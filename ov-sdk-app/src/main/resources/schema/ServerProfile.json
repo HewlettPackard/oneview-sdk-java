@@ -1,0 +1,378 @@
+{
+	"type": "object",
+	"optional": true,
+	"properties": {
+		"uri": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true",
+			"format": "URI",
+			"searchable": "true"
+		},
+		"name": {
+			"type": "string",
+			"searchable": "true",
+			"required": "true",
+			"minLength": "1",
+			"maxLength": "100"
+		},
+		"description": {
+			"type": "string",
+			"optional": true,
+			"searchable": "true",
+			"minLength": "0",
+			"maxLength": "1024"
+		},
+		"serialNumber": {
+			"type": "string",
+			"optional": true,
+			"searchable": "true"
+		},
+		"uuid": {
+			"type": "string",
+			"optional": true,
+			"searchable": "true"
+		},
+		"serverHardwareUri": {
+			"type": "string",
+			"optional": true,
+			"format": "URI"
+		},
+		"serverHardwareTypeUri": {
+			"type": "string",
+			"optional": true,
+			"format": "URI"
+		},
+		"enclosureGroupUri": {
+			"type": "string",
+			"optional": true,
+			"format": "URI"
+		},
+		"enclosureUri": {
+			"type": "string",
+			"optional": true,
+			"format": "URI"
+		},
+		"enclosureBay": {
+			"type": "integer",
+			"optional": true
+		},
+		"affinity": {
+			"type": "string",
+			"optional": true,
+			"default": "Bay"
+		},
+		"associatedServer": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true"
+		},
+		"hideUnusedFlexNics": {
+			"type": "boolean",
+			"optional": true
+		},
+		"firmware": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"forceInstallFirmware": {
+					"type": "boolean",
+					"optional": false
+				},
+				"firmwareBaselineUri": {
+					"type": "string",
+					"optional": true,
+					"format": "URI"
+				},
+				"manageFirmware": {
+					"type": "boolean",
+					"optional": false
+				}
+			}
+		},
+		"macType": {
+			"type": "string",
+			"optional": true,
+			"searchable": "true",
+			"default": "Virtual"
+		},
+		"wwnType": {
+			"type": "string",
+			"optional": true,
+			"searchable": "true",
+			"default": "Virtual"
+		},
+		"serialNumberType": {
+			"type": "string",
+			"optional": true,
+			"searchable": "true",
+			"default": "Virtual if serialNumber and uuid are not specified"
+		},
+		"category": {
+			"type": "string",
+			"optional": true
+		},
+		"created": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true"
+		},
+		"modified": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true"
+		},
+		"status": {
+			"type": "string",
+			"optional": true
+		},
+		"state": {
+			"type": "string",
+			"optional": true
+		},
+		"inProgress": {
+			"type": "boolean",
+			"optional": false,
+			"readonly": "true"
+		},
+		"taskUri": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true",
+			"format": "URI"
+		},
+		"connections": {
+			"type": "array",
+			"optional": true,
+			"items": {
+				"type": "any",
+				"optional": true
+			}
+		},
+		"bootMode": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"manageMode": {
+					"type": "boolean",
+					"optional": true,
+					"default": "false"
+				},
+				"pxeBootPolicy": {
+					"type": "string",
+					"optional": true
+				},
+				"mode": {
+					"type": "string",
+					"optional": true
+				}
+			}
+		},
+		"boot": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"order": {
+					"type": "array",
+					"optional": true,
+					"items": {
+						"type": "string",
+						"optional": true
+					},
+					"minItems": "1",
+					"maxItems": "5"
+				},
+				"manageBoot": {
+					"type": "boolean",
+					"optional": false
+				}
+			}
+		},
+		"bios": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"manageBios": {
+					"type": "boolean",
+					"optional": false
+				},
+				"overriddenSettings": {
+					"type": "array",
+					"optional": true,
+					"items": {
+						"type": "object",
+						"optional": true,
+						"properties": {
+							"id": {
+								"type": "string",
+								"required": "true"
+							},
+							"value": {
+								"type": "string",
+								"required": "true"
+							}
+						}
+					}
+				}
+			}
+		},
+		"localStorage": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"logicalDrives": {
+					"type": "array",
+					"optional": true,
+					"items": {
+						"type": "object",
+						"optional": true,
+						"properties": {
+							"bootable": {
+								"type": "boolean",
+								"optional": false
+							},
+							"raidLevel": {
+								"type": "string",
+								"optional": true
+							}
+						}
+					}
+				},
+				"manageLocalStorage": {
+					"type": "boolean",
+					"optional": false
+				},
+				"initialize": {
+					"type": "boolean",
+					"optional": false
+				}
+			},
+			"default": "false"
+		},
+		"sanStorage": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"volumeAttachments": {
+					"type": "array",
+					"optional": true,
+					"items": {
+						"type": "object",
+						"optional": true,
+						"properties": {
+							"storagePaths": {
+								"type": "array",
+								"optional": true,
+								"items": {
+									"type": "object",
+									"optional": true,
+									"properties": {
+										"storageTargets": {
+											"type": "array",
+											"optional": true,
+											"items": {
+												"type": "string",
+												"optional": true
+											}
+										},
+										"storageTargetType": {
+											"type": "string",
+											"optional": true
+										},
+										"connectionId": {
+											"type": "integer",
+											"required": "true"
+										},
+										"isEnabled": {
+											"type": "boolean",
+											"required": "true"
+										},
+										"status": {
+											"type": "string",
+											"optional": true,
+											"readonly": "true"
+										}
+									}
+								}
+							},
+							"permanent": {
+								"type": "boolean",
+								"optional": true
+							},
+							"state": {
+								"type": "string",
+								"optional": true,
+								"readonly": "true"
+							},
+							"lun": {
+								"type": "string",
+								"optional": true
+							},
+							"volumeUri": {
+								"type": "string",
+								"optional": true,
+								"format": "URI"
+							},
+							"lunType": {
+								"type": "string",
+								"required": "true"
+							},
+							"volumeStorageSystemUri": {
+								"type": "string",
+								"optional": true,
+								"format": "URI"
+							},
+							"volumeName": {
+								"type": "string",
+								"optional": true
+							},
+							"volumeProvisionedCapacityBytes": {
+								"type": "string",
+								"optional": true
+							},
+							"volumeProvisionType": {
+								"type": "string",
+								"optional": true
+							},
+							"volumeStoragePoolUri": {
+								"type": "string",
+								"optional": true,
+								"format": "URI"
+							},
+							"volumeShareable": {
+								"type": "boolean",
+								"optional": true
+							},
+							"volumeDescription": {
+								"type": "string",
+								"optional": true
+							},
+							"status": {
+								"type": "string",
+								"optional": true,
+								"readonly": "true"
+							},
+							"id": {
+								"type": "number",
+								"optional": true
+							}
+						}
+					}
+				},
+				"hostOSType": {
+					"type": "string",
+					"required": "true"
+				},
+				"manageSanStorage": {
+					"type": "boolean",
+					"required": "true"
+				}
+			}
+		},
+		"eTag": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true"
+		}
+	}
+}

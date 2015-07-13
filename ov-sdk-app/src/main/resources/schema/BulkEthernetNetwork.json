@@ -1,0 +1,49 @@
+{
+	"type": "object",
+	"optional": true,
+	"properties": {
+		"bandwidth": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"maximumBandwidth": {
+					"type": "number",
+					"required": "true"
+				},
+				"typicalBandwidth": {
+					"type": "number",
+					"required": "true"
+				}
+			}
+		},
+		"smartLink": {
+			"type": "boolean",
+			"searchable": "true",
+			"required": "true"
+		},
+		"namePrefix": {
+			"type": "string",
+			"searchable": "true",
+			"required": "true"
+		},
+		"vlanIdRange": {
+			"type": "string",
+			"searchable": "true",
+			"required": "true"
+		},
+		"privateNetwork": {
+			"type": "boolean",
+			"searchable": "true",
+			"required": "true"
+		},
+		"purpose": {
+			"type": "string",
+			"enum": ["General",
+			"Management",
+			"VMMigration",
+			"FaultTolerance"],
+			"searchable": "true",
+			"required": "true"
+		}
+	}
+}

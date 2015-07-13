@@ -1,0 +1,198 @@
+{
+	"type": "object",
+	"optional": true,
+	"properties": {
+		"reachability": {
+			"type": "string",
+			"optional": true,
+			"enum": ["Unknown",
+			"NotReachable",
+			"Reachable",
+			"RedundantlyReachable"]
+		},
+		"networkType": {
+			"type": "string",
+			"enum": ["Ethernet",
+			"FibreChannel"],
+			"required": "true"
+		},
+		"portConfigInfos": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"optional": true,
+				"properties": {
+					"desiredSpeed": {
+						"type": "string",
+						"optional": true,
+						"enum": ["Speed0M",
+						"Speed1M",
+						"Speed10M",
+						"Speed100M",
+						"Speed1G",
+						"Speed2G",
+						"Speed2_5G",
+						"Speed4G",
+						"Speed8G",
+						"Speed10G",
+						"Auto",
+						"Speed20G",
+						"Speed40G",
+						"Unknown"]
+					},
+					"portUri": {
+						"type": "string",
+						"optional": true,
+						"readonly": "true"
+					},
+					"location": {
+						"type": "object",
+						"optional": true,
+						"properties": {
+							"locationEntries": {
+								"type": "array",
+								"optional": true,
+								"items": {
+									"type": "object",
+									"optional": true,
+									"properties": {
+										"value": {
+											"type": "string",
+											"optional": true
+										},
+										"type": {
+											"type": "string",
+											"optional": true,
+											"enum": ["Port",
+											"Bay",
+											"Enclosure"]
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"required": "true"
+		},
+		"networkUris": {
+			"type": "array",
+			"items": {
+				"type": "string",
+				"optional": true
+			},
+			"required": "true"
+		},
+		"fcNetworkUris": {
+			"type": "array",
+			"items": {
+				"type": "string",
+				"optional": true
+			},
+			"required": "true"
+		},
+		"logicalInterconnectUri": {
+			"type": "string",
+			"required": "true"
+		},
+		"lacpTimer": {
+			"type": "string",
+			"optional": true,
+			"enum": ["Short",
+			"Long"]
+		},
+		"manualLoginRedistributionState": {
+			"type": "string",
+			"enum": ["Supported",
+			"NotSupported",
+			"Distributing",
+			"Distributed",
+			"DistributionFailed"],
+			"required": "true"
+		},
+		"connectionMode": {
+			"type": "string",
+			"enum": ["Auto",
+			"Failover"],
+			"required": "true"
+		},
+		"ethernetNetworkType": {
+			"type": "string",
+			"enum": ["Tagged",
+			"Untagged",
+			"Tunnel",
+			"Unknown",
+			"NotApplicable"],
+			"searchable": "true",
+			"required": "true"
+		},
+		"primaryPortLocation": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"locationEntries": {
+					"type": "array",
+					"optional": true,
+					"items": {
+						"type": "object",
+						"optional": true,
+						"properties": {
+							"value": {
+								"type": "string",
+								"optional": true
+							},
+							"type": {
+								"type": "string",
+								"optional": true,
+								"enum": ["Port",
+								"Bay",
+								"Enclosure"]
+							}
+						}
+					}
+				}
+			}
+		},
+		"nativeNetworkUri": {
+			"type": "string",
+			"optional": true
+		},
+		"description": {
+			"type": "string",
+			"optional": true
+		},
+		"status": {
+			"type": "string",
+			"optional": true
+		},
+		"name": {
+			"type": "string",
+			"optional": true
+		},
+		"state": {
+			"type": "string",
+			"optional": true
+		},
+		"created": {
+			"type": "string",
+			"optional": true
+		},
+		"eTag": {
+			"type": "string",
+			"optional": true
+		},
+		"modified": {
+			"type": "string",
+			"optional": true
+		},
+		"category": {
+			"type": "string",
+			"optional": true
+		},
+		"uri": {
+			"type": "string",
+			"optional": true
+		}
+	}
+}

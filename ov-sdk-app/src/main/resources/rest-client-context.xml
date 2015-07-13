@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+        
+    <context:component-scan base-package="com.hp.ov.sdk" />
+    <context:annotation-config />
+    
+<!--     <bean id="httpRestClient" class="com.hp.ov.sdk.rest.impl.HttpRestClientImpl" > -->
+<!--     </bean> -->
+<!--     <bean id="httpRestClientTest" class="com.hp.ov.sdk.rest.impl.HttpRestClientTest" > -->
+<!--     </bean> -->
+<!--     <bean id="loginSessions" class="com.hp.ov.sdk.client.impl.LoginSessionsImpl" >  -->
+<!--     </bean> -->
+    
+
+<!--     <bean id="restSslClient" class="com.hp.ov.sdk.rest.RestSslClient"> -->
+<!--         <constructor-arg ref="restTemplate"/> -->
+<!--         <constructor-arg ref="credentials"/> -->
+<!--     </bean> -->
+ 
+<!--     <bean id="httpClientParams" class="org.apache.commons.httpclient.params.HttpClientParams"> -->
+<!--         <property name="authenticationPreemptive" value="true"/> -->
+<!--         <property name="connectionManagerClass" -->
+<!--                   value="org.apache.commons.httpclient.MultiThreadedHttpConnectionManager"/> -->
+<!--     </bean> -->
+<!--     <bean id="httpClient" class="org.apache.commons.httpclient.HttpClient"> -->
+<!--         <constructor-arg ref="httpClientParams"/> -->
+<!--     </bean> -->
+<!--     <bean id="credentials" class="org.apache.commons.httpclient.UsernamePasswordCredentials"> -->
+<!--         <constructor-arg value="administrator"/> -->
+<!--         <constructor-arg value="hpvse123"/> -->
+<!--     </bean> -->
+<!--     <bean id="httpClientFactory" class="org.springframework.http.client.CommonsClientHttpRequestFactory"> -->
+<!--         <constructor-arg ref="httpClient"/> -->
+<!--     </bean> -->
+ 
+<!--     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate"> -->
+<!--         <constructor-arg ref="httpClientFactory"/> -->
+<!--         <property name="messageConverters"> -->
+<!--             <list> -->
+<!--                 <bean class="org.springframework.http.converter.StringHttpMessageConverter"/> -->
+<!--             </list> -->
+<!--         </property> -->
+<!--     </bean> -->
+    
+
+</beans>

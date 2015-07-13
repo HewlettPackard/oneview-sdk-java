@@ -1,0 +1,64 @@
+{
+	"type": "object",
+	"optional": true,
+	"properties": {
+		"networkUris": {
+			"type": "array",
+			"items": {
+				"type": "string",
+				"optional": true
+			},
+			"searchable": "true",
+			"required": "true"
+		},
+		"connectionTemplateUri": {
+			"type": "string",
+			"readonly": "true",
+			"searchable": "true",
+			"required": "true",
+			"minLength": "0",
+			"maxLength": "255"
+		},
+		"nativeNetworkUri": {
+			"type": "string",
+			"optional": true,
+			"searchable": "true"
+		},
+		"description": {
+			"type": "string",
+			"optional": true
+		},
+		"status": {
+			"type": "string",
+			"optional": true
+		},
+		"name": {
+			"type": "string",
+			"optional": true
+		},
+		"state": {
+			"type": "string",
+			"optional": true
+		},
+		"created": {
+			"type": "string",
+			"optional": true
+		},
+		"eTag": {
+			"type": "string",
+			"optional": true
+		},
+		"modified": {
+			"type": "string",
+			"optional": true
+		},
+		"category": {
+			"type": "string",
+			"optional": true
+		},
+		"uri": {
+			"type": "string",
+			"optional": true
+		}
+	}
+}

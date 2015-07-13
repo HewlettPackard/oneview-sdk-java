@@ -1,0 +1,667 @@
+{
+	"type": "object",
+	"optional": true,
+	"properties": {
+		"enableFastMacCacheFailover": {
+			"type": "boolean",
+			"optional": true
+		},
+		"enclosureUri": {
+			"type": "string",
+			"optional": true
+		},
+		"ports": {
+			"type": "array",
+			"optional": true,
+			"items": {
+				"type": "object",
+				"optional": true,
+				"properties": {
+					"capability": {
+						"type": "array",
+						"optional": true,
+						"items": {
+							"type": "string",
+							"optional": true
+						}
+					},
+					"portId": {
+						"type": "string",
+						"optional": true
+					},
+					"interconnectName": {
+						"type": "string",
+						"optional": true
+					},
+					"portStatus": {
+						"type": "string",
+						"optional": true,
+						"enum": ["Linked",
+						"Unlinked",
+						"Unknown"]
+					},
+					"portName": {
+						"type": "string",
+						"optional": true
+					},
+					"portType": {
+						"type": "string",
+						"optional": true,
+						"enum": ["Uplink",
+						"Downlink",
+						"Stacking",
+						"Auto"]
+					},
+					"fcPortProperties": {
+						"type": "object",
+						"optional": true,
+						"properties": {
+							"logins": {
+								"type": "string",
+								"optional": true
+							},
+							"wwnn": {
+								"type": "string",
+								"optional": true
+							},
+							"wwpn": {
+								"type": "string",
+								"optional": true
+							},
+							"opOnline": {
+								"type": "boolean",
+								"optional": true
+							},
+							"opOnlineReason": {
+								"type": "string",
+								"optional": true
+							},
+							"loginsCount": {
+								"type": "integer",
+								"optional": true
+							},
+							"principleInterconnectName": {
+								"type": "string",
+								"optional": true
+							},
+							"principleInterconnectNameList": {
+								"type": "array",
+								"optional": true,
+								"items": {
+									"type": "string",
+									"optional": true
+								}
+							},
+							"neighborInterconnectName": {
+								"type": "string",
+								"optional": true
+							},
+							"fcfMac": {
+								"type": "string",
+								"optional": true
+							}
+						}
+					},
+					"portMonitorConfigInfo": {
+						"type": "string",
+						"optional": true,
+						"enum": ["NotMonitored",
+						"MonitoredToServer",
+						"MonitoredFromServer",
+						"MonitoredBoth",
+						"AnalyzerPort"]
+					},
+					"bayNumber": {
+						"type": "integer",
+						"optional": true
+					},
+					"lagId": {
+						"type": "integer",
+						"optional": true
+					},
+					"associatedUplinkSetUri": {
+						"type": "string",
+						"optional": true
+					},
+					"pairedPortName": {
+						"type": "string",
+						"optional": true
+					},
+					"enabled": {
+						"type": "boolean",
+						"optional": true
+					},
+					"subports": {
+						"type": "array",
+						"optional": true,
+						"items": {
+							"type": "object",
+							"optional": true,
+							"properties": {
+								"portStatus": {
+									"type": "string",
+									"optional": true,
+									"enum": ["Linked",
+									"Unlinked",
+									"Unknown"]
+								},
+								"portNumber": {
+									"type": "integer",
+									"optional": true
+								},
+								"portStatusReason": {
+									"type": "string",
+									"optional": true,
+									"enum": ["None",
+									"Active",
+									"StandBy",
+									"LoggedIn",
+									"NotLoggedIn",
+									"Unknown",
+									"AdminHidden",
+									"LoopDetected",
+									"PauseFloodDetected",
+									"AdminDisabled",
+									"EkeyMismatch",
+									"Unpopulated",
+									"ModuleUnrecognized",
+									"FailedValidation",
+									"ModuleUnsupported",
+									"ModuleIncompatible",
+									"SmartLink",
+									"SmartLinkButNoDCC",
+									"OkUncertified",
+									"OkNonHP",
+									"UnsupportedStorage",
+									"FabricTypeMismatch",
+									"Ok",
+									"Unavailable",
+									"PortPairMisMatchSfpType",
+									"PortPairMismatchEnetSpeed"]
+								}
+							}
+						}
+					},
+					"portHealthStatus": {
+						"type": "string",
+						"optional": true,
+						"enum": ["Normal",
+						"Warning",
+						"Error",
+						"Disabled"]
+					},
+					"connectorType": {
+						"type": "string",
+						"optional": true
+					},
+					"neighbor": {
+						"type": "object",
+						"optional": true,
+						"properties": {
+							"remoteChassisId": {
+								"type": "string",
+								"optional": true
+							},
+							"remoteChassisIdType": {
+								"type": "string",
+								"optional": true
+							},
+							"remoteMgmtAddress": {
+								"type": "string",
+								"optional": true
+							},
+							"remoteMgmtAddressType": {
+								"type": "string",
+								"optional": true
+							},
+							"remotePortDescription": {
+								"type": "string",
+								"optional": true
+							},
+							"remotePortId": {
+								"type": "string",
+								"optional": true
+							},
+							"remotePortIdType": {
+								"type": "string",
+								"optional": true
+							},
+							"remoteSystemCapabilities": {
+								"type": "string",
+								"optional": true
+							},
+							"remoteSystemDescription": {
+								"type": "string",
+								"optional": true
+							},
+							"remoteSystemName": {
+								"type": "string",
+								"optional": true
+							},
+							"remoteType": {
+								"type": "string",
+								"optional": true
+							}
+						}
+					},
+					"portStatusReason": {
+						"type": "string",
+						"optional": true,
+						"enum": ["None",
+						"Active",
+						"StandBy",
+						"LoggedIn",
+						"NotLoggedIn",
+						"Unknown",
+						"AdminHidden",
+						"LoopDetected",
+						"PauseFloodDetected",
+						"AdminDisabled",
+						"EkeyMismatch",
+						"Unpopulated",
+						"ModuleUnrecognized",
+						"FailedValidation",
+						"ModuleUnsupported",
+						"ModuleIncompatible",
+						"SmartLink",
+						"SmartLinkButNoDCC",
+						"OkUncertified",
+						"OkNonHP",
+						"UnsupportedStorage",
+						"FabricTypeMismatch",
+						"Ok",
+						"Unavailable",
+						"PortPairMisMatchSfpType",
+						"PortPairMismatchEnetSpeed"]
+					},
+					"portTypeExtended": {
+						"type": "string",
+						"optional": true,
+						"enum": ["Internal",
+						"External",
+						"Unknown"]
+					},
+					"operationalSpeed": {
+						"type": "string",
+						"optional": true
+					},
+					"configPortTypes": {
+						"type": "array",
+						"optional": true,
+						"items": {
+							"type": "string",
+							"optional": true
+						}
+					},
+					"description": {
+						"type": "string",
+						"optional": true
+					},
+					"status": {
+						"type": "string",
+						"optional": true
+					},
+					"name": {
+						"type": "string",
+						"optional": true
+					},
+					"state": {
+						"type": "string",
+						"optional": true
+					},
+					"created": {
+						"type": "string",
+						"optional": true
+					},
+					"eTag": {
+						"type": "string",
+						"optional": true
+					},
+					"modified": {
+						"type": "string",
+						"optional": true
+					},
+					"category": {
+						"type": "string",
+						"optional": true
+					},
+					"uri": {
+						"type": "string",
+						"optional": true
+					}
+				}
+			}
+		},
+		"partNumber": {
+			"type": "string",
+			"optional": true
+		},
+		"powerStatus": {
+			"type": "string",
+			"optional": true,
+			"enum": ["On",
+			"Off",
+			"Unknown"],
+			"readonly": "true"
+		},
+		"ipAddressList": {
+			"type": "array",
+			"optional": true,
+			"items": {
+				"type": "object",
+				"optional": true,
+				"properties": {
+					"ipAddress": {
+						"type": "string",
+						"required": "true"
+					},
+					"ipAddressType": {
+						"type": "string",
+						"enum": ["Unknown",
+						"Ipv4",
+						"Ipv6Static",
+						"Ipv6Dhcp",
+						"Ipv6Slaac",
+						"Ipv6LinkLocal"],
+						"required": "true"
+					}
+				}
+			}
+		},
+		"logicalInterconnectUri": {
+			"type": "string",
+			"optional": true
+		},
+		"snmpConfiguration": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"readCommunity": {
+					"type": "string",
+					"optional": true,
+					"default": "public"
+				},
+				"systemContact": {
+					"type": "string",
+					"optional": true,
+					"default": ""
+				},
+				"trapDestinations": {
+					"type": "array",
+					"optional": true,
+					"items": {
+						"type": "object",
+						"optional": true,
+						"properties": {
+							"trapSeverities": {
+								"type": "array",
+								"optional": true,
+								"items": {
+									"type": "string",
+									"optional": true
+								}
+							},
+							"enetTrapCategories": {
+								"type": "array",
+								"optional": true,
+								"items": {
+									"type": "string",
+									"optional": true
+								}
+							},
+							"fcTrapCategories": {
+								"type": "array",
+								"optional": true,
+								"items": {
+									"type": "string",
+									"optional": true
+								}
+							},
+							"vcmTrapCategories": {
+								"type": "array",
+								"optional": true,
+								"items": {
+									"type": "string",
+									"optional": true
+								}
+							},
+							"trapFormat": {
+								"type": "string",
+								"optional": true,
+								"enum": ["SNMPv1",
+								"SNMPv2"],
+								"default": "SNMPv1"
+							},
+							"trapDestination": {
+								"type": "string",
+								"optional": true,
+								"default": ""
+							},
+							"communityString": {
+								"type": "string",
+								"optional": true,
+								"default": "public"
+							}
+						}
+					}
+				},
+				"snmpAccess": {
+					"type": "array",
+					"optional": true,
+					"items": {
+						"type": "string",
+						"optional": true
+					}
+				},
+				"enabled": {
+					"type": "boolean",
+					"optional": false,
+					"default": "false"
+				},
+				"description": {
+					"type": "string",
+					"optional": true
+				},
+				"status": {
+					"type": "string",
+					"optional": true
+				},
+				"name": {
+					"type": "string",
+					"optional": true
+				},
+				"state": {
+					"type": "string",
+					"optional": true
+				},
+				"created": {
+					"type": "string",
+					"optional": true
+				},
+				"eTag": {
+					"type": "string",
+					"optional": true
+				},
+				"modified": {
+					"type": "string",
+					"optional": true
+				},
+				"category": {
+					"type": "string",
+					"optional": true
+				},
+				"uri": {
+					"type": "string",
+					"optional": true
+				}
+			},
+			"readonly": "true"
+		},
+		"interconnectTypeUri": {
+			"type": "string",
+			"optional": true
+		},
+		"portCount": {
+			"type": "integer",
+			"optional": true
+		},
+		"igmpIdleTimeoutInterval": {
+			"type": "integer",
+			"optional": true
+		},
+		"enablePauseFloodProtection": {
+			"type": "boolean",
+			"optional": false
+		},
+		"productName": {
+			"type": "string",
+			"optional": true
+		},
+		"enclosureName": {
+			"type": "string",
+			"optional": true
+		},
+		"unsupportedCapabilities": {
+			"type": "array",
+			"optional": true,
+			"items": {
+				"type": "string",
+				"optional": true
+			},
+			"readonly": "true"
+		},
+		"firmwareVersion": {
+			"type": "string",
+			"optional": true
+		},
+		"interconnectIP": {
+			"type": "string",
+			"optional": true
+		},
+		"model": {
+			"type": "string",
+			"optional": true,
+			"searchable": "true"
+		},
+		"interconnectLocation": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"locationEntries": {
+					"type": "array",
+					"optional": true,
+					"items": {
+						"type": "object",
+						"optional": true,
+						"properties": {
+							"value": {
+								"type": "string",
+								"optional": true
+							},
+							"type": {
+								"type": "string",
+								"optional": true,
+								"enum": ["Port",
+								"Bay",
+								"Enclosure"]
+							}
+						}
+					}
+				}
+			},
+			"searchable": "true"
+		},
+		"subPortCount": {
+			"type": "integer",
+			"optional": true
+		},
+		"enableIgmpSnooping": {
+			"type": "boolean",
+			"optional": true
+		},
+		"edgeVirtualBridgingAvailable": {
+			"type": "boolean",
+			"optional": false
+		},
+		"networkLoopProtectionInterval": {
+			"type": "integer",
+			"optional": true
+		},
+		"enableNetworkLoopProtection": {
+			"type": "boolean",
+			"optional": true
+		},
+		"maxBandwidth": {
+			"type": "string",
+			"optional": true,
+			"enum": ["Auto",
+			"Speed_1M",
+			"Speed_10M",
+			"Speed_100M",
+			"Speed_1G",
+			"Speed_2G",
+			"Speed_2_5G",
+			"Speed_4G",
+			"Speed_5G",
+			"Speed_8G",
+			"Speed_10G",
+			"Speed_12G",
+			"Speed_13G",
+			"Speed_15G",
+			"Speed_16G",
+			"Speed_20G",
+			"Speed_24G",
+			"Speed_30G",
+			"Speed_40G",
+			"Speed_100G"]
+		},
+		"serialNumber": {
+			"type": "string",
+			"optional": true
+		},
+		"roles": {
+			"type": "array",
+			"optional": true,
+			"items": {
+				"type": "string",
+				"optional": true
+			}
+		},
+		"description": {
+			"type": "string",
+			"optional": true
+		},
+		"status": {
+			"type": "string",
+			"optional": true
+		},
+		"name": {
+			"type": "string",
+			"optional": true
+		},
+		"state": {
+			"type": "string",
+			"optional": true
+		},
+		"created": {
+			"type": "string",
+			"optional": true
+		},
+		"eTag": {
+			"type": "string",
+			"optional": true
+		},
+		"modified": {
+			"type": "string",
+			"optional": true
+		},
+		"category": {
+			"type": "string",
+			"optional": true
+		},
+		"uri": {
+			"type": "string",
+			"optional": true
+		}
+	}
+}

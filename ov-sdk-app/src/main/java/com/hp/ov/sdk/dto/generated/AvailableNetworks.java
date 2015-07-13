@@ -1,0 +1,154 @@
+/*******************************************************************************
+ * // (C) Copyright 2014-2015 Hewlett-Packard Development Company, L.P.
+ *******************************************************************************/
+package com.hp.ov.sdk.dto.generated;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Generated;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Generated("org.jsonschema2pojo")
+@JsonPropertyOrder({
+        "ethernetNetworks", "networkSets", "fcNetworks", "type"
+})
+public class AvailableNetworks implements Serializable
+{
+
+    /**
+	 * 
+	 */
+    private static final long serialVersionUID = 1L;
+    @JsonProperty("ethernetNetworks")
+    private List<Object> ethernetNetworks = new ArrayList<Object>();
+    @JsonProperty("networkSets")
+    private List<Object> networkSets = new ArrayList<Object>();
+    @JsonProperty("fcNetworks")
+    private List<Object> fcNetworks = new ArrayList<Object>();
+    @JsonProperty("type")
+    private String type;
+
+    /**
+     * 
+     * @return The ethernetNetworks
+     */
+    @JsonProperty("ethernetNetworks")
+    public List<Object> getEthernetNetworks()
+    {
+        return ethernetNetworks;
+    }
+
+    /**
+     * 
+     * @param ethernetNetworks
+     *        The ethernetNetworks
+     */
+    @JsonProperty("ethernetNetworks")
+    public void setEthernetNetworks(List<Object> ethernetNetworks)
+    {
+        this.ethernetNetworks = ethernetNetworks;
+    }
+
+    /**
+     * 
+     * @return The networkSets
+     */
+    @JsonProperty("networkSets")
+    public List<Object> getNetworkSets()
+    {
+        return networkSets;
+    }
+
+    /**
+     * 
+     * @param networkSets
+     *        The networkSets
+     */
+    @JsonProperty("networkSets")
+    public void setNetworkSets(List<Object> networkSets)
+    {
+        this.networkSets = networkSets;
+    }
+
+    /**
+     * 
+     * @return The fcNetworks
+     */
+    @JsonProperty("fcNetworks")
+    public List<Object> getFcNetworks()
+    {
+        return fcNetworks;
+    }
+
+    /**
+     * 
+     * @param fcNetworks
+     *        The fcNetworks
+     */
+    @JsonProperty("fcNetworks")
+    public void setFcNetworks(List<Object> fcNetworks)
+    {
+        this.fcNetworks = fcNetworks;
+    }
+
+    /**
+     * 
+     * @return The type
+     */
+    public String getType()
+    {
+        return type;
+    }
+
+    /**
+     * 
+     * @param type
+     *        The type
+     */
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    @Override
+    public String toString()
+    {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder().append(type).append(ethernetNetworks)
+                .append(networkSets).append(fcNetworks).toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if (other == this)
+        {
+            return true;
+        }
+        if ((other instanceof AvailableNetworks) == false)
+        {
+            return false;
+        }
+        AvailableNetworks rhs = ((AvailableNetworks) other);
+        return new EqualsBuilder().append(type, rhs.type)
+                .append(ethernetNetworks, rhs.ethernetNetworks)
+                .append(networkSets, rhs.networkSets)
+                .append(fcNetworks, rhs.fcNetworks).isEquals();
+    }
+
+}

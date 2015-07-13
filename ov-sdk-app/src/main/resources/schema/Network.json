@@ -1,0 +1,93 @@
+{
+	"type": "object",
+	"optional": true,
+	"properties": {
+		"internalVlanId": {
+			"type": "integer",
+			"maximum": "1001",
+			"minimum": "2",
+			"required": "true"
+		},
+		"smartLink": {
+			"type": "boolean",
+			"searchable": "true",
+			"required": "true"
+		},
+		"privateNetwork": {
+			"type": "boolean",
+			"searchable": "true",
+			"required": "true"
+		},
+		"purpose": {
+			"type": "string",
+			"enum": ["General",
+			"Management",
+			"VMMigration",
+			"FaultTolerance"],
+			"searchable": "true",
+			"required": "true"
+		},
+		"vlanId": {
+			"type": "integer",
+			"maximum": "4094",
+			"minimum": "1",
+			"searchable": "true",
+			"required": "true"
+		},
+		"connectionTemplateUri": {
+			"type": "string",
+			"readonly": "true",
+			"searchable": "true",
+			"required": "true",
+			"minLength": "0",
+			"maxLength": "255"
+		},
+		"ethernetNetworkType": {
+			"type": "string",
+			"enum": ["Tagged",
+			"Untagged",
+			"Tunnel",
+			"Unknown",
+			"NotApplicable"],
+			"searchable": "true",
+			"required": "true",
+			"default": "Tagged"
+		},
+		"description": {
+			"type": "string",
+			"optional": true
+		},
+		"status": {
+			"type": "string",
+			"optional": true
+		},
+		"name": {
+			"type": "string",
+			"optional": true
+		},
+		"state": {
+			"type": "string",
+			"optional": true
+		},
+		"created": {
+			"type": "string",
+			"optional": true
+		},
+		"eTag": {
+			"type": "string",
+			"optional": true
+		},
+		"modified": {
+			"type": "string",
+			"optional": true
+		},
+		"category": {
+			"type": "string",
+			"optional": true
+		},
+		"uri": {
+			"type": "string",
+			"optional": true
+		}
+	}
+}

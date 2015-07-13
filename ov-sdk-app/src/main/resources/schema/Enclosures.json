@@ -1,0 +1,458 @@
+{
+	"type": "object",
+	"optional": true,
+	"properties": {
+		"uri": {
+			"type": "string",
+			"optional": true
+		},
+		"uuid": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true",
+			"minLength": "0",
+			"maxLength": "255"
+		},
+		"name": {
+			"type": "string",
+			"optional": true,
+			"minLength": "1",
+			"maxLength": "32"
+		},
+		"serialNumber": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true",
+			"minLength": "0",
+			"maxLength": "255"
+		},
+		"partNumber": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true",
+			"minLength": "0",
+			"maxLength": "255"
+		},
+		"assetTag": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true",
+			"minLength": "0",
+			"maxLength": "32"
+		},
+		"enclosureType": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true",
+			"minLength": "0",
+			"maxLength": "255"
+		},
+		"enclosureGroupUri": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true"
+		},
+		"rackName": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true",
+			"minLength": "1",
+			"maxLength": "32"
+		},
+		"deviceBayCount": {
+			"type": "integer",
+			"readonly": "true",
+			"required": "true"
+		},
+		"deviceBays": {
+			"type": "array",
+			"optional": true,
+			"items": {
+				"type": "any",
+				"optional": true
+			},
+			"readonly": "true"
+		},
+		"interconnectBayCount": {
+			"type": "integer",
+			"optional": true,
+			"readonly": "true"
+		},
+		"interconnectBays": {
+			"type": "array",
+			"optional": true,
+			"items": {
+				"type": "object",
+				"optional": true,
+				"properties": {
+					"bayNumber": {
+						"type": "integer",
+						"optional": true
+					},
+					"logicalInterconnectUri": {
+						"type": "string",
+						"optional": true
+					},
+					"interconnectUri": {
+						"type": "string",
+						"optional": true
+					},
+					"interconnectModel": {
+						"type": "string",
+						"optional": true
+					}
+				}
+			},
+			"readonly": "true"
+		},
+		"powerSupplyBayCount": {
+			"type": "integer",
+			"optional": true,
+			"readonly": "true"
+		},
+		"powerSupplyBays": {
+			"type": "array",
+			"optional": true,
+			"items": {
+				"type": "object",
+				"optional": true,
+				"properties": {
+					"bayNumber": {
+						"type": "integer",
+						"optional": true,
+						"readonly": "true"
+					},
+					"devicePresence": {
+						"type": "string",
+						"optional": true,
+						"enum": ["PresenceNoOp",
+						"PresenceUnknown",
+						"Absent",
+						"Present",
+						"Subsumed"],
+						"readonly": "true"
+					},
+					"status": {
+						"type": "string",
+						"optional": true,
+						"enum": ["Unknown",
+						"OK",
+						"Disabled",
+						"Warning",
+						"Critical"],
+						"readonly": "true"
+					},
+					"model": {
+						"type": "string",
+						"optional": true
+					},
+					"serialNumber": {
+						"type": "string",
+						"optional": true,
+						"readonly": "true",
+						"minLength": "0",
+						"maxLength": "255"
+					},
+					"partNumber": {
+						"type": "string",
+						"optional": true,
+						"readonly": "true",
+						"minLength": "0",
+						"maxLength": "255"
+					},
+					"sparePartNumber": {
+						"type": "string",
+						"optional": true,
+						"readonly": "true",
+						"minLength": "0",
+						"maxLength": "255"
+					}
+				}
+			},
+			"readonly": "true"
+		},
+		"fanBayCount": {
+			"type": "integer",
+			"optional": true,
+			"readonly": "true"
+		},
+		"fanBays": {
+			"type": "array",
+			"optional": true,
+			"items": {
+				"type": "object",
+				"optional": true,
+				"properties": {
+					"bayNumber": {
+						"type": "integer",
+						"optional": true,
+						"readonly": "true"
+					},
+					"devicePresence": {
+						"type": "string",
+						"optional": true,
+						"enum": ["PresenceNoOp",
+						"PresenceUnknown",
+						"Absent",
+						"Present",
+						"Subsumed"]
+					},
+					"deviceRequired": {
+						"type": "boolean",
+						"optional": false
+					},
+					"status": {
+						"type": "string",
+						"optional": true,
+						"enum": ["Unknown",
+						"OK",
+						"Disabled",
+						"Warning",
+						"Critical"],
+						"readonly": "true"
+					},
+					"state": {
+						"type": "string",
+						"optional": true,
+						"enum": ["Misplaced",
+						"Missing",
+						"Degraded",
+						"Failed",
+						"OK"],
+						"readonly": "true"
+					},
+					"model": {
+						"type": "string",
+						"optional": true
+					},
+					"partNumber": {
+						"type": "string",
+						"optional": true,
+						"readonly": "true",
+						"minLength": "0",
+						"maxLength": "255"
+					},
+					"sparePartNumber": {
+						"type": "string",
+						"optional": true,
+						"readonly": "true",
+						"minLength": "0",
+						"maxLength": "255"
+					}
+				}
+			},
+			"readonly": "true"
+		},
+		"oa": {
+			"type": "array",
+			"optional": true,
+			"items": {
+				"type": "object",
+				"optional": true,
+				"properties": {
+					"bayNumber": {
+						"type": "integer",
+						"required": "true"
+					},
+					"fwVersion": {
+						"type": "string",
+						"optional": true,
+						"minLength": "0",
+						"maxLength": "255"
+					},
+					"role": {
+						"type": "string",
+						"optional": true,
+						"enum": ["Unknown",
+						"OaAbsent",
+						"Standby",
+						"Transition",
+						"Active"]
+					},
+					"ipAddress": {
+						"type": "string",
+						"optional": true,
+						"minLength": "0",
+						"maxLength": "255"
+					},
+					"ipv6Addresses": {
+						"type": "array",
+						"optional": true,
+						"items": {
+							"type": "object",
+							"optional": true,
+							"properties": {
+								"address": {
+									"type": "string",
+									"optional": true,
+									"minLength": "0",
+									"maxLength": "255"
+								},
+								"type": {
+									"type": "string",
+									"optional": true,
+									"enum": ["LinkLocal",
+									"RouterAdv",
+									"NotSet",
+									"Unknown",
+									"Static"]
+								}
+							}
+						}
+					},
+					"dhcpEnable": {
+						"type": "boolean",
+						"optional": true
+					},
+					"fwBuildDate": {
+						"type": "string",
+						"optional": true,
+						"minLength": "0",
+						"maxLength": "255"
+					},
+					"dhcpIpv6Enable": {
+						"type": "boolean",
+						"optional": true
+					},
+					"fqdnHostName": {
+						"type": "string",
+						"optional": true,
+						"minLength": "0",
+						"maxLength": "255"
+					},
+					"state": {
+						"type": "string",
+						"optional": true,
+						"enum": ["Online",
+						"Offline"]
+					}
+				}
+			},
+			"readonly": "true"
+		},
+		"oaBayCount": {
+			"type": "integer",
+			"optional": true,
+			"readonly": "true"
+		},
+		"activeOaPreferredIP": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true",
+			"minLength": "0",
+			"maxLength": "255"
+		},
+		"standbyOaPreferredIP": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true",
+			"minLength": "0",
+			"maxLength": "255"
+		},
+		"isFwManaged": {
+			"type": "boolean",
+			"optional": false,
+			"readonly": "true"
+		},
+		"fwBaselineName": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true"
+		},
+		"fwBaselineUri": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true"
+		},
+		"vcmMode": {
+			"type": "boolean",
+			"readonly": "true",
+			"required": "true"
+		},
+		"vcmUrl": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true",
+			"minLength": "0",
+			"maxLength": "255"
+		},
+		"vcmDomainName": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true",
+			"minLength": "0",
+			"maxLength": "255"
+		},
+		"vcmDomainId": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true",
+			"minLength": "0",
+			"maxLength": "255"
+		},
+		"category": {
+			"type": "string",
+			"optional": true
+		},
+		"description": {
+			"type": "string",
+			"optional": true
+		},
+		"created": {
+			"type": "string",
+			"optional": true
+		},
+		"modified": {
+			"type": "string",
+			"optional": true
+		},
+		"eTag": {
+			"type": "string",
+			"optional": true
+		},
+		"licensingIntent": {
+			"type": "string",
+			"enum": ["OneView",
+			"OneViewNoiLO",
+			"OneViewStandard"],
+			"readonly": "true",
+			"required": "true"
+		},
+		"state": {
+			"type": "string",
+			"optional": true
+		},
+		"stateReason": {
+			"type": "string",
+			"optional": true,
+			"description": "Indicates the reason the resource in its current state"
+		},
+		"refreshState": {
+			"type": "string",
+			"optional": true,
+			"enum": ["NotRefreshing",
+			"RefreshPending",
+			"Refreshing",
+			"RefreshFailed"],
+			"description": "Indicates if the resource is currently refreshing."
+		},
+		"status": {
+			"type": "string",
+			"optional": true
+		},
+		"consistentWithGroup": {
+			"type": "boolean",
+			"optional": false,
+			"readonly": "true"
+		},
+		"reconfigurationState": {
+			"type": "string",
+			"enum": ["NotReapplyingConfiguration",
+			"ReapplyingConfiguration",
+			"ReapplyingConfigurationFailed",
+			"Pending"],
+			"readonly": "true",
+			"required": "true"
+		}
+	}
+}

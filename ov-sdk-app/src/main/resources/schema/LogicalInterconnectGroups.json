@@ -1,0 +1,536 @@
+{
+	"type": "object",
+	"optional": true,
+	"properties": {
+		"interconnectMapTemplate": {
+			"type": "object",
+			"properties": {
+				"interconnectMapEntryTemplates": {
+					"type": "array",
+					"optional": true,
+					"items": {
+						"type": "object",
+						"optional": true,
+						"properties": {
+							"logicalLocation": {
+								"type": "object",
+								"optional": true,
+								"properties": {
+									"locationEntries": {
+										"type": "array",
+										"optional": true,
+										"items": {
+											"type": "object",
+											"optional": true,
+											"properties": {
+												"relativeValue": {
+													"type": "integer",
+													"optional": true
+												},
+												"type": {
+													"type": "string",
+													"optional": true,
+													"enum": ["Port",
+													"Bay",
+													"Enclosure"]
+												}
+											}
+										}
+									}
+								}
+							},
+							"permittedInterconnectTypeUri": {
+								"type": "string",
+								"optional": true
+							},
+							"logicalDownlinkUri": {
+								"type": "string",
+								"optional": true,
+								"readonly": "true"
+							}
+						}
+					}
+				}
+			},
+			"required": "true"
+		},
+		"uplinkSets": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"optional": true,
+				"properties": {
+					"reachability": {
+						"type": "string",
+						"optional": true,
+						"enum": ["Unknown",
+						"NotReachable",
+						"Reachable",
+						"RedundantlyReachable"],
+						"readonly": "true"
+					},
+					"networkType": {
+						"type": "string",
+						"enum": ["Ethernet",
+						"FibreChannel"],
+						"required": "true"
+					},
+					"logicalPortConfigInfos": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"optional": true,
+							"properties": {
+								"logicalLocation": {
+									"type": "object",
+									"optional": true,
+									"properties": {
+										"locationEntries": {
+											"type": "array",
+											"optional": true,
+											"items": {
+												"type": "object",
+												"optional": true,
+												"properties": {
+													"relativeValue": {
+														"type": "integer",
+														"optional": true
+													},
+													"type": {
+														"type": "string",
+														"optional": true,
+														"enum": ["Port",
+														"Bay",
+														"Enclosure"]
+													}
+												}
+											}
+										}
+									}
+								},
+								"desiredSpeed": {
+									"type": "string",
+									"optional": true,
+									"enum": ["Speed0M",
+									"Speed1M",
+									"Speed10M",
+									"Speed100M",
+									"Speed1G",
+									"Speed2G",
+									"Speed2_5G",
+									"Speed4G",
+									"Speed8G",
+									"Speed10G",
+									"Auto",
+									"Speed20G",
+									"Speed40G",
+									"Unknown"]
+								}
+							}
+						},
+						"required": "true"
+					},
+					"networkUris": {
+						"type": "array",
+						"optional": true,
+						"items": {
+							"type": "string",
+							"optional": true
+						}
+					},
+					"lacpTimer": {
+						"type": "string",
+						"optional": true,
+						"enum": ["Short",
+						"Long"]
+					},
+					"ethernetNetworkType": {
+						"type": "string",
+						"enum": ["Tagged",
+						"Untagged",
+						"Tunnel",
+						"Unknown",
+						"NotApplicable"],
+						"searchable": "true",
+						"required": "true"
+					},
+					"primaryPort": {
+						"type": "object",
+						"optional": true,
+						"properties": {
+							"locationEntries": {
+								"type": "array",
+								"optional": true,
+								"items": {
+									"type": "object",
+									"optional": true,
+									"properties": {
+										"relativeValue": {
+											"type": "integer",
+											"optional": true
+										},
+										"type": {
+											"type": "string",
+											"optional": true,
+											"enum": ["Port",
+											"Bay",
+											"Enclosure"]
+										}
+									}
+								}
+							}
+						}
+					},
+					"nativeNetworkUri": {
+						"type": "string",
+						"optional": true
+					},
+					"mode": {
+						"type": "string",
+						"optional": true,
+						"enum": ["Auto",
+						"Failover"]
+					},
+					"name": {
+						"type": "string",
+						"optional": true
+					}
+				}
+			},
+			"required": "true"
+		},
+		"snmpConfiguration": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"readCommunity": {
+					"type": "string",
+					"optional": true,
+					"default": "public"
+				},
+				"systemContact": {
+					"type": "string",
+					"optional": true,
+					"default": ""
+				},
+				"trapDestinations": {
+					"type": "array",
+					"optional": true,
+					"items": {
+						"type": "object",
+						"optional": true,
+						"properties": {
+							"trapSeverities": {
+								"type": "array",
+								"optional": true,
+								"items": {
+									"type": "string",
+									"optional": true
+								}
+							},
+							"enetTrapCategories": {
+								"type": "array",
+								"optional": true,
+								"items": {
+									"type": "string",
+									"optional": true
+								}
+							},
+							"fcTrapCategories": {
+								"type": "array",
+								"optional": true,
+								"items": {
+									"type": "string",
+									"optional": true
+								}
+							},
+							"vcmTrapCategories": {
+								"type": "array",
+								"optional": true,
+								"items": {
+									"type": "string",
+									"optional": true
+								}
+							},
+							"trapFormat": {
+								"type": "string",
+								"optional": true,
+								"enum": ["SNMPv1",
+								"SNMPv2"],
+								"default": "SNMPv1"
+							},
+							"trapDestination": {
+								"type": "string",
+								"optional": true,
+								"default": ""
+							},
+							"communityString": {
+								"type": "string",
+								"optional": true,
+								"default": "public"
+							}
+						}
+					}
+				},
+				"snmpAccess": {
+					"type": "array",
+					"optional": true,
+					"items": {
+						"type": "string",
+						"optional": true
+					}
+				},
+				"enabled": {
+					"type": "boolean",
+					"optional": false,
+					"default": "false"
+				},
+				"description": {
+					"type": "string",
+					"optional": true
+				},
+				"status": {
+					"type": "string",
+					"optional": true
+				},
+				"name": {
+					"type": "string",
+					"optional": true
+				},
+				"state": {
+					"type": "string",
+					"optional": true
+				},
+				"created": {
+					"type": "string",
+					"optional": true
+				},
+				"eTag": {
+					"type": "string",
+					"optional": true
+				},
+				"modified": {
+					"type": "string",
+					"optional": true
+				},
+				"category": {
+					"type": "string",
+					"optional": true
+				},
+				"uri": {
+					"type": "string",
+					"optional": true
+				}
+			}
+		},
+		"telemetryConfiguration": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"enableTelemetry": {
+					"type": "boolean",
+					"required": "true",
+					"default": "true"
+				},
+				"sampleCount": {
+					"type": "integer",
+					"maximum": "102",
+					"minimum": "1",
+					"required": "true",
+					"default": "12"
+				},
+				"sampleInterval": {
+					"type": "integer",
+					"maximum": "300",
+					"minimum": "1",
+					"required": "true",
+					"default": "300"
+				},
+				"description": {
+					"type": "string",
+					"optional": true
+				},
+				"status": {
+					"type": "string",
+					"optional": true
+				},
+				"name": {
+					"type": "string",
+					"optional": true
+				},
+				"state": {
+					"type": "string",
+					"optional": true
+				},
+				"created": {
+					"type": "string",
+					"optional": true
+				},
+				"eTag": {
+					"type": "string",
+					"optional": true
+				},
+				"modified": {
+					"type": "string",
+					"optional": true
+				},
+				"category": {
+					"type": "string",
+					"optional": true
+				},
+				"uri": {
+					"type": "string",
+					"optional": true
+				}
+			}
+		},
+		"stackingHealth": {
+			"type": "string",
+			"optional": true,
+			"enum": ["Unknown",
+			"Connected",
+			"BiConnected",
+			"Disconnected"],
+			"readonly": "true"
+		},
+		"ethernetSettings": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"interconnectType": {
+					"type": "string",
+					"optional": true,
+					"enum": ["Ethernet",
+					"FibreChannel"],
+					"readonly": "true",
+					"default": "Ethernet"
+				},
+				"enableIgmpSnooping": {
+					"type": "boolean",
+					"optional": false,
+					"default": "false"
+				},
+				"igmpIdleTimeoutInterval": {
+					"type": "integer",
+					"optional": true,
+					"maximum": "3600",
+					"minimum": "1",
+					"default": "260"
+				},
+				"enableFastMacCacheFailover": {
+					"type": "boolean",
+					"optional": false,
+					"default": "true"
+				},
+				"macRefreshInterval": {
+					"type": "integer",
+					"optional": true,
+					"maximum": "30",
+					"minimum": "1",
+					"default": "5"
+				},
+				"enableNetworkLoopProtection": {
+					"type": "boolean",
+					"optional": false,
+					"default": "true"
+				},
+				"enablePauseFloodProtection": {
+					"type": "boolean",
+					"optional": false,
+					"default": "true"
+				},
+				"dependentResourceUri": {
+					"type": "string",
+					"optional": true,
+					"readonly": "true"
+				},
+				"name": {
+					"type": "string",
+					"optional": true,
+					"readonly": "true"
+				},
+				"id": {
+					"type": "string",
+					"optional": true,
+					"readonly": "true"
+				},
+				"description": {
+					"type": "string",
+					"optional": true
+				},
+				"status": {
+					"type": "string",
+					"optional": true
+				},
+				"state": {
+					"type": "string",
+					"optional": true
+				},
+				"created": {
+					"type": "string",
+					"optional": true
+				},
+				"eTag": {
+					"type": "string",
+					"optional": true
+				},
+				"modified": {
+					"type": "string",
+					"optional": true
+				},
+				"category": {
+					"type": "string",
+					"optional": true
+				},
+				"uri": {
+					"type": "string",
+					"optional": true
+				}
+			}
+		},
+		"stackingMode": {
+			"type": "string",
+			"enum": ["None",
+			"Enclosure",
+			"SwitchPairs",
+			"MultiEnclosure"],
+			"required": "true"
+		},
+		"description": {
+			"type": "string",
+			"optional": true
+		},
+		"status": {
+			"type": "string",
+			"optional": true
+		},
+		"name": {
+			"type": "string",
+			"optional": true
+		},
+		"state": {
+			"type": "string",
+			"optional": true
+		},
+		"created": {
+			"type": "string",
+			"optional": true
+		},
+		"eTag": {
+			"type": "string",
+			"optional": true
+		},
+		"modified": {
+			"type": "string",
+			"optional": true
+		},
+		"category": {
+			"type": "string",
+			"optional": true
+		},
+		"uri": {
+			"type": "string",
+			"optional": true
+		}
+	}
+}
