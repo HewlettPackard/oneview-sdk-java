@@ -7,18 +7,18 @@ This version of SDK is built against HP OneView v1.20.
 
 Features:
 
-This version of SDK covers following features:
+In summary, this version of SDK covers following 3 features:
 
-REST API:
+1.REST API:
 
 The most commonly used REST APIs are covered in this version of SDK. The resources like Network, Network Set, Logical Interconnect Group, Enclosure Group, Enclosure, Storage System, Storage 	Pool, Storage Volume Template, Storage Volumes, Server Profiles and firmware are part of SDK. Also, get calls for Logical Interconnect, Uplink Sets, and Server Hardware are included as well.
 Please refer Appendix section to get the complete of lists APIs and non supported APIs.
 
-Listening on SCMB messages and metrics Data:
+2.Listening on SCMB messages and metrics Data:
 
 SDK has APIs to	listen on SCMB and MSMB messages and notify the consumers.
 
-Sample programs:
+3.Sample programs:
 
 To quickly get started, SDK is bundled with sample programs. User can leverage the most of code in sample programs to start using it. SDK includes sample programs for resources like Network, Network Set, Logical Interconnect Group, Enclosure Group, Enclosure, Storage System, Storage Pool, Storage Volume Template, Storage Volumes, Server Profiles, firmware, SCMB and MSMB modules.
 
