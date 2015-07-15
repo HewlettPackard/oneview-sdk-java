@@ -1,31 +1,39 @@
 # oneview-sdk-java
-Java SDK for HP OneView
+Java SDK for HP OneView:
+
 The Java SDK for HP OneView enables Java developers to easily build integration and scalable solutions with HP OneView. SDK provides client API's to consume OneView REST API's.
 
 This version of SDK is built against HP OneView v1.20.
 
 Features:
+
 This version of SDK covers following features:
 
 REST API:
+
 The most commonly used REST APIs are covered in this version of SDK. The resources like Network, Network Set, Logical Interconnect Group, Enclosure Group, Enclosure, Storage System, Storage 	Pool, Storage Volume Template, Storage Volumes, Server Profiles and firmware are part of SDK. Also, get calls for Logical Interconnect, Uplink Sets, and Server Hardware are included as well.
 Please refer Appendix section to get the complete of lists APIs and non supported APIs.
 
 Listening on SCMB messages and metrics Data:
+
 SDK has APIs to	listen on SCMB and MSMB messages and notify the consumers.
 
 Sample programs:
+
 To quickly get started, SDK is bundled with sample programs. User can leverage the most of code in sample programs to start using it. SDK includes sample programs for resources like Network, Network Set, Logical Interconnect Group, Enclosure Group, Enclosure, Storage System, Storage Pool, Storage Volume Template, Storage Volumes, Server Profiles, firmware, SCMB and MSMB modules.
 
 Release Name:
+
 ov-sdk-app_v0.2_2015-07-13.zip. It is packaged as maven project and delivered.
 
 Software Requirement:
+
 Eclipse
 Jdk 1.7 or above
 Openssl
 
 Steps to generate keystore and truststore:
+
 	1. Fetch CA certificate of server
 		openssl s_client -host <<IP_Address>> -port <<PortNumber>>
 		Where port number is 443
@@ -42,12 +50,14 @@ Steps to generate keystore and truststore:
 		Example: keytool -importkeystore –destkeystore KeyStore – srckeystore myclient.p12 -srcstoretype pkcs12 -alias myclientcert
 
 How to use:
+
 	1. Import SDK maven project into eclipse IDE
 	2. Place the Keystore and TrustStore generated under src/main/resource folder
 	3. Update HPOneView Credentials located at com.hp.ov.sdk.rest.login.SampleRestParams object
 	4. From src/main/test folder, run any of the test cases.
 
-Compatibility
+Compatibility:
+
 This version of SDK works with OneView v1.20. If user prefers to try with 1.1 or 2.0 rev, it is required to update the DTOs before start using it.
 
 Appendix:
