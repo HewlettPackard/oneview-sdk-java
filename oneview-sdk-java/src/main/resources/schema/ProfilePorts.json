@@ -1,0 +1,15 @@
+{
+	"type": "object",
+	"optional": true,
+	"properties": {
+		"ports": {
+			"type": "array",
+			"optional": true,
+			"items": {
+				"type": "any",
+				"optional": true
+			},
+			"readonly": "true"
+		}
+	}
+}

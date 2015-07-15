@@ -1,0 +1,256 @@
+{
+	"type": "object",
+	"optional": true,
+	"properties": {
+		"serialNumber": {
+			"type": "string",
+			"searchable": "true",
+			"required": "true"
+		},
+		"environmentalConfiguration": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"powerHistorySupported": {
+					"type": "boolean",
+					"description": "Resource supports monitoring and retrieval of power consumption history data.  Lack of power consumption history also implies that the calibratedMaxPower cannot be automatically calculated.",
+					"required": "true"
+				},
+				"thermalHistorySupported": {
+					"type": "boolean",
+					"description": "Resource supports ambient temperature history reporting.",
+					"required": "true"
+				},
+				"utilizationHistorySupported": {
+					"type": "boolean",
+					"description": "Resource supports CPU utilization history.",
+					"required": "true"
+				},
+				"capHistorySupported": {
+					"type": "boolean",
+					"description": "Resource supports power cap value history.",
+					"required": "true"
+				},
+				"historySampleIntervalSeconds": {
+					"type": "integer",
+					"description": "Number of seconds in a power history sample interval. Typically 300 seconds (5 minutes).",
+					"required": "true"
+				},
+				"historyBufferSize": {
+					"type": "integer",
+					"description": "Number of history samples maintained by the device. For example, 288 samples at 5 minute intervals cover 24 hours.",
+					"required": "true"
+				},
+				"powerCapType": {
+					"type": "string",
+					"optional": true,
+					"enum": ["None",
+					"Thermal",
+					"Electrical"],
+					"description": "The type of power capping supported by this device."
+				},
+				"idleMaxPower": {
+					"type": "integer",
+					"description": "Minimum power consumption seen (in Watts), 0 if unknown. The minimum power consumption occurs when the device is in idle state.",
+					"required": "true"
+				},
+				"calibratedMaxPower": {
+					"type": "integer",
+					"description": "The calibrated maximum power. Calibrated Maximum Power is defined as the maximum potential power that the device can consume, subject to the following requirements and constraints:  1. The value reported MUST be the maximum which can be sustained for greater than 1/2 second (i.e., in-rush currents and other spikes that may persist for less than a 1/2 second are not to be included). 2. The value reported MUST represent the maximum total AC input across all power supplies 3. The value reported MUST represent the maximum AC input the device can sustain as configured at the time this metric is reported. If additional components are added later or if it is discovered at a later time that more power can be used, the larger number MUST be reported when the device is next queried for this metric. 4. The value reported does not represent potential input power in the case of error conditions such as short circuits. 5. The actual power used by the device MUST NOT exceed the reported Calibrated Maximum Power by greater than 1%. 6. The Calibrated Maximum Power SHOULD NOT exceed the actual maximum power that the device is capable of using by more than 5%.",
+					"required": "true"
+				},
+				"psuList": {
+					"type": "array",
+					"optional": true,
+					"items": {
+						"type": "object",
+						"optional": true,
+						"properties": {
+							"capacity": {
+								"type": "integer",
+								"optional": true,
+								"description": "The size of the power supply in Watts."
+							},
+							"psuId": {
+								"type": "integer",
+								"optional": true,
+								"description": "A small integer identifying the slot or bay number of the power supply starting at one (1). "
+							},
+							"inputVoltage": {
+								"type": "integer",
+								"optional": true,
+								"description": "The line voltage (input) to the power supply (sampled or nominal)."
+							},
+							"side": {
+								"type": "string",
+								"optional": true,
+								"enum": ["Unspecified",
+								"A",
+								"B",
+								"Dynamic"],
+								"description": "The logical power delivery grouping of the power supply. In a known non-redundant configuration, all power supplies should be considered on side A. In a known AC-redundant configuration, the 2 sets of redundant power supplies should be identified as side A/B groupings.  For an AC_REDUNDNAT C-Class BladeSystem slot 1,2,3 is on Side B (right from the front), and 4,5,6 are on Side A (left from the front). If there is no inherent side-ness, then the side will be Dynamic."
+							},
+							"powerType": {
+								"type": "string",
+								"optional": true,
+								"enum": ["Unknown",
+								"AC",
+								"DC"],
+								"description": "The type of input power (AC or DC) of the power supply."
+							}
+						}
+					},
+					"description": "The list of configuration data for each power supply of the device."
+				},
+				"height": {
+					"type": "integer",
+					"description": "The height of the device in u-slots (-1 for unspecified).",
+					"required": "true"
+				},
+				"rackId": {
+					"type": "string",
+					"optional": true,
+					"description": "The GUID of the containing rack if available; otherwise null."
+				},
+				"uSlot": {
+					"type": "integer",
+					"description": "The top-u-slot number of the device in the associated rack if available; -1 otherwise.",
+					"required": "true"
+				},
+				"rackName": {
+					"type": "string",
+					"optional": true,
+					"description": "The rack name associated to this device (null for unspecified)."
+				},
+				"relativeOrder": {
+					"type": "integer",
+					"description": "The relative order of a resource in a Rack when slot information cannot be discovered and is not yet configured.  This information is derived from the management link cable connections in a BladeSystem enclosure.  The values increase from top to bottom, the lowest number (one at top of rack) to highest number (bottom of rack).   A value of -1 indicates unspecified.",
+					"required": "true"
+				},
+				"rackModel": {
+					"type": "string",
+					"optional": true,
+					"description": "The model of the Rack in which this device is mounted."
+				},
+				"rackUHeight": {
+					"type": "integer",
+					"optional": true,
+					"description": "The U height of the rack in which this device is mounted."
+				},
+				"licenseRequirement": {
+					"type": "string",
+					"enum": ["None",
+					"iLOAdvanced",
+					"OneView"],
+					"description": "Reflects any known missing license requirement that prevents access to environmental monitoring features of the resource.   If the value is None, then there are no known issues preventing access to environmental monitoring features of the resource. If the value is iLOAdvanced, then the server hardware must have an iLOAdvanced license applied to environmental monitoring features.    If the value is OneView, then it indicates that there are insufficient HP OneView licenses available to the appliance to enable environmental management features on the resource.",
+					"required": "true"
+				}
+			},
+			"searchable": "true"
+		},
+		"switchManagementConnection": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"connectionProperties": {
+					"type": "array",
+					"optional": true,
+					"items": {
+						"type": "object",
+						"optional": true,
+						"properties": {
+							"valueFormat": {
+								"type": "string",
+								"enum": ["SecuritySensitive",
+								"Unknown"],
+								"searchable": "true",
+								"required": "true"
+							},
+							"valueType": {
+								"type": "string",
+								"enum": ["Integer",
+								"String",
+								"Float",
+								"Double",
+								"Boolean",
+								"Unknown"],
+								"required": "true"
+							},
+							"propertyName": {
+								"type": "string",
+								"searchable": "true",
+								"required": "true"
+							},
+							"value": {
+								"type": "string",
+								"searchable": "true",
+								"required": "true"
+							}
+						}
+					}
+				}
+			},
+			"searchable": "true"
+		},
+		"modelName": {
+			"type": "string",
+			"searchable": "true",
+			"required": "true"
+		},
+		"chassisId": {
+			"type": "string",
+			"searchable": "true",
+			"required": "true"
+		},
+		"firmwareVersion": {
+			"type": "string",
+			"searchable": "true",
+			"required": "true"
+		},
+		"roles": {
+			"type": "array",
+			"items": {
+				"type": "string",
+				"optional": true
+			},
+			"searchable": "true",
+			"required": "true"
+		},
+		"description": {
+			"type": "string",
+			"optional": true
+		},
+		"status": {
+			"type": "string",
+			"optional": true
+		},
+		"name": {
+			"type": "string",
+			"optional": true
+		},
+		"state": {
+			"type": "string",
+			"optional": true
+		},
+		"eTag": {
+			"type": "string",
+			"optional": true
+		},
+		"created": {
+			"type": "string",
+			"optional": true
+		},
+		"modified": {
+			"type": "string",
+			"optional": true
+		},
+		"category": {
+			"type": "string",
+			"optional": true
+		},
+		"uri": {
+			"type": "string",
+			"optional": true
+		}
+	}
+}

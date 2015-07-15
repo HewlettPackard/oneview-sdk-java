@@ -1,0 +1,232 @@
+{
+	"type": "object",
+	"optional": true,
+	"properties": {
+		"serverHardware": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"optional": true,
+				"properties": {
+					"serverHardwareUri": {
+						"type": "string",
+						"readonly": "true",
+						"required": "true"
+					},
+					"status": {
+						"type": "string",
+						"readonly": "true",
+						"required": "true"
+					},
+					"messages": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"optional": true,
+							"properties": {
+								"status": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								},
+								"messageId": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								},
+								"errorSource": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								},
+								"sourceName": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								},
+								"activityUri": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								},
+								"message": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								},
+								"recommendedActions": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								},
+								"createdTime": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								}
+							}
+						},
+						"readonly": "true",
+						"required": "true"
+					}
+				}
+			},
+			"readonly": "true",
+			"required": "true"
+		},
+		"eTag": {
+			"type": "string",
+			"optional": true,
+			"readonly": "true"
+		},
+		"firmwareStatus": {
+			"type": "object",
+			"optional": true,
+			"properties": {
+				"status": {
+					"type": "string",
+					"readonly": "true",
+					"required": "true"
+				},
+				"messages": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"optional": true,
+						"properties": {
+							"status": {
+								"type": "string",
+								"optional": true,
+								"readonly": "true"
+							},
+							"messageId": {
+								"type": "string",
+								"optional": true,
+								"readonly": "true"
+							},
+							"errorSource": {
+								"type": "string",
+								"optional": true,
+								"readonly": "true"
+							},
+							"sourceName": {
+								"type": "string",
+								"optional": true,
+								"readonly": "true"
+							},
+							"activityUri": {
+								"type": "string",
+								"optional": true,
+								"readonly": "true"
+							},
+							"message": {
+								"type": "string",
+								"optional": true,
+								"readonly": "true"
+							},
+							"recommendedActions": {
+								"type": "string",
+								"optional": true,
+								"readonly": "true"
+							},
+							"createdTime": {
+								"type": "string",
+								"optional": true,
+								"readonly": "true"
+							}
+						}
+					},
+					"readonly": "true",
+					"required": "true"
+				},
+				"version": {
+					"type": "string",
+					"readonly": "true",
+					"required": "true"
+				},
+				"name": {
+					"type": "string",
+					"readonly": "true",
+					"required": "true"
+				}
+			},
+			"readonly": "true"
+		},
+		"connections": {
+			"type": "array",
+			"optional": true,
+			"items": {
+				"type": "object",
+				"optional": true,
+				"properties": {
+					"connectionId": {
+						"type": "number",
+						"readonly": "true",
+						"required": "true"
+					},
+					"status": {
+						"type": "string",
+						"readonly": "true",
+						"required": "true"
+					},
+					"messages": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"optional": true,
+							"properties": {
+								"status": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								},
+								"messageId": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								},
+								"errorSource": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								},
+								"sourceName": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								},
+								"activityUri": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								},
+								"message": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								},
+								"recommendedActions": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								},
+								"createdTime": {
+									"type": "string",
+									"optional": true,
+									"readonly": "true"
+								}
+							}
+						},
+						"readonly": "true",
+						"required": "true"
+					}
+				}
+			},
+			"readonly": "true"
+		},
+		"type": {
+			"type": "string",
+			"optional": true
+		}
+	}
+}
