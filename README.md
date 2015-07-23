@@ -11,16 +11,16 @@ In summary, this version of SDK covers following 3 features:
 
 1.REST API:
 
-The most commonly used REST APIs are covered in this version of SDK. The resources like Network, Network Set, Logical Interconnect Group, Enclosure Group, Enclosure, Storage System, Storage 	Pool, Storage Volume Template, Storage Volumes, Server Profiles and firmware are part of SDK. Also, get calls for Logical Interconnect, Uplink Sets, and Server Hardware are included as well.
-Please refer Appendix section to get the complete of lists APIs and non supported APIs.
+The most commonly used REST APIs of OneView are covered in this version of SDK. Resources like Network, Network Set, Logical Interconnect Group, Enclosure Group, Enclosure, Storage System, Storage Pool, Storage Volume Template, Storage Volumes, Server Profiles and Firmware are part of SDK. Additionally, get calls for Logical Interconnect, Uplink Sets, and Server Hardware are included .
+Please refer to the Appendix section to get the complete of lists APIs and  unsupported APIs.
 
 2.Listening on SCMB messages and metrics Data:
 
-SDK has APIs to	listen on SCMB and MSMB messages and notify the consumers.
+SDK has APIs to	listen on SCMB (State Change Message Bus)  and MSMB (Metric Service Message Bus) messages and notify the consumers.
 
 3.Sample programs:
 
-To quickly get started, SDK is bundled with sample programs. User can leverage the most of code in sample programs to start using it. SDK includes sample programs for resources like Network, Network Set, Logical Interconnect Group, Enclosure Group, Enclosure, Storage System, Storage Pool, Storage Volume Template, Storage Volumes, Server Profiles, firmware, SCMB and MSMB modules.
+To get started quickly, this SDK is bundled with sample programs. Users can leverage a majority of the code in sample programs to start using the SDK. The SDK includes sample programs for resources like Network, Network Set, Logical Interconnect Group, Enclosure Group, Enclosure, Storage System, Storage Pool, Storage Volume Template, Storage Volumes, Server Profiles, firmware, SCMB and MSMB modules.
 
 Release Name:
 
@@ -58,7 +58,7 @@ How to use:
 
 Compatibility:
 
-This version of SDK works with OneView v1.20. If user prefers to try with 1.1 or 2.0 rev, it is required to update the DTOs before start using it.
+This version of SDK works with OneView v1.20. If users prefer to try with versions 1.1 or 2.0 , it is required to update the DTOs before start using it.
 
 Appendix:
 
