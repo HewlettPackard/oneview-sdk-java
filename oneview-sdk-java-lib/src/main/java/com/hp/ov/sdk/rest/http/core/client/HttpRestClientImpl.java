@@ -44,10 +44,6 @@ public class HttpRestClientImpl implements HttpRestClient {
      * @throws SDKResourceNotFoundException
      * @throws SDKNoSuchUrlException
      */
-
-    /*
-     * 
-     */
     @Override
     public String sendRequestToHPOV(final RestParams params, final JSONObject jsonObject) {
 

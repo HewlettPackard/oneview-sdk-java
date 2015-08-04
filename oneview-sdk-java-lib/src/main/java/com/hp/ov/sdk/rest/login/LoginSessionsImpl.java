@@ -36,15 +36,7 @@ public class LoginSessionsImpl implements LoginSessions {
 
     @Autowired
     private UrlUtils urlUtils;
-
-    // private JSONObject jsonObject;
-
-    // TODO - plan to move this to central place
-    public void init() {
-        final ApplicationContext ctx = new FileSystemXmlApplicationContext("src/main/resources/rest-client-context.xml");
-        httpRestClient = (HttpRestClient) ctx.getBean("httpRestClientImpl");
-    }
-
+    
     @Override
     public String getLoginSessionId(final RestParams params, final LoginSessionDto dto) {
 
@@ -66,14 +58,6 @@ public class LoginSessionsImpl implements LoginSessions {
         logger.debug("LoginSessionsImpl : getLoginSessionId : sessionId : " + sessionId);
         logger.info("LoginSessionsImpl : getLoginSessionId : End");
         return sessionId;
-    }
-
-    public HttpRestClient getRestClient() {
-        return httpRestClient;
-    }
-
-    public void setRestClient(final HttpRestClient httpRestClient) {
-        this.httpRestClient = httpRestClient;
     }
 
 }

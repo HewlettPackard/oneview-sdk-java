@@ -23,6 +23,7 @@ import com.hp.ov.sdk.dto.CaCert;
 import com.hp.ov.sdk.dto.RabbitMqClientCert;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
+import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKScmbConnectionNotFoundException;
 import com.hp.ov.sdk.messaging.core.RabbitMqClientConnectionFactory;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -80,11 +81,11 @@ public class ScmbConnectionManagerImpl implements ScmbConnectionManager {
             try {
                 conn = connectionFactory.newConnection();
                 channel = conn.createChannel();
-                // TODO - temp Solution
-
+                
             } catch (final IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                logger.error("ScmbConnectionManagerImpl : startScmb: IOException");
+                throw new SDKScmbConnectionNotFoundException(SDKErrorEnum.scmbConnectionNotFound, null, null, null,
+                        SdkConstants.SCMB_CONNECTION, null);
             }
             scmbConnection.setConn(conn);
             scmbConnection.setChannel(channel);
@@ -166,8 +167,7 @@ public class ScmbConnectionManagerImpl implements ScmbConnectionManager {
                 synchronized (map) {
                     map.remove(params.getHostname());
                 }
-            } catch (final IOException e) {
-                // TODO Auto-generated catch block
+            } catch (final IOException e) {                
                 logger.error("ScmbConnectionManagerImpl : removeScmbConnection : error in closing connection");
             }
         }
@@ -175,7 +175,7 @@ public class ScmbConnectionManagerImpl implements ScmbConnectionManager {
 
     @Override
     public void processConsumer(final RestParams params, final String routingKey, final ScmbMessageExecutionQueue messageQueue) {
-        // TODO Auto-generated method stub
+        
         Connection conn = null;
         Channel channel = null;
         // validate params

@@ -5,11 +5,8 @@ package com.hp.ov.sdk.messaging.scmb.services;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.EventTypes;
 
 public class ScmbMessageExecutionQueue extends Thread {
 
@@ -29,25 +26,9 @@ public class ScmbMessageExecutionQueue extends Thread {
         try {
             String message;
             while ((message = messagesInQueue.take()) != SHUTDOWN_REQ) {
-                // TODO - processing logic
-                // check for power off/on alerts
-                if (message.contains(EventTypes.SERVER_RESET_EVENT)) {
-                    // TODO - call listeners
-                    // logger.debug("ScmbProcessor : run : Message Received: " +
-                    // responseBody);
-                    handler.handleMessage(message);
-                } else if (message.contains(EventTypes.UPLINK_SET_CHANGE_EVENT)) { // UPLINK
-                                                                                   // SET
-                                                                                   // CHANGE
-                    handler.handleMessage(message);
-                } else if (message.contains(EventTypes.SERVER_HEALTH_STATUS_EVENT)) {
-                    handler.handleMessage(message);
-                }
-                /*
-                 * else {//everything else, just print message
-                 * logger.debug("ScmbProcessor : run : Message Received: " +
-                 * responseBody); }
-                 */
+                
+                handler.handleMessage(message);
+                
             }
         } catch (final InterruptedException ex) {
             // TODO - exception

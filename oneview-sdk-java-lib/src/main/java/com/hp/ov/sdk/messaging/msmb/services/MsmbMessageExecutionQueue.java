@@ -9,8 +9,6 @@ import java.util.concurrent.BlockingQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.constants.EventTypes;
-
 public class MsmbMessageExecutionQueue extends Thread {
 
     private static final Logger logger = LoggerFactory.getLogger(MsmbMessageExecutionQueue.class);
@@ -29,23 +27,10 @@ public class MsmbMessageExecutionQueue extends Thread {
         try {
             String message;
             while ((message = messagesInQueue.take()) != SHUTDOWN_REQ) {
-                // TODO - processing logic
-                // check for power off/on alerts
 
-                if (message.contains(EventTypes.MSMB_SERVER_HARDWARE)) {
-                    // TODO - call listeners
-                    logger.debug("MsmbProcessor : run : Message Received: " + message);
-                    handler.handleMessage(message);
-                }
-
-                else {// everything else, just print message
-                    logger.debug("MsmbProcessor : run : other Message Received: " + message);
-                }
-                /*
-                 * else {//everything else, just print message
-                 * logger.debug("ScmbProcessor : run : Message Received: " +
-                 * responseBody); }
-                 */
+                logger.debug("MsmbProcessor : run : Message Received: " + message);
+                handler.handleMessage(message);
+                
             }
         } catch (final InterruptedException ex) {
             // TODO - exception

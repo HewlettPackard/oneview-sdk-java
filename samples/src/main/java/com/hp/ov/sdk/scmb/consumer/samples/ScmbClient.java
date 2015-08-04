@@ -23,11 +23,8 @@ public class ScmbClient
 
     private RestParams params;
     private static ScmbConnectionManager objectUnderTest;
-
     private static SdkUtils sdkUtils;
-
     private static SampleRestParams sampleRestParams;
-
     private static ScmbAlertsHandler scmbAlertsHandler;
 
     public static void init()
