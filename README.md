@@ -12,7 +12,7 @@ In summary, this version of SDK covers following 3 features:
 1.REST API:
 
 The most commonly used REST APIs of OneView are covered in this version of SDK. Resources like Network, Network Set, Logical Interconnect Group, Enclosure Group, Enclosure, Storage System, Storage Pool, Storage Volume Template, Storage Volumes, Server Profiles and Firmware are part of SDK. Additionally, get calls for Logical Interconnect, Uplink Sets, and Server Hardware are included .
-Please refer to the Appendix section to get the complete of lists APIs and  unsupported APIs.
+Please refer to the Appendix section to get the complete of lists APIs.
 
 2.Listening on SCMB messages and metrics Data:
 
