@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.constants;
 
@@ -42,5 +42,6 @@ public class ResourceUris {
     public static final String POWER_STATE_URI = "powerState";
     public static final String FC_SANS_DEVICE_MANAGER = "device-managers";
     public static final String FIRMWARE_DRIVER_URI = "/rest/firmware-drivers";
+    public static final String INTERCONNECT_URI = "/rest/interconnects";
 
 }

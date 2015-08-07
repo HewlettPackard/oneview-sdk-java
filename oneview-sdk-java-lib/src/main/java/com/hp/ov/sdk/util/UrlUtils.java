@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 // UrlUtils.java - (insert one line description here)
 // (C) Copyright 2015 Hewlett-Packard Development Company, L.P.

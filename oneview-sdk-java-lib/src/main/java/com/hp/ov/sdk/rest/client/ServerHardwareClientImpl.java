@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
@@ -16,10 +16,18 @@ import com.hp.ov.sdk.adaptors.ServerHardwareAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
+import com.hp.ov.sdk.dto.AddServer;
+import com.hp.ov.sdk.dto.BiosSettingsStateCollection;
+import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.IloSsoUrlResult;
+import com.hp.ov.sdk.dto.JavaRemoteConsoleUrlResult;
+import com.hp.ov.sdk.dto.RemoteConsoleUrlResult;
 import com.hp.ov.sdk.dto.ServerHardwareCollection;
 import com.hp.ov.sdk.dto.ServerPowerControlRequest;
 import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.UtilizationData;
+import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.generated.ServerHardware;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -218,5 +226,123 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         return serverHardwareDto.getPowerState().toString();
     }
 
-    // TODO - implement the remaining update methods and GetByName method
+    @Override
+    public TaskResourceV2 createServerHardware(RestParams params, AddServer addServerDto, final boolean aSync,
+            final boolean useJsonRequest) {
+        logger.info("ServerHardwareClientImpl : createServerHardware : Start");
+        String returnObj = null;
+
+        // validate params
+        if (addServerDto == null) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.SERVER_HARDWARES,
+                    null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.POST);
+        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI));
+
+        // TODO - check for json request in the input dto. if it is present,
+        // then
+        // convert that into jsonObject and pass it rest client
+        // idea is : user can create json string and call the sdk api.
+        // user can save time in creating network dto.
+
+        // create JSON request from dto
+        jsonObject = adaptor.buildJsonObjectFromDto(addServerDto);
+        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        // convert returnObj to taskResource
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
+
+        logger.debug("ServerHardwareClientImpl : createServerHardware : returnObj =" + returnObj);
+        logger.debug("ServerHardwareClientImpl : createServerHardware : taskResource =" + taskResourceV2);
+
+        // check for aSync flag. if user is asking async mode, return directly
+        // the TaskResourceV2
+        // if user is asking for sync mode, call task monitor polling method and
+        // send the update
+        // once task is complete or exceeds the timeout.
+        if (taskResourceV2 != null && aSync == false) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        logger.info("ServerHardwareClientImpl : createServerHardware : End");
+
+        return taskResourceV2;
+    }
+
+    @Override
+    public BiosSettingsStateCollection getBiosForServerHardware(RestParams params, String resourceId) {
+        logger.info("ServerHardwareClientImpl : getBiosForServerHardware : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI, resourceId, SdkConstants.BIOS));
+
+        final String returnObj = restClient.sendRequestToHPOV(params, null);
+        logger.debug("ServerHardwareClient : getBiosForServerHardware : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_HARDWARE,
+                    null);
+        }
+        // Call adaptor to convert to DTO
+        final BiosSettingsStateCollection biosSettingsStateCollectionDto = adaptor.buildBiosCollectionDto(returnObj);
+
+        logger.info("ServerHardwareClientImpl : getBiosForServerHardware : End");
+
+        return biosSettingsStateCollectionDto;
+    }
+
+    // TODO
+    @Override
+    public EnvironmentalConfiguration getEnvironmentConfigurationForServerHardware(RestParams params, String resourceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // TODO
+    @Override
+    public EnvironmentalConfiguration updateEnvironmentConfigurationForServerHardware(RestParams params, String resourceId,
+            EnvironmentalConfigurationUpdate environmentalConfigurationUpdateDto) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // TODO
+    @Override
+    public IloSsoUrlResult getIloSsoUrlForServerHardware(RestParams params, String resourceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // TODO
+    @Override
+    public JavaRemoteConsoleUrlResult getJavaRemoteConsoleUrlForServerHardware(RestParams params, String resourceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // TODO
+    @Override
+    public TaskResourceV2 updateMpFirmwareVersionForServerHardware(RestParams params, String resourceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // TODO
+    @Override
+    public RemoteConsoleUrlResult getRemoteConsoleUrlForServerHardware(RestParams params, String resourceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // TODO
+    @Override
+    public UtilizationData getUtilizationForServerHardware(RestParams params, String resourceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

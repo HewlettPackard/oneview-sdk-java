@@ -1,3 +1,6 @@
+/*******************************************************************************
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ *******************************************************************************/
 package com.hp.ov.sdk.serverprofiles.samples;
 
 import java.util.ArrayList;
@@ -6,7 +9,11 @@ import java.util.List;
 
 import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.ConnectionBoot.BootControl;
+import com.hp.ov.sdk.dto.samples.NetworkForServerProfile;
+import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile;
+import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile.StorageVolume;
 import com.hp.ov.sdk.dto.ServerProfileCollection;
+import com.hp.ov.sdk.dto.samples.ServerProfileValue;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.AvailableNetworks;
 import com.hp.ov.sdk.dto.generated.AvailableServers;
@@ -18,10 +25,6 @@ import com.hp.ov.sdk.dto.generated.StoragePath.StorageTargetType;
 import com.hp.ov.sdk.dto.ProfileConnectionV3;
 import com.hp.ov.sdk.dto.generated.Firmware;
 import com.hp.ov.sdk.dto.generated.ServerProfile;
-import com.hp.ov.sdk.dto.samples.NetworkForServerProfile;
-import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile;
-import com.hp.ov.sdk.dto.samples.ServerProfileValue;
-import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile.StorageVolume;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -39,7 +42,6 @@ import com.hp.ov.sdk.util.samples.ResourceDtoUtilsWrapper;
 import com.hp.ov.sdk.util.samples.SampleRestParams;
 
 public class ServerProfileClientSample {
-
     private RestParams params;
     private static SdkUtils sdkUtils;
     private static SampleRestParams sampleRestParams;
@@ -61,10 +63,10 @@ public class ServerProfileClientSample {
     private static final String profileName = "ServerProfile-Bay15";
     private static final String enclosureGroupName = "Enclosure_Test";
     private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402");
-    private static final List<String> storageVolumeName = Arrays.asList("Volume101");
+    private static final List<String> storageVolumeName = Arrays.asList("Volume101", "Volume103");
     private static final List<String> fcNetworkNames = Arrays.asList("FC_Network_A", "FC_Network_B");
     private static final Boolean useBayNameForServerHardwareUri = false;
-    private static final String resourceId = "c6968984-ca81-49b9-b327-c9f9fb5daa59";
+    private static final String resourceId = "10fbed31-21cd-4c40-9401-3d70511cff00";
 
     // ================================
 
@@ -760,6 +762,7 @@ public class ServerProfileClientSample {
         client.getServerProfileById();
         client.getAllServerProfile();
         client.createServerProfile();
+        client.getServerProfileByName();
         client.getAvailableNetworksForServerProfile();
         client.getAvailableServersForServerProfile();
         client.getAvailableServersForServerProfileUsingProfile();
@@ -770,6 +773,5 @@ public class ServerProfileClientSample {
         client.deleteServerProfile();
         client.deleteServerProfileByFilter();
         client.deleteServerProfileByFilterWithMatch();
-        client.getServerProfileByName();
     }
 }

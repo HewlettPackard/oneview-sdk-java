@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
@@ -107,7 +107,8 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
     public EnclosureGroups getEnclosureGroupByName(final RestParams params, final String name) {
         EnclosureGroups enclosureGroupDto = null;
         logger.info("EnclosureGroupClientImpl : getEnclosureGroupByName : Start");
-        final String query = "filter=\"name=\'" + name + "\'\"";
+        // final String query = "filter=\"name=\'" + name + "\'\"";
+        final String query = urlUtils.createQueryString(name);
 
         // validate args
         if (null == params) {
@@ -239,18 +240,54 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
         return "Deleted";
     }
 
-    // TODO
     @Override
     public String getConfigurationScript(final RestParams params, final String resourceId) {
-        // TODO Auto-generated method stub
-        return null;
+        logger.info("EnclosureGroupClientImpl : getConfigurationScript : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI, resourceId,
+                SdkConstants.SCRIPT));
+
+        final String returnObj = restClient.sendRequestToHPOV(params, null);
+        logger.debug("EnclosureGroupClientImpl : getConfigurationScript : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE_GROUP,
+                    null);
+        }
+
+        logger.info("EnclosureGroupClientImpl : getConfigurationScript : End");
+
+        return returnObj;
     }
 
-    // TODO
     @Override
     public String updateConfigurationScript(final RestParams params, final String resourceId, final String scriptData) {
-        // TODO Auto-generated method stub
-        return null;
+        logger.info("EnclosureGroupClientImpl : updateConfigurationScript : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.PUT);
+        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI, resourceId,
+                SdkConstants.SCRIPT));
+
+        final String returnObj = restClient.sendStringRequestToHPOV(params, scriptData);
+        logger.debug("EnclosureGroupClientImpl : updateConfigurationScript : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE_GROUP,
+                    null);
+        }
+
+        logger.info("EnclosureGroupClientImpl : updateConfigurationScript : End");
+
+        return returnObj;
     }
 
 }

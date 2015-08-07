@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
@@ -11,13 +11,11 @@ import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
 @Component
-public class ApplianceDetailsAdaptor
-{
+public class ApplianceDetailsAdaptor {
 
     private ObjectToJsonConverter converter;
-    
-    public ApplianceDetailsDto buildDto(final Object source)
-    {
+
+    public ApplianceDetailsDto buildDto(final Object source) {
 
         converter = ConverterFactory.getConverter();
         // convert json object to DTO replace quotes and back slash in the file

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.http.core.client;
 
@@ -11,5 +11,10 @@ public interface HttpRestClient {
      * module for sending web service requests.
      */
     public String sendRequestToHPOV(final RestParams params, final JSONObject jsonObject);
+
+    /**
+     * module for sending web service requests.
+     */
+    public String sendStringRequestToHPOV(final RestParams params, final String scriptObject);
 
 }

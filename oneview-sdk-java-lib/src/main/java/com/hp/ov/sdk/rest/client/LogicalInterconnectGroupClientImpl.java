@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
@@ -286,18 +286,58 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         return taskResourceV2;
     }
 
-    // TODO
     @Override
     public InterconnectSettingsV2 getDefaultInterconnectSettings(final RestParams params) {
-        // TODO Auto-generated method stub
-        return null;
+        logger.info("LogicalInterconnectGroupClientImpl : getDefaultInterconnectSettings : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI,
+                SdkConstants.DEFAULT_SETTINGS));
+
+        final String returnObj = restClient.sendRequestToHPOV(params, null);
+        logger.debug("LogicalInterconnectGroupClientImpl : getDefaultInterconnectSettings : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
+                    SdkConstants.LOGICAL_INTERCONNECT_GROUP, null);
+        }
+        // Call adaptor to convert to DTO
+        final InterconnectSettingsV2 interconnectSettingsDto = adaptor.buildInterconnectSettingsDto(returnObj);
+
+        logger.info("LogicalInterconnectGroupClientImpl : getDefaultInterconnectSettings : End");
+
+        return interconnectSettingsDto;
     }
 
-    // TODO
     @Override
     public InterconnectSettingsV2 getInterconnectSettings(final RestParams params, final String resourceId, final String settingId) {
-        // TODO Auto-generated method stub
-        return null;
+        logger.info("LogicalInterconnectGroupClientImpl : getInterconnectSettings : Start");
+
+        // validate args
+        if (null == params || resourceId.equals("") || settingId.equals("")) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId,
+                SdkConstants.SETTINGS, settingId));
+
+        final String returnObj = restClient.sendRequestToHPOV(params, null);
+        logger.debug("LogicalInterconnectGroupClientImpl : getInterconnectSettings : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
+                    SdkConstants.LOGICAL_INTERCONNECT_GROUP, null);
+        }
+        // Call adaptor to convert to DTO
+        final InterconnectSettingsV2 interconnectSettingsDto = adaptor.buildInterconnectSettingsDto(returnObj);
+
+        logger.info("LogicalInterconnectGroupClientImpl : getInterconnectSettings : End");
+
+        return interconnectSettingsDto;
     }
 
 }

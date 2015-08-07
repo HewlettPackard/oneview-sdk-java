@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
@@ -13,14 +13,12 @@ import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
 @Component
-public class NetworkSetAdaptor extends BaseAdaptor<NetworkSets, Object>
-{
+public class NetworkSetAdaptor extends BaseAdaptor<NetworkSets, Object> {
 
     private ObjectToJsonConverter converter;
 
     @Override
-    public NetworkSets buildDto(final Object source)
-    {
+    public NetworkSets buildDto(final Object source) {
         // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         converter = ConverterFactory.getConverter();
@@ -29,24 +27,21 @@ public class NetworkSetAdaptor extends BaseAdaptor<NetworkSets, Object>
         return networkSetDto;
     }
 
-    public NetworkSetCollection buildCollectionDto(final Object source)
-    {
-        if (null == source || source.equals(""))
-        {
+    public NetworkSetCollection buildCollectionDto(final Object source) {
+        if (null == source || source.equals("")) {
             return null;
         }
         // convert json Object to DTO, replace quotes and back slash in the file
         converter = ConverterFactory.getConverter();
         final NetworkSetCollection networkSetCollectionDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source))),
-                NetworkSetCollection.class);
+                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
+                        .convertObjectToJsonString(source))), NetworkSetCollection.class);
         return networkSetCollectionDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final NetworkSets source)
-    {
+    public JSONObject buildJsonObjectFromDto(final NetworkSets source) {
         converter = ConverterFactory.getConverter();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
-    
+
 }

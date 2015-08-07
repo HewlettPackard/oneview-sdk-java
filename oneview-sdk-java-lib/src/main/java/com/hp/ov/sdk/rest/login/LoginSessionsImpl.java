@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 
 package com.hp.ov.sdk.rest.login;
@@ -36,7 +36,7 @@ public class LoginSessionsImpl implements LoginSessions {
 
     @Autowired
     private UrlUtils urlUtils;
-    
+
     @Override
     public String getLoginSessionId(final RestParams params, final LoginSessionDto dto) {
 

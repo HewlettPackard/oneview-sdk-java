@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
@@ -21,6 +21,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ * The EnclosureGroups data transfer object (DTO) contains the information used
+ * to represent a enclosure group in the system. It is used to pass details
+ * about the LIG that the enclosure group uses while adding an enclosure. It is
+ * passed to the add/update enclosureGroup REST api, as well as the add/update
+ * enclosureGroup through java client api.
+ */
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({ "uri", "category", "name", "created", "modified", "eTag", "status", "state", "stackingMode",
@@ -28,8 +36,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public class EnclosureGroups implements Serializable {
 
     /**
-	 * 
-	 */
+     * 
+     */
     private static final long serialVersionUID = 1L;
     @JsonProperty("uri")
     private String uri;

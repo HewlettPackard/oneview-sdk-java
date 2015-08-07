@@ -1,12 +1,11 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.scmb.consumer.samples;
 
 import com.hp.ov.sdk.dto.samples.ScmbMessage;
 
-public interface ServerHardwareListener
-{
+public interface ServerHardwareListener {
 
     /**
      * 

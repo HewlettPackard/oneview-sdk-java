@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
@@ -21,6 +21,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ * The LogicalInterconnectGroups data transfer object (DTO) contains the
+ * information used to represent a LogicalInterconnectGroups in the system. The
+ * LogicalInterconnectGroups Dto is a generic specification of a set of uplink
+ * set that is used to channel the data(both vlan and fiber channel network) and
+ * the type of interconnect that is used in the virtual connect to aid in the
+ * purpose.It is passed in to the add/update logicalInterconnectGroups REST api,
+ * as well as the add/update logicalInterconnectGroups through java client api.
+ */
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({ "stackingMode", "stackingHealth", "interconnectMapTemplate", "uplinkSets", "snmpConfiguration",
@@ -29,8 +39,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public class LogicalInterconnectGroups implements Serializable {
 
     /**
-	 * 
-	 */
+     * 
+     */
     private static final long serialVersionUID = 1L;
     /**
      * 

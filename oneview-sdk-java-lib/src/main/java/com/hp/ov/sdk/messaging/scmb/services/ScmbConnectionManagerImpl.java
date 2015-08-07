@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.messaging.scmb.services;
 
@@ -81,7 +81,7 @@ public class ScmbConnectionManagerImpl implements ScmbConnectionManager {
             try {
                 conn = connectionFactory.newConnection();
                 channel = conn.createChannel();
-                
+
             } catch (final IOException e) {
                 logger.error("ScmbConnectionManagerImpl : startScmb: IOException");
                 throw new SDKScmbConnectionNotFoundException(SDKErrorEnum.scmbConnectionNotFound, null, null, null,
@@ -167,7 +167,7 @@ public class ScmbConnectionManagerImpl implements ScmbConnectionManager {
                 synchronized (map) {
                     map.remove(params.getHostname());
                 }
-            } catch (final IOException e) {                
+            } catch (final IOException e) {
                 logger.error("ScmbConnectionManagerImpl : removeScmbConnection : error in closing connection");
             }
         }
@@ -175,7 +175,6 @@ public class ScmbConnectionManagerImpl implements ScmbConnectionManager {
 
     @Override
     public void processConsumer(final RestParams params, final String routingKey, final ScmbMessageExecutionQueue messageQueue) {
-        
         Connection conn = null;
         Channel channel = null;
         // validate params

@@ -1,20 +1,17 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.util;
 
-public class StringUtil
-{
+public class StringUtil {
     private static final String SLASH = "\\";
     private static final String REPLACEDWITH = "";
 
-    public static String convertIntToString(final int number)
-    {
+    public static String convertIntToString(final int number) {
         return Integer.toString(number);
     }
 
-    public static String replaceQuotesWithEmpty(final String inStr)
-    {
+    public static String replaceQuotesWithEmpty(final String inStr) {
 
         final String newStr = inStr.replaceAll(SLASH, REPLACEDWITH);
         final String pattern = "^\"|\"$";
@@ -22,8 +19,7 @@ public class StringUtil
         return returnStr;
     }
 
-    public static String replaceQuotesAndBackSlash(final String inStr)
-    {
+    public static String replaceQuotesAndBackSlash(final String inStr) {
 
         final String SLASHQ = "\\\\{1}?\"";
         final String REPLACEDWITH = "";
@@ -36,8 +32,7 @@ public class StringUtil
         return returnStr;
     }
 
-    public static String replaceQuotesBackSlashWithQuote(final String inStr)
-    {
+    public static String replaceQuotesBackSlashWithQuote(final String inStr) {
 
         final String SLASHQ = "\\\\{1}?\"";
         final String QUOTE = "\"";

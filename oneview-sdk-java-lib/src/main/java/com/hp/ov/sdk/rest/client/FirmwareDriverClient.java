@@ -1,9 +1,10 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.FwBaselineCollection;
+import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.FwBaseline;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
@@ -49,6 +50,19 @@ public interface FirmwareDriverClient {
      */
     public FwBaseline getFirmwareDriverByName(final RestParams params, final String firmwareName);
 
-    // TODO - implement the remaining update methods and GetByName method
+    /**
+     * This module aids in deletion of the firmware baseline resource with the
+     * specified id. If force is set to true, the firmware baseline resource
+     * will be deleted even if it is assigned to devices
+     * 
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param resourceId
+     *            The resourceId for FirmwareDriver as seen in HP OneView.
+     * @return TaskResourceV2,which returns the task status for the process
+     */
+    public TaskResourceV2 deleteFirmwareDriver(final RestParams params, final String resourceId, final Boolean isForce,
+            final boolean aSync, final boolean useJsonRequest);
 
 }

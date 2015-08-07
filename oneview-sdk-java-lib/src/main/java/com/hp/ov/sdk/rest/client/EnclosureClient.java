@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
@@ -131,7 +131,7 @@ public interface EnclosureClient {
      * @return SsoUrlData, gets the data used for single sign URL for onboard
      *         administrator
      */
-    public SsoUrlData getActiveOaSsoUrl(final RestParams param, final String resourceId);
+    public SsoUrlData getActiveOaSsoUrl(final RestParams params, final String resourceId);
 
     /**
      * This method aids in updating the enclosure configuration with that of
@@ -142,9 +142,11 @@ public interface EnclosureClient {
      *            details.
      * @param resourceId
      *            The resourceId for enclosure as seen in HP OneView.
+     * @param aSync
+     *            Flag input to process request asynchronously or synchronously.
      * @return taskResource which returns the task status for the process
      */
-    public TaskResourceV2 updateCompliance(final RestParams param, final String resourceId);
+    public TaskResourceV2 updateCompliance(final RestParams params, final String resourceId, final boolean aSync);
 
     /**
      * This method aids in reapplying the enclosure configuration.
@@ -154,9 +156,11 @@ public interface EnclosureClient {
      *            details.
      * @param resourceId
      *            The resourceId for enclosure as seen in HP OneView.
+     * @param aSync
+     *            Flag input to process request asynchronously or synchronously.
      * @return taskResource which returns the task status for the process
      */
-    public TaskResourceV2 updateConfiguration(final RestParams param, final String resourceId);
+    public TaskResourceV2 updateConfiguration(final RestParams params, final String resourceId, final boolean aSync);
 
     /**
      * This method aids in applying the firmware baseline to the enclosure. This
@@ -172,10 +176,17 @@ public interface EnclosureClient {
      * @param fwBaselineConfigDto
      *            fwBaselineConfig is the firmware baseline to be applied to the
      *            enclosure
+     * @param aSync
+     *            Flag input to process request asynchronously or synchronously.
+     * @param useJsonRequest
+     *            The JsonRequest body is part of FwBaselineConfig Object which
+     *            takes in a String containing the update to be made, which is
+     *            converted to FwBaselineConfig Object using adaptor and
+     *            processed.
      * @return taskResource which returns the task status for the process
      */
-    public TaskResourceV2 updateEnclosureFwBaseline(final RestParams param, final String resourceId,
-            final FwBaselineConfig fwBaselineConfigDto);
+    public TaskResourceV2 updateEnclosureFwBaseline(final RestParams params, final String resourceId,
+            final FwBaselineConfig fwBaselineConfigDto, final boolean aSync, final boolean useJsonRequest);
 
     /**
      * This methods aids in fetching the environmental configuration of the
@@ -203,11 +214,16 @@ public interface EnclosureClient {
      * @param environmentalConfigurationUpdateDto
      *            environmentalConfiguration, environmental configuration of
      *            enclosure resource specifying the cpu, power value
+     * @param useJsonRequest
+     *            The JsonRequest body is part of EnvironmentalConfiguration
+     *            Object which takes in a String containing the update to be
+     *            made, which is converted to FwBaselineConfig Object using
+     *            adaptor and processed.
      * @return environmentalConfiguration, fetches the environmental
      *         configuration of enclosure resource
      */
     public EnvironmentalConfiguration updateEnvironmentalConfiguration(final RestParams param, final String resourceId,
-            final EnvironmentalConfigurationUpdate environmentalConfigurationUpdateDto);
+            final EnvironmentalConfigurationUpdate environmentalConfigurationUpdateDto, final boolean useJsonRequest);
 
     /**
      * This method aids in refreshing the enclosure to fix configuration issues.
@@ -218,10 +234,19 @@ public interface EnclosureClient {
      * @param resourceId
      *            The resourceId for enclosure as seen in HP OneView.
      * @param refreshStateConfigDto
+     *            refreshStateConfigDto, RefreshStateConfig containing the
+     *            refresh state details to fix configuration issues.
+     * @param aSync
+     *            Flag input to process request asynchronously or synchronously.
+     * @param useJsonRequest
+     *            The JsonRequest body is part of FwBaselineConfig Object which
+     *            takes in a String containing the update to be made, which is
+     *            converted to FwBaselineConfig Object using adaptor and
+     *            processed.
      * @return taskResource which returns the task status for the process
      */
-    public TaskResourceV2 updateRefreshState(final RestParams param, final String resourceId,
-            final RefreshStateConfig refreshStateConfigDto);
+    public TaskResourceV2 updateRefreshState(final RestParams params, final String resourceId,
+            final RefreshStateConfig refreshStateConfigDto, final boolean aSync, final boolean useJsonRequest);
 
     /**
      * The module aids in fetching the configuration script for the specified
@@ -234,7 +259,7 @@ public interface EnclosureClient {
      *            The resourceId for enclosure as seen in HP OneView.
      * @return String, the configuration script for the specified enclosure
      */
-    public String getScript(final RestParams param, final String resourceId);
+    public String getScript(final RestParams params, final String resourceId);
 
     /**
      * The module aids in updating the configuration script for the specified
@@ -246,10 +271,18 @@ public interface EnclosureClient {
      * @param resourceId
      *            The resourceId for enclosure as seen in HP OneView.
      * @param scriptData
-     *            The script data to be updated for enclosure
+     *            The script data to be updated for enclosure.
+     * @param aSync
+     *            Flag input to process request asynchronously or synchronously.
+     * @param useJsonRequest
+     *            The JsonRequest body is part of Enclosure Object which takes
+     *            in a String containing the update to be made, which is
+     *            converted to FwBaselineConfig Object using adaptor and
+     *            processed.
      * @return taskResource which returns the task status for the process
      */
-    public TaskResourceV2 updateScript(final RestParams param, final String resourceId, final String scriptData);
+    public TaskResourceV2 updateScript(final RestParams params, final String resourceId, final String scriptData,
+            final boolean aSync, final boolean useJsonRequest);
 
     /**
      * This method aids in fetching data that can be used to construct a single
@@ -263,7 +296,7 @@ public interface EnclosureClient {
      * @return SsoUrlData, gets the data used for single sign URL for onboard
      *         administrator
      */
-    public SsoUrlData getStandbyOaSsoUrl(final RestParams param, final String resourceId);
+    public SsoUrlData getStandbyOaSsoUrl(final RestParams params, final String resourceId);
 
     /**
      * This method aids in retrieving historical utilization data for the
@@ -277,5 +310,5 @@ public interface EnclosureClient {
      * @return UtilizationData, specifies the resource data utlization such as
      *         power, cpu
      */
-    public UtilizationData getUtilization(final RestParams param, final String resourceId);
+    public UtilizationData getUtilization(final RestParams params, final String resourceId);
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
@@ -14,14 +14,12 @@ import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
 @Component
-public class NetworkAdaptor extends BaseAdaptor<Network, Object>
-{
+public class NetworkAdaptor extends BaseAdaptor<Network, Object> {
 
-    private ObjectToJsonConverter converter;    
+    private ObjectToJsonConverter converter;
 
     @Override
-    public Network buildDto(final Object source)
-    {
+    public Network buildDto(final Object source) {
         converter = ConverterFactory.getConverter();
         // TODO - exceptions
         // convert Object to DTO includes replace quotes and back slash
@@ -30,8 +28,7 @@ public class NetworkAdaptor extends BaseAdaptor<Network, Object>
         return networkDto;
     }
 
-    public BulkEthernetNetwork buildBulkEthernetDto(final Object source)
-    {
+    public BulkEthernetNetwork buildBulkEthernetDto(final Object source) {
         converter = ConverterFactory.getConverter();
         // TODO - exceptions
         // convert Object to DTO Collection includes replace quotes and back
@@ -41,31 +38,27 @@ public class NetworkAdaptor extends BaseAdaptor<Network, Object>
         return bulkEthernetNetworkDto;
     }
 
-    public NetworkCollection buildCollectionDto(final Object source)
-    {
+    public NetworkCollection buildCollectionDto(final Object source) {
         // TODO - exceptions
-        if (null == source || source.equals(""))
-        {
+        if (null == source || source.equals("")) {
             return null;
         }
         converter = ConverterFactory.getConverter();
         // convert json object to DTO replace quotes and back slash in the file
         final NetworkCollection networkCollectionDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source))),
-                NetworkCollection.class);
+                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
+                        .convertObjectToJsonString(source))), NetworkCollection.class);
         return networkCollectionDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final Network source)
-    {
+    public JSONObject buildJsonObjectFromDto(final Network source) {
         converter = ConverterFactory.getConverter();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
-    public JSONObject buildJsonObjectFrombulkEthernetDto(final BulkEthernetNetwork source)
-    {
+    public JSONObject buildJsonObjectFrombulkEthernetDto(final BulkEthernetNetwork source) {
         converter = ConverterFactory.getConverter();
         return new JSONObject(converter.convertObjectToJsonString(source));
-    }   
+    }
 
 }

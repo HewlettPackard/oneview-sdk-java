@@ -1,11 +1,19 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import com.hp.ov.sdk.dto.AddServer;
+import com.hp.ov.sdk.dto.BiosSettingsStateCollection;
+import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
+import com.hp.ov.sdk.dto.IloSsoUrlResult;
+import com.hp.ov.sdk.dto.JavaRemoteConsoleUrlResult;
+import com.hp.ov.sdk.dto.RemoteConsoleUrlResult;
 import com.hp.ov.sdk.dto.ServerHardwareCollection;
 import com.hp.ov.sdk.dto.ServerPowerControlRequest;
 import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.UtilizationData;
+import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.generated.ServerHardware;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
@@ -101,5 +109,133 @@ public interface ServerHardwareClient {
      */
     public String getPowerState(final RestParams params, final String resourceId);
 
-    // TODO - implement the remaining update methods and GetByName method
+    /**
+     * This module aids in adding a rack-mount server for management by the
+     * appliance
+     * 
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param addServer
+     * @return taskResource which returns the task status for the process
+     */
+    public TaskResourceV2 createServerHardware(final RestParams params, final AddServer addServerDto, final boolean aSync,
+            final boolean useJsonRequest);
+
+    /**
+     * This module aids in fetching the list of BIOS/UEFI values currently set
+     * on the physical server.
+     * 
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param resourceId
+     *            The resourceId for ServerHardware as seen in HP OneView.
+     * @return biosSettingsStateCollection, which is a object containing the
+     *         collection of biosSettingsState details.
+     */
+    public BiosSettingsStateCollection getBiosForServerHardware(final RestParams params, final String resourceId);
+
+    /**
+     * This module aids in fetching the settings that describe the environmental
+     * configuration (supported feature set, calibrated minimum & maximum power,
+     * location & dimensions, ...) of the server hardware resource.
+     * 
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param resourceId
+     *            The resourceId for ServerHardware as seen in HP OneView.
+     * @return environmentalConfiguration, which is a object containing the
+     *         environmentalConfiguration details.
+     */
+    public EnvironmentalConfiguration getEnvironmentConfigurationForServerHardware(final RestParams params, final String resourceId);
+
+    /**
+     * THis module aids in updating/setting the calibrated max power of an
+     * unmanaged or unsupported server hardware resource.
+     * 
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param resourceId
+     *            The resourceId for ServerHardware as seen in HP OneView.
+     * @param environmentalConfigurationUpdateDto
+     * @return environmentalConfiguration, which is a object containing the
+     *         environmentalConfiguration details.
+     */
+    public EnvironmentalConfiguration updateEnvironmentConfigurationForServerHardware(final RestParams params,
+            final String resourceId, final EnvironmentalConfigurationUpdate environmentalConfigurationUpdateDto);
+
+    /**
+     * THis module fetches the URL to launch a Single Sign-On (SSO) session for
+     * the iLO web interface
+     * 
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param resourceId
+     *            The resourceId for ServerHardware as seen in HP OneView.
+     * @return iloSsoUrlResult, which is a object containing the iloSsoUrlResult
+     *         details.
+     */
+    public IloSsoUrlResult getIloSsoUrlForServerHardware(final RestParams params, final String resourceId);
+
+    /**
+     * 
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param resourceId
+     *            The resourceId for ServerHardware as seen in HP OneView.
+     * @return javaRemoteConsoleUrlResult, which is a object containing the
+     *         javaRemoteConsoleUrlResult details.
+     */
+    public JavaRemoteConsoleUrlResult getJavaRemoteConsoleUrlForServerHardware(final RestParams params, final String resourceId);
+
+    /**
+     * This module aids in generating a Single Sign-On (SSO) session for the iLO
+     * Java Applet console and returns the URL to launch it. If the server
+     * hardware is unmanaged or unsupported, the resulting URL will not use SSO
+     * and the iLO Java Applet will prompt for credentials. Note, this is not
+     * supported on G7/iLO3 or earlier servers.
+     * 
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param resourceId
+     *            The resourceId for ServerHardware as seen in HP OneView.
+     * @return taskResource which returns the task status for the process
+     */
+    public TaskResourceV2 updateMpFirmwareVersionForServerHardware(final RestParams params, final String resourceId);
+
+    /**
+     * This module aids in the generating a Single Sign-On (SSO) session for the
+     * iLO Integrated Remote Console Application (IRC) and returns the URL to
+     * launch it
+     * 
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param resourceId
+     *            The resourceId for ServerHardware as seen in HP OneView.
+     * @return remoteConsoleUrlResult, which is a object containing the
+     *         remoteConsoleUrlResult details.
+     */
+    public RemoteConsoleUrlResult getRemoteConsoleUrlForServerHardware(final RestParams params, final String resourceId);
+
+    /**
+     * This module aids in retrieving historical utilization data for the
+     * specified resource, metrics, and time span.
+     * 
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param resourceId
+     *            The resourceId for ServerHardware as seen in HP OneView.
+     * @return utilizationData, which is a object containing the utilizationData
+     *         details.
+     */
+    public UtilizationData getUtilizationForServerHardware(final RestParams params, final String resourceId);
+
 }

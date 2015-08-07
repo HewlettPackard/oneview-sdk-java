@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.constants;
 
@@ -60,11 +60,27 @@ public class SdkConstants {
     public static final String FIRMWARE_DRIVER = "firmware-drivers";
     public static final String ETHERNET = "Ethernet";
     public static final String FIBRE_CHANNEL = "FibreChannel";
+
+    public static final String DEFAULT_SETTINGS = "defaultSettings";
+    public static final String SETTINGS = "settings";
+    public static final String SCRIPT = "script";
+    public static final String ACTIVE_OA_SSO_URL = "activeOaSsoUrl";
+    public static final String COMPLIANCE = "compliance";
+    public static final String CONFIGURATION = "configuration";
+    public static final String ENCLOSURE_FW_BASELINE = "enclosureFwBaseline";
+    public static final String ENVIRONMENTAL_CONFIGURATION = "environmentalConfiguration";
+    public static final String REFRESH_STATE = "refreshState";
+    public static final String STANDBY_OA_SSO_URL = "standbyOaSsoUrl";
+    public static final String UTILIZATION = "utilization";
+    public static final String BIOS = "bios";
+    public static final String INTERCONNECT = "interconnect";
     /**
 	 * 
 	 */
     public static final int URL_NOT_FOUND = 404;
     public static final int BAD_REQUEST = 400;
+    public static final int FORBIDDEN_REQUEST = 403;
+    public static final int METHOD_NOT_ALLOWED = 405;
 
     public static final String JSON_TO_OBJECT_CONVERSION = "Json-to-object";
     public static final String OBJECT_TO_JOSON_CONVERSION = "Object-to-json";

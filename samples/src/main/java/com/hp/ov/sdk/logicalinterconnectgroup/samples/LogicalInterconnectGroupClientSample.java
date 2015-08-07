@@ -1,3 +1,6 @@
+/*******************************************************************************
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ *******************************************************************************/
 package com.hp.ov.sdk.logicalinterconnectgroup.samples;
 
 import java.util.ArrayList;
@@ -5,12 +8,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import com.hp.ov.sdk.dto.samples.UplinkSetValue;
 import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
+import com.hp.ov.sdk.dto.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.LogicalInterconnectGroupCollectionV2;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
 import com.hp.ov.sdk.dto.generated.UplinkSet;
-import com.hp.ov.sdk.dto.samples.UplinkSetValue;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -37,7 +41,7 @@ public class LogicalInterconnectGroupClientSample {
 
     // test values - user input
     // ================================
-    private static final String resourceName = "LIG_PROD_2";
+    private static final String resourceName = "LIG_PROD";
     private static final String permittedInterconnectType = "HP VC FlexFabric-20/40 F8 Module";
     private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402", "Prod_403");
     private static final List<String> fcNetworkName_A = Arrays.asList("FC_Network_A");
@@ -49,7 +53,8 @@ public class LogicalInterconnectGroupClientSample {
     private static final String ethUplinkSetName = "EthernetUplinkSet";
     private static final String fcAUplinkSetName = "FCUplinkSetA";
     private static final String fcBUplinkSetName = "FCUplinkSetB";
-    private static final String resourceId = "5f5f0065-1578-454e-9e38-96881e0af3ba";
+    private static final String resourceId = "df9dff39-2884-42e4-b9a1-bfbca2ed6de2";
+    private static final String settingId = "e64a27e7-e5da-465f-b07e-f8a59e01b2b9";
 
     // ================================
 
@@ -333,9 +338,88 @@ public class LogicalInterconnectGroupClientSample {
             System.out.println("LogicalInterconnectGroupClientTest : deleteLogicalInterconnectGroup : arguments are null ");
             return;
         }
+    }
+
+    private void getDefaultInterconnectSettings() {
+        InterconnectSettingsV2 interconnectSettingsDto = null;
+        // first get the session Id
+        try {
+            // Get the basic REST parameters like hostname, username and
+            // password
+            params = sampleRestParams.getBasicRestParams();
+
+            // update the parameters with version and sessionId
+            params = sdkUtils.createRestParams(params);
+
+            // then make sdk service call to get resource
+            interconnectSettingsDto = logicalInterconnectGroupClient.getDefaultInterconnectSettings(params);
+
+            System.out.println("LogicalInterconnectGroupClientTest : " + "getDefaultInterconnectSettings : logical interconnect"
+                    + " setting returned to client : " + interconnectSettingsDto.toString());
+
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("LogicalInterconnectGroupClientTest : "
+                    + "getDefaultInterconnectSettings : resource setting you are looking is not found");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("LogicalInterconnectGroupClientTest : " + "getDefaultInterconnectSettings : no such url : "
+                    + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("LogicalInterconnectGroupClientTest : "
+                    + "getDefaultInterconnectSettings : Applicance Not reachabe at : " + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("LogicalInterconnectGroupClientTest : "
+                    + "getDefaultInterconnectSettings : No response from appliance : " + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("LogicalInterconnectGroupClientTest : " + "getDefaultInterconnectSettings : arguments are null ");
+            return;
+        }
 
     }
-    
+
+    private void getInterconnectSettings() {
+        InterconnectSettingsV2 interconnectSettingsDto = null;
+        // first get the session Id
+        try {
+            // Get the basic REST parameters like hostname, username and
+            // password
+            params = sampleRestParams.getBasicRestParams();
+
+            // update the parameters with version and sessionId
+            params = sdkUtils.createRestParams(params);
+
+            // then make sdk service call to get resource
+            interconnectSettingsDto = logicalInterconnectGroupClient.getInterconnectSettings(params, resourceId, settingId);
+
+            System.out.println("LogicalInterconnectGroupClientTest : " + "getInterconnectSettings : logical interconnect"
+                    + " setting returned to client : " + interconnectSettingsDto.toString());
+
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("LogicalInterconnectGroupClientTest : "
+                    + "getInterconnectSettings : resource setting you are looking is not found");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("LogicalInterconnectGroupClientTest : " + "getInterconnectSettings : no such url : "
+                    + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("LogicalInterconnectGroupClientTest : " + "getInterconnectSettings : Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("LogicalInterconnectGroupClientTest : " + "getInterconnectSettings : No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("LogicalInterconnectGroupClientTest : " + "getInterconnectSettings : arguments are null ");
+            return;
+        }
+
+    }
+
     private LogicalInterconnectGroups buildTestLogicalInterconnectGroup() {
         final HashMap<Integer, String> bayPermittedInterconnectMaps = new HashMap<Integer, String>();
         bayPermittedInterconnectMaps.put(1, permittedInterconnectType);
@@ -394,8 +478,8 @@ public class LogicalInterconnectGroupClientSample {
 
         client.getAllLogicalInterconnectGroups();
         client.getLogicalInterconnectGroupById();
-        // client.getDefaultInterconnectSettings();
-        // client.getInterconnectSettings();
+        client.getDefaultInterconnectSettings();
+        client.getInterconnectSettings();
         client.createLogicalInterconnectGroup();
         client.getLogicalInterconnectGroupByName();
         client.updateLogicalInterconnectGroup();

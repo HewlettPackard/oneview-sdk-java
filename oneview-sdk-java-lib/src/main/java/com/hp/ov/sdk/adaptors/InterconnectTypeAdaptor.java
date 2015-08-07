@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
@@ -12,14 +12,12 @@ import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
 @Component
-public class InterconnectTypeAdaptor extends BaseAdaptor<InterconnectTypes, Object>
-{
+public class InterconnectTypeAdaptor extends BaseAdaptor<InterconnectTypes, Object> {
 
-    private ObjectToJsonConverter converter;    
+    private ObjectToJsonConverter converter;
 
     @Override
-    public InterconnectTypes buildDto(final Object source)
-    {
+    public InterconnectTypes buildDto(final Object source) {
         // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         converter = ConverterFactory.getConverter();
@@ -28,20 +26,17 @@ public class InterconnectTypeAdaptor extends BaseAdaptor<InterconnectTypes, Obje
         return interconnectTypeDto;
     }
 
-    public InterconnectTypeCollectionV2 buildCollectionDto(final Object source)
-    {
+    public InterconnectTypeCollectionV2 buildCollectionDto(final Object source) {
         // TODO - exceptions
-        if (null == source || source.equals(""))
-        {
+        if (null == source || source.equals("")) {
             return null;
         }
         converter = ConverterFactory.getConverter();
         // convert json Object to DTO, replace quotes and back slash in the file
         final InterconnectTypeCollectionV2 interconnectTypeCollectionDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source))),
-                InterconnectTypeCollectionV2.class);
+                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
+                        .convertObjectToJsonString(source))), InterconnectTypeCollectionV2.class);
         return interconnectTypeCollectionDto;
     }
- 
 
 }

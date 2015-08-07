@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
@@ -99,7 +99,8 @@ public class StoragePoolClientImpl implements StoragePoolClient {
         StoragePool storagePoolDto = null;
         logger.info("StoragePoolClientImpl : getStoragePoolByName : Start");
 
-        final String query = "filter=\"name=\'" + name + "\'\"";
+        // final String query = "filter=\"name=\'" + name + "\'\"";
+        final String query = urlUtils.createQueryString(name);
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);

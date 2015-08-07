@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
@@ -11,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.hp.ov.sdk.adaptors.FirmwareDriverAdaptor;
+import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.FwBaselineCollection;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.FwBaseline;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -22,12 +24,15 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
+import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
 
 @Component
 public class FirmwareDriverClientImpl implements FirmwareDriverClient {
 
     private static final Logger logger = LoggerFactory.getLogger(FirmwareDriverClientImpl.class);
+    private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
+
     @Autowired
     private HttpRestClient restClient;
 
@@ -36,6 +41,12 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
 
     @Autowired
     private UrlUtils urlUtils;
+
+    @Autowired
+    private TaskAdaptor taskAdaptor;
+
+    @Autowired
+    private TaskMonitorManager taskMonitor;
 
     @Override
     public FwBaseline getFirmwareDriver(final RestParams params, final String resourceId) {
@@ -112,6 +123,44 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
         throw new SDKResourceNotFoundException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.FIRMWARE_DRIVER, null);
 
     }
-    // TODO - implement the remaining update methods and GetByName method
+
+    @Override
+    public TaskResourceV2 deleteFirmwareDriver(RestParams params, String resourceId, Boolean isForce, final boolean aSync,
+            final boolean useJsonRequest) {
+        logger.info("FirmwareDriverClientImpl : deleteFirmwareDriver : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.DELETE);
+        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI, resourceId));
+
+        final String returnObj = restClient.sendRequestToHPOV(params, null);
+        logger.debug("FirmwareDriverClientImpl : deleteFirmwareDriver : response from OV :" + returnObj);
+
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.FIRMWARE_DRIVER,
+                    null);
+        }
+
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
+
+        logger.debug("FirmwareDriverClientImpl : deleteFirmwareDriver : returnObj =" + returnObj);
+        logger.debug("FirmwareDriverClientImpl : deleteFirmwareDriver : taskResource =" + taskResourceV2);
+
+        // check for asyncOrSyncMode. if user is asking async mode, return the
+        // directly the TaskResourceV2
+        // if user is asking for sync mode, calling the tasking polling method
+        // and send the update
+        // once task is complete.
+        if (taskResourceV2 != null && aSync == false) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        logger.info("FirmwareDriverClientImpl : deleteFirmwareDriver : End");
+
+        return taskResourceV2;
+    }
 
 }

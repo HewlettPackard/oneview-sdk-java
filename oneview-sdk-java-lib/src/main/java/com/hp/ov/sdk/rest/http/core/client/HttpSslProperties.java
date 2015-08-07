@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.http.core.client;
 
@@ -64,7 +64,7 @@ public class HttpSslProperties {
         this.trustStoreType = trustStoreType;
     }
 
-    /**
+    /*
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -72,7 +72,7 @@ public class HttpSslProperties {
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    /**
+    /*
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -80,7 +80,7 @@ public class HttpSslProperties {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
 
-    /**
+    /*
      * @see java.lang.Object#toString()
      */
     @Override

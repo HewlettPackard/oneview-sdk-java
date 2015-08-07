@@ -1,3 +1,6 @@
+/*******************************************************************************
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ *******************************************************************************/
 // ScmbHandler.java - (insert one line description here)
 // (C) Copyright 2015 Hewlett-Packard Development Company, L.P.
 
@@ -12,18 +15,15 @@ import com.hp.ov.sdk.messaging.scmb.services.ScmbAlertsHandler;
 /**
  * 
  */
-public class ScmbHandler implements ScmbListener
-{
+public class ScmbHandler implements ScmbListener {
 
     private final ScmbAlertsHandler scmbAlertsHandler;
 
-    public ScmbHandler()
-    {
+    public ScmbHandler() {
         scmbAlertsHandler = new ScmbAlertsHandler(this);
     }
 
-    public ScmbAlertsHandler getScmbAlertsHandler()
-    {
+    public ScmbAlertsHandler getScmbAlertsHandler() {
         return scmbAlertsHandler;
     }
 
@@ -33,8 +33,7 @@ public class ScmbHandler implements ScmbListener
      * (com.hp.ov.sdk.dto.ScmbAlertsMessageDto)
      */
     @Override
-    public void handleScmbMessage(final ScmbAlertsMessageDto alertsDto)
-    {
+    public void handleScmbMessage(final ScmbAlertsMessageDto alertsDto) {
         System.out.println("ScmbAlertsHandler : handlMessage :  value from Dto : resourceUri: " + alertsDto.getResourceUri());
         final ScmbMessage scmbMessage = new ScmbMessage();
         // set the message
@@ -47,20 +46,15 @@ public class ScmbHandler implements ScmbListener
         final LogicalInterconnectConsumer liHandler = new LogicalInterconnectConsumer();
 
         // notify server listener
-        if (alertsDto.getResource().getAlertTypeID().equals(EventTypes.SERVER_RESET_EVENT))
-        {
+        if (alertsDto.getResource().getAlertTypeID().equals(EventTypes.SERVER_RESET_EVENT)) {
             serverHandler.notifyPowerStatus(scmbMessage);
-        }
-        else if (alertsDto.getResource().getAlertTypeID().equals(EventTypes.SERVER_HEALTH_STATUS_EVENT))
-        { // server
-          // health
-          // listener
+        } else if (alertsDto.getResource().getAlertTypeID().equals(EventTypes.SERVER_HEALTH_STATUS_EVENT)) { // server
+                                                                                                             // health
+                                                                                                             // listener
             serverHandler.notifyHealthStatus(scmbMessage);
-        }
-        else if (alertsDto.getResource().getAlertTypeID().equals(EventTypes.UPLINK_SET_CHANGE_EVENT))
-        { // notify
-          // logical-interconnecs
-          // listener
+        } else if (alertsDto.getResource().getAlertTypeID().equals(EventTypes.UPLINK_SET_CHANGE_EVENT)) { // notify
+                                                                                                          // logical-interconnecs
+                                                                                                          // listener
             liHandler.notifyLiUplinkSetStatus(scmbMessage);
         }
 

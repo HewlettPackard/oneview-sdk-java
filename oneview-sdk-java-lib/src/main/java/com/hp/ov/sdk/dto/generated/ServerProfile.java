@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
@@ -22,6 +22,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.hp.ov.sdk.dto.ProfileConnectionV3;
 
+/**
+ * The ServerProfile data transfer object (DTO) contains the information used to
+ * represent a server profile in the system. The server profile Dto specifies
+ * the connections, the bios setting, the storage details and firmware details
+ * to the server hardware. It is also used in creation of templates which are to
+ * be applied to servers. It is passed in to the add/update server profile REST
+ * api, as well as the add/update server profile through java client api.
+ */
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({ "uri", "name", "description", "serialNumber", "uuid", "serverHardwareUri", "serverHardwareTypeUri",
@@ -31,8 +40,8 @@ import com.hp.ov.sdk.dto.ProfileConnectionV3;
 public class ServerProfile implements Serializable {
 
     /**
-	 * 
-	 */
+     * 
+     */
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("uri")

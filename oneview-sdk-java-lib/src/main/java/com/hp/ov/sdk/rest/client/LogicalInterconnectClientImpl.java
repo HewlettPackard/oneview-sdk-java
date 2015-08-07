@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
@@ -16,11 +16,18 @@ import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.InterconnectFibData;
+import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
 import com.hp.ov.sdk.dto.LiFirmware;
 import com.hp.ov.sdk.dto.LogicalInterconnectCollectionV2;
+import com.hp.ov.sdk.dto.PortMonitor;
+import com.hp.ov.sdk.dto.PortMonitorUplinkPortCollection;
+import com.hp.ov.sdk.dto.SwitchDumpDataInfo;
+import com.hp.ov.sdk.dto.SwitchDumpGenerationInfo;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
 import com.hp.ov.sdk.dto.generated.SnmpConfiguration;
+import com.hp.ov.sdk.dto.generated.TelemetryConfiguration;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -129,8 +136,8 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     }
 
     @Override
-    public LiFirmware getLogicalInterconnectFirmware(final RestParams params, final String resourceId) {
-        logger.info("LogicalInterconnectClientImpl : getLogicalInterconnectFirmware : Start");
+    public LiFirmware getLogicalInterconnectFirmwareById(final RestParams params, final String resourceId) {
+        logger.info("LogicalInterconnectClientImpl : getLogicalInterconnectFirmwareById : Start");
 
         // validate args
         if (null == params) {
@@ -141,7 +148,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId, "firmware"));
 
         final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("LogicalInterconnectClientImpl : getLogicalInterconnectFirmware : response from OV :" + returnObj);
+        logger.debug("LogicalInterconnectClientImpl : getLogicalInterconnectFirmwareById : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.LOGICAL_INTERCONNECT, null);
@@ -150,7 +157,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         final LiFirmware liFirmwareDto = adaptor.buildFirmwareDto(returnObj);
 
-        logger.info("LogicalInterconnectClientImpl : getLogicalInterconnectFirmware : End");
+        logger.info("LogicalInterconnectClientImpl : getLogicalInterconnectFirmwareById : End");
 
         return liFirmwareDto;
     }
@@ -288,5 +295,85 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         return taskResourceV2;
     }
 
-    // TODO - implement the remaining update methods and GetByName method
+    // TODO
+    @Override
+    public InterconnectFibData getLogicalInterconnectForwardingInformationBase(RestParams params, String resourceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // TODO
+    @Override
+    public InterconnectFibDataInfo createLogicalInterconnectForwardingInformationBase(RestParams params, String resourceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // TODO
+    @Override
+    public void getLogicalInterconnectForwardingInformationBaseDump(RestParams params, String resourceId, String fileName) {
+        // TODO Auto-generated method stub
+
+    }
+
+    // TODO
+    @Override
+    public SnmpConfiguration getLogicalInterconnectSnmpConfigurationById(RestParams params, String resourceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // TODO
+    @Override
+    public SwitchDumpDataInfo createLogicalInterconnectSupportDump(RestParams params, String resourceId,
+            SwitchDumpGenerationInfo switchDumpGenerationInfo) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // TODO
+    @Override
+    public PortMonitorUplinkPortCollection getLogicalInterconnectUnassignedUplinkPortsForPortMonitor(RestParams params,
+            String resourceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // TODO
+    @Override
+    public TaskResourceV2 updateLogicalInterconnectConfiguration(RestParams params, String resourceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // TODO
+    @Override
+    public PortMonitor getLogicalInterconnectPortMonitorConfiguration(RestParams params, String resourceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // TODO
+    @Override
+    public TaskResourceV2 updateLogicalInterconnectPortMonitorConfiguration(RestParams params, String resourceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // TODO
+    @Override
+    public TelemetryConfiguration getLogicalInterconnectTelementaryConfiguration(RestParams params, String resourceId,
+            String telementaryConfigurationId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    // TODO
+    @Override
+    public TelemetryConfiguration updateLogicalInterconnectTelementaryConfiguration(RestParams params, String resourceId,
+            String telementaryConfigurationId, TelemetryConfiguration telemetryConfiguration) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

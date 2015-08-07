@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
@@ -20,6 +20,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.hp.ov.sdk.dto.JsonRequest;
 
+/**
+ * The FcNetwork data transfer object (DTO) contains the information used to
+ * represent a fiber channel path in the system. It is passed in to the
+ * add/update fcnetwork REST api, as well as the add/update fcnetwork through
+ * java client api.
+ */
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({ "fabricType", "connectionTemplateUri", "linkStabilityTime", "managedSanUri", "autoLoginRedistribution",
@@ -27,8 +34,8 @@ import com.hp.ov.sdk.dto.JsonRequest;
 public class FcNetwork implements Serializable {
 
     /**
-	 * 
-	 */
+     * 
+     */
     private static final long serialVersionUID = 1L;
     /**
      * 

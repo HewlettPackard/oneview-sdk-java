@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.msmb.consumer.samples;
 
@@ -19,8 +19,7 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.SdkUtils;
 import com.hp.ov.sdk.util.samples.SampleRestParams;
 
-public class MsmbClient
-{
+public class MsmbClient {
 
     private RestParams params;
     private static MsmbConnectionManager objectUnderTest;
@@ -28,17 +27,14 @@ public class MsmbClient
     private static SampleRestParams sampleRestParams;
     private static MsmbAlertsHandler msmbAlertsHandler;
 
-    public static void init()
-    {
+    public static void init() {
         sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
         sampleRestParams = new SampleRestParams();
         objectUnderTest = HPOneViewSdkBeanFactory.getMsmbConnectionManager();
     }
 
-    public void msmbProcessor()
-    {
-        try
-        {
+    public void msmbProcessor() {
+        try {
             // Get the basic REST parameters like hostname, username and
             // password
             params = sampleRestParams.getBasicRestParams();
@@ -47,45 +43,29 @@ public class MsmbClient
             params = sdkUtils.createRestParams(params);
 
             // create MessageExecutionQueue object
-            final MsmbMessageExecutionQueue messageQueue = new MsmbMessageExecutionQueue(
-                    msmbAlertsHandler);
+            final MsmbMessageExecutionQueue messageQueue = new MsmbMessageExecutionQueue(msmbAlertsHandler);
 
             // start the dequeue process
             messageQueue.start();
 
             // then start scmb
             objectUnderTest.startMsmb(params);
-            objectUnderTest.processConsumer(params,
-                    SamplesConstants.MSMB_ALERTS_ROUTING_KEY, messageQueue);
+            objectUnderTest.processConsumer(params, SamplesConstants.MSMB_ALERTS_ROUTING_KEY, messageQueue);
             // TODO - start next processor with different routing key
             // objectUnderTest.processConsumer(params, "scmb.interconnects.#");
-        }
-        catch (final SDKResourceNotFoundException ex)
-        {
-            System.out.println("ScmbConnectionManagerImplTest : testScmbProcessor : resource not found : "
-                    + params.getHostname());
-        }
-        catch (final SDKNoSuchUrlException ex)
-        {
-            System.out.println("ScmbConnectionManagerImplTest : testScmbProcessor : no such url : "
-                    + params.getHostname());
-        }
-        catch (final SDKApplianceNotReachableException e)
-        {
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("ScmbConnectionManagerImplTest : testScmbProcessor : resource not found : " + params.getHostname());
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("ScmbConnectionManagerImplTest : testScmbProcessor : no such url : " + params.getHostname());
+        } catch (final SDKApplianceNotReachableException e) {
             System.out.println("ScmbConnectionManagerImplTest : testScmbProcessor : Applicance Not reachabe at : "
                     + params.getHostname());
-        }
-        catch (final SDKNoResponseException ex)
-        {
+        } catch (final SDKNoResponseException ex) {
             System.out.println("ScmbConnectionManagerImplTest : testScmbProcessor : No response from appliance : "
                     + params.getHostname());
-        }
-        catch (final SDKInvalidArgumentException ex)
-        {
+        } catch (final SDKInvalidArgumentException ex) {
             System.out.println("ScmbConnectionManagerImplTest : testScmbProcessor : arguments are null ");
-        }
-        catch (final SDKScmbConnectionNotFoundException ex)
-        {
+        } catch (final SDKScmbConnectionNotFoundException ex) {
             System.out.println("ScmbConnectionManagerImplTest : testScmbProcessor : scmb connection not found ");
         }
 
@@ -93,10 +73,8 @@ public class MsmbClient
         // + rabbitMqClientCertDto.toString());
     }
 
-    public void stopMsmb()
-    {
-        try
-        {
+    public void stopMsmb() {
+        try {
             // Get the basic REST parameters like hostname, username and
             // password
             params = sampleRestParams.getBasicRestParams();
@@ -106,48 +84,32 @@ public class MsmbClient
 
             // then stop scmb
             objectUnderTest.stopMsmb(params);
-        }
-        catch (final SDKResourceNotFoundException ex)
-        {
-            System.out.println("ScmbConnectionManagerImplTest : testStopScmb : resource not found : "
-                    + params.getHostname());
-        }
-        catch (final SDKNoSuchUrlException ex)
-        {
-            System.out.println("ScmbConnectionManagerImplTest : testStopScmb : no such url : "
-                    + params.getHostname());
-        }
-        catch (final SDKApplianceNotReachableException e)
-        {
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("ScmbConnectionManagerImplTest : testStopScmb : resource not found : " + params.getHostname());
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("ScmbConnectionManagerImplTest : testStopScmb : no such url : " + params.getHostname());
+        } catch (final SDKApplianceNotReachableException e) {
             System.out.println("ScmbConnectionManagerImplTest : testStopScmb : Applicance Not reachabe at : "
                     + params.getHostname());
-        }
-        catch (final SDKInvalidArgumentException ex)
-        {
+        } catch (final SDKInvalidArgumentException ex) {
             System.out.println("ScmbConnectionManagerImplTest : testStopScmb : arguments are null ");
-        }
-        catch (final SDKMsmbConnectionNotFoundException e)
-        {
+        } catch (final SDKMsmbConnectionNotFoundException e) {
             System.out.println("ScmbConnectionManagerImplTest : testStopScmb : connection not found ");
         }
     }
 
     // main
 
-    public static void main(final String[] args)
-    {
+    public static void main(final String[] args) {
         init();
         final MsmbClient msmbClient = new MsmbClient();
         final MsmbHandler handler = new MsmbHandler();
         msmbAlertsHandler = handler.getMsmbAlertsHandler();
         msmbClient.msmbProcessor();
-        try
-        {
+        try {
             Thread.sleep(300000); // Sample value to before stopping scmb ( 300
                                   // secs = 5 mins )
-        }
-        catch (final InterruptedException e)
-        {
+        } catch (final InterruptedException e) {
             System.out.println("ScmbConnectionManagerImplTest : mainTest : thread interrupted ");
         }
         msmbClient.stopMsmb();

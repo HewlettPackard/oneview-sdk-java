@@ -1,13 +1,20 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
+
+/**
+ * The StorageVolumeTemplate data transfer object (DTO) contains the information
+ * used to represent a storage volume template in the system. It is passed in to
+ * the add/update storage volume template REST api, as well as the add/update
+ * storage volume template through java client api.
+ */
 
 public class StorageVolumeTemplate extends BaseModelResource {
 
     /**
-	 * 
-	 */
+     * 
+     */
     private static final long serialVersionUID = 1L;
     private TemplateProvisioningData provisioning;
     private RefreshState refreshState;

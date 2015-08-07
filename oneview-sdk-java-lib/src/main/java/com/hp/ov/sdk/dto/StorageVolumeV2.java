@@ -1,7 +1,14 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
+
+/**
+ * The StorageVolumeV2 data transfer object (DTO) contains the information used
+ * to represent a storage volume in the system. It is passed in to the
+ * add/update storage volume REST api, as well as the add/update storage volume
+ * through java client api.
+ */
 
 public class StorageVolumeV2 extends BaseModelResource {
 

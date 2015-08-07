@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
@@ -106,7 +106,8 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
     public StorageVolumeTemplate getStorageVolumeTemplateByName(final RestParams params, final String name) {
         StorageVolumeTemplate storageVolumeTemplateDto = null;
         logger.info("StorageVolumeTemplateClientImpl : getNetworkSetByName : Start");
-        final String query = "filter=\"name=\'" + name + "\'\"";
+        // final String query = "filter=\"name=\'" + name + "\'\"";
+        final String query = urlUtils.createQueryString(name);
 
         // validate args
         if (null == params) {

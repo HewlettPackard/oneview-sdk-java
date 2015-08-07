@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
@@ -17,6 +17,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+/**
+ * The NetworkSet data transfer object (DTO) contains the information used to to
+ * represent a collection of network that represents a network set in the
+ * system. It is passed in to the add/update networkSet REST api, as well as the
+ * add/update networkSet through java client api.
+ */
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({ "networkUris", "connectionTemplateUri", "nativeNetworkUri", "description", "status", "name", "state", "eTag",
@@ -24,8 +31,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class NetworkSets implements Serializable {
 
     /**
-	 * 
-	 */
+     * 
+     */
     private static final long serialVersionUID = 1L;
     /**
      * 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
@@ -12,20 +12,17 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 
 @Component
-public class LoginSessionAdaptor extends BaseAdaptor<LoginSessionDto, RestParams>
-{
+public class LoginSessionAdaptor extends BaseAdaptor<LoginSessionDto, RestParams> {
 
     private ObjectToJsonConverter converter;
 
-    public JSONObject buildJSONObjectFromDto(final LoginSessionDto source)
-    {
+    public JSONObject buildJSONObjectFromDto(final LoginSessionDto source) {
         converter = ConverterFactory.getConverter();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
     @Override
-    public LoginSessionDto buildDto(final RestParams params)
-    {
+    public LoginSessionDto buildDto(final RestParams params) {
         final LoginSessionDto target = new LoginSessionDto();
         target.setUserName(params.getUserName());
         target.setPassword(params.getPassword());
@@ -35,18 +32,15 @@ public class LoginSessionAdaptor extends BaseAdaptor<LoginSessionDto, RestParams
     }
 
     // TODO - add exception
-    public String retrieveSessionId(final String request)
-    {
+    public String retrieveSessionId(final String request) {
         String sessionId = null;
         String string = null;
 
         string = request.substring(1, request.length() - 1);
         final String[] keyValuePairs = string.split(",");
-        for (final String pair : keyValuePairs)
-        {
+        for (final String pair : keyValuePairs) {
             final String[] entry = pair.split(":");
-            if (entry[0].trim().contains("sessionID"))
-            {
+            if (entry[0].trim().contains("sessionID")) {
                 sessionId = (entry[1].trim().replaceAll("\"", ""));
             }
         }

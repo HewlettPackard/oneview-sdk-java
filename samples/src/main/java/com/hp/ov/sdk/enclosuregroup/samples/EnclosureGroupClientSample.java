@@ -1,3 +1,6 @@
+/*******************************************************************************
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ *******************************************************************************/
 package com.hp.ov.sdk.enclosuregroup.samples;
 
 import java.util.ArrayList;
@@ -33,8 +36,9 @@ public class EnclosureGroupClientSample {
     // test values - user input
     // ================================
     private static final String resourceName = "Enclosure_Test";
-    private static final String logicalInterconnectName = "LIG_PROD_1";
-    private static final String resourceId = "b95fc9be-450f-400c-999c-2d6c88ea58cc";
+    private static final String logicalInterconnectName = "LIG_PROD";
+    private static final String resourceId = "9ecda449-9d60-41ef-8922-62dbd0519531";
+    private static final String scriptData = "name=Enclosure_test";
 
     // ================================
 
@@ -304,73 +308,88 @@ public class EnclosureGroupClientSample {
 
     }
 
-    /*
-     * private void testGetConfigurationScript() { String enclosureScript =
-     * null; try { // Get the basic REST parameters like hostname, username and
-     * // password params = sampleRestParams.getBasicRestParams();
-     * 
-     * // update the parameters with version and sessionId params =
-     * sdkUtils.createRestParams(params);
-     * 
-     * // then make sdk service call to get resource enclosureScript =
-     * enclosureGroupClient.getConfigurationScript(params, resourceId); } catch
-     * (final SDKResourceNotFoundException ex) {
-     * System.out.println("EnclosureGroupClientTest : testGetConfigurationScript :"
-     * + " resource you are looking is not found "); } catch (final
-     * SDKNoSuchUrlException ex) {
-     * System.out.println("EnclosureGroupClientTest : testGetConfigurationScript :"
-     * + " no such url : " + params.getUrl()); } catch (final
-     * SDKApplianceNotReachableException e) {
-     * System.out.println("EnclosureGroupClientTest : testGetConfigurationScript :"
-     * + " Applicance Not reachabe at : " + params.getHostname()); } catch
-     * (final SDKNoResponseException ex) {
-     * System.out.println("EnclosureGroupClientTest : testGetConfigurationScript :"
-     * + " No response from appliance : " + params.getHostname()); } catch
-     * (final SDKInvalidArgumentException ex) {
-     * System.out.println("EnclosureGroupClientTest : testGetConfigurationScript :"
-     * + " arguments are null "); }
-     * 
-     * System.out.println("EnclosureGroupClientTest : testGetConfigurationScript :"
-     * + " enclosure script returned to client : " + enclosureScript); }
-     * 
-     * private void updateConfigurationScript() throws InstantiationException,
-     * IllegalAccessException { String enclosureScript = null; EnclosureGroups
-     * enclosureGroupDto = null; String resourceId = null; try { // Get the
-     * basic REST parameters like hostname, username and // password params =
-     * sampleRestParams.getBasicRestParams();
-     * 
-     * // update the parameters with version and sessionId params =
-     * sdkUtils.createRestParams(params);
-     * 
-     * 
-     * // fetch resource Id using resource name enclosureGroupDto =
-     * enclosureGroupClient.getEnclosureGroupByName( params, resourceName);
-     * 
-     * if (null != enclosureGroupDto.getUri()) { resourceId =
-     * urlUtils.getResourceIdFromUri(enclosureGroupDto.getUri()); }
-     * 
-     * // then make sdk service call to get resource enclosureScript =
-     * enclosureGroupClient.updateConfigurationScript(params, resourceId,
-     * scriptData); } catch (final SDKResourceNotFoundException ex) {
-     * System.out.
-     * println("EnclosureGroupClientTest : updateConfigurationScript :" +
-     * " resource you are looking is not found "); } catch (final
-     * SDKNoSuchUrlException ex) {
-     * System.out.println("EnclosureGroupClientTest : updateConfigurationScript :"
-     * + " no such url : " + params.getUrl()); } catch (final
-     * SDKApplianceNotReachableException e) {
-     * System.out.println("EnclosureGroupClientTest : updateConfigurationScript :"
-     * + " Applicance Not reachabe at : " + params.getHostname()); } catch
-     * (final SDKNoResponseException ex) {
-     * System.out.println("EnclosureGroupClientTest : updateConfigurationScript :"
-     * + " No response from appliance : " + params.getHostname()); } catch
-     * (final SDKInvalidArgumentException ex) {
-     * System.out.println("EnclosureGroupClientTest : updateConfigurationScript :"
-     * + " arguments are null "); }
-     * 
-     * System.out.println("EnclosureGroupClientTest : updateConfigurationScript :"
-     * + " enclosure script returned to client : " + enclosureScript); }
-     */
+    private void getConfigurationScript() {
+        String enclosureScript = null;
+        try {
+            // Get the basic REST parameters like hostname, username and
+            // password
+            params = sampleRestParams.getBasicRestParams();
+
+            // update the parameters with version and sessionId
+            params = sdkUtils.createRestParams(params);
+
+            // then make sdk service call to get resource
+            enclosureScript = enclosureGroupClient.getConfigurationScript(params, resourceId);
+
+            System.out.println("EnclosureGroupClientTest : getConfigurationScript :" + " enclosure script returned to client : "
+                    + enclosureScript);
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("EnclosureGroupClientTest : getConfigurationScript :" + " resource you are looking is not found ");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("EnclosureGroupClientTest : getConfigurationScript :" + " no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("EnclosureGroupClientTest : getConfigurationScript :" + " Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("EnclosureGroupClientTest : getConfigurationScript :" + " No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("EnclosureGroupClientTest : getConfigurationScript :" + " arguments are null ");
+            return;
+        }
+
+    }
+
+    private void updateConfigurationScript() throws InstantiationException, IllegalAccessException {
+        String enclosureScript = null;
+        EnclosureGroups enclosureGroupDto = null;
+        String resourceId = null;
+        try {
+            // Get the basic REST parameters like hostname, username and
+            // password
+            params = sampleRestParams.getBasicRestParams();
+
+            // update the parameters with version and sessionId
+            params = sdkUtils.createRestParams(params);
+
+            // fetch resource Id using resource name
+            enclosureGroupDto = enclosureGroupClient.getEnclosureGroupByName(params, resourceName);
+
+            if (null != enclosureGroupDto.getUri()) {
+                resourceId = urlUtils.getResourceIdFromUri(enclosureGroupDto.getUri());
+            }
+
+            // then make sdk service call to get resource
+            enclosureScript = enclosureGroupClient.updateConfigurationScript(params, resourceId, scriptData);
+
+            System.out.println("EnclosureGroupClientTest : updateConfigurationScript :" + " enclosure script returned to client : "
+                    + enclosureScript);
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out
+                    .println("EnclosureGroupClientTest : updateConfigurationScript :" + " resource you are looking is not found ");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("EnclosureGroupClientTest : updateConfigurationScript :" + " no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("EnclosureGroupClientTest : updateConfigurationScript :" + " Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("EnclosureGroupClientTest : updateConfigurationScript :" + " No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("EnclosureGroupClientTest : updateConfigurationScript :" + " arguments are null ");
+            return;
+        }
+
+    }
+
     // TODO - Move Uri fetch logic to SdkUtils
     private EnclosureGroups buildTestEnclosureGroupDto() {
 
@@ -401,6 +420,8 @@ public class EnclosureGroupClientSample {
         client.getEnclosureGroupById();
         client.getAllEnclosureGroup();
         client.createEnclosureGroup();
+        client.updateConfigurationScript();
+        client.getConfigurationScript();
         client.getEnclosureGroupByName();
         client.updateEnclosureGroup();
         client.createEnclosureGroup();

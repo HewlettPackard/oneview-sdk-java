@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
@@ -39,7 +39,7 @@ import com.hp.ov.sdk.util.UrlUtils;
 public class ServerProfileClientImpl implements ServerProfileClient {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerProfileClientImpl.class);
-    private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
+    private static final int TIMEOUT = 1200000; // in milliseconds = 20 mins
     @Autowired
     private HttpRestClient restClient;
 
@@ -119,7 +119,8 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     public ServerProfile getServerProfileByName(final RestParams params, final String name) {
         ServerProfile serverProfileDto = null;
         logger.info("ServerProfileClientImpl : getServerProfileByName : Start");
-        final String query = "filter=\"name=\'" + name + "\'\"";
+        // final String query = "filter=\"name=\'" + name + "\'\"";
+        final String query = urlUtils.createQueryString(name);
 
         // validate args
         if (null == params) {

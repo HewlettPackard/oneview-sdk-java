@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
@@ -99,7 +99,8 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
     public InterconnectTypes getInterconnectTypeByName(final RestParams params, final String name) {
         InterconnectTypes interconnectTypeDto = null;
         logger.info("InterconnectTypeClientImpl : getInterconnectTypeByName : Start");
-        final String query = "filter=\"name=\'" + name + "\'\"";
+        // final String query = "filter=\"name=\'" + name + "\'\"";
+        final String query = urlUtils.createQueryString(name);
 
         // validate args
         if (null == params) {

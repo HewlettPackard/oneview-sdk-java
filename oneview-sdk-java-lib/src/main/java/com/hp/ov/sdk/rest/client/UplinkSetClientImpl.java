@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
@@ -205,5 +205,49 @@ public class UplinkSetClientImpl implements UplinkSetClient {
         logger.error("UplinkSetClientImpl : getUplinkSetsByName : Not found for name :" + uplinkSetName);
         throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.UPLINKSET, null);
     }
-    // TODO - implement the remaining update methods and GetByName method
+
+    @Override
+    public TaskResourceV2 createUplinkSet(RestParams params, UplinkSets uplinkSetDto, boolean aSync, boolean useJsonRequest) {
+        logger.info("UplinkSetClientImpl : createUplinkSet : Start");
+        String returnObj = null;
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // validate dto
+        if (uplinkSetDto == null) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.UPLINKSET, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.POST);
+        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI));
+
+        // TODO - check for json request in the input dto. if it is present,
+        // then
+        // convert that into jsonObject and pass it rest client
+        // idea is : user can create json string and call the sdk api.
+        // user can save time in creating network dto.
+
+        // create JSON request from dto
+        jsonObject = adaptor.buildJsonObjectFromDto(uplinkSetDto);
+        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        // convert returnObj to taskResource
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
+
+        logger.debug("UplinkSetClientImpl : createUplinkSet : returnObj =" + returnObj);
+        logger.debug("UplinkSetClientImpl : createUplinkSet : taskResource =" + taskResourceV2);
+
+        // check for aSync flag. if user is asking async mode, return directly
+        // the TaskResourceV2
+        // if user is asking for sync mode, call task monitor polling method and
+        // send the update
+        // once task is complete or exceeds the timeout.
+        if (taskResourceV2 != null && aSync == false) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        logger.info("UplinkSetClientImpl : createUplinkSet : End");
+
+        return taskResourceV2;
+    }
 }

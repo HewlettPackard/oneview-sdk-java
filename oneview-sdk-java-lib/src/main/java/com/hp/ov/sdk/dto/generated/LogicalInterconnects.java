@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
@@ -23,6 +23,17 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.hp.ov.sdk.dto.InterconnectMap;
 import com.hp.ov.sdk.dto.PortMonitor;
 
+/**
+ * The LogicalInterconnects data transfer object (DTO) contains the information
+ * used to represent a LogicalInterconnects in the system. The
+ * LogicalInterconnects Dto specifies the set of uplink set that is used to
+ * channel the data(both vlan and fiber channel network) and the type of
+ * interconnect that is used in the virtual connect to aid in the purpose. The
+ * dto is used to add/update interconnects at a location and also in generating
+ * support dumps. It is passed in to the update logicalInterconnects REST api,
+ * as well as the update logicalInterconnects through java client api.
+ */
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({ "stackingHealth", "snmpConfiguration", "telemetryConfiguration", "ethernetSettings", "description", "status",
@@ -31,8 +42,8 @@ import com.hp.ov.sdk.dto.PortMonitor;
 public class LogicalInterconnects implements Serializable {
 
     /**
-	 * 
-	 */
+     * 
+     */
     private static final long serialVersionUID = 1L;
     /**
      * 

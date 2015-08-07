@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.messaging.msmb.services;
 
@@ -14,27 +14,25 @@ import com.hp.ov.sdk.messaging.msmb.listeners.MsmbListener;
 public class MsmbAlertsHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(MsmbAlertsHandler.class);
-    
+
     private MsmbAlertsMessageAdaptor adaptor;
     private MsmbListener msmbListener;
-    
-    public MsmbAlertsHandler()
-    {
+
+    public MsmbAlertsHandler() {
 
     }
 
-    public MsmbAlertsHandler(final MsmbListener msmbListener)
-    {
+    public MsmbAlertsHandler(final MsmbListener msmbListener) {
         this.msmbListener = msmbListener;
     }
-    
+
     public void handleMessage(final String message) {
         adaptor = new MsmbAlertsMessageAdaptor();
         logger.debug("MsmbAlertsHandler : handlMessage : Message Received: " + message);
         // call adaptor
         final MsmbAlertsMessageDto alertsDto = adaptor.buildDto(message);
-        //invoke listener
+        // invoke listener
         msmbListener.handleMsmbMessage(alertsDto);
-        
+
     }
 }

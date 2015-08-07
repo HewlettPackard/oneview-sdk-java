@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
@@ -84,8 +84,9 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         ConnectionTemplate connectionTemplateDto = null;
         ConnectionTemplateCollection connectionTemplateCollectionDto = null;
         logger.info("ConnectionTemplateClientImpl : getConnectionTemplateByName : Start");
-        final String query = "filter=\"name matches \'" + resourceName + "\'\"";
-
+        // final String query = "filter=\"name matches \'" + resourceName +
+        // "\'\"";
+        final String query = urlUtils.createQueryString(resourceName);
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);

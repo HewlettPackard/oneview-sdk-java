@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.messaging.scmb.services;
 
@@ -15,8 +15,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.GetResponse;
 
-public class ScmbProcessor extends Thread
-{
+public class ScmbProcessor extends Thread {
 
     private static final Logger logger = LoggerFactory.getLogger(ScmbProcessor.class);
 
@@ -27,8 +26,7 @@ public class ScmbProcessor extends Thread
     private final ScmbMessageExecutionQueue messageQueue;
 
     public ScmbProcessor(final RestParams params, final Connection conn, final Channel channel, final String routingKey,
-            final ScmbMessageExecutionQueue queue)
-    {
+            final ScmbMessageExecutionQueue queue) {
         this.params = params;
         this.conn = conn;
         this.channel = channel;
@@ -37,11 +35,9 @@ public class ScmbProcessor extends Thread
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
 
-        try
-        {
+        try {
             // do not specify queue name. AMQP will create a queue with random
             // name starting with amq.gen* e.g. amq.gen-32sfQz9
             final DeclareOk queue = channel.queueDeclare("", true, false, true, null);
@@ -50,41 +46,30 @@ public class ScmbProcessor extends Thread
             // Exchange with required routing key.
             channel.queueBind(queue.getQueue(), SdkConstants.SCMB_EXCHANGE_NAME, routingKey);
             // Now you should be able to receive messages from queue
-            while (true)
-            {
+            while (true) {
                 final GetResponse chResponse = channel.basicGet(queue.getQueue(), false);
-                if (chResponse == null)
-                {
-                    // logger.debug("ScmbProcessor : run : No Message Received: "
-                    // );
-                }
-                else
-                {
+                if (chResponse == null) {
+                    // logger.debug("ScmbProcessor : run : No Message Received: ");
+                } else {
                     final byte[] body = chResponse.getBody();
                     final String responseBody = new String(body);
                     // add to queue
-                    //TODO - define seperate queue for each resource and insert it
+                    //TODO - Geoff feedback. Add separate queue for each resources instead of putting in one queue
                     messageQueue.add(responseBody);
                 }
                 // TODO - get feedback, is it good idea to sleep in while loop?
             }
-        }
-        catch (final IOException e)
-        {
+        } catch (final IOException e) {
             logger.error("ScmbProcessor : run : error in scmb processor : thread might have been interrupted by Stop user");
         }
     }
 
-    public void releaseScmbThread()
-    {
+    public void releaseScmbThread() {
         this.interrupt();
         // also stop Message Queue thread
-        try
-        {
+        try {
             messageQueue.shutDown();
-        }
-        catch (final InterruptedException e)
-        {
+        } catch (final InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

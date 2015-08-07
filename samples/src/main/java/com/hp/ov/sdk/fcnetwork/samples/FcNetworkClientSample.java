@@ -1,3 +1,6 @@
+/*******************************************************************************
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ *******************************************************************************/
 package com.hp.ov.sdk.fcnetwork.samples;
 
 import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
@@ -30,8 +33,8 @@ public class FcNetworkClientSample {
 
     // test values - user input
     // ================================
-    private static final String resourceName = "FC_Network_C";
-    private static final String resourceId = "b6aeb1ac-b790-452f-89ed-ddc86520c9f2";
+    private static final String resourceName = "FC_Network_A";
+    private static final String resourceId = "3007c39d-db47-49d9-af69-0865a59228fc";
 
     // ================================
 
@@ -311,10 +314,10 @@ public class FcNetworkClientSample {
             System.out.println("FcNetworkClientTest : deleteFcNetwork : " + "fcNetwork group object returned to client : "
                     + taskResourceV2.toString());
         } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("FcNetworkClientTest : deleteFcNetworkSet :" + " resource you are looking is not found for delete ");
+            System.out.println("FcNetworkClientTest : deleteFcNetwork :" + " resource you are looking is not found for delete ");
             return;
         } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("FcNetworkClientTest : deleteFcNetworkSet :" + " no such url : " + params.getUrl());
+            System.out.println("FcNetworkClientTest : deleteFcNetwork :" + " no such url : " + params.getUrl());
             return;
         } catch (final SDKApplianceNotReachableException e) {
             System.out.println("FcNetworkClientTest : deleteFcNetwork :" + " Applicance Not reachabe at : " + params.getHostname());

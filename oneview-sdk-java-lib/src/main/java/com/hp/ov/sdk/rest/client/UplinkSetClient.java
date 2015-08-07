@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
@@ -90,5 +90,23 @@ public interface UplinkSetClient {
      */
     public UplinkSets getUplinkSetsByName(final RestParams params, final String uplinkSetName);
 
-    // TODO - implement the remaining update methods and GetByName method
+    /**
+     * This module aids in creation of uplinkSet.
+     * 
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param uplinkSetDto
+     *            This is a object containing the UplinkSet details, used to
+     *            create a UplinkSet.
+     * @param aSync
+     *            Flag input to process request asynchronously or synchronously.
+     * @param useJsonRequest
+     *            The JsonRequest body is part of UplinkSet Object which takes
+     *            in a String containing the update to be made, which is
+     *            converted to UplinkSets Object using adaptor and processed.
+     * @return taskResource which returns the task status for the process
+     */
+    public TaskResourceV2 createUplinkSet(final RestParams params, final UplinkSets uplinkSetDto, final boolean aSync,
+            final boolean useJsonRequest);
 }

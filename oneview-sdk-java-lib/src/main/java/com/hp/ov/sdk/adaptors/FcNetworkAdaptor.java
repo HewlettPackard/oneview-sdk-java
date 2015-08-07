@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
@@ -13,14 +13,12 @@ import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
 @Component
-public class FcNetworkAdaptor extends BaseAdaptor<FcNetwork, Object>
-{
+public class FcNetworkAdaptor extends BaseAdaptor<FcNetwork, Object> {
 
-    private ObjectToJsonConverter converter;    
+    private ObjectToJsonConverter converter;
 
     @Override
-    public FcNetwork buildDto(final Object source)
-    {
+    public FcNetwork buildDto(final Object source) {
         // TODO - exceptions
         // convert json object to DTO, replace quotes and back slash in the file
         converter = ConverterFactory.getConverter();
@@ -29,23 +27,20 @@ public class FcNetworkAdaptor extends BaseAdaptor<FcNetwork, Object>
         return fcNetworkDto;
     }
 
-    public FcNetworkCollection buildCollectionDto(final Object source)
-    {
+    public FcNetworkCollection buildCollectionDto(final Object source) {
         // TODO - exceptions
-        if (null == source || source.equals(""))
-        {
+        if (null == source || source.equals("")) {
             return null;
         }
         converter = ConverterFactory.getConverter();
         // convert json object to DTO, replace quotes and back slash in the file
         final FcNetworkCollection fcNetworkCollectionDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source))),
-                FcNetworkCollection.class);
+                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
+                        .convertObjectToJsonString(source))), FcNetworkCollection.class);
         return fcNetworkCollectionDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final FcNetwork source)
-    {
+    public JSONObject buildJsonObjectFromDto(final FcNetwork source) {
         converter = ConverterFactory.getConverter();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }

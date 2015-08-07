@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
@@ -20,9 +20,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * A server hardware resource.
- * 
+ * The ServerHardware data transfer object (DTO) contains the information used
+ * to represent a server hardware in the system. It is passed in to the
+ * add/update server hardware REST api, as well as the add/update server
+ * hardware through java client api.
  */
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({ "name", "state", "stateReason", "assetTag", "category", "created", "description", "eTag", "formFactor",
@@ -34,8 +37,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public class ServerHardware implements Serializable {
 
     /**
-	 * 
-	 */
+     * 
+     */
     private static final long serialVersionUID = 1L;
     /**
      * The name of the server.

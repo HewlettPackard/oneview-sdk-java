@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.messaging.msmb.services;
 
@@ -49,26 +49,13 @@ public class MsmbProcessor extends Thread {
             while (true) {
                 final GetResponse chResponse = channel.basicGet(queue.getQueue(), false);
                 if (chResponse == null) {
-                    // logger.debug("ScmbProcessor : run : No Message Received: "
-                    // );
+                    // logger.debug("ScmbProcessor : run : No Message Received: ");
                 } else {
                     final byte[] body = chResponse.getBody();
                     final String responseBody = new String(body);
                     // check for power off/on alerts
-
-                    messageQueue.add(responseBody);
-
-                    /*
-                     * if
-                     * (responseBody.contains(EventTypes.MSMB_SERVER_HARDWARE))
-                     * { //TODO - call listeners
-                     * logger.debug("MsmbProcessor : run : Message Received: " +
-                     * responseBody); handler.handleMessage(responseBody); }
-                     * 
-                     * else {//everything else, just print message
-                     * logger.debug("MsmbProcessor : run : other Message Received: "
-                     * + responseBody); }
-                     */
+                    //TODO - Geoff feedback. Add separate queue for each resources instead of putting in one queue
+                    messageQueue.add(responseBody);                 
 
                 }
                 // TODO - get feedback, is it good idea to sleep in while loop?

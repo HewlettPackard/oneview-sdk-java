@@ -1,3 +1,6 @@
+/*******************************************************************************
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ *******************************************************************************/
 package com.hp.ov.sdk.networkset.samples;
 
 import java.util.Arrays;
@@ -34,8 +37,8 @@ public class NetworkSetClientSample {
     // test values - user input
     // ================================
 
-    private static final String resourceId = "77b93464-cf98-4714-93a2-8fcac3c02307";
-    private static final String resourceName = "NetworkSet_Test_one";
+    private static final String resourceId = "4a2dec96-6344-4f15-821c-ce51734faba7";
+    private static final String resourceName = "NetworkSet_Prod";
     private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402", "Prod_403", "Prod_404");
 
     // ================================

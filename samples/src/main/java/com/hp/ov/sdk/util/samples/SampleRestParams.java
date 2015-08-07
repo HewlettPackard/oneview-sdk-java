@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2014-2015 Hewlett-Packard Development Company, L.P.
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.util.samples;
 
@@ -9,10 +9,6 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public class SampleRestParams {
 
-    // @Autowired
-    // private HttpSslProperties props;
-
-    // @Autowired
     private SslPropertiesManager util;
 
     private HttpSslProperties httpSslProperties;
@@ -21,9 +17,9 @@ public class SampleRestParams {
         // Sample values - user needs set these values as per his environment
 
         final RestParams params = new RestParams();
-        params.setHostname("15.199.201.9");
-        params.setUserName("administrator");
-        params.setPassword("hpvse123");
+        params.setHostname("10.10.10.10");
+        params.setUserName("admin");
+        params.setPassword("admin");
         params.setDomain("LOCAL");
         params.setApiVersion(120);
 

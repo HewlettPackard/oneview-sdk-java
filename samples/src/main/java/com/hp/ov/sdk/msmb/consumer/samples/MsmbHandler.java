@@ -1,3 +1,6 @@
+/*******************************************************************************
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ *******************************************************************************/
 // ScmbHandler.java - (insert one line description here)
 // (C) Copyright 2015 Hewlett-Packard Development Company, L.P.
 
@@ -9,22 +12,18 @@ import com.hp.ov.sdk.msmb.consumer.samples.ServerHardwareMsmbConsumer;
 import com.hp.ov.sdk.messaging.msmb.listeners.MsmbListener;
 import com.hp.ov.sdk.messaging.msmb.services.MsmbAlertsHandler;
 
-
 /**
  * 
  */
-public class MsmbHandler implements MsmbListener
-{
+public class MsmbHandler implements MsmbListener {
 
     private final MsmbAlertsHandler msmbAlertsHandler;
 
-    public MsmbHandler()
-    {
+    public MsmbHandler() {
         msmbAlertsHandler = new MsmbAlertsHandler(this);
     }
 
-    public MsmbAlertsHandler getMsmbAlertsHandler()
-    {
+    public MsmbAlertsHandler getMsmbAlertsHandler() {
         return msmbAlertsHandler;
     }
 
@@ -34,8 +33,7 @@ public class MsmbHandler implements MsmbListener
      * (com.hp.ov.sdk.dto.ScmbAlertsMessageDto)
      */
     @Override
-    public void handleMsmbMessage(final MsmbAlertsMessageDto alertsDto)
-    {
+    public void handleMsmbMessage(final MsmbAlertsMessageDto alertsDto) {
         System.out.println("MsmbAlertsHandler : handlMessage : value from Dto : resourceUri: " + alertsDto.getResourceUri());
         MsmbMessage msmbMessage = new MsmbMessage();
         // set the message

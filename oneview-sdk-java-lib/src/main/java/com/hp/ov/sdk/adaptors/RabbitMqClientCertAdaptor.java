@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
@@ -12,14 +12,12 @@ import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
 @Component
-public class RabbitMqClientCertAdaptor extends BaseAdaptor<RabbitMqClientCert, Object>
-{
+public class RabbitMqClientCertAdaptor extends BaseAdaptor<RabbitMqClientCert, Object> {
 
     private ObjectToJsonConverter converter;
-    
+
     @Override
-    public RabbitMqClientCert buildDto(final Object source)
-    {
+    public RabbitMqClientCert buildDto(final Object source) {
         converter = ConverterFactory.getConverter();
         // TODO - exceptions
         // convert json object to DTO, replace quotes and back slash in the file
@@ -28,8 +26,7 @@ public class RabbitMqClientCertAdaptor extends BaseAdaptor<RabbitMqClientCert, O
         return rabbitMqClientCertDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final RabbitMqClientCert source)
-    {
+    public JSONObject buildJsonObjectFromDto(final RabbitMqClientCert source) {
         converter = ConverterFactory.getConverter();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }

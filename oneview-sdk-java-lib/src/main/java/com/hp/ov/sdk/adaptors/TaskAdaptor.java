@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
@@ -11,27 +11,24 @@ import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
 @Component
-public class TaskAdaptor extends BaseAdaptor<TaskResourceV2, Object>
-{
+public class TaskAdaptor extends BaseAdaptor<TaskResourceV2, Object> {
 
     private ObjectToJsonConverter converter;
 
     @Override
-    public TaskResourceV2 buildDto(final Object source)
-    {
+    public TaskResourceV2 buildDto(final Object source) {
         // convert Object to DTO includes replace quotes and back slash
         converter = ConverterFactory.getConverter();
-        final TaskResourceV2 taskResourceV2 = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source))),
-                TaskResourceV2.class);
+        final TaskResourceV2 taskResourceV2 = converter.convertJsonToObject(StringUtil.replaceQuotesBackSlashWithQuote(StringUtil
+                .replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source))), TaskResourceV2.class);
         return taskResourceV2;
     }
 
-    public Object buildClassDto(final Object source, final Class<?> classObj)
-    {
+    public Object buildClassDto(final Object source, final Class<?> classObj) {
         // convert Object to DTO includes replace quotes and back slash
         converter = ConverterFactory.getConverter();
-        return converter.convertJsonToObject(StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), classObj);
+        return converter.convertJsonToObject(StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)),
+                classObj);
 
     }
 

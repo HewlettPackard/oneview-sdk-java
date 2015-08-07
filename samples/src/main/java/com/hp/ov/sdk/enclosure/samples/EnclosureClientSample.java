@@ -1,3 +1,6 @@
+/*******************************************************************************
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ *******************************************************************************/
 package com.hp.ov.sdk.enclosure.samples;
 
 import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
@@ -9,11 +12,12 @@ import com.hp.ov.sdk.dto.FwBaselineOptions;
 import com.hp.ov.sdk.dto.LicensingIntent;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
+import com.hp.ov.sdk.dto.RefreshStateConfig.RefreshForceOptions;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.UtilizationData;
 import com.hp.ov.sdk.dto.generated.Enclosures;
 import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
-import com.hp.ov.sdk.dto.RefreshStateConfig.RefreshForceOptions;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -47,10 +51,9 @@ public class EnclosureClientSample {
     private static final String username = "dcs";
     private static final String password = "dcs";
     private static final String firmware = "HP Service Pack For ProLiant OneView 2014 11 13";
-    private static final String resourceId = "09SGH102X6J1";
+    private static final String resourceId = "09SGH100X6J1";
 
     // ================================
-
     private static void init() {
         sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
         urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
@@ -308,6 +311,7 @@ public class EnclosureClientSample {
             System.out.println("EnclosureClientTest : deleteEnclosure :" + " arguments are null ");
             return;
         }
+
     }
 
     private void getActiveOaSsoUrl() throws InstantiationException, IllegalAccessException {
@@ -352,6 +356,508 @@ public class EnclosureClientSample {
             System.out.println("EnclosureClientTest : getActiveOaSsoUrl :" + " arguments are null ");
             return;
         }
+
+    }
+
+    private void updateCompliance() throws InstantiationException, IllegalAccessException {
+        TaskResourceV2 taskResourceV2 = null;
+        String resourceId = null;
+        Enclosures enclosureDto = null;
+        // first get the session Id
+        try {
+            // Get the basic REST parameters like hostname, username and
+            // password
+            params = sampleRestParams.getBasicRestParams();
+
+            // update the parameters with version and sessionId
+            params = sdkUtils.createRestParams(params);
+
+            enclosureDto = enclosureClient.getEnclosureByName(params, resourceName);
+
+            if (null != enclosureDto.getUri()) {
+                resourceId = urlUtils.getResourceIdFromUri(enclosureDto.getUri());
+            }
+
+            // then make sdk service call to get resource
+            taskResourceV2 = enclosureClient.updateCompliance(params, resourceId, false);
+
+            System.out.println("EnclosureClientTest : updateCompliance :" + " task object returned to client : "
+                    + taskResourceV2.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("EnclosureClientTest : updateCompliance :" + " resource you are looking is not found ");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("EnclosureClientTest : updateCompliance :" + " no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out
+                    .println("EnclosureClientTest : updateCompliance :" + " Applicance Not reachabe at : " + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out
+                    .println("EnclosureClientTest : updateCompliance :" + " No response from appliance : " + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("EnclosureClientTest : updateCompliance :" + " arguments are null ");
+            return;
+        }
+
+    }
+
+    private void updateConfiguration() throws InstantiationException, IllegalAccessException {
+        TaskResourceV2 taskResourceV2 = null;
+        String resourceId = null;
+        Enclosures enclosureDto = null;
+        // first get the session Id
+        try {
+            // Get the basic REST parameters like hostname, username and
+            // password
+            params = sampleRestParams.getBasicRestParams();
+
+            // update the parameters with version and sessionId
+            params = sdkUtils.createRestParams(params);
+
+            enclosureDto = enclosureClient.getEnclosureByName(params, resourceName);
+
+            if (null != enclosureDto.getUri()) {
+                resourceId = urlUtils.getResourceIdFromUri(enclosureDto.getUri());
+            }
+
+            // then make sdk service call to get resource
+            taskResourceV2 = enclosureClient.updateConfiguration(params, resourceId, false);
+
+            System.out.println("EnclosureClientTest : updateConfiguration :" + " task object returned to client : "
+                    + taskResourceV2.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("EnclosureClientTest : updateConfiguration :" + " resource you are looking is not found ");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("EnclosureClientTest : updateConfiguration :" + " no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("EnclosureClientTest : updateConfiguration :" + " Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("EnclosureClientTest : updateConfiguration :" + " No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("EnclosureClientTest : updateConfiguration :" + " arguments are null ");
+            return;
+        }
+
+    }
+
+    private void updateEnclosureFwBaseline() throws InstantiationException, IllegalAccessException {
+        String resourceId = null;
+        Enclosures enclosureDto = null;
+        FwBaselineConfig fwBaselineConfigDto = null;
+        try {
+            // Get the basic REST parameters like hostname, username and
+            // password
+            params = sampleRestParams.getBasicRestParams();
+
+            // update the parameters with version and sessionId
+            params = sdkUtils.createRestParams(params);
+
+            // fetch resource Id using resource name
+            enclosureDto = enclosureClient.getEnclosureByName(params, resourceName);
+
+            if (null != enclosureDto.getUri()) {
+                resourceId = urlUtils.getResourceIdFromUri(enclosureDto.getUri());
+            }
+
+            fwBaselineConfigDto = buildFwBaselineConfig();
+
+            /**
+             * then make sdk service call to get resource aSync parameter
+             * indicates sync vs async useJsonRequest parameter indicates
+             * whether json input request present or not
+             */
+            taskResourceV2 = enclosureClient.updateEnclosureFwBaseline(params, resourceId, fwBaselineConfigDto, false, false);
+
+            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline : " + "Enclosure task object returned to client : "
+                    + taskResourceV2.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline :"
+                    + " resource you are looking is not found for update ");
+            return;
+        } catch (final SDKBadRequestException ex) {
+            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline :" + " bad request, try again : "
+                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline :" + " no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline :" + " Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline :" + " No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline : " + "arguments are null ");
+            return;
+        } catch (final SDKTasksException e) {
+            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline : " + "errors in task, please check task "
+                    + "resource for more details ");
+            return;
+        }
+
+    }
+
+    private void getEnvironmentalConfiguration() throws InstantiationException, IllegalAccessException {
+        Enclosures enclosureDto = null;
+        String resourceId = null;
+        EnvironmentalConfiguration environmentalConfigurationDto = null;
+        // first get the session Id
+        try {
+            // Get the basic REST parameters like hostname, username and
+            // password
+            params = sampleRestParams.getBasicRestParams();
+
+            // update the parameters with version and sessionId
+            params = sdkUtils.createRestParams(params);
+
+            // fetch resource Id using resource name
+            enclosureDto = enclosureClient.getEnclosureByName(params, resourceName);
+
+            if (null != enclosureDto.getUri()) {
+                resourceId = urlUtils.getResourceIdFromUri(enclosureDto.getUri());
+            }
+
+            // then make sdk service call to get resource
+            environmentalConfigurationDto = enclosureClient.getEnvironmentalConfiguration(params, resourceId);
+
+            System.out.println("EnclosureClientTest : getEnvironmentalConfiguration :"
+                    + " enclosure environmental configuration object returned to client : "
+                    + environmentalConfigurationDto.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("EnclosureClientTest : getEnvironmentalConfiguration :" + " resource you are looking is not found ");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("EnclosureClientTest : getEnvironmentalConfiguration :" + " no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("EnclosureClientTest : getEnvironmentalConfiguration :" + " Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("EnclosureClientTest : getEnvironmentalConfiguration :" + " No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("EnclosureClientTest : getEnvironmentalConfiguration :" + " arguments are null ");
+            return;
+        }
+
+    }
+
+    private void updateEnvironmentalConfiguration() throws InstantiationException, IllegalAccessException {
+        Enclosures enclosureDto = null;
+        String resourceId = null;
+        EnvironmentalConfiguration environmentalConfigurationDto = null;
+        EnvironmentalConfigurationUpdate environmentalConfigurationUpdateDto = null;
+        try {
+            // Get the basic REST parameters like hostname, username and
+            // password
+            params = sampleRestParams.getBasicRestParams();
+
+            // update the parameters with version and sessionId
+            params = sdkUtils.createRestParams(params);
+
+            // fetch resource Id using resource name
+            enclosureDto = enclosureClient.getEnclosureByName(params, resourceName);
+
+            if (null != enclosureDto.getUri()) {
+                resourceId = urlUtils.getResourceIdFromUri(enclosureDto.getUri());
+            }
+
+            environmentalConfigurationUpdateDto = buildEnvironmentalConfigurationUpdateConfig();
+
+            /**
+             * then make sdk service call to get resource aSync parameter
+             * indicates sync vs async useJsonRequest parameter indicates
+             * whether json input request present or not
+             */
+            environmentalConfigurationDto = enclosureClient.updateEnvironmentalConfiguration(params, resourceId,
+                    environmentalConfigurationUpdateDto, false);
+
+            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration : "
+                    + "Enclosure task object returned to client : " + environmentalConfigurationDto.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration :"
+                    + " resource you are looking is not found for update ");
+            return;
+        } catch (final SDKBadRequestException ex) {
+            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration :" + " bad request, try again : "
+                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration :" + " no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration :" + " Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration :" + " No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration : " + "arguments are null ");
+            return;
+        } catch (final SDKTasksException e) {
+            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration : " + "errors in task, please check task "
+                    + "resource for more details ");
+            return;
+        }
+
+    }
+
+    private void updateRefreshState() throws InstantiationException, IllegalAccessException {
+        Enclosures enclosureDto = null;
+        String resourceId = null;
+        try {
+            // Get the basic REST parameters like hostname, username and
+            // password
+            params = sampleRestParams.getBasicRestParams();
+
+            // update the parameters with version and sessionId
+            params = sdkUtils.createRestParams(params);
+
+            // fetch resource Id using resource name
+            enclosureDto = enclosureClient.getEnclosureByName(params, resourceName);
+
+            if (null != enclosureDto.getUri()) {
+                resourceId = urlUtils.getResourceIdFromUri(enclosureDto.getUri());
+            }
+
+            RefreshStateConfig refreshStateConfigDto = buildRefreshStateConfig();
+
+            /**
+             * then make sdk service call to get resource aSync parameter
+             * indicates sync vs async useJsonRequest parameter indicates
+             * whether json input request present or not
+             */
+            taskResourceV2 = enclosureClient.updateRefreshState(params, resourceId, refreshStateConfigDto, false, false);
+
+            System.out.println("EnclosureClientTest : updateRefreshState : " + "Enclosure task object returned to client : "
+                    + taskResourceV2.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("EnclosureClientTest : updateRefreshState :" + " resource you are looking is not found for update ");
+            return;
+        } catch (final SDKBadRequestException ex) {
+            System.out.println("EnclosureClientTest : updateRefreshState :" + " bad request, try again : "
+                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("EnclosureClientTest : updateRefreshState :" + " no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("EnclosureClientTest : updateRefreshState :" + " Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("EnclosureClientTest : updateRefreshState :" + " No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("EnclosureClientTest : updateRefreshState : " + "arguments are null ");
+            return;
+        } catch (final SDKTasksException e) {
+            System.out.println("EnclosureClientTest : updateRefreshState : " + "errors in task, please check task "
+                    + "resource for more details ");
+            return;
+        }
+    }
+
+    private void getScript() throws InstantiationException, IllegalAccessException {
+        Enclosures enclosureDto = null;
+        String resourceId = null;
+        String script = null;
+        // first get the session Id
+        try {
+            // Get the basic REST parameters like hostname, username and
+            // password
+            params = sampleRestParams.getBasicRestParams();
+
+            // update the parameters with version and sessionId
+            params = sdkUtils.createRestParams(params);
+
+            // fetch resource Id using resource name
+            enclosureDto = enclosureClient.getEnclosureByName(params, resourceName);
+
+            if (null != enclosureDto.getUri()) {
+                resourceId = urlUtils.getResourceIdFromUri(enclosureDto.getUri());
+            }
+
+            // then make sdk service call to get resource
+            script = enclosureClient.getScript(params, resourceId);
+
+            System.out.println("EnclosureClientTest : getScript :"
+                    + " enclosure environmental configuration object returned to client : " + script);
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("EnclosureClientTest : getScript :" + " resource you are looking is not found ");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("EnclosureClientTest : getScript :" + " no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("EnclosureClientTest : getScript :" + " Applicance Not reachabe at : " + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("EnclosureClientTest : getScript :" + " No response from appliance : " + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("EnclosureClientTest : getScript :" + " arguments are null ");
+            return;
+        }
+
+    }
+
+    private void updateScript() throws InstantiationException, IllegalAccessException {
+        Enclosures enclosureDto = null;
+        String resourceId = null;
+        try {
+            // Get the basic REST parameters like hostname, username and
+            // password
+            params = sampleRestParams.getBasicRestParams();
+
+            // update the parameters with version and sessionId
+            params = sdkUtils.createRestParams(params);
+
+            // fetch resource Id using resource name
+            enclosureDto = enclosureClient.getEnclosureByName(params, resourceName);
+
+            if (null != enclosureDto.getUri()) {
+                resourceId = urlUtils.getResourceIdFromUri(enclosureDto.getUri());
+            }
+
+            /**
+             * then make sdk service call to get resource aSync parameter
+             * indicates sync vs async useJsonRequest parameter indicates
+             * whether json input request present or not
+             */
+            taskResourceV2 = enclosureClient.updateScript(params, resourceId, "name=Enclosure_test_two", false, false);
+
+            System.out.println("EnclosureClientTest : updateScript : " + "Enclosure task object returned to client : "
+                    + taskResourceV2.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("EnclosureClientTest : updateScript :" + " resource you are looking is not found for update ");
+            return;
+        } catch (final SDKBadRequestException ex) {
+            System.out.println("EnclosureClientTest : updateScript :" + " bad request, try again : "
+                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("EnclosureClientTest : updateScript :" + " no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("EnclosureClientTest : updateScript :" + " Applicance Not reachabe at : " + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("EnclosureClientTest : updateScript :" + " No response from appliance : " + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("EnclosureClientTest : updateScript : " + "arguments are null ");
+            return;
+        } catch (final SDKTasksException e) {
+            System.out.println("EnclosureClientTest : updateScript : " + "errors in task, please check task "
+                    + "resource for more details ");
+            return;
+        }
+    }
+
+    public void getStandbyOaSsoUrl() throws InstantiationException, IllegalAccessException {
+        SsoUrlData ssoUrlDataDto = null;
+        String resourceId = null;
+        Enclosures enclosureDto = null;
+        // first get the session Id
+        try {
+            // Get the basic REST parameters like hostname, username and
+            // password
+            params = sampleRestParams.getBasicRestParams();
+
+            // update the parameters with version and sessionId
+            params = sdkUtils.createRestParams(params);
+
+            enclosureDto = enclosureClient.getEnclosureByName(params, resourceName);
+
+            if (null != enclosureDto.getUri()) {
+                resourceId = urlUtils.getResourceIdFromUri(enclosureDto.getUri());
+            }
+
+            // then make sdk service call to get resource
+            ssoUrlDataDto = enclosureClient.getStandbyOaSsoUrl(params, resourceId);
+
+            System.out.println("EnclosureClientTest : getStandbyOaSsoUrl :"
+                    + " enclosure sso url data object returned to client : " + ssoUrlDataDto.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("EnclosureClientTest : getStandbyOaSsoUrl :" + " resource you are looking is not found ");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("EnclosureClientTest : getStandbyOaSsoUrl :" + " no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("EnclosureClientTest : getStandbyOaSsoUrl :" + " Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("EnclosureClientTest : getStandbyOaSsoUrl :" + " No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("EnclosureClientTest : getStandbyOaSsoUrl :" + " arguments are null ");
+            return;
+        }
+
+    }
+
+    public void getUtilization() throws InstantiationException, IllegalAccessException {
+        UtilizationData utilizationDataDto = null;
+        String resourceId = null;
+        Enclosures enclosureDto = null;
+        // first get the session Id
+        try {
+            // Get the basic REST parameters like hostname, username and
+            // password
+            params = sampleRestParams.getBasicRestParams();
+
+            // update the parameters with version and sessionId
+            params = sdkUtils.createRestParams(params);
+
+            enclosureDto = enclosureClient.getEnclosureByName(params, resourceName);
+
+            if (null != enclosureDto.getUri()) {
+                resourceId = urlUtils.getResourceIdFromUri(enclosureDto.getUri());
+            }
+
+            // then make sdk service call to get resource
+            utilizationDataDto = enclosureClient.getUtilization(params, resourceId);
+
+            System.out.println("EnclosureClientTest : getUtilization :"
+                    + " enclosure utilization data object returned to client : " + utilizationDataDto.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("EnclosureClientTest : getUtilization :" + " resource you are looking is not found ");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("EnclosureClientTest : getUtilization :" + " no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("EnclosureClientTest : getUtilization :" + " Applicance Not reachabe at : " + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("EnclosureClientTest : getUtilization :" + " No response from appliance : " + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("EnclosureClientTest : getUtilization :" + " arguments are null ");
+            return;
+        }
+
     }
 
     // TODO - Move Uri fetch logic to SdkUtils
@@ -408,10 +914,21 @@ public class EnclosureClientSample {
         EnclosureClientSample client = new EnclosureClientSample();
         client.getEnclosureById();
         client.getAllEnclosure();
-        client.getActiveOaSsoUrl();
         client.createEnclosure();
+        client.getActiveOaSsoUrl();
         client.getEnclosureByName();
+        client.getActiveOaSsoUrl();
+        client.updateCompliance();
+        client.updateConfiguration();
+        client.updateEnclosureFwBaseline();
+        client.getEnvironmentalConfiguration();
+        client.updateEnvironmentalConfiguration();
+        client.updateRefreshState();
+        client.updateScript();
+        client.getScript();
+        client.getStandbyOaSsoUrl();
+        client.getUtilization();
         client.updateEnclosure();
-        // client.deleteEnclosure();
+        client.deleteEnclosure();
     }
 }

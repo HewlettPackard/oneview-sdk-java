@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
@@ -21,6 +21,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ * The Interconnects data transfer object (DTO) contains the information used to
+ * represent a interconnects in the system. It is passed in to the update
+ * interconnects REST api, as well as the update interconnects through java
+ * client api.
+ */
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({ "serialNumber", "logicalInterconnectUri", "ports", "partNumber", "powerStatus", "ipAddressList",
@@ -32,8 +39,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public class Interconnects implements Serializable {
 
     /**
-	 * 
-	 */
+     * 
+     */
     private static final long serialVersionUID = 1L;
     @JsonProperty("serialNumber")
     private String serialNumber;

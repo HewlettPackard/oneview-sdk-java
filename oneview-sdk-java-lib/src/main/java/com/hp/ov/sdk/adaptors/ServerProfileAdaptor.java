@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
@@ -19,14 +19,12 @@ import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
 @Component
-public class ServerProfileAdaptor extends BaseAdaptor<ServerProfile, Object>
-{
+public class ServerProfileAdaptor extends BaseAdaptor<ServerProfile, Object> {
 
     private ObjectToJsonConverter converter;
-    
+
     @Override
-    public ServerProfile buildDto(final Object source)
-    {
+    public ServerProfile buildDto(final Object source) {
         // TODO - exceptions
         // convert json object to DTO, replace quotes and back slash in the file
         converter = ConverterFactory.getConverter();
@@ -35,23 +33,20 @@ public class ServerProfileAdaptor extends BaseAdaptor<ServerProfile, Object>
         return serverProfileDto;
     }
 
-    public ServerProfileCollection buildCollectionDto(final Object source)
-    {
+    public ServerProfileCollection buildCollectionDto(final Object source) {
         // TODO - exceptions
-        if (null == source || source.equals(""))
-        {
+        if (null == source || source.equals("")) {
             return null;
         }
         // convert json file to DTO, replace quotes and back slash in the file
         converter = ConverterFactory.getConverter();
         final ServerProfileCollection serverProfileCollectionDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source))),
-                ServerProfileCollection.class);
+                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
+                        .convertObjectToJsonString(source))), ServerProfileCollection.class);
         return serverProfileCollectionDto;
     }
 
-    public AvailableNetworks buildAvailableNetworkDto(final Object source)
-    {
+    public AvailableNetworks buildAvailableNetworkDto(final Object source) {
         // convert json file to DTO, replace quote and back slash in file
         converter = ConverterFactory.getConverter();
         final AvailableNetworks availableNetworksDto = converter.convertJsonToObject(
@@ -59,25 +54,23 @@ public class ServerProfileAdaptor extends BaseAdaptor<ServerProfile, Object>
         return availableNetworksDto;
     }
 
-    public List<AvailableServers> buildAvailableServerDto(final Object source)
-    {
+    public List<AvailableServers> buildAvailableServerDto(final Object source) {
         converter = ConverterFactory.getConverter();
         converter.convertObjectToJsonString(source);
         // replace quotes and back slash in the file
         StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source));
-        StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)));
+        StringUtil
+                .replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)));
         // convert json object to DTO, replace quotes and back slash in the file
 
         final List<AvailableServers> availableServersCollectionDto = (List<AvailableServers>) converter.convertJsonToListObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source))),
-                new TypeToken<List<AvailableServers>>()
-                {
+                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
+                        .convertObjectToJsonString(source))), new TypeToken<List<AvailableServers>>() {
                 }.getType());
         return availableServersCollectionDto;
     }
 
-    public ProfilePorts buildProfilePortsDto(final Object source)
-    {
+    public ProfilePorts buildProfilePortsDto(final Object source) {
         converter = ConverterFactory.getConverter();
         // convert json object to DTO, replace quotes and back slash in the file
         final ProfilePorts profilePortsDto = converter.convertJsonToObject(
@@ -85,10 +78,9 @@ public class ServerProfileAdaptor extends BaseAdaptor<ServerProfile, Object>
         return profilePortsDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final ServerProfile source)
-    {
+    public JSONObject buildJsonObjectFromDto(final ServerProfile source) {
         converter = ConverterFactory.getConverter();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
-   
+
 }

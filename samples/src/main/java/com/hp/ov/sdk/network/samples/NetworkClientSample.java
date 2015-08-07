@@ -1,3 +1,6 @@
+/*******************************************************************************
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ *******************************************************************************/
 package com.hp.ov.sdk.network.samples;
 
 import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
@@ -32,7 +35,7 @@ public class NetworkClientSample {
 
     // test values - user input
     // ================================
-    private static final String resourceId = "fa655d9b-2c9e-40dd-880d-76cbc80bd051";
+    private static final String resourceId = "cd9c1548-d2b0-405e-95da-c575babb6a52";
     private static final String resourceName = "Eth-demo";
     private static final Double maxBandwidth = (double) 8000;
     private static final Double minBandwidth = (double) 2000;
@@ -436,11 +439,8 @@ public class NetworkClientSample {
 
     // Main
     public static void main(final String[] args) throws Exception {
-        
         init();
-        
         final NetworkClientSample client = new NetworkClientSample();
-        
         client.getNetworkById();
         client.getAllNetwork();
         client.createNetwork();

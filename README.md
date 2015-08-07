@@ -11,7 +11,7 @@ In summary, this version of SDK covers following 3 features:
 
 1.REST API:
 
-The most commonly used REST APIs of OneView are covered in this version of SDK. Resources like Network, Network Set, Logical Interconnect Group, Enclosure Group, Enclosure, Storage System, Storage Pool, Storage Volume Template, Storage Volumes, Server Profiles and Firmware are part of SDK. Additionally, get calls for Logical Interconnect, Uplink Sets, and Server Hardware are included .
+The most commonly used REST APIs of OneView are covered in this version of SDK. Resources like Network, Network Set, Logical Interconnect Group, Enclosure Group, Enclosure, Storage System, Storage Pool, Storage Volume Template, Storage Volumes, Server Profiles and Firmware are part of SDK. Additionally, get calls for Logical Interconnect, Uplink Sets, Interconnects and Server Hardware are included .
 
 2.Listening on SCMB messages and metrics Data:
 
@@ -38,11 +38,15 @@ Steps to generate keystore and truststore:
 		Where port number is 443
 		Example:
 		openssl s_client –host 15.199.201.9 –port 443
-		Save Server Certificate from -----BEGIN CERTIFICATE----- to -----END CERTIFICATE----- as default-server.crt
-	2. Added Server Cert as follows:
+		Save Server Certificate from -----BEGIN CERTIFICATE----- to -----END CERTIFICATE----- as default-server.crt	
+	2. Fetch client cert and key from rest API using rest client,
+		https://<<IP_Address>>rest/certificates/client/rabbitmq/keypair/default
+		store the base64SSLKeyData as default-client.key
+		store the base64SSLCertData as default-client.crt
+	3. Added Server Cert as follows:
 		keytool -import -v -trustcacerts -alias myservercert -file <<servercert>> -keystore <<TrustStorePath>>
 		Example: keytool -import -v -trustcacerts -alias myservercert –file default-server.crt -keystore TrustStore
-	3. Added Client Cert as Follows:
+	4. Added Client Cert as Follows:
 		openssl pkcs12 -export -name myclientcert -in default-client.crt -inkey default-client.key -out myclient.p12
 	4. Generate Key Store for client
 		keytool -importkeystore -destkeystore <<KeyStorePath>> -srckeystore <<SrcKeyStorePath .P12 file>> -srcstoretype pkcs12 -alias myclientcert 

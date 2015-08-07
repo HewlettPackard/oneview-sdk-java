@@ -1,5 +1,5 @@
 /*******************************************************************************
- * // (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
@@ -13,14 +13,12 @@ import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
 @Component
-public class UplinkSetAdaptor extends BaseAdaptor<UplinkSets, Object>
-{
+public class UplinkSetAdaptor extends BaseAdaptor<UplinkSets, Object> {
 
     private ObjectToJsonConverter converter;
 
     @Override
-    public UplinkSets buildDto(final Object source)
-    {
+    public UplinkSets buildDto(final Object source) {
         // TODO - exceptions
         // convert json object to DTO, replace quotes and back slash in the file
         converter = ConverterFactory.getConverter();
@@ -29,11 +27,9 @@ public class UplinkSetAdaptor extends BaseAdaptor<UplinkSets, Object>
         return uplinkSetDto;
     }
 
-    public UplinkSetCollectionV2 buildCollectionDto(final Object source)
-    {
+    public UplinkSetCollectionV2 buildCollectionDto(final Object source) {
         // TODO - exceptions
-        if (null == source || source.equals(""))
-        {
+        if (null == source || source.equals("")) {
             return null;
         }
         converter = ConverterFactory.getConverter();
@@ -43,8 +39,7 @@ public class UplinkSetAdaptor extends BaseAdaptor<UplinkSets, Object>
         return uplinkSetCollectionDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final UplinkSets source)
-    {
+    public JSONObject buildJsonObjectFromDto(final UplinkSets source) {
         converter = ConverterFactory.getConverter();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
