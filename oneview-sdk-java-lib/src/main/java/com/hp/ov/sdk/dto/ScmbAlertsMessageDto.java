@@ -3,7 +3,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
-public class ScmbAlertsMessageDto extends BaseMessagingAlertModel {
+public class ScmbAlertsMessageDto extends BaseMessagingModel {
 
     /**
 	 * 

@@ -10,7 +10,8 @@ public enum SDKErrorEnum implements SDKErrorKey {
             "RESOURCE_NOT_FOUND"), certificateError("CERTIFICATE_ERROR"), rabbitMqCertificateError("RABBIT_MQ_CERTIFICATE_ERROR"), badRequestError(
             "BAD_REQUEST"), forbiddenRequestError("FORBIDDEN_REQUEST"), methodNotFound("METHOD_NOT_FOUND"), tasksError(
             "TASKS_ERROR"), applicanceNotReachable("APPLIANCE_NOT_REACHABLE"), apiMismatchError("API_VERSION_MISMATCH"), invalidOperationException(
-            "INVALID_OPERATION_EXCEPTION");
+            "INVALID_OPERATION_EXCEPTION"), unauthorized("UNAUTHORIZED"), internalServerError("INTERNAL_SERVER_ERROR"), sslHandshakeException(
+            "SSL_HANDSHAKE_EXCEPTION"), socketException("SOCKET_EXCEPTION");
 
     private final String baseKeyName;
 

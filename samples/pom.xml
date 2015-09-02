@@ -3,9 +3,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.hp.ov</groupId>
+  <groupId>com.hp.ov.samples</groupId>
   <artifactId>samples</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
   <parent>
         <groupId>com.hp.ov</groupId>
         <artifactId>oneview-sdk-java</artifactId>
@@ -55,9 +55,9 @@
   </build>
   <dependencies>
     <dependency>
-       <groupId>com.hp.ov</groupId>
+       <groupId>com.hp.ov.lib</groupId>
        <artifactId>oneview-sdk-java-lib</artifactId>
-       <version>1.0.0-SNAPSHOT</version>
+       <version>1.0.1-SNAPSHOT</version>
        <scope>compile</scope>
     </dependency>
   </dependencies>

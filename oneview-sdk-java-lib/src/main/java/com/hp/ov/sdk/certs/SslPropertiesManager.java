@@ -7,9 +7,6 @@ import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 
 public class SslPropertiesManager {
 
-    private static final String DEFAULT_PASSWORD = "changeit";
-    private static final String STORE_TYPE = "jks";
-
     private HttpSslProperties httpSslProperties;
 
     public HttpSslProperties getHttpSslProperties() {
@@ -20,14 +17,16 @@ public class SslPropertiesManager {
         this.httpSslProperties = httpSslProperties;
     }
 
-    public HttpSslProperties getSslProperties(final String keyStoreFile, final String trustStoreFile) {
+    // TODO- Refactor incase of param passing.
+    public HttpSslProperties getSslProperties(final String keyStoreFile, final String trustStoreFile,
+            final String keyStorePassword, final String trustStorePassword, final String keyStoreType, final String trustStoreType) {
 
         httpSslProperties.setKeyStore(keyStoreFile);
         httpSslProperties.setTrustStore(trustStoreFile);
-        httpSslProperties.setKeyStorePassword(DEFAULT_PASSWORD);
-        httpSslProperties.setTrustStorePassword(DEFAULT_PASSWORD);
-        httpSslProperties.setKeyStoreType(STORE_TYPE);
-        httpSslProperties.setTrustStoreType(STORE_TYPE);
+        httpSslProperties.setKeyStorePassword(keyStorePassword);
+        httpSslProperties.setTrustStorePassword(trustStorePassword);
+        httpSslProperties.setKeyStoreType(keyStoreType);
+        httpSslProperties.setTrustStoreType(trustStoreType);
 
         return httpSslProperties;
     }

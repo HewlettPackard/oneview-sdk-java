@@ -95,7 +95,7 @@ public class StoragePoolClientImpl implements StoragePoolClient {
     }
 
     @Override
-    public StoragePool getStoragePoolByName(final RestParams params, final String name) {
+    public StoragePool getStoragePoolByName(final RestParams params, final String name, final String storageSystemUri) {
         StoragePool storagePoolDto = null;
         logger.info("StoragePoolClientImpl : getStoragePoolByName : Start");
 
@@ -119,14 +119,17 @@ public class StoragePoolClientImpl implements StoragePoolClient {
 
         final StoragePoolCollection storagePoolCollectionDto = adaptor.buildCollectionDto(returnObj);
 
+        storagePoolDto = null;
         if (storagePoolCollectionDto.getCount() != 0) {
-            storagePoolDto = storagePoolCollectionDto.getMembers().get(0);
-        } else {
-            storagePoolDto = null;
+            for (int i = 0; i < storagePoolCollectionDto.getCount(); i++) {
+                if (storagePoolCollectionDto.getMembers().get(i).getStorageSystemUri().equalsIgnoreCase(storageSystemUri)) {
+                    storagePoolDto = storagePoolCollectionDto.getMembers().get(i);
+                }
+            }
         }
 
         if (storagePoolDto == null) {
-            logger.error("StoragePoolClientImpl : getStoragePoolByName : Not found for name :" + name);
+            logger.error("StoragePoolClientImpl : getStoragePoolByName : Not found for storage pool name :" + name);
             throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.STORAGE_POOL, null);
         }
         logger.info("StoragePoolClientImpl : getStoragePoolByName : End");

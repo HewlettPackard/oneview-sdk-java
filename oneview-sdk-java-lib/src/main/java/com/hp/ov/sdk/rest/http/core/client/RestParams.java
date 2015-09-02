@@ -26,8 +26,6 @@ public class RestParams {
     private String domain = "LOCAL";
     private String url = null;
     private HttpMethodType type = HttpMethodType.GET;
-    private String keyStoreFile = null;
-    private String trustStoreFile = null;
     private String sessionId = null;
     private int amqpPort = 5671; // default port
     private String routingKey = "scmb.alerts.#"; // default value
@@ -65,22 +63,6 @@ public class RestParams {
 
     public void setSessionId(final String sessionId) {
         this.sessionId = sessionId;
-    }
-
-    public String getKeyStoreFile() {
-        return keyStoreFile;
-    }
-
-    public void setKeyStoreFile(final String keyStoreFile) {
-        this.keyStoreFile = keyStoreFile;
-    }
-
-    public String getTrustStoreFile() {
-        return trustStoreFile;
-    }
-
-    public void setTrustStoreFile(final String trustStoreFile) {
-        this.trustStoreFile = trustStoreFile;
     }
 
     public HttpMethodType getType() {

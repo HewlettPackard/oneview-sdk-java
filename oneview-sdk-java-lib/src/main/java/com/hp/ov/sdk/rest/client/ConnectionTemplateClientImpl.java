@@ -160,18 +160,63 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         return connectionTemplateDto;
     }
 
-    // TODO
     @Override
     public ConnectionTemplateCollection getAllConnectionTemplates(final RestParams params) {
-        // TODO Auto-generated method stub
-        return null;
+        ConnectionTemplateCollection connectionTemplateCollectionDto = null;
+        logger.info("ConnectionTemplateImpl : getAllConnectionTemplates : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI));
+
+        final String returnObj = restClient.sendRequestToHPOV(params, null);
+        logger.debug("ConnectionTemplateImpl : getAllConnectionTemplates : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
+                    SdkConstants.CONNECTION_TEMPLATE, null);
+        }
+        // Call adaptor to convert to DTO
+
+        connectionTemplateCollectionDto = adaptor.buildCollectionDto(returnObj);
+
+        logger.debug("ConnectionTemplateImpl : getAllConnectionTemplates : count :" + connectionTemplateCollectionDto.getCount());
+        logger.info("ConnectionTemplateImpl : getAllConnectionTemplates : End");
+
+        return connectionTemplateCollectionDto;
     }
 
-    // TODO
     @Override
     public ConnectionTemplate getDefaultConnectionTemplateForConnectionTemplate(final RestParams params) {
-        // TODO Auto-generated method stub
-        return null;
+        ConnectionTemplate connectionTemplateDto = null;
+        logger.info("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.DEFAULT_CONNECTION_TEMPLATE_URI));
+
+        final String returnObj = restClient.sendRequestToHPOV(params, null);
+        logger.debug("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
+                    SdkConstants.CONNECTION_TEMPLATE, null);
+        }
+        // Call adaptor to convert to DTO
+
+        connectionTemplateDto = adaptor.buildDto(returnObj);
+
+        logger.debug("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : name :"
+                + connectionTemplateDto.getName());
+        logger.info("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : End");
+
+        return connectionTemplateDto;
     }
 
 }

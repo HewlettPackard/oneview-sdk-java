@@ -7,6 +7,7 @@ public class ResourceUris {
 
     public static final String ETHERNET_URI = "/rest/ethernet-networks";
     public static final String CONNECTION_TEMPLATE_URI = "/rest/connection-templates";
+    public static final String DEFAULT_CONNECTION_TEMPLATE_URI = "/rest/connection-templates/defaultConnectionTemplate";
     public static final String BULK_ETHERNET_URI = "/rest/ethernet-networks/bulk";
     public static final String LOGIN_SESSIONS = "/rest/login-sessions";
     public static final String CONNECTION_TEMPLATES = "/rest/connection-templates";

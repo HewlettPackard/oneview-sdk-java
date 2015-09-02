@@ -9,9 +9,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.net.SocketException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLSocketFactory;
 
 import org.json.JSONObject;
@@ -25,9 +27,13 @@ import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKForbiddenException;
+import com.hp.ov.sdk.exceptions.SDKInternalServerErrorException;
 import com.hp.ov.sdk.exceptions.SDKMethodNotAllowed;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
+import com.hp.ov.sdk.exceptions.SDKSSLHandshakeException;
+import com.hp.ov.sdk.exceptions.SDKSocketException;
+import com.hp.ov.sdk.exceptions.SDKUnauthorizedException;
 import com.hp.ov.sdk.util.StringUtil;
 
 @Component
@@ -121,6 +127,10 @@ public class HttpRestClientImpl implements HttpRestClient {
             // TODO - exceptions
         } catch (final MalformedURLException e) {
             throw new SDKNoSuchUrlException(SDKErrorEnum.invalidUrl, null, null, null, SdkConstants.APPLIANCE, null);
+        } catch (final SSLHandshakeException s) {
+            throw new SDKSSLHandshakeException(SDKErrorEnum.sslHandshakeException, null, null, null, SdkConstants.APPLIANCE, null);
+        } catch (final SocketException s) {
+            throw new SDKSocketException(SDKErrorEnum.socketException, null, null, null, SdkConstants.APPLIANCE, null);
         } catch (final IOException e) {
             if (responseCode == SdkConstants.URL_NOT_FOUND) {
                 throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.APPLIANCE,
@@ -134,6 +144,13 @@ public class HttpRestClientImpl implements HttpRestClient {
                 throw new SDKForbiddenException(SDKErrorEnum.forbiddenRequestError, null, null, null, SdkConstants.APPLIANCE, null);
             } else if (responseCode == SdkConstants.METHOD_NOT_ALLOWED) {
                 throw new SDKMethodNotAllowed(SDKErrorEnum.methodNotFound, null, null, null, SdkConstants.APPLIANCE, null);
+            } else if (responseCode == SdkConstants.UNAUTHORIZED) {
+                throw new SDKUnauthorizedException(SDKErrorEnum.unauthorized, null, null, null, SdkConstants.APPLIANCE, null);
+            } else if ((responseCode == SdkConstants.CONFLICT_DUE_TO_STATE) || (responseCode == SdkConstants.PRECONDITION_FAILED)
+                    || (responseCode == SdkConstants.UNSUPPORTED_MEDIA_TYPE)
+                    || (responseCode == SdkConstants.INTERNAL_SERVER_ERROR) || (responseCode == SdkConstants.SERVICE_UNAVAILABLE)) {
+                throw new SDKInternalServerErrorException(SDKErrorEnum.internalServerError, null, null, null,
+                        SdkConstants.APPLIANCE, null);
             } else {
                 throw new SDKApplianceNotReachableException(SDKErrorEnum.applicanceNotReachable, null, null, null,
                         SdkConstants.APPLIANCE, null);
@@ -227,6 +244,13 @@ public class HttpRestClientImpl implements HttpRestClient {
                 throw new SDKForbiddenException(SDKErrorEnum.forbiddenRequestError, null, null, null, SdkConstants.APPLIANCE, null);
             } else if (responseCode == SdkConstants.METHOD_NOT_ALLOWED) {
                 throw new SDKMethodNotAllowed(SDKErrorEnum.methodNotFound, null, null, null, SdkConstants.APPLIANCE, null);
+            } else if (responseCode == SdkConstants.UNAUTHORIZED) {
+                throw new SDKUnauthorizedException(SDKErrorEnum.unauthorized, null, null, null, SdkConstants.APPLIANCE, null);
+            } else if ((responseCode == SdkConstants.CONFLICT_DUE_TO_STATE) || (responseCode == SdkConstants.PRECONDITION_FAILED)
+                    || (responseCode == SdkConstants.UNSUPPORTED_MEDIA_TYPE)
+                    || (responseCode == SdkConstants.INTERNAL_SERVER_ERROR) || (responseCode == SdkConstants.SERVICE_UNAVAILABLE)) {
+                throw new SDKInternalServerErrorException(SDKErrorEnum.internalServerError, null, null, null,
+                        SdkConstants.APPLIANCE, null);
             } else {
                 throw new SDKApplianceNotReachableException(SDKErrorEnum.applicanceNotReachable, null, null, null,
                         SdkConstants.APPLIANCE, null);

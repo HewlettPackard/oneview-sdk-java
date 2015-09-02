@@ -14,6 +14,8 @@ import com.hp.ov.sdk.messaging.msmb.services.MsmbConnectionManagerImpl;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbAlertsHandler;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbConnectionManager;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbConnectionManagerImpl;
+import com.hp.ov.sdk.rest.client.ConnectionTemplateClient;
+import com.hp.ov.sdk.rest.client.ConnectionTemplateClientImpl;
 import com.hp.ov.sdk.rest.client.EnclosureClient;
 import com.hp.ov.sdk.rest.client.EnclosureClientImpl;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
@@ -73,6 +75,10 @@ public class HPOneViewSdkBeanFactory {
             context.refresh();
         }
         return context;
+    }
+
+    public static ConnectionTemplateClient getConnectionTemplateClient() {
+        return getApplicationContext().getBean(ConnectionTemplateClientImpl.class);
     }
 
     public static NetworkClient getNetworkClient() {

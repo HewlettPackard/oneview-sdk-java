@@ -23,6 +23,7 @@ import com.hp.ov.sdk.dto.CaCert;
 import com.hp.ov.sdk.dto.RabbitMqClientCert;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
+import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKScmbConnectionNotFoundException;
 import com.hp.ov.sdk.messaging.core.RabbitMqClientConnectionFactory;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -86,7 +87,8 @@ public class MsmbConnectionManagerImpl implements MsmbConnectionManager {
 
             } catch (final IOException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.APPLIANCE,
+                        null);
             }
             msmbConnection.setConn(conn);
             msmbConnection.setChannel(channel);

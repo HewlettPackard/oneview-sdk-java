@@ -14,7 +14,7 @@ public class SDKApiVersionMismatchException extends SDKException {
             final Object[] detailsParameters, final Object[] recommendedActionsParameters, final String errorSource,
             final Throwable cause) {
         super(sdkErrorKey, messageParameters, detailsParameters, recommendedActionsParameters, errorSource, cause);
-        // TODO Auto-generated constructor stub
+
     }
 
 }

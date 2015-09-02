@@ -4,6 +4,7 @@
 package com.hp.ov.sdk.util.samples;
 
 import com.hp.ov.sdk.certs.SslPropertiesManager;
+import com.hp.ov.sdk.constants.samples.SamplesConstants;
 import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
@@ -17,20 +18,20 @@ public class SampleRestParams {
         // Sample values - user needs set these values as per his environment
 
         final RestParams params = new RestParams();
-        params.setHostname("10.10.10.10");
-        params.setUserName("admin");
-        params.setPassword("admin");
-        params.setDomain("LOCAL");
-        params.setApiVersion(120);
-
-        params.setKeyStoreFile("src/main/resources/KeyStore");
-        params.setTrustStoreFile("src/main/resources/TrustStore");
+        params.setHostname(SamplesConstants.HOSTNAME);
+        params.setUserName(SamplesConstants.USERNAME);
+        params.setPassword(SamplesConstants.PASSWORD);
+        params.setDomain(SamplesConstants.DOMAIN);
+        params.setApiVersion(SamplesConstants.VERSION);
 
         httpSslProperties = new HttpSslProperties();
         util = new SslPropertiesManager();
         util.setHttpSslProperties(httpSslProperties);
 
-        httpSslProperties = util.getSslProperties("src/main/resources/KeyStore", "src/main/resources/TrustStore");
+        httpSslProperties = util.getSslProperties(SamplesConstants.KEY_STORE_FILE, SamplesConstants.TRUST_STORE_FILE,
+                SamplesConstants.KEY_STORE_PASSWORD, SamplesConstants.TRUST_STORE_PASSWORD, SamplesConstants.KEY_STORE_TYPE,
+                SamplesConstants.TRUST_STORE_TYPE);
+
         util.loadSslProperties(httpSslProperties);
 
         return params;

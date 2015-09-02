@@ -3,7 +3,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
-public class MsmbAlertsMessageDto extends BaseMessagingAlertModel {
+public class MsmbAlertsMessageDto extends BaseMessagingModel {
 
     /**
 	 * 

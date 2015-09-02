@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.SdkConstants;
+import com.hp.ov.sdk.exceptions.SDKErrorEnum;
+import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.rabbitmq.client.AMQP.Queue.DeclareOk;
 import com.rabbitmq.client.Channel;
@@ -54,7 +56,8 @@ public class ScmbProcessor extends Thread {
                     final byte[] body = chResponse.getBody();
                     final String responseBody = new String(body);
                     // add to queue
-                    //TODO - Geoff feedback. Add separate queue for each resources instead of putting in one queue
+                    // TODO - Geoff feedback. Add separate queue for each
+                    // resources instead of putting in one queue
                     messageQueue.add(responseBody);
                 }
                 // TODO - get feedback, is it good idea to sleep in while loop?
@@ -71,7 +74,7 @@ public class ScmbProcessor extends Thread {
             messageQueue.shutDown();
         } catch (final InterruptedException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.APPLIANCE, null);
         }
     }
 

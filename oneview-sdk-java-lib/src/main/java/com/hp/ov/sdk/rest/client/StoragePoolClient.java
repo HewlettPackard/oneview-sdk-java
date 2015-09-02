@@ -48,7 +48,7 @@ public interface StoragePoolClient {
      * @return storagePoolDto, which is a object containing the StoragePool
      *         details.
      */
-    public StoragePool getStoragePoolByName(final RestParams params, final String name);
+    public StoragePool getStoragePoolByName(final RestParams params, final String name, final String storageSystemUri);
 
     /**
      * The module aids in creation of StoragePool when provided with the
