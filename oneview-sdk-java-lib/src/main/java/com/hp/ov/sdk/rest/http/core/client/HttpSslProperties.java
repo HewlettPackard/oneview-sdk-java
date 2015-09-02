@@ -9,12 +9,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class HttpSslProperties {
 
-    private String keyStore;
-    private String trustStore;
-    private String keyStorePassword;
-    private String trustStorePassword;
-    private String keyStoreType;
-    private String trustStoreType;
+    public static final String DEFAULT_PASSWORD = "changeit";
+    public static final String DEFAULT_TYPE = "jks";
+
+    private String keyStore = null;
+    private String trustStore = null;
+    private String keyStorePassword = null;
+    private String trustStorePassword = null;
+    private String keyStoreType = null;
+    private String trustStoreType = null;
 
     public String getKeyStore() {
         return keyStore;
