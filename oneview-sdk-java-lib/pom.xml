@@ -111,8 +111,8 @@
     </dependency>
     <dependency>
         <groupId>org.bouncycastle</groupId>
-        <artifactId>bcprov-jdk16</artifactId>
-        <version>1.45</version>
+        <artifactId>bcprov-jdk15on</artifactId>
+        <version>1.52</version>
     </dependency>
     <dependency>
        <groupId>commons-lang</groupId>
