@@ -21,6 +21,10 @@ public class UrlUtils {
         return resourceId;
     }
 
+    public String createFilterString(final String name) {
+        return SdkConstants.FILTER_PREFIX + name + SdkConstants.FILTER_APPEND;
+    }
+
     public String createQueryString(final String name) {
         return SdkConstants.QUERY_PREFIX + name + SdkConstants.QUERY_APPEND;
     }

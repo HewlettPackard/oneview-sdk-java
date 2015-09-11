@@ -30,9 +30,8 @@ import com.hp.ov.sdk.rest.client.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.InterconnectsClient;
 import com.hp.ov.sdk.rest.client.UplinkSetClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.SdkUtils;
 import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.SampleRestParams;
+import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * UplinkSetClientSample is a sample program to assign/consume networks of HP OneView to uplink ports of interconnect. 
@@ -41,8 +40,6 @@ import com.hp.ov.sdk.util.samples.SampleRestParams;
  */
 public class UplinkSetClientSample {
     private RestParams params;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
     private static UrlUtils urlUtils;
     private static TaskResourceV2 taskResourceV2;
     private static UplinkSetClient uplinkSetClient;
@@ -64,9 +61,7 @@ public class UplinkSetClientSample {
     // ================================
 
     private static void init() {
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
         urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        sampleRestParams = new SampleRestParams();
         uplinkSetClient = HPOneViewSdkBeanFactory.getUplinkSetClient();
         fcNetworkClient = HPOneViewSdkBeanFactory.getFcNetworkClient();
         enclosureClient = HPOneViewSdkBeanFactory.getEnclosureClient();
@@ -76,12 +71,8 @@ public class UplinkSetClientSample {
     private void getUplinkSetById() throws InstantiationException, IllegalAccessException {
         UplinkSets uplinkSetDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             uplinkSetDto = uplinkSetClient.getUplinkSet(params, resourceId);
@@ -112,12 +103,8 @@ public class UplinkSetClientSample {
     private void getAllUplinkSet() throws InstantiationException, IllegalAccessException {
         UplinkSetCollectionV2 uplinkSetCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             uplinkSetCollectionDto = uplinkSetClient.getAllUplinkSet(params);
@@ -145,21 +132,12 @@ public class UplinkSetClientSample {
 
     private void deleteUplinkSet() throws InstantiationException, IllegalAccessException {
         String resourceId = null;
-        UplinkSets uplinkSetDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch uplink set uri
-            uplinkSetDto = uplinkSetClient.getUplinkSetsByName(params, resourceName);
-
-            if (null != uplinkSetDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(uplinkSetDto.getUri());
-            }
+            // get resource ID
+            resourceId = uplinkSetClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
             taskResourceV2 = uplinkSetClient.deleteUplinkSet(params, resourceId, false);
@@ -189,12 +167,8 @@ public class UplinkSetClientSample {
         UplinkSets uplinkSetDto = null;
         String resourceId = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             uplinkSetDto = uplinkSetClient.getUplinkSetsByName(params, resourceName);
@@ -240,12 +214,8 @@ public class UplinkSetClientSample {
 
     private void createUplinkSet() throws InstantiationException, IllegalAccessException {
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // create network request body
             final UplinkSets uplinkSetsDto = buildTestUplinkSetDto();

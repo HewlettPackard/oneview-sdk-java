@@ -6,7 +6,10 @@ package com.hp.ov.sdk.exceptions;
 public class SDKInternalException extends SDKException {
 
     /**
-     * 
+     * <p>
+     * This exception is thrown when there is a object to json conversion
+     * failure.
+     * </p>
      */
     private static final long serialVersionUID = 1L;
 

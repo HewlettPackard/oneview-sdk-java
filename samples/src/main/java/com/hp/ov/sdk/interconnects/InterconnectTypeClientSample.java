@@ -13,42 +13,33 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.InterconnectTypeClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.SdkUtils;
-import com.hp.ov.sdk.util.samples.SampleRestParams;
+import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * InterconnectTypeClientSample is a sample program to consume the characteristics model of an interconnect in 
- * HP OneView.It invokes APIs of InterconnectTypeClient which is in sdk library to perform GET/PUT/POST/DELETE
+ * HP OneView.It invokes APIs of InterconnectTypeClient which is in sdk library to perform GET
  * operations on interconnect type resource
  */
 public class InterconnectTypeClientSample {
     private RestParams params;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
     private static InterconnectTypeClient interconnectTypeClient;
 
     // These are variables to be defined by user
     // ================================
     private static final String resourceName = "HP VC FlexFabric-20/40 F8 Module";
-    private static final String resourceId = "f4a7d44e-b0c5-4c9c-9c83-142e24aac7b3";
+    private static final String resourceId = "2edca2bb-e8d1-44b9-839e-3e4a95dff9f2";
 
     // ================================
 
     private static void init() {
         interconnectTypeClient = HPOneViewSdkBeanFactory.getInterconnectTypeClient();
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
-        sampleRestParams = new SampleRestParams();
     }
 
     private void getInterconnectTypeById() throws InstantiationException, IllegalAccessException {
         InterconnectTypes interconnectTypeDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             interconnectTypeDto = interconnectTypeClient.getInterconnectType(params, resourceId);
@@ -81,12 +72,8 @@ public class InterconnectTypeClientSample {
             SDKNoSuchUrlException {
         InterconnectTypeCollectionV2 interconnectTypeCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             interconnectTypeCollectionDto = interconnectTypeClient.getAllInterconnectType(params);
@@ -116,12 +103,8 @@ public class InterconnectTypeClientSample {
     private void getInterconnectTypeByName() throws InstantiationException, IllegalAccessException {
         InterconnectTypes interconnectTypeDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             interconnectTypeDto = interconnectTypeClient.getInterconnectTypeByName(params, resourceName);

@@ -36,20 +36,17 @@ import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.ServerProfileClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.SdkUtils;
 import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 import com.hp.ov.sdk.util.samples.ResourceDtoUtilsWrapper;
-import com.hp.ov.sdk.util.samples.SampleRestParams;
 
 /*
- * ServerProfileClientSample is a sample program capture/consume the entire server configuration of HP OneView.  
- * It invokes APIs of ServerProfileClient which is in sdk library to perform GET/PUT/POST/DELETE
+ * ServerProfileClientSample is a sample program capture/consume the entire server configuration managed 
+ * by HP OneView. It invokes APIs of ServerProfileClient which is in sdk library to perform GET/PUT/POST/DELETE/COPY
  * operations on server profile resource
  */
 public class ServerProfileClientSample {
     private RestParams params;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
     private static UrlUtils urlUtils;
     private static TaskResourceV2 taskResourceV2;
     private static ServerProfileClient serverProfileClient;
@@ -68,7 +65,7 @@ public class ServerProfileClientSample {
     private static final String profileName = "ServerProfile-Bay15";
     private static final String enclosureGroupName = "Enclosure_Test";
     private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402");
-    private static final List<String> storageVolumeName = Arrays.asList("Volume101", "Volume103");
+    private static final List<String> storageVolumeName = Arrays.asList("Volume101");
     private static final List<String> fcNetworkNames = Arrays.asList("FC_Network_A", "FC_Network_B");
     private static final Boolean useBayNameForServerHardwareUri = false;
     private static final String resourceId = "10fbed31-21cd-4c40-9401-3d70511cff00";
@@ -76,9 +73,7 @@ public class ServerProfileClientSample {
     // ================================
 
     private static void init() {
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
         urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        sampleRestParams = new SampleRestParams();
         serverProfileClient = HPOneViewSdkBeanFactory.getServerProfileClient();
         serverHardwareClient = HPOneViewSdkBeanFactory.getServerHardwareClient();
         enclosureGroupClient = HPOneViewSdkBeanFactory.getEnclosureGroupClient();
@@ -88,12 +83,8 @@ public class ServerProfileClientSample {
         ServerProfile serverProfileDto = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             serverProfileDto = serverProfileClient.getServerProfile(params, resourceId);
@@ -125,12 +116,8 @@ public class ServerProfileClientSample {
             SDKNoSuchUrlException {
         ServerProfileCollection serverProfileCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             serverProfileCollectionDto = serverProfileClient.getAllServerProfile(params);
@@ -161,12 +148,8 @@ public class ServerProfileClientSample {
         ServerProfile serverProfileDto = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             serverProfileDto = serverProfileClient.getServerProfileByName(params, templateName);
@@ -197,12 +180,8 @@ public class ServerProfileClientSample {
     public void getAvailableNetworksForServerProfile() {
         AvailableNetworks availableNetworksDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // fetch enclosure group uri from enclosure name
             final String enclosureGroupUri = enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();
@@ -244,12 +223,8 @@ public class ServerProfileClientSample {
     public void getAvailableServersForServerProfileUsingServerHardwareTypeAndEnclosureGroup() {
         List<AvailableServers> availableServersCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // fetch enclosure group uri from enclosure name
             final String enclosureGroupUri = enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();
@@ -294,12 +269,8 @@ public class ServerProfileClientSample {
     public void getAvailableServersForServerProfile() {
         List<AvailableServers> availableServersCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             availableServersCollectionDto = serverProfileClient.getAvailableServersForServerProfile(params);
@@ -332,12 +303,8 @@ public class ServerProfileClientSample {
     public void getAvailableServersForServerProfileUsingProfile() {
         List<AvailableServers> availableServersCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // fetch server profile uri using template name
             final String profileUri = serverProfileClient.getServerProfileByName(params, templateName).getUri();
@@ -375,12 +342,8 @@ public class ServerProfileClientSample {
     public void getProfilePortsForServerProfile() {
         ProfilePorts profilePortsDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // fetch enclosure group uri from enclosure name
             final String enclosureGroupUri = enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();
@@ -417,12 +380,8 @@ public class ServerProfileClientSample {
 
     public void createServerProfile() throws InstantiationException, IllegalAccessException {
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // create serverProfile request body
             final ServerProfile serverProfileDto = buildTestServerProfileDto(params);
@@ -464,12 +423,8 @@ public class ServerProfileClientSample {
         String resourceId = null;
         ServerProfile serverProfileDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // fetch resource Id using resource name
             serverProfileDto = serverProfileClient.getServerProfileByName(params, templateName);
@@ -519,22 +474,13 @@ public class ServerProfileClientSample {
 
     public void deleteServerProfile() throws InstantiationException, IllegalAccessException {
         String resourceId = null;
-        ServerProfile serverProfileDto = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch resource Id using resource name
-            serverProfileDto = serverProfileClient.getServerProfileByName(params, templateName);
-
-            if (null != serverProfileDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(serverProfileDto.getUri());
-            }
+            // get resource ID
+            resourceId = serverProfileClient.getId(params, templateName);
 
             // then make sdk service call to get resource
             taskResourceV2 = serverProfileClient.deleteServerProfile(params, resourceId, false);
@@ -566,12 +512,8 @@ public class ServerProfileClientSample {
         // first get the session Id
         Boolean matches = false;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             taskResourceV2 = serverProfileClient.deleteServerProfileByFilter(params, templateName, matches, false);
@@ -603,12 +545,8 @@ public class ServerProfileClientSample {
         // first get the session Id
         Boolean matches = true;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             taskResourceV2 = serverProfileClient.deleteServerProfileByFilter(params, templateName, matches, false);
@@ -640,12 +578,8 @@ public class ServerProfileClientSample {
 
     public void copyServerProfile() throws InstantiationException, IllegalAccessException {
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             taskResourceV2 = serverProfileClient.copyServerProfile(params, templateName, bayName, profileName, false);

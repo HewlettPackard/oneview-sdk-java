@@ -92,6 +92,10 @@ public class SdkConstants {
     public static final String OBJECT_TO_JOSON_CONVERSION = "Object-to-json";
     public static final String TASK_MONITOR = "task-monitor";
 
-    public static final String QUERY_PREFIX = "filter=\"name=\'";
-    public static final String QUERY_APPEND = "\'\"";
+    public static final String FILTER_PREFIX = "filter=\"name=\'";
+    public static final String FILTER_APPEND = "\'\"";
+
+    public static final String QUERY_PREFIX = "query=name eq \"";
+    public static final String QUERY_APPEND = "\"";
+
 }

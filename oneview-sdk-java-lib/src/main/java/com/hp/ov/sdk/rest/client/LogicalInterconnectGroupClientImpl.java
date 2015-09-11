@@ -123,7 +123,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
     public LogicalInterconnectGroups getLogicalInterconnectGroupByName(final RestParams params, final String name) {
         logger.info("LogicalInterconnectGroupClientImpl : getLogicalInterconnectGroupByName : Start");
         // String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = urlUtils.createQueryString(name);
+        final String query = urlUtils.createFilterString(name);
         logger.debug("LogicalInterconnectGroupClientImpl : getLogicalInterconnectGroupByName : query = " + query);
 
         // validate args
@@ -338,6 +338,18 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         logger.info("LogicalInterconnectGroupClientImpl : getInterconnectSettings : End");
 
         return interconnectSettingsDto;
+    }
+
+    @Override
+    public String getId(final RestParams creds, final String name) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        LogicalInterconnectGroups logicalInterconnectGroupDto = getLogicalInterconnectGroupByName(creds, name);
+
+        if (null != logicalInterconnectGroupDto.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(logicalInterconnectGroupDto.getUri());
+        }
+        return resourceId;
     }
 
 }

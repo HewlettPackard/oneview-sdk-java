@@ -96,4 +96,31 @@ public interface SwitchClient {
      */
     public EnvironmentalConfiguration getSwitchEnvironmentConfiguration(final RestParams params, final String resourceId);
 
+    /**
+     * The module aids in fetching the Switch details for the Switch name as
+     * specified in HP OneView.
+     * 
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param name
+     *            The name is the Switch name as seen in HP OneView.
+     * @return switchDto, which is a object containing the Switch details.
+     */
+    public Switch getSwitchByName(final RestParams params, final String name);
+
+    /**
+     * The module aids in fetching the Switch details for the Switch name as
+     * specified in HP OneView.
+     * 
+     * @param creds
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param name
+     *            The resourceName is the Switch name as seen in HP OneView.
+     * @return String, which is a resource Id for the Switch name as seen in
+     *         HPOneView.
+     */
+    public String getId(final RestParams creds, final String name);
+
 }

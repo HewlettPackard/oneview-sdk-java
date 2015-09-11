@@ -137,4 +137,18 @@ public interface EnclosureGroupClient {
      */
     public String updateConfigurationScript(final RestParams params, final String resourceId, final String scriptData);
 
+    /**
+     * The module aids in fetching the EnclosureGroup details for the
+     * EnclosureGroup name as specified in HP OneView.
+     * 
+     * @param creds
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param name
+     *            The resourceName is the EnclosureGroup name as seen in HP
+     *            OneView.
+     * @return String, which is a resource Id for the EnclosureGroup name as
+     *         seen in HPOneView.
+     */
+    public String getId(final RestParams creds, final String name);
 }

@@ -244,6 +244,21 @@ public interface ServerProfileClient {
     public TaskResourceV2 copyServerProfile(final RestParams params, final String sourceName, final String destinationBay,
             final String profileName, final boolean aSync);
 
+    /**
+     * The module aids in fetching the ServerProfile details for the
+     * ServerProfile name as specified in HP OneView.
+     * 
+     * @param creds
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param name
+     *            The resourceName is the ServerProfile name as seen in HP
+     *            OneView.
+     * @return String, which is a resource Id for the ServerProfile name as seen
+     *         in HPOneView.
+     */
+    public String getId(final RestParams creds, final String name);
+
     // TODO - implement the remaining update methods and GetByName method
 
 }

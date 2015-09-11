@@ -6,7 +6,10 @@ package com.hp.ov.sdk.exceptions;
 public class SdkRuntimeException extends RuntimeException {
 
     /**
-     * 
+     * <p>
+     * This exception is thrown by the execution of the method or constructor
+     * and propagate outside the method or constructor boundary
+     * </p>
      */
     private static final long serialVersionUID = 1L;
 

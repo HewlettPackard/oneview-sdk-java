@@ -120,7 +120,7 @@ public class EnclosureClientImpl implements EnclosureClient {
         Enclosures enclosureDto = null;
         logger.info("EnclosureClientImpl : getEnclosureByName : Start");
         // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = urlUtils.createQueryString(name);
+        final String query = urlUtils.createFilterString(name);
 
         // validate args
         if (null == params) {
@@ -665,6 +665,18 @@ public class EnclosureClientImpl implements EnclosureClient {
         logger.info("EnclosureClientImpl : getUtilization : End");
 
         return utilizationDataDto;
+    }
+
+    @Override
+    public String getId(final RestParams creds, final String name) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        Enclosures enclosures = getEnclosureByName(creds, name);
+
+        if (null != enclosures.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(enclosures.getUri());
+        }
+        return resourceId;
     }
 
 }

@@ -4,8 +4,8 @@
 package com.hp.ov.sdk.util;
 
 public class StringUtil {
-    private static final String SLASH = "\\";
-    private static final String REPLACEDWITH = "";
+    // private static final String SLASH = "\\";
+    // private static final String REPLACEDWITH = "";
 
     public static String convertIntToString(final int number) {
         return Integer.toString(number);
@@ -13,7 +13,7 @@ public class StringUtil {
 
     public static String replaceQuotesWithEmpty(final String inStr) {
 
-        final String newStr = inStr.replaceAll(SLASH, REPLACEDWITH);
+        // final String newStr = inStr.replaceAll(SLASH, REPLACEDWITH);
         final String pattern = "^\"|\"$";
         final String returnStr = inStr.replaceAll(pattern, "");
         return returnStr;

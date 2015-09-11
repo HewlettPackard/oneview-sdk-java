@@ -107,7 +107,7 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
         StorageVolumeTemplate storageVolumeTemplateDto = null;
         logger.info("StorageVolumeTemplateClientImpl : getNetworkSetByName : Start");
         // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = urlUtils.createQueryString(name);
+        final String query = urlUtils.createFilterString(name);
 
         // validate args
         if (null == params) {
@@ -249,6 +249,18 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
         logger.info("StorageVolumeTemplateClientImpl : deleteStorageVolumeTemplate : End");
 
         return null;
+    }
+
+    @Override
+    public String getId(final RestParams creds, final String name) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        StorageVolumeTemplate storageVolumeTemplateDto = getStorageVolumeTemplateByName(creds, name);
+
+        if (null != storageVolumeTemplateDto.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(storageVolumeTemplateDto.getUri());
+        }
+        return resourceId;
     }
 
     @Override

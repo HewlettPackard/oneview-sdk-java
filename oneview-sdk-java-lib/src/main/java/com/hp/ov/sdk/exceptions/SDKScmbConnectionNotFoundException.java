@@ -6,8 +6,8 @@ package com.hp.ov.sdk.exceptions;
 public class SDKScmbConnectionNotFoundException extends SDKException {
 
     /**
-	 * 
-	 */
+     * The connection is not found to disconnect for scmb.
+     */
     private static final long serialVersionUID = 1L;
 
     public SDKScmbConnectionNotFoundException(final SDKErrorKey sdkErrorKey, final Object[] messageParameters,

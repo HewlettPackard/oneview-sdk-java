@@ -25,9 +25,8 @@ import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
-import com.hp.ov.sdk.util.SdkUtils;
 import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.SampleRestParams;
+import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 import com.hp.ov.sdk.util.samples.ResourceDtoUtilsWrapper;
 
 /*
@@ -39,8 +38,6 @@ import com.hp.ov.sdk.util.samples.ResourceDtoUtilsWrapper;
 public class LogicalInterconnectGroupClientSample {
     private RestParams params;
     private static LogicalInterconnectGroupClient logicalInterconnectGroupClient;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
     private static UrlUtils urlUtils;
     private static ResourceDtoUtils resourceDtoUtils;
     private static TaskResourceV2 taskResourceV2;
@@ -59,15 +56,13 @@ public class LogicalInterconnectGroupClientSample {
     private static final String ethUplinkSetName = "EthernetUplinkSet";
     private static final String fcAUplinkSetName = "FCUplinkSetA";
     private static final String fcBUplinkSetName = "FCUplinkSetB";
-    private static final String resourceId = "2b156954-dd0c-44f2-b602-a0328d19d34c";
-    private static final String settingId = "2a69ad5d-a3e9-4713-a947-22900e30355a";
+    private static final String resourceId = "22b3555b-e26a-4c2d-b2f7-f8a18971ce37";
+    private static final String settingId = "63938196-aee5-47e6-8599-310ded7ba5f6";
 
     // ================================
 
     private static void init() throws Exception {
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
         urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        sampleRestParams = new SampleRestParams();
         logicalInterconnectGroupClient = HPOneViewSdkBeanFactory.getLogicalInterconnectGroupClient();
         resourceDtoUtils = HPOneViewSdkBeanFactory.getResourceDtoUtils();
     }
@@ -76,12 +71,8 @@ public class LogicalInterconnectGroupClientSample {
         LogicalInterconnectGroups logicalInterconnectGroupDto = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             logicalInterconnectGroupDto = logicalInterconnectGroupClient.getLogicalInterconnectGroup(params, resourceId);
@@ -115,12 +106,8 @@ public class LogicalInterconnectGroupClientSample {
     private void getAllLogicalInterconnectGroups() throws InstantiationException, IllegalAccessException {
         LogicalInterconnectGroupCollectionV2 logicalInterconnectGroupCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             logicalInterconnectGroupCollectionDto = logicalInterconnectGroupClient.getAllLogicalInterconnectGroups(params);
@@ -155,12 +142,8 @@ public class LogicalInterconnectGroupClientSample {
         LogicalInterconnectGroups logicalInterconnectGroupDto = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             logicalInterconnectGroupDto = logicalInterconnectGroupClient.getLogicalInterconnectGroupByName(params, resourceName);
@@ -192,13 +175,8 @@ public class LogicalInterconnectGroupClientSample {
 
     private void createLogicalInterconnectGroup() throws InstantiationException, IllegalAccessException {
         try {
-
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // create logicalInterconnectGroup request body
             final LogicalInterconnectGroups logicalInterconnectGroupDto = buildTestLogicalInterconnectGroup();
@@ -243,13 +221,8 @@ public class LogicalInterconnectGroupClientSample {
         LogicalInterconnectGroups logicalInterconnectGroups = null;
         String resourceId = null;
         try {
-
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // get resource Id using resource name
             logicalInterconnectGroups = logicalInterconnectGroupClient.getLogicalInterconnectGroupByName(params, resourceName);
@@ -298,22 +271,13 @@ public class LogicalInterconnectGroupClientSample {
     }
 
     private void deleteLogicalInterconnectGroup() throws InstantiationException, IllegalAccessException {
-        LogicalInterconnectGroups logicalInterconnectGroups = null;
         String resourceId = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch resource Id using name
-            logicalInterconnectGroups = logicalInterconnectGroupClient.getLogicalInterconnectGroupByName(params, resourceName);
-
-            if (null != logicalInterconnectGroups.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(logicalInterconnectGroups.getUri());
-            }
+            // get resource ID
+            resourceId = logicalInterconnectGroupClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
             taskResourceV2 = logicalInterconnectGroupClient.deleteLogicalInterconnectGroup(params, resourceId, false);
@@ -350,12 +314,8 @@ public class LogicalInterconnectGroupClientSample {
         InterconnectSettingsV2 interconnectSettingsDto = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             interconnectSettingsDto = logicalInterconnectGroupClient.getDefaultInterconnectSettings(params);
@@ -390,12 +350,8 @@ public class LogicalInterconnectGroupClientSample {
         InterconnectSettingsV2 interconnectSettingsDto = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             interconnectSettingsDto = logicalInterconnectGroupClient.getInterconnectSettings(params, resourceId, settingId);
@@ -485,6 +441,7 @@ public class LogicalInterconnectGroupClientSample {
         client.getAllLogicalInterconnectGroups();
         client.getLogicalInterconnectGroupById();
         client.getDefaultInterconnectSettings();
+        // To run getInterconnectSettings, need settingID and resourceID of LIG
         client.getInterconnectSettings();
         client.createLogicalInterconnectGroup();
         client.getLogicalInterconnectGroupByName();

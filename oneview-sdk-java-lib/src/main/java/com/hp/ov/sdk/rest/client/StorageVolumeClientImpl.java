@@ -113,7 +113,7 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
         logger.info("StorageVolumeClientImpl : getStorageVolumeByName : Start");
 
         // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = urlUtils.createQueryString(name);
+        final String query = urlUtils.createFilterString(name);
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
@@ -268,6 +268,18 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
         logger.info("StorageVolumeClientImpl : deleteStorageVolume : End");
 
         return taskResourceV2;
+    }
+
+    @Override
+    public String getId(final RestParams creds, final String name) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        StorageVolumeV2 storageVolumeDto = getStorageVolumeByName(creds, name);
+
+        if (null != storageVolumeDto.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(storageVolumeDto.getUri());
+        }
+        return resourceId;
     }
 
     @Override

@@ -104,4 +104,22 @@ public interface StoragePoolClient {
      */
     public String deleteStoragePool(final RestParams params, final String resourceId);
 
+    /**
+     * The module aids in fetching the StoragePool details for the StoragePool
+     * name as specified in HP OneView.
+     * 
+     * @param creds
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param name
+     *            The resourceName is the StoragePool name as seen in HP
+     *            OneView.
+     * @param storageSystemUri
+     *            The uri of the storage system the storage pool is associated
+     *            with.
+     * @return String, which is a resource Id for the StoragePool name as seen
+     *         in HPOneView.
+     */
+    public String getId(final RestParams creds, final String name, final String storageSystemUri);
+
 }

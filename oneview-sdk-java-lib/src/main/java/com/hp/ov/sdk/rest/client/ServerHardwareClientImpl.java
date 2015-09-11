@@ -295,6 +295,18 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         return biosSettingsStateCollectionDto;
     }
 
+    @Override
+    public String getId(final RestParams creds, final String name) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        ServerHardware serverHardwareDto = getServerHardwareByName(creds, name);
+
+        if (null != serverHardwareDto.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(serverHardwareDto.getUri());
+        }
+        return resourceId;
+    }
+
     // TODO
     @Override
     public EnvironmentalConfiguration getEnvironmentConfigurationForServerHardware(RestParams params, String resourceId) {

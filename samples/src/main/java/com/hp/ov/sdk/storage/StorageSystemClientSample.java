@@ -25,19 +25,16 @@ import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.StorageSystemClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.SdkUtils;
 import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.SampleRestParams;
+import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * StorageSystemClientSample is a sample program consume the storage server of HP OneView.  
+ * StorageSystemClientSample is a sample program consume the storage server managed by HP OneView.  
  * It invokes APIs of StorageSystemClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on storage system resource
  */
 public class StorageSystemClientSample {
     private RestParams params;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
     private static UrlUtils urlUtils;
     private static StorageSystemClient storageSystemClient;
     private static FcNetworkClient fcNetworkClient;
@@ -60,9 +57,7 @@ public class StorageSystemClientSample {
     // ================================
 
     private static void init() {
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
         urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        sampleRestParams = new SampleRestParams();
         storageSystemClient = HPOneViewSdkBeanFactory.getStorageSystemClient();
         fcNetworkClient = HPOneViewSdkBeanFactory.getFcNetworkClient();
 
@@ -71,12 +66,8 @@ public class StorageSystemClientSample {
     private void getStorageSystemById() throws InstantiationException, IllegalAccessException {
         StorageSystemV2 storageSystemDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             storageSystemDto = storageSystemClient.getStorageSystem(params, resourceId);
@@ -108,22 +99,13 @@ public class StorageSystemClientSample {
     private void getStoragePoolsForStorageSystem() throws InstantiationException, IllegalAccessException,
             SDKResourceNotFoundException, SDKNoSuchUrlException {
         String resourceId = null;
-        StorageSystemV2 storageSystemDto = null;
         StoragePoolCollection storagePoolCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch resource Id using resource name
-            storageSystemDto = storageSystemClient.getStorageSystemByName(params, resourceName);
-
-            if (null != storageSystemDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(storageSystemDto.getUri());
-            }
+            // get resource ID
+            resourceId = storageSystemClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
             storagePoolCollectionDto = storageSystemClient.getStoragePoolsForStorageSystem(params, resourceId);
@@ -155,22 +137,13 @@ public class StorageSystemClientSample {
     private void getAllManagedPortsForStorageSystem() throws InstantiationException, IllegalAccessException,
             SDKResourceNotFoundException, SDKNoSuchUrlException {
         String resourceId = null;
-        StorageSystemV2 storageSystemDto = null;
         StorageTargetPortCollection storageTargetPortCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch resource Id using resource name
-            storageSystemDto = storageSystemClient.getStorageSystemByName(params, resourceName);
-
-            if (null != storageSystemDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(storageSystemDto.getUri());
-            }
+            // get resource ID
+            resourceId = storageSystemClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
             storageTargetPortCollectionDto = storageSystemClient.getAllManagedPortsForStorageSystem(params, resourceId);
@@ -204,22 +177,13 @@ public class StorageSystemClientSample {
     private void getManagedPortsForStorageSystem() throws InstantiationException, IllegalAccessException,
             SDKResourceNotFoundException, SDKNoSuchUrlException {
         String resourceId = null;
-        StorageSystemV2 storageSystemDto = null;
         StorageTargetPortV2 storageTargetPortDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch resource Id using resource name
-            storageSystemDto = storageSystemClient.getStorageSystemByName(params, resourceName);
-
-            if (null != storageSystemDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(storageSystemDto.getUri());
-            }
+            // get resource ID
+            resourceId = storageSystemClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
             storageTargetPortDto = storageSystemClient.getManagedPortsForStorageSystem(params, resourceId, targetPortId);
@@ -251,12 +215,8 @@ public class StorageSystemClientSample {
             SDKNoSuchUrlException {
         StorageSystemCollection storageSystemCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             storageSystemCollectionDto = storageSystemClient.getAllStorageSystems(params);
@@ -286,12 +246,8 @@ public class StorageSystemClientSample {
     private void getStorageSystemByName() throws InstantiationException, IllegalAccessException {
         StorageSystemV2 storageSystemDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             storageSystemDto = storageSystemClient.getStorageSystemByName(params, resourceName);
@@ -322,12 +278,8 @@ public class StorageSystemClientSample {
         String createStorage = null;
         AddStorageSystemCredentials addStorageSystemCredentialsDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // create storageSystem request body
             addStorageSystemCredentialsDto = buildTestStorageSystemDto();
@@ -372,12 +324,8 @@ public class StorageSystemClientSample {
         String resourceId = null;
         StorageSystemV2 storageSystemDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // fetch resource Id using resource name
             storageSystemDto = storageSystemClient.getStorageSystemByName(params, resourceName);
@@ -430,21 +378,12 @@ public class StorageSystemClientSample {
         // first get the session Id
         String deleteStorage = null;
         String resourceId = null;
-        StorageSystemV2 storageSystemDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch resource Id using resource name
-            storageSystemDto = storageSystemClient.getStorageSystemByName(params, resourceName);
-
-            if (null != storageSystemDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(storageSystemDto.getUri());
-            }
+            // get resource ID
+            resourceId = storageSystemClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
             deleteStorage = storageSystemClient.deleteStorageSystem(params, resourceId);

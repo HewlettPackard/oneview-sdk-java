@@ -20,9 +20,8 @@ import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.NetworkSetClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
-import com.hp.ov.sdk.util.SdkUtils;
 import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.SampleRestParams;
+import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * NetworkSetClientSample is a sample program to consume a consolidated set of ethernet network 
@@ -33,8 +32,6 @@ public class NetworkSetClientSample {
 
     private RestParams params;
     private static NetworkSetClient networkSetClient;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
     private static UrlUtils urlUtils;
     private static ResourceDtoUtils resourceDtoUtils;
     private static TaskResourceV2 taskResourceV2;
@@ -50,9 +47,7 @@ public class NetworkSetClientSample {
 
     private static void init() throws Exception {
         networkSetClient = HPOneViewSdkBeanFactory.getNetworkSetClient();
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
         urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        sampleRestParams = new SampleRestParams();
         resourceDtoUtils = HPOneViewSdkBeanFactory.getResourceDtoUtils();
     }
 
@@ -60,12 +55,8 @@ public class NetworkSetClientSample {
         NetworkSets networkSetDto = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             networkSetDto = networkSetClient.getNetworkSets(params, resourceId);
@@ -96,12 +87,8 @@ public class NetworkSetClientSample {
     private void getAllNetworkSet() throws InstantiationException, IllegalAccessException {
         NetworkSetCollection networkSetCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             networkSetCollectionDto = networkSetClient.getAllNetworkSets(params);
@@ -133,12 +120,8 @@ public class NetworkSetClientSample {
         NetworkSets networkSetDto = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             networkSetDto = networkSetClient.getNetworkSetsByName(params, resourceName);
@@ -168,12 +151,8 @@ public class NetworkSetClientSample {
 
     private void createNetworkSet() throws InstantiationException, IllegalAccessException {
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // create network set request body
             final NetworkSets networkSetDto = resourceDtoUtils.buildNetworkSetDto(params, resourceName, networkNames);
@@ -216,12 +195,8 @@ public class NetworkSetClientSample {
         String resourceId = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // fetch resource Id using resource name
             networkSetDto = networkSetClient.getNetworkSetsByName(params, resourceName);
@@ -270,22 +245,14 @@ public class NetworkSetClientSample {
     }
 
     private void deleteNetworkSet() throws InstantiationException, IllegalAccessException {
-        NetworkSets networkSetDto = null;
         String resourceId = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch resource Id using resource name
-            networkSetDto = networkSetClient.getNetworkSetsByName(params, resourceName);
-            if (null != networkSetDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(networkSetDto.getUri());
-            }
+            // get resource ID
+            resourceId = networkSetClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
             taskResourceV2 = networkSetClient.deleteNetworkSet(params, resourceId, false);

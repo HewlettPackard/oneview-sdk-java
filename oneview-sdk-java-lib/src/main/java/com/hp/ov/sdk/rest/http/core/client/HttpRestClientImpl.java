@@ -45,7 +45,7 @@ public class HttpRestClientImpl implements HttpRestClient {
     private static final String CONTENT_TYPE_STRING = "text/plain; charset=UTF-8";
     private static final String ACCEPT_LANGAUGE = "en_US";
     private static final String CHAR_SET = "UTF-8";
-    private static final int TIMEOUT = 1000;
+    private static final int TIMEOUT = 0;
 
     /**
      * this method mainly used to get sync response from REST API

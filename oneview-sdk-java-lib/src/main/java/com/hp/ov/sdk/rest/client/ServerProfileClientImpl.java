@@ -120,7 +120,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         ServerProfile serverProfileDto = null;
         logger.info("ServerProfileClientImpl : getServerProfileByName : Start");
         // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = urlUtils.createQueryString(name);
+        final String query = urlUtils.createFilterString(name);
 
         // validate args
         if (null == params) {
@@ -586,6 +586,18 @@ public class ServerProfileClientImpl implements ServerProfileClient {
 
         return taskResourceV2;
 
+    }
+
+    @Override
+    public String getId(final RestParams creds, final String name) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        ServerProfile serverProfileDto = getServerProfileByName(creds, name);
+
+        if (null != serverProfileDto.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(serverProfileDto.getUri());
+        }
+        return resourceId;
     }
     // TODO - implement the remaining update methods and GetByName method
 

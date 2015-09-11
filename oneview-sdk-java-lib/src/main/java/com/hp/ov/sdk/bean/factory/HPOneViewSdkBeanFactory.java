@@ -16,6 +16,8 @@ import com.hp.ov.sdk.messaging.scmb.services.ScmbConnectionManager;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbConnectionManagerImpl;
 import com.hp.ov.sdk.rest.client.ConnectionTemplateClient;
 import com.hp.ov.sdk.rest.client.ConnectionTemplateClientImpl;
+import com.hp.ov.sdk.rest.client.FcSansDeviceManagerClient;
+import com.hp.ov.sdk.rest.client.FcSansDeviceManagerClientImpl;
 import com.hp.ov.sdk.rest.client.EnclosureClient;
 import com.hp.ov.sdk.rest.client.EnclosureClientImpl;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
@@ -32,10 +34,14 @@ import com.hp.ov.sdk.rest.client.LogicalInterconnectClient;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectClientImpl;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClientImpl;
+import com.hp.ov.sdk.rest.client.FcSansManagedSanClient;
+import com.hp.ov.sdk.rest.client.FcSansManagedSanClientImpl;
 import com.hp.ov.sdk.rest.client.NetworkClient;
 import com.hp.ov.sdk.rest.client.NetworkClientImpl;
 import com.hp.ov.sdk.rest.client.NetworkSetClient;
 import com.hp.ov.sdk.rest.client.NetworkSetClientImpl;
+import com.hp.ov.sdk.rest.client.FcSansProviderClient;
+import com.hp.ov.sdk.rest.client.FcSansProviderClientImpl;
 import com.hp.ov.sdk.rest.client.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.ServerHardwareClientImpl;
 import com.hp.ov.sdk.rest.client.ServerProfileClient;
@@ -147,6 +153,18 @@ public class HPOneViewSdkBeanFactory {
 
     public static StorageVolumeClient getStorageVolumeClient() {
         return getApplicationContext().getBean(StorageVolumeClientImpl.class);
+    }
+
+    public static FcSansDeviceManagerClient getDeviceManagerClient() {
+        return getApplicationContext().getBean(FcSansDeviceManagerClientImpl.class);
+    }
+
+    public static FcSansProviderClient getProviderClient() {
+        return getApplicationContext().getBean(FcSansProviderClientImpl.class);
+    }
+
+    public static FcSansManagedSanClient getManagedSanClient() {
+        return getApplicationContext().getBean(FcSansManagedSanClientImpl.class);
     }
 
     public static UrlUtils getUrlUtils() {

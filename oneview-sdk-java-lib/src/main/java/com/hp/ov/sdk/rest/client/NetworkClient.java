@@ -135,4 +135,18 @@ public interface NetworkClient {
      */
     public TaskResourceV2 createNetworkInBulk(final RestParams params, final BulkEthernetNetwork bulkEthernetDto,
             final boolean aSync, final boolean useJsonRequest);
+
+    /**
+     * The module aids in fetching the Network details for the Network name as
+     * specified in HP OneView.
+     * 
+     * @param creds
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param name
+     *            The resourceName is the Network name as seen in HP OneView.
+     * @return String, which is a resource Id for the Network name as seen in
+     *         HPOneView.
+     */
+    public String getId(final RestParams creds, final String name);
 }

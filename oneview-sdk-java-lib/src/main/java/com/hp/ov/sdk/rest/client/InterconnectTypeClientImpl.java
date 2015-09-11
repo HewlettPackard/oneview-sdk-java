@@ -100,7 +100,7 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
         InterconnectTypes interconnectTypeDto = null;
         logger.info("InterconnectTypeClientImpl : getInterconnectTypeByName : Start");
         // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = urlUtils.createQueryString(name);
+        final String query = urlUtils.createFilterString(name);
 
         // validate args
         if (null == params) {
@@ -135,4 +135,15 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
         return interconnectTypeDto;
     }
 
+    @Override
+    public String getId(final RestParams creds, final String name) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        InterconnectTypes interconnectTypesDto = getInterconnectTypeByName(creds, name);
+
+        if (null != interconnectTypesDto.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(interconnectTypesDto.getUri());
+        }
+        return resourceId;
+    }
 }

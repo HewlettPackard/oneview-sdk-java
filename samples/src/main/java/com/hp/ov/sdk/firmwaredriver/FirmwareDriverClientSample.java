@@ -14,46 +14,34 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.SdkUtils;
-import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.SampleRestParams;
+import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * FirmwareDriverClientSample is a sample program to consume the firmware driver software resource of HP OneView
- * It invokes APIs of FirmwareDriverClient which is in sdk library to perform GET/PUT/POST/DELETE
+ * It invokes APIs of FirmwareDriverClient which is in sdk library to perform GET/DELETE
  * operations on firmware driver resource
  */
 public class FirmwareDriverClientSample {
     private RestParams params;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
-    private static UrlUtils urlUtils;
     private static TaskResourceV2 taskResourceV2;
     private static FirmwareDriverClient firmwareDriverClient;
 
     // These are variables to be defined by user
     // ================================
-    private static final String resourceName = "ubuntu-13.04-desktop-i386.iso";// "HP Service Pack For ProLiant OneView 2014 11 13";
-    private static final String resourceId = "ubuntu-13_04-desktop-i386";// "bp-hp-service-pack-for-proliant-oneview-2014-11-30-05";
+    private static final String resourceName = "HP Service Pack For ProLiant OneView 2014 11 13";
+    private static final String resourceId = "bp-hp-service-pack-for-proliant-oneview-2014-11-30-05";
 
     // ================================
 
     private static void init() {
         firmwareDriverClient = HPOneViewSdkBeanFactory.getFirmwareDriverClient();
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        sampleRestParams = new SampleRestParams();
     }
 
     private void getFirmwareDriverById() throws InstantiationException, IllegalAccessException {
         FwBaseline fwBaselineDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             fwBaselineDto = firmwareDriverClient.getFirmwareDriver(params, resourceId);
@@ -85,12 +73,8 @@ public class FirmwareDriverClientSample {
             SDKNoSuchUrlException {
         FwBaselineCollection fwBaselineCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             fwBaselineCollectionDto = firmwareDriverClient.getAllFirmwareDrivers(params);
@@ -121,12 +105,8 @@ public class FirmwareDriverClientSample {
         FwBaseline fwBaselineDto = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             fwBaselineDto = firmwareDriverClient.getFirmwareDriverByName(params, resourceName);
@@ -156,22 +136,13 @@ public class FirmwareDriverClientSample {
 
     private void deleteFirmwareDriver() throws InstantiationException, IllegalAccessException {
         String resourceId = null;
-        FwBaseline fwBaselineDto = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch resource Id using name
-            fwBaselineDto = firmwareDriverClient.getFirmwareDriverByName(params, resourceName);
-
-            if (null != fwBaselineDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(fwBaselineDto.getUri());
-            }
+            // get resource ID
+            resourceId = firmwareDriverClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
             taskResourceV2 = firmwareDriverClient.deleteFirmwareDriver(params, resourceId, false, false, false);

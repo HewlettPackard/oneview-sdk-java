@@ -19,19 +19,16 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.util.SdkUtils;
 import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.SampleRestParams;
+import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * StorageVolumeTemplateClientSample is a sample program consumes the template that is defined over the storage pool   
- * of HP OneView. It invokes APIs of StorageVolumeTemplateClient which is in sdk library to perform GET/PUT/POST/DELETE
+ * in HP OneView. It invokes APIs of StorageVolumeTemplateClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on storage volume template resource
  */
 public class StorageVolumeTemplateClientSample {
     private RestParams params;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
     private static UrlUtils urlUtils;
     private static StorageVolumeTemplateClient storageVolumeTemplateClient;
     private static StoragePoolClient storagePoolClient;
@@ -49,9 +46,7 @@ public class StorageVolumeTemplateClientSample {
     // ================================
 
     private static void init() {
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
         urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        sampleRestParams = new SampleRestParams();
         storageVolumeTemplateClient = HPOneViewSdkBeanFactory.getStorageVolumeTemplateClient();
         storagePoolClient = HPOneViewSdkBeanFactory.getStoragePoolClient();
         storageSystemClient = HPOneViewSdkBeanFactory.getStorageSystemClient();
@@ -60,12 +55,8 @@ public class StorageVolumeTemplateClientSample {
     private void getStorageVolumeTemplateById() throws InstantiationException, IllegalAccessException {
         StorageVolumeTemplate storageVolumeTemplateDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // fetch resource Id using resource name
             // then make sdk service call to get resource
@@ -99,12 +90,8 @@ public class StorageVolumeTemplateClientSample {
             SDKNoSuchUrlException {
         StorageVolumeTemplateCollection storageVolumeTemplateCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             storageVolumeTemplateCollectionDto = storageVolumeTemplateClient.getAllStorageVolumeTemplates(params);
@@ -138,12 +125,8 @@ public class StorageVolumeTemplateClientSample {
     private void getStorageVolumeTemplateByName() throws InstantiationException, IllegalAccessException {
         StorageVolumeTemplate storageVolumeTemplateDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             storageVolumeTemplateDto = storageVolumeTemplateClient.getStorageVolumeTemplateByName(params, resourceName);
@@ -178,12 +161,8 @@ public class StorageVolumeTemplateClientSample {
 
         StorageVolumeTemplate storageVolumeTemplateDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // create storageVolumeTemplate request body
             storageVolumeTemplateDto = buildTestStorageVolumeTemplateDto();
@@ -229,12 +208,8 @@ public class StorageVolumeTemplateClientSample {
         StorageVolumeTemplate storageVolumeTemplateDto = null;
         String resourceId = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // fetch resource Id using resource name
             storageVolumeTemplateDto = storageVolumeTemplateClient.getStorageVolumeTemplateByName(params, resourceName);
@@ -285,23 +260,14 @@ public class StorageVolumeTemplateClientSample {
     }
 
     private void deleteStorageVolumeTemplate() throws InstantiationException, IllegalAccessException {
-        StorageVolumeTemplate storageVolumeTemplateDto = null;
         String deletedString = "";
         String resourceId = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch resource Id using resource name
-            storageVolumeTemplateDto = storageVolumeTemplateClient.getStorageVolumeTemplateByName(params, resourceName);
-
-            if (null != storageVolumeTemplateDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(storageVolumeTemplateDto.getUri());
-            }
+            // get resource ID
+            resourceId = storageVolumeTemplateClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
             deletedString = storageVolumeTemplateClient.deleteStorageVolumeTemplate(params, resourceId);

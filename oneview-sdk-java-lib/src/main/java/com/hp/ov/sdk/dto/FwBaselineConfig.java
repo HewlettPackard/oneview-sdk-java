@@ -3,7 +3,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
-public class FwBaselineConfig {
+import java.io.Serializable;
+
+public class FwBaselineConfig implements Serializable {
 
     /**
      * 

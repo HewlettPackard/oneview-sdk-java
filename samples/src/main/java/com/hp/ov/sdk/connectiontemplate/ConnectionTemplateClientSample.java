@@ -17,19 +17,16 @@ import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.ConnectionTemplateClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
-import com.hp.ov.sdk.util.SdkUtils;
 import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.SampleRestParams;
+import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * ConnectionTemplateClientSample is a sample program to consume default connection configuration characteristics of 
- * HP OneView. It invokes APIs of ConnectionTemplateClient which is in sdk library to perform GET/PUT/POST/DELETE
+ * HP OneView. It invokes APIs of ConnectionTemplateClient which is in sdk library to perform GET/PUT
  * operations on connection template resource
  */
 public class ConnectionTemplateClientSample {
     private RestParams params;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
     private static UrlUtils urlUtils;
     private static ResourceDtoUtils resourceDtoUtils;
     private static ConnectionTemplateClient connectionTemplateClient;
@@ -44,9 +41,7 @@ public class ConnectionTemplateClientSample {
     // ================================
 
     private static void init() {
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
         urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        sampleRestParams = new SampleRestParams();
         resourceDtoUtils = HPOneViewSdkBeanFactory.getResourceDtoUtils();
         connectionTemplateClient = HPOneViewSdkBeanFactory.getConnectionTemplateClient();
     }
@@ -56,12 +51,8 @@ public class ConnectionTemplateClientSample {
         // first get the session Id
         try {
 
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             connectionTemplateDto = connectionTemplateClient.getConnectionTemplate(params, resourceId);
@@ -90,12 +81,8 @@ public class ConnectionTemplateClientSample {
         // first get the session Id
         String resourceId = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             connectionTemplateDto = connectionTemplateClient.getConnectionTemplateByName(params, resourceName);
 
@@ -119,7 +106,7 @@ public class ConnectionTemplateClientSample {
             System.out.println("ConnectionTemplateClientTest : updateConnectionTemplate : "
                     + "connectionTemplate object returned to client : " + connectionTemplateDto.toString());
         } catch (SDKResourceNotFoundException ex) {
-            System.out.println("ConnectionTemplateClientTest : updateConnectionTemplate :" + " resource not found to delete : ");
+            System.out.println("ConnectionTemplateClientTest : updateConnectionTemplate :" + " resource not found to update : ");
         } catch (SDKBadRequestException ex) {
             System.out.println("ConnectionTemplateClientTest : updateConnectionTemplate :" + " bad request, try again : ");
         } catch (SDKNoSuchUrlException ex) {
@@ -144,12 +131,8 @@ public class ConnectionTemplateClientSample {
         // first get the session Id
         try {
 
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             connectionTemplateCollectionDto = connectionTemplateClient.getAllConnectionTemplates(params);
@@ -176,12 +159,8 @@ public class ConnectionTemplateClientSample {
         ConnectionTemplate connectionTemplateDto = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             /**
              * then make sdk service call to get resource aSync parameter

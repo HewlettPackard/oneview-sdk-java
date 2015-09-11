@@ -6,7 +6,8 @@ package com.hp.ov.sdk.exceptions;
 public class SDKFileNotFoundException extends SDKException {
 
     /**
-     * 
+     * Signals that an attempt to open the file denoted by a specified pathname
+     * has failed
      */
     private static final long serialVersionUID = 1L;
 

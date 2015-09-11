@@ -21,19 +21,16 @@ import com.hp.ov.sdk.rest.client.StoragePoolClient;
 import com.hp.ov.sdk.rest.client.StorageSystemClient;
 import com.hp.ov.sdk.rest.client.StorageVolumeClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.SdkUtils;
 import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.SampleRestParams;
+import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * StorageVolumeClientSample is a sample program consume the container that is defined over the storage pool HP OneView.  
- * It invokes APIs of StorageVolumeClient which is in sdk library to perform GET/PUT/POST/DELETE
- * operations on storage volume resource
+ * StorageVolumeClientSample is a sample program consume the container that is defined over the storage pool in HP OneView.  
+ * It invokes APIs of StorageVolumeClient which is in sdk library to perform GET/PUT/POST/DELETE operations on storage
+ *  volume resource
  */
 public class StorageVolumeClientSample {
     private RestParams params;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
     private static UrlUtils urlUtils;
     private static TaskResourceV2 taskResourceV2;
     private static StorageVolumeClient storageVolumeClient;
@@ -52,9 +49,7 @@ public class StorageVolumeClientSample {
     // ================================
 
     private static void init() {
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
         urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        sampleRestParams = new SampleRestParams();
         storageVolumeClient = HPOneViewSdkBeanFactory.getStorageVolumeClient();
         storagePoolClient = HPOneViewSdkBeanFactory.getStoragePoolClient();
         storageSystemClient = HPOneViewSdkBeanFactory.getStorageSystemClient();
@@ -63,12 +58,8 @@ public class StorageVolumeClientSample {
     private void getStorageVolumeById() throws InstantiationException, IllegalAccessException {
         StorageVolumeV2 storageVolumeDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             storageVolumeDto = storageVolumeClient.getStorageVolume(params, resourceId);
@@ -100,12 +91,8 @@ public class StorageVolumeClientSample {
             SDKNoSuchUrlException {
         StorageVolumeCollection storageVolumeCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             storageVolumeCollectionDto = storageVolumeClient.getAllStorageVolumes(params);
@@ -135,12 +122,8 @@ public class StorageVolumeClientSample {
     private void getStorageVolumeByName() throws InstantiationException, IllegalAccessException {
         StorageVolumeV2 storageVolumeDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             storageVolumeDto = storageVolumeClient.getStorageVolumeByName(params, resourceName);
@@ -171,12 +154,8 @@ public class StorageVolumeClientSample {
     private void createStorageVolume() throws InstantiationException, IllegalAccessException {
 
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // create storageVolume request body
             final AddStorageVolumeV2 addStorageVolumeDto = buildTestStorageVolumeDto();
@@ -217,12 +196,8 @@ public class StorageVolumeClientSample {
     private void createPrivateStorageVolume() throws InstantiationException, IllegalAccessException {
 
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // create storageVolume request body
             final AddStorageVolumeV2 addStorageVolumeDto = buildTestPrivateStorageVolumeDto();
@@ -265,12 +240,8 @@ public class StorageVolumeClientSample {
         String updateStorage = null;
         String resourceId = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // fetch resource Id using resource name
             storageVolumeDto = storageVolumeClient.getStorageVolumeByName(params, resourceName);
@@ -319,22 +290,13 @@ public class StorageVolumeClientSample {
     }
 
     private void deleteStorageVolume() throws InstantiationException, IllegalAccessException {
-        StorageVolumeV2 storageVolumeDto = null;
         String resourceId = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch resource Id using resource name
-            storageVolumeDto = storageVolumeClient.getStorageVolumeByName(params, resourceName);
-
-            if (null != storageVolumeDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(storageVolumeDto.getUri());
-            }
+            // get resource ID
+            resourceId = storageVolumeClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
             taskResourceV2 = storageVolumeClient.deleteStorageVolume(params, resourceId, false);

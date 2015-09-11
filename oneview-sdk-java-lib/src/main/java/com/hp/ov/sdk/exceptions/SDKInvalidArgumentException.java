@@ -6,7 +6,7 @@ package com.hp.ov.sdk.exceptions;
 public class SDKInvalidArgumentException extends SDKException {
 
     /**
-     * 
+     * Invalid argument is passed in params.
      */
     private static final long serialVersionUID = 1L;
 

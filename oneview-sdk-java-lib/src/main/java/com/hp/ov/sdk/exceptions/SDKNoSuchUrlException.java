@@ -6,8 +6,8 @@ package com.hp.ov.sdk.exceptions;
 public class SDKNoSuchUrlException extends SDKException {
 
     /**
-	 * 
-	 */
+     * The URL is incorrect
+     */
     private static final long serialVersionUID = 1L;
 
     public SDKNoSuchUrlException(final SDKErrorKey sdkErrorKey, final Object[] messageParameters, final Object[] detailsParameters,

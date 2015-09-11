@@ -113,7 +113,7 @@ public class NetworkClientImpl implements NetworkClient {
     public Network getNetworkByName(final RestParams params, final String name) {
         logger.info("NetworkClientImpl : getNetworkByName : Start");
 
-        final String query = urlUtils.createQueryString(name);
+        final String query = urlUtils.createFilterString(name);
         logger.debug("NetworkClientImpl : getNetworkByName : query = " + query);
         Network networkDto = null;
         // validate args
@@ -359,6 +359,18 @@ public class NetworkClientImpl implements NetworkClient {
         logger.info("NetworkClientImpl : createNetworkInBulk : End");
 
         return taskResourceV2;
+    }
+
+    @Override
+    public String getId(final RestParams creds, final String name) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        Network network = getNetworkByName(creds, name);
+
+        if (null != network.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(network.getUri());
+        }
+        return resourceId;
     }
 
 }

@@ -14,6 +14,8 @@ public class SampleRestParams {
 
     private HttpSslProperties httpSslProperties;
 
+    private static volatile SampleRestParams sample = null;
+
     public RestParams getBasicRestParams() {
         // Sample values - user needs set these values as per his environment
 
@@ -38,4 +40,14 @@ public class SampleRestParams {
 
     }
 
+    public static SampleRestParams getInstance() {
+        if (sample == null) {
+            synchronized (SampleRestParams.class) {
+                if (sample == null) {
+                    sample = new SampleRestParams();
+                }
+            }
+        }
+        return sample;
+    }
 }

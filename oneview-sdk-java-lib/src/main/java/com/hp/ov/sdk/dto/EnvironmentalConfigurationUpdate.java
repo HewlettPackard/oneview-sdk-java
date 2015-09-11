@@ -3,7 +3,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
-public class EnvironmentalConfigurationUpdate {
+import java.io.Serializable;
+
+public class EnvironmentalConfigurationUpdate implements Serializable {
     /**
      * 
      */

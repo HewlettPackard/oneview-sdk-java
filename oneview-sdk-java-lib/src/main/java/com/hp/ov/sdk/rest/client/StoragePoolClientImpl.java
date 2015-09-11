@@ -100,7 +100,7 @@ public class StoragePoolClientImpl implements StoragePoolClient {
         logger.info("StoragePoolClientImpl : getStoragePoolByName : Start");
 
         // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = urlUtils.createQueryString(name);
+        final String query = urlUtils.createFilterString(name);
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
@@ -238,6 +238,18 @@ public class StoragePoolClientImpl implements StoragePoolClient {
         logger.info("StoragePoolClientImpl : deleteStoragePool : End");
 
         return returnObj;
+    }
+
+    @Override
+    public String getId(final RestParams creds, final String name, final String storageSystemUri) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        StoragePool storagePoolDto = getStoragePoolByName(creds, name, storageSystemUri);
+
+        if (null != storagePoolDto.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(storagePoolDto.getUri());
+        }
+        return resourceId;
     }
 
 }

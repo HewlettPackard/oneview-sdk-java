@@ -6,8 +6,11 @@ package com.hp.ov.sdk.exceptions;
 public class SDKResourceNotFoundException extends SDKException {
 
     /**
-	 * 
-	 */
+     * <p>
+     * The URI path (excluding filters) specifies a non-existent resource or
+     * collection
+     * </p>
+     */
     private static final long serialVersionUID = 1L;
 
     public SDKResourceNotFoundException(final SDKErrorKey sdkErrorKey, final Object[] messageParameters,

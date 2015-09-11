@@ -238,4 +238,18 @@ public interface ServerHardwareClient {
      */
     public UtilizationData getUtilizationForServerHardware(final RestParams params, final String resourceId);
 
+    /**
+     * The module aids in fetching the ServerHardware details for the
+     * ServerHardware name as specified in HP OneView.
+     * 
+     * @param creds
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param name
+     *            The resourceName is the ServerHardware name as seen in HP
+     *            OneView.
+     * @return String, which is a resource Id for the ServerHardware name as
+     *         seen in HPOneView.
+     */
+    public String getId(final RestParams creds, final String name);
 }

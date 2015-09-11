@@ -132,4 +132,19 @@ public interface StorageVolumeTemplateClient {
      */
     public ConnectableStorageVolumeTemplateCollection getConnectableVolumeTemplates(final RestParams params);
 
+    /**
+     * The module aids in fetching the StorageVolumeTemplate details for the
+     * StorageVolumeTemplate name as specified in HP OneView.
+     * 
+     * @param creds
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param name
+     *            The resourceName is the StorageVolumeTemplate name as seen in
+     *            HP OneView.
+     * @return String, which is a resource Id for the StorageVolumeTemplate name
+     *         as seen in HPOneView.
+     */
+    public String getId(final RestParams creds, final String name);
+
 }

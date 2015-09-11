@@ -6,8 +6,11 @@ package com.hp.ov.sdk.exceptions;
 public class SDKDuplicateResourceException extends SDKException {
 
     /**
-	 * 
-	 */
+     * <p>
+     * Duplicate Found PUT-Resulted in a duplicate error where resource with
+     * name already exist.
+     * </p>
+     */
     private static final long serialVersionUID = 1L;
 
     public SDKDuplicateResourceException(final SDKErrorKey sdkErrorKey, final Object[] messageParameters,

@@ -88,4 +88,19 @@ public interface ConnectionTemplateClient {
      *         Connection Template details.
      */
     public ConnectionTemplate getDefaultConnectionTemplateForConnectionTemplate(final RestParams params);
+
+    /**
+     * The module aids in fetching the Connection template details for the
+     * Connection template name as specified in HP OneView.
+     * 
+     * @param creds
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param name
+     *            The resourceName is the Connection template name as seen in HP
+     *            OneView.
+     * @return String, which is a resource Id for the Connection template name
+     *         as seen in HPOneView.
+     */
+    public String getId(final RestParams creds, final String name);
 }

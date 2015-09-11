@@ -192,7 +192,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         logger.info("StorageSystemClientImpl : getStorageSystemByName : Start");
 
         // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = urlUtils.createQueryString(name);
+        final String query = urlUtils.createFilterString(name);
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
@@ -334,6 +334,18 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         logger.info("StorageSystemClientImpl : deleteStorageSystem : End");
 
         return returnObj;
+    }
+
+    @Override
+    public String getId(final RestParams creds, final String name) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        StorageSystemV2 storageSystemDto = getStorageSystemByName(creds, name);
+
+        if (null != storageSystemDto.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(storageSystemDto.getUri());
+        }
+        return resourceId;
     }
 
 }

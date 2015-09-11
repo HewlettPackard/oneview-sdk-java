@@ -6,8 +6,8 @@ package com.hp.ov.sdk.exceptions;
 public class SDKMsmbConnectionNotFoundException extends SDKException {
 
     /**
-	 * 
-	 */
+     * The connection is not found to disconnect for msmb.
+     */
     private static final long serialVersionUID = 1L;
 
     public SDKMsmbConnectionNotFoundException(final SDKErrorKey sdkErrorKey, final Object[] messageParameters,

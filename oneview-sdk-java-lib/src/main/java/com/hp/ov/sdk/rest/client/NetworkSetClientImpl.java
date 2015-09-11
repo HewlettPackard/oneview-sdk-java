@@ -109,7 +109,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
 
         logger.info("NetworkSetClientImpl : getNetworkSetByName : Start");
 
-        final String query = urlUtils.createQueryString(name);
+        final String query = urlUtils.createFilterString(name);
         logger.debug("NetworkSetClientImpl : getNetworkSetByName : query = " + query);
 
         // validate args
@@ -255,9 +255,9 @@ public class NetworkSetClientImpl implements NetworkSetClient {
         logger.debug("NetworkSetClientImpl : deleteNetworkSet : returnObj =" + returnObj);
         logger.debug("NetworkSetClientImpl : deleteNetworkSet : taskResource =" + taskResourceV2);
 
-        // check for asyncOrSyncMode. if user is askign async mode, return the
+        // check for asyncOrSyncMode. if user is asking async mode, return the
         // directly the TaskResourceV2
-        // if user is asking for sync mode, callig the tasking polling method
+        // if user is asking for sync mode, calling the tasking polling method
         // and send the update
         // once task is complete.
         if (taskResourceV2 != null && aSync == false) {
@@ -266,6 +266,18 @@ public class NetworkSetClientImpl implements NetworkSetClient {
         logger.info("NetworkSetClientImpl : deleteNetworkSet : End");
 
         return taskResourceV2;
+    }
+
+    @Override
+    public String getId(final RestParams creds, final String name) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        NetworkSets networkSets = getNetworkSetsByName(creds, name);
+
+        if (null != networkSets.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(networkSets.getUri());
+        }
+        return resourceId;
     }
 
 }

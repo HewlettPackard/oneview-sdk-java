@@ -163,4 +163,16 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
         return taskResourceV2;
     }
 
+    @Override
+    public String getId(final RestParams creds, final String name) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        FwBaseline fwBaselineDto = getFirmwareDriverByName(creds, name);
+
+        if (null != fwBaselineDto.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(fwBaselineDto.getUri());
+        }
+        return resourceId;
+    }
+
 }

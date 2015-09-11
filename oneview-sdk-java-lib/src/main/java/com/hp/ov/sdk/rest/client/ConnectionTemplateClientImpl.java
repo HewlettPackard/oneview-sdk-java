@@ -86,7 +86,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         logger.info("ConnectionTemplateClientImpl : getConnectionTemplateByName : Start");
         // final String query = "filter=\"name matches \'" + resourceName +
         // "\'\"";
-        final String query = urlUtils.createQueryString(resourceName);
+        final String query = urlUtils.createFilterString(resourceName);
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
@@ -217,6 +217,18 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         logger.info("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : End");
 
         return connectionTemplateDto;
+    }
+
+    @Override
+    public String getId(final RestParams creds, final String name) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        ConnectionTemplate connectionTemplateDto = getConnectionTemplateByName(creds, name);
+
+        if (null != connectionTemplateDto.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(connectionTemplateDto.getUri());
+        }
+        return resourceId;
     }
 
 }

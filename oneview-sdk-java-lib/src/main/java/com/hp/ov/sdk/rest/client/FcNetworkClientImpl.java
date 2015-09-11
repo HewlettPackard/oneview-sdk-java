@@ -137,7 +137,7 @@ public class FcNetworkClientImpl implements FcNetworkClient {
         logger.info("FcNetworkClientImpl : getFcNetworkByName : Start");
 
         // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = urlUtils.createQueryString(name);
+        final String query = urlUtils.createFilterString(name);
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
@@ -304,4 +304,15 @@ public class FcNetworkClientImpl implements FcNetworkClient {
         return taskResourceV2;
     }
 
+    @Override
+    public String getId(final RestParams creds, final String name) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        FcNetwork fcNetwork = getFcNetworkByName(creds, name);
+
+        if (null != fcNetwork.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(fcNetwork.getUri());
+        }
+        return resourceId;
+    }
 }

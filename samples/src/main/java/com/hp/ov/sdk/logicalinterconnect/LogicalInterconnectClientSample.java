@@ -23,20 +23,17 @@ import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.SdkUtils;
 import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.SampleRestParams;
+import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * LogicalInterconnectClientSample, sample program consumes the available networks through the interconnect uplinks and
  * downlink capabilities through a physical server’s interfaces of HP OneView. It invokes APIs of LogicalInterconnectClient
- *  which is in sdk library to perform GET/PUT/POST/DELETE operations on logical interconnect resource
+ *  which is in sdk library to perform GET/PUT operations on logical interconnect resource
  */
 public class LogicalInterconnectClientSample {
 
     private RestParams params;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
     private static UrlUtils urlUtils;
     private static TaskResourceV2 taskResourceV2;
     private static LogicalInterconnectClient logicalInterconnectClient;
@@ -57,20 +54,14 @@ public class LogicalInterconnectClientSample {
     private static void init() {
         logicalInterconnectClient = HPOneViewSdkBeanFactory.getLogicalInterconnectClient();
         firmwareDriverClient = HPOneViewSdkBeanFactory.getFirmwareDriverClient();
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
         urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        sampleRestParams = new SampleRestParams();
     }
 
     private void getLogicalInterconnectById() throws InstantiationException, IllegalAccessException {
         LogicalInterconnects logicalInterconnectsDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnect(params, resourceId);
@@ -98,12 +89,8 @@ public class LogicalInterconnectClientSample {
     private void getAllLogicalInterconnects() throws InstantiationException, IllegalAccessException {
         LogicalInterconnectCollectionV2 logicalInterconnectCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             logicalInterconnectCollectionDto = logicalInterconnectClient.getAllLogicalInterconnects(params);
@@ -132,12 +119,8 @@ public class LogicalInterconnectClientSample {
         String resourceId = null;
         LogicalInterconnects logicalInterconnectsDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // fetch logicalInterconnectsDto Uri
             logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnectByName(params, resourceName);
@@ -178,21 +161,12 @@ public class LogicalInterconnectClientSample {
 
     private void updateLogicalInterconnectComplianceById() throws InstantiationException, IllegalAccessException {
         String resourceId = null;
-        LogicalInterconnects logicalInterconnectsDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch logicalInterconnectsDto Uri
-            logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnectByName(params, resourceName);
-
-            if (null != logicalInterconnectsDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(logicalInterconnectsDto.getUri());
-            }
+            // get resource ID
+            resourceId = logicalInterconnectClient.getId(params, resourceName);
 
             taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectComplianceById(params, resourceId, false);
 
@@ -222,22 +196,13 @@ public class LogicalInterconnectClientSample {
 
     private void updateLogicalInterconnectFirmwareStageById() throws InstantiationException, IllegalAccessException {
         String resourceId = null;
-        LogicalInterconnects logicalInterconnectsDto = null;
         LiFirmware liFirmwareDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch logicalInterconnectsDto Uri
-            logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnectByName(params, resourceName);
-
-            if (null != logicalInterconnectsDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(logicalInterconnectsDto.getUri());
-            }
+            // get resource ID
+            resourceId = logicalInterconnectClient.getId(params, resourceName);
 
             liFirmwareDto = buildLIFirmwareStageDto();
             taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectFirmwareById(params, resourceId, liFirmwareDto,
@@ -279,22 +244,13 @@ public class LogicalInterconnectClientSample {
 
     private void updateLogicalInterconnectFirmwareActiveById() throws InstantiationException, IllegalAccessException {
         String resourceId = null;
-        LogicalInterconnects logicalInterconnectsDto = null;
         LiFirmware liFirmwareDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch logicalInterconnectsDto Uri
-            logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnectByName(params, resourceName);
-
-            if (null != logicalInterconnectsDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(logicalInterconnectsDto.getUri());
-            }
+            // get resource ID
+            resourceId = logicalInterconnectClient.getId(params, resourceName);
 
             liFirmwareDto = logicalInterconnectClient.getLogicalInterconnectFirmwareById(params, resourceId);
             liFirmwareDto = buildLIFirmwareActiveDto(liFirmwareDto);
@@ -355,24 +311,15 @@ public class LogicalInterconnectClientSample {
 
     private void updateLogicalInterconnectFirmwareUpdateById() throws InstantiationException, IllegalAccessException {
         String resourceId = null;
-        LogicalInterconnects logicalInterconnectsDto = null;
         LiFirmware liFirmwareDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             liFirmwareDto = buildLIFirmwareUpdateDto();
 
-            // fetch logicalInterconnectsDto Uri
-            logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnectByName(params, resourceName);
-
-            if (null != logicalInterconnectsDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(logicalInterconnectsDto.getUri());
-            }
+            // get resource ID
+            resourceId = logicalInterconnectClient.getId(params, resourceName);
 
             taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectFirmwareById(params, resourceId, liFirmwareDto,
                     false, false);

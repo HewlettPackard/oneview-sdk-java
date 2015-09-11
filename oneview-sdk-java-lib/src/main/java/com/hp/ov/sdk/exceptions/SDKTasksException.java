@@ -6,8 +6,10 @@ package com.hp.ov.sdk.exceptions;
 public class SDKTasksException extends SDKException {
 
     /**
-	 * 
-	 */
+     * <p>
+     * Exception resulted as part of task completion check
+     * </p>
+     */
     private static final long serialVersionUID = 1L;
 
     public SDKTasksException(final SDKErrorKey sdkErrorKey, final Object[] messageParameters, final Object[] detailsParameters,

@@ -6,7 +6,10 @@ package com.hp.ov.sdk.exceptions;
 public class SDKException extends SdkRuntimeException {
 
     /**
-     * 
+     * <p>
+     * The generic exception class from which all one-view sdk exception extend
+     * from.
+     * </p>
      */
     private static final long serialVersionUID = 1L;
     private final SDKErrorKey errorKey;

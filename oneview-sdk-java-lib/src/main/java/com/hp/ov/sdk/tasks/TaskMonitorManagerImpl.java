@@ -22,7 +22,7 @@ public class TaskMonitorManagerImpl implements TaskMonitorManager {
     @Autowired
     private TaskServiceManager taskService;
 
-    private static final int MILLI_SEC = 5000;
+    private static final int MILLI_SEC = 1000;
 
     // TODO - for responseCode == 202
     // Implement review comment from Geoff

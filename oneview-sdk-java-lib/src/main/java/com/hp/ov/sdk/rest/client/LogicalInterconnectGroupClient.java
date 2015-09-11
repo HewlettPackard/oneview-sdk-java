@@ -153,4 +153,18 @@ public interface LogicalInterconnectGroupClient {
      */
     public InterconnectSettingsV2 getInterconnectSettings(RestParams params, final String resourceId, final String settingId);
 
+    /**
+     * The module aids in fetching the LogicalInterconnectGroup details for the
+     * LogicalInterconnectGroups name as specified in HP OneView.
+     * 
+     * @param creds
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param name
+     *            The resourceName is the LogicalInterconnectGroups name as seen
+     *            in HP OneView.
+     * @return String, which is a resource Id for the LogicalInterconnectGroups
+     *         name as seen in HPOneView.
+     */
+    public String getId(final RestParams creds, final String name);
 }

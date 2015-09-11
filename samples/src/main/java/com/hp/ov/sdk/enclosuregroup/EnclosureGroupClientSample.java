@@ -21,19 +21,16 @@ import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.SdkUtils;
 import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.SampleRestParams;
+import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * EnclosureGroupClientSample is a sample program enables/consume to set a common configuration across the enclosure resources 
- * of HP OneView. It invokes APIs of EnclosureGroupClient which is in sdk library to perform GET/PUT/POST/DELETE
+ * EnclosureGroupClientSample is a sample program enables/consume to set a common configuration across the enclosure  
+ * resources of HP OneView. It invokes APIs of EnclosureGroupClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on enclosure group resource
  */
 public class EnclosureGroupClientSample {
     private RestParams params;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
     private static UrlUtils urlUtils;
     private static LogicalInterconnectGroupClient logicalInterconnectGroupClient;
     private static EnclosureGroupClient enclosureGroupClient;
@@ -42,15 +39,13 @@ public class EnclosureGroupClientSample {
     // ================================
     private static final String resourceName = "Enclosure_Test";
     private static final String logicalInterconnectName = "LIG_PROD";
-    private static final String resourceId = "9ecda449-9d60-41ef-8922-62dbd0519531";
+    private static final String resourceId = "049b1698-dadf-4713-9a4c-ff4efb9780c5";
     private static final String scriptData = "name=Enclosure_test";
 
     // ================================
 
     private static void init() throws Exception {
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
         urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        sampleRestParams = new SampleRestParams();
         logicalInterconnectGroupClient = HPOneViewSdkBeanFactory.getLogicalInterconnectGroupClient();
         enclosureGroupClient = HPOneViewSdkBeanFactory.getEnclosureGroupClient();
     }
@@ -58,12 +53,8 @@ public class EnclosureGroupClientSample {
     private void getEnclosureGroupById() throws InstantiationException, IllegalAccessException {
         EnclosureGroups enclosureGroupDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             enclosureGroupDto = enclosureGroupClient.getEnclosureGroup(params, resourceId);
@@ -95,12 +86,8 @@ public class EnclosureGroupClientSample {
             SDKNoSuchUrlException {
         EnclosureGroupCollectionV2 enclosureGroupCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             enclosureGroupCollectionDto = enclosureGroupClient.getAllEnclosureGroups(params);
@@ -130,12 +117,8 @@ public class EnclosureGroupClientSample {
     private void getEnclosureGroupByName() throws InstantiationException, IllegalAccessException {
         EnclosureGroups enclosureGroupDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             enclosureGroupDto = enclosureGroupClient.getEnclosureGroupByName(params, resourceName);
@@ -166,12 +149,8 @@ public class EnclosureGroupClientSample {
     private void createEnclosureGroup() throws InstantiationException, IllegalAccessException {
         EnclosureGroups enclosureGroupReturnDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // create enclosure group request body
             final EnclosureGroups enclosureGroupDto = buildTestEnclosureGroupDto();
@@ -213,12 +192,8 @@ public class EnclosureGroupClientSample {
         String resourceId = null;
         EnclosureGroups enclosureGroupDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // fetch resource Id using resource name
             enclosureGroupDto = enclosureGroupClient.getEnclosureGroupByName(params, resourceName);
@@ -268,23 +243,14 @@ public class EnclosureGroupClientSample {
 
     private void deleteEnclosureGroup() throws InstantiationException, IllegalAccessException {
         // first get the session Id
-        EnclosureGroups enclosureGroupDto = null;
         String deleteMsg = null;
         String resourceId = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch resource Id using resource name
-            enclosureGroupDto = enclosureGroupClient.getEnclosureGroupByName(params, resourceName);
-
-            if (null != enclosureGroupDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(enclosureGroupDto.getUri());
-            }
+            // get resource ID
+            resourceId = enclosureGroupClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
             deleteMsg = enclosureGroupClient.deleteEnclosureGroup(params, resourceId);
@@ -316,12 +282,8 @@ public class EnclosureGroupClientSample {
     private void getConfigurationScript() {
         String enclosureScript = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             enclosureScript = enclosureGroupClient.getConfigurationScript(params, resourceId);
@@ -354,12 +316,8 @@ public class EnclosureGroupClientSample {
         EnclosureGroups enclosureGroupDto = null;
         String resourceId = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // fetch resource Id using resource name
             enclosureGroupDto = enclosureGroupClient.getEnclosureGroupByName(params, resourceName);

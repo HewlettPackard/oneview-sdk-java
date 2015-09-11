@@ -295,6 +295,18 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         return taskResourceV2;
     }
 
+    @Override
+    public String getId(final RestParams creds, final String name) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        LogicalInterconnects logicalInterconnectsDto = getLogicalInterconnectByName(creds, name);
+
+        if (null != logicalInterconnectsDto.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(logicalInterconnectsDto.getUri());
+        }
+        return resourceId;
+    }
+
     // TODO
     @Override
     public InterconnectFibData getLogicalInterconnectForwardingInformationBase(RestParams params, String resourceId) {

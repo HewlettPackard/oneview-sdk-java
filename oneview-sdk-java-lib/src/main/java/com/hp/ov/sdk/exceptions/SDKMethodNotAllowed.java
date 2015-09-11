@@ -6,7 +6,7 @@ package com.hp.ov.sdk.exceptions;
 public class SDKMethodNotAllowed extends SDKException {
 
     /**
-     * 
+     * The requested HTTP method is not valid/supported
      */
     private static final long serialVersionUID = 1L;
 

@@ -153,4 +153,19 @@ public interface StorageSystemClient {
      * @return String, is Deleted if successful.
      */
     public String deleteStorageSystem(final RestParams params, final String resourceId);
+
+    /**
+     * The module aids in fetching the StorageSystem details for the
+     * StorageSystem name as specified in HP OneView.
+     * 
+     * @param creds
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param name
+     *            The resourceName is the StorageSystem name as seen in HP
+     *            OneView.
+     * @return String, which is a resource Id for the StorageSystem name as seen
+     *         in HPOneView.
+     */
+    public String getId(final RestParams creds, final String name);
 }

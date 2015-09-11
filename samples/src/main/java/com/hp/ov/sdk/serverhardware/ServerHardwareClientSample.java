@@ -22,21 +22,16 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.ServerHardwareClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.SdkUtils;
-import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.SampleRestParams;
+import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * ServerHardwareClientSample is a sample program to captures/consume details about the physical configuration of server  
  * hardware, defines which settings are available to the server profiles assigned to that type of server hardware 
- * It invokes APIs of ServerHardwareClient which is in sdk library to perform GET/PUT/POST/DELETE operations
+ * It invokes APIs of ServerHardwareClient which is in sdk library to perform GET/POST operations
  * on server hardware resource
  */
 public class ServerHardwareClientSample {
     private RestParams params;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
-    private static UrlUtils urlUtils;
     private static TaskResourceV2 taskResourceV2;
     private static ServerHardwareClient serverHardwareClient;
 
@@ -52,20 +47,13 @@ public class ServerHardwareClientSample {
 
     private static void init() {
         serverHardwareClient = HPOneViewSdkBeanFactory.getServerHardwareClient();
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        sampleRestParams = new SampleRestParams();
     }
 
     private void getServerHardwareById() throws InstantiationException, IllegalAccessException {
         ServerHardware serverHardwareDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make rest call to get resource
             serverHardwareDto = serverHardwareClient.getServerHardware(params, resourceId);
@@ -97,12 +85,8 @@ public class ServerHardwareClientSample {
         ServerHardwareCollection serverHardwareCollectionDto = null;
         try {
 
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make rest call to get resource
             serverHardwareCollectionDto = serverHardwareClient.getAllServerHardwares(params);
@@ -134,12 +118,9 @@ public class ServerHardwareClientSample {
 
         ServerHardwareCollection serverHardwareCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
             // then make rest call to get resource
             serverHardwareCollectionDto = serverHardwareClient.getServerHardwareWithNoProfile(params);
 
@@ -170,12 +151,9 @@ public class ServerHardwareClientSample {
     private void getServerHardwareByName() throws InstantiationException, IllegalAccessException {
         ServerHardware serverHardwareDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
             // then make rest call to get resource
             serverHardwareDto = serverHardwareClient.getServerHardwareByName(params, resourceName);
             if (serverHardwareDto != null) {
@@ -208,15 +186,10 @@ public class ServerHardwareClientSample {
 
     private void powerServer() throws InstantiationException, IllegalAccessException {
         String resourceId = null;
-        ServerHardware serverHardwareDto = null;
         ServerPowerControlRequest serverPowerControlRequestDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // create network request body
             serverPowerControlRequestDto = buildTestserverPowerControlRequestDto();
@@ -226,12 +199,8 @@ public class ServerHardwareClientSample {
              * whether json input request present or not
              */
 
-            // fetch resource Id using name
-            serverHardwareDto = serverHardwareClient.getServerHardwareByName(params, resourceName);
-
-            if (null != serverHardwareDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(serverHardwareDto.getUri());
-            }
+            // get resource ID
+            resourceId = serverHardwareClient.getId(params, resourceName);
 
             taskResourceV2 = serverHardwareClient.powerServer(params, resourceId, serverPowerControlRequestDto, false, false);
 
@@ -265,22 +234,12 @@ public class ServerHardwareClientSample {
         // first get the session Id
         String powerState = null;
         String resourceId = null;
-        ServerHardware serverHardwareDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-            // then make rest call to get resource
-
-            // fetch resource Id using name
-            serverHardwareDto = serverHardwareClient.getServerHardwareByName(params, resourceName);
-
-            if (null != serverHardwareDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(serverHardwareDto.getUri());
-            }
+            // get resource ID
+            resourceId = serverHardwareClient.getId(params, resourceName);
 
             powerState = serverHardwareClient.getPowerState(params, resourceId);
 
@@ -309,12 +268,8 @@ public class ServerHardwareClientSample {
 
     private void createServerHardware() throws InstantiationException, IllegalAccessException {
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // create network request body
             final AddServer addServerDto = buildTestServerHardwareDto();
@@ -355,12 +310,8 @@ public class ServerHardwareClientSample {
     private void getBiosForServerHardware() throws InstantiationException, IllegalAccessException {
         BiosSettingsStateCollection biosSettingsStateCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make rest call to get resource
             biosSettingsStateCollectionDto = serverHardwareClient.getBiosForServerHardware(params, resourceId);

@@ -65,4 +65,18 @@ public interface FirmwareDriverClient {
     public TaskResourceV2 deleteFirmwareDriver(final RestParams params, final String resourceId, final Boolean isForce,
             final boolean aSync, final boolean useJsonRequest);
 
+    /**
+     * The module aids in fetching the firmware driver details for the firmware
+     * driver name as specified in HP OneView.
+     * 
+     * @param creds
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param name
+     *            The resourceName is the firmware driver name as seen in HP
+     *            OneView.
+     * @return String, which is a resource Id for the firmware driver name as
+     *         seen in HPOneView.
+     */
+    public String getId(final RestParams creds, final String name);
 }

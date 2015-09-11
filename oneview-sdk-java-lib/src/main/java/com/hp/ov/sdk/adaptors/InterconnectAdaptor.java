@@ -6,6 +6,7 @@ package com.hp.ov.sdk.adaptors;
 import org.springframework.stereotype.Component;
 
 import com.hp.ov.sdk.bean.factory.ConverterFactory;
+import com.hp.ov.sdk.dto.InterconnectsCollection;
 import com.hp.ov.sdk.dto.generated.Interconnects;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
@@ -25,4 +26,16 @@ public class InterconnectAdaptor extends BaseAdaptor<Interconnects, Object> {
         return interconnectDto;
     }
 
+    public InterconnectsCollection buildCollectionDto(Object source) {
+        // TODO - exceptions
+        if (null == source || source.equals("")) {
+            return null;
+        }
+        converter = ConverterFactory.getConverter();
+        // convert json object to DTO, replace quotes and back slash in the file
+        final InterconnectsCollection interconnectsCollectionDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
+                        .convertObjectToJsonString(source))), InterconnectsCollection.class);
+        return interconnectsCollectionDto;
+    }
 }

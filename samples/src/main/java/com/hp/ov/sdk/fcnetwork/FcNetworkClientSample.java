@@ -18,9 +18,8 @@ import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.FcNetworkClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
-import com.hp.ov.sdk.util.SdkUtils;
 import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.SampleRestParams;
+import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * FcNetworkClientSample is a sample program to consume fiber channel networks resource of HP OneView
@@ -30,8 +29,6 @@ import com.hp.ov.sdk.util.samples.SampleRestParams;
 public class FcNetworkClientSample {
     private RestParams params;
     private static FcNetworkClient fcNetworkClient;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
     private static UrlUtils urlUtils;
     private static TaskResourceV2 taskResourceV2;
     private static ResourceDtoUtils resourceDtoUtils;
@@ -45,22 +42,16 @@ public class FcNetworkClientSample {
 
     private static void init() {
         fcNetworkClient = HPOneViewSdkBeanFactory.getFcNetworkClient();
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
         resourceDtoUtils = HPOneViewSdkBeanFactory.getResourceDtoUtils();
         urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        sampleRestParams = new SampleRestParams();
     }
 
     private void getFcNetworkById() throws InstantiationException, IllegalAccessException {
         FcNetwork fcNetworkDto = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             fcNetworkDto = fcNetworkClient.getFcNetwork(params, resourceId);
@@ -92,12 +83,8 @@ public class FcNetworkClientSample {
             SDKNoSuchUrlException {
         FcNetworkCollection fcNetworkCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             fcNetworkCollectionDto = fcNetworkClient.getAllFcNetworks(params);
@@ -126,12 +113,8 @@ public class FcNetworkClientSample {
             SDKNoSuchUrlException {
         FcNetworkCollection fcNetworkCollectionDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             fcNetworkCollectionDto = fcNetworkClient.getFcNetworkByFilter(params, 0, 10);
@@ -163,12 +146,8 @@ public class FcNetworkClientSample {
         FcNetwork fcNetworkDto = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
             fcNetworkDto = fcNetworkClient.getFcNetworkByName(params, resourceName);
@@ -198,12 +177,8 @@ public class FcNetworkClientSample {
 
     private void createFcNetwork() throws InstantiationException, IllegalAccessException {
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // create network request body
             final FcNetwork fcNetworkDto = resourceDtoUtils.buildFcNetworkDto(resourceName);
@@ -244,12 +219,8 @@ public class FcNetworkClientSample {
         String resourceId = null;
         FcNetwork fcNetworkDto = null;
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // fetch resource Id using name
 
@@ -296,22 +267,13 @@ public class FcNetworkClientSample {
 
     private void deleteFcNetwork() throws InstantiationException, IllegalAccessException {
         String resourceId = null;
-        FcNetwork fcNetworkDto = null;
         // first get the session Id
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
-
-            // fetch resource Id using name
-            fcNetworkDto = fcNetworkClient.getFcNetworkByName(params, resourceName);
-
-            if (null != fcNetworkDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(fcNetworkDto.getUri());
-            }
+            // get resource ID
+            resourceId = fcNetworkClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
             taskResourceV2 = fcNetworkClient.deleteFcNetwork(params, resourceId, false);
@@ -339,12 +301,8 @@ public class FcNetworkClientSample {
 
     private void createFcNetworkUsingJsonRequest() throws InstantiationException, IllegalAccessException {
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = sampleRestParams.getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
 
             // create network request body
             final FcNetwork fcNetworkDto = buildTestFcNetworkDtoWithJsonRequest();

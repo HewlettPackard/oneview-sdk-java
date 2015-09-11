@@ -108,7 +108,7 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
         EnclosureGroups enclosureGroupDto = null;
         logger.info("EnclosureGroupClientImpl : getEnclosureGroupByName : Start");
         // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = urlUtils.createQueryString(name);
+        final String query = urlUtils.createFilterString(name);
 
         // validate args
         if (null == params) {
@@ -219,7 +219,7 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
 
     @Override
     public String deleteEnclosureGroup(final RestParams params, final String resourceId) {
-        logger.info("EnclosureGroupClientImpl : deleteEnclosureGroupV2 : Start");
+        logger.info("EnclosureGroupClientImpl : deleteEnclosureGroup : Start");
 
         // validate args
         if (null == params) {
@@ -230,12 +230,12 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
         params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI, resourceId));
 
         final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("EnclosureGroupClientImpl : deleteEnclosureGroupV2 : response from OV :" + returnObj);
+        logger.debug("EnclosureGroupClientImpl : deleteEnclosureGroup : response from OV :" + returnObj);
         /************ Returns Response code 204 *********************************/
 
-        logger.debug("EnclosureGroupClientImpl : deleteEnclosureGroupV2 : returnObj =" + returnObj);
+        logger.debug("EnclosureGroupClientImpl : deleteEnclosureGroup : returnObj =" + returnObj);
 
-        logger.info("EnclosureGroupClientImpl : deleteEnclosureGroupV2 : End");
+        logger.info("EnclosureGroupClientImpl : deleteEnclosureGroup : End");
 
         return "Deleted";
     }
@@ -290,4 +290,15 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
         return returnObj;
     }
 
+    @Override
+    public String getId(final RestParams creds, final String name) {
+        String resourceId = "";
+        // fetch resource Id using resource name
+        EnclosureGroups enclosureGroups = getEnclosureGroupByName(creds, name);
+
+        if (null != enclosureGroups.getUri()) {
+            resourceId = urlUtils.getResourceIdFromUri(enclosureGroups.getUri());
+        }
+        return resourceId;
+    }
 }

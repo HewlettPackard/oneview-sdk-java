@@ -50,4 +50,19 @@ public interface InterconnectTypeClient {
      */
     public InterconnectTypes getInterconnectTypeByName(final RestParams params, final String name);
 
+    /**
+     * The module aids in fetching the InterconnectTypes details for the
+     * InterconnectTypes name as specified in HP OneView.
+     * 
+     * @param creds
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param name
+     *            The resourceName is the InterconnectTypes name as seen in HP
+     *            OneView.
+     * @return String, which is a resource Id for the InterconnectTypes name as
+     *         seen in HPOneView.
+     */
+    public String getId(final RestParams creds, final String name);
+
 }
