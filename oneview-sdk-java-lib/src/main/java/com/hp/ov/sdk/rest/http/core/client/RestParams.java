@@ -6,6 +6,9 @@ package com.hp.ov.sdk.rest.http.core.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.HostnameVerifier;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -30,6 +33,9 @@ public class RestParams {
     private int amqpPort = 5671; // default port
     private String routingKey = "scmb.alerts.#"; // default value
     private String exchange = "scmb";// default value
+
+    private TrustManager trustManager = null;
+    private HostnameVerifier hostVerifier = null;
 
     // TODO - add remaining ssl properties
 
@@ -178,4 +184,65 @@ public class RestParams {
 
         return header;
     }
+
+    /**
+     * Gets the current TrustManager. 
+     * If using the system default, null is returned.
+     * @return the current TrustManager or null if default.
+     **/
+    public TrustManager getTrustManager() {
+       return this.trustManager;
+    }
+
+    /**
+     * Sets a new TrustManager for future connections.
+     * @see TrustManager
+     * @see getTrustManager
+     * @return the old TrustManager
+     **/
+    public TrustManager setTrustManager(final TrustManager trustMgr) {
+       TrustManager old = getTrustManager();
+       this.trustManager = trustMgr;
+       return old;
+    }
+
+    /**
+     * Is a non-default TrustManager to be used.
+     * @return true if non-default, false otherwise
+     **/
+    public boolean hasTrustManager() {
+       return getTrustManager() != null;
+    }
+
+    /**
+     * Gets the current HostnameVerifier. 
+     * If using the system default, null is returned.
+     * @return the current HostnameVerifier or null if default.
+     **/
+    public HostnameVerifier getHostnameVerifier() {
+       return this.hostVerifier;
+    }
+
+    /**
+     * Sets a new HostnameVerifier for future connections.
+     * @see HostnameVerifier
+     * @see getHostnameVerifier
+     * @return the old HostnameVerifier
+     **/
+    public HostnameVerifier
+    setHostnameVerifier(final HostnameVerifier verifier) {
+       HostnameVerifier old = getHostnameVerifier();
+       this.hostVerifier = verifier;
+       return old;
+    }
+
+    /**
+     * Is a non-default HostnameVerifier to be used.
+     * @return true if non-default, false otherwise
+     **/
+    public boolean hasHostnameVerifier() {
+       return getHostnameVerifier() != null;
+    }
+
 }
+    
