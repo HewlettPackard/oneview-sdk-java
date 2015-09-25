@@ -55,11 +55,11 @@ public class CertificateStoreManagerImpl implements CertificateStoreManager {
         } catch (final NoSuchAlgorithmException e) {
             throw new SDKCertificateException(SDKErrorEnum.certificateError,
                                               null, null, null,
-                                              SdkConstants.CERTS, null);
+                                              SdkConstants.CERTS, e);
         } catch (final KeyManagementException e) {
             throw new SDKCertificateException(SDKErrorEnum.certificateError,
                                               null, null, null,
-                                              SdkConstants.CERTS, null);
+                                              SdkConstants.CERTS, e);
         }
 
         return sslContext;
@@ -102,27 +102,27 @@ public class CertificateStoreManagerImpl implements CertificateStoreManager {
         } catch (final CertificateException e) {
             throw new SDKCertificateException(SDKErrorEnum.certificateError,
                                               null, null, null,
-                                              SdkConstants.CERTS, null);
+                                              SdkConstants.CERTS, e);
         } catch (final KeyStoreException e) {
             throw new SDKCertificateException(SDKErrorEnum.certificateError,
                                               null, null, null,
-                                              SdkConstants.CERTS, null);
+                                              SdkConstants.CERTS, e);
         } catch (final NoSuchAlgorithmException e) {
             throw new SDKCertificateException(SDKErrorEnum.certificateError,
                                               null, null, null,
-                                              SdkConstants.CERTS, null);
+                                              SdkConstants.CERTS, e);
         } catch (final IOException e) {
             throw new SDKCertificateException(SDKErrorEnum.certificateError,
                                               null, null, null,
-                                              SdkConstants.CERTS, null);
+                                              SdkConstants.CERTS, e);
         } catch (final UnrecoverableKeyException e) {
             throw new SDKCertificateException(SDKErrorEnum.certificateError,
                                               null, null, null,
-                                              SdkConstants.CERTS, null);
+                                              SdkConstants.CERTS, e);
         } catch (final InvalidKeySpecException e) {
             throw new SDKCertificateException(SDKErrorEnum.certificateError,
                                               null, null, null,
-                                              SdkConstants.CERTS, null);
+                                              SdkConstants.CERTS, e);
         }
 
         return kmf;
@@ -150,19 +150,19 @@ public class CertificateStoreManagerImpl implements CertificateStoreManager {
         } catch (final CertificateException e) {
             throw new SDKCertificateException(SDKErrorEnum.certificateError,
                                               null, null, null,
-                                              SdkConstants.CERTS, null);
+                                              SdkConstants.CERTS, e);
         } catch (final KeyStoreException e) {
             throw new SDKCertificateException(SDKErrorEnum.certificateError,
                                               null, null, null,
-                                              SdkConstants.CERTS, null);
+                                              SdkConstants.CERTS, e);
         } catch (final NoSuchAlgorithmException e) {
             throw new SDKCertificateException(SDKErrorEnum.certificateError,
                                               null, null, null,
-                                              SdkConstants.CERTS, null);
+                                              SdkConstants.CERTS, e);
         } catch (final IOException e) {
             throw new SDKCertificateException(SDKErrorEnum.certificateError,
                                               null, null, null,
-                                              SdkConstants.CERTS, null);
+                                              SdkConstants.CERTS, e);
         }
 
         return tmf;
