@@ -12,18 +12,26 @@ public class SDKException extends SdkRuntimeException {
      * </p>
      */
     private static final long serialVersionUID = 1L;
-    private final SDKErrorKey errorKey;
+    private SDKErrorKey errorKey;
 
-    public SDKException(final SDKErrorKey sdkErrorKey, final Object[] messageParameters, final Object[] detailsParameters,
-            final Object[] recommendedActionsParameters, final String errorSource, final Throwable cause) {
-        super(sdkErrorKey.getErrorCode(), sdkErrorKey.getMessageKey(), messageParameters, sdkErrorKey.getDetailsKey(),
-                detailsParameters, sdkErrorKey.getRecommendedActionsKey(), recommendedActionsParameters, errorSource, cause);
-        this.errorKey = sdkErrorKey;
-
+    public SDKException(final SDKErrorKey sdkErrorKey,
+                        final Object[] messageParameters,
+                        final Object[] detailsParameters,
+                        final Object[] recommendedActionsParameters,
+                        final String errorSource, final Throwable cause) {
+        super(sdkErrorKey.getErrorCode(), sdkErrorKey.getMessageKey(),
+              messageParameters, sdkErrorKey.getDetailsKey(),
+              detailsParameters, sdkErrorKey.getRecommendedActionsKey(),
+              recommendedActionsParameters, errorSource, cause);
+        setErrorKey(sdkErrorKey);
     }
 
     public SDKErrorKey getErrorKey() {
         return errorKey;
     }
 
+    protected void setErrorKey(final SDKErrorKey key) {
+       // We could simulate final by only allowing it to be set if null;
+       this.errorKey = key;
+    }
 }

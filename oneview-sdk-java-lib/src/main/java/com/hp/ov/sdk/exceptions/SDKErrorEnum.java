@@ -5,13 +5,27 @@ package com.hp.ov.sdk.exceptions;
 
 public enum SDKErrorEnum implements SDKErrorKey {
 
-    fail("FAIL"), invalidArgument("INVALID_ARGUMENT"), invalidUrl("INVALID_URL"), fileNotFound("FILE_NOTFOUND"), internalError(
-            "INTERNAL_SDK_EXCEPTION"), noResponseFromAppliance("NO_RESPONSE"), scmbConnectionNotFound("SCMB_CONNECTION_NOT_FOUND"), resourceNotFound(
-            "RESOURCE_NOT_FOUND"), certificateError("CERTIFICATE_ERROR"), rabbitMqCertificateError("RABBIT_MQ_CERTIFICATE_ERROR"), badRequestError(
-            "BAD_REQUEST"), forbiddenRequestError("FORBIDDEN_REQUEST"), methodNotFound("METHOD_NOT_FOUND"), tasksError(
-            "TASKS_ERROR"), applicanceNotReachable("APPLIANCE_NOT_REACHABLE"), apiMismatchError("API_VERSION_MISMATCH"), invalidOperationException(
-            "INVALID_OPERATION_EXCEPTION"), unauthorized("UNAUTHORIZED"), internalServerError("INTERNAL_SERVER_ERROR"), sslHandshakeException(
-            "SSL_HANDSHAKE_EXCEPTION"), socketException("SOCKET_EXCEPTION");
+    fail("FAIL"),
+    invalidArgument("INVALID_ARGUMENT"),
+    invalidUrl("INVALID_URL"),
+    fileNotFound("FILE_NOTFOUND"),
+    internalError("INTERNAL_SDK_EXCEPTION"),
+    noResponseFromAppliance("NO_RESPONSE"),
+    scmbConnectionNotFound("SCMB_CONNECTION_NOT_FOUND"),
+    resourceNotFound("RESOURCE_NOT_FOUND"),
+    certificateError("CERTIFICATE_ERROR"),
+    rabbitMqCertificateError("RABBIT_MQ_CERTIFICATE_ERROR"),
+    badRequestError("BAD_REQUEST"),
+    forbiddenRequestError("FORBIDDEN_REQUEST"),
+    methodNotFound("METHOD_NOT_FOUND"),
+    tasksError("TASKS_ERROR"),
+    applicanceNotReachable("APPLIANCE_NOT_REACHABLE"),
+    apiMismatchError("API_VERSION_MISMATCH"),
+    invalidOperationException("INVALID_OPERATION_EXCEPTION"),
+    unauthorized("UNAUTHORIZED"),
+    internalServerError("INTERNAL_SERVER_ERROR"),
+    sslHandshakeException("SSL_HANDSHAKE_EXCEPTION"),
+    socketException("SOCKET_EXCEPTION");
 
     private final String baseKeyName;
 

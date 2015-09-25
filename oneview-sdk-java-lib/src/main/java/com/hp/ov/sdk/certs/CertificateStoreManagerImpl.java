@@ -34,13 +34,17 @@ import com.hp.ov.sdk.exceptions.SDKCertificateException;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 @Component
 public class CertificateStoreManagerImpl implements CertificateStoreManager {
 
     private SSLContext sslContext;
 
     @Override
-    public SSLContext getSslContext(final RabbitMqClientCert rabbitMqClientCert, final CaCert caCert) {
+    public SSLContext
+    getSslContext(final RabbitMqClientCert rabbitMqClientCert,
+                  final CaCert caCert) {
 
         // Now initialize SSLContext with KeyStore and TrustStore.
         try {
@@ -49,9 +53,13 @@ public class CertificateStoreManagerImpl implements CertificateStoreManager {
                     getInitiazedTrustManager(caCert.getCaCert()).getTrustManagers(), new SecureRandom());
 
         } catch (final NoSuchAlgorithmException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, null, null, null, SdkConstants.CERTS, null);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError,
+                                              null, null, null,
+                                              SdkConstants.CERTS, null);
         } catch (final KeyManagementException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, null, null, null, SdkConstants.CERTS, null);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError,
+                                              null, null, null,
+                                              SdkConstants.CERTS, null);
         }
 
         return sslContext;
@@ -59,43 +67,62 @@ public class CertificateStoreManagerImpl implements CertificateStoreManager {
     }
 
     // TODO - exception
-    private KeyManagerFactory getInitiazedKeyManager(final RabbitMqClientCert certDto) {
+    private KeyManagerFactory
+    getInitiazedKeyManager(final RabbitMqClientCert certDto) {
         KeyManagerFactory kmf = null;
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        Security.addProvider(new BouncyCastleProvider());
         try {
             // Read client certificate and private key.
-            final byte[] encoded = Base64.decode(certDto.getBase64SSLKeyData());
+            final byte[] encoded =
+                Base64.decode(certDto.getBase64SSLKeyData());
 
-            final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encoded);
+            final PKCS8EncodedKeySpec keySpec =
+                new PKCS8EncodedKeySpec(encoded);
             final KeyFactory kf = KeyFactory.getInstance("RSA");
             final PrivateKey privateKey = kf.generatePrivate(keySpec);
 
             final String strClientCert = certDto.getBase64SSLCertData();
-            final CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-            final Certificate cert = certFactory.generateCertificate(new ByteArrayInputStream(strClientCert
+            final CertificateFactory certFactory =
+                CertificateFactory.getInstance("X.509");
+            final Certificate cert =
+                certFactory.generateCertificate(new ByteArrayInputStream(strClientCert
                     .getBytes(StandardCharsets.UTF_8)));
 
             // Add both client cert and private key to the keyStore.
             final KeyStore ks = KeyStore.getInstance("jks");
             ks.load(null, "password".toCharArray());
-            ks.setEntry("rabbitmq-client", new KeyStore.PrivateKeyEntry(privateKey, new Certificate[] { cert }),
+            ks.setEntry("rabbitmq-client",
+                    new KeyStore.PrivateKeyEntry(privateKey,
+                                                 new Certificate[] {cert}),
                     new KeyStore.PasswordProtection("password".toCharArray()));
 
             kmf = KeyManagerFactory.getInstance("SunX509");
             kmf.init(ks, "password".toCharArray());
             // TODO - add proper error key
         } catch (final CertificateException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, null, null, null, SdkConstants.CERTS, null);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError,
+                                              null, null, null,
+                                              SdkConstants.CERTS, null);
         } catch (final KeyStoreException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, null, null, null, SdkConstants.CERTS, null);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError,
+                                              null, null, null,
+                                              SdkConstants.CERTS, null);
         } catch (final NoSuchAlgorithmException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, null, null, null, SdkConstants.CERTS, null);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError,
+                                              null, null, null,
+                                              SdkConstants.CERTS, null);
         } catch (final IOException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, null, null, null, SdkConstants.CERTS, null);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError,
+                                              null, null, null,
+                                              SdkConstants.CERTS, null);
         } catch (final UnrecoverableKeyException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, null, null, null, SdkConstants.CERTS, null);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError,
+                                              null, null, null,
+                                              SdkConstants.CERTS, null);
         } catch (final InvalidKeySpecException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, null, null, null, SdkConstants.CERTS, null);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError,
+                                              null, null, null,
+                                              SdkConstants.CERTS, null);
         }
 
         return kmf;
@@ -103,28 +130,39 @@ public class CertificateStoreManagerImpl implements CertificateStoreManager {
 
     // TODO - exception
     private TrustManagerFactory getInitiazedTrustManager(final String caCert) {
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        Security.addProvider(new BouncyCastleProvider());
         TrustManagerFactory tmf = null;
         try {
-            final CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+            final CertificateFactory certFactory =
+                CertificateFactory.getInstance("X.509");
 
             // Add CA certificate to TrustStore.
             final KeyStore tks = KeyStore.getInstance("jks");
             tks.load(null, "password".toCharArray());
-            final Certificate caCErt = certFactory.generateCertificate(new ByteArrayInputStream(caCert
+            final Certificate caCErt =
+                certFactory.generateCertificate(new ByteArrayInputStream(caCert
                     .getBytes(StandardCharsets.UTF_8)));
 
-            tks.setEntry("ca-cert", new KeyStore.TrustedCertificateEntry(caCErt), null);
+            tks.setEntry("ca-cert",
+                         new KeyStore.TrustedCertificateEntry(caCErt), null);
             tmf = TrustManagerFactory.getInstance("SunX509");
             tmf.init(tks);
         } catch (final CertificateException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, null, null, null, SdkConstants.CERTS, null);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError,
+                                              null, null, null,
+                                              SdkConstants.CERTS, null);
         } catch (final KeyStoreException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, null, null, null, SdkConstants.CERTS, null);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError,
+                                              null, null, null,
+                                              SdkConstants.CERTS, null);
         } catch (final NoSuchAlgorithmException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, null, null, null, SdkConstants.CERTS, null);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError,
+                                              null, null, null,
+                                              SdkConstants.CERTS, null);
         } catch (final IOException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, null, null, null, SdkConstants.CERTS, null);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError,
+                                              null, null, null,
+                                              SdkConstants.CERTS, null);
         }
 
         return tmf;
