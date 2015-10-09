@@ -1,5 +1,3 @@
-OneView Java SDK Samples:
-
 How to run samples:
 <pre>
 1. Setup "samples" project as maven project. This is a sub project. It has dependency has "oneview-sdk-java-lib" project.
