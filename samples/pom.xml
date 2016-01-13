@@ -62,7 +62,7 @@
     <dependency>
        <groupId>com.hp.ov.lib</groupId>
        <artifactId>oneview-sdk-java-lib</artifactId>
-       <version>1.0.1-SNAPSHOT</version>
+       <version>1.0.2-SNAPSHOT</version>
        <scope>compile</scope>
     </dependency>
   </dependencies>
