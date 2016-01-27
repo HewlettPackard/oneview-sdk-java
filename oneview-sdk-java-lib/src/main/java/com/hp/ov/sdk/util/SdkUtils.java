@@ -90,9 +90,8 @@ public class SdkUtils {
         // Get version
         final ApplianceDetailsDto applianceDetailsDto = applianceDetails.getVersion(params);
         // validate the API version
-        validateApiVersion(params.getApiVersion(), applianceDetailsDto.getCurrentVersion());
+        validateApiVersion(params.getApiVersion(), applianceDetailsDto.getMinimumVersion(), applianceDetailsDto.getCurrentVersion());
 
-        params.setApiVersion(applianceDetailsDto.getCurrentVersion());
         // Create LoginSessionDto;
         final LoginSessionDto loginSessionDto = loginSessionAdaptor.buildDto(params);
         // Get login session
@@ -110,23 +109,19 @@ public class SdkUtils {
         return params;
     }
 
-    private void validateApiVersion(final int actualVersion, final int expectedVersion) {
-
+    private void validateApiVersion(final int requestedVersion, final int applianceMinimumVersion, final int applianceCurrentVersion) {
         logger.info("########### Checking API Version Start ####################");
-        if (expectedVersion == actualVersion) { // e.g. v 120 == v 120
-            logger.info("API version : " + "You are trying to connect to appliance verion: " + actualVersion
-                    + " and it is matching with your expected version:" + expectedVersion);
-        } else if (actualVersion > expectedVersion) {
-            logger.error("API Version Mismatch :" + "actual Version is : " + actualVersion + "expected version is : "
-                    + expectedVersion);
-            throw new SDKApiVersionMismatchException(SDKErrorEnum.apiMismatchError, null, null, null, SdkConstants.APPLIANCE, null);
-        } else if (actualVersion < expectedVersion) {
-            logger.error("API Version Mismatch :" + "actual Version is : " + actualVersion + "expected version is : "
-                    + expectedVersion);
-            throw new SDKApiVersionMismatchException(SDKErrorEnum.apiMismatchError, null, null, null, SdkConstants.APPLIANCE, null);
+
+        if (requestedVersion >= applianceMinimumVersion && requestedVersion  <= applianceCurrentVersion) {
+            logger.info("API version : You are trying to connect to appliance verion: "
+                    + requestedVersion  + " and it is matching with the minimum and current version ("
+                    + applianceMinimumVersion + " to " + applianceCurrentVersion + ")");
+
+            logger.info("########### Checking API Version End ####################");
+            return;
         }
 
-        logger.info("########### Checking API Version End ####################");
+        throw new SDKApiVersionMismatchException(SDKErrorEnum.apiMismatchError, null, null, null, SdkConstants.APPLIANCE, null);
     }
 
     public String getConnectionTemplateUri(final RestParams params, final String connectionTemplateName) {
