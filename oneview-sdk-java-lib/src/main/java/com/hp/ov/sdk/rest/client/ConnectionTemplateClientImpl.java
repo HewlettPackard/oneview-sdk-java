@@ -15,14 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.hp.ov.sdk.adaptors.ConnectionTemplateAdaptor;
-import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ConnectionTemplateCollection;
@@ -34,38 +27,31 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.tasks.TaskMonitorManager;
-import com.hp.ov.sdk.util.SdkUtils;
 import com.hp.ov.sdk.util.UrlUtils;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component
 public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(ConnectionTemplateClientImpl.class);
-    @Autowired
-    private HttpRestClient restClient;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionTemplateClientImpl.class);
 
-    @Autowired
-    private ConnectionTemplateAdaptor adaptor;
+    private final ConnectionTemplateAdaptor adaptor;
 
     private JSONObject jsonObject;
 
-    @Autowired
-    private SdkUtils sdkUtils;
+    protected ConnectionTemplateClientImpl(ConnectionTemplateAdaptor adaptor) {
+        this.adaptor = adaptor;
+    }
 
-    @Autowired
-    private TaskAdaptor taskAdaptor;
-
-    @Autowired
-    private TaskMonitorManager taskMonitor;
-
-    @Autowired
-    private UrlUtils urlUtils;
+    public static ConnectionTemplateClient getClient() {
+        return new ConnectionTemplateClientImpl(new ConnectionTemplateAdaptor());
+    }
 
     @Override
     public ConnectionTemplate getConnectionTemplate(final RestParams params, final String resourceId) {
         ConnectionTemplate connectionTemplateDto = null;
-        logger.info("ConnectionTemplateImpl : getConnectionTemplate : Start");
+        LOGGER.info("ConnectionTemplateImpl : getConnectionTemplate : Start");
 
         // validate args
         if (null == params) {
@@ -73,10 +59,10 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI, resourceId));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ConnectionTemplateImpl : getConnectionTemplate : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ConnectionTemplateImpl : getConnectionTemplate : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.CONNECTION_TEMPLATE, null);
@@ -85,8 +71,8 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
 
         connectionTemplateDto = adaptor.buildDto(returnObj);
 
-        logger.debug("ConnectionTemplateImpl : getConnectionTemplate : name :" + connectionTemplateDto.getName());
-        logger.info("ConnectionTemplateImpl : getConnectionTemplate : End");
+        LOGGER.debug("ConnectionTemplateImpl : getConnectionTemplate : name :" + connectionTemplateDto.getName());
+        LOGGER.info("ConnectionTemplateImpl : getConnectionTemplate : End");
 
         return connectionTemplateDto;
     }
@@ -95,20 +81,21 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
     public ConnectionTemplate getConnectionTemplateByName(final RestParams params, final String resourceName) {
         ConnectionTemplate connectionTemplateDto = null;
         ConnectionTemplateCollection connectionTemplateCollectionDto = null;
-        logger.info("ConnectionTemplateClientImpl : getConnectionTemplateByName : Start");
+
+        LOGGER.info("ConnectionTemplateClientImpl : getConnectionTemplateByName : Start");
         // final String query = "filter=\"name matches \'" + resourceName +
         // "\'\"";
-        final String query = urlUtils.createFilterString(resourceName);
+        final String query = UrlUtils.createFilterString(resourceName);
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI, query));
+        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI, query));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ConnectionTemplateClientImpl : getConnectionTemplateByName : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ConnectionTemplateClientImpl : getConnectionTemplateByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.CONNECTION_TEMPLATE, null);
@@ -123,12 +110,12 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         }
 
         if (connectionTemplateDto == null) {
-            logger.error("ConnectionTemplateClientImpl : getConnectionTemplateByName : resource not Found for name :"
+            LOGGER.error("ConnectionTemplateClientImpl : getConnectionTemplateByName : resource not Found for name :"
                     + resourceName);
             throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null,
                     SdkConstants.CONNECTION_TEMPLATE, null);
         }
-        logger.info("ConnectionTemplateClientImpl : getConnectionTemplateByName : End");
+        LOGGER.info("ConnectionTemplateClientImpl : getConnectionTemplateByName : End");
 
         return connectionTemplateDto;
     }
@@ -136,7 +123,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
     @Override
     public ConnectionTemplate updateConnectionTemplate(final RestParams params, final String resourceId,
             ConnectionTemplate connectionTemplateDto, final boolean useJsonRequest) {
-        logger.info("ConnectionTemplateClientImpl : updateConnectionTemplate : Start");
+        LOGGER.info("ConnectionTemplateClientImpl : updateConnectionTemplate : Start");
 
         // validate args
         if (null == params) {
@@ -149,7 +136,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         }
         // set the additional params
         params.setType(HttpMethodType.PUT);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI, resourceId));
         String returnObj = null;
 
         // TODO-check for json request in the input dto. if it is present,
@@ -161,13 +148,13 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(connectionTemplateDto);
 
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         connectionTemplateDto = adaptor.buildDto(returnObj);
 
-        logger.debug("ConnectionTemplateClientImpl : updateConnectionTemplate : returnObj =" + returnObj);
+        LOGGER.debug("ConnectionTemplateClientImpl : updateConnectionTemplate : returnObj =" + returnObj);
 
-        logger.info("ConnectionTemplateClientImpl : updateConnectionTemplate : End");
+        LOGGER.info("ConnectionTemplateClientImpl : updateConnectionTemplate : End");
 
         return connectionTemplateDto;
     }
@@ -175,7 +162,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
     @Override
     public ConnectionTemplateCollection getAllConnectionTemplates(final RestParams params) {
         ConnectionTemplateCollection connectionTemplateCollectionDto = null;
-        logger.info("ConnectionTemplateImpl : getAllConnectionTemplates : Start");
+        LOGGER.info("ConnectionTemplateImpl : getAllConnectionTemplates : Start");
 
         // validate args
         if (null == params) {
@@ -183,10 +170,10 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ConnectionTemplateImpl : getAllConnectionTemplates : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ConnectionTemplateImpl : getAllConnectionTemplates : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.CONNECTION_TEMPLATE, null);
@@ -195,8 +182,8 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
 
         connectionTemplateCollectionDto = adaptor.buildCollectionDto(returnObj);
 
-        logger.debug("ConnectionTemplateImpl : getAllConnectionTemplates : count :" + connectionTemplateCollectionDto.getCount());
-        logger.info("ConnectionTemplateImpl : getAllConnectionTemplates : End");
+        LOGGER.debug("ConnectionTemplateImpl : getAllConnectionTemplates : count :" + connectionTemplateCollectionDto.getCount());
+        LOGGER.info("ConnectionTemplateImpl : getAllConnectionTemplates : End");
 
         return connectionTemplateCollectionDto;
     }
@@ -204,7 +191,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
     @Override
     public ConnectionTemplate getDefaultConnectionTemplateForConnectionTemplate(final RestParams params) {
         ConnectionTemplate connectionTemplateDto = null;
-        logger.info("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : Start");
+        LOGGER.info("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : Start");
 
         // validate args
         if (null == params) {
@@ -212,10 +199,10 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.DEFAULT_CONNECTION_TEMPLATE_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.DEFAULT_CONNECTION_TEMPLATE_URI));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.CONNECTION_TEMPLATE, null);
@@ -224,9 +211,9 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
 
         connectionTemplateDto = adaptor.buildDto(returnObj);
 
-        logger.debug("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : name :"
+        LOGGER.debug("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : name :"
                 + connectionTemplateDto.getName());
-        logger.info("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : End");
+        LOGGER.info("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : End");
 
         return connectionTemplateDto;
     }
@@ -238,7 +225,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         ConnectionTemplate connectionTemplateDto = getConnectionTemplateByName(creds, name);
 
         if (null != connectionTemplateDto.getUri()) {
-            resourceId = urlUtils.getResourceIdFromUri(connectionTemplateDto.getUri());
+            resourceId = UrlUtils.getResourceIdFromUri(connectionTemplateDto.getUri());
         }
         return resourceId;
     }

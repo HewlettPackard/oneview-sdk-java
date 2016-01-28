@@ -15,20 +15,16 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.http.core.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.HostnameVerifier;
-
+import com.hp.ov.sdk.dto.HttpMethodType;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.springframework.stereotype.Component;
 
-import com.hp.ov.sdk.dto.HttpMethodType;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.TrustManager;
+import java.util.ArrayList;
+import java.util.List;
 
-@Component
 public class RestParams {
 
     private int apiVersion = 100;// default value

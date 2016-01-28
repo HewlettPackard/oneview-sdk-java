@@ -15,26 +15,21 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
-import org.json.JSONObject;
-import org.springframework.stereotype.Component;
-
-import com.hp.ov.sdk.bean.factory.ConverterFactory;
 import com.hp.ov.sdk.dto.AddStorageVolumeV2;
 import com.hp.ov.sdk.dto.StorageVolumeCollection;
 import com.hp.ov.sdk.dto.StorageVolumeV2;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
+import org.json.JSONObject;
 
-@Component
 public class StorageVolumeAdaptor extends BaseAdaptor<StorageVolumeV2, Object> {
-
-    private ObjectToJsonConverter converter;
 
     @Override
     public StorageVolumeV2 buildDto(final Object source) {
         // TODO - exceptions
         // convert json object to DTO, replace quotes and back slash in the file
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
         final StorageVolumeV2 storageVolumeDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), StorageVolumeV2.class);
         return storageVolumeDto;
@@ -45,7 +40,8 @@ public class StorageVolumeAdaptor extends BaseAdaptor<StorageVolumeV2, Object> {
         if (null == source || source.equals("")) {
             return null;
         }
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
         // convert json object to DTO, replace quotes and back slash in the file
         final StorageVolumeCollection storageVolumeCollectionDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
@@ -54,12 +50,14 @@ public class StorageVolumeAdaptor extends BaseAdaptor<StorageVolumeV2, Object> {
     }
 
     public JSONObject buildJsonObjectFromDto(final StorageVolumeV2 source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
     public JSONObject buildJsonObjectFromDto(final AddStorageVolumeV2 source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 

@@ -15,7 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.scmb.consumer;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
+import com.hp.ov.sdk.certs.MessagingCertificateManager;
 import com.hp.ov.sdk.constants.samples.SamplesConstants;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -23,6 +23,7 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKScmbConnectionNotFoundException;
+import com.hp.ov.sdk.messaging.msmb.services.MsmbConnectionManager;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbAlertsHandler;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbConnectionManager;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbMessageExecutionQueue;
@@ -32,29 +33,26 @@ import com.hp.ov.sdk.util.samples.SampleRestParams;
 
 public class ScmbClient {
 
-    private RestParams params;
-    private static ScmbConnectionManager objectUnderTest;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
-    private static ScmbAlertsHandler scmbAlertsHandler;
+    private final ScmbConnectionManager objectUnderTest;
 
-    public static void init() {
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
-        sampleRestParams = new SampleRestParams();
-        objectUnderTest = HPOneViewSdkBeanFactory.getScmbConnectionManager();
+    private RestParams params;
+
+    private ScmbClient() {
+        this.objectUnderTest = new ScmbConnectionManager(MessagingCertificateManager.getInstance());
     }
 
     public void scmbProcessor() {
         try {
             // Get the basic REST parameters like hostname, username and
             // password
-            params = sampleRestParams.getBasicRestParams();
+            params = SampleRestParams.getInstance().getBasicRestParams();
 
             // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            params = SdkUtils.getInstance().createRestParams(params);
 
             // create MessageExecutionQueue object
-            final ScmbMessageExecutionQueue messageQueue = new ScmbMessageExecutionQueue(scmbAlertsHandler);
+            final ScmbMessageExecutionQueue messageQueue = new ScmbMessageExecutionQueue(
+                    new ScmbHandler().getScmbAlertsHandler());
 
             // start the dequeue process
             messageQueue.start();
@@ -86,10 +84,10 @@ public class ScmbClient {
         try {
             // Get the basic REST parameters like hostname, username and
             // password
-            params = sampleRestParams.getBasicRestParams();
+            params = SampleRestParams.getInstance().getBasicRestParams();
 
             // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            params = SdkUtils.getInstance().createRestParams(params);
 
             // then stop scmb
             objectUnderTest.stopScmb(params);
@@ -107,14 +105,11 @@ public class ScmbClient {
         }
     }
 
-    // main
-
     public static void main(final String[] args) {
-        init();
-        final ScmbClient scmbClient = new ScmbClient();
-        final ScmbHandler handler = new ScmbHandler();
-        scmbAlertsHandler = handler.getScmbAlertsHandler();
+        ScmbClient scmbClient = new ScmbClient();
+
         scmbClient.scmbProcessor();
+
         try {
             Thread.sleep(300000); // Sample value to before stopping scmb ( 300
                                   // secs = 5 mins )

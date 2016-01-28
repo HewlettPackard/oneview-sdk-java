@@ -15,14 +15,10 @@
  *******************************************************************************/
 package com.hp.ov.sdk.storage;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.AddStoragePool;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.StoragePoolCollection;
-import com.hp.ov.sdk.rest.client.StoragePoolClient;
-import com.hp.ov.sdk.rest.client.StorageSystemClient;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -30,32 +26,36 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
+import com.hp.ov.sdk.rest.client.StoragePoolClient;
+import com.hp.ov.sdk.rest.client.StoragePoolClientImpl;
+import com.hp.ov.sdk.rest.client.StorageSystemClient;
+import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
+import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * StoragePoolClientSample is a sample program consumes the set of disk from the storage system managed 
+ * StoragePoolClientSample is a sample program consumes the set of disk from the storage system managed
  * by HP OneView. It invokes APIs of StoragePoolClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on storage pool resource
  */
 public class StoragePoolClientSample {
+
+    private final StoragePoolClient storagePoolClient;
+    private final StorageSystemClient storageSystemClient;
+
     private RestParams params;
-    private static UrlUtils urlUtils;
-    private static StoragePoolClient storagePoolClient;
-    private static StorageSystemClient storageSystemClient;
 
     // These are variables to be defined by user
     // ================================
     private static final String resourceName = "FST_CPG1";
-    private static final String storageSystemName = "ThreePAR7200-3050";
-    private static final String resourceId = "8D86FFEC-7437-4DAB-A147-3A28E2FF990D";
-
+    private static final String storageSystemName = "ThreePAR7200-4166";
+    private static final String resourceId = "EEDD9919-42DC-4BD1-804A-A8B3B1140C11";
     // ================================
 
-    private static void init() {
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        storagePoolClient = HPOneViewSdkBeanFactory.getStoragePoolClient();
-        storageSystemClient = HPOneViewSdkBeanFactory.getStorageSystemClient();
+    private StoragePoolClientSample() {
+        this.storagePoolClient = StoragePoolClientImpl.getClient();
+        this.storageSystemClient = StorageSystemClientImpl.getClient();
     }
 
     private void getStoragePoolById() throws InstantiationException, IllegalAccessException {
@@ -207,7 +207,7 @@ public class StoragePoolClientSample {
             storagePoolDto = storagePoolClient.getStoragePoolByName(params, resourceName, getStorageSystemUri());
 
             if (null != storagePoolDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(storagePoolDto.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(storagePoolDto.getUri());
             }
 
             storagePoolDto.setRefreshState(RefreshState.RefreshPending);
@@ -298,13 +298,12 @@ public class StoragePoolClientSample {
         return storageSystemClient.getStorageSystemByName(params, storageSystemName).getUri();
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         StoragePoolClientSample client = new StoragePoolClientSample();
-        client.getStoragePoolById();
+
         client.createStoragePool();
         client.getAllStoragePool();
+        client.getStoragePoolById();
         client.getStoragePoolByName();
         client.updateStoragePool();
         client.deleteStoragePool();

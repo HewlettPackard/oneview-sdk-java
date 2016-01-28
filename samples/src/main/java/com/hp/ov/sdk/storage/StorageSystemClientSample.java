@@ -15,11 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.storage;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
 import com.hp.ov.sdk.dto.StoragePoolCollection;
 import com.hp.ov.sdk.dto.StorageSystemCollection;
@@ -35,26 +30,33 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.FcNetworkClient;
+import com.hp.ov.sdk.rest.client.FcNetworkClientImpl;
 import com.hp.ov.sdk.rest.client.StorageSystemClient;
+import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /*
- * StorageSystemClientSample is a sample program consume the storage server managed by HP OneView.  
+ * StorageSystemClientSample is a sample program consume the storage server managed by HP OneView.
  * It invokes APIs of StorageSystemClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on storage system resource
  */
 public class StorageSystemClientSample {
+
+    private final StorageSystemClient storageSystemClient;
+    private final FcNetworkClient fcNetworkClient;
+
     private RestParams params;
-    private static UrlUtils urlUtils;
-    private static StorageSystemClient storageSystemClient;
-    private static FcNetworkClient fcNetworkClient;
 
     // These are variables to be defined by user
     // ================================
     private static final String targetPortId = "15FC4E34-E6B9-41ED-B821-204E265393C9";
-    private static final String resourceName = "ThreePAR7200-3050";
+    private static final String resourceName = "ThreePAR7200-4166";
     private static final String username = "dcs";
     private static final String password = "dcs";
     private static final String ipAddress = "172.18.11.11";
@@ -65,14 +67,11 @@ public class StorageSystemClientSample {
     private static final String unManagedPort_B = "0:1:2";
     private static final String managedDomain = "TestDomain";
     private static final String unManagedDomain = "TestDomain";
-
     // ================================
 
-    private static void init() {
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        storageSystemClient = HPOneViewSdkBeanFactory.getStorageSystemClient();
-        fcNetworkClient = HPOneViewSdkBeanFactory.getFcNetworkClient();
-
+    private StorageSystemClientSample() {
+        this.storageSystemClient = StorageSystemClientImpl.getClient();
+        this.fcNetworkClient = FcNetworkClientImpl.getClient();
     }
 
     private void getStorageSystemById() throws InstantiationException, IllegalAccessException {
@@ -343,7 +342,7 @@ public class StorageSystemClientSample {
             storageSystemDto = storageSystemClient.getStorageSystemByName(params, resourceName);
 
             if (null != storageSystemDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(storageSystemDto.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(storageSystemDto.getUri());
             }
 
             final StorageSystemV2 updateStorageSystemDto = buildUpdateStorageSystemDto(storageSystemDto);
@@ -424,18 +423,15 @@ public class StorageSystemClientSample {
     }
 
     // TODO - Move Uri fetch logic to SdkUtils
-
     private AddStorageSystemCredentials buildTestStorageSystemDto() {
         final AddStorageSystemCredentials dto = new AddStorageSystemCredentials();
         dto.setIp_hostname(ipAddress);
         dto.setUsername(username);
         dto.setPassword(password);
         return dto;
-
     }
 
     // TODO - Move Uri fetch logic to SdkUtils
-
     private StorageSystemV2 buildUpdateStorageSystemDto(final StorageSystemV2 storageSystemDto) {
 
         final List<StorageTargetPortV2> tempStorageTargetPort = new ArrayList<StorageTargetPortV2>();
@@ -495,13 +491,11 @@ public class StorageSystemClientSample {
         return storageSystemDto;
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         StorageSystemClientSample client = new StorageSystemClientSample();
-        client.getStorageSystemById();
+
         client.createStorageSystem();
-        Thread.sleep(30000);
+        client.getStorageSystemById();
         client.updateStorageSystem();
         client.getAllManagedPortsForStorageSystem();
         client.getAllStorageSystem();

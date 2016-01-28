@@ -15,11 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.logicalinterconnectgroup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.UplinkSetCollectionV2;
 import com.hp.ov.sdk.dto.generated.Enclosures;
@@ -38,46 +33,53 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.EnclosureClient;
+import com.hp.ov.sdk.rest.client.EnclosureClientImpl;
 import com.hp.ov.sdk.rest.client.FcNetworkClient;
+import com.hp.ov.sdk.rest.client.FcNetworkClientImpl;
 import com.hp.ov.sdk.rest.client.InterconnectsClient;
+import com.hp.ov.sdk.rest.client.InterconnectsClientImpl;
 import com.hp.ov.sdk.rest.client.UplinkSetClient;
+import com.hp.ov.sdk.rest.client.UplinkSetClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /*
- * UplinkSetClientSample is a sample program to assign/consume networks of HP OneView to uplink ports of interconnect. 
+ * UplinkSetClientSample is a sample program to assign/consume networks of HP OneView to uplink ports of interconnect.
  * It invokes APIs of UplinkSetClient which is in sdk library to perform GET/PUT/POST/DELETE operations
  * on uplink set resource
  */
 public class UplinkSetClientSample {
+
+    private final UplinkSetClient uplinkSetClient;
+    private final FcNetworkClient fcNetworkClient;
+    private final EnclosureClient enclosureClient;
+    private final InterconnectsClient interconnectClient;
+
     private RestParams params;
-    private static UrlUtils urlUtils;
-    private static TaskResourceV2 taskResourceV2;
-    private static UplinkSetClient uplinkSetClient;
-    private static FcNetworkClient fcNetworkClient;
-    private static EnclosureClient enclosureClient;
-    private static InterconnectsClient interconnectClient;
+    private TaskResourceV2 taskResourceV2;
 
     // These are variables to be defined by user
     // ================================
     private static final String resourceName = "Test_uplink_eth_one";
-    private static final String resourceId = "85a84db0-9045-4afa-9ef2-79d394c21559";
+    private static final String resourceId = "37bc8d44-eb9b-4b0d-91c1-bf1c50e7eb52";
     private static final String category = "logical-interconnects";
     private static final List<String> fcNetworkName_A = Arrays.asList("FC_Network_D");
     private static final String type = "uplink-setV2";
     private static final String enclosureName = "Encl1";
     private static final String portValue = "X3";
     private static final String bayValue = "2";
-
     // ================================
 
-    private static void init() {
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        uplinkSetClient = HPOneViewSdkBeanFactory.getUplinkSetClient();
-        fcNetworkClient = HPOneViewSdkBeanFactory.getFcNetworkClient();
-        enclosureClient = HPOneViewSdkBeanFactory.getEnclosureClient();
-        interconnectClient = HPOneViewSdkBeanFactory.getInterconnectsClient();
+    private UplinkSetClientSample() {
+        uplinkSetClient = UplinkSetClientImpl.getClient();
+        fcNetworkClient = FcNetworkClientImpl.getClient();
+        enclosureClient = EnclosureClientImpl.getClient();
+        interconnectClient = InterconnectsClientImpl.getClient();
     }
 
     private void getUplinkSetById() throws InstantiationException, IllegalAccessException {
@@ -186,7 +188,7 @@ public class UplinkSetClientSample {
             uplinkSetDto = uplinkSetClient.getUplinkSetsByName(params, resourceName);
             // fetch uplinkset uri
             if (null != uplinkSetDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(uplinkSetDto.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(uplinkSetDto.getUri());
             }
 
             // Change updateSetName
@@ -294,7 +296,7 @@ public class UplinkSetClientSample {
         for (int i = 0; i < enclosuresDto.getInterconnectBayCount(); i++) {
             if (Integer.parseInt(bayValue) == enclosuresDto.getInterconnectBays().get(i).getBayNumber()) {
                 if (null != enclosuresDto.getInterconnectBays().get(i).getInterconnectUri()) {
-                    resourceId = urlUtils.getResourceIdFromUri(enclosuresDto.getInterconnectBays().get(i).getInterconnectUri());
+                    resourceId = UrlUtils.getResourceIdFromUri(enclosuresDto.getInterconnectBays().get(i).getInterconnectUri());
                 }
 
                 Interconnects interconnectsDto = interconnectClient.getInterconnects(params, resourceId);
@@ -331,13 +333,12 @@ public class UplinkSetClientSample {
         return uplinkSetsDto;
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         UplinkSetClientSample client = new UplinkSetClientSample();
-        client.getUplinkSetById();
-        client.getAllUplinkSet();
+
         client.createUplinkSet();
+        client.getAllUplinkSet();
+        client.getUplinkSetById();
         client.updateUplinkSet();
         client.deleteUplinkSet();
     }

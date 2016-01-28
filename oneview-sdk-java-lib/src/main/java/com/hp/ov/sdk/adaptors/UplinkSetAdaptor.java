@@ -15,25 +15,20 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
-import org.json.JSONObject;
-import org.springframework.stereotype.Component;
-
-import com.hp.ov.sdk.bean.factory.ConverterFactory;
 import com.hp.ov.sdk.dto.UplinkSetCollectionV2;
 import com.hp.ov.sdk.dto.generated.UplinkSets;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
+import org.json.JSONObject;
 
-@Component
 public class UplinkSetAdaptor extends BaseAdaptor<UplinkSets, Object> {
-
-    private ObjectToJsonConverter converter;
 
     @Override
     public UplinkSets buildDto(final Object source) {
         // TODO - exceptions
         // convert json object to DTO, replace quotes and back slash in the file
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
         final UplinkSets uplinkSetDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), UplinkSets.class);
         return uplinkSetDto;
@@ -44,7 +39,8 @@ public class UplinkSetAdaptor extends BaseAdaptor<UplinkSets, Object> {
         if (null == source || source.equals("")) {
             return null;
         }
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
         // convert json object to DTO, replace quotes and back slash in the file
         final UplinkSetCollectionV2 uplinkSetCollectionDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), UplinkSetCollectionV2.class);
@@ -52,7 +48,8 @@ public class UplinkSetAdaptor extends BaseAdaptor<UplinkSets, Object> {
     }
 
     public JSONObject buildJsonObjectFromDto(final UplinkSets source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 

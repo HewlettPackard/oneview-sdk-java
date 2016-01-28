@@ -15,39 +15,31 @@
  *******************************************************************************/
 package com.hp.ov.sdk.messaging.scmb.services;
 
-import org.springframework.stereotype.Component;
-
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 
-@Component
 public class ScmbConnection {
-    private Connection conn = null;
-    private Channel channel = null;
-    private ScmbState state;
+
+    private final Connection conn;
+    private final Channel channel;
+    private final ScmbState state;
+
+    public ScmbConnection(Connection conn, Channel channel, ScmbState state) {
+        this.conn = conn;
+        this.channel = channel;
+        this.state = state;
+    }
 
     public ScmbState getState() {
         return state;
-    }
-
-    public void setState(final ScmbState state) {
-        this.state = state;
     }
 
     public Connection getConn() {
         return conn;
     }
 
-    public void setConn(final Connection conn) {
-        this.conn = conn;
-    }
-
     public Channel getChannel() {
         return channel;
-    }
-
-    public void setChannel(final Channel channel) {
-        this.channel = channel;
     }
 
 }

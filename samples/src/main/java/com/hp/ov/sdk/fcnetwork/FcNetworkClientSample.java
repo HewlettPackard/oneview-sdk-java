@@ -15,7 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.fcnetwork;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
+import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.FcNetworkCollection;
 import com.hp.ov.sdk.dto.JsonRequest;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -28,8 +28,8 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.FcNetworkClient;
+import com.hp.ov.sdk.rest.client.FcNetworkClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
@@ -39,23 +39,20 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
  * operations on fiber channel networks resource
  */
 public class FcNetworkClientSample {
+
+    private final FcNetworkClient fcNetworkClient;
+
+    private TaskResourceV2 taskResourceV2;
     private RestParams params;
-    private static FcNetworkClient fcNetworkClient;
-    private static UrlUtils urlUtils;
-    private static TaskResourceV2 taskResourceV2;
-    private static ResourceDtoUtils resourceDtoUtils;
 
     // test values - user input
     // ================================
     private static final String resourceName = "FC_Network_A";
-    private static final String resourceId = "3007c39d-db47-49d9-af69-0865a59228fc";
-
+    private static final String resourceId = "fd735c74-ed67-4c71-b6b0-5b5112776d13";
     // ================================
 
-    private static void init() {
-        fcNetworkClient = HPOneViewSdkBeanFactory.getFcNetworkClient();
-        resourceDtoUtils = HPOneViewSdkBeanFactory.getResourceDtoUtils();
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
+    private FcNetworkClientSample() {
+        this.fcNetworkClient = FcNetworkClientImpl.getClient();
     }
 
     private void getFcNetworkById() throws InstantiationException, IllegalAccessException {
@@ -184,7 +181,6 @@ public class FcNetworkClientSample {
             System.out.println("FcNetworkClientTest : getFcNetworkByName :" + " arguments are null ");
             return;
         }
-
     }
 
     private void createFcNetwork() throws InstantiationException, IllegalAccessException {
@@ -193,7 +189,7 @@ public class FcNetworkClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // create network request body
-            final FcNetwork fcNetworkDto = resourceDtoUtils.buildFcNetworkDto(resourceName);
+            final FcNetwork fcNetworkDto = this.buildFcNetworkDto(resourceName);
             /**
              * then make sdk service call to get resource aSync parameter
              * indicates sync vs async useJsonRequest parameter indicates
@@ -239,7 +235,7 @@ public class FcNetworkClientSample {
             fcNetworkDto = fcNetworkClient.getFcNetworkByName(params, resourceName);
             fcNetworkDto.setName(resourceName + "_updated");
             if (null != fcNetworkDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(fcNetworkDto.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(fcNetworkDto.getUri());
             }
             /**
              * then make sdk service call to get resource aSync parameter
@@ -364,17 +360,29 @@ public class FcNetworkClientSample {
         return fcNetworkDto;
     }
 
-    // Main
+    private FcNetwork buildFcNetworkDto(String fcNetworkName) {
+        FcNetwork fcNetworkDto = new FcNetwork();
+
+        fcNetworkDto.setName(fcNetworkName);
+        fcNetworkDto.setConnectionTemplateUri(null);
+        fcNetworkDto.setLinkStabilityTime(30);
+        fcNetworkDto.setAutoLoginRedistribution(true);
+        fcNetworkDto.setFabricType(FcNetwork.FabricType.FabricAttach);
+        fcNetworkDto.setType(ResourceCategory.RC_FCNETWORK);
+
+        return fcNetworkDto;
+    }
+
     public static void main(final String[] args) throws Exception {
-        init();
         FcNetworkClientSample client = new FcNetworkClientSample();
-        client.getFcNetworkById();
-        client.getAllFcNetwork();
-        client.getFcNetworkByFilter();
+
         client.createFcNetwork();
+        client.getFcNetworkById();
+        client.getFcNetworkByFilter();
         client.getFcNetworkByName();
         client.updateFcNetwork();
         client.createFcNetwork();
+        client.getAllFcNetwork();
         client.deleteFcNetwork();
         client.createFcNetworkUsingJsonRequest();
     }

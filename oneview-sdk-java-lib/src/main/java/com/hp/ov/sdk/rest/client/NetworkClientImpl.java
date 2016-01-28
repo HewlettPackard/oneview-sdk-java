@@ -15,12 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
+import com.hp.ov.sdk.adaptors.ConnectionTemplateAdaptor;
 import com.hp.ov.sdk.adaptors.NetworkAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -39,36 +34,45 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component
 public class NetworkClientImpl implements NetworkClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(NetworkClientImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NetworkClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
-    @Autowired
-    private HttpRestClient restClient;
 
-    @Autowired
-    private ConnectionTemplateClient connectionTemplateClient;
-
-    @Autowired
-    private NetworkAdaptor adaptor;
+    private final ConnectionTemplateClient connectionTemplateClient;
+    private final NetworkAdaptor adaptor;
+    private final TaskAdaptor taskAdaptor;
+    private final TaskMonitorManager taskMonitor;
 
     private JSONObject jsonObject;
 
-    @Autowired
-    private UrlUtils urlUtils;
+    protected NetworkClientImpl(
+        ConnectionTemplateClient connectionTemplateClient,
+        NetworkAdaptor adaptor,
+        TaskAdaptor taskAdaptor,
+        TaskMonitorManager taskMonitor) {
 
-    @Autowired
-    private TaskAdaptor taskAdaptor;
+        this.connectionTemplateClient = connectionTemplateClient;
+        this.adaptor = adaptor;
+        this.taskAdaptor = taskAdaptor;
+        this.taskMonitor = taskMonitor;
+    }
 
-    @Autowired
-    private TaskMonitorManager taskMonitor;
+    public static NetworkClient getClient() {
+        return new NetworkClientImpl(
+                ConnectionTemplateClientImpl.getClient(),
+                new NetworkAdaptor(),
+                TaskAdaptor.getInstance(),
+                TaskMonitorManager.getInstance());
+    }
 
     @Override
     public Network getNetwork(final RestParams params, final String resourceId) {
-
-        logger.info("NetworkClientImpl : getNetwork : Start");
+        LOGGER.info("NetworkClientImpl : getNetwork : Start");
 
         // validate args
         if (null == params) {
@@ -76,36 +80,37 @@ public class NetworkClientImpl implements NetworkClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI, resourceId));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("NetworkClient : getNetwork : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("NetworkClient : getNetwork : response from OV :" + returnObj);
+
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKS, null);
         }
         // Call adaptor to convert to DTO
         final Network networkDto = adaptor.buildDto(returnObj);
 
-        logger.debug("NetworkClient : getNetwork : vlanID :" + networkDto.getVlanId());
-        logger.info("NetworkClientImpl : getNetwork : End");
+        LOGGER.debug("NetworkClient : getNetwork : vlanID :" + networkDto.getVlanId());
+        LOGGER.info("NetworkClientImpl : getNetwork : End");
 
         return networkDto;
     }
 
     @Override
     public NetworkCollection getAllNetworks(final RestParams params) {
-        logger.info("NetworkClientImpl : getAllNetworks : Start");
+        LOGGER.info("NetworkClientImpl : getAllNetworks : Start");
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI));
 
         // call rest client
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("NetworkClientImpl : getAllNetworks : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("NetworkClientImpl : getAllNetworks : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKS, null);
@@ -114,8 +119,8 @@ public class NetworkClientImpl implements NetworkClient {
 
         final NetworkCollection networkCollectionDto = adaptor.buildCollectionDto(returnObj);
 
-        logger.debug("NetworkClient : getAllNetworks : members count :" + networkCollectionDto.getCount());
-        logger.info("NetworkClientImpl : getAllNetworks : End");
+        LOGGER.debug("NetworkClient : getAllNetworks : members count :" + networkCollectionDto.getCount());
+        LOGGER.info("NetworkClientImpl : getAllNetworks : End");
 
         return networkCollectionDto;
 
@@ -123,10 +128,10 @@ public class NetworkClientImpl implements NetworkClient {
 
     @Override
     public Network getNetworkByName(final RestParams params, final String name) {
-        logger.info("NetworkClientImpl : getNetworkByName : Start");
+        LOGGER.info("NetworkClientImpl : getNetworkByName : Start");
 
-        final String query = urlUtils.createFilterString(name);
-        logger.debug("NetworkClientImpl : getNetworkByName : query = " + query);
+        final String query = UrlUtils.createFilterString(name);
+        LOGGER.debug("NetworkClientImpl : getNetworkByName : query = " + query);
         Network networkDto = null;
         // validate args
         if (null == params) {
@@ -134,10 +139,10 @@ public class NetworkClientImpl implements NetworkClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.ETHERNET_URI, query));
+        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.ETHERNET_URI, query));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("NetworkClientImpl : getNetworkByName : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("NetworkClientImpl : getNetworkByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKS, null);
         }
@@ -151,10 +156,10 @@ public class NetworkClientImpl implements NetworkClient {
         }
 
         if (networkDto == null) {
-            logger.error("NetworkClientImpl : getNetworkByName : resource not Found for name :" + name);
+            LOGGER.error("NetworkClientImpl : getNetworkByName : resource not Found for name :" + name);
             throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.NETWORKS, null);
         }
-        logger.info("NetworkClientImpl : getNetworkByName : End");
+        LOGGER.info("NetworkClientImpl : getNetworkByName : End");
 
         return networkDto;
     }
@@ -163,7 +168,7 @@ public class NetworkClientImpl implements NetworkClient {
     public TaskResourceV2 createNetwork(final RestParams params, final Network dto, final boolean aSync,
             final boolean useJsonRequest) {
         ConnectionTemplate connectionTemplateDto, tempDto;
-        logger.info("NetworkClientImpl : createNetwork : Start");
+        LOGGER.info("NetworkClientImpl : createNetwork : Start");
         String returnObj = null;
         String networkName = null;
         Network networkDto = null;
@@ -173,7 +178,7 @@ public class NetworkClientImpl implements NetworkClient {
         }
         // set the additional params
         params.setType(HttpMethodType.POST);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI));
 
         // check for json request in the input dto. if it is present,
         // then
@@ -196,12 +201,12 @@ public class NetworkClientImpl implements NetworkClient {
             jsonObject = adaptor.buildJsonObjectFromDto(dto);
         }
 
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("NetworkClientImpl : createNetwork : returnObj =" + returnObj);
-        logger.debug("NetworkClientImpl : createNetwork : taskResource =" + taskResourceV2);
+        LOGGER.debug("NetworkClientImpl : createNetwork : returnObj =" + returnObj);
+        LOGGER.debug("NetworkClientImpl : createNetwork : taskResource =" + taskResourceV2);
 
         // check for aSync flag. if user is asking async mode, return directly
         // the TaskResourceV2
@@ -227,7 +232,7 @@ public class NetworkClientImpl implements NetworkClient {
             connectionTemplateDto = connectionTemplateClient.updateConnectionTemplate(params,
                     (connectionTemplateUri.substring(connectionTemplateUri.lastIndexOf("/") + 1)), connectionTemplateDto, false);
         }
-        logger.info("NetworkClientImpl : createNetwork : End");
+        LOGGER.info("NetworkClientImpl : createNetwork : End");
 
         return taskResourceV2;
     }
@@ -235,7 +240,7 @@ public class NetworkClientImpl implements NetworkClient {
     @Override
     public TaskResourceV2 updateNetwork(final RestParams params, final String resourceId, final Network dto,
             final boolean asyncOrSyncMode, final boolean useJsonRequest) {
-        logger.info("NetworkClientImpl : updateNetwork : Start");
+        LOGGER.info("NetworkClientImpl : updateNetwork : Start");
         Network networkDto = null;
         // validate args
         if (null == params) {
@@ -247,7 +252,7 @@ public class NetworkClientImpl implements NetworkClient {
         }
         // set the additional params
         params.setType(HttpMethodType.PUT);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI, resourceId));
         String returnObj = null;
 
         // check for json request in the input dto. if it is present,
@@ -265,12 +270,12 @@ public class NetworkClientImpl implements NetworkClient {
             jsonObject = adaptor.buildJsonObjectFromDto(dto);
         }
 
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("NetworkClientImpl : updateNetwork : returnObj =" + returnObj);
-        logger.debug("NetworkClientImpl : updateNetwork : taskResource =" + taskResourceV2);
+        LOGGER.debug("NetworkClientImpl : updateNetwork : returnObj =" + returnObj);
+        LOGGER.debug("NetworkClientImpl : updateNetwork : taskResource =" + taskResourceV2);
 
         // check for aSync flag. if user is asking async mode, return directly
         // the TaskResourceV2
@@ -280,7 +285,7 @@ public class NetworkClientImpl implements NetworkClient {
         if (taskResourceV2 != null && asyncOrSyncMode == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("NetworkClientImpl : updateNetwork : End");
+        LOGGER.info("NetworkClientImpl : updateNetwork : End");
 
         return taskResourceV2;
     }
@@ -288,7 +293,7 @@ public class NetworkClientImpl implements NetworkClient {
     @Override
     public TaskResourceV2 deleteNetwork(final RestParams params, final String resourceId, final boolean aSync) {
 
-        logger.info("NetworkClientImpl : deleteNetwork : Start");
+        LOGGER.info("NetworkClientImpl : deleteNetwork : Start");
 
         // validate args
         if (null == params) {
@@ -296,10 +301,10 @@ public class NetworkClientImpl implements NetworkClient {
         }
         // set the additional params
         params.setType(HttpMethodType.DELETE);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI, resourceId));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("NetworkClient : deleteNetwork : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("NetworkClient : deleteNetwork : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKS, null);
@@ -307,8 +312,8 @@ public class NetworkClientImpl implements NetworkClient {
 
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("NetworkClientImpl : deleteNetwork : returnObj =" + returnObj);
-        logger.debug("NetworkClientImpl : deleteNetwork : taskResource =" + taskResourceV2);
+        LOGGER.debug("NetworkClientImpl : deleteNetwork : returnObj =" + returnObj);
+        LOGGER.debug("NetworkClientImpl : deleteNetwork : taskResource =" + taskResourceV2);
 
         // check for asyncOrSyncMode. if user is asking async mode, return the
         // directly the TaskResourceV2
@@ -318,7 +323,7 @@ public class NetworkClientImpl implements NetworkClient {
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("NetworkClientImpl : deleteNetwork : End");
+        LOGGER.info("NetworkClientImpl : deleteNetwork : End");
 
         return taskResourceV2;
     }
@@ -326,7 +331,7 @@ public class NetworkClientImpl implements NetworkClient {
     @Override
     public TaskResourceV2 createNetworkInBulk(final RestParams params, final BulkEthernetNetwork bulkEthernetDto,
             final boolean aSync, final boolean useJsonRequest) {
-        logger.info("NetworkClientImpl : createNetworkInBulk : Start");
+        LOGGER.info("NetworkClientImpl : createNetworkInBulk : Start");
         String returnObj = null;
 
         // validate params
@@ -336,7 +341,7 @@ public class NetworkClientImpl implements NetworkClient {
         }
         // set the additional params
         params.setType(HttpMethodType.POST);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.BULK_ETHERNET_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.BULK_ETHERNET_URI));
 
         // check for json request in the input bulkEthernetDto. if it is
         // present,
@@ -348,17 +353,17 @@ public class NetworkClientImpl implements NetworkClient {
         if (useJsonRequest == true) {
             final BulkEthernetNetwork bulkEthernetNetworkDto = adaptor.buildBulkEthernetDto(bulkEthernetDto.getJsonRequest()
                     .getBody());
-            jsonObject = adaptor.buildJsonObjectFrombulkEthernetDto(bulkEthernetNetworkDto);
+            jsonObject = adaptor.buildJsonObjectFromBulkEthernetDto(bulkEthernetNetworkDto);
         } else {
             // create JSON request from bulkEthernetDto
-            jsonObject = adaptor.buildJsonObjectFrombulkEthernetDto(bulkEthernetDto);
+            jsonObject = adaptor.buildJsonObjectFromBulkEthernetDto(bulkEthernetDto);
         }
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("NetworkClientImpl : createNetworkInBulk : returnObj =" + returnObj);
-        logger.debug("NetworkClientImpl : createNetworkInBulk : taskResource =" + taskResourceV2);
+        LOGGER.debug("NetworkClientImpl : createNetworkInBulk : returnObj =" + returnObj);
+        LOGGER.debug("NetworkClientImpl : createNetworkInBulk : taskResource =" + taskResourceV2);
 
         // check for aSync flag. if user is asking async mode, return directly
         // the TaskResourceV2
@@ -368,7 +373,7 @@ public class NetworkClientImpl implements NetworkClient {
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("NetworkClientImpl : createNetworkInBulk : End");
+        LOGGER.info("NetworkClientImpl : createNetworkInBulk : End");
 
         return taskResourceV2;
     }
@@ -380,7 +385,7 @@ public class NetworkClientImpl implements NetworkClient {
         Network network = getNetworkByName(creds, name);
 
         if (null != network.getUri()) {
-            resourceId = urlUtils.getResourceIdFromUri(network.getUri());
+            resourceId = UrlUtils.getResourceIdFromUri(network.getUri());
         }
         return resourceId;
     }

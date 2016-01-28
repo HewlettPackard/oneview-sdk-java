@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.firmwaredriver;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.FwBaselineCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.FwBaseline;
@@ -25,6 +24,7 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.FirmwareDriverClient;
+import com.hp.ov.sdk.rest.client.FirmwareDriverClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
@@ -34,19 +34,20 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
  * operations on firmware driver resource
  */
 public class FirmwareDriverClientSample {
+
+    private final FirmwareDriverClient firmwareDriverClient;
+
     private RestParams params;
-    private static TaskResourceV2 taskResourceV2;
-    private static FirmwareDriverClient firmwareDriverClient;
+    private TaskResourceV2 taskResourceV2;
 
     // These are variables to be defined by user
     // ================================
     private static final String resourceName = "HP Service Pack For ProLiant OneView 2014 11 13";
     private static final String resourceId = "bp-hp-service-pack-for-proliant-oneview-2014-11-30-05";
-
     // ================================
 
-    private static void init() {
-        firmwareDriverClient = HPOneViewSdkBeanFactory.getFirmwareDriverClient();
+    private FirmwareDriverClientSample() {
+        this.firmwareDriverClient = FirmwareDriverClientImpl.getClient();
     }
 
     private void getFirmwareDriverById() throws InstantiationException, IllegalAccessException {
@@ -78,7 +79,6 @@ public class FirmwareDriverClientSample {
             System.out.println("FirmwareDriverClientTest : getFirmwareDriverById :" + " arguments are null ");
             return;
         }
-
     }
 
     private void getAllFirmwareDriver() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
@@ -143,7 +143,6 @@ public class FirmwareDriverClientSample {
             System.out.println("FirmwareDriverClientTest : getFirmwareDriverByName :" + " arguments are null ");
             return;
         }
-
     }
 
     private void deleteFirmwareDriver() throws InstantiationException, IllegalAccessException {
@@ -180,13 +179,11 @@ public class FirmwareDriverClientSample {
             System.out.println("FirmwareDriverClientTest : deleteFirmwareDriver :" + " arguments are null ");
             return;
         }
-
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         FirmwareDriverClientSample client = new FirmwareDriverClientSample();
+
         client.getFirmwareDriverById();
         client.getAllFirmwareDriver();
         client.getFirmwareDriverByName();

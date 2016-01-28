@@ -15,25 +15,20 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
-import org.json.JSONObject;
-import org.springframework.stereotype.Component;
-
-import com.hp.ov.sdk.bean.factory.ConverterFactory;
 import com.hp.ov.sdk.dto.FcNetworkCollection;
 import com.hp.ov.sdk.dto.generated.FcNetwork;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
+import org.json.JSONObject;
 
-@Component
 public class FcNetworkAdaptor extends BaseAdaptor<FcNetwork, Object> {
-
-    private ObjectToJsonConverter converter;
 
     @Override
     public FcNetwork buildDto(final Object source) {
         // TODO - exceptions
         // convert json object to DTO, replace quotes and back slash in the file
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
         final FcNetwork fcNetworkDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), FcNetwork.class);
         return fcNetworkDto;
@@ -44,7 +39,8 @@ public class FcNetworkAdaptor extends BaseAdaptor<FcNetwork, Object> {
         if (null == source || source.equals("")) {
             return null;
         }
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
         // convert json object to DTO, replace quotes and back slash in the file
         final FcNetworkCollection fcNetworkCollectionDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
@@ -53,7 +49,8 @@ public class FcNetworkAdaptor extends BaseAdaptor<FcNetwork, Object> {
     }
 
     public JSONObject buildJsonObjectFromDto(final FcNetwork source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 

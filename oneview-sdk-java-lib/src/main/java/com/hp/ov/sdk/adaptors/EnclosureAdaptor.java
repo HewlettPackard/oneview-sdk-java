@@ -15,10 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
-import org.json.JSONObject;
-import org.springframework.stereotype.Component;
-
-import com.hp.ov.sdk.bean.factory.ConverterFactory;
 import com.hp.ov.sdk.dto.AddEnclosureV2;
 import com.hp.ov.sdk.dto.EnclosureCollectionV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
@@ -30,16 +26,14 @@ import com.hp.ov.sdk.dto.generated.Enclosures;
 import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
+import org.json.JSONObject;
 
-@Component
 public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
-
-    private ObjectToJsonConverter converter;
 
     @Override
     public Enclosures buildDto(final Object source) {
         // TODO - exceptions
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         // convert json Object to DTO, replace quotes and back slash in the file
         final Enclosures enclosureDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), Enclosures.class);
@@ -49,7 +43,7 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
     public EnvironmentalConfiguration buildEnvironmentalConfigurationDto(final Object source) {
         // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final EnvironmentalConfiguration environmentalConfigurationDto = converter
                 .convertJsonToObject(StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)),
                         EnvironmentalConfiguration.class);
@@ -59,7 +53,7 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
     public SsoUrlData buildSsoUrlData(final Object source) {
         // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final SsoUrlData ssoUrlData = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), SsoUrlData.class);
         return ssoUrlData;
@@ -68,7 +62,7 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
     public UtilizationData buildUtilizationData(final Object source) {
         // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final UtilizationData utilizationData = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), UtilizationData.class);
         return utilizationData;
@@ -76,7 +70,7 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
 
     public EnclosureCollectionV2 buildCollectionDto(final Object source) {
         // TODO - exceptions
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         if (null == source || source.equals("")) {
             return null;
         }
@@ -88,27 +82,27 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
     }
 
     public JSONObject buildJsonObjectFromDto(final Enclosures source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
     public JSONObject buildJsonObjectFromDto(final FwBaselineConfig source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
     public JSONObject buildJsonObjectFromDto(final RefreshStateConfig source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
     public JSONObject buildJsonObjectFromDto(final EnvironmentalConfigurationUpdate source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
     public JSONObject buildJsonObjectFromDto(final AddEnclosureV2 source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 }

@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.storage;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.AddStorageVolumeV2;
 import com.hp.ov.sdk.dto.StorageVolumeCollection;
@@ -30,41 +29,43 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.StoragePoolClient;
+import com.hp.ov.sdk.rest.client.StoragePoolClientImpl;
 import com.hp.ov.sdk.rest.client.StorageSystemClient;
+import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
 import com.hp.ov.sdk.rest.client.StorageVolumeClient;
+import com.hp.ov.sdk.rest.client.StorageVolumeClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * StorageVolumeClientSample is a sample program consume the container that is defined over the storage pool in HP OneView.  
+ * StorageVolumeClientSample is a sample program consume the container that is defined over the storage pool in HP OneView.
  * It invokes APIs of StorageVolumeClient which is in sdk library to perform GET/PUT/POST/DELETE operations on storage
  *  volume resource
  */
 public class StorageVolumeClientSample {
+
+    private final StorageVolumeClient storageVolumeClient;
+    private final StoragePoolClient storagePoolClient;
+    private final StorageSystemClient storageSystemClient;
+
     private RestParams params;
-    private static UrlUtils urlUtils;
-    private static TaskResourceV2 taskResourceV2;
-    private static StorageVolumeClient storageVolumeClient;
-    private static StoragePoolClient storagePoolClient;
-    private static StorageSystemClient storageSystemClient;
+    private TaskResourceV2 taskResourceV2;
 
     // These are variables to be defined by user
     // ================================
     private static final String resourceName = "Volume101";
-    private static final String storageSystemName = "ThreePAR7200-3050";
+    private static final String storageSystemName = "ThreePAR7200-4166";
     private static final String storagePoolName = "FST_CPG1";
     private static final String resourceNameForPrivateStorage = "volume103";
-    private static final String resourceId = "50A95C8F-B279-44E8-9496-C633EAA82EF1";
+    private static final String resourceId = "27340EE2-BCB2-4294-A760-B82D23BF3DCE";
     private static final String capacity = "1234567898";
-
     // ================================
 
-    private static void init() {
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        storageVolumeClient = HPOneViewSdkBeanFactory.getStorageVolumeClient();
-        storagePoolClient = HPOneViewSdkBeanFactory.getStoragePoolClient();
-        storageSystemClient = HPOneViewSdkBeanFactory.getStorageSystemClient();
+    private StorageVolumeClientSample() {
+        this.storageVolumeClient = StorageVolumeClientImpl.getClient();
+        this.storagePoolClient = StoragePoolClientImpl.getClient();
+        this.storageSystemClient = StorageSystemClientImpl.getClient();
     }
 
     private void getStorageVolumeById() throws InstantiationException, IllegalAccessException {
@@ -259,7 +260,7 @@ public class StorageVolumeClientSample {
             storageVolumeDto = storageVolumeClient.getStorageVolumeByName(params, resourceName);
 
             if (null != storageVolumeDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(storageVolumeDto.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(storageVolumeDto.getUri());
             }
             storageVolumeDto.setName(resourceName);
 
@@ -333,7 +334,6 @@ public class StorageVolumeClientSample {
             System.out.println("StorageVolumeClientTest : deleteStorageVolume : arguments are null ");
             return;
         }
-
     }
 
     // TODO - Move Uri fetch logic to SdkUtils
@@ -382,12 +382,11 @@ public class StorageVolumeClientSample {
         return storageSystemClient.getStorageSystemByName(params, storageSystemName).getUri();
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         StorageVolumeClientSample client = new StorageVolumeClientSample();
-        client.getStorageVolumeById();
+
         client.createStorageVolume();
+        client.getStorageVolumeById();
         client.createPrivateStorageVolume();
         client.getAllStorageVolume();
         client.getStorageVolumeByName();

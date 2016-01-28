@@ -15,23 +15,17 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
-import org.json.JSONObject;
-import org.springframework.stereotype.Component;
-
-import com.hp.ov.sdk.bean.factory.ConverterFactory;
 import com.hp.ov.sdk.dto.SanResponse;
 import com.hp.ov.sdk.dto.SanResponseCollection;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
+import org.json.JSONObject;
 
-@Component
 public class ManagedSanAdaptor extends BaseAdaptor<SanResponse, Object> {
-
-    private ObjectToJsonConverter converter;
 
     @Override
     public SanResponse buildDto(Object source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         final SanResponse deviceManagerResponseDto = converter.convertJsonToObject(
@@ -40,7 +34,7 @@ public class ManagedSanAdaptor extends BaseAdaptor<SanResponse, Object> {
     }
 
     public SanResponseCollection buildCollectionDto(Object source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         final SanResponseCollection deviceManagerResponseCollectionDto = converter.convertJsonToObject(
@@ -49,7 +43,7 @@ public class ManagedSanAdaptor extends BaseAdaptor<SanResponse, Object> {
     }
 
     public JSONObject buildJsonObjectFromDto(final SanResponse source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 

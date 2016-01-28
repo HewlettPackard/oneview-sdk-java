@@ -15,14 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
-import java.util.ArrayList;
-
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.hp.ov.sdk.adaptors.LogicalInterconnectAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -48,33 +40,41 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component
+import java.util.ArrayList;
+
+
 public class LogicalInterconnectClientImpl implements LogicalInterconnectClient {
 
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
-    public static final Logger logger = LoggerFactory.getLogger(LogicalInterconnectClientImpl.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(LogicalInterconnectClientImpl.class);
 
-    @Autowired
-    private HttpRestClient restClient;
-
-    @Autowired
-    private LogicalInterconnectAdaptor adaptor;
+    private final LogicalInterconnectAdaptor adaptor;
+    private final TaskAdaptor taskAdaptor;
+    private final TaskMonitorManager taskMonitor;
 
     private JSONObject jsonObject;
 
-    @Autowired
-    private UrlUtils urlUtils;
+    protected LogicalInterconnectClientImpl(LogicalInterconnectAdaptor adaptor,
+        TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
 
-    @Autowired
-    private TaskAdaptor taskAdaptor;
+        this.adaptor = adaptor;
+        this.taskAdaptor = taskAdaptor;
+        this.taskMonitor = taskMonitor;
+    }
 
-    @Autowired
-    private TaskMonitorManager taskMonitor;
+    public static LogicalInterconnectClient getClient() {
+        return new LogicalInterconnectClientImpl(new LogicalInterconnectAdaptor(),
+                TaskAdaptor.getInstance(),
+                TaskMonitorManager.getInstance());
+    }
 
     @Override
     public LogicalInterconnects getLogicalInterconnect(final RestParams params, final String resourceId) {
-        logger.info("LogicalInterconnectClientImpl : getLogicalInterconnect : Start");
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnect : Start");
 
         // validate args
         if (null == params) {
@@ -82,10 +82,10 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("LogicalInterconnectClientImpl : getLogicalInterconnect : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnect : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.LOGICAL_INTERCONNECT, null);
@@ -94,15 +94,15 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         final LogicalInterconnects logicalInterconnectDto = adaptor.buildDto(returnObj);
 
-        logger.debug("LogicalInterconnectClientImpl : getLogicalInterconnect : Name :" + logicalInterconnectDto.getName());
-        logger.info("LogicalInterconnectClientImpl : getLogicalInterconnect : End");
+        LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnect : Name :" + logicalInterconnectDto.getName());
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnect : End");
 
         return logicalInterconnectDto;
     }
 
     @Override
     public LogicalInterconnectCollectionV2 getAllLogicalInterconnects(final RestParams params) {
-        logger.info("LogicalInterconnectClientImpl : getAllLogicalInterconnects : Start");
+        LOGGER.info("LogicalInterconnectClientImpl : getAllLogicalInterconnects : Start");
 
         // validate args
         if (null == params) {
@@ -110,10 +110,10 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("LogicalInterconnectClientImpl : getAllLogicalInterconnects : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("LogicalInterconnectClientImpl : getAllLogicalInterconnects : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.LOGICAL_INTERCONNECTS, null);
@@ -122,26 +122,26 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         final LogicalInterconnectCollectionV2 logicalInterconnectCollectionDto = adaptor.buildCollectionDto(returnObj);
 
-        logger.debug("LogicalInterconnectClientImpl : getAllLogicalInterconnects : members count :"
+        LOGGER.debug("LogicalInterconnectClientImpl : getAllLogicalInterconnects : members count :"
                 + logicalInterconnectCollectionDto.getCount());
-        logger.info("LogicalInterconnectClientImpl : getAllLogicalInterconnects : End");
+        LOGGER.info("LogicalInterconnectClientImpl : getAllLogicalInterconnects : End");
 
         return logicalInterconnectCollectionDto;
     }
 
     @Override
     public LogicalInterconnects getLogicalInterconnectByName(final RestParams params, final String logicalInterconnectName) {
-        logger.info("LogicalInterconnectClientImpl : getLogicalInterconnectByName : start");
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectByName : start");
         final LogicalInterconnectCollectionV2 logicalInterconnectCollectionDto = getAllLogicalInterconnects(params);
 
         for (final LogicalInterconnects logicalInterconnectDto : new ArrayList<>(logicalInterconnectCollectionDto.getMembers())) {
             if (logicalInterconnectDto.getName().equals(logicalInterconnectName)) {
                 System.out.println(logicalInterconnectDto.getName());
-                logger.info("LogicalInterconnectClientImpl : getLogicalInterconnectByName : End");
+                LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectByName : End");
                 return logicalInterconnectDto;
             }
         }
-        logger.error("LogicalInterconnectClientImpl : getLogicalInterconnectByName : resource not Found for name :"
+        LOGGER.error("LogicalInterconnectClientImpl : getLogicalInterconnectByName : resource not Found for name :"
                 + logicalInterconnectName);
         throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.LOGICAL_INTERCONNECT,
                 null);
@@ -149,7 +149,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
     @Override
     public LiFirmware getLogicalInterconnectFirmwareById(final RestParams params, final String resourceId) {
-        logger.info("LogicalInterconnectClientImpl : getLogicalInterconnectFirmwareById : Start");
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectFirmwareById : Start");
 
         // validate args
         if (null == params) {
@@ -157,10 +157,10 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId, "firmware"));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId, "firmware"));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("LogicalInterconnectClientImpl : getLogicalInterconnectFirmwareById : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectFirmwareById : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.LOGICAL_INTERCONNECT, null);
@@ -169,7 +169,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         final LiFirmware liFirmwareDto = adaptor.buildFirmwareDto(returnObj);
 
-        logger.info("LogicalInterconnectClientImpl : getLogicalInterconnectFirmwareById : End");
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectFirmwareById : End");
 
         return liFirmwareDto;
     }
@@ -178,7 +178,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     public TaskResourceV2 updateLogicalInterconnectSnmpConfigurationById(final RestParams params, final String resourceId,
             final SnmpConfiguration snmpConfigurationDto, final boolean asyncOrSyncMode, final boolean useJsonRequest) {
 
-        logger.info("LogicalInterconnectClientImpl : updateLogicalInterconnectSnmpConfigurationById : Start");
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectSnmpConfigurationById : Start");
 
         // validate args
         if (null == params) {
@@ -191,7 +191,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         }
         // set the additional params
         params.setType(HttpMethodType.PUT);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId + "/"
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId + "/"
                 + "snmp-configuration"));
         String returnObj = null;
 
@@ -203,12 +203,12 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(snmpConfigurationDto);
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectSnmpConfigurationById : returnObj =" + returnObj);
-        logger.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectSnmpConfigurationById : taskResource ="
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectSnmpConfigurationById : returnObj =" + returnObj);
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectSnmpConfigurationById : taskResource ="
                 + taskResourceV2);
 
         // check for aSync flag. if user is asking async mode, return directly
@@ -219,7 +219,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         if (taskResourceV2 != null && asyncOrSyncMode == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("LogicalInterconnectClientImpl : updateLogicalInterconnectSnmpConfigurationById  : End");
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectSnmpConfigurationById  : End");
 
         return taskResourceV2;
     }
@@ -227,7 +227,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     @Override
     public TaskResourceV2 updateLogicalInterconnectComplianceById(final RestParams params, final String resourceId,
             final boolean asyncOrSyncMode) {
-        logger.info("LogicalInterconnectClientImpl : updateLogicalInterconnectComplianceById : Start");
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectComplianceById : Start");
 
         // validate args
         if (null == params) {
@@ -236,24 +236,24 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         // set the additional params
         params.setType(HttpMethodType.PUT);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId + "/"
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId + "/"
                 + "compliance"));
         String returnObj = null;
 
         // create JSON request from dto
         jsonObject = null;
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectComplianceById : returnObj =" + returnObj);
-        logger.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectComplianceById : taskResource =" + taskResourceV2);
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectComplianceById : returnObj =" + returnObj);
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectComplianceById : taskResource =" + taskResourceV2);
 
         // once task is complete or exceeds the timeout.
         if (taskResourceV2 != null) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("LogicalInterconnectClientImpl : updateLogicalInterconnectComplianceById  : End");
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectComplianceById  : End");
 
         return taskResourceV2;
     }
@@ -262,7 +262,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     public TaskResourceV2 updateLogicalInterconnectFirmwareById(final RestParams params, final String resourceId,
             final LiFirmware lIFirmwareDto, final boolean asyncOrSyncMode, final boolean useJsonRequest) {
 
-        logger.info("LogicalInterconnectClientImpl : updateLogicalInterconnectFirmwareById : Start");
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectFirmwareById : Start");
 
         // validate args
         if (null == params) {
@@ -275,7 +275,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         }
         // set the additional params
         params.setType(HttpMethodType.PUT);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId + "/"
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId + "/"
                 + "firmware"));
         String returnObj = null;
 
@@ -287,12 +287,12 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(lIFirmwareDto);
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectFirmwareById : returnObj =" + returnObj);
-        logger.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectFirmwareById : taskResource =" + taskResourceV2);
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectFirmwareById : returnObj =" + returnObj);
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectFirmwareById : taskResource =" + taskResourceV2);
 
         // check for aSync flag. if user is asking async mode, return directly
         // the TaskResourceV2
@@ -302,7 +302,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         if (taskResourceV2 != null && asyncOrSyncMode == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("LogicalInterconnectClientImpl : updateLogicalInterconnectFirmwareById  : End");
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectFirmwareById  : End");
 
         return taskResourceV2;
     }
@@ -314,7 +314,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         LogicalInterconnects logicalInterconnectsDto = getLogicalInterconnectByName(creds, name);
 
         if (null != logicalInterconnectsDto.getUri()) {
-            resourceId = urlUtils.getResourceIdFromUri(logicalInterconnectsDto.getUri());
+            resourceId = UrlUtils.getResourceIdFromUri(logicalInterconnectsDto.getUri());
         }
         return resourceId;
     }
@@ -323,28 +323,28 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     @Override
     public InterconnectFibData getLogicalInterconnectForwardingInformationBase(RestParams params, String resourceId) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO
     @Override
     public InterconnectFibDataInfo createLogicalInterconnectForwardingInformationBase(RestParams params, String resourceId) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO
     @Override
     public void getLogicalInterconnectForwardingInformationBaseDump(RestParams params, String resourceId, String fileName) {
         // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
     // TODO
     @Override
     public SnmpConfiguration getLogicalInterconnectSnmpConfigurationById(RestParams params, String resourceId) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO
@@ -352,7 +352,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     public SwitchDumpDataInfo createLogicalInterconnectSupportDump(RestParams params, String resourceId,
             SwitchDumpGenerationInfo switchDumpGenerationInfo) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO
@@ -360,28 +360,28 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     public PortMonitorUplinkPortCollection getLogicalInterconnectUnassignedUplinkPortsForPortMonitor(RestParams params,
             String resourceId) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO
     @Override
     public TaskResourceV2 updateLogicalInterconnectConfiguration(RestParams params, String resourceId) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO
     @Override
     public PortMonitor getLogicalInterconnectPortMonitorConfiguration(RestParams params, String resourceId) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO
     @Override
     public TaskResourceV2 updateLogicalInterconnectPortMonitorConfiguration(RestParams params, String resourceId) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO
@@ -389,7 +389,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     public TelemetryConfiguration getLogicalInterconnectTelementaryConfiguration(RestParams params, String resourceId,
             String telementaryConfigurationId) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO
@@ -397,7 +397,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     public TelemetryConfiguration updateLogicalInterconnectTelementaryConfiguration(RestParams params, String resourceId,
             String telementaryConfigurationId, TelemetryConfiguration telemetryConfiguration) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
 }

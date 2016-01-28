@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.network;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.JsonRequest;
 import com.hp.ov.sdk.dto.NetworkCollection;
@@ -32,6 +31,7 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.NetworkClient;
+import com.hp.ov.sdk.rest.client.NetworkClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
@@ -42,26 +42,24 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
  * operations on ethernet networks resource
  */
 public class NetworkClientSample {
+
+    private NetworkClient networkClient;
     private RestParams params;
-    private static NetworkClient networkClient;
-    private static TaskResourceV2 taskResourceV2;
-    private static UrlUtils urlUtils;
+    private TaskResourceV2 taskResourceV2;
 
     // test values - user input
     // ================================
-    private static final String resourceId = "cd9c1548-d2b0-405e-95da-c575babb6a52";
+    private static final String resourceId = "609c1f1e-8def-431a-ad4e-e01ce9184005";
     private static final String resourceName = "Eth-demo";
-    private static final Double maxBandwidth = (double) 8000;
-    private static final Double minBandwidth = (double) 2000;
+    private static final Double maxBandwidth = Double.valueOf(8000);
+    private static final Double minBandwidth = Double.valueOf(2000);
     private static final Integer vlanId = 333;
     private static final String bulkNetworkName = "Prod";
-    private static final String vlanRange = "401-410";
-
+    private static final String vlanRange = "401-405";
     // ================================
 
-    private static void init() throws Exception {
-        networkClient = HPOneViewSdkBeanFactory.getNetworkClient();
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
+    private NetworkClientSample() {
+        this.networkClient = NetworkClientImpl.getClient();
     }
 
     private void getNetworkById() throws InstantiationException, IllegalAccessException {
@@ -192,7 +190,6 @@ public class NetworkClientSample {
                     + "errors in task, please check task resource for more details ");
             return;
         }
-
     }
 
     private void updateNetwork() throws InstantiationException, IllegalAccessException {
@@ -210,7 +207,7 @@ public class NetworkClientSample {
             // networkDto.setVlanId(5000);
             // end
             if (null != networkDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(networkDto.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(networkDto.getUri());
             }
             /**
              * then make sdk service call to get resource aSync parameter
@@ -278,7 +275,6 @@ public class NetworkClientSample {
             System.out.println("NetworkClientTest : deleteNetwork : arguments are null ");
             return;
         }
-
     }
 
     private void createNetworkInBulk() throws InstantiationException, IllegalAccessException {
@@ -318,7 +314,6 @@ public class NetworkClientSample {
                     + "errors in task, please check task resource for more details ");
             return;
         }
-
     }
 
     private void createNetworkUsingJsonRequest() throws InstantiationException, IllegalAccessException {
@@ -359,7 +354,6 @@ public class NetworkClientSample {
                     .println("NetworkClientTest : createNetworkUsingJsonRequest : errors in task, please check task resource for more details ");
             return;
         }
-
     }
 
     private Network buildNetworkDto() {
@@ -382,7 +376,6 @@ public class NetworkClientSample {
         dto.setConnectionTemplate(connectionTemplate);
 
         return dto;
-
     }
 
     private BulkEthernetNetwork buildBulkEthernetNetworkDto() {
@@ -404,7 +397,6 @@ public class NetworkClientSample {
     }
 
     private Network buildTestNetworkDtoWithJsonRequest() {
-
         final Network networkDto = new Network();
         final JsonRequest jsonRequest = new JsonRequest();
         jsonRequest
@@ -414,16 +406,16 @@ public class NetworkClientSample {
         return networkDto;
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         final NetworkClientSample client = new NetworkClientSample();
-        client.getNetworkById();
+
         client.getAllNetwork();
         client.createNetwork();
+        client.getNetworkById();
         client.getNetworkByName();
         client.updateNetwork();
         client.createNetwork();
+        client.getAllNetwork();
         client.deleteNetwork();
         client.createNetworkInBulk();
         client.createNetworkUsingJsonRequest();

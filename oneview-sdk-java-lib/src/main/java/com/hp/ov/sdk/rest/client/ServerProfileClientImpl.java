@@ -15,15 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.hp.ov.sdk.adaptors.ServerProfileAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -46,35 +37,45 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class ServerProfileClientImpl implements ServerProfileClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(ServerProfileClientImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerProfileClientImpl.class);
     private static final int TIMEOUT = 1200000; // in milliseconds = 20 mins
-    @Autowired
-    private HttpRestClient restClient;
 
-    @Autowired
-    private ServerProfileAdaptor adaptor;
+    private final ServerProfileAdaptor adaptor;
+    private final TaskAdaptor taskAdaptor;
+    private final TaskMonitorManager taskMonitor;
+    private final ServerHardwareClient serverHardwareClientImpl;
 
     private JSONObject jsonObject;
 
-    @Autowired
-    private UrlUtils urlUtils;
+    protected ServerProfileClientImpl(ServerProfileAdaptor adaptor, TaskAdaptor taskAdaptor,
+        TaskMonitorManager taskMonitor, ServerHardwareClient serverHardwareClientImpl) {
 
-    @Autowired
-    private TaskAdaptor taskAdaptor;
+        this.adaptor = adaptor;
+        this.taskAdaptor = taskAdaptor;
+        this.taskMonitor = taskMonitor;
+        this.serverHardwareClientImpl = serverHardwareClientImpl;
+    }
 
-    @Autowired
-    private TaskMonitorManager taskMonitor;
-
-    @Autowired
-    private ServerHardwareClientImpl serverHardwareClientImpl;
+    public static ServerProfileClient getClient() {
+        return new ServerProfileClientImpl(new ServerProfileAdaptor(),
+                TaskAdaptor.getInstance(),
+                TaskMonitorManager.getInstance(),
+                ServerHardwareClientImpl.getClient());
+    }
 
     @Override
     public ServerProfile getServerProfile(final RestParams params, final String resourceId) {
-        logger.info("ServerProfileClientImpl : getServerProfile : Start");
+        LOGGER.info("ServerProfileClientImpl : getServerProfile : Start");
 
         // validate args
         if (null == params) {
@@ -82,10 +83,10 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, resourceId));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ServerProfileClientImpl : getServerProfile : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ServerProfileClientImpl : getServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
                     null);
@@ -93,15 +94,15 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         // Call adaptor to convert to DTO
         final ServerProfile serverProfileDto = adaptor.buildDto(returnObj);
 
-        logger.debug("ServerProfileClientImpl : getServerProfile : Name :" + serverProfileDto.getName());
-        logger.info("ServerProfileClientImpl : getServerProfile : End");
+        LOGGER.debug("ServerProfileClientImpl : getServerProfile : Name :" + serverProfileDto.getName());
+        LOGGER.info("ServerProfileClientImpl : getServerProfile : End");
 
         return serverProfileDto;
     }
 
     @Override
     public ServerProfileCollection getAllServerProfile(final RestParams params) {
-        logger.info("ServerProfileClientImpl : getAllServerProfile : Start");
+        LOGGER.info("ServerProfileClientImpl : getAllServerProfile : Start");
 
         // validate args
         if (null == params) {
@@ -109,10 +110,10 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ServerProfileClientImpl : getAllServerProfile : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ServerProfileClientImpl : getAllServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILES,
                     null);
@@ -121,8 +122,8 @@ public class ServerProfileClientImpl implements ServerProfileClient {
 
         final ServerProfileCollection serverProfileCollectionDto = adaptor.buildCollectionDto(returnObj);
 
-        logger.debug("ServerProfileClientImpl : getAllServerProfile : Count :" + serverProfileCollectionDto.getCount());
-        logger.info("ServerProfileClientImpl : getAllServerProfile : End");
+        LOGGER.debug("ServerProfileClientImpl : getAllServerProfile : Count :" + serverProfileCollectionDto.getCount());
+        LOGGER.info("ServerProfileClientImpl : getAllServerProfile : End");
 
         return serverProfileCollectionDto;
     }
@@ -130,9 +131,9 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     @Override
     public ServerProfile getServerProfileByName(final RestParams params, final String name) {
         ServerProfile serverProfileDto = null;
-        logger.info("ServerProfileClientImpl : getServerProfileByName : Start");
+        LOGGER.info("ServerProfileClientImpl : getServerProfileByName : Start");
         // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = urlUtils.createFilterString(name);
+        final String query = UrlUtils.createFilterString(name);
 
         // validate args
         if (null == params) {
@@ -140,10 +141,10 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, query));
+        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, query));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ServerProfileClientImpl : getServerProfileByName : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ServerProfileClientImpl : getServerProfileByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILES,
                     null);
@@ -158,11 +159,11 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         }
 
         if (serverProfileDto == null) {
-            logger.error("ServerProfileClientImpl : getServerProfileByName : Not found for name :" + name);
+            LOGGER.error("ServerProfileClientImpl : getServerProfileByName : Not found for name :" + name);
             throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.SERVER_PROFILE,
                     null);
         }
-        logger.info("ServerProfileClientImpl : getServerProfileByName : End");
+        LOGGER.info("ServerProfileClientImpl : getServerProfileByName : End");
 
         return serverProfileDto;
     }
@@ -170,7 +171,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     @Override
     public AvailableNetworks getAvailableNetworksForServerProfile(final RestParams params, final String serverHardwareTypeUri,
             final String enclosureGroupUri) {
-        logger.info("ServerProfileClientImpl : getAvailableNetworksForServerProfile : Start");
+        LOGGER.info("ServerProfileClientImpl : getAvailableNetworksForServerProfile : Start");
 
         final String query = "serverHardwareTypeUri=" + serverHardwareTypeUri + "&enclosureGroupUri=" + enclosureGroupUri;
 
@@ -180,10 +181,10 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.AVAILABLE_NETWORKS_URI, query));
+        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.AVAILABLE_NETWORKS_URI, query));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ServerProfileClientImpl : getAvailableNetworksForServerProfile : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ServerProfileClientImpl : getAvailableNetworksForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
                     null);
@@ -193,20 +194,20 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         final AvailableNetworks availableNetworksDto = adaptor.buildAvailableNetworkDto(returnObj);
 
         if (availableNetworksDto != null) {
-            logger.debug("ServerProfileClientImpl : getAvailableNetworksForServerProfile : networkSet :"
+            LOGGER.debug("ServerProfileClientImpl : getAvailableNetworksForServerProfile : networkSet :"
                     + availableNetworksDto.getNetworkSets());
         } else {
-            logger.debug("ServerProfileClientImpl : getAvailableNetworksForServerProfile : Not Found for server hardware :"
+            LOGGER.debug("ServerProfileClientImpl : getAvailableNetworksForServerProfile : Not Found for server hardware :"
                     + serverHardwareTypeUri + "and enclosure group " + enclosureGroupUri);
         }
-        logger.info("ServerProfileClientImpl : getAvailableNetworksForServerProfile : End");
+        LOGGER.info("ServerProfileClientImpl : getAvailableNetworksForServerProfile : End");
 
         return availableNetworksDto;
     }
 
     @Override
     public List<AvailableServers> getAvailableServersForServerProfile(final RestParams params) {
-        logger.info("ServerProfileClientImpl : getAvailableServersForServerProfile : Start");
+        LOGGER.info("ServerProfileClientImpl : getAvailableServersForServerProfile : Start");
 
         // validate args
         if (null == params) {
@@ -214,10 +215,10 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.AVAILABLE_SERVERS_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.AVAILABLE_SERVERS_URI));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
                     null);
@@ -227,12 +228,12 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         final List<AvailableServers> availableServersCollectionDto = adaptor.buildAvailableServerDto(returnObj);
 
         if (availableServersCollectionDto != null) {
-            logger.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : name :"
+            LOGGER.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : name :"
                     + availableServersCollectionDto.get(0).getName());
         } else {
-            logger.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : Not Found ");
+            LOGGER.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : Not Found ");
         }
-        logger.info("ServerProfileClientImpl : getAvailableServersForServerProfile : End");
+        LOGGER.info("ServerProfileClientImpl : getAvailableServersForServerProfile : End");
 
         return availableServersCollectionDto;
     }
@@ -240,7 +241,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     @Override
     public List<AvailableServers> getAvailableServersForServerProfile(final RestParams params, final String serverHardwareTypeUri,
             final String enclosureGroupUri) {
-        logger.info("ServerProfileClientImpl : getAvailableServersForServerProfile : Start");
+        LOGGER.info("ServerProfileClientImpl : getAvailableServersForServerProfile : Start");
 
         final String query = "serverHardwareTypeUri=" + serverHardwareTypeUri + "&enclosureGroupUri=" + enclosureGroupUri;
 
@@ -250,10 +251,10 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.AVAILABLE_SERVERS_URI, query));
+        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.AVAILABLE_SERVERS_URI, query));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
                     null);
@@ -263,20 +264,20 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         final List<AvailableServers> availableServersCollectionDto = adaptor.buildAvailableServerDto(returnObj);
 
         if (availableServersCollectionDto.get(0) != null) {
-            logger.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : value :"
+            LOGGER.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : value :"
                     + availableServersCollectionDto.get(0).getName());
         } else {
-            logger.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : Not Found for server hardware :"
+            LOGGER.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : Not Found for server hardware :"
                     + serverHardwareTypeUri + "and enclosure group " + enclosureGroupUri);
         }
-        logger.info("ServerProfileClientImpl : getAvailableServersForServerProfile : End");
+        LOGGER.info("ServerProfileClientImpl : getAvailableServersForServerProfile : End");
 
         return availableServersCollectionDto;
     }
 
     @Override
     public List<AvailableServers> getAvailableServersForServerProfile(final RestParams params, final String profileUri) {
-        logger.info("ServerProfileClientImpl : getAvailableServersForServerProfile : Start");
+        LOGGER.info("ServerProfileClientImpl : getAvailableServersForServerProfile : Start");
 
         final String query = "profileUri=" + profileUri;
 
@@ -286,10 +287,10 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.AVAILABLE_SERVERS_URI, query));
+        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.AVAILABLE_SERVERS_URI, query));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
                     null);
@@ -299,12 +300,12 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         final List<AvailableServers> availableServersCollectionDto = adaptor.buildAvailableServerDto(returnObj);
 
         if (availableServersCollectionDto != null) {
-            logger.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : name :"
+            LOGGER.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : name :"
                     + availableServersCollectionDto.get(0).getName());
         } else {
-            logger.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : Not Found for profile  :" + profileUri);
+            LOGGER.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : Not Found for profile  :" + profileUri);
         }
-        logger.info("ServerProfileClientImpl : getAvailableServersForServerProfile : End");
+        LOGGER.info("ServerProfileClientImpl : getAvailableServersForServerProfile : End");
 
         return availableServersCollectionDto;
     }
@@ -312,7 +313,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     @Override
     public ProfilePorts getProfilePortsForServerProfile(final RestParams params, final String serverHardwareTypeUri,
             final String enclosureGroupUri) {
-        logger.info("ServerProfileClientImpl : getProfilePortsForServerProfile : Start");
+        LOGGER.info("ServerProfileClientImpl : getProfilePortsForServerProfile : Start");
 
         final String query = "serverHardwareTypeUri=" + serverHardwareTypeUri + "&enclosureGroupUri=" + enclosureGroupUri;
 
@@ -322,10 +323,10 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.PROFILE_PORTS_URI, query));
+        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.PROFILE_PORTS_URI, query));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ServerProfileClientImpl : getProfilePortsForServerProfile : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ServerProfileClientImpl : getProfilePortsForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
                     null);
@@ -335,12 +336,12 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         final ProfilePorts profilePortsDto = adaptor.buildProfilePortsDto(returnObj);
 
         if (profilePortsDto != null) {
-            logger.debug("ServerProfileClientImpl : getProfilePortsForServerProfile : networkSet :" + profilePortsDto.toString());
+            LOGGER.debug("ServerProfileClientImpl : getProfilePortsForServerProfile : networkSet :" + profilePortsDto.toString());
         } else {
-            logger.debug("ServerProfileClientImpl : getProfilePortsForServerProfile : Not Found for server hardware :"
+            LOGGER.debug("ServerProfileClientImpl : getProfilePortsForServerProfile : Not Found for server hardware :"
                     + serverHardwareTypeUri + "and enclosure group " + enclosureGroupUri);
         }
-        logger.info("ServerProfileClientImpl : getProfilePortsForServerProfile : End");
+        LOGGER.info("ServerProfileClientImpl : getProfilePortsForServerProfile : End");
 
         return profilePortsDto;
     }
@@ -348,7 +349,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     @Override
     public TaskResourceV2 createServerProfile(final RestParams params, final ServerProfile serverProfileDto, final boolean aSync,
             final boolean useJsonRequest) {
-        logger.info("ServerProfileClientImpl : createServerProfile : Start");
+        LOGGER.info("ServerProfileClientImpl : createServerProfile : Start");
         String returnObj = null;
 
         // validate params
@@ -357,7 +358,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         }
         // set the additional params
         params.setType(HttpMethodType.POST);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI));
 
         // TODO - check for json request in the input dto. if it is present,
         // then
@@ -367,12 +368,12 @@ public class ServerProfileClientImpl implements ServerProfileClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(serverProfileDto);
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("ServerProfileClientImpl : createServerProfile : returnObj =" + returnObj);
-        logger.debug("ServerProfileClientImpl : createServerProfile : taskResource =" + taskResourceV2);
+        LOGGER.debug("ServerProfileClientImpl : createServerProfile : returnObj =" + returnObj);
+        LOGGER.debug("ServerProfileClientImpl : createServerProfile : taskResource =" + taskResourceV2);
 
         // check for aSync flag. if user is asking async mode, return directly
         // the TaskResourceV2
@@ -382,7 +383,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("ServerProfileClientImpl : createServerProfile : End");
+        LOGGER.info("ServerProfileClientImpl : createServerProfile : End");
 
         return taskResourceV2;
     }
@@ -390,7 +391,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     @Override
     public TaskResourceV2 updateServerProfile(final RestParams params, final String resourceId,
             final ServerProfile serverProfileDto, final boolean aSync, final boolean useJsonRequest) {
-        logger.info("ServerProfileClientImpl : updateServerProfile : Start");
+        LOGGER.info("ServerProfileClientImpl : updateServerProfile : Start");
 
         // validate args
         if (null == params) {
@@ -402,7 +403,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         }
         // set the additional params
         params.setType(HttpMethodType.PUT);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, resourceId));
         String returnObj = null;
 
         // TODO - check for json request in the input dto. if it is present,
@@ -413,12 +414,12 @@ public class ServerProfileClientImpl implements ServerProfileClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(serverProfileDto);
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("ServerProfileClientImpl : updateServerProfile : returnObj =" + returnObj);
-        logger.debug("ServerProfileClientImpl : updateServerProfile : taskResource =" + taskResourceV2);
+        LOGGER.debug("ServerProfileClientImpl : updateServerProfile : returnObj =" + returnObj);
+        LOGGER.debug("ServerProfileClientImpl : updateServerProfile : taskResource =" + taskResourceV2);
 
         // check for aSync flag. if user is asking async mode, return directly
         // the TaskResourceV2
@@ -428,14 +429,14 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("ServerProfileClientImpl : updateServerProfile : End");
+        LOGGER.info("ServerProfileClientImpl : updateServerProfile : End");
 
         return taskResourceV2;
     }
 
     @Override
     public TaskResourceV2 deleteServerProfile(final RestParams params, final String resourceId, final boolean aSync) {
-        logger.info("ServerProfileClientImpl : deleteServerProfile : Start");
+        LOGGER.info("ServerProfileClientImpl : deleteServerProfile : Start");
 
         // validate args
         if (null == params) {
@@ -443,10 +444,10 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         }
         // set the additional params
         params.setType(HttpMethodType.DELETE);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, resourceId));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ServerProfileClientImpl : deleteServerProfile : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ServerProfileClientImpl : deleteServerProfile : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -455,8 +456,8 @@ public class ServerProfileClientImpl implements ServerProfileClient {
 
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("ServerProfileClientImpl : deleteServerProfile : returnObj =" + returnObj);
-        logger.debug("ServerProfileClientImpl : deleteServerProfile : taskResource =" + taskResourceV2);
+        LOGGER.debug("ServerProfileClientImpl : deleteServerProfile : returnObj =" + returnObj);
+        LOGGER.debug("ServerProfileClientImpl : deleteServerProfile : taskResource =" + taskResourceV2);
 
         // check for asyncOrSyncMode. if user is askign async mode, return the
         // directly the TaskResourceV2
@@ -466,7 +467,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("ServerProfileClientImpl : deleteServerProfile : End");
+        LOGGER.info("ServerProfileClientImpl : deleteServerProfile : End");
 
         return taskResourceV2;
     }
@@ -474,7 +475,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     @Override
     public TaskResourceV2 deleteServerProfileByFilter(final RestParams params, final String filter, final Boolean match,
             final boolean aSync) {
-        logger.info("ServerProfileClientImpl : deleteServerProfileByFilter : Start");
+        LOGGER.info("ServerProfileClientImpl : deleteServerProfileByFilter : Start");
 
         String query = null;
         if (match) {
@@ -489,10 +490,10 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         }
         // set the additional params
         params.setType(HttpMethodType.DELETE);
-        params.setUrl(urlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, query));
+        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, query));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ServerProfileClientImpl : deleteServerProfileByFilter : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ServerProfileClientImpl : deleteServerProfileByFilter : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -501,8 +502,8 @@ public class ServerProfileClientImpl implements ServerProfileClient {
 
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("ServerProfileClientImpl : deleteServerProfileByFilter : returnObj =" + returnObj);
-        logger.debug("ServerProfileClientImpl : deleteServerProfileByFilter : taskResource =" + taskResourceV2);
+        LOGGER.debug("ServerProfileClientImpl : deleteServerProfileByFilter : returnObj =" + returnObj);
+        LOGGER.debug("ServerProfileClientImpl : deleteServerProfileByFilter : taskResource =" + taskResourceV2);
 
         // check for asyncOrSyncMode. if user is askign async mode, return the
         // directly the TaskResourceV2
@@ -512,7 +513,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("ServerProfileClientImpl : deleteServerProfileByFilter : End");
+        LOGGER.info("ServerProfileClientImpl : deleteServerProfileByFilter : End");
 
         return taskResourceV2;
     }
@@ -534,7 +535,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         for (final ServerHardware serverHardware : new ArrayList<>(serverHardwareCollectionDto.getMembers())) {
             if (serverHardware.getName().equals(destinationBay)) {
                 System.out.println(serverHardware.getName());
-                logger.info("ServerHardwareClientImpl : getServerHardwareByName : End");
+                LOGGER.info("ServerHardwareClientImpl : getServerHardwareByName : End");
                 serverHardwareDto = serverHardware;
             }
         }
@@ -569,7 +570,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         // validate params
         // set the additional params
         params.setType(HttpMethodType.POST);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI));
 
         // TODO - check for json request in the input dto. if it is present,
         // then
@@ -579,12 +580,12 @@ public class ServerProfileClientImpl implements ServerProfileClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(serverProfileDto);
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("ServerProfileClientImpl : copyServerProfile : returnObj =" + returnObj);
-        logger.debug("ServerProfileClientImpl : copyServerProfile : taskResource =" + taskResourceV2);
+        LOGGER.debug("ServerProfileClientImpl : copyServerProfile : returnObj =" + returnObj);
+        LOGGER.debug("ServerProfileClientImpl : copyServerProfile : taskResource =" + taskResourceV2);
 
         // check for aSync flag. if user is asking async mode, return directly
         // the TaskResourceV2
@@ -594,7 +595,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("ServerProfileClientImpl : copyServerProfile : End");
+        LOGGER.info("ServerProfileClientImpl : copyServerProfile : End");
 
         return taskResourceV2;
 
@@ -607,7 +608,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         ServerProfile serverProfileDto = getServerProfileByName(creds, name);
 
         if (null != serverProfileDto.getUri()) {
-            resourceId = urlUtils.getResourceIdFromUri(serverProfileDto.getUri());
+            resourceId = UrlUtils.getResourceIdFromUri(serverProfileDto.getUri());
         }
         return resourceId;
     }

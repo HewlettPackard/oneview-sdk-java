@@ -15,12 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.hp.ov.sdk.adaptors.ManagedSanAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
@@ -34,26 +28,31 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component
+
 public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(FcSansManagedSanClientImpl.class);
-    @Autowired
-    private HttpRestClient restClient;
+    private static final Logger LOGGER = LoggerFactory.getLogger(FcSansManagedSanClientImpl.class);
 
-    @Autowired
-    private ManagedSanAdaptor adaptor;
+    private final ManagedSanAdaptor adaptor;
 
     private JSONObject jsonObject;
 
-    @Autowired
-    private UrlUtils urlUtils;
+    protected FcSansManagedSanClientImpl(ManagedSanAdaptor adaptor) {
+        this.adaptor = adaptor;
+    }
+
+    public static FcSansManagedSanClient getClient() {
+        return new FcSansManagedSanClientImpl(new ManagedSanAdaptor());
+    }
 
     @Override
     public SanResponse getManagedSan(final RestParams params, final String resourceId) {
         SanResponse sanResponseDto = null;
-        logger.info("ManagedSanClientImpl : getManagedSan : Start");
+        LOGGER.info("ManagedSanClientImpl : getManagedSan : Start");
 
         // validate args
         if (null == params) {
@@ -61,10 +60,10 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_SANS_MANAGED_SAN_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_SANS_MANAGED_SAN_URI, resourceId));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ManagedSanClientImpl : getManagedSan : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ManagedSanClientImpl : getManagedSan : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.MANAGED_SAN, null);
         }
@@ -72,8 +71,8 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
 
         sanResponseDto = adaptor.buildDto(returnObj);
 
-        logger.debug("ManagedSanClientImpl : getManagedSan : name :" + sanResponseDto.getName());
-        logger.info("ManagedSanClientImpl : getManagedSan : End");
+        LOGGER.debug("ManagedSanClientImpl : getManagedSan : name :" + sanResponseDto.getName());
+        LOGGER.info("ManagedSanClientImpl : getManagedSan : End");
 
         return sanResponseDto;
     }
@@ -81,7 +80,7 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
     @Override
     public SanResponseCollection getAllManagedSan(final RestParams params) {
         SanResponseCollection sanResponseCollectionDto = null;
-        logger.info("ManagedSanClientImpl : getAllManagedSan : Start");
+        LOGGER.info("ManagedSanClientImpl : getAllManagedSan : Start");
 
         // validate args
         if (null == params) {
@@ -89,10 +88,10 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_SANS_MANAGED_SAN_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_SANS_MANAGED_SAN_URI));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ManagedSanClientImpl : getAllManagedSan : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ManagedSanClientImpl : getAllManagedSan : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.MANAGED_SAN, null);
         }
@@ -100,8 +99,8 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
 
         sanResponseCollectionDto = adaptor.buildCollectionDto(returnObj);
 
-        logger.debug("ManagedSanClientImpl : getAllManagedSan : count :" + sanResponseCollectionDto.getCount());
-        logger.info("ManagedSanClientImpl : getAllManagedSan : End");
+        LOGGER.debug("ManagedSanClientImpl : getAllManagedSan : count :" + sanResponseCollectionDto.getCount());
+        LOGGER.info("ManagedSanClientImpl : getAllManagedSan : End");
 
         return sanResponseCollectionDto;
     }
@@ -109,8 +108,8 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
     @Override
     public SanResponse getManagedSanByName(final RestParams params, final String name) {
         SanResponse sanResponseDto = null;
-        logger.info("ManagedSanClientImpl : getManagedSanByName : Start");
-        final String query = urlUtils.createQueryString(name);
+        LOGGER.info("ManagedSanClientImpl : getManagedSanByName : Start");
+        final String query = UrlUtils.createQueryString(name);
 
         // validate args
         if (null == params) {
@@ -118,10 +117,10 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.FC_SANS_MANAGED_SAN_URI, query));
+        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.FC_SANS_MANAGED_SAN_URI, query));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ManagedSanClientImpl : getManagedSanByName : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ManagedSanClientImpl : getManagedSanByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.MANAGED_SAN, null);
         }
@@ -135,10 +134,10 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
         }
 
         if (sanResponseDto == null) {
-            logger.error("ManagedSanClientImpl : getManagedSanByName : Not found for name :" + name);
+            LOGGER.error("ManagedSanClientImpl : getManagedSanByName : Not found for name :" + name);
             throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.MANAGED_SAN, null);
         }
-        logger.info("ManagedSanClientImpl : getManagedSanByName : End");
+        LOGGER.info("ManagedSanClientImpl : getManagedSanByName : End");
 
         return sanResponseDto;
     }
@@ -146,7 +145,7 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
     @Override
     public SanResponse updateManagedSan(final RestParams params, final String resourceId, final SanResponse updateSanResponseDto,
             final boolean aSync, final boolean useJsonRequest) {
-        logger.info("ManagedSanClientImpl : updateManagedSan : Start");
+        LOGGER.info("ManagedSanClientImpl : updateManagedSan : Start");
         String returnObj = null;
 
         // validate params
@@ -155,7 +154,7 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
         }
         // set the additional params
         params.setType(HttpMethodType.PUT);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_SANS_MANAGED_SAN_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_SANS_MANAGED_SAN_URI, resourceId));
 
         // TODO - check for json request in the input dto. if it is present,
         // then
@@ -165,14 +164,14 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(updateSanResponseDto);
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to sanResponseDto
         final SanResponse sanResponseDto = adaptor.buildDto(returnObj);
 
-        logger.debug("ManagedSanClientImpl : updateManagedSan : returnObj =" + returnObj);
-        logger.debug("ManagedSanClientImpl : updateManagedSan : SanResponse =" + sanResponseDto);
+        LOGGER.debug("ManagedSanClientImpl : updateManagedSan : returnObj =" + returnObj);
+        LOGGER.debug("ManagedSanClientImpl : updateManagedSan : SanResponse =" + sanResponseDto);
 
-        logger.info("ManagedSanClientImpl : updateManagedSan : End");
+        LOGGER.info("ManagedSanClientImpl : updateManagedSan : End");
 
         return sanResponseDto;
     }
@@ -184,7 +183,7 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
         SanResponse sanResponseDto = getManagedSanByName(creds, name);
 
         if (null != sanResponseDto.getUri()) {
-            resourceId = urlUtils.getResourceIdFromUri(sanResponseDto.getUri());
+            resourceId = UrlUtils.getResourceIdFromUri(sanResponseDto.getUri());
         }
         return resourceId;
     }

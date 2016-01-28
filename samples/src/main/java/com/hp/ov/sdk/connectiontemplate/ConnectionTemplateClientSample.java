@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.connectiontemplate;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.ConnectionTemplateCollection;
 import com.hp.ov.sdk.dto.generated.Bandwidth;
 import com.hp.ov.sdk.dto.generated.ConnectionTemplate;
@@ -27,35 +26,35 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.ConnectionTemplateClient;
+import com.hp.ov.sdk.rest.client.ConnectionTemplateClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * ConnectionTemplateClientSample is a sample program to consume default connection configuration characteristics of 
+ * ConnectionTemplateClientSample is a sample program to consume default connection configuration characteristics of
  * HP OneView. It invokes APIs of ConnectionTemplateClient which is in sdk library to perform GET/PUT
  * operations on connection template resource
  */
 public class ConnectionTemplateClientSample {
+
+    private final ResourceDtoUtils resourceDtoUtils;
+    private final ConnectionTemplateClient connectionTemplateClient;
+
     private RestParams params;
-    private static UrlUtils urlUtils;
-    private static ResourceDtoUtils resourceDtoUtils;
-    private static ConnectionTemplateClient connectionTemplateClient;
 
     // test values - user input
     // ================================
-    private static final String resourceName = "name1238697625-1438946680695";
-    private static final String resourceId = "a0f41234-8175-48e4-bcf4-a92e9206bd24";
+    private static final String resourceName = "name242646746-1453232034511";
+    private static final String resourceId = "270c1680-51dc-4a2e-82f9-da6f5097ea93";
     private static final Double maxBandwidth = (double) 8000;
     private static final Double minBandwidth = (double) 2000;
-
     // ================================
 
-    private static void init() {
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        resourceDtoUtils = HPOneViewSdkBeanFactory.getResourceDtoUtils();
-        connectionTemplateClient = HPOneViewSdkBeanFactory.getConnectionTemplateClient();
+    private ConnectionTemplateClientSample() {
+        this.resourceDtoUtils = new ResourceDtoUtils();
+        this.connectionTemplateClient = ConnectionTemplateClientImpl.getClient();
     }
 
     public void getConnectionTemplate() throws InstantiationException, IllegalAccessException {
@@ -99,7 +98,7 @@ public class ConnectionTemplateClientSample {
             connectionTemplateDto = connectionTemplateClient.getConnectionTemplateByName(params, resourceName);
 
             if (null != connectionTemplateDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(connectionTemplateDto.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(connectionTemplateDto.getUri());
             }
 
             Bandwidth bandwidth = resourceDtoUtils.buildBandwidth(maxBandwidth, minBandwidth);
@@ -208,10 +207,9 @@ public class ConnectionTemplateClientSample {
 
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         ConnectionTemplateClientSample client = new ConnectionTemplateClientSample();
+
         client.getConnectionTemplate();
         client.updateConnectionTemplate();
         client.getAllConnectionTemplates();

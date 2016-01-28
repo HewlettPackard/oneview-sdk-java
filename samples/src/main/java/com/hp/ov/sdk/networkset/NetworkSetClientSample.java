@@ -18,7 +18,6 @@ package com.hp.ov.sdk.networkset;
 import java.util.Arrays;
 import java.util.List;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.NetworkSetCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.NetworkSets;
@@ -30,6 +29,7 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.NetworkSetClient;
+import com.hp.ov.sdk.rest.client.NetworkSetClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -42,25 +42,21 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
  */
 public class NetworkSetClientSample {
 
+    private TaskResourceV2 taskResourceV2;
+    private ResourceDtoUtils resourceDtoUtils;
     private RestParams params;
-    private static NetworkSetClient networkSetClient;
-    private static UrlUtils urlUtils;
-    private static ResourceDtoUtils resourceDtoUtils;
-    private static TaskResourceV2 taskResourceV2;
+    private NetworkSetClient networkSetClient;
 
     // test values - user input
     // ================================
-
-    private static final String resourceId = "4a2dec96-6344-4f15-821c-ce51734faba7";
+    private static final String resourceId = "3e52e8f3-f740-429e-b2b6-d253f7a1f285";
     private static final String resourceName = "NetworkSet_Prod";
     private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402", "Prod_403", "Prod_404");
-
     // ================================
 
-    private static void init() throws Exception {
-        networkSetClient = HPOneViewSdkBeanFactory.getNetworkSetClient();
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        resourceDtoUtils = HPOneViewSdkBeanFactory.getResourceDtoUtils();
+    private NetworkSetClientSample() {
+        this.networkSetClient = NetworkSetClientImpl.getClient();
+        this.resourceDtoUtils = new ResourceDtoUtils();
     }
 
     private void getNetworkSetById() throws InstantiationException, IllegalAccessException {
@@ -125,7 +121,6 @@ public class NetworkSetClientSample {
             System.out.println("NetworkSetClientTest : getAllNetworkSet : " + "arguments are null ");
             return;
         }
-
     }
 
     private void getNetworkSetByName() throws InstantiationException, IllegalAccessException {
@@ -214,7 +209,7 @@ public class NetworkSetClientSample {
             networkSetDto = networkSetClient.getNetworkSetsByName(params, resourceName);
 
             if (null != networkSetDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(networkSetDto.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(networkSetDto.getUri());
             }
             // Test name
             networkSetDto.setName(resourceName + "_updated");
@@ -289,19 +284,18 @@ public class NetworkSetClientSample {
             System.out.println("NetworkSetClientTest : deleteNetworkSet :" + " arguments are null ");
             return;
         }
-
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         NetworkSetClientSample client = new NetworkSetClientSample();
-        client.getNetworkSetById();
+        
         client.getAllNetworkSet();
         client.createNetworkSet();
+        client.getNetworkSetById();
         client.getNetworkSetByName();
         client.updateNetworkSet();
         client.createNetworkSet();
+        client.getAllNetworkSet();
         client.deleteNetworkSet();
     }
 }

@@ -31,7 +31,7 @@ import com.rabbitmq.client.GetResponse;
 
 public class ScmbProcessor extends Thread {
 
-    private static final Logger logger = LoggerFactory.getLogger(ScmbProcessor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScmbProcessor.class);
 
     private final RestParams params;
     private final Connection conn;
@@ -63,7 +63,7 @@ public class ScmbProcessor extends Thread {
             while (true) {
                 final GetResponse chResponse = channel.basicGet(queue.getQueue(), false);
                 if (chResponse == null) {
-                    // logger.debug("ScmbProcessor : run : No Message Received: ");
+                    // LOGGER.debug("ScmbProcessor : run : No Message Received: ");
                 } else {
                     final byte[] body = chResponse.getBody();
                     final String responseBody = new String(body);
@@ -75,7 +75,7 @@ public class ScmbProcessor extends Thread {
                 // TODO - get feedback, is it good idea to sleep in while loop?
             }
         } catch (final IOException e) {
-            logger.error("ScmbProcessor : run : error in scmb processor : thread might have been interrupted by Stop user");
+            LOGGER.error("ScmbProcessor : run : error in scmb processor : thread might have been interrupted by Stop user");
         }
     }
 

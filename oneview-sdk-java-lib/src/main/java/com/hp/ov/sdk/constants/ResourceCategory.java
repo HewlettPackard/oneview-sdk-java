@@ -15,9 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.constants;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class ResourceCategory {
 
     public static final String RC_NETWORK = "ethernet-networkV2";

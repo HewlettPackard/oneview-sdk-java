@@ -15,28 +15,22 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
-import org.json.JSONObject;
-import org.springframework.stereotype.Component;
-
 import com.hp.ov.sdk.dto.AddServer;
 import com.hp.ov.sdk.dto.BiosSettingsStateCollection;
-import com.hp.ov.sdk.bean.factory.ConverterFactory;
 import com.hp.ov.sdk.dto.ServerHardwareCollection;
 import com.hp.ov.sdk.dto.ServerPowerControlRequest;
 import com.hp.ov.sdk.dto.generated.ServerHardware;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
+import org.json.JSONObject;
 
-@Component
 public class ServerHardwareAdaptor extends BaseAdaptor<ServerHardware, Object> {
-
-    private ObjectToJsonConverter converter;
 
     @Override
     public ServerHardware buildDto(final Object source) {
         // TODO - exceptions
         // convert json object to DTO, replace quotes and back slash in the file
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final ServerHardware serverHardwareDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), ServerHardware.class);
         return serverHardwareDto;
@@ -48,7 +42,7 @@ public class ServerHardwareAdaptor extends BaseAdaptor<ServerHardware, Object> {
             return null;
         }
         // convert json Object to DTO, replace quotes and back slash in the file
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final ServerHardwareCollection serverHardwareCollectionDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
                         .convertObjectToJsonString(source))), ServerHardwareCollection.class);
@@ -61,7 +55,7 @@ public class ServerHardwareAdaptor extends BaseAdaptor<ServerHardware, Object> {
             return null;
         }
         // convert json Object to DTO, replace quotes and back slash in the file
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final BiosSettingsStateCollection biosSettingsStateCollectionDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
                         .convertObjectToJsonString(source))), BiosSettingsStateCollection.class);
@@ -69,12 +63,12 @@ public class ServerHardwareAdaptor extends BaseAdaptor<ServerHardware, Object> {
     }
 
     public JSONObject buildJsonObjectFromDto(final AddServer source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
     public JSONObject buildJsonObjectFromDto(final ServerPowerControlRequest source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 

@@ -15,7 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.msmb.consumer;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
+import com.hp.ov.sdk.certs.MessagingCertificateManager;
 import com.hp.ov.sdk.constants.samples.SamplesConstants;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -33,29 +33,27 @@ import com.hp.ov.sdk.util.samples.SampleRestParams;
 
 public class MsmbClient {
 
-    private RestParams params;
-    private static MsmbConnectionManager objectUnderTest;
-    private static SdkUtils sdkUtils;
-    private static SampleRestParams sampleRestParams;
-    private static MsmbAlertsHandler msmbAlertsHandler;
+    private final MsmbConnectionManager objectUnderTest;
 
-    public static void init() {
-        sdkUtils = HPOneViewSdkBeanFactory.getSdkUtils();
-        sampleRestParams = new SampleRestParams();
-        objectUnderTest = HPOneViewSdkBeanFactory.getMsmbConnectionManager();
+    private RestParams params;
+
+    private MsmbClient() {
+        this.objectUnderTest = new MsmbConnectionManager(MessagingCertificateManager.getInstance());
     }
 
     public void msmbProcessor() {
         try {
             // Get the basic REST parameters like hostname, username and
             // password
-            params = sampleRestParams.getBasicRestParams();
+            params = SampleRestParams.getInstance().getBasicRestParams();
 
             // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            params = SdkUtils.getInstance().createRestParams(params);
 
             // create MessageExecutionQueue object
-            final MsmbMessageExecutionQueue messageQueue = new MsmbMessageExecutionQueue(msmbAlertsHandler);
+
+            final MsmbMessageExecutionQueue messageQueue = new MsmbMessageExecutionQueue(
+                    new MsmbHandler().getMsmbAlertsHandler());
 
             // start the dequeue process
             messageQueue.start();
@@ -81,7 +79,7 @@ public class MsmbClient {
             System.out.println("ScmbConnectionManagerImplTest : testScmbProcessor : scmb connection not found ");
         }
 
-        // logger.info("ScmbConsumerManagerImplTest : testScmbProcessor : rabbitmq client certificate object returned to client : "
+        // LOGGER.info("ScmbConsumerManagerImplTest : testScmbProcessor : rabbitmq client certificate object returned to client : "
         // + rabbitMqClientCertDto.toString());
     }
 
@@ -89,10 +87,10 @@ public class MsmbClient {
         try {
             // Get the basic REST parameters like hostname, username and
             // password
-            params = sampleRestParams.getBasicRestParams();
+            params = SampleRestParams.getInstance().getBasicRestParams();
 
             // update the parameters with version and sessionId
-            params = sdkUtils.createRestParams(params);
+            params = SdkUtils.getInstance().createRestParams(params);
 
             // then stop scmb
             objectUnderTest.stopMsmb(params);
@@ -110,14 +108,11 @@ public class MsmbClient {
         }
     }
 
-    // main
-
     public static void main(final String[] args) {
-        init();
         final MsmbClient msmbClient = new MsmbClient();
-        final MsmbHandler handler = new MsmbHandler();
-        msmbAlertsHandler = handler.getMsmbAlertsHandler();
+
         msmbClient.msmbProcessor();
+
         try {
             Thread.sleep(300000); // Sample value to before stopping scmb ( 300
                                   // secs = 5 mins )

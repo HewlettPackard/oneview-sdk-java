@@ -15,15 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.hp.ov.sdk.adaptors.ServerHardwareAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -49,33 +40,42 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class ServerHardwareClientImpl implements ServerHardwareClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(ServerHardwareClientImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerHardwareClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
 
-    @Autowired
-    private HttpRestClient restClient;
-
-    @Autowired
-    private ServerHardwareAdaptor adaptor;
-
-    @Autowired
-    private UrlUtils urlUtils;
+    private final ServerHardwareAdaptor adaptor;
+    private final TaskAdaptor taskAdaptor;
+    private final TaskMonitorManager taskMonitor;
 
     private JSONObject jsonObject;
 
-    @Autowired
-    private TaskAdaptor taskAdaptor;
+    protected ServerHardwareClientImpl(ServerHardwareAdaptor adaptor,
+        TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
 
-    @Autowired
-    private TaskMonitorManager taskMonitor;
+        this.adaptor = adaptor;
+        this.taskAdaptor = taskAdaptor;
+        this.taskMonitor = taskMonitor;
+    }
+
+    public static ServerHardwareClient getClient() {
+        return new ServerHardwareClientImpl(new ServerHardwareAdaptor(),
+                TaskAdaptor.getInstance(),
+                TaskMonitorManager.getInstance());
+    }
 
     @Override
     public ServerHardware getServerHardware(final RestParams params, final String resourceId) {
-        logger.info("ServerHardwareClientImpl : getServerHardware : Start");
+        LOGGER.info("ServerHardwareClientImpl : getServerHardware : Start");
 
         // validate args
         if (null == params) {
@@ -83,10 +83,10 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI, resourceId));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ServerHardwareClient : getServerHardware : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ServerHardwareClient : getServerHardware : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_HARDWARE,
                     null);
@@ -94,26 +94,26 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         // Call adaptor to convert to DTO
         final ServerHardware serverHardwareDto = adaptor.buildDto(returnObj);
 
-        logger.debug("ServerHardwareClient : getServerHardware : name :" + serverHardwareDto.getName());
-        logger.info("ServerHardwareClientImpl : getServerHardware : End");
+        LOGGER.debug("ServerHardwareClient : getServerHardware : name :" + serverHardwareDto.getName());
+        LOGGER.info("ServerHardwareClientImpl : getServerHardware : End");
 
         return serverHardwareDto;
     }
 
     @Override
     public ServerHardwareCollection getAllServerHardwares(final RestParams params) {
-        logger.info("ServerHardwareClientImpl : getAllServerHardwares : Start");
+        LOGGER.info("ServerHardwareClientImpl : getAllServerHardwares : Start");
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI));
 
         // call rest client
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ServerHardwareClientImpl : getAllServerHardwares : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ServerHardwareClientImpl : getAllServerHardwares : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_HARDWARES,
@@ -123,8 +123,8 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
 
         final ServerHardwareCollection serverHardwareCollectionDto = adaptor.buildCollectionDto(returnObj);
 
-        logger.debug("ServerHardwareClientImpl : getAllServerHardwares : members count :" + serverHardwareCollectionDto.getCount());
-        logger.info("ServerHardwareClientImpl : getAllServerHardwares : End");
+        LOGGER.debug("ServerHardwareClientImpl : getAllServerHardwares : members count :" + serverHardwareCollectionDto.getCount());
+        LOGGER.info("ServerHardwareClientImpl : getAllServerHardwares : End");
 
         return serverHardwareCollectionDto;
     }
@@ -132,18 +132,18 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
     @Override
     public ServerHardwareCollection getServerHardwareWithNoProfile(final RestParams params) {
 
-        logger.info("ServerHardwareClientImpl : getServerHardwareWithNoProfile : Start");
+        LOGGER.info("ServerHardwareClientImpl : getServerHardwareWithNoProfile : Start");
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI));
 
         // call rest client
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ServerHardwareClientImpl : getServerHardwareWithNoProfile : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ServerHardwareClientImpl : getServerHardwareWithNoProfile : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_HARDWARES,
@@ -152,7 +152,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         // Call adaptor to convert to DTO
 
         final ServerHardwareCollection serverHardwareCollectionDto = adaptor.buildCollectionDto(returnObj);
-        logger.debug("ServerHardwareClientImpl : getServerHardwareWithNoProfile : members count :"
+        LOGGER.debug("ServerHardwareClientImpl : getServerHardwareWithNoProfile : members count :"
                 + serverHardwareCollectionDto.getCount());
         final List<ServerHardware> tempServerHardwareCollectionDto = serverHardwareCollectionDto.getMembers();
         for (final ServerHardware serverHardwareDto : new ArrayList<>(serverHardwareCollectionDto.getMembers())) {
@@ -161,9 +161,9 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
             }
         }
         serverHardwareCollectionDto.setMembers(tempServerHardwareCollectionDto);
-        logger.debug("ServerHardwareClientImpl : getServerHardwareWithNoProfile : members count :"
+        LOGGER.debug("ServerHardwareClientImpl : getServerHardwareWithNoProfile : members count :"
                 + serverHardwareCollectionDto.getCount());
-        logger.info("ServerHardwareClientImpl : getServerHardwareWithNoProfile : End");
+        LOGGER.info("ServerHardwareClientImpl : getServerHardwareWithNoProfile : End");
 
         return serverHardwareCollectionDto;
     }
@@ -171,17 +171,17 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
     @Override
     public ServerHardware getServerHardwareByName(final RestParams params, final String destinationBay) {
 
-        logger.info("ServerHardwareClientImpl : getServerHardwareByName : start");
+        LOGGER.info("ServerHardwareClientImpl : getServerHardwareByName : start");
         final ServerHardwareCollection serverHardwareCollectionDto = getAllServerHardwares(params);
 
         for (final ServerHardware serverHardwareDto : new ArrayList<>(serverHardwareCollectionDto.getMembers())) {
             if (serverHardwareDto.getName().equals(destinationBay)) {
                 System.out.println(serverHardwareDto.getName());
-                logger.info("ServerHardwareClientImpl : getServerHardwareByName : End");
+                LOGGER.info("ServerHardwareClientImpl : getServerHardwareByName : End");
                 return serverHardwareDto;
             }
         }
-        logger.error("ServerHardwareClientImpl : getServerHardwareByName : resource not Found for name :" + destinationBay);
+        LOGGER.error("ServerHardwareClientImpl : getServerHardwareByName : resource not Found for name :" + destinationBay);
         throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.SERVER_HARDWARE, null);
     }
 
@@ -189,7 +189,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
     public TaskResourceV2 powerServer(final RestParams params, final String resourceId,
             final ServerPowerControlRequest serverPowerControlRequestDto, final boolean aSync, final boolean useJsonRequest) {
         // create ServerPowerControlRequest
-        logger.info("ServerHardwareClientImpl : powerServer : Start");
+        LOGGER.info("ServerHardwareClientImpl : powerServer : Start");
         String returnObj = null;
 
         // validate params
@@ -198,7 +198,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         }
         // set the additional params
         params.setType(HttpMethodType.PUT);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI, resourceId,
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI, resourceId,
                 ResourceUris.POWER_STATE_URI));
 
         // TODO - check for json request in the input dto. if it is present,
@@ -209,12 +209,12 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(serverPowerControlRequestDto);
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("ServerHardwareClientImpl : powerServer : returnObj =" + returnObj);
-        logger.debug("ServerHardwareClientImpl : powerServer : taskResource =" + taskResourceV2);
+        LOGGER.debug("ServerHardwareClientImpl : powerServer : returnObj =" + returnObj);
+        LOGGER.debug("ServerHardwareClientImpl : powerServer : taskResource =" + taskResourceV2);
 
         // check for aSync flag. if user is asking async mode, return directly
         // the TaskResourceV2
@@ -224,24 +224,24 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("ServerHardwareClientImpl : powerServer : End");
+        LOGGER.info("ServerHardwareClientImpl : powerServer : End");
 
         return taskResourceV2;
     }
 
     @Override
     public String getPowerState(final RestParams params, final String resourceId) {
-        logger.info("ServerHardwareClientImpl : getPowerState : start");
+        LOGGER.info("ServerHardwareClientImpl : getPowerState : start");
         final ServerHardware serverHardwareDto = getServerHardware(params, resourceId);
 
-        logger.info("ServerHardwareClientImpl : getPowerState : End");
+        LOGGER.info("ServerHardwareClientImpl : getPowerState : End");
         return serverHardwareDto.getPowerState().toString();
     }
 
     @Override
     public TaskResourceV2 createServerHardware(RestParams params, AddServer addServerDto, final boolean aSync,
             final boolean useJsonRequest) {
-        logger.info("ServerHardwareClientImpl : createServerHardware : Start");
+        LOGGER.info("ServerHardwareClientImpl : createServerHardware : Start");
         String returnObj = null;
 
         // validate params
@@ -251,7 +251,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         }
         // set the additional params
         params.setType(HttpMethodType.POST);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI));
 
         // TODO - check for json request in the input dto. if it is present,
         // then
@@ -261,12 +261,12 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(addServerDto);
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("ServerHardwareClientImpl : createServerHardware : returnObj =" + returnObj);
-        logger.debug("ServerHardwareClientImpl : createServerHardware : taskResource =" + taskResourceV2);
+        LOGGER.debug("ServerHardwareClientImpl : createServerHardware : returnObj =" + returnObj);
+        LOGGER.debug("ServerHardwareClientImpl : createServerHardware : taskResource =" + taskResourceV2);
 
         // check for aSync flag. if user is asking async mode, return directly
         // the TaskResourceV2
@@ -276,14 +276,14 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("ServerHardwareClientImpl : createServerHardware : End");
+        LOGGER.info("ServerHardwareClientImpl : createServerHardware : End");
 
         return taskResourceV2;
     }
 
     @Override
     public BiosSettingsStateCollection getBiosForServerHardware(RestParams params, String resourceId) {
-        logger.info("ServerHardwareClientImpl : getBiosForServerHardware : Start");
+        LOGGER.info("ServerHardwareClientImpl : getBiosForServerHardware : Start");
 
         // validate args
         if (null == params) {
@@ -291,10 +291,10 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI, resourceId, SdkConstants.BIOS));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI, resourceId, SdkConstants.BIOS));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("ServerHardwareClient : getBiosForServerHardware : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("ServerHardwareClient : getBiosForServerHardware : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_HARDWARE,
                     null);
@@ -302,7 +302,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         // Call adaptor to convert to DTO
         final BiosSettingsStateCollection biosSettingsStateCollectionDto = adaptor.buildBiosCollectionDto(returnObj);
 
-        logger.info("ServerHardwareClientImpl : getBiosForServerHardware : End");
+        LOGGER.info("ServerHardwareClientImpl : getBiosForServerHardware : End");
 
         return biosSettingsStateCollectionDto;
     }
@@ -314,7 +314,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         ServerHardware serverHardwareDto = getServerHardwareByName(creds, name);
 
         if (null != serverHardwareDto.getUri()) {
-            resourceId = urlUtils.getResourceIdFromUri(serverHardwareDto.getUri());
+            resourceId = UrlUtils.getResourceIdFromUri(serverHardwareDto.getUri());
         }
         return resourceId;
     }
@@ -323,7 +323,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
     @Override
     public EnvironmentalConfiguration getEnvironmentConfigurationForServerHardware(RestParams params, String resourceId) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO
@@ -331,42 +331,42 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
     public EnvironmentalConfiguration updateEnvironmentConfigurationForServerHardware(RestParams params, String resourceId,
             EnvironmentalConfigurationUpdate environmentalConfigurationUpdateDto) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO
     @Override
     public IloSsoUrlResult getIloSsoUrlForServerHardware(RestParams params, String resourceId) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO
     @Override
     public JavaRemoteConsoleUrlResult getJavaRemoteConsoleUrlForServerHardware(RestParams params, String resourceId) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO
     @Override
     public TaskResourceV2 updateMpFirmwareVersionForServerHardware(RestParams params, String resourceId) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO
     @Override
     public RemoteConsoleUrlResult getRemoteConsoleUrlForServerHardware(RestParams params, String resourceId) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO
     @Override
     public UtilizationData getUtilizationForServerHardware(RestParams params, String resourceId) {
         // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
 }

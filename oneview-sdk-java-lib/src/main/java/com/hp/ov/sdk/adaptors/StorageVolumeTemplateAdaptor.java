@@ -15,25 +15,20 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
-import org.json.JSONObject;
-import org.springframework.stereotype.Component;
-
-import com.hp.ov.sdk.bean.factory.ConverterFactory;
 import com.hp.ov.sdk.dto.StorageVolumeTemplate;
 import com.hp.ov.sdk.dto.StorageVolumeTemplateCollection;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
+import org.json.JSONObject;
 
-@Component
 public class StorageVolumeTemplateAdaptor extends BaseAdaptor<StorageVolumeTemplate, Object> {
-
-    private ObjectToJsonConverter converter;
 
     @Override
     public StorageVolumeTemplate buildDto(final Object source) {
         // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
         final StorageVolumeTemplate storageVolumeTemplateDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), StorageVolumeTemplate.class);
         return storageVolumeTemplateDto;
@@ -44,7 +39,8 @@ public class StorageVolumeTemplateAdaptor extends BaseAdaptor<StorageVolumeTempl
         if (null == source || source.equals("")) {
             return null;
         }
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
         // convert json Object to DTO, replace quotes and back slash in the file
         final StorageVolumeTemplateCollection storageVolumeTemplateCollectionDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
@@ -53,7 +49,8 @@ public class StorageVolumeTemplateAdaptor extends BaseAdaptor<StorageVolumeTempl
     }
 
     public JSONObject buildJsonObjectFromDto(final StorageVolumeTemplate source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 

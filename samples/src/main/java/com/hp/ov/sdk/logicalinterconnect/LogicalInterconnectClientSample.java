@@ -18,7 +18,6 @@ package com.hp.ov.sdk.logicalinterconnect;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.Command;
 import com.hp.ov.sdk.dto.LiFirmware;
 import com.hp.ov.sdk.dto.LogicalInterconnectCollectionV2;
@@ -33,7 +32,9 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.FirmwareDriverClient;
+import com.hp.ov.sdk.rest.client.FirmwareDriverClientImpl;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectClient;
+import com.hp.ov.sdk.rest.client.LogicalInterconnectClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
@@ -45,28 +46,26 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
  */
 public class LogicalInterconnectClientSample {
 
+    private final LogicalInterconnectClient logicalInterconnectClient;
+    private final FirmwareDriverClient firmwareDriverClient;
+
     private RestParams params;
-    private static UrlUtils urlUtils;
-    private static TaskResourceV2 taskResourceV2;
-    private static LogicalInterconnectClient logicalInterconnectClient;
-    private static FirmwareDriverClient firmwareDriverClient;
+    private TaskResourceV2 taskResourceV2;
 
     // These are variables to be defined by user
     // ================================
     private static final String sppName = "HP Service Pack For ProLiant OneView 2014 11 13";
     private static final String resourceName = "Encl1-LI";
-    private static final String resourceId = "7cb0f6c8-4b80-4b71-a245-e7a1071d5ad6";
+    private static final String resourceId = "5566a380-afd4-4e5a-ad15-b3a3cfe1fcdf";
 
     // InterconnectUri
     private static final String interconnectNameOne = "Encl1, interconnect 1";
     private static final String interconnectNameTwo = "Encl1, interconnect 2";
-
     // ================================
 
-    private static void init() {
-        logicalInterconnectClient = HPOneViewSdkBeanFactory.getLogicalInterconnectClient();
-        firmwareDriverClient = HPOneViewSdkBeanFactory.getFirmwareDriverClient();
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
+    private LogicalInterconnectClientSample() {
+        this.logicalInterconnectClient = LogicalInterconnectClientImpl.getClient();
+        this.firmwareDriverClient = FirmwareDriverClientImpl.getClient();
     }
 
     private void getLogicalInterconnectById() throws InstantiationException, IllegalAccessException {
@@ -138,7 +137,7 @@ public class LogicalInterconnectClientSample {
             logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnectByName(params, resourceName);
 
             if (null != logicalInterconnectsDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(logicalInterconnectsDto.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(logicalInterconnectsDto.getUri());
             }
 
             logicalInterconnectsDto.getSnmpConfiguration().setReadCommunity("private");
@@ -168,7 +167,6 @@ public class LogicalInterconnectClientSample {
                     + "updateLogicalInterconnectSnmpConfigurationById : errors in task, "
                     + "please check task resource for more details ");
         }
-
     }
 
     private void updateLogicalInterconnectComplianceById() throws InstantiationException, IllegalAccessException {
@@ -371,16 +369,30 @@ public class LogicalInterconnectClientSample {
         return liFirmware;
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         LogicalInterconnectClientSample client = new LogicalInterconnectClientSample();
+
         client.getLogicalInterconnectById();
         client.getAllLogicalInterconnects();
         client.updateLogicalInterconnectComplianceById();
         client.updateLogicalInterconnectFirmwareStageById();
+
+        /* TODO
+        *  the methods below could not be executed due to the following error:
+        *
+        * "recommendedActions": [
+        *   "Firmware staging/update operation is only allowed at this state.
+        *   Please retry the operation with stage/update command."]
+        * "errorCode": "ACTIVATE_OPERATION_NOT_ALLOWED",
+        * "message": "Activate operation is not allowed at this state.
+        *   One or more interconnects may not have been baselined to this
+        *   firmware or all interconnects are already activated/activating to this baseline."
+
         client.updateLogicalInterconnectFirmwareActiveById();
         client.updateLogicalInterconnectFirmwareUpdateById();
+
+        */
+
         client.updateLogicalInterconnectSnmpConfigurationById();
     }
 
