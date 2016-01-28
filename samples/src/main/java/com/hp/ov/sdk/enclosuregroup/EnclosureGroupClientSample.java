@@ -379,6 +379,10 @@ public class EnclosureGroupClientSample {
             interconnectBayMappings.add(interconnectBayMapping);
         }
         dto.setInterconnectBayMappings(interconnectBayMappings);
+        dto.setInterconnectBayMappingCount(dto.getInterconnectBayMappings().size());
+
+        dto.setEnclosureCount(1);
+
         return dto;
     }
 

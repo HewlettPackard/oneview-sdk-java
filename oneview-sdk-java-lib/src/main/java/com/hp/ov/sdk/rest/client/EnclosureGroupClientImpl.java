@@ -169,8 +169,10 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
         // user can save time in creating network dto.
 
         // create JSON request from dto
-        jsonObject = adaptor.buildJsonObjectFromDto(dto);
+
+        jsonObject = adaptor.buildJsonObjectFromDto(dto, params.getApiVersion());
         returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+
         // convert returnObj to enclosureresourceV2
         final EnclosureGroups enclosureGroupV2 = (EnclosureGroups) taskAdaptor.buildClassDto(returnObj, EnclosureGroups.class);
 
@@ -208,8 +210,9 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
         // user can save time in creating network dto.
 
         // create JSON request from dto
-        jsonObject = adaptor.buildJsonObjectFromDto(enclosureGroupDto);
+        jsonObject = adaptor.buildJsonObjectFromDto(enclosureGroupDto, params.getApiVersion());
         returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+
         // convert returnObj to taskResource
         final EnclosureGroups enclosureGroupV2 = (EnclosureGroups) taskAdaptor.buildClassDto(returnObj, EnclosureGroups.class);
 

@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.annotations.Since;
 
 /**
  * The EnclosureGroups data transfer object (DTO) contains the information used
@@ -43,14 +44,38 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "uri", "category", "name", "created", "modified", "eTag", "status", "state", "stackingMode",
-        "portMappingCount", "portMappings", "interconnectBayMappingCount", "interconnectBayMappings", "description", "type" })
+@JsonPropertyOrder({
+	"associatedLogicalInterconnectGroups",
+	"uri",
+	"category",
+	"name",
+	"created",
+	"ipRangeUris",
+	"modified",
+	"eTag",
+	"enclosureCount",
+	"enclosureTypeUri",
+	"status",
+	"state",
+	"powerMode",
+	"stackingMode",
+	"portMappingCount",
+	"portMappings",
+	"interconnectBayMappingCount",
+	"interconnectBayMappings",
+	"description",
+	"type"
+	})
 public class EnclosureGroups implements Serializable {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
+
+    @Since(200)
+    @JsonProperty("associatedLogicalInterconnectGroups")
+    private List<String> associatedLogicalInterconnectGroups = new ArrayList<String>();
     @JsonProperty("uri")
     private String uri;
     @JsonProperty("category")
@@ -59,14 +84,26 @@ public class EnclosureGroups implements Serializable {
     private String name;
     @JsonProperty("created")
     private String created;
+    @Since(200)
+    @JsonProperty("ipRangeUris")
+    private List<String> ipRangeUris = new ArrayList<String>();
     @JsonProperty("modified")
     private String modified;
     @JsonProperty("eTag")
     private String eTag;
+    @Since(200)
+    @JsonProperty("enclosureCount")
+    private Integer enclosureCount;
+    @Since(200)
+    @JsonProperty("enclosureTypeUri")
+    private String enclosureTypeUri;
     @JsonProperty("status")
     private String status;
     @JsonProperty("state")
     private String state;
+
+    @JsonProperty("powerMode")
+    private EnclosureGroups.PowerMode powerMode;
     /**
      * 
      * (Required)
@@ -96,6 +133,26 @@ public class EnclosureGroups implements Serializable {
     private String description;
     @JsonProperty("type")
     private String type;
+
+
+    /**
+     *
+     * @return The associatedLogicalInterconnectGroups
+     */
+    @JsonProperty("associatedLogicalInterconnectGroups")
+    public List<String> getAssociatedLogicalInterconnectGroups() {
+        return associatedLogicalInterconnectGroups;
+    }
+
+    /**
+     *
+     * @param associatedLogicalInterconnectGroups
+     *            The associatedLogicalInterconnectGroups
+     */
+    @JsonProperty("associatedLogicalInterconnectGroups")
+    public void setAssociatedLogicalInterconnectGroups(final List<String> associatedLogicalInterconnectGroups) {
+        this.associatedLogicalInterconnectGroups = associatedLogicalInterconnectGroups;
+    }
 
     /**
      * 
@@ -193,6 +250,25 @@ public class EnclosureGroups implements Serializable {
     }
 
     /**
+     *
+     * @return The ipRangeUris
+     */
+    @JsonProperty("ipRangeUris")
+    public List<String> getIpRangeUris() {
+        return ipRangeUris;
+    }
+
+    /**
+     *
+     * @param ipRangeUris
+     *            The ipRangeUris
+     */
+    @JsonProperty("ipRangeUris")
+    public void setIpRangeUris(final List<String> ipRangeUris) {
+        this.ipRangeUris = ipRangeUris;
+    }
+
+    /**
      * 
      * @return The modified
      */
@@ -231,7 +307,45 @@ public class EnclosureGroups implements Serializable {
     }
 
     /**
-     * 
+     *
+     * @return The enclosureCount
+     */
+    @JsonProperty("enclosureCount")
+    public Integer getEnclosureCount() {
+        return enclosureCount;
+    }
+
+    /**
+     *
+     * @param enclosureCount
+     *            The enclosureCount
+     */
+    @JsonProperty("enclosureCount")
+    public void setEnclosureCount(final Integer enclosureCount) {
+        this.enclosureCount = enclosureCount;
+    }
+
+    /**
+     *
+     * @return The enclosureTypeUri
+     */
+    @JsonProperty("enclosureTypeUri")
+    public String getEnclosureTypeUri() {
+        return enclosureTypeUri;
+    }
+
+    /**
+     *
+     * @param enclosureTypeUri
+     *            The enclosureTypeUri
+     */
+    @JsonProperty("enclosureTypeUri")
+    public void setEnclosureTypeUri(final String enclosureTypeUri) {
+        this.enclosureTypeUri = enclosureTypeUri;
+    }
+
+    /**
+     *
      * @return The status
      */
     @JsonProperty("status")
@@ -266,6 +380,25 @@ public class EnclosureGroups implements Serializable {
     @JsonProperty("state")
     public void setState(final String state) {
         this.state = state;
+    }
+
+    /**
+     *
+     * @return The powerMode
+     */
+    @JsonProperty("stackingMode")
+    public EnclosureGroups.PowerMode getPowerMode() {
+        return powerMode;
+    }
+
+    /**
+     *
+     * @param powerMode
+     *            The powerMode
+     */
+    @JsonProperty("powerMode")
+    public void setPowerMode(final EnclosureGroups.PowerMode powerMode) {
+        this.powerMode = powerMode;
     }
 
     /**
@@ -401,9 +534,28 @@ public class EnclosureGroups implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(uri).append(category).append(name).append(created).append(modified).append(eTag)
-                .append(status).append(state).append(stackingMode).append(portMappingCount).append(portMappings)
-                .append(interconnectBayMappingCount).append(interconnectBayMappings).append(description).toHashCode();
+        return new HashCodeBuilder()
+                .append(associatedLogicalInterconnectGroups)
+                .append(uri)
+                .append(category)
+                .append(name)
+                .append(created)
+                .append(ipRangeUris)
+                .append(modified)
+                .append(eTag)
+                .append(enclosureCount)
+                .append(enclosureTypeUri)
+                .append(status)
+                .append(state)
+                .append(powerMode)
+                .append(stackingMode)
+                .append(portMappingCount)
+                .append(portMappings)
+                .append(interconnectBayMappingCount)
+                .append(interconnectBayMappings)
+                .append(description)
+                .append(type)
+                .toHashCode();
     }
 
     @Override
@@ -415,11 +567,63 @@ public class EnclosureGroups implements Serializable {
             return false;
         }
         final EnclosureGroups rhs = ((EnclosureGroups) other);
-        return new EqualsBuilder().append(uri, rhs.uri).append(category, rhs.category).append(name, rhs.name)
-                .append(created, rhs.created).append(modified, rhs.modified).append(eTag, rhs.eTag).append(status, rhs.status)
-                .append(state, rhs.state).append(stackingMode, rhs.stackingMode).append(portMappingCount, rhs.portMappingCount)
-                .append(portMappings, rhs.portMappings).append(interconnectBayMappingCount, rhs.interconnectBayMappingCount)
-                .append(interconnectBayMappings, rhs.interconnectBayMappings).append(description, rhs.description).isEquals();
+        return new EqualsBuilder()
+                .append(associatedLogicalInterconnectGroups, rhs.associatedLogicalInterconnectGroups)
+                .append(uri, rhs.uri)
+                .append(category, rhs.category)
+                .append(name, rhs.name)
+                .append(created, rhs.created)
+                .append(ipRangeUris, rhs.ipRangeUris)
+                .append(modified, rhs.modified)
+                .append(eTag, rhs.eTag)
+                .append(enclosureCount, rhs.enclosureCount)
+                .append(enclosureTypeUri, rhs.enclosureTypeUri)
+                .append(status, rhs.status)
+                .append(state, rhs.state)
+                .append(powerMode, rhs.powerMode)
+                .append(stackingMode, rhs.stackingMode)
+                .append(portMappingCount, rhs.portMappingCount)
+                .append(portMappings, rhs.portMappings)
+                .append(interconnectBayMappingCount, rhs.interconnectBayMappingCount)
+                .append(interconnectBayMappings, rhs.interconnectBayMappings)
+                .append(description, rhs.description)
+                .append(type, rhs.type)
+                .isEquals();
+    }
+
+    @Generated("org.jsonschema2pojo")
+    public static enum PowerMode {
+
+        RedundantPowerFeed("RedundantPowerFeed"), RedundantPowerSupply("RedundantPowerSupply");
+        private final String value;
+        private static Map<String, EnclosureGroups.PowerMode> constants = new HashMap<String, EnclosureGroups.PowerMode>();
+
+        static {
+            for (final EnclosureGroups.PowerMode c : values()) {
+                constants.put(c.value, c);
+            }
+        }
+
+        private PowerMode(final String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+        @JsonCreator
+        public static EnclosureGroups.PowerMode fromValue(final String value) {
+            final EnclosureGroups.PowerMode constant = constants.get(value);
+            if (constant == null) {
+                throw new IllegalArgumentException(value);
+            } else {
+                return constant;
+            }
+        }
+
     }
 
     @Generated("org.jsonschema2pojo")

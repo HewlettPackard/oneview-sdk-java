@@ -16,6 +16,7 @@
 package com.hp.ov.sdk.util;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKFileNotFoundException;
@@ -61,6 +62,12 @@ public class ObjectToJsonConverter {
 
     public String convertObjectToJsonString(final Object inObj) {
         Gson gson = new Gson();
+
+        return (gson.toJson(inObj).toString());
+    }
+
+    public String convertObjectToJsonString(final Object inObj, double version) {
+        Gson gson = new GsonBuilder().setVersion(version).create();
 
         return (gson.toJson(inObj).toString());
     }

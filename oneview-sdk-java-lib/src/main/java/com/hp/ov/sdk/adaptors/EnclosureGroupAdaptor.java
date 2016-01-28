@@ -46,8 +46,8 @@ public class EnclosureGroupAdaptor extends BaseAdaptor<EnclosureGroups, Object> 
         return enclosureGroupCollectionDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final EnclosureGroups source) {
+    public JSONObject buildJsonObjectFromDto(final EnclosureGroups source, double version) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        return new JSONObject(converter.convertObjectToJsonString(source));
+        return new JSONObject(converter.convertObjectToJsonString(source, version));
     }
 }
