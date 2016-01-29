@@ -22,44 +22,35 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public class SampleRestParams {
 
-    private SslPropertiesManager util;
+    private static class SampleRestParamsHolder {
+        private static SampleRestParams INSTANCE = new SampleRestParams();
+    }
 
-    private HttpSslProperties httpSslProperties;
-
-    private static volatile SampleRestParams sample = null;
+    public static SampleRestParams getInstance() {
+        return SampleRestParamsHolder.INSTANCE;
+    }
 
     public RestParams getBasicRestParams() {
         // Sample values - user needs set these values as per his environment
 
         final RestParams params = new RestParams();
+
         params.setHostname(SamplesConstants.HOSTNAME);
         params.setUserName(SamplesConstants.USERNAME);
         params.setPassword(SamplesConstants.PASSWORD);
         params.setDomain(SamplesConstants.DOMAIN);
         params.setApiVersion(SamplesConstants.VERSION);
 
-        httpSslProperties = new HttpSslProperties();
-        util = new SslPropertiesManager();
-        util.setHttpSslProperties(httpSslProperties);
+        SslPropertiesManager sslPropertiesManager = new SslPropertiesManager();
 
-        httpSslProperties = util.getSslProperties(SamplesConstants.KEY_STORE_FILE, SamplesConstants.TRUST_STORE_FILE,
-                SamplesConstants.KEY_STORE_PASSWORD, SamplesConstants.TRUST_STORE_PASSWORD, SamplesConstants.KEY_STORE_TYPE,
-                SamplesConstants.TRUST_STORE_TYPE);
+        HttpSslProperties httpSslProperties = sslPropertiesManager.getSslProperties(
+                SamplesConstants.KEY_STORE_FILE, SamplesConstants.TRUST_STORE_FILE,
+                SamplesConstants.KEY_STORE_PASSWORD, SamplesConstants.TRUST_STORE_PASSWORD,
+                SamplesConstants.KEY_STORE_TYPE, SamplesConstants.TRUST_STORE_TYPE);
 
-        util.loadSslProperties(httpSslProperties);
+        sslPropertiesManager.loadSslProperties(httpSslProperties);
 
         return params;
-
     }
 
-    public static SampleRestParams getInstance() {
-        if (sample == null) {
-            synchronized (SampleRestParams.class) {
-                if (sample == null) {
-                    sample = new SampleRestParams();
-                }
-            }
-        }
-        return sample;
-    }
 }

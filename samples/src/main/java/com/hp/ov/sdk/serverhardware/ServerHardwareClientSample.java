@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.serverhardware;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.AddServer;
 import com.hp.ov.sdk.dto.BiosSettingsStateCollection;
 import com.hp.ov.sdk.dto.ConfigurationState;
@@ -33,32 +32,34 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.ServerHardwareClient;
+import com.hp.ov.sdk.rest.client.ServerHardwareClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * ServerHardwareClientSample is a sample program to captures/consume details about the physical configuration of server  
- * hardware, defines which settings are available to the server profiles assigned to that type of server hardware 
+ * ServerHardwareClientSample is a sample program to captures/consume details about the physical configuration of server
+ * hardware, defines which settings are available to the server profiles assigned to that type of server hardware
  * It invokes APIs of ServerHardwareClient which is in sdk library to perform GET/POST operations
  * on server hardware resource
  */
 public class ServerHardwareClientSample {
+
+    private final ServerHardwareClient serverHardwareClient;
+
     private RestParams params;
-    private static TaskResourceV2 taskResourceV2;
-    private static ServerHardwareClient serverHardwareClient;
+    private TaskResourceV2 taskResourceV2;
 
     // These are variables to be defined by user
     // ================================
     private static final String resourceName = "Encl1, bay 15";
-    private static final String resourceId = "31393736-3831-4753-4831-30305835524E";
+    private static final String resourceId = "31393736-3831-4753-4831-30305837524E";
     private static final String hostname = "172.18.1.13";
     private static final String username = "dcs";
     private static final String password = "dcs";
-
     // ================================
 
-    private static void init() {
-        serverHardwareClient = HPOneViewSdkBeanFactory.getServerHardwareClient();
+    private ServerHardwareClientSample() {
+        this.serverHardwareClient = ServerHardwareClientImpl.getClient();
     }
 
     private void getServerHardwareById() throws InstantiationException, IllegalAccessException {
@@ -369,10 +370,9 @@ public class ServerHardwareClientSample {
         return dto;
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         ServerHardwareClientSample client = new ServerHardwareClientSample();
+
         client.getServerHardwareById();
         client.getAllServerHardwares();
         client.getPowerState();

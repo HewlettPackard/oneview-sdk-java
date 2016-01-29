@@ -15,39 +15,31 @@
  *******************************************************************************/
 package com.hp.ov.sdk.messaging.msmb.services;
 
-import org.springframework.stereotype.Component;
-
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 
-@Component
 public class MsmbConnection {
-    private Connection conn = null;
-    private Channel channel = null;
-    private MsmbState state;
+
+    private final Connection conn;
+    private final Channel channel;
+    private final MsmbState state;
+
+    public MsmbConnection(Connection conn, Channel channel, MsmbState state) {
+        this.conn = conn;
+        this.channel = channel;
+        this.state = state;
+    }
 
     public MsmbState getState() {
         return state;
-    }
-
-    public void setState(final MsmbState state) {
-        this.state = state;
     }
 
     public Connection getConn() {
         return conn;
     }
 
-    public void setConn(final Connection conn) {
-        this.conn = conn;
-    }
-
     public Channel getChannel() {
         return channel;
-    }
-
-    public void setChannel(final Channel channel) {
-        this.channel = channel;
     }
 
 }

@@ -15,11 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.hp.ov.sdk.adaptors.InterconnectTypeAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
@@ -33,24 +28,26 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component
 public class InterconnectTypeClientImpl implements InterconnectTypeClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(InterconnectTypeClientImpl.class);
-    @Autowired
-    private HttpRestClient restClient;
+    private static final Logger LOGGER = LoggerFactory.getLogger(InterconnectTypeClientImpl.class);
 
-    @Autowired
-    private InterconnectTypeAdaptor adaptor;
+    private final InterconnectTypeAdaptor adaptor;
 
-    @Autowired
-    private UrlUtils urlUtils;
+    private InterconnectTypeClientImpl(InterconnectTypeAdaptor adaptor) {
+        this.adaptor = adaptor;
+    }
+
+    public static InterconnectTypeClient getClient() {
+        return new InterconnectTypeClientImpl(new InterconnectTypeAdaptor());
+    }
 
     @Override
     public InterconnectTypes getInterconnectType(final RestParams params, final String resourceId) {
-
-        logger.info("InterconnectTypeClientImpl : getInterconnectType : Start");
+        LOGGER.info("InterconnectTypeClientImpl : getInterconnectType : Start");
 
         // validate args
         if (null == params) {
@@ -58,10 +55,10 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_TYPE_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_TYPE_URI, resourceId));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("InterconnectTypeClientImpl : getInterconnectType : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("InterconnectTypeClientImpl : getInterconnectType : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.INTERCONNECT_TYPE, null);
@@ -70,27 +67,26 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
 
         final InterconnectTypes interconnectTypeDto = adaptor.buildDto(returnObj);
 
-        logger.debug("InterconnectTypeClientImpl : getInterconnectType : name :" + interconnectTypeDto.getName());
-        logger.info("InterconnectTypeClientImpl : getInterconnectType : End");
+        LOGGER.debug("InterconnectTypeClientImpl : getInterconnectType : name :" + interconnectTypeDto.getName());
+        LOGGER.info("InterconnectTypeClientImpl : getInterconnectType : End");
 
         return interconnectTypeDto;
-
     }
 
     @Override
     public InterconnectTypeCollectionV2 getAllInterconnectType(final RestParams params) {
-        logger.info("InterconnectTypeClientImpl : getAllInterconnectTypeV2s : Start");
+        LOGGER.info("InterconnectTypeClientImpl : getAllInterconnectTypeV2s : Start");
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_TYPE_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_TYPE_URI));
 
         // call rest client
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("InterconnectTypeClientImpl : getAllInterconnectTypes : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("InterconnectTypeClientImpl : getAllInterconnectTypes : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -100,9 +96,9 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
 
         final InterconnectTypeCollectionV2 interconnectTypeCollectionDto = adaptor.buildCollectionDto(returnObj);
 
-        logger.debug("InterconnectTypeClientImpl : getAllInterconnectTypes : members count :"
+        LOGGER.debug("InterconnectTypeClientImpl : getAllInterconnectTypes : members count :"
                 + interconnectTypeCollectionDto.getCount());
-        logger.info("InterconnectTypeClientImpl : getAllInterconnectTypes : End");
+        LOGGER.info("InterconnectTypeClientImpl : getAllInterconnectTypes : End");
 
         return interconnectTypeCollectionDto;
     }
@@ -110,9 +106,9 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
     @Override
     public InterconnectTypes getInterconnectTypeByName(final RestParams params, final String name) {
         InterconnectTypes interconnectTypeDto = null;
-        logger.info("InterconnectTypeClientImpl : getInterconnectTypeByName : Start");
+        LOGGER.info("InterconnectTypeClientImpl : getInterconnectTypeByName : Start");
         // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = urlUtils.createFilterString(name);
+        final String query = UrlUtils.createFilterString(name);
 
         // validate args
         if (null == params) {
@@ -120,10 +116,10 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.INTERCONNECT_TYPE_URI, query));
+        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.INTERCONNECT_TYPE_URI, query));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("InterconnectTypeClientImpl : getInterconnectTypeByName : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("InterconnectTypeClientImpl : getInterconnectTypeByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.INTERCONNECT_TYPE, null);
@@ -138,11 +134,11 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
         }
 
         if (interconnectTypeDto == null) {
-            logger.error("InterconnectTypeClientImpl : getInterconnectTypeByName : resource not Found for name :" + name);
+            LOGGER.error("InterconnectTypeClientImpl : getInterconnectTypeByName : resource not Found for name :" + name);
             throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.INTERCONNECT_TYPE,
                     null);
         }
-        logger.info("InterconnectTypeClientImpl : getInterconnectTypeByName : End");
+        LOGGER.info("InterconnectTypeClientImpl : getInterconnectTypeByName : End");
 
         return interconnectTypeDto;
     }
@@ -154,7 +150,7 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
         InterconnectTypes interconnectTypesDto = getInterconnectTypeByName(creds, name);
 
         if (null != interconnectTypesDto.getUri()) {
-            resourceId = urlUtils.getResourceIdFromUri(interconnectTypesDto.getUri());
+            resourceId = UrlUtils.getResourceIdFromUri(interconnectTypesDto.getUri());
         }
         return resourceId;
     }

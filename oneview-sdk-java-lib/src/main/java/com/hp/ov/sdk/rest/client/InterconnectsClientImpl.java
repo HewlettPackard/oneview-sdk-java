@@ -15,13 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
-import java.util.ArrayList;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.hp.ov.sdk.adaptors.InterconnectAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
@@ -35,23 +28,29 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component
+import java.util.ArrayList;
+
+
 public class InterconnectsClientImpl implements InterconnectsClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(InterconnectsClientImpl.class);
-    @Autowired
-    private HttpRestClient restClient;
+    private static final Logger LOGGER = LoggerFactory.getLogger(InterconnectsClientImpl.class);
 
-    @Autowired
-    private InterconnectAdaptor adaptor;
+    private final InterconnectAdaptor adaptor;
 
-    @Autowired
-    private UrlUtils urlUtils;
+    protected InterconnectsClientImpl(InterconnectAdaptor adaptor) {
+        this.adaptor = adaptor;
+    }
+
+    public static InterconnectsClient getClient() {
+        return new InterconnectsClientImpl(new InterconnectAdaptor());
+    }
 
     @Override
     public Interconnects getInterconnects(final RestParams params, final String resourceId) {
-        logger.info("InterconnectsClientImpl : getInterconnects : Start");
+        LOGGER.info("InterconnectsClientImpl : getInterconnects : Start");
 
         // validate args
         if (null == params) {
@@ -59,10 +58,10 @@ public class InterconnectsClientImpl implements InterconnectsClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_URI, resourceId));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("InterconnectsClientImpl : getInterconnects : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("InterconnectsClientImpl : getInterconnects : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.INTERCONNECT,
                     null);
@@ -71,26 +70,26 @@ public class InterconnectsClientImpl implements InterconnectsClient {
 
         final Interconnects interconnectDto = adaptor.buildDto(returnObj);
 
-        logger.debug("InterconnectsClientImpl : getInterconnects : name :" + interconnectDto.getName());
-        logger.info("InterconnectsClientImpl : getInterconnects : End");
+        LOGGER.debug("InterconnectsClientImpl : getInterconnects : name :" + interconnectDto.getName());
+        LOGGER.info("InterconnectsClientImpl : getInterconnects : End");
 
         return interconnectDto;
     }
 
     @Override
     public InterconnectsCollection getAllInterconnects(final RestParams params) {
-        logger.info("InterconnectsClientImpl : getAllInterconnects : Start");
+        LOGGER.info("InterconnectsClientImpl : getAllInterconnects : Start");
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_URI));
 
         // call rest client
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("InterconnectsClientImpl : getAllInterconnects : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("InterconnectsClientImpl : getAllInterconnects : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.INTERCONNECT,
@@ -100,8 +99,8 @@ public class InterconnectsClientImpl implements InterconnectsClient {
 
         final InterconnectsCollection interconnectsCollectionDto = adaptor.buildCollectionDto(returnObj);
 
-        logger.debug("InterconnectsClientImpl : getAllInterconnects : members count :" + interconnectsCollectionDto.getCount());
-        logger.info("InterconnectsClientImpl : getAllInterconnects : End");
+        LOGGER.debug("InterconnectsClientImpl : getAllInterconnects : members count :" + interconnectsCollectionDto.getCount());
+        LOGGER.info("InterconnectsClientImpl : getAllInterconnects : End");
 
         return interconnectsCollectionDto;
     }
@@ -113,24 +112,24 @@ public class InterconnectsClientImpl implements InterconnectsClient {
         Interconnects interconnectsDto = getInterconnectByName(creds, name);
 
         if (null != interconnectsDto.getUri()) {
-            resourceId = urlUtils.getResourceIdFromUri(interconnectsDto.getUri());
+            resourceId = UrlUtils.getResourceIdFromUri(interconnectsDto.getUri());
         }
         return resourceId;
     }
 
     @Override
     public Interconnects getInterconnectByName(RestParams params, String interconnectName) {
-        logger.info("InterconnectsClientImpl : getInterconnectByName : start");
+        LOGGER.info("InterconnectsClientImpl : getInterconnectByName : start");
         final InterconnectsCollection interconnectsCollectionDto = getAllInterconnects(params);
 
         for (final Interconnects interconnectsDto : new ArrayList<>(interconnectsCollectionDto.getMembers())) {
             if (interconnectsDto.getName().equals(interconnectName)) {
                 System.out.println(interconnectsDto.getName());
-                logger.info("InterconnectsClientImpl : getInterconnectByName : End");
+                LOGGER.info("InterconnectsClientImpl : getInterconnectByName : End");
                 return interconnectsDto;
             }
         }
-        logger.error("InterconnectsClientImpl : getInterconnectByName : resource not Found for name :" + interconnectName);
+        LOGGER.error("InterconnectsClientImpl : getInterconnectByName : resource not Found for name :" + interconnectName);
         throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.INTERCONNECT, null);
     }
 

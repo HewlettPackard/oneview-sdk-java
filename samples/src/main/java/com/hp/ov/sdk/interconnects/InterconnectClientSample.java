@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.interconnects;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.InterconnectsCollection;
 import com.hp.ov.sdk.dto.generated.Interconnects;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -24,28 +23,30 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.InterconnectsClient;
+import com.hp.ov.sdk.rest.client.InterconnectsClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * InterconnectClientSample is a sample program to consume the characteristics model of an interconnect in 
+ * InterconnectClientSample is a sample program to consume the characteristics model of an interconnect in
  * HP OneView.It invokes APIs of InterconnectsClient which is in sdk library to perform GET/PUT
  * operations on interconnect resource
  */
 public class InterconnectClientSample {
+
+    private final InterconnectsClient interconnectsClient;
+
     private RestParams params;
-    private static InterconnectsClient interconnectsClient;
+
+    public InterconnectClientSample() {
+        this.interconnectsClient = InterconnectsClientImpl.getClient();
+    }
 
     // These are variables to be defined by user
     // ================================
-    private static final String resourceName = "enc-05, interconnect 2";
-    private static final String resourceId = "0da2b172-ccde-409d-8946-57df1e5c39b6";
-
+    private static final String resourceName = "Encl1, interconnect 2";
+    private static final String resourceId = "3dbf4bf0-cb1d-4756-92c8-55c30461c9ff";
     // ================================
-
-    private static void init() {
-        interconnectsClient = HPOneViewSdkBeanFactory.getInterconnectsClient();
-    }
 
     private void getInterconnectsById() throws InstantiationException, IllegalAccessException {
         Interconnects interconnectsDto = null;
@@ -140,15 +141,13 @@ public class InterconnectClientSample {
             System.out.println("InterconnectClientSample : getInterconnectsByName :" + " arguments are null ");
             return;
         }
-
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         InterconnectClientSample client = new InterconnectClientSample();
-        client.getInterconnectsById();
+
         client.getAllInterconnects();
+        client.getInterconnectsById();
         client.getInterconnectsByName();
     }
 

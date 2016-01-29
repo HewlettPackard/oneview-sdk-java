@@ -25,7 +25,7 @@ import com.hp.ov.sdk.messaging.scmb.listeners.ScmbListener;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbAlertsHandler;
 
 /**
- * 
+ *
  */
 public class ScmbHandler implements ScmbListener {
 
@@ -69,7 +69,6 @@ public class ScmbHandler implements ScmbListener {
                                                                                                           // listener
             liHandler.notifyLiUplinkSetStatus(scmbMessage);
         }
-
     }
 
 }

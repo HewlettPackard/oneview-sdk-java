@@ -15,12 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.hp.ov.sdk.adaptors.StoragePoolAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
@@ -35,25 +29,29 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component
 public class StoragePoolClientImpl implements StoragePoolClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(StoragePoolClientImpl.class);
-    @Autowired
-    private HttpRestClient restClient;
+    private static final Logger LOGGER = LoggerFactory.getLogger(StoragePoolClientImpl.class);
 
-    @Autowired
-    private StoragePoolAdaptor adaptor;
+    private final StoragePoolAdaptor adaptor;
 
     private JSONObject jsonObject;
 
-    @Autowired
-    private UrlUtils urlUtils;
+    protected StoragePoolClientImpl(StoragePoolAdaptor adaptor) {
+        this.adaptor = adaptor;
+    }
+
+    public static StoragePoolClient getClient() {
+        return new StoragePoolClientImpl(new StoragePoolAdaptor());
+    }
 
     @Override
     public StoragePool getStoragePool(final RestParams params, final String resourceId) {
-        logger.info("StoragePoolClientImpl : getStoragePool : Start");
+        LOGGER.info("StoragePoolClientImpl : getStoragePool : Start");
 
         // validate args
         if (null == params) {
@@ -61,10 +59,10 @@ public class StoragePoolClientImpl implements StoragePoolClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_POOL_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_POOL_URI, resourceId));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("StoragePoolClientImpl : getStoragePool : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("StoragePoolClientImpl : getStoragePool : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_POOL,
                     null);
@@ -72,15 +70,15 @@ public class StoragePoolClientImpl implements StoragePoolClient {
         // Call adaptor to convert to DTO
         final StoragePool storagePoolDto = adaptor.buildDto(returnObj);
 
-        logger.debug("StoragePoolClientImpl : getStoragePool : name :" + storagePoolDto.getName());
-        logger.info("StoragePoolClientImpl : getStoragePool : End");
+        LOGGER.debug("StoragePoolClientImpl : getStoragePool : name :" + storagePoolDto.getName());
+        LOGGER.info("StoragePoolClientImpl : getStoragePool : End");
 
         return storagePoolDto;
     }
 
     @Override
     public StoragePoolCollection getAllStoragePools(final RestParams params) {
-        logger.info("StoragePoolClientImpl : getAllStoragePools : Start");
+        LOGGER.info("StoragePoolClientImpl : getAllStoragePools : Start");
 
         // validate args
         if (null == params) {
@@ -88,10 +86,10 @@ public class StoragePoolClientImpl implements StoragePoolClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_POOL_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_POOL_URI));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("StoragePoolClientImpl : getAllStoragePools : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("StoragePoolClientImpl : getAllStoragePools : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_POOL,
                     null);
@@ -100,8 +98,8 @@ public class StoragePoolClientImpl implements StoragePoolClient {
 
         final StoragePoolCollection storagePoolCollectionDto = adaptor.buildCollectionDto(returnObj);
 
-        logger.debug("StoragePoolClientImpl : getAllStoragePools : count :" + storagePoolCollectionDto.getCount());
-        logger.info("StoragePoolClientImpl : getAllStoragePools : End");
+        LOGGER.debug("StoragePoolClientImpl : getAllStoragePools : count :" + storagePoolCollectionDto.getCount());
+        LOGGER.info("StoragePoolClientImpl : getAllStoragePools : End");
 
         return storagePoolCollectionDto;
     }
@@ -109,20 +107,20 @@ public class StoragePoolClientImpl implements StoragePoolClient {
     @Override
     public StoragePool getStoragePoolByName(final RestParams params, final String name, final String storageSystemUri) {
         StoragePool storagePoolDto = null;
-        logger.info("StoragePoolClientImpl : getStoragePoolByName : Start");
+        LOGGER.info("StoragePoolClientImpl : getStoragePoolByName : Start");
 
         // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = urlUtils.createFilterString(name);
+        final String query = UrlUtils.createFilterString(name);
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.STORAGE_POOL_URI, query));
+        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.STORAGE_POOL_URI, query));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("StoragePoolClientImpl : getStoragePoolByName : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("StoragePoolClientImpl : getStoragePoolByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_POOL,
                     null);
@@ -141,10 +139,10 @@ public class StoragePoolClientImpl implements StoragePoolClient {
         }
 
         if (storagePoolDto == null) {
-            logger.error("StoragePoolClientImpl : getStoragePoolByName : Not found for storage pool name :" + name);
+            LOGGER.error("StoragePoolClientImpl : getStoragePoolByName : Not found for storage pool name :" + name);
             throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.STORAGE_POOL, null);
         }
-        logger.info("StoragePoolClientImpl : getStoragePoolByName : End");
+        LOGGER.info("StoragePoolClientImpl : getStoragePoolByName : End");
 
         return storagePoolDto;
 
@@ -152,7 +150,7 @@ public class StoragePoolClientImpl implements StoragePoolClient {
 
     @Override
     public String createStoragePool(final RestParams params, final AddStoragePool addStoragePoolDto, final boolean useJsonRequest) {
-        logger.info("StoragePoolClientImpl : createStoragePool : Start");
+        LOGGER.info("StoragePoolClientImpl : createStoragePool : Start");
         String returnObj = null;
 
         // validate params
@@ -161,7 +159,7 @@ public class StoragePoolClientImpl implements StoragePoolClient {
         }
         // set the additional params
         params.setType(HttpMethodType.POST);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_POOL_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_POOL_URI));
 
         // TODO - check for json request in the input storagePoolDto. if it is
         // present,
@@ -172,14 +170,14 @@ public class StoragePoolClientImpl implements StoragePoolClient {
 
         // create JSON request from storagePoolDto
         jsonObject = adaptor.buildJsonObjectFromDto(addStoragePoolDto);
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         if (!returnObj.isEmpty() || returnObj != null) {
             returnObj = "Created";
         }
 
-        logger.debug("StoragePoolClientImpl : createStoragePool : returnObj =" + returnObj);
+        LOGGER.debug("StoragePoolClientImpl : createStoragePool : returnObj =" + returnObj);
 
-        logger.info("StoragePoolClientImpl : createStoragePool : End");
+        LOGGER.info("StoragePoolClientImpl : createStoragePool : End");
 
         return returnObj;
     }
@@ -187,7 +185,7 @@ public class StoragePoolClientImpl implements StoragePoolClient {
     @Override
     public String updateStoragePool(final RestParams params, final String resourceId, final StoragePool storagePoolDto,
             final boolean useJsonRequest) {
-        logger.info("StoragePoolClientImpl : updateStoragePool : Start");
+        LOGGER.info("StoragePoolClientImpl : updateStoragePool : Start");
 
         // validate args
         if (null == params) {
@@ -199,7 +197,7 @@ public class StoragePoolClientImpl implements StoragePoolClient {
         }
         // set the additional params
         params.setType(HttpMethodType.PUT);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_POOL_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_POOL_URI, resourceId));
         String returnObj = null;
 
         // TODO - check for json request in the input dto. if it is present,
@@ -210,21 +208,21 @@ public class StoragePoolClientImpl implements StoragePoolClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(storagePoolDto);
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         if (!returnObj.isEmpty() || returnObj != null) {
             returnObj = "Updated";
         }
 
-        logger.debug("StoragePoolClientImpl : updateStoragePool : returnObj =" + returnObj);
+        LOGGER.debug("StoragePoolClientImpl : updateStoragePool : returnObj =" + returnObj);
 
-        logger.info("StoragePoolClientImpl : updateStoragePool : End");
+        LOGGER.info("StoragePoolClientImpl : updateStoragePool : End");
 
         return returnObj;
     }
 
     @Override
     public String deleteStoragePool(final RestParams params, final String resourceId) {
-        logger.info("StoragePoolClientImpl : deleteStoragePool : Start");
+        LOGGER.info("StoragePoolClientImpl : deleteStoragePool : Start");
 
         // validate args
         if (null == params) {
@@ -232,22 +230,22 @@ public class StoragePoolClientImpl implements StoragePoolClient {
         }
         // set the additional params
         params.setType(HttpMethodType.DELETE);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_POOL_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_POOL_URI, resourceId));
 
-        String returnObj = restClient.sendRequestToHPOV(params, null);
+        String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
         if (!returnObj.isEmpty() || returnObj != null) {
             returnObj = "Deleted";
         }
-        logger.debug("StoragePoolClientImpl : deleteStoragePool : response from OV :" + returnObj);
+        LOGGER.debug("StoragePoolClientImpl : deleteStoragePool : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_POOL,
                     null);
         }
 
-        logger.debug("StoragePoolClientImpl : deleteStoragePool : returnObj =" + returnObj);
+        LOGGER.debug("StoragePoolClientImpl : deleteStoragePool : returnObj =" + returnObj);
 
-        logger.info("StoragePoolClientImpl : deleteStoragePool : End");
+        LOGGER.info("StoragePoolClientImpl : deleteStoragePool : End");
 
         return returnObj;
     }
@@ -259,7 +257,7 @@ public class StoragePoolClientImpl implements StoragePoolClient {
         StoragePool storagePoolDto = getStoragePoolByName(creds, name, storageSystemUri);
 
         if (null != storagePoolDto.getUri()) {
-            resourceId = urlUtils.getResourceIdFromUri(storagePoolDto.getUri());
+            resourceId = UrlUtils.getResourceIdFromUri(storagePoolDto.getUri());
         }
         return resourceId;
     }

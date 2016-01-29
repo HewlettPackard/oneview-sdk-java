@@ -18,7 +18,6 @@ package com.hp.ov.sdk.sanmanager;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
 import com.hp.ov.sdk.dto.DeviceManagerResponseCollection;
 import com.hp.ov.sdk.dto.Property;
@@ -31,22 +30,25 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.FcSansDeviceManagerClient;
+import com.hp.ov.sdk.rest.client.FcSansDeviceManagerClientImpl;
 import com.hp.ov.sdk.rest.client.FcSansProviderClient;
+import com.hp.ov.sdk.rest.client.FcSansProviderClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * DeviceManagerClientSample is a sample program to consume the network advisor by managing the 
- * san manager  of HP OneView. It invokes APIs of DeviceManagerClient which is in sdk library to 
+ * DeviceManagerClientSample is a sample program to consume the network advisor by managing the
+ * san manager  of HP OneView. It invokes APIs of DeviceManagerClient which is in sdk library to
  * perform GET/PUT/POST/DELETE operations on san manager resource
  */
 
 public class FcSansDeviceManagerClientSample {
+
+    private final FcSansDeviceManagerClient fcSansDeviceManagerClient;
+    private final FcSansProviderClient fcSansProviderClient;
+
     private RestParams params;
-    private static UrlUtils urlUtils;
-    private static FcSansDeviceManagerClient fcSansDeviceManagerClient;
-    private static FcSansProviderClient fcSansProviderClient;
 
     // test values - user input
     // ================================
@@ -62,13 +64,11 @@ public class FcSansDeviceManagerClientSample {
     private static final String portName = "Port";
     private static final String useSSLName = "UseSsl";
     private static final String useSSLValue = "true";
-
     // ================================
 
-    private static void init() {
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        fcSansDeviceManagerClient = HPOneViewSdkBeanFactory.getDeviceManagerClient();
-        fcSansProviderClient = HPOneViewSdkBeanFactory.getProviderClient();
+    private FcSansDeviceManagerClientSample() {
+        fcSansDeviceManagerClient = FcSansDeviceManagerClientImpl.getClient();
+        fcSansProviderClient = FcSansProviderClientImpl.getClient();
     }
 
     private void createDeviceManager() throws InstantiationException, IllegalAccessException {
@@ -191,7 +191,7 @@ public class FcSansDeviceManagerClientSample {
             deviceManagerResponseDto = updateHostConnectionDetails(deviceManagerResponseDto);
 
             if (null != deviceManagerResponseDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(deviceManagerResponseDto.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(deviceManagerResponseDto.getUri());
             }
             /**
              * then make sdk service call to get resource aSync parameter
@@ -327,15 +327,13 @@ public class FcSansDeviceManagerClientSample {
         return deviceManagerResponseDto;
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         FcSansDeviceManagerClientSample client = new FcSansDeviceManagerClientSample();
-        client.createDeviceManager();
-        client.deleteDeviceManager();
+
         client.createDeviceManager();
         client.updateDeviceManager();
         client.getAllDeviceManager();
         client.getDeviceManager();
+        client.deleteDeviceManager();
     }
 }

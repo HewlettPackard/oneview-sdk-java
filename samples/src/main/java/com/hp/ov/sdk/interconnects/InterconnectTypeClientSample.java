@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.interconnects;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.InterconnectTypeCollectionV2;
 import com.hp.ov.sdk.dto.generated.InterconnectTypes;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -24,6 +23,7 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.InterconnectTypeClient;
+import com.hp.ov.sdk.rest.client.InterconnectTypeClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
@@ -33,18 +33,19 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
  * operations on interconnect type resource
  */
 public class InterconnectTypeClientSample {
+
+    private final InterconnectTypeClient interconnectTypeClient;
+
     private RestParams params;
-    private static InterconnectTypeClient interconnectTypeClient;
 
     // These are variables to be defined by user
     // ================================
     private static final String resourceName = "HP VC FlexFabric-20/40 F8 Module";
-    private static final String resourceId = "2edca2bb-e8d1-44b9-839e-3e4a95dff9f2";
-
+    private static final String resourceId = "15943359-6e16-4b42-9900-4b98118914ad";
     // ================================
 
-    private static void init() {
-        interconnectTypeClient = HPOneViewSdkBeanFactory.getInterconnectTypeClient();
+    private InterconnectTypeClientSample() {
+        this.interconnectTypeClient = InterconnectTypeClientImpl.getClient();
     }
 
     private void getInterconnectTypeById() throws InstantiationException, IllegalAccessException {
@@ -77,7 +78,6 @@ public class InterconnectTypeClientSample {
             System.out.println("InterconnectTypeClientTest : getInterconnectTypeById :" + " arguments are null ");
             return;
         }
-
     }
 
     private void getAllInterconnectType() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
@@ -141,16 +141,14 @@ public class InterconnectTypeClientSample {
             System.out.println("InterconnectTypeClientTest : getInterconnectTypeByName :" + " arguments are null ");
             return;
         }
-
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         InterconnectTypeClientSample client = new InterconnectTypeClientSample();
-        client.getInterconnectTypeById();
+
         client.getAllInterconnectType();
         client.getInterconnectTypeByName();
+        client.getInterconnectTypeById();
     }
 
 }

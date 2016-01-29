@@ -15,27 +15,21 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
-import org.json.JSONObject;
-import org.springframework.stereotype.Component;
-
-import com.hp.ov.sdk.bean.factory.ConverterFactory;
 import com.hp.ov.sdk.dto.LiFirmware;
 import com.hp.ov.sdk.dto.LogicalInterconnectCollectionV2;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
 import com.hp.ov.sdk.dto.generated.SnmpConfiguration;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
+import org.json.JSONObject;
 
-@Component
 public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects, Object> {
-
-    private ObjectToJsonConverter converter;
 
     @Override
     public LogicalInterconnects buildDto(final Object source) {
         // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final LogicalInterconnects logicalInterconnectsDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), LogicalInterconnects.class);
         return logicalInterconnectsDto;
@@ -44,7 +38,7 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
     public LiFirmware buildFirmwareDto(final Object source) {
         // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final LiFirmware liFirmwareDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), LiFirmware.class);
         return liFirmwareDto;
@@ -56,7 +50,7 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
             return null;
         }
         // convert json Object to DTO, replace quotes and back slash in the file
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final LogicalInterconnectCollectionV2 logicalInterconnectCollectionDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
                         .convertObjectToJsonString(source))), LogicalInterconnectCollectionV2.class);
@@ -65,13 +59,13 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
 
     public JSONObject buildJsonObjectFromDto(final LiFirmware source) {
         // return the JSON object.
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
     public JSONObject buildJsonObjectFromDto(final SnmpConfiguration source) {
         // return the JSON object.
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 

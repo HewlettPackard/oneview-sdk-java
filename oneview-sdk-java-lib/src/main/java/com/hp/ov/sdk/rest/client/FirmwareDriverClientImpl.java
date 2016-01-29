@@ -15,13 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
-import java.util.ArrayList;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.hp.ov.sdk.adaptors.FirmwareDriverAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -38,31 +31,37 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component
+import java.util.ArrayList;
+
 public class FirmwareDriverClientImpl implements FirmwareDriverClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(FirmwareDriverClientImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FirmwareDriverClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
 
-    @Autowired
-    private HttpRestClient restClient;
+    private final FirmwareDriverAdaptor adaptor;
+    private final TaskAdaptor taskAdaptor;
+    private final TaskMonitorManager taskMonitor;
 
-    @Autowired
-    private FirmwareDriverAdaptor adaptor;
+    protected FirmwareDriverClientImpl(FirmwareDriverAdaptor adaptor,
+        TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
 
-    @Autowired
-    private UrlUtils urlUtils;
+        this.adaptor = adaptor;
+        this.taskAdaptor = taskAdaptor;
+        this.taskMonitor = taskMonitor;
+    }
 
-    @Autowired
-    private TaskAdaptor taskAdaptor;
-
-    @Autowired
-    private TaskMonitorManager taskMonitor;
+    public static FirmwareDriverClient getClient() {
+        return new FirmwareDriverClientImpl(new FirmwareDriverAdaptor(),
+                TaskAdaptor.getInstance(),
+                TaskMonitorManager.getInstance());
+    }
 
     @Override
     public FwBaseline getFirmwareDriver(final RestParams params, final String resourceId) {
-        logger.info("FirmwareDriverClientImpl : getFirmwareDriver : Start");
+        LOGGER.info("FirmwareDriverClientImpl : getFirmwareDriver : Start");
 
         // validate args
         if (null == params) {
@@ -70,10 +69,10 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI, resourceId));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("FirmwareDriverClientImpl : getFirmwareDriver : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("FirmwareDriverClientImpl : getFirmwareDriver : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.FIRMWARE_DRIVER,
                     null);
@@ -82,15 +81,15 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
 
         final FwBaseline fwBaselineDto = adaptor.buildDto(returnObj);
 
-        logger.debug("FirmwareDriverClientImpl : getFirmwareDriver : name :" + fwBaselineDto.getName());
-        logger.info("FirmwareDriverClientImpl : getFirmwareDriver : End");
+        LOGGER.debug("FirmwareDriverClientImpl : getFirmwareDriver : name :" + fwBaselineDto.getName());
+        LOGGER.info("FirmwareDriverClientImpl : getFirmwareDriver : End");
 
         return fwBaselineDto;
     }
 
     @Override
     public FwBaselineCollection getAllFirmwareDrivers(final RestParams params) {
-        logger.info("FirmwareDriverClientImpl : getAllFirmwareDrivers : Start");
+        LOGGER.info("FirmwareDriverClientImpl : getAllFirmwareDrivers : Start");
 
         // validate args
         if (null == params) {
@@ -98,10 +97,10 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("FirmwareDriverClientImpl : getAllFirmwareDrivers : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("FirmwareDriverClientImpl : getAllFirmwareDrivers : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.FIRMWARE_DRIVER,
                     null);
@@ -110,15 +109,15 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
 
         final FwBaselineCollection fwBaselineCollectionDto = adaptor.buildCollectionDto(returnObj);
 
-        logger.debug("FirmwareDriverClientImpl : getAllFirmwareDrivers : count :" + fwBaselineCollectionDto.getCount());
-        logger.info("FirmwareDriverClientImpl : getAllFirmwareDrivers : End");
+        LOGGER.debug("FirmwareDriverClientImpl : getAllFirmwareDrivers : count :" + fwBaselineCollectionDto.getCount());
+        LOGGER.info("FirmwareDriverClientImpl : getAllFirmwareDrivers : End");
 
         return fwBaselineCollectionDto;
     }
 
     @Override
     public FwBaseline getFirmwareDriverByName(final RestParams params, final String firmwareName) {
-        logger.info("FirmwareDriverClientImpl : getFirmwareDriverByName : Start");
+        LOGGER.info("FirmwareDriverClientImpl : getFirmwareDriverByName : Start");
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
@@ -127,11 +126,11 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
         for (final FwBaseline fwBaselineDto : new ArrayList<>(fwBaselineCollectionDto.getMembers())) {
             if ((fwBaselineDto.getName().replaceAll(" ", "")).equalsIgnoreCase((firmwareName.replaceAll(" ", "")))) {
                 System.out.println(fwBaselineDto.getName());
-                logger.info("FirmwareDriverClientImpl : getFirmwareDriverByName : End");
+                LOGGER.info("FirmwareDriverClientImpl : getFirmwareDriverByName : End");
                 return fwBaselineDto;
             }
         }
-        logger.error("FirmwareDriverClientImpl : getFirmwareDriverByName : resource not Found for name :" + firmwareName);
+        LOGGER.error("FirmwareDriverClientImpl : getFirmwareDriverByName : resource not Found for name :" + firmwareName);
         throw new SDKResourceNotFoundException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.FIRMWARE_DRIVER, null);
 
     }
@@ -139,7 +138,7 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
     @Override
     public TaskResourceV2 deleteFirmwareDriver(RestParams params, String resourceId, Boolean isForce, final boolean aSync,
             final boolean useJsonRequest) {
-        logger.info("FirmwareDriverClientImpl : deleteFirmwareDriver : Start");
+        LOGGER.info("FirmwareDriverClientImpl : deleteFirmwareDriver : Start");
 
         // validate args
         if (null == params) {
@@ -147,10 +146,10 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
         }
         // set the additional params
         params.setType(HttpMethodType.DELETE);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI, resourceId));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("FirmwareDriverClientImpl : deleteFirmwareDriver : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("FirmwareDriverClientImpl : deleteFirmwareDriver : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.FIRMWARE_DRIVER,
@@ -159,8 +158,8 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
 
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("FirmwareDriverClientImpl : deleteFirmwareDriver : returnObj =" + returnObj);
-        logger.debug("FirmwareDriverClientImpl : deleteFirmwareDriver : taskResource =" + taskResourceV2);
+        LOGGER.debug("FirmwareDriverClientImpl : deleteFirmwareDriver : returnObj =" + returnObj);
+        LOGGER.debug("FirmwareDriverClientImpl : deleteFirmwareDriver : taskResource =" + taskResourceV2);
 
         // check for asyncOrSyncMode. if user is asking async mode, return the
         // directly the TaskResourceV2
@@ -170,7 +169,7 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("FirmwareDriverClientImpl : deleteFirmwareDriver : End");
+        LOGGER.info("FirmwareDriverClientImpl : deleteFirmwareDriver : End");
 
         return taskResourceV2;
     }
@@ -182,7 +181,7 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
         FwBaseline fwBaselineDto = getFirmwareDriverByName(creds, name);
 
         if (null != fwBaselineDto.getUri()) {
-            resourceId = urlUtils.getResourceIdFromUri(fwBaselineDto.getUri());
+            resourceId = UrlUtils.getResourceIdFromUri(fwBaselineDto.getUri());
         }
         return resourceId;
     }

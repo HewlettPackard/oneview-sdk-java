@@ -21,29 +21,6 @@ public class SslPropertiesManager {
 
     private HttpSslProperties httpSslProperties = new HttpSslProperties();
 
-    public HttpSslProperties getHttpSslProperties() {
-        return httpSslProperties;
-    }
-
-    public void setHttpSslProperties(final HttpSslProperties httpSslProperties) {
-        if (httpSslProperties == null) {
-            throw new IllegalArgumentException("Can not be null");
-        }
-        this.httpSslProperties = httpSslProperties;
-    }
-
-    // TODO- Refactor incase of param passing.
-    public HttpSslProperties getSslProperties(final String keyStoreFile, final String trustStoreFile) {
-        return getSslProperties(keyStoreFile, trustStoreFile, HttpSslProperties.DEFAULT_PASSWORD,
-                HttpSslProperties.DEFAULT_PASSWORD);
-    }
-
-    public HttpSslProperties getSslProperties(final String keyStoreFile, final String trustStoreFile,
-            final String keyStorePassword, final String trustStorePassword) {
-        return getSslProperties(keyStoreFile, trustStoreFile, keyStorePassword, trustStorePassword, HttpSslProperties.DEFAULT_TYPE,
-                HttpSslProperties.DEFAULT_TYPE);
-    }
-
     public HttpSslProperties getSslProperties(final String keyStoreFile, final String trustStoreFile,
             final String keyStorePassword, final String trustStorePassword, final String keyStoreType, final String trustStoreType) {
 
@@ -58,7 +35,6 @@ public class SslPropertiesManager {
     }
 
     public void loadSslProperties(final HttpSslProperties httpSslProperties) {
-
         if (httpSslProperties.getKeyStore() != null && !httpSslProperties.getKeyStore().trim().equals("")) {
             System.setProperty("javax.net.ssl.keyStore", httpSslProperties.getKeyStore());
         }

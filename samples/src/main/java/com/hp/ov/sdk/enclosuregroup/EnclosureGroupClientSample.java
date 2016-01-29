@@ -15,10 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.enclosuregroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.EnclosureGroupCollectionV2;
 import com.hp.ov.sdk.dto.generated.EnclosureGroups;
@@ -31,10 +27,15 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
+import com.hp.ov.sdk.rest.client.EnclosureGroupClientImpl;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClient;
+import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * EnclosureGroupClientSample is a sample program enables/consume to set a common configuration across the enclosure  
@@ -42,24 +43,23 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
  * operations on enclosure group resource
  */
 public class EnclosureGroupClientSample {
+
+    private final LogicalInterconnectGroupClient logicalInterconnectGroupClient;
+    private final EnclosureGroupClient enclosureGroupClient;
+
     private RestParams params;
-    private static UrlUtils urlUtils;
-    private static LogicalInterconnectGroupClient logicalInterconnectGroupClient;
-    private static EnclosureGroupClient enclosureGroupClient;
 
     // test values - user input
     // ================================
     private static final String resourceName = "Enclosure_Test";
     private static final String logicalInterconnectName = "LIG_PROD";
-    private static final String resourceId = "049b1698-dadf-4713-9a4c-ff4efb9780c5";
+    private static final String resourceId = "7383eb8d-52ad-4c44-aea3-dc138cc9adbc";
     private static final String scriptData = "name=Enclosure_test";
-
     // ================================
 
-    private static void init() throws Exception {
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        logicalInterconnectGroupClient = HPOneViewSdkBeanFactory.getLogicalInterconnectGroupClient();
-        enclosureGroupClient = HPOneViewSdkBeanFactory.getEnclosureGroupClient();
+    public EnclosureGroupClientSample() {
+        this.logicalInterconnectGroupClient = LogicalInterconnectGroupClientImpl.getClient();
+        this.enclosureGroupClient = EnclosureGroupClientImpl.getClient();
     }
 
     private void getEnclosureGroupById() throws InstantiationException, IllegalAccessException {
@@ -91,7 +91,6 @@ public class EnclosureGroupClientSample {
             System.out.println("EnclosureGroupClientTest : getEnclosureGroupById :" + " arguments are null ");
             return;
         }
-
     }
 
     private void getAllEnclosureGroup() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
@@ -155,7 +154,6 @@ public class EnclosureGroupClientSample {
             System.out.println("EnclosureGroupClientTest : getEnclosureGroupByName :" + " arguments are null ");
             return;
         }
-
     }
 
     private void createEnclosureGroup() throws InstantiationException, IllegalAccessException {
@@ -213,7 +211,7 @@ public class EnclosureGroupClientSample {
             enclosureGroupDto.setName(resourceName + "_updated");
 
             if (null != enclosureGroupDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(enclosureGroupDto.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(enclosureGroupDto.getUri());
             }
             /**
              * then make sdk service call to get resource aSync parameter
@@ -288,7 +286,6 @@ public class EnclosureGroupClientSample {
             System.out.println("EnclosureGroupClientTest : deleteEnclosureGroup :" + " arguments are null ");
             return;
         }
-
     }
 
     private void getConfigurationScript() {
@@ -320,7 +317,6 @@ public class EnclosureGroupClientSample {
             System.out.println("EnclosureGroupClientTest : getConfigurationScript :" + " arguments are null ");
             return;
         }
-
     }
 
     private void updateConfigurationScript() throws InstantiationException, IllegalAccessException {
@@ -335,7 +331,7 @@ public class EnclosureGroupClientSample {
             enclosureGroupDto = enclosureGroupClient.getEnclosureGroupByName(params, resourceName);
 
             if (null != enclosureGroupDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(enclosureGroupDto.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(enclosureGroupDto.getUri());
             }
 
             // then make sdk service call to get resource
@@ -362,23 +358,21 @@ public class EnclosureGroupClientSample {
             System.out.println("EnclosureGroupClientTest : updateConfigurationScript :" + " arguments are null ");
             return;
         }
-
     }
 
     // TODO - Move Uri fetch logic to SdkUtils
     private EnclosureGroups buildTestEnclosureGroupDto() {
-
         // fetch resource Id using resource name
         final String logicalInterconnectGroupUri = logicalInterconnectGroupClient.getLogicalInterconnectGroupByName(params,
                 logicalInterconnectName).getUri();
 
-        int i;
         final EnclosureGroups dto = new EnclosureGroups();
         dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP);
         dto.setName(resourceName);
         dto.setStackingMode(EnclosureGroups.StackingMode.Enclosure);
         final List<InterconnectBayMapping> interconnectBayMappings = new ArrayList<InterconnectBayMapping>();
-        for (i = 0; i < 8; i++) {
+
+        for (int i = 0; i < 8; i++) {
             final InterconnectBayMapping interconnectBayMapping = new InterconnectBayMapping();
             interconnectBayMapping.setInterconnectBay(i + 1);
             interconnectBayMapping.setLogicalInterconnectGroupUri(logicalInterconnectGroupUri);
@@ -388,16 +382,15 @@ public class EnclosureGroupClientSample {
         return dto;
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         EnclosureGroupClientSample client = new EnclosureGroupClientSample();
-        client.getEnclosureGroupById();
+
         client.getAllEnclosureGroup();
         client.createEnclosureGroup();
+        client.getEnclosureGroupById();
+        client.getEnclosureGroupByName();
         client.updateConfigurationScript();
         client.getConfigurationScript();
-        client.getEnclosureGroupByName();
         client.updateEnclosureGroup();
         client.createEnclosureGroup();
         client.deleteEnclosureGroup();

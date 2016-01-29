@@ -20,13 +20,10 @@ import java.util.List;
 
 public class MsmbAlertsResource extends BaseModelResource {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
 
     private String numberOfSamples;
-    private String resourceTye;
+    private String resourceType;
     private String startTime;
     private long sampleIntervalInSeconds;
     private List<ResourceDataList> resourceDataList = new ArrayList<ResourceDataList>();
@@ -39,12 +36,12 @@ public class MsmbAlertsResource extends BaseModelResource {
         this.numberOfSamples = numberOfSamples;
     }
 
-    public String getResourceTye() {
-        return resourceTye;
+    public String getResourceType() {
+        return resourceType;
     }
 
-    public void setResourceTye(final String resourceTye) {
-        this.resourceTye = resourceTye;
+    public void setResourceType(final String resourceType) {
+        this.resourceType = resourceType;
     }
 
     public String getStartTime() {

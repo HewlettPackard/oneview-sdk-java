@@ -15,18 +15,12 @@
  *******************************************************************************/
 package com.hp.ov.sdk.logicalinterconnectgroup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
-import com.hp.ov.sdk.dto.samples.UplinkSetValue;
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.LogicalInterconnectGroupCollectionV2;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
 import com.hp.ov.sdk.dto.generated.UplinkSet;
+import com.hp.ov.sdk.dto.samples.UplinkSetValue;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -35,24 +29,31 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClient;
+import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 import com.hp.ov.sdk.util.samples.ResourceDtoUtilsWrapper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
 /*
- * LogicalInterconnectGroupClientSample is a sample program, acts as a recipe for representing the available networks, 
- * uplink sets, stacking links, and interconnect settings for a set of physical interconnects in a single enclosure 
- * of HP OneView to a logical interconnect group. It invokes APIs of LogicalInterconnectGroupClient which is in sdk 
+ * LogicalInterconnectGroupClientSample is a sample program, acts as a recipe for representing the available networks,
+ * uplink sets, stacking links, and interconnect settings for a set of physical interconnects in a single enclosure
+ * of HP OneView to a logical interconnect group. It invokes APIs of LogicalInterconnectGroupClient which is in sdk
  * library to perform GET/PUT/POST/DELETE operations on logical interconnect group resource
  */
 public class LogicalInterconnectGroupClientSample {
+
+    private final LogicalInterconnectGroupClient logicalInterconnectGroupClient;
+    private final ResourceDtoUtils resourceDtoUtils;
+
     private RestParams params;
-    private static LogicalInterconnectGroupClient logicalInterconnectGroupClient;
-    private static UrlUtils urlUtils;
-    private static ResourceDtoUtils resourceDtoUtils;
-    private static TaskResourceV2 taskResourceV2;
+    private TaskResourceV2 taskResourceV2;
 
     // test values - user input
     // ================================
@@ -68,15 +69,13 @@ public class LogicalInterconnectGroupClientSample {
     private static final String ethUplinkSetName = "EthernetUplinkSet";
     private static final String fcAUplinkSetName = "FCUplinkSetA";
     private static final String fcBUplinkSetName = "FCUplinkSetB";
-    private static final String resourceId = "22b3555b-e26a-4c2d-b2f7-f8a18971ce37";
-    private static final String settingId = "63938196-aee5-47e6-8599-310ded7ba5f6";
-
+    private static final String resourceId = "e77a2b15-0b6d-4b86-9766-068c6a8eeb7a";
+    private static final String settingId = "98a35420-b01e-47b2-9ddd-dee264ebacca";
     // ================================
 
-    private static void init() throws Exception {
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        logicalInterconnectGroupClient = HPOneViewSdkBeanFactory.getLogicalInterconnectGroupClient();
-        resourceDtoUtils = HPOneViewSdkBeanFactory.getResourceDtoUtils();
+    private LogicalInterconnectGroupClientSample() {
+        this.logicalInterconnectGroupClient = LogicalInterconnectGroupClientImpl.getClient();
+        this.resourceDtoUtils = new ResourceDtoUtils();
     }
 
     private void getLogicalInterconnectGroupById() throws InstantiationException, IllegalAccessException {
@@ -112,7 +111,6 @@ public class LogicalInterconnectGroupClientSample {
             System.out.println("LogicalInterconnectGroupClientTest : " + "getLogicalInterconnectGroupById : arguments are null ");
             return;
         }
-
     }
 
     private void getAllLogicalInterconnectGroups() throws InstantiationException, IllegalAccessException {
@@ -182,7 +180,6 @@ public class LogicalInterconnectGroupClientSample {
             System.out.println("LogicalInterconnectGroupClientTest : " + "getLogicalInterconnectGroupByName : arguments are null ");
             return;
         }
-
     }
 
     private void createLogicalInterconnectGroup() throws InstantiationException, IllegalAccessException {
@@ -240,7 +237,7 @@ public class LogicalInterconnectGroupClientSample {
             logicalInterconnectGroups = logicalInterconnectGroupClient.getLogicalInterconnectGroupByName(params, resourceName);
 
             if (null != logicalInterconnectGroups.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(logicalInterconnectGroups.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(logicalInterconnectGroups.getUri());
             }
 
             // create uplinksetDto request body
@@ -279,7 +276,6 @@ public class LogicalInterconnectGroupClientSample {
                     + "please check task resource for more details ");
             return;
         }
-
     }
 
     private void deleteLogicalInterconnectGroup() throws InstantiationException, IllegalAccessException {
@@ -391,18 +387,18 @@ public class LogicalInterconnectGroupClientSample {
             System.out.println("LogicalInterconnectGroupClientTest : " + "getInterconnectSettings : arguments are null ");
             return;
         }
-
     }
 
     private LogicalInterconnectGroups buildTestLogicalInterconnectGroup() {
-        final HashMap<Integer, String> bayPermittedInterconnectMaps = new HashMap<Integer, String>();
+        HashMap<Integer, String> bayPermittedInterconnectMaps = new HashMap<Integer, String>();
+
         bayPermittedInterconnectMaps.put(1, permittedInterconnectType);
         bayPermittedInterconnectMaps.put(2, permittedInterconnectType);
+
         return resourceDtoUtils.buildLogicalInterconnectGroupDto(params, resourceName, bayPermittedInterconnectMaps);
     }
 
     private List<UplinkSet> buildUplinkSetGroupDto() {
-
         List<UplinkSet> uplinkSetGroupDto = new ArrayList<UplinkSet>();
 
         final HashMap<Integer, List<String>> ethBayPortMap = new HashMap<Integer, List<String>>();
@@ -439,24 +435,22 @@ public class LogicalInterconnectGroupClientSample {
         uplinkSetValues.add(fcAUplinkSetValue);
         uplinkSetValues.add(fcBUplinkSetValue);
 
-        ResourceDtoUtilsWrapper resourceDtoUtilsWrapper = new ResourceDtoUtilsWrapper();
+        ResourceDtoUtilsWrapper resourceDtoUtilsWrapper = new ResourceDtoUtilsWrapper(resourceDtoUtils);
         uplinkSetGroupDto = resourceDtoUtilsWrapper.buildUplinkSetGroupDto(params, uplinkSetValues);
 
         return uplinkSetGroupDto;
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         LogicalInterconnectGroupClientSample client = new LogicalInterconnectGroupClientSample();
 
         client.getAllLogicalInterconnectGroups();
+        client.createLogicalInterconnectGroup();
         client.getLogicalInterconnectGroupById();
+        client.getLogicalInterconnectGroupByName();
         client.getDefaultInterconnectSettings();
         // To run getInterconnectSettings, need settingID and resourceID of LIG
         client.getInterconnectSettings();
-        client.createLogicalInterconnectGroup();
-        client.getLogicalInterconnectGroupByName();
         client.updateLogicalInterconnectGroup();
         client.deleteLogicalInterconnectGroup();
     }

@@ -20,12 +20,11 @@ package com.hp.ov.sdk.msmb.consumer;
 
 import com.hp.ov.sdk.dto.MsmbAlertsMessageDto;
 import com.hp.ov.sdk.dto.samples.MsmbMessage;
-import com.hp.ov.sdk.msmb.consumer.ServerHardwareMsmbConsumer;
 import com.hp.ov.sdk.messaging.msmb.listeners.MsmbListener;
 import com.hp.ov.sdk.messaging.msmb.services.MsmbAlertsHandler;
 
 /**
- * 
+ *
  */
 public class MsmbHandler implements MsmbListener {
 
@@ -55,7 +54,7 @@ public class MsmbHandler implements MsmbListener {
         // notify server power usage consumer
         // TODO - filter logic
         // if
-        // (alertsDto.getResource().getResourceTye().equals(EventTypes.MSMB_SERVER_HARDWARE)){
+        // (alertsDto.getResource().getResourceType().equals(EventTypes.MSMB_SERVER_HARDWARE)){
         serverConsumer.notifyPowerUsage(msmbMessage);
         // }
 

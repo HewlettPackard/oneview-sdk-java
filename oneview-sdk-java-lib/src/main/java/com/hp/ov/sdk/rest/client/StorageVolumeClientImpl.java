@@ -15,12 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.hp.ov.sdk.adaptors.StorageVolumeAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -39,33 +33,39 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component
 public class StorageVolumeClientImpl implements StorageVolumeClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(StorageVolumeClientImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StorageVolumeClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
 
-    @Autowired
-    private HttpRestClient restClient;
-
-    @Autowired
-    private StorageVolumeAdaptor adaptor;
+    private final StorageVolumeAdaptor adaptor;
+    private final TaskAdaptor taskAdaptor;
+    private final TaskMonitorManager taskMonitor;
 
     private JSONObject jsonObject;
 
-    @Autowired
-    private UrlUtils urlUtils;
+    protected StorageVolumeClientImpl(StorageVolumeAdaptor adaptor,
+        TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
 
-    @Autowired
-    private TaskAdaptor taskAdaptor;
+        this.adaptor = adaptor;
+        this.taskAdaptor = taskAdaptor;
+        this.taskMonitor = taskMonitor;
+    }
 
-    @Autowired
-    private TaskMonitorManager taskMonitor;
+    public static StorageVolumeClient getClient() {
+        return new StorageVolumeClientImpl(
+                new StorageVolumeAdaptor(),
+                TaskAdaptor.getInstance(),
+                TaskMonitorManager.getInstance());
+    }
 
     @Override
     public StorageVolumeV2 getStorageVolume(final RestParams params, final String resourceId) {
-        logger.info("StorageVolumeClientImpl : getStorageVolume : Start");
+        LOGGER.info("StorageVolumeClientImpl : getStorageVolume : Start");
 
         // validate args
         if (null == params) {
@@ -73,10 +73,10 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_URI, resourceId));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("StorageVolumeClientImpl : getStorageVolume : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("StorageVolumeClientImpl : getStorageVolume : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_VOLUME,
                     null);
@@ -85,15 +85,15 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
 
         final StorageVolumeV2 storageVolumeDto = adaptor.buildDto(returnObj);
 
-        logger.debug("StorageVolumeClientImpl : getStorageVolume : name :" + storageVolumeDto.getName());
-        logger.info("StorageVolumeClientImpl : getStorageVolume : End");
+        LOGGER.debug("StorageVolumeClientImpl : getStorageVolume : name :" + storageVolumeDto.getName());
+        LOGGER.info("StorageVolumeClientImpl : getStorageVolume : End");
 
         return storageVolumeDto;
     }
 
     @Override
     public StorageVolumeCollection getAllStorageVolumes(final RestParams params) {
-        logger.info("StorageVolumeClientImpl : getAllStorageVolumes : Start");
+        LOGGER.info("StorageVolumeClientImpl : getAllStorageVolumes : Start");
 
         // validate args
         if (null == params) {
@@ -101,10 +101,10 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_URI));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("StorageVolumeClientImpl : getAllStorageVolumes : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("StorageVolumeClientImpl : getAllStorageVolumes : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_VOLUMES,
                     null);
@@ -113,8 +113,8 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
 
         final StorageVolumeCollection storageVolumeCollectionDto = adaptor.buildCollectionDto(returnObj);
 
-        logger.debug("StorageVolumeClientImpl : getAllStorageVolumes : count :" + storageVolumeCollectionDto.getCount());
-        logger.info("StorageVolumeClientImpl : getAllStorageVolumes : End");
+        LOGGER.debug("StorageVolumeClientImpl : getAllStorageVolumes : count :" + storageVolumeCollectionDto.getCount());
+        LOGGER.info("StorageVolumeClientImpl : getAllStorageVolumes : End");
 
         return storageVolumeCollectionDto;
     }
@@ -122,20 +122,20 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
     @Override
     public StorageVolumeV2 getStorageVolumeByName(final RestParams params, final String name) {
         StorageVolumeV2 storageVolumeDto = null;
-        logger.info("StorageVolumeClientImpl : getStorageVolumeByName : Start");
+        LOGGER.info("StorageVolumeClientImpl : getStorageVolumeByName : Start");
 
         // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = urlUtils.createFilterString(name);
+        final String query = UrlUtils.createFilterString(name);
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(urlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_URI, query));
+        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_URI, query));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("StorageVolumeClientImpl : getStorageVolumeByName : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("StorageVolumeClientImpl : getStorageVolumeByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_VOLUMES,
                     null);
@@ -151,11 +151,11 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
         }
 
         if (storageVolumeDto == null) {
-            logger.error("StorageVolumeClientImpl : getStorageVolumeByName : Not found for name :" + name);
+            LOGGER.error("StorageVolumeClientImpl : getStorageVolumeByName : Not found for name :" + name);
             throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.STORAGE_VOLUME,
                     null);
         }
-        logger.info("StorageVolumeClientImpl : getStorageVolumeByName : End");
+        LOGGER.info("StorageVolumeClientImpl : getStorageVolumeByName : End");
 
         return storageVolumeDto;
 
@@ -164,7 +164,7 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
     @Override
     public TaskResourceV2 createStorageVolume(final RestParams params, final AddStorageVolumeV2 addStorageVolumeDto,
             final boolean aSync, final boolean useJsonRequest) {
-        logger.info("StorageVolumeClientImpl : createStorageVolume : Start");
+        LOGGER.info("StorageVolumeClientImpl : createStorageVolume : Start");
         String returnObj = null;
 
         // validate params
@@ -174,7 +174,7 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
         }
         // set the additional params
         params.setType(HttpMethodType.POST);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_URI));
 
         // TODO - check for json request in the input storageVolumeDto. if it is
         // present,
@@ -185,12 +185,12 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
 
         // create JSON request from storageVolumeDto
         jsonObject = adaptor.buildJsonObjectFromDto(addStorageVolumeDto);
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("StorageVolumeClientImpl : createStorageVolume : returnObj =" + returnObj);
-        logger.debug("StorageVolumeClientImpl : createStorageVolume : taskResource =" + taskResourceV2);
+        LOGGER.debug("StorageVolumeClientImpl : createStorageVolume : returnObj =" + returnObj);
+        LOGGER.debug("StorageVolumeClientImpl : createStorageVolume : taskResource =" + taskResourceV2);
 
         // check for aSync flag. if user is asking async mode, return directly
         // the TaskResourceV2
@@ -200,7 +200,7 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("StorageVolumeClientImpl : createStorageVolume : End");
+        LOGGER.info("StorageVolumeClientImpl : createStorageVolume : End");
 
         return taskResourceV2;
     }
@@ -208,7 +208,7 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
     @Override
     public String updateStorageVolume(final RestParams params, final String resourceId, final StorageVolumeV2 storageVolumeDto,
             final boolean useJsonRequest) {
-        logger.info("StorageVolumeClientImpl : updateStorageVolume : Start");
+        LOGGER.info("StorageVolumeClientImpl : updateStorageVolume : Start");
 
         // validate args
         if (null == params) {
@@ -221,7 +221,7 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
         }
         // set the additional params
         params.setType(HttpMethodType.PUT);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_URI, resourceId));
         String returnObj = null;
 
         // TODO - check for json request in the input dto. if it is present,
@@ -232,21 +232,21 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(storageVolumeDto);
-        returnObj = restClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         if (!returnObj.isEmpty() || returnObj != null) {
             returnObj = "Updated";
         }
 
-        logger.debug("StorageVolumeClientImpl : updateStorageVolume : returnObj =" + returnObj);
+        LOGGER.debug("StorageVolumeClientImpl : updateStorageVolume : returnObj =" + returnObj);
 
-        logger.info("StorageVolumeClientImpl : updateStorageVolume : End");
+        LOGGER.info("StorageVolumeClientImpl : updateStorageVolume : End");
 
         return returnObj;
     }
 
     @Override
     public TaskResourceV2 deleteStorageVolume(final RestParams params, final String resourceId, final boolean aSync) {
-        logger.info("StorageVolumeClientImpl : deleteStorageVolume : Start");
+        LOGGER.info("StorageVolumeClientImpl : deleteStorageVolume : Start");
 
         // validate args
         if (null == params) {
@@ -254,10 +254,10 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
         }
         // set the additional params
         params.setType(HttpMethodType.DELETE);
-        params.setUrl(urlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_URI, resourceId));
 
-        final String returnObj = restClient.sendRequestToHPOV(params, null);
-        logger.debug("StorageVolumeClientImpl : deleteStorageVolume : response from OV :" + returnObj);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        LOGGER.debug("StorageVolumeClientImpl : deleteStorageVolume : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_VOLUMES,
@@ -266,8 +266,8 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
 
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        logger.debug("StorageVolumeClientImpl : deleteStorageVolume : returnObj =" + returnObj);
-        logger.debug("StorageVolumeClientImpl : deleteStorageVolume : taskResource =" + taskResourceV2);
+        LOGGER.debug("StorageVolumeClientImpl : deleteStorageVolume : returnObj =" + returnObj);
+        LOGGER.debug("StorageVolumeClientImpl : deleteStorageVolume : taskResource =" + taskResourceV2);
 
         // check for asyncOrSyncMode. if user is asking async mode, return the
         // directly the TaskResourceV2
@@ -277,7 +277,7 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        logger.info("StorageVolumeClientImpl : deleteStorageVolume : End");
+        LOGGER.info("StorageVolumeClientImpl : deleteStorageVolume : End");
 
         return taskResourceV2;
     }
@@ -289,7 +289,7 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
         StorageVolumeV2 storageVolumeDto = getStorageVolumeByName(creds, name);
 
         if (null != storageVolumeDto.getUri()) {
-            resourceId = urlUtils.getResourceIdFromUri(storageVolumeDto.getUri());
+            resourceId = UrlUtils.getResourceIdFromUri(storageVolumeDto.getUri());
         }
         return resourceId;
     }

@@ -18,52 +18,43 @@
 
 package com.hp.ov.sdk.util;
 
-import org.springframework.stereotype.Component;
-
 import com.hp.ov.sdk.constants.SdkConstants;
 
-/**
- * 
- */
-@Component
-public class UrlUtils {
+public final class UrlUtils {
 
-    public String getResourceIdFromUri(final String uri) {
-        final String resourceId = uri.substring(uri.lastIndexOf("/") + 1);
-        return resourceId;
+    public static String getResourceIdFromUri(final String uri) {
+        return uri.substring(uri.lastIndexOf("/") + 1);
     }
 
-    public String createFilterString(final String name) {
+    public static String createFilterString(final String name) {
         return SdkConstants.FILTER_PREFIX + name + SdkConstants.FILTER_APPEND;
     }
 
-    public String createQueryString(final String name) {
+    public static String createQueryString(final String name) {
         return SdkConstants.QUERY_PREFIX + name + SdkConstants.QUERY_APPEND;
     }
 
-    public String createRestUrl(final String hostname, final String uri) {
-
+    public static String createRestUrl(final String hostname, final String uri) {
         return SdkConstants.HTTPS + hostname + uri;
     }
 
-    public String createRestUrl(final String hostname, final String uri, final String resourceId) {
-
+    public static String createRestUrl(final String hostname, final String uri, final String resourceId) {
         return SdkConstants.HTTPS + hostname + uri + "/" + resourceId;
     }
 
-    public String createRestUrl(final String hostname, final String uri, final String resourceId, final String subElement) {
+    public static String createRestUrl(final String hostname, final String uri, final String resourceId,
+        final String subElement) {
 
         return SdkConstants.HTTPS + hostname + uri + "/" + resourceId + "/" + subElement;
     }
 
-    public String createRestUrl(final String hostname, final String uri, final String resourceId, final String subElement,
-            final String targetId) {
+    public static String createRestUrl(final String hostname, final String uri, final String resourceId,
+        final String subElement, final String targetId) {
 
         return SdkConstants.HTTPS + hostname + uri + "/" + resourceId + "/" + subElement + "/" + targetId;
     }
 
-    public String createRestQueryUrl(final String hostname, final String uri, final String query) {
-
+    public static String createRestQueryUrl(final String hostname, final String uri, final String query) {
         return SdkConstants.HTTPS + hostname + uri + "?" + query.replaceAll(" ", "%20");
     }
 }

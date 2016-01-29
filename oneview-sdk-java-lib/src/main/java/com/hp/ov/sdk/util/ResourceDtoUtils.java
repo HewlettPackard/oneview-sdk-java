@@ -15,14 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ConnectionBoot;
@@ -32,8 +24,6 @@ import com.hp.ov.sdk.dto.StorageTargetPortCollection;
 import com.hp.ov.sdk.dto.generated.Bandwidth;
 import com.hp.ov.sdk.dto.generated.Bios;
 import com.hp.ov.sdk.dto.generated.Boot;
-import com.hp.ov.sdk.dto.generated.FcNetwork;
-import com.hp.ov.sdk.dto.generated.FcNetwork.FabricType;
 import com.hp.ov.sdk.dto.generated.Firmware;
 import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.generated.InterconnectMapTemplate;
@@ -54,35 +44,32 @@ import com.hp.ov.sdk.dto.generated.VolumeAttachment;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.rest.client.InterconnectTypeClient;
+import com.hp.ov.sdk.rest.client.InterconnectTypeClientImpl;
 import com.hp.ov.sdk.rest.client.StorageSystemClient;
+import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
-@Component
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+
 public class ResourceDtoUtils {
 
-    @Autowired
-    private SdkUtils utils;
+    private static final String ACTIVE = "Active";
 
-    @Autowired
-    private InterconnectTypeClient interconnectTypeClient;
+    private final StorageSystemClient storageSystemClient;
 
-    @Autowired
-    private StorageSystemClient storageSystemClient;
-
-    private static final String active = "Active";
-
-    public NetworkSets buildNetworkSetDto(final RestParams params, final String networkSetName, final List<String> networkNames,
-            final String nativeNetworkName) {
-        final NetworkSets dto = buildNetworkSetDto(params, networkSetName, networkNames);
-        dto.setNativeNetworkUri(utils.getNetworkUri(params, nativeNetworkName));
-        return dto;
+    public ResourceDtoUtils() {
+        this.storageSystemClient = StorageSystemClientImpl.getClient();
     }
 
     public NetworkSets buildNetworkSetDto(final RestParams params, final String networkSetName, final List<String> networkNames) {
-        final NetworkSets dto = new NetworkSets();
+        NetworkSets dto = new NetworkSets();
+
         dto.setName(networkSetName);
         dto.setNativeNetworkUri(null);
-        dto.setNetworkUris(utils.getNetworkUris(params, networkNames));
+        dto.setNetworkUris(SdkUtils.getInstance().getNetworkUris(params, networkNames));
         dto.setConnectionTemplateUri(null);
         dto.setType(ResourceCategory.RC_NETWORKSET);
 
@@ -97,20 +84,6 @@ public class ResourceDtoUtils {
         return bandwidth;
     }
 
-    public FcNetwork buildFcNetworkDto(final String fcNetworkName) {
-        final FcNetwork fcNetworkDto = new FcNetwork();
-
-        fcNetworkDto.setName(fcNetworkName);
-        fcNetworkDto.setConnectionTemplateUri(null);
-        fcNetworkDto.setLinkStabilityTime(30);
-        fcNetworkDto.setAutoLoginRedistribution(true);
-        fcNetworkDto.setFabricType(FabricType.FabricAttach);
-        // fcNetworkDto.setManagedSanUri(managedSanUri);
-        fcNetworkDto.setType(ResourceCategory.RC_FCNETWORK);
-
-        return fcNetworkDto;
-    }
-
     public LogicalInterconnectGroups buildLogicalInterconnectGroupDto(final RestParams params,
             final String logicalInterconnectGroupName, final HashMap<Integer, String> bayPermittedInterconnectMaps) {
         // local variable declaration.
@@ -123,7 +96,7 @@ public class ResourceDtoUtils {
         dto.setUplinkSets(null);
         dto.setModified(null);
         dto.setName(logicalInterconnectGroupName);
-        dto.setState(active);
+        dto.setState(ACTIVE);
         dto.setStatus(null);
 
         final List<InterconnectMapEntryTemplate> interconnectMapEntryTemplatesDto = new ArrayList<InterconnectMapEntryTemplate>();
@@ -143,11 +116,13 @@ public class ResourceDtoUtils {
                 }
                 locationEntriesDto.add(locationEntryDto);
             }
-            final LogicalLocation logicalLocationDto = new LogicalLocation();
+            LogicalLocation logicalLocationDto = new LogicalLocation();
+
             logicalLocationDto.setLocationEntries(locationEntriesDto);
             interconnectMapEntryTemplateDto.setLogicalLocation(logicalLocationDto);
+
             if (bayPermittedInterconnectMaps.get((i + 1)) != null) {
-                interconnectMapEntryTemplateDto.setPermittedInterconnectTypeUri(utils.getPermittedInterconnectTypeUri(params,
+                interconnectMapEntryTemplateDto.setPermittedInterconnectTypeUri(SdkUtils.getInstance().getPermittedInterconnectTypeUri(params,
                         bayPermittedInterconnectMaps.get((i + 1))));
             } else {
                 interconnectMapEntryTemplateDto.setPermittedInterconnectTypeUri(null);
@@ -169,7 +144,7 @@ public class ResourceDtoUtils {
      * ligName, String uplinkSetName, String uplinkSetType, List<String>
      * networkNames, String nativeEthNetwork, HashMap<Integer, List<String>>
      * bayPortMap, String ethMode, String lacpTimer, String fcUplinkSpeed) {
-     * 
+     *
      * }
      */
     public UplinkSet buildUplinkSetDto(final RestParams params, final String ligName, final String uplinkSetName,
@@ -183,17 +158,18 @@ public class ResourceDtoUtils {
         final List<LogicalPortConfigInfo> logicalPortConfigInfos = new ArrayList<LogicalPortConfigInfo>();
         final UplinkSet uplinkSetDto = new UplinkSet();
 
+        InterconnectTypeClient interconnectTypeClient = InterconnectTypeClientImpl.getClient();
+
         for (final Entry<Integer, List<String>> entry : bayPortMap.entrySet()) {
             final Integer bayRelativeValue = entry.getKey();
             final List<String> portNames = entry.getValue();
 
-            final String permittedInterconnectTypeUri = utils.getPermittedInterconnectTypeUriForLigBasedOnBay(params, ligName,
+            final String permittedInterconnectTypeUri = SdkUtils.getInstance().getPermittedInterconnectTypeUriForLigBasedOnBay(params, ligName,
                     bayRelativeValue);
             final InterconnectTypes interconnectTypeDto = interconnectTypeClient.getInterconnectType(params,
                     (permittedInterconnectTypeUri.substring(permittedInterconnectTypeUri.lastIndexOf("/") + 1)));
 
             for (int i = 0; i < portNames.size(); i++) {
-
                 Integer portNumber = -1;
                 for (final PortInfo portInfo : interconnectTypeDto.getPortInfos()) {
                     if (portInfo.getPortName().equalsIgnoreCase(portNames.get(i))) {
@@ -233,10 +209,10 @@ public class ResourceDtoUtils {
         uplinkSetDto.setMode(UplinkSet.Mode.Auto);
         if (uplinkSetType.equalsIgnoreCase(SdkConstants.ETHERNET)) {
             uplinkSetDto.setNetworkType(UplinkSet.NetworkType.Ethernet);
-            uplinkSetDto.setNetworkUris(utils.getNetworkUris(params, networkNames));
+            uplinkSetDto.setNetworkUris(SdkUtils.getInstance().getNetworkUris(params, networkNames));
         } else if (uplinkSetType.equalsIgnoreCase(SdkConstants.FIBRE_CHANNEL)) {
             uplinkSetDto.setNetworkType(UplinkSet.NetworkType.FibreChannel);
-            uplinkSetDto.setNetworkUris(utils.getFcNetworkUris(params, networkNames));
+            uplinkSetDto.setNetworkUris(SdkUtils.getInstance().getFcNetworkUris(params, networkNames));
         }
         uplinkSetDto.setPrimaryPort(null);
 
@@ -253,9 +229,9 @@ public class ResourceDtoUtils {
         connection.setName(networkName);
         connection.setFunctionType(functionType);
         if (functionType.toString().equalsIgnoreCase("Ethernet")) {
-            connection.setNetworkUri(utils.getNetworkUri(params, networkName));
+            connection.setNetworkUri(SdkUtils.getInstance().getNetworkUri(params, networkName));
         } else if (functionType.toString().equalsIgnoreCase("FibreChannel")) {
-            connection.setNetworkUri(utils.getFcNetworkUri(params, networkName));
+            connection.setNetworkUri(SdkUtils.getInstance().getFcNetworkUri(params, networkName));
         }
         connection.setRequestedMbps(requestedMbps);
         connection.setAllocatedMbps(allocatedMbps);
@@ -279,14 +255,14 @@ public class ResourceDtoUtils {
             final Boolean useBayNameForServerHardwareUri, final Integer j, final Boolean isEnabled,
             final List<String> storageTargets, final StorageTargetType storageTargetType, final String lunType,
             final HashMap<String, Integer> fcId) {
-        final Boolean volumeIsSharable = utils.isVolumeSharable(params, volumeName);
+        final Boolean volumeIsSharable = SdkUtils.getInstance().isVolumeSharable(params, volumeName);
         if (volumeIsSharable || !(useBayNameForServerHardwareUri)) {
             final VolumeAttachment volumeAttachment = new VolumeAttachment();
             volumeAttachment.setId(Double.parseDouble(j.toString()));
             volumeAttachment.setLunType(lunType);
-            volumeAttachment.setVolumeUri(utils.getVolumeUri(params, volumeName));
-            volumeAttachment.setVolumeStoragePoolUri(utils.getStoragePoolFromVolume(params, volumeName));
-            volumeAttachment.setVolumeStorageSystemUri(utils.getStorageSystemFromVolume(params, volumeName));
+            volumeAttachment.setVolumeUri(SdkUtils.getInstance().getVolumeUri(params, volumeName));
+            volumeAttachment.setVolumeStoragePoolUri(SdkUtils.getInstance().getStoragePoolFromVolume(params, volumeName));
+            volumeAttachment.setVolumeStorageSystemUri(SdkUtils.getInstance().getStorageSystemFromVolume(params, volumeName));
 
             final StorageTargetPortCollection storageTargetPortCollectionDto = storageSystemClient
                     .getAllManagedPortsForStorageSystem(
@@ -324,7 +300,7 @@ public class ResourceDtoUtils {
         serverProfileDto.setType(ResourceCategory.RC_SERVER_PROFILE);
         serverProfileDto.setName(profileName);
         if (serverHardwareName != null && serverHardwareName.length() != 0) {
-            final String serverHardwareTypeUri = utils.getServerHardwareTypeUri(params, serverHardwareName);
+            final String serverHardwareTypeUri = SdkUtils.getInstance().getServerHardwareTypeUri(params, serverHardwareName);
             serverProfileDto
                     .setServerHardwareTypeUri((serverHardwareTypeUri != null && serverHardwareTypeUri.length() != 0) ? serverHardwareTypeUri
                             : null);
@@ -337,11 +313,11 @@ public class ResourceDtoUtils {
                     null);
         }
         if (useBayNameForServerHardwareUri) {
-            final String serverHardwareUri = utils.getServerHardwareUri(params, serverHardwareName);
+            final String serverHardwareUri = SdkUtils.getInstance().getServerHardwareUri(params, serverHardwareName);
             serverProfileDto
                     .setServerHardwareUri((serverHardwareUri != null && serverHardwareUri.length() != 0) ? serverHardwareUri : null);
         }
-        serverProfileDto.setEnclosureGroupUri(utils.getEnclosureGroupUri(params, enclosureGroupName));
+        serverProfileDto.setEnclosureGroupUri(SdkUtils.getInstance().getEnclosureGroupUri(params, enclosureGroupName));
         serverProfileDto.setAffinity(affinity);
         serverProfileDto.setHideUnusedFlexNics(false);
         serverProfileDto.setFirmware(firmware);

@@ -15,36 +15,30 @@
  *******************************************************************************/
 package com.hp.ov.sdk.messaging.msmb.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import com.hp.ov.sdk.adaptors.MsmbAlertsMessageAdaptor;
 import com.hp.ov.sdk.dto.MsmbAlertsMessageDto;
 import com.hp.ov.sdk.messaging.msmb.listeners.MsmbListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component
 public class MsmbAlertsHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(MsmbAlertsHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MsmbAlertsHandler.class);
 
-    private MsmbAlertsMessageAdaptor adaptor;
-    private MsmbListener msmbListener;
-
-    public MsmbAlertsHandler() {
-
-    }
+    private final MsmbAlertsMessageAdaptor adaptor;
+    private final MsmbListener msmbListener;
 
     public MsmbAlertsHandler(final MsmbListener msmbListener) {
         this.msmbListener = msmbListener;
+        this.adaptor = new MsmbAlertsMessageAdaptor();
     }
 
     public void handleMessage(final String message) {
-        adaptor = new MsmbAlertsMessageAdaptor();
-        logger.debug("MsmbAlertsHandler : handlMessage : Message Received: " + message);
+        LOGGER.debug("MsmbAlertsHandler : handlMessage : Message Received: " + message);
+
         // call adaptor
         final MsmbAlertsMessageDto alertsDto = adaptor.buildDto(message);
         // invoke listener
         msmbListener.handleMsmbMessage(alertsDto);
-
     }
 }

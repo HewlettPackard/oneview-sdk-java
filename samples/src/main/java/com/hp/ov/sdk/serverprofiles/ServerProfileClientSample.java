@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.ConnectionBoot.BootControl;
 import com.hp.ov.sdk.dto.samples.NetworkForServerProfile;
 import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile;
@@ -45,25 +44,30 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
+import com.hp.ov.sdk.rest.client.EnclosureGroupClientImpl;
 import com.hp.ov.sdk.rest.client.ServerHardwareClient;
+import com.hp.ov.sdk.rest.client.ServerHardwareClientImpl;
 import com.hp.ov.sdk.rest.client.ServerProfileClient;
+import com.hp.ov.sdk.rest.client.ServerProfileClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
+import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 import com.hp.ov.sdk.util.samples.ResourceDtoUtilsWrapper;
 
 /*
- * ServerProfileClientSample is a sample program capture/consume the entire server configuration managed 
+ * ServerProfileClientSample is a sample program capture/consume the entire server configuration managed
  * by HP OneView. It invokes APIs of ServerProfileClient which is in sdk library to perform GET/PUT/POST/DELETE/COPY
  * operations on server profile resource
  */
 public class ServerProfileClientSample {
+
+    private final ServerProfileClient serverProfileClient;
+    private final ServerHardwareClient serverHardwareClient;
+    private final EnclosureGroupClient enclosureGroupClient;
+
     private RestParams params;
-    private static UrlUtils urlUtils;
-    private static TaskResourceV2 taskResourceV2;
-    private static ServerProfileClient serverProfileClient;
-    private static ServerHardwareClient serverHardwareClient;
-    private static EnclosureGroupClient enclosureGroupClient;
+    private TaskResourceV2 taskResourceV2;
 
     // test values - user input
     // ================================
@@ -81,14 +85,12 @@ public class ServerProfileClientSample {
     private static final List<String> fcNetworkNames = Arrays.asList("FC_Network_A", "FC_Network_B");
     private static final Boolean useBayNameForServerHardwareUri = false;
     private static final String resourceId = "10fbed31-21cd-4c40-9401-3d70511cff00";
-
     // ================================
 
-    private static void init() {
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        serverProfileClient = HPOneViewSdkBeanFactory.getServerProfileClient();
-        serverHardwareClient = HPOneViewSdkBeanFactory.getServerHardwareClient();
-        enclosureGroupClient = HPOneViewSdkBeanFactory.getEnclosureGroupClient();
+    private ServerProfileClientSample() {
+        serverProfileClient = ServerProfileClientImpl.getClient();
+        serverHardwareClient = ServerHardwareClientImpl.getClient();
+        enclosureGroupClient = EnclosureGroupClientImpl.getClient();
     }
 
     public void getServerProfileById() throws InstantiationException, IllegalAccessException {
@@ -444,7 +446,7 @@ public class ServerProfileClientSample {
             serverProfileDto.setName(templateName);
 
             if (null != serverProfileDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(serverProfileDto.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(serverProfileDto.getUri());
             }
             /**
              * then make sdk service call to get resource aSync parameter
@@ -702,17 +704,16 @@ public class ServerProfileClientSample {
         serverProfileValue.setUseBayNameForServerHardwareUri(useBayNameForServerHardwareUri);
         serverProfileValue.setWwnType(ServerProfile.AssignmentType.Virtual);
 
-        ResourceDtoUtilsWrapper resourceDtoUtilsWrapper = new ResourceDtoUtilsWrapper();
+        ResourceDtoUtilsWrapper resourceDtoUtilsWrapper = new ResourceDtoUtilsWrapper(new ResourceDtoUtils());
         return resourceDtoUtilsWrapper.buildServerProfile(params, serverProfileValue);
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         ServerProfileClientSample client = new ServerProfileClientSample();
+
+        client.createServerProfile();
         client.getServerProfileById();
         client.getAllServerProfile();
-        client.createServerProfile();
         client.getServerProfileByName();
         client.getAvailableNetworksForServerProfile();
         client.getAvailableServersForServerProfile();

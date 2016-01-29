@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.enclosure;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.AddEnclosureV2;
 import com.hp.ov.sdk.dto.EnclosureCollectionV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
@@ -38,8 +37,11 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.EnclosureClient;
+import com.hp.ov.sdk.rest.client.EnclosureClientImpl;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
+import com.hp.ov.sdk.rest.client.EnclosureGroupClientImpl;
 import com.hp.ov.sdk.rest.client.FirmwareDriverClient;
+import com.hp.ov.sdk.rest.client.FirmwareDriverClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
@@ -50,12 +52,13 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
  * operations on enclosure resource
  */
 public class EnclosureClientSample {
+
+    private final EnclosureClient enclosureClient;
+    private final FirmwareDriverClient firmwareDriverClient;
+    private final EnclosureGroupClient enclosureGroupClient;
+
     private RestParams params;
-    private static UrlUtils urlUtils;
-    private static EnclosureClient enclosureClient;
-    private static FirmwareDriverClient firmwareDriverClient;
-    private static EnclosureGroupClient enclosureGroupClient;
-    private static TaskResourceV2 taskResourceV2;
+    private TaskResourceV2 taskResourceV2;
 
     // test values - user input
     // ================================
@@ -66,13 +69,12 @@ public class EnclosureClientSample {
     private static final String password = "dcs";
     private static final String firmware = "HP Service Pack For ProLiant OneView 2014 11 13";
     private static final String resourceId = "09SGH100X6J1";
-
     // ================================
-    private static void init() {
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        enclosureClient = HPOneViewSdkBeanFactory.getEnclosureClient();
-        firmwareDriverClient = HPOneViewSdkBeanFactory.getFirmwareDriverClient();
-        enclosureGroupClient = HPOneViewSdkBeanFactory.getEnclosureGroupClient();
+
+    private EnclosureClientSample() {
+        this.enclosureClient = EnclosureClientImpl.getClient();
+        this.firmwareDriverClient = FirmwareDriverClientImpl.getClient();
+        this.enclosureGroupClient = EnclosureGroupClientImpl.getClient();
     }
 
     private void getEnclosureById() throws InstantiationException, IllegalAccessException {
@@ -223,7 +225,7 @@ public class EnclosureClientSample {
             enclosureDto = enclosureClient.getEnclosureByName(params, resourceName);
 
             if (null != enclosureDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(enclosureDto.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(enclosureDto.getUri());
             }
             enclosureDto.setName(resourceName);
 
@@ -797,13 +799,12 @@ public class EnclosureClientSample {
         return refreshStateConfigDto;
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         EnclosureClientSample client = new EnclosureClientSample();
-        client.getEnclosureById();
+
         client.getAllEnclosure();
         client.createEnclosure();
+        client.getEnclosureById();
         client.getActiveOaSsoUrl();
         client.getEnclosureByName();
         client.getActiveOaSsoUrl();
@@ -813,6 +814,7 @@ public class EnclosureClientSample {
         client.getEnvironmentalConfiguration();
         // Check if the privilege exists
         client.updateEnvironmentalConfiguration();
+
         client.updateRefreshState();
         client.updateScript();
         client.getScript();

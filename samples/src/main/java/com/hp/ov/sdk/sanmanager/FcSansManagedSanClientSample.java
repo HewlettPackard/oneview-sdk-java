@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.sanmanager;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.SanResponse;
 import com.hp.ov.sdk.dto.SanResponseCollection;
@@ -27,27 +26,29 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.FcSansManagedSanClient;
+import com.hp.ov.sdk.rest.client.FcSansManagedSanClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * ManagedSanClientSample is a sample program capture/consume the physical or logical fibre channel SAN or a Flat SAN  
+ * ManagedSanClientSample is a sample program capture/consume the physical or logical fibre channel SAN or a Flat SAN
  * managed by HP OneView. It invokes APIs of ManagedSanClientSample which is in sdk library to perform GET/PUT
  * operations on san resource
  */
 public class FcSansManagedSanClientSample {
+
+    private final FcSansManagedSanClient fcSansManagedSanClient;
+
     private RestParams params;
-    private static FcSansManagedSanClient fcSansManagedSanClient;
 
     // test values - user input
     // ================================
-    private static final String resourceId = "ec7ec761-c70a-48c6-9d70-496a2edd7212";
-    private static final String resourceName = "SANA";
-
+    private static final String resourceId = "991bde39-d13e-4e7b-a2b4-04f2af701881";
+    private static final String resourceName = "SAN1_0";
     // ================================
 
-    private static void init() {
-        fcSansManagedSanClient = HPOneViewSdkBeanFactory.getManagedSanClient();
+    private FcSansManagedSanClientSample() {
+        this.fcSansManagedSanClient = FcSansManagedSanClientImpl.getClient();
     }
 
     private void getManagedSan() throws InstantiationException, IllegalAccessException {
@@ -164,10 +165,9 @@ public class FcSansManagedSanClientSample {
         }
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         FcSansManagedSanClientSample client = new FcSansManagedSanClientSample();
+
         client.getAllManagedSan();
         client.getManagedSan();
         client.updateManagedSan();

@@ -15,25 +15,20 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
-import java.util.List;
-
-import org.json.JSONObject;
-import org.springframework.stereotype.Component;
-
-import com.hp.ov.sdk.bean.factory.ConverterFactory;
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
 import com.hp.ov.sdk.dto.DeviceManagerResponseCollection;
+import com.hp.ov.sdk.dto.Property;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
-import com.hp.ov.sdk.dto.Property;
+import org.json.JSONObject;
 
-@Component
+import java.util.List;
+
 public class DeviceManagerAdaptor extends BaseAdaptor<DeviceManagerResponse, Object> {
-    private ObjectToJsonConverter converter;
 
     @Override
     public DeviceManagerResponse buildDto(Object source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         final DeviceManagerResponse deviceManagerResponseDto = converter.convertJsonToObject(
@@ -42,7 +37,7 @@ public class DeviceManagerAdaptor extends BaseAdaptor<DeviceManagerResponse, Obj
     }
 
     public DeviceManagerResponseCollection buildCollectionDto(Object source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         final DeviceManagerResponseCollection deviceManagerResponseCollectionDto = converter.convertJsonToObject(
@@ -52,12 +47,12 @@ public class DeviceManagerAdaptor extends BaseAdaptor<DeviceManagerResponse, Obj
     }
 
     public JSONObject buildJsonObjectFromDto(final List<Property> source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
     public JSONObject buildJsonObjectFromDto(final DeviceManagerResponse source) {
-        converter = ConverterFactory.getConverter();
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 

@@ -15,14 +15,16 @@
  *******************************************************************************/
 package com.hp.ov.sdk.storage;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.StorageVolumeTemplate;
 import com.hp.ov.sdk.dto.StorageVolumeTemplateCollection;
 import com.hp.ov.sdk.dto.TemplateProvisioningData;
 import com.hp.ov.sdk.rest.client.StoragePoolClient;
+import com.hp.ov.sdk.rest.client.StoragePoolClientImpl;
 import com.hp.ov.sdk.rest.client.StorageSystemClient;
+import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
 import com.hp.ov.sdk.rest.client.StorageVolumeTemplateClient;
+import com.hp.ov.sdk.rest.client.StorageVolumeTemplateClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
@@ -35,33 +37,32 @@ import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * StorageVolumeTemplateClientSample is a sample program consumes the template that is defined over the storage pool   
+ * StorageVolumeTemplateClientSample is a sample program consumes the template that is defined over the storage pool
  * in HP OneView. It invokes APIs of StorageVolumeTemplateClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on storage volume template resource
  */
 public class StorageVolumeTemplateClientSample {
-    private RestParams params;
-    private static UrlUtils urlUtils;
-    private static StorageVolumeTemplateClient storageVolumeTemplateClient;
-    private static StoragePoolClient storagePoolClient;
-    private static StorageSystemClient storageSystemClient;
 
     // These are variables to be defined by user
     // ================================
     private static final String resourceName = "FusionTemplateExample";
-    private static final String storageSystemName = "ThreePAR7200-3050";
+    private static final String storageSystemName = "ThreePAR7200-4166";
     private static final String storagePoolName = "FST_CPG1";
     private static final String capacity = "235834383322";
-    private static final String resourceId = "f2434b35-b53e-4e4b-b7aa-ab7f7533dc07";
+    private static final String resourceId = "fd66576a-1e20-444e-b92a-9e719500ee17";
     private static final String provisionType = "Thin";
-
     // ================================
 
-    private static void init() {
-        urlUtils = HPOneViewSdkBeanFactory.getUrlUtils();
-        storageVolumeTemplateClient = HPOneViewSdkBeanFactory.getStorageVolumeTemplateClient();
-        storagePoolClient = HPOneViewSdkBeanFactory.getStoragePoolClient();
-        storageSystemClient = HPOneViewSdkBeanFactory.getStorageSystemClient();
+    private final StorageVolumeTemplateClient storageVolumeTemplateClient;
+    private final StoragePoolClient storagePoolClient;
+    private final StorageSystemClient storageSystemClient;
+
+    private RestParams params;
+
+    public StorageVolumeTemplateClientSample() {
+        this.storageVolumeTemplateClient = StorageVolumeTemplateClientImpl.getClient();
+        this.storagePoolClient = StoragePoolClientImpl.getClient();
+        this.storageSystemClient = StorageSystemClientImpl.getClient();
     }
 
     private void getStorageVolumeTemplateById() throws InstantiationException, IllegalAccessException {
@@ -227,7 +228,7 @@ public class StorageVolumeTemplateClientSample {
             storageVolumeTemplateDto = storageVolumeTemplateClient.getStorageVolumeTemplateByName(params, resourceName);
 
             if (null != storageVolumeTemplateDto.getUri()) {
-                resourceId = urlUtils.getResourceIdFromUri(storageVolumeTemplateDto.getUri());
+                resourceId = UrlUtils.getResourceIdFromUri(storageVolumeTemplateDto.getUri());
             }
             storageVolumeTemplateDto.setName(resourceName);
 
@@ -334,12 +335,11 @@ public class StorageVolumeTemplateClientSample {
         return storageSystemClient.getStorageSystemByName(params, storageSystemName).getUri();
     }
 
-    // Main
     public static void main(final String[] args) throws Exception {
-        init();
         StorageVolumeTemplateClientSample client = new StorageVolumeTemplateClientSample();
-        client.getStorageVolumeTemplateById();
+
         client.createStorageVolumeTemplate();
+        client.getStorageVolumeTemplateById();
         client.getAllStorageVolumeTemplate();
         client.getStorageVolumeTemplateByName();
         client.updateStorageVolumeTemplate();

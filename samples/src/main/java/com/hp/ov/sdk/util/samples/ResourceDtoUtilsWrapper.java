@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.hp.ov.sdk.bean.factory.HPOneViewSdkBeanFactory;
 import com.hp.ov.sdk.dto.ProfileConnectionV3;
 import com.hp.ov.sdk.dto.generated.SanStorage;
 import com.hp.ov.sdk.dto.generated.ServerProfile;
@@ -34,17 +33,16 @@ import com.hp.ov.sdk.util.ResourceDtoUtils;
 
 public class ResourceDtoUtilsWrapper {
 
-    private ResourceDtoUtils resourceDtoUtils;
+    private final ResourceDtoUtils resourceDtoUtils;
 
-    public void init() {
-        resourceDtoUtils = HPOneViewSdkBeanFactory.getResourceDtoUtils();
+    public ResourceDtoUtilsWrapper(ResourceDtoUtils resourceDtoUtils) {
+        this.resourceDtoUtils = resourceDtoUtils;
     }
 
     public List<UplinkSet> buildUplinkSetGroupDto(final RestParams params, final List<UplinkSetValue> uplinkSetValues) {
-        init();
         final List<UplinkSet> uplinkSetGroupDto = new ArrayList<UplinkSet>();
 
-        for (final UplinkSetValue uplinkSetValue : uplinkSetValues) {
+        for (UplinkSetValue uplinkSetValue : uplinkSetValues) {
             uplinkSetGroupDto.add(resourceDtoUtils.buildUplinkSetDto(params, uplinkSetValue.getLigName(),
                     uplinkSetValue.getUplinkSetName(), uplinkSetValue.getUplinkSetType(), uplinkSetValue.getBayPortMap(),
                     uplinkSetValue.getNetworkNames()));
@@ -54,7 +52,6 @@ public class ResourceDtoUtilsWrapper {
     }
 
     public ServerProfile buildServerProfile(final RestParams params, final ServerProfileValue serverProfileValue) {
-        init();
         Integer j = 1;
         final HashMap<String, Integer> fcId = new HashMap<String, Integer>();
         List<ProfileConnectionV3> connections = new ArrayList<ProfileConnectionV3>();
