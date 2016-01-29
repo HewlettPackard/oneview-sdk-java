@@ -25,6 +25,7 @@ public class ResourceCategory {
     public static final String RC_LOGICALINTERCONNECTGROUP = "logical-interconnect-groupV2";
     public static final String RC_UPLINKSET = "uplink-sets";
     public static final String RC_ENCLOSURE_GROUP = "EnclosureGroupV2";
+    public static final String RC_ENCLOSURE_GROUP_V200 = "EnclosureGroupV200";
     public static final String RC_STORAGE_VOLUME_TEMPLATE = "StorageVolumeTemplate";
     public static final String RC_ADD_STORAGE_VOLUME = "AddStorageVolumeV2";
     public static final String RC_SERVER_PROFILE = "ServerProfileV4";
