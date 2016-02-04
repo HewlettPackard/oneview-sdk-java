@@ -154,7 +154,7 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
         String returnObj = null;
 
         // validate params
-        if (dto == null) {
+        if (dto == null || params == null) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.ENCLOSURE_GROUP,
                     null);
         }
