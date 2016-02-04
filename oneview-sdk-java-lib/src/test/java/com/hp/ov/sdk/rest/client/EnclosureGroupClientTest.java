@@ -59,7 +59,7 @@ public class EnclosureGroupClientTest {
                 Mockito.any(JSONObject.class)))
         .thenReturn(enclosureGroupJson);
 
-        EnclosureGroups enclosureGroupDto = client.getEnclosureGroup(params, "random-UUID");
+        EnclosureGroups enclosureGroupDto = client.getEnclosureGroup(params, resourceId);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI, resourceId));
@@ -73,7 +73,7 @@ public class EnclosureGroupClientTest {
 
     @Test (expected = SDKInvalidArgumentException.class)
     public void testGetEnclosureGroupWithNullParams() {
-        client.getEnclosureGroup(null, "random-UUID");
+        client.getEnclosureGroup(null, resourceId);
     }
 
     @Test (expected = SDKNoResponseException.class)
@@ -84,7 +84,7 @@ public class EnclosureGroupClientTest {
                 Mockito.any(JSONObject.class)))
         .thenReturn(null);
 
-        client.getEnclosureGroup(params, "random-UUID");
+        client.getEnclosureGroup(params, resourceId);
     }
 
     @Test
