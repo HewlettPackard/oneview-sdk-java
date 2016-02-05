@@ -26,7 +26,7 @@
   <groupId>com.hp.ov.samples</groupId>
   <artifactId>samples</artifactId>
   <packaging>jar</packaging>
-  <name>samples</name>
+  <name>OneView SDK Java Samples</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

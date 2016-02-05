@@ -15,6 +15,17 @@
  *******************************************************************************/
 package com.hp.ov.sdk.certs;
 
+import com.google.common.io.BaseEncoding;
+import com.hp.ov.sdk.constants.SdkConstants;
+import com.hp.ov.sdk.dto.CaCert;
+import com.hp.ov.sdk.dto.RabbitMqClientCert;
+import com.hp.ov.sdk.exceptions.SDKCertificateException;
+import com.hp.ov.sdk.exceptions.SDKErrorEnum;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -32,22 +43,6 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
-
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
-
-
-
-import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.CaCert;
-import com.hp.ov.sdk.dto.RabbitMqClientCert;
-import com.hp.ov.sdk.exceptions.SDKCertificateException;
-import com.hp.ov.sdk.exceptions.SDKErrorEnum;
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
 
 public class CertificateStoreManager {
 
@@ -77,8 +72,7 @@ public class CertificateStoreManager {
         Security.addProvider(new BouncyCastleProvider());
         try {
             // Read client certificate and private key.
-            final byte[] encoded =
-                Base64.decode(certDto.getBase64SSLKeyData());
+            final byte[] encoded = BaseEncoding.base64().decode(certDto.getBase64SSLKeyData());
 
             final PKCS8EncodedKeySpec keySpec =
                 new PKCS8EncodedKeySpec(encoded);
