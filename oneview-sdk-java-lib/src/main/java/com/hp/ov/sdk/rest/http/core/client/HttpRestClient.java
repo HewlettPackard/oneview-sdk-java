@@ -49,22 +49,28 @@ import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
-public final class HttpRestClient {
+public class HttpRestClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpRestClient.class);
+
     private static final String ACCEPT = "application/json";
     private static final String ACCEPT_LANGUAGE = "en_US";
     private static final String CHAR_SET = "UTF-8";
-    private static final String CONTENT_TYPE = "application/json; charset="+CHAR_SET;
-    private static final String CONTENT_TYPE_STRING = "text/plain; charset="+CHAR_SET;
+    private static final String CONTENT_TYPE = "application/json; charset=" + CHAR_SET;
+    private static final String CONTENT_TYPE_STRING = "text/plain; charset=" + CHAR_SET;
     private static final int TIMEOUT = 0; //???
 
-    /**
-     * this method mainly used to get sync response from REST API
-     *
-     * @throws SDKResourceNotFoundException
-     * @throws SDKNoSuchUrlException
-     */
+    private static final class HttpRestClientHolder {
+        private static final HttpRestClient INSTANCE = new HttpRestClient();
+    }
+
+    public static HttpRestClient getClient() {
+        return HttpRestClientHolder.INSTANCE;
+    }
+
+    public String sendRequest(RestParams restParams, JSONObject jsonObject) {
+        return sendRequestToHPOV(restParams, jsonObject);
+    }
 
     /**
      * Send the request to OV and read the response.
