@@ -233,21 +233,17 @@ public class FcSansDeviceManagerClientSample {
     }
 
     private void deleteDeviceManager() throws InstantiationException, IllegalAccessException {
-        // first get the session Id
-        String deleteMsg = null;
-        String resourceId = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
 
             // get resource ID
-            resourceId = fcSansDeviceManagerClient.getId(params, resourceName);
+            String resourceId = fcSansDeviceManagerClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
-            deleteMsg = fcSansDeviceManagerClient.deleteDeviceManager(params, resourceId);
+            fcSansDeviceManagerClient.deleteDeviceManager(params, resourceId);
 
-            System.out.println("DeviceManagerClientTest : deleteDeviceManager : " + "device manager object returned to client : "
-                    + deleteMsg);
+            System.out.println("DeviceManagerClientTest : deleteDeviceManager : " + "device manager object deleted!");
         } catch (final SDKResourceNotFoundException ex) {
             System.out.println("DeviceManagerClientTest : deleteDeviceManager:"
                     + " resource you are looking is not found for delete ");
@@ -267,7 +263,6 @@ public class FcSansDeviceManagerClientSample {
             System.out.println("DeviceManagerClientTest : deleteDeviceManager :" + " arguments are null ");
             return;
         }
-
     }
 
     private SanProviderResponse getProviderUrl(final RestParams params, final String providerName) {

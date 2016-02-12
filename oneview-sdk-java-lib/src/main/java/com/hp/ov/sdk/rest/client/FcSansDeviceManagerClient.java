@@ -14,9 +14,9 @@
  * limitations under the License.
  *******************************************************************************/
 /**
- * A device manager is a hardware system that the SAN Resource Manager can communicate 
- * with in order to manage the zones on a SAN. For example, the SAN Resource Manager may 
- * communicate with one or more Brocade Network Advisor systems, identified by IP addresses or 
+ * A device manager is a hardware system that the SAN Resource Manager can communicate
+ * with in order to manage the zones on a SAN. For example, the SAN Resource Manager may
+ * communicate with one or more Brocade Network Advisor systems, identified by IP addresses or
  * DNS names, in order to manage the zones on the SANs controlled by those BNA systems.
  */
 package com.hp.ov.sdk.rest.client;
@@ -29,23 +29,23 @@ public interface FcSansDeviceManagerClient {
     /*
      * The module aids in creating a Device Manager under the specified
      * provider.
-     * 
+     *
      * @param params The RestParams is a structure containing the connection
      * details.
-     * 
+     *
      * @param providerUrl The provider url based on the switch provider obtained
      * from one view
-     * 
+     *
      * @param deviceManagerResponseDto The deviceManagerResposne object
      * containing the connection details.
-     * 
+     *
      * @param aSync Flag input to process request asynchronously or
      * synchronously.
-     * 
+     *
      * @param useJsonRequest The JsonRequest body is part of AddEnclosure Object
      * which takes in a String containing the new Enclosure details, which is
      * converted to AddEnclosure Object using adaptor and processed.
-     * 
+     *
      * @return sanProviderResponseCollectionDto, which is a object containing
      * the SanProviderResponse Collection details.
      */
@@ -55,10 +55,10 @@ public interface FcSansDeviceManagerClient {
     /*
      * The module aids in fetching all the Device Managers registered under
      * current HP OneView
-     * 
+     *
      * @param params The RestParams is a structure containing the connection
      * details.
-     * 
+     *
      * @return DeviceManagerResponseCollectionDto, which is a object containing
      * the DeviceManagerResponse Collection details.
      */
@@ -67,13 +67,13 @@ public interface FcSansDeviceManagerClient {
     /*
      * The module aids in fetching the Device Managers registered under current
      * HP OneView
-     * 
+     *
      * @param params The RestParams is a structure containing the connection
      * details.
-     * 
+     *
      * @param resourceId The resourceId for device manager as seen in HP
      * OneView.
-     * 
+     *
      * @return DeviceManagerResponseDto, which is a object containing the
      * DeviceManagerResponse details.
      */
@@ -82,13 +82,13 @@ public interface FcSansDeviceManagerClient {
     /*
      * The module aids in fetching the Device Managers registered under current
      * HP OneView
-     * 
+     *
      * @param params The RestParams is a structure containing the connection
      * details.
-     * 
+     *
      * @param name The name of resource for device manager as seen in HP
      * OneView.
-     * 
+     *
      * @return DeviceManagerResponseDto, which is a object containing the
      * DeviceManagerResponse details.
      */
@@ -97,31 +97,31 @@ public interface FcSansDeviceManagerClient {
     /*
      * The module aids in fetching the Device Managers registered under current
      * HP OneView
-     * 
+     *
      * @param params The RestParams is a structure containing the connection
      * details.
-     * 
+     *
      * @param resourceId The resourceId for device manager as seen in HP
      * OneView.
-     * 
+     *
      * @return DeviceManagerResponseDto, which is a object containing the
      * DeviceManagerResponse details.
      */
-    public String deleteDeviceManager(final RestParams params, final String resourceId);
+    void deleteDeviceManager(final RestParams params, final String resourceId);
 
     /*
      * The module aids in fetching the Device Managers registered under current
      * HP OneView
-     * 
+     *
      * @param params The RestParams is a structure containing the connection
      * details.
-     * 
+     *
      * @param resourceId The resourceId for device manager as seen in HP
      * OneView. *
-     * 
+     *
      * @param aSync Flag input to process request asynchronously or
      * synchronously.
-     * 
+     *
      * @return DeviceManagerResponseDto, which is a object containing the
      * DeviceManagerResponse details.
      */
@@ -131,7 +131,7 @@ public interface FcSansDeviceManagerClient {
     /**
      * The module aids in fetching the device manager details for the device
      * manager name as specified in HP OneView.
-     * 
+     *
      * @param creds
      *            The RestParams is a structure containing the connection
      *            details.
