@@ -26,25 +26,37 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.google.gson.annotations.Since;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "bayNumber", "interconnectUri", "logicalInterconnectUri" })
+@JsonPropertyOrder({
+    "bayNumber",
+    "interconnectUri",
+    "ipv4Setting",
+    "logicalInterconnectUri",
+    "serialNumber"})
 public class InterconnectBay implements Serializable {
 
     /**
-	 * 
-	 */
+     *
+    */
     private static final long serialVersionUID = 1L;
     @JsonProperty("bayNumber")
     private Integer bayNumber;
     @JsonProperty("interconnectUri")
     private String interconnectUri;
+    @JsonProperty("ipv4Setting")
+    @Since(200)
+    private Ipv4Setting ipv4Setting;
     @JsonProperty("logicalInterconnectUri")
     private String logicalInterconnectUri;
+    @Since(200)
+    @JsonProperty("serialNumber")
+    private String serialNumber;
 
     /**
-     * 
+     *
      * @return The bayNumber
      */
     @JsonProperty("bayNumber")
@@ -53,7 +65,7 @@ public class InterconnectBay implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param bayNumber
      *            The bayNumber
      */
@@ -63,7 +75,7 @@ public class InterconnectBay implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The interconnectUri
      */
     @JsonProperty("interconnectUri")
@@ -72,7 +84,7 @@ public class InterconnectBay implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param interconnectUri
      *            The interconnectUri
      */
@@ -82,7 +94,26 @@ public class InterconnectBay implements Serializable {
     }
 
     /**
-     * 
+     *
+     * @return The ipv4Setting
+     */
+    @JsonProperty("ipv4Setting")
+    public Ipv4Setting getIpv4Setting() {
+        return ipv4Setting;
+    }
+
+    /**
+     *
+     * @param ipv4Setting
+     *            The ipv4Setting
+     */
+    @JsonProperty("ipv4Setting")
+    public void setIpv4Setting(final Ipv4Setting ipv4Setting) {
+        this.ipv4Setting = ipv4Setting;
+    }
+
+    /**
+     *
      * @return The logicalInterconnectUri
      */
     @JsonProperty("logicalInterconnectUri")
@@ -91,13 +122,32 @@ public class InterconnectBay implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param logicalInterconnectUri
      *            The logicalInterconnectUri
      */
     @JsonProperty("logicalInterconnectUri")
     public void setLogicalInterconnectUri(final String logicalInterconnectUri) {
         this.logicalInterconnectUri = logicalInterconnectUri;
+    }
+
+    /**
+     *
+     * @return The serialNumber
+     */
+    @JsonProperty("serialNumber")
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    /**
+     *
+     * @param serialNumber
+     *            The serialNumber
+     */
+    @JsonProperty("serialNumber")
+    public void setSerialNumber(final String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     @Override
@@ -107,7 +157,13 @@ public class InterconnectBay implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(bayNumber).append(interconnectUri).append(logicalInterconnectUri).toHashCode();
+        return new HashCodeBuilder()
+                .append(bayNumber)
+                .append(interconnectUri)
+                .append(ipv4Setting)
+                .append(logicalInterconnectUri)
+                .append(serialNumber)
+                .toHashCode();
     }
 
     @Override
@@ -119,8 +175,13 @@ public class InterconnectBay implements Serializable {
             return false;
         }
         final InterconnectBay rhs = ((InterconnectBay) other);
-        return new EqualsBuilder().append(bayNumber, rhs.bayNumber).append(interconnectUri, rhs.interconnectUri)
-                .append(logicalInterconnectUri, rhs.logicalInterconnectUri).isEquals();
+        return new EqualsBuilder()
+                .append(bayNumber, rhs.bayNumber)
+                .append(interconnectUri, rhs.interconnectUri)
+                .append(ipv4Setting, rhs.ipv4Setting)
+                .append(logicalInterconnectUri, rhs.logicalInterconnectUri)
+                .append(serialNumber, rhs.serialNumber)
+                .isEquals();
     }
 
 }

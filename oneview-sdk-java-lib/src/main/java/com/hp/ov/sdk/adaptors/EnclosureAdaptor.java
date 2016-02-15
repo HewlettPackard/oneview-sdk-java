@@ -15,10 +15,16 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
+import java.util.Arrays;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.hp.ov.sdk.dto.AddEnclosureV2;
 import com.hp.ov.sdk.dto.EnclosureCollectionV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
+import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.UtilizationData;
@@ -26,7 +32,6 @@ import com.hp.ov.sdk.dto.generated.Enclosures;
 import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
-import org.json.JSONObject;
 
 public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
 
@@ -37,6 +42,15 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
         // convert json Object to DTO, replace quotes and back slash in the file
         final Enclosures enclosureDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), Enclosures.class);
+        return enclosureDto;
+    }
+
+    public AddEnclosureV2 buildAddEnclosureDto(final Object source) {
+        // TODO - exceptions
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        // convert json Object to DTO, replace quotes and back slash in the file
+        final AddEnclosureV2 enclosureDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), AddEnclosureV2.class);
         return enclosureDto;
     }
 
@@ -84,6 +98,11 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
     public JSONObject buildJsonObjectFromDto(final Enclosures source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
+    }
+
+    public JSONArray buildJsonArrayDto(final Patch source) {
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        return new JSONArray(converter.convertObjectToJsonString(Arrays.asList(source)));
     }
 
     public JSONObject buildJsonObjectFromDto(final FwBaselineConfig source) {

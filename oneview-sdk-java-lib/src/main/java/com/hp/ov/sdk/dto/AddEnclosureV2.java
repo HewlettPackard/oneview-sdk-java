@@ -17,6 +17,8 @@ package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
 
+import com.google.gson.annotations.Since;
+
 public class AddEnclosureV2 implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,6 +32,8 @@ public class AddEnclosureV2 implements Serializable {
     private LicensingIntent licensingIntent;
     private String password;
     private String state;
+    @Since(200)
+    private String type;
     private UnmanagedDevice unmanagedEnclosure;
     private FwBaselineOptions updateFirmwareOn;
     private String username;
@@ -167,6 +171,23 @@ public class AddEnclosureV2 implements Serializable {
      */
     public void setState(final String state) {
         this.state = state;
+    }
+
+    /**
+     *
+     * @return The type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     *
+     * @param type
+     *            The type to set
+     */
+    public void setType(final String type) {
+        this.type = type;
     }
 
     /**

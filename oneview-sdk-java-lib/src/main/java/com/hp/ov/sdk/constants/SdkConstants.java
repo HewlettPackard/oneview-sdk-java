@@ -77,12 +77,14 @@ public class SdkConstants {
     public static final String SETTINGS = "settings";
     public static final String SCRIPT = "script";
     public static final String ACTIVE_OA_SSO_URL = "activeOaSsoUrl";
+    public static final String ACTIVE_OA_SSO_URL_V200 = "sso";
     public static final String COMPLIANCE = "compliance";
     public static final String CONFIGURATION = "configuration";
     public static final String ENCLOSURE_FW_BASELINE = "enclosureFwBaseline";
     public static final String ENVIRONMENTAL_CONFIGURATION = "environmentalConfiguration";
     public static final String REFRESH_STATE = "refreshState";
     public static final String STANDBY_OA_SSO_URL = "standbyOaSsoUrl";
+    public static final String STANDBY_OA_SSO_URL_V200 = "sso";
     public static final String UTILIZATION = "utilization";
     public static final String BIOS = "bios";
     public static final String INTERCONNECT = "interconnect";

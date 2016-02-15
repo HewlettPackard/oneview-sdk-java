@@ -62,7 +62,7 @@ public class MessagingCertificateManager {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.RABBIT_MQ_CLIENT_CERT_KEYPAIR));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
 
         LOGGER.debug("SCMBCertificatesImpl : getRabbitMqClientCertificate : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
@@ -94,7 +94,7 @@ public class MessagingCertificateManager {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.CA_CERT_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
 
         LOGGER.debug("SCMBCertificatesImpl : getCACertificate : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {

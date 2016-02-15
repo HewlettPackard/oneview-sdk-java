@@ -30,10 +30,21 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.annotations.Since;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "bayNumber", "devicePresence", "deviceRequired", "status", "state", "model", "partNumber", "sparePartNumber" })
+@JsonPropertyOrder({
+    "bayNumber",
+    "changeState",
+    "devicePresence",
+    "deviceRequired",
+    "forceInstallFirmware",
+    "status",
+    "state",
+    "model",
+    "partNumber",
+    "sparePartNumber"})
 public class FanBay implements Serializable {
 
     /**
@@ -42,10 +53,15 @@ public class FanBay implements Serializable {
     private static final long serialVersionUID = 1L;
     @JsonProperty("bayNumber")
     private Integer bayNumber;
+    @JsonProperty("changeState")
+    @Since(200)
+    private String changeState;
     @JsonProperty("devicePresence")
     private FanBay.DevicePresence devicePresence;
     @JsonProperty("deviceRequired")
     private Boolean deviceRequired;
+    @JsonProperty("forceInstallFirmware")
+    private Boolean forceInstallFirmware;
     @JsonProperty("status")
     private FanBay.Status status;
     @JsonProperty("state")
@@ -58,8 +74,8 @@ public class FanBay implements Serializable {
     private String sparePartNumber;
 
     /**
-     * 
-     * @return The bayNumber
+     *
+     *@return The bayNumber
      */
     @JsonProperty("bayNumber")
     public Integer getBayNumber() {
@@ -67,9 +83,9 @@ public class FanBay implements Serializable {
     }
 
     /**
-     * 
-     * @param bayNumber
-     *            The bayNumber
+     *
+     *@param bayNumber
+     *           The bayNumber
      */
     @JsonProperty("bayNumber")
     public void setBayNumber(final Integer bayNumber) {
@@ -77,8 +93,27 @@ public class FanBay implements Serializable {
     }
 
     /**
-     * 
-     * @return The devicePresence
+     *
+     *@return The changeState
+     */
+    @JsonProperty("changeState")
+    public String getChangeState() {
+        return changeState;
+    }
+
+    /**
+     *
+     *@param bayNumber
+     *           The bayNumber
+     */
+    @JsonProperty("changeState")
+    public void setChangeState(final String changeState) {
+        this.changeState = changeState;
+    }
+
+    /**
+     *
+     *@return The devicePresence
      */
     @JsonProperty("devicePresence")
     public FanBay.DevicePresence getDevicePresence() {
@@ -86,9 +121,9 @@ public class FanBay implements Serializable {
     }
 
     /**
-     * 
-     * @param devicePresence
-     *            The devicePresence
+     *
+     *@param devicePresence
+     *           The devicePresence
      */
     @JsonProperty("devicePresence")
     public void setDevicePresence(final FanBay.DevicePresence devicePresence) {
@@ -96,8 +131,8 @@ public class FanBay implements Serializable {
     }
 
     /**
-     * 
-     * @return The deviceRequired
+     *
+     *@return The deviceRequired
      */
     @JsonProperty("deviceRequired")
     public Boolean getDeviceRequired() {
@@ -105,9 +140,9 @@ public class FanBay implements Serializable {
     }
 
     /**
-     * 
-     * @param deviceRequired
-     *            The deviceRequired
+     *
+     *@param deviceRequired
+     *           The deviceRequired
      */
     @JsonProperty("deviceRequired")
     public void setDeviceRequired(final Boolean deviceRequired) {
@@ -115,8 +150,27 @@ public class FanBay implements Serializable {
     }
 
     /**
-     * 
-     * @return The status
+     *
+     *@return The forceInstallFirmware
+     */
+    @JsonProperty("forceInstallFirmware")
+    public Boolean getForceInstallFirmware() {
+        return forceInstallFirmware;
+    }
+
+    /**
+     *
+     *@param forceInstallFirmware
+     *           The forceInstallFirmware
+     */
+    @JsonProperty("forceInstallFirmware")
+    public void setForceInstallFirmware(final Boolean forceInstallFirmware) {
+        this.forceInstallFirmware = forceInstallFirmware;
+    }
+
+    /**
+     *
+     *@return The status
      */
     @JsonProperty("status")
     public FanBay.Status getStatus() {
@@ -124,9 +178,9 @@ public class FanBay implements Serializable {
     }
 
     /**
-     * 
-     * @param status
-     *            The status
+     *
+     *@param status
+     *           The status
      */
     @JsonProperty("status")
     public void setStatus(final FanBay.Status status) {
@@ -134,8 +188,8 @@ public class FanBay implements Serializable {
     }
 
     /**
-     * 
-     * @return The state
+     *
+     *@return The state
      */
     @JsonProperty("state")
     public FanBay.State getState() {
@@ -143,9 +197,9 @@ public class FanBay implements Serializable {
     }
 
     /**
-     * 
-     * @param state
-     *            The state
+     *
+     *@param state
+     *           The state
      */
     @JsonProperty("state")
     public void setState(final FanBay.State state) {
@@ -153,8 +207,8 @@ public class FanBay implements Serializable {
     }
 
     /**
-     * 
-     * @return The model
+     *
+     *@return The model
      */
     @JsonProperty("model")
     public String getModel() {
@@ -162,9 +216,9 @@ public class FanBay implements Serializable {
     }
 
     /**
-     * 
-     * @param model
-     *            The model
+     *
+     *@param model
+     *           The model
      */
     @JsonProperty("model")
     public void setModel(final String model) {
@@ -172,8 +226,8 @@ public class FanBay implements Serializable {
     }
 
     /**
-     * 
-     * @return The partNumber
+     *
+     *@return The partNumber
      */
     @JsonProperty("partNumber")
     public String getPartNumber() {
@@ -181,9 +235,9 @@ public class FanBay implements Serializable {
     }
 
     /**
-     * 
-     * @param partNumber
-     *            The partNumber
+     *
+     *@param partNumber
+     *           The partNumber
      */
     @JsonProperty("partNumber")
     public void setPartNumber(final String partNumber) {
@@ -191,8 +245,8 @@ public class FanBay implements Serializable {
     }
 
     /**
-     * 
-     * @return The sparePartNumber
+     *
+     *@return The sparePartNumber
      */
     @JsonProperty("sparePartNumber")
     public String getSparePartNumber() {
@@ -200,9 +254,9 @@ public class FanBay implements Serializable {
     }
 
     /**
-     * 
-     * @param sparePartNumber
-     *            The sparePartNumber
+     *
+     *@param sparePartNumber
+     *           The sparePartNumber
      */
     @JsonProperty("sparePartNumber")
     public void setSparePartNumber(final String sparePartNumber) {
@@ -216,8 +270,18 @@ public class FanBay implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(bayNumber).append(devicePresence).append(deviceRequired).append(status).append(state)
-                .append(model).append(partNumber).append(sparePartNumber).toHashCode();
+        return new HashCodeBuilder()
+                .append(bayNumber)
+                .append(changeState)
+                .append(devicePresence)
+                .append(deviceRequired)
+                .append(forceInstallFirmware)
+                .append(status)
+                .append(state)
+                .append(model)
+                .append(partNumber)
+                .append(sparePartNumber)
+                .toHashCode();
     }
 
     @Override
@@ -229,9 +293,17 @@ public class FanBay implements Serializable {
             return false;
         }
         final FanBay rhs = ((FanBay) other);
-        return new EqualsBuilder().append(bayNumber, rhs.bayNumber).append(devicePresence, rhs.devicePresence)
-                .append(deviceRequired, rhs.deviceRequired).append(status, rhs.status).append(state, rhs.state)
-                .append(model, rhs.model).append(partNumber, rhs.partNumber).append(sparePartNumber, rhs.sparePartNumber)
+        return new EqualsBuilder()
+                .append(bayNumber, rhs.bayNumber)
+                .append(changeState, rhs.changeState)
+                .append(devicePresence, rhs.devicePresence)
+                .append(deviceRequired, rhs.deviceRequired)
+                .append(forceInstallFirmware, rhs.forceInstallFirmware)
+                .append(status, rhs.status)
+                .append(state, rhs.state)
+                .append(model, rhs.model)
+                .append(partNumber, rhs.partNumber)
+                .append(sparePartNumber, rhs.sparePartNumber)
                 .isEquals();
     }
 

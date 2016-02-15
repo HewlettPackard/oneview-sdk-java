@@ -64,7 +64,7 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureGroupClientImpl : getEnclosureGroup : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE_GROUP,
@@ -91,7 +91,7 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI));
 
         // call rest client
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureGroupClientImpl : getAllEnclosureGroups : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -123,7 +123,7 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI, query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureGroupClientImpl : getEnclosureGroupByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE_GROUPS,
@@ -236,7 +236,7 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureGroupClientImpl : deleteEnclosureGroup : response from OV :" + returnObj);
         /************ Returns Response code 204 *********************************/
 
@@ -260,7 +260,7 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI, resourceId,
                 SdkConstants.SCRIPT));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureGroupClientImpl : getConfigurationScript : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE_GROUP,

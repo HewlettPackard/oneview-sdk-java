@@ -30,15 +30,27 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.annotations.Since;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "bayNumber", "devicePresence", "status", "model", "serialNumber", "partNumber", "sparePartNumber" })
+@JsonPropertyOrder({
+    "bayNumber",
+    "devicePresence",
+    "status",
+    "model",
+    "serialNumber",
+    "partNumber",
+    "sparePartNumber" })
+
 public class PowerSupplyBay implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @JsonProperty("bayNumber")
     private Integer bayNumber;
+    @JsonProperty("changeState")
+    @Since(200)
+    private PowerSupplyBay.ChangeState changeState;
     @JsonProperty("devicePresence")
     private PowerSupplyBay.DevicePresence devicePresence;
     @JsonProperty("status")
@@ -271,6 +283,45 @@ public class PowerSupplyBay implements Serializable {
         @JsonCreator
         public static PowerSupplyBay.Status fromValue(final String value) {
             final PowerSupplyBay.Status constant = constants.get(value);
+            if (constant == null) {
+                throw new IllegalArgumentException(value);
+            } else {
+                return constant;
+            }
+        }
+
+    }
+
+    @Generated("org.jsonschema2pojo")
+    public static enum ChangeState {
+
+        Insert("Insert"),
+        None("None"),
+        ProcessingInsert("ProcessingInsert"),
+        Remove("Remove");
+
+        private final String value;
+        private static Map<String, PowerSupplyBay.ChangeState> constants = new HashMap<String, PowerSupplyBay.ChangeState>();
+
+        static {
+            for (final PowerSupplyBay.ChangeState c : values()) {
+                constants.put(c.value, c);
+            }
+        }
+
+        private ChangeState(final String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+        @JsonCreator
+        public static PowerSupplyBay.ChangeState fromValue(final String value) {
+            final PowerSupplyBay.ChangeState constant = constants.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
             } else {

@@ -71,7 +71,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.NETWORK_SETS_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("NetworkSetClientImpl : getNetworkSet : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKSET, null);
@@ -98,7 +98,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.NETWORK_SETS_URI));
 
         // call rest client
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("NetworkSetClientImpl : getAllNetworkSets : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -130,7 +130,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.NETWORK_SETS_URI, query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("NetworkSetClientImpl : getNetworkSetsByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKSET, null);
@@ -253,7 +253,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.NETWORK_SETS_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("NetworkSetClientImpl : deleteNetworkSet : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {

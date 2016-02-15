@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.annotations.Since;
 
 /**
  * The Enclosures data transfer object (DTO) contains the information used to
@@ -42,22 +43,66 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "uri", "uuid", "name", "serialNumber", "partNumber", "assetTag", "enclosureType", "enclosureGroupUri",
-        "rackName", "deviceBayCount", "deviceBays", "interconnectBayCount", "interconnectBays", "powerSupplyBayCount",
-        "powerSupplyBays", "fanBayCount", "fanBays", "oa", "oaBayCount", "activeOaPreferredIP", "standbyOaPreferredIP",
-        "isFwManaged", "fwBaselineName", "fwBaselineUri", "vcmMode", "vcmUrl", "vcmDomainName", "vcmDomainId", "category",
-        "description", "created", "modified", "eTag", "licensingIntent", "state", "stateReason", "refreshState", "status",
-        "consistentWithGroup", "reconfigurationState", "type" })
+@JsonPropertyOrder({
+    "uri",
+    "uuid",
+    "uuidState",
+    "name",
+    "serialNumber",
+    "partNumber",
+    "assetTag",
+    "enclosureType",
+    "enclosureGroupUri",
+    "enclosureModel",
+    "enclosureTypeUri",
+    "rackName",
+    "deviceBayCount",
+    "deviceBays",
+    "interconnectBayCount",
+    "interconnectBays",
+    "powerSupplyBayCount",
+    "powerSupplyBays",
+    "fanBayCount",
+    "fanBays",
+    "oa",
+    "oaBayCount",
+    "oaBays",
+    "activeOaPreferredIP",
+    "standbyOaPreferredIP",
+    "isFwManaged",
+    "logicalEnclosureUri",
+    "fwBaselineName",
+    "fwBaselineUri",
+    "vcmMode",
+    "vcmUrl",
+    "vcmDomainName",
+    "vcmDomainId",
+    "category",
+    "description",
+    "created",
+    "modified",
+    "eTag",
+    "licensingIntent",
+    "state",
+    "stateReason",
+    "refreshState",
+    "status",
+    "consistentWithGroup",
+    "reconfigurationState",
+    "type" })
 public class Enclosures implements Serializable {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     @JsonProperty("uri")
     private String uri;
     @JsonProperty("uuid")
     private String uuid;
+    @JsonProperty("uuidState")
+    @Since(200)
+    private Enclosures.UuidState uuidState;
     @JsonProperty("name")
     private String name;
     @JsonProperty("serialNumber")
@@ -70,12 +115,18 @@ public class Enclosures implements Serializable {
     private String enclosureType;
     @JsonProperty("enclosureGroupUri")
     private String enclosureGroupUri;
+    @JsonProperty("enclosureModel")
+    @Since(200)
+    private String enclosureModel;
+    @JsonProperty("enclosureTypeUri")
+    @Since(200)
+    private String enclosureTypeUri;
     @JsonProperty("rackName")
     private String rackName;
     /**
-     * 
-     * (Required)
-     * 
+     *
+     *(Required)
+     *
      */
     @JsonProperty("deviceBayCount")
     private Integer deviceBayCount;
@@ -97,20 +148,26 @@ public class Enclosures implements Serializable {
     private List<Oa> oa = new ArrayList<Oa>();
     @JsonProperty("oaBayCount")
     private Integer oaBayCount;
+    @JsonProperty("oaBays")
+    @Since(200)
+    private Integer oaBays;
     @JsonProperty("activeOaPreferredIP")
     private String activeOaPreferredIP;
     @JsonProperty("standbyOaPreferredIP")
     private String standbyOaPreferredIP;
     @JsonProperty("isFwManaged")
     private Boolean isFwManaged;
+    @JsonProperty("logicalEnclosureUri")
+    @Since(200)
+    private String logicalEnclosureUri;
     @JsonProperty("fwBaselineName")
     private String fwBaselineName;
     @JsonProperty("fwBaselineUri")
     private String fwBaselineUri;
     /**
-     * 
-     * (Required)
-     * 
+     *
+     *(Required)
+     *
      */
     @JsonProperty("vcmMode")
     private Boolean vcmMode;
@@ -131,23 +188,23 @@ public class Enclosures implements Serializable {
     @JsonProperty("eTag")
     private String eTag;
     /**
-     * 
-     * (Required)
-     * 
+     *
+     *(Required)
+     *
      */
     @JsonProperty("licensingIntent")
     private Enclosures.LicensingIntent licensingIntent;
     @JsonProperty("state")
     private String state;
     /**
-     * Indicates the reason the resource in its current state
-     * 
+     *Indicates the reason the resource in its current state
+     *
      */
     @JsonProperty("stateReason")
     private String stateReason;
     /**
-     * Indicates if the resource is currently refreshing.
-     * 
+     *Indicates if the resource is currently refreshing.
+     *
      */
     @JsonProperty("refreshState")
     private Enclosures.RefreshState refreshState;
@@ -158,16 +215,16 @@ public class Enclosures implements Serializable {
     @JsonProperty("type")
     private String type;
     /**
-     * 
-     * (Required)
-     * 
+     *
+     *(Required)
+     *
      */
     @JsonProperty("reconfigurationState")
     private Enclosures.ReconfigurationState reconfigurationState;
 
     /**
-     * 
-     * @return The uri
+     *
+     *@return The uri
      */
     @JsonProperty("uri")
     public String getUri() {
@@ -175,9 +232,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param uri
-     *            The uri
+     *
+     *@param uri
+     *           The uri
      */
     @JsonProperty("uri")
     public void setUri(final String uri) {
@@ -185,8 +242,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The uuid
+     *
+     *@return The uuid
      */
     @JsonProperty("uuid")
     public String getUuid() {
@@ -194,9 +251,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param uuid
-     *            The uuid
+     *
+     *@param uuid
+     *           The uuid
      */
     @JsonProperty("uuid")
     public void setUuid(final String uuid) {
@@ -204,8 +261,27 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The name
+     *
+     *@return The uuid
+     */
+    @JsonProperty("uuidState")
+    public String getUuidState() {
+        return uuid;
+    }
+
+    /**
+     *
+     *@param uuidState
+     *           The uuidState
+     */
+    @JsonProperty("uuidState")
+    public void setUuidState(final UuidState uuidState) {
+        this.uuidState = uuidState;
+    }
+
+    /**
+     *
+     *@return The name
      */
     @JsonProperty("name")
     public String getName() {
@@ -213,9 +289,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param name
-     *            The name
+     *
+     *@param name
+     *           The name
      */
     @JsonProperty("name")
     public void setName(final String name) {
@@ -223,8 +299,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The serialNumber
+     *
+     *@return The serialNumber
      */
     @JsonProperty("serialNumber")
     public String getSerialNumber() {
@@ -232,9 +308,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param serialNumber
-     *            The serialNumber
+     *
+     *@param serialNumber
+     *           The serialNumber
      */
     @JsonProperty("serialNumber")
     public void setSerialNumber(final String serialNumber) {
@@ -242,8 +318,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The partNumber
+     *
+     *@return The partNumber
      */
     @JsonProperty("partNumber")
     public String getPartNumber() {
@@ -251,9 +327,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param partNumber
-     *            The partNumber
+     *
+     *@param partNumber
+     *           The partNumber
      */
     @JsonProperty("partNumber")
     public void setPartNumber(final String partNumber) {
@@ -261,8 +337,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The assetTag
+     *
+     *@return The assetTag
      */
     @JsonProperty("assetTag")
     public String getAssetTag() {
@@ -270,9 +346,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param assetTag
-     *            The assetTag
+     *
+     *@param assetTag
+     *           The assetTag
      */
     @JsonProperty("assetTag")
     public void setAssetTag(final String assetTag) {
@@ -280,8 +356,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The enclosureType
+     *
+     *@return The enclosureType
      */
     @JsonProperty("enclosureType")
     public String getEnclosureType() {
@@ -289,9 +365,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param enclosureType
-     *            The enclosureType
+     *
+     *@param enclosureType
+     *           The enclosureType
      */
     @JsonProperty("enclosureType")
     public void setEnclosureType(final String enclosureType) {
@@ -299,8 +375,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The enclosureGroupUri
+     *
+     *@return The enclosureGroupUri
      */
     @JsonProperty("enclosureGroupUri")
     public String getEnclosureGroupUri() {
@@ -308,9 +384,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param enclosureGroupUri
-     *            The enclosureGroupUri
+     *
+     *@param enclosureGroupUri
+     *           The enclosureGroupUri
      */
     @JsonProperty("enclosureGroupUri")
     public void setEnclosureGroupUri(final String enclosureGroupUri) {
@@ -318,8 +394,46 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The rackName
+     *
+     *@return The enclosureModel
+     */
+    @JsonProperty("enclosureModel")
+    public String getEnclosureModel() {
+        return enclosureModel;
+    }
+
+    /**
+     *
+     *@param enclosureModel
+     *           The enclosureModel
+     */
+    @JsonProperty("enclosureModel")
+    public void setEnclosureModel(final String enclosureModel) {
+        this.enclosureModel = enclosureModel;
+    }
+
+    /**
+     *
+     *@return The enclosureTypeUri
+     */
+    @JsonProperty("enclosureTypeUri")
+    public String getEnclosureTypeUri() {
+        return enclosureTypeUri;
+    }
+
+    /**
+     *
+     *@param enclosureTypeUri
+     *           The enclosureTypeUri
+     */
+    @JsonProperty("enclosureTypeUri")
+    public void setEnclosureTypeUri(final String enclosureTypeUri) {
+        this.enclosureTypeUri = enclosureTypeUri;
+    }
+
+    /**
+     *
+     *@return The rackName
      */
     @JsonProperty("rackName")
     public String getRackName() {
@@ -327,9 +441,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param rackName
-     *            The rackName
+     *
+     *@param rackName
+     *           The rackName
      */
     @JsonProperty("rackName")
     public void setRackName(final String rackName) {
@@ -337,10 +451,10 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * (Required)
-     * 
-     * @return The deviceBayCount
+     *
+     *(Required)
+     *
+     *@return The deviceBayCount
      */
     @JsonProperty("deviceBayCount")
     public Integer getDeviceBayCount() {
@@ -348,11 +462,11 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * (Required)
-     * 
-     * @param deviceBayCount
-     *            The deviceBayCount
+     *
+     *(Required)
+     *
+     *@param deviceBayCount
+     *           The deviceBayCount
      */
     @JsonProperty("deviceBayCount")
     public void setDeviceBayCount(final Integer deviceBayCount) {
@@ -360,8 +474,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The deviceBays
+     *
+     *@return The deviceBays
      */
     @JsonProperty("deviceBays")
     public List<Object> getDeviceBays() {
@@ -369,9 +483,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param deviceBays
-     *            The deviceBays
+     *
+     *@param deviceBays
+     *           The deviceBays
      */
     @JsonProperty("deviceBays")
     public void setDeviceBays(final List<Object> deviceBays) {
@@ -379,8 +493,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The interconnectBayCount
+     *
+     *@return The interconnectBayCount
      */
     @JsonProperty("interconnectBayCount")
     public Integer getInterconnectBayCount() {
@@ -388,9 +502,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param interconnectBayCount
-     *            The interconnectBayCount
+     *
+     *@param interconnectBayCount
+     *           The interconnectBayCount
      */
     @JsonProperty("interconnectBayCount")
     public void setInterconnectBayCount(final Integer interconnectBayCount) {
@@ -398,8 +512,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The interconnectBays
+     *
+     *@return The interconnectBays
      */
     @JsonProperty("interconnectBays")
     public List<InterconnectBay> getInterconnectBays() {
@@ -407,9 +521,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param interconnectBays
-     *            The interconnectBays
+     *
+     *@param interconnectBays
+     *           The interconnectBays
      */
     @JsonProperty("interconnectBays")
     public void setInterconnectBays(final List<InterconnectBay> interconnectBays) {
@@ -417,8 +531,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The powerSupplyBayCount
+     *
+     *@return The powerSupplyBayCount
      */
     @JsonProperty("powerSupplyBayCount")
     public Integer getPowerSupplyBayCount() {
@@ -426,9 +540,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param powerSupplyBayCount
-     *            The powerSupplyBayCount
+     *
+     *@param powerSupplyBayCount
+     *           The powerSupplyBayCount
      */
     @JsonProperty("powerSupplyBayCount")
     public void setPowerSupplyBayCount(final Integer powerSupplyBayCount) {
@@ -436,8 +550,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The powerSupplyBays
+     *
+     *@return The powerSupplyBays
      */
     @JsonProperty("powerSupplyBays")
     public List<PowerSupplyBay> getPowerSupplyBays() {
@@ -445,9 +559,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param powerSupplyBays
-     *            The powerSupplyBays
+     *
+     *@param powerSupplyBays
+     *           The powerSupplyBays
      */
     @JsonProperty("powerSupplyBays")
     public void setPowerSupplyBays(final List<PowerSupplyBay> powerSupplyBays) {
@@ -455,8 +569,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The fanBayCount
+     *
+     *@return The fanBayCount
      */
     @JsonProperty("fanBayCount")
     public Integer getFanBayCount() {
@@ -464,9 +578,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param fanBayCount
-     *            The fanBayCount
+     *
+     *@param fanBayCount
+     *           The fanBayCount
      */
     @JsonProperty("fanBayCount")
     public void setFanBayCount(final Integer fanBayCount) {
@@ -474,8 +588,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The fanBays
+     *
+     *@return The fanBays
      */
     @JsonProperty("fanBays")
     public List<FanBay> getFanBays() {
@@ -483,9 +597,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param fanBays
-     *            The fanBays
+     *
+     *@param fanBays
+     *           The fanBays
      */
     @JsonProperty("fanBays")
     public void setFanBays(final List<FanBay> fanBays) {
@@ -493,8 +607,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The oa
+     *
+     *@return The oa
      */
     @JsonProperty("oa")
     public List<Oa> getOa() {
@@ -502,9 +616,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param oa
-     *            The oa
+     *
+     *@param oa
+     *           The oa
      */
     @JsonProperty("oa")
     public void setOa(final List<Oa> oa) {
@@ -512,8 +626,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The oaBayCount
+     *
+     *@return The oaBayCount
      */
     @JsonProperty("oaBayCount")
     public Integer getOaBayCount() {
@@ -521,9 +635,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param oaBayCount
-     *            The oaBayCount
+     *
+     *@param oaBayCount
+     *           The oaBayCount
      */
     @JsonProperty("oaBayCount")
     public void setOaBayCount(final Integer oaBayCount) {
@@ -531,8 +645,27 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The activeOaPreferredIP
+     *
+     *@return The oaBays
+     */
+    @JsonProperty("oaBays")
+    public Integer getOaBays() {
+        return oaBayCount;
+    }
+
+    /**
+     *
+     *@param oaBays
+     *           The oaBays
+     */
+    @JsonProperty("oaBayCount")
+    public void setOaBays(final Integer oaBays) {
+        this.oaBays = oaBays;
+    }
+
+    /**
+     *
+     *@return The activeOaPreferredIP
      */
     @JsonProperty("activeOaPreferredIP")
     public String getActiveOaPreferredIP() {
@@ -540,9 +673,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param activeOaPreferredIP
-     *            The activeOaPreferredIP
+     *
+     *@param activeOaPreferredIP
+     *           The activeOaPreferredIP
      */
     @JsonProperty("activeOaPreferredIP")
     public void setActiveOaPreferredIP(final String activeOaPreferredIP) {
@@ -550,8 +683,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The standbyOaPreferredIP
+     *
+     *@return The standbyOaPreferredIP
      */
     @JsonProperty("standbyOaPreferredIP")
     public String getStandbyOaPreferredIP() {
@@ -559,9 +692,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param standbyOaPreferredIP
-     *            The standbyOaPreferredIP
+     *
+     *@param standbyOaPreferredIP
+     *           The standbyOaPreferredIP
      */
     @JsonProperty("standbyOaPreferredIP")
     public void setStandbyOaPreferredIP(final String standbyOaPreferredIP) {
@@ -569,8 +702,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The isFwManaged
+     *
+     *@return The isFwManaged
      */
     @JsonProperty("isFwManaged")
     public Boolean getIsFwManaged() {
@@ -578,9 +711,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param isFwManaged
-     *            The isFwManaged
+     *
+     *@param isFwManaged
+     *           The isFwManaged
      */
     @JsonProperty("isFwManaged")
     public void setIsFwManaged(final Boolean isFwManaged) {
@@ -588,8 +721,27 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The fwBaselineName
+     *
+     *@return The logicalEnclosureUri
+     */
+    @JsonProperty("logicalEnclosureUri")
+    public String getLogicalEnclosureUri() {
+        return logicalEnclosureUri;
+    }
+
+    /**
+     *
+     *@param logicalEnclosureUri
+     *           The logicalEnclosureUri
+     */
+    @JsonProperty("logicalEnclosureUri")
+    public void setLogicalEnclosureUri(final String logicalEnclosureUri) {
+        this.logicalEnclosureUri = logicalEnclosureUri;
+    }
+
+    /**
+     *
+     *@return The fwBaselineName
      */
     @JsonProperty("fwBaselineName")
     public String getFwBaselineName() {
@@ -597,9 +749,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param fwBaselineName
-     *            The fwBaselineName
+     *
+     *@param fwBaselineName
+     *           The fwBaselineName
      */
     @JsonProperty("fwBaselineName")
     public void setFwBaselineName(final String fwBaselineName) {
@@ -607,8 +759,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The fwBaselineUri
+     *
+     *@return The fwBaselineUri
      */
     @JsonProperty("fwBaselineUri")
     public String getFwBaselineUri() {
@@ -616,9 +768,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param fwBaselineUri
-     *            The fwBaselineUri
+     *
+     *@param fwBaselineUri
+     *           The fwBaselineUri
      */
     @JsonProperty("fwBaselineUri")
     public void setFwBaselineUri(final String fwBaselineUri) {
@@ -626,10 +778,10 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * (Required)
-     * 
-     * @return The vcmMode
+     *
+     *(Required)
+     *
+     *@return The vcmMode
      */
     @JsonProperty("vcmMode")
     public Boolean getVcmMode() {
@@ -637,11 +789,11 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * (Required)
-     * 
-     * @param vcmMode
-     *            The vcmMode
+     *
+     *(Required)
+     *
+     *@param vcmMode
+     *           The vcmMode
      */
     @JsonProperty("vcmMode")
     public void setVcmMode(final Boolean vcmMode) {
@@ -649,8 +801,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The vcmUrl
+     *
+     *@return The vcmUrl
      */
     @JsonProperty("vcmUrl")
     public String getVcmUrl() {
@@ -658,9 +810,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param vcmUrl
-     *            The vcmUrl
+     *
+     *@param vcmUrl
+     *           The vcmUrl
      */
     @JsonProperty("vcmUrl")
     public void setVcmUrl(final String vcmUrl) {
@@ -668,8 +820,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The vcmDomainName
+     *
+     *@return The vcmDomainName
      */
     @JsonProperty("vcmDomainName")
     public String getVcmDomainName() {
@@ -677,9 +829,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param vcmDomainName
-     *            The vcmDomainName
+     *
+     *@param vcmDomainName
+     *           The vcmDomainName
      */
     @JsonProperty("vcmDomainName")
     public void setVcmDomainName(final String vcmDomainName) {
@@ -687,8 +839,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The vcmDomainId
+     *
+     *@return The vcmDomainId
      */
     @JsonProperty("vcmDomainId")
     public String getVcmDomainId() {
@@ -696,9 +848,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param vcmDomainId
-     *            The vcmDomainId
+     *
+     *@param vcmDomainId
+     *           The vcmDomainId
      */
     @JsonProperty("vcmDomainId")
     public void setVcmDomainId(final String vcmDomainId) {
@@ -706,8 +858,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The category
+     *
+     *@return The category
      */
     @JsonProperty("category")
     public String getCategory() {
@@ -715,9 +867,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param category
-     *            The category
+     *
+     *@param category
+     *           The category
      */
     @JsonProperty("category")
     public void setCategory(final String category) {
@@ -725,8 +877,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The description
+     *
+     *@return The description
      */
     @JsonProperty("description")
     public String getDescription() {
@@ -734,9 +886,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param description
-     *            The description
+     *
+     *@param description
+     *           The description
      */
     @JsonProperty("description")
     public void setDescription(final String description) {
@@ -744,8 +896,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The created
+     *
+     *@return The created
      */
     @JsonProperty("created")
     public String getCreated() {
@@ -753,9 +905,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param created
-     *            The created
+     *
+     *@param created
+     *           The created
      */
     @JsonProperty("created")
     public void setCreated(final String created) {
@@ -763,8 +915,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The modified
+     *
+     *@return The modified
      */
     @JsonProperty("modified")
     public String getModified() {
@@ -772,9 +924,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param modified
-     *            The modified
+     *
+     *@param modified
+     *           The modified
      */
     @JsonProperty("modified")
     public void setModified(final String modified) {
@@ -782,8 +934,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The eTag
+     *
+     *@return The eTag
      */
     @JsonProperty("eTag")
     public String getETag() {
@@ -791,9 +943,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param eTag
-     *            The eTag
+     *
+     *@param eTag
+     *           The eTag
      */
     @JsonProperty("eTag")
     public void setETag(final String eTag) {
@@ -801,10 +953,10 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * (Required)
-     * 
-     * @return The licensingIntent
+     *
+     *(Required)
+     *
+     *@return The licensingIntent
      */
     @JsonProperty("licensingIntent")
     public Enclosures.LicensingIntent getLicensingIntent() {
@@ -812,11 +964,11 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * (Required)
-     * 
-     * @param licensingIntent
-     *            The licensingIntent
+     *
+     *(Required)
+     *
+     *@param licensingIntent
+     *           The licensingIntent
      */
     @JsonProperty("licensingIntent")
     public void setLicensingIntent(final Enclosures.LicensingIntent licensingIntent) {
@@ -824,8 +976,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The state
+     *
+     *@return The state
      */
     @JsonProperty("state")
     public String getState() {
@@ -833,9 +985,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param state
-     *            The state
+     *
+     *@param state
+     *           The state
      */
     @JsonProperty("state")
     public void setState(final String state) {
@@ -843,9 +995,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * Indicates the reason the resource in its current state
-     * 
-     * @return The stateReason
+     *Indicates the reason the resource in its current state
+     *
+     *@return The stateReason
      */
     @JsonProperty("stateReason")
     public String getStateReason() {
@@ -853,10 +1005,10 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * Indicates the reason the resource in its current state
-     * 
-     * @param stateReason
-     *            The stateReason
+     *Indicates the reason the resource in its current state
+     *
+     *@param stateReason
+     *           The stateReason
      */
     @JsonProperty("stateReason")
     public void setStateReason(final String stateReason) {
@@ -864,9 +1016,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * Indicates if the resource is currently refreshing.
-     * 
-     * @return The refreshState
+     *Indicates if the resource is currently refreshing.
+     *
+     *@return The refreshState
      */
     @JsonProperty("refreshState")
     public Enclosures.RefreshState getRefreshState() {
@@ -874,10 +1026,10 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * Indicates if the resource is currently refreshing.
-     * 
-     * @param refreshState
-     *            The refreshState
+     *Indicates if the resource is currently refreshing.
+     *
+     *@param refreshState
+     *           The refreshState
      */
     @JsonProperty("refreshState")
     public void setRefreshState(final Enclosures.RefreshState refreshState) {
@@ -885,8 +1037,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The status
+     *
+     *@return The status
      */
     @JsonProperty("status")
     public String getStatus() {
@@ -894,9 +1046,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param status
-     *            The status
+     *
+     *@param status
+     *           The status
      */
     @JsonProperty("status")
     public void setStatus(final String status) {
@@ -904,8 +1056,8 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @return The consistentWithGroup
+     *
+     *@return The consistentWithGroup
      */
     @JsonProperty("consistentWithGroup")
     public Boolean getConsistentWithGroup() {
@@ -913,9 +1065,9 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * @param consistentWithGroup
-     *            The consistentWithGroup
+     *
+     *@param consistentWithGroup
+     *           The consistentWithGroup
      */
     @JsonProperty("consistentWithGroup")
     public void setConsistentWithGroup(final Boolean consistentWithGroup) {
@@ -923,10 +1075,10 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * (Required)
-     * 
-     * @return The reconfigurationState
+     *
+     *(Required)
+     *
+     *@return The reconfigurationState
      */
     @JsonProperty("reconfigurationState")
     public Enclosures.ReconfigurationState getReconfigurationState() {
@@ -934,11 +1086,11 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * (Required)
-     * 
-     * @param reconfigurationState
-     *            The reconfigurationState
+     *
+     *(Required)
+     *
+     *@param reconfigurationState
+     *           The reconfigurationState
      */
     @JsonProperty("reconfigurationState")
     public void setReconfigurationState(final Enclosures.ReconfigurationState reconfigurationState) {
@@ -946,10 +1098,10 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * (Required)
-     * 
-     * @return The type
+     *
+     *(Required)
+     *
+     *@return The type
      */
     @JsonProperty("type")
     public String getType() {
@@ -957,11 +1109,11 @@ public class Enclosures implements Serializable {
     }
 
     /**
-     * 
-     * (Required)
-     * 
-     * @param type
-     *            The type
+     *
+     *(Required)
+     *
+     *@param type
+     *           The type
      */
     @JsonProperty("type")
     public void setType(final String type) {
@@ -975,14 +1127,53 @@ public class Enclosures implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(uri).append(uuid).append(name).append(serialNumber).append(partNumber).append(assetTag)
-                .append(enclosureType).append(enclosureGroupUri).append(rackName).append(deviceBayCount).append(deviceBays)
-                .append(interconnectBayCount).append(interconnectBays).append(powerSupplyBayCount).append(powerSupplyBays)
-                .append(fanBayCount).append(fanBays).append(oa).append(oaBayCount).append(activeOaPreferredIP)
-                .append(standbyOaPreferredIP).append(isFwManaged).append(fwBaselineName).append(fwBaselineUri).append(vcmMode)
-                .append(vcmUrl).append(vcmDomainName).append(vcmDomainId).append(category).append(description).append(created)
-                .append(modified).append(eTag).append(licensingIntent).append(state).append(stateReason).append(refreshState)
-                .append(status).append(consistentWithGroup).append(reconfigurationState).toHashCode();
+        return new HashCodeBuilder()
+                .append(uri)
+                .append(uuid)
+                .append(uuidState)
+                .append(name)
+                .append(serialNumber)
+                .append(partNumber)
+                .append(assetTag)
+                .append(enclosureType)
+                .append(enclosureGroupUri)
+                .append(enclosureModel)
+                .append(enclosureTypeUri)
+                .append(rackName)
+                .append(deviceBayCount)
+                .append(deviceBays)
+                .append(interconnectBayCount)
+                .append(interconnectBays)
+                .append(powerSupplyBayCount)
+                .append(powerSupplyBays)
+                .append(fanBayCount)
+                .append(fanBays)
+                .append(oa)
+                .append(oaBayCount)
+                .append(oaBays)
+                .append(activeOaPreferredIP)
+                .append(standbyOaPreferredIP)
+                .append(isFwManaged)
+                .append(logicalEnclosureUri)
+                .append(fwBaselineName)
+                .append(fwBaselineUri)
+                .append(vcmMode)
+                .append(vcmUrl)
+                .append(vcmDomainName)
+                .append(vcmDomainId)
+                .append(category)
+                .append(description)
+                .append(created)
+                .append(modified)
+                .append(eTag)
+                .append(licensingIntent)
+                .append(state)
+                .append(stateReason)
+                .append(refreshState)
+                .append(status)
+                .append(consistentWithGroup)
+                .append(reconfigurationState)
+                .toHashCode();
     }
 
     @Override
@@ -994,22 +1185,53 @@ public class Enclosures implements Serializable {
             return false;
         }
         final Enclosures rhs = ((Enclosures) other);
-        return new EqualsBuilder().append(uri, rhs.uri).append(uuid, rhs.uuid).append(name, rhs.name)
-                .append(serialNumber, rhs.serialNumber).append(partNumber, rhs.partNumber).append(assetTag, rhs.assetTag)
-                .append(enclosureType, rhs.enclosureType).append(enclosureGroupUri, rhs.enclosureGroupUri)
-                .append(rackName, rhs.rackName).append(deviceBayCount, rhs.deviceBayCount).append(deviceBays, rhs.deviceBays)
-                .append(interconnectBayCount, rhs.interconnectBayCount).append(interconnectBays, rhs.interconnectBays)
-                .append(powerSupplyBayCount, rhs.powerSupplyBayCount).append(powerSupplyBays, rhs.powerSupplyBays)
-                .append(fanBayCount, rhs.fanBayCount).append(fanBays, rhs.fanBays).append(oa, rhs.oa)
-                .append(oaBayCount, rhs.oaBayCount).append(activeOaPreferredIP, rhs.activeOaPreferredIP)
-                .append(standbyOaPreferredIP, rhs.standbyOaPreferredIP).append(isFwManaged, rhs.isFwManaged)
-                .append(fwBaselineName, rhs.fwBaselineName).append(fwBaselineUri, rhs.fwBaselineUri).append(vcmMode, rhs.vcmMode)
-                .append(vcmUrl, rhs.vcmUrl).append(vcmDomainName, rhs.vcmDomainName).append(vcmDomainId, rhs.vcmDomainId)
-                .append(category, rhs.category).append(description, rhs.description).append(created, rhs.created)
-                .append(modified, rhs.modified).append(eTag, rhs.eTag).append(licensingIntent, rhs.licensingIntent)
-                .append(state, rhs.state).append(stateReason, rhs.stateReason).append(refreshState, rhs.refreshState)
-                .append(status, rhs.status).append(consistentWithGroup, rhs.consistentWithGroup)
-                .append(reconfigurationState, rhs.reconfigurationState).isEquals();
+        return new EqualsBuilder()
+                .append(uri, rhs.uri)
+                .append(uuid, rhs.uuid)
+                .append(uuidState, rhs.uuidState)
+                .append(name, rhs.name)
+                .append(serialNumber, rhs.serialNumber)
+                .append(partNumber, rhs.partNumber)
+                .append(assetTag, rhs.assetTag)
+                .append(enclosureType, rhs.enclosureType)
+                .append(enclosureGroupUri, rhs.enclosureGroupUri)
+                .append(enclosureModel, rhs.enclosureModel)
+                .append(enclosureTypeUri, rhs.enclosureTypeUri)
+                .append(rackName, rhs.rackName)
+                .append(deviceBayCount, rhs.deviceBayCount)
+                .append(deviceBays, rhs.deviceBays)
+                .append(interconnectBayCount, rhs.interconnectBayCount)
+                .append(interconnectBays, rhs.interconnectBays)
+                .append(powerSupplyBayCount, rhs.powerSupplyBayCount)
+                .append(powerSupplyBays, rhs.powerSupplyBays)
+                .append(fanBayCount, rhs.fanBayCount)
+                .append(fanBays, rhs.fanBays)
+                .append(oa, rhs.oa)
+                .append(oaBayCount, rhs.oaBayCount)
+                .append(oaBays, rhs.oaBays)
+                .append(activeOaPreferredIP, rhs.activeOaPreferredIP)
+                .append(standbyOaPreferredIP, rhs.standbyOaPreferredIP)
+                .append(isFwManaged, rhs.isFwManaged)
+                .append(logicalEnclosureUri, rhs.logicalEnclosureUri)
+                .append(fwBaselineName, rhs.fwBaselineName)
+                .append(fwBaselineUri, rhs.fwBaselineUri)
+                .append(vcmMode, rhs.vcmMode)
+                .append(vcmUrl, rhs.vcmUrl)
+                .append(vcmDomainName, rhs.vcmDomainName)
+                .append(vcmDomainId, rhs.vcmDomainId)
+                .append(category, rhs.category)
+                .append(description, rhs.description)
+                .append(created, rhs.created)
+                .append(modified, rhs.modified)
+                .append(eTag, rhs.eTag)
+                .append(licensingIntent, rhs.licensingIntent)
+                .append(state, rhs.state)
+                .append(stateReason, rhs.stateReason)
+                .append(refreshState, rhs.refreshState)
+                .append(status, rhs.status)
+                .append(consistentWithGroup, rhs.consistentWithGroup)
+                .append(reconfigurationState, rhs.reconfigurationState)
+                .isEquals();
     }
 
     @Generated("org.jsonschema2pojo")
@@ -1044,7 +1266,6 @@ public class Enclosures implements Serializable {
                 return constant;
             }
         }
-
     }
 
     @Generated("org.jsonschema2pojo")
@@ -1080,7 +1301,6 @@ public class Enclosures implements Serializable {
                 return constant;
             }
         }
-
     }
 
     @Generated("org.jsonschema2pojo")
@@ -1115,7 +1335,43 @@ public class Enclosures implements Serializable {
                 return constant;
             }
         }
+    }
 
+    @Generated("org.jsonschema2pojo")
+    public static enum UuidState {
+
+        Blink("Blink"),
+        Off("Off"),
+        On("On");
+
+        private final String value;
+        private static Map<String, Enclosures.UuidState> constants = new HashMap<String, Enclosures.UuidState>();
+
+        static {
+            for (final Enclosures.UuidState c : values()) {
+                constants.put(c.value, c);
+            }
+        }
+
+        private UuidState(final String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+        @JsonCreator
+        public static Enclosures.UuidState fromValue(final String value) {
+            final Enclosures.UuidState constant = constants.get(value);
+            if (constant == null) {
+                throw new IllegalArgumentException(value);
+            } else {
+                return constant;
+            }
+        }
     }
 
 }

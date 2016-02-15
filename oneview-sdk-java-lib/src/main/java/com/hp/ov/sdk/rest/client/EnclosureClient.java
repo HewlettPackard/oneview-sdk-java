@@ -19,6 +19,7 @@ import com.hp.ov.sdk.dto.AddEnclosureV2;
 import com.hp.ov.sdk.dto.EnclosureCollectionV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
+import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -32,7 +33,7 @@ public interface EnclosureClient {
     /**
      * The module aids in fetching the enclosure details for the specified
      * enclosure resourceId
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -113,6 +114,31 @@ public interface EnclosureClient {
      * @return taskResource which returns the task status for the process
      */
     public TaskResourceV2 updateEnclosure(final RestParams params, final String resourceId, final Enclosures enclosureDto,
+            final boolean aSync, final boolean useJsonRequest);
+
+    /**
+     * The module takes in an Patch object or JsonRequest and updates the
+     * existing enclosure based on resource Id and the content of the Patch object.
+     * It can process the request asynchronously or synchronously based on flag
+     * input.
+     * 
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param resourceId
+     *            The resourceId for enclosure as seen in HP OneView.
+     * @param patchDto
+     *            This is a object containing the update to be made to existing
+     *            Enclosure pointed to by the above mentioned resourceId
+     * @param aSync
+     *            Flag input to process request asynchronously or synchronously.
+     * @param useJsonRequest
+     *            The JsonRequest body is part of Enclosure Object which takes
+     *            in a String containing the update to be made, which is
+     *            converted to Patch Object using adaptor and processed.
+     * @return taskResource which returns the task status for the process
+     */
+    public TaskResourceV2 patchEnclosure(final RestParams params, final String resourceId, final Patch patchDto,
             final boolean aSync, final boolean useJsonRequest);
 
     /**
