@@ -48,6 +48,9 @@ import com.hp.ov.sdk.util.UrlUtils;
 
 public class EnclosureClientImpl implements EnclosureClient {
 
+    private static final String ROLE_STANDBY = "?role=Standby";
+    private static final String ROLE_ACTIVE = "?role=Active";
+    private static final int VERSION_200 = 200;
     private static final Logger LOGGER = LoggerFactory.getLogger(EnclosureClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
 
@@ -347,8 +350,8 @@ public class EnclosureClientImpl implements EnclosureClient {
         params.setType(HttpMethodType.GET);
 
         String restUrl = SdkConstants.ACTIVE_OA_SSO_URL;
-        if (200 == params.getApiVersion()) {
-            restUrl = SdkConstants.ACTIVE_OA_SSO_URL_V200 + "?role=Active";
+        if (VERSION_200 == params.getApiVersion()) {
+            restUrl = SdkConstants.ACTIVE_OA_SSO_URL_V200 + ROLE_ACTIVE;
         }
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, restUrl));
 
@@ -686,8 +689,8 @@ public class EnclosureClientImpl implements EnclosureClient {
         params.setType(HttpMethodType.GET);
 
         String restUrl = SdkConstants.STANDBY_OA_SSO_URL;
-        if (200 == params.getApiVersion()) {
-            restUrl = SdkConstants.STANDBY_OA_SSO_URL_V200 + "?role=Standby";
+        if (VERSION_200 == params.getApiVersion()) {
+            restUrl = SdkConstants.STANDBY_OA_SSO_URL_V200 + ROLE_STANDBY;
         }
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, restUrl));
 

@@ -15,17 +15,18 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class DeviceManagerResponse extends BaseModelResource {
 
-    /**
-	 * 
-	 */
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1002171687002022317L;
 
-    private List<Property> connectionInfo = new ArrayList<Property>();
+    private List<Property> connectionInfo = new ArrayList<>();
     private String deviceManagerUrl;
     private String deviceManagerVersion;
     private Boolean isInternal;
@@ -35,157 +36,135 @@ public class DeviceManagerResponse extends BaseModelResource {
     private RefreshState refreshState;
     private String unimportedSansUri;
 
-    /**
-     * 
-     * @return The connectionInfo
-     */
     public List<Property> getConnectionInfo() {
         return connectionInfo;
     }
 
-    /**
-     * 
-     * @param connectionInfo
-     *            The connectionInfo
-     */
     public void setConnectionInfo(List<Property> connectionInfo) {
         this.connectionInfo = connectionInfo;
     }
 
-    /**
-     * 
-     * @return The deviceManagerUrl
-     */
     public String getDeviceManagerUrl() {
         return deviceManagerUrl;
     }
 
-    /**
-     * 
-     * @param deviceManagerUrl
-     *            The deviceManagerUrl
-     */
     public void setDeviceManagerUrl(String deviceManagerUrl) {
         this.deviceManagerUrl = deviceManagerUrl;
     }
 
-    /**
-     * 
-     * @return The deviceManagerVersion
-     */
     public String getDeviceManagerVersion() {
         return deviceManagerVersion;
     }
 
-    /**
-     * 
-     * @param deviceManagerVersion
-     *            The deviceManagerVersion
-     */
     public void setDeviceManagerVersion(String deviceManagerVersion) {
         this.deviceManagerVersion = deviceManagerVersion;
     }
 
-    /**
-     * 
-     * @return The isInternal
-     */
     public Boolean getIsInternal() {
         return isInternal;
     }
 
-    /**
-     * 
-     * @param isInternal
-     *            The isInternal
-     */
     public void setIsInternal(Boolean isInternal) {
         this.isInternal = isInternal;
     }
 
-    /**
-     * 
-     * @return The managedSansUri
-     */
     public String getManagedSansUri() {
         return managedSansUri;
     }
 
-    /**
-     * 
-     * @param managedSansUri
-     *            The managedSansUri
-     */
     public void setManagedSansUri(String managedSansUri) {
         this.managedSansUri = managedSansUri;
     }
 
-    /**
-     * 
-     * @return The providerDisplayName
-     */
     public String getProviderDisplayName() {
         return providerDisplayName;
     }
 
-    /**
-     * 
-     * @param providerDisplayName
-     *            The providerDisplayName
-     */
     public void setProviderDisplayName(String providerDisplayName) {
         this.providerDisplayName = providerDisplayName;
     }
 
-    /**
-     * 
-     * @return The providerUri
-     */
     public String getProviderUri() {
         return providerUri;
     }
 
-    /**
-     * 
-     * @param providerUri
-     *            The providerUri
-     */
     public void setProviderUri(String providerUri) {
         this.providerUri = providerUri;
     }
 
-    /**
-     * 
-     * @return The refreshState
-     */
     public RefreshState getRefreshState() {
         return refreshState;
     }
 
-    /**
-     * 
-     * @param refreshState
-     *            The refreshState
-     */
     public void setRefreshState(RefreshState refreshState) {
         this.refreshState = refreshState;
     }
 
-    /**
-     * 
-     * @return The unimportedSansUri
-     */
     public String getUnimportedSansUri() {
         return unimportedSansUri;
     }
 
-    /**
-     * 
-     * @param unimportedSansUri
-     *            The unimportedSansUri
-     */
     public void setUnimportedSansUri(String unimportedSansUri) {
         this.unimportedSansUri = unimportedSansUri;
     }
 
+    @Override
+    public final boolean canEqual(Object obj) {
+        return (obj instanceof DeviceManagerResponse);
+    }
+
+    @Override
+    public final boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof DeviceManagerResponse) {
+            DeviceManagerResponse that = (DeviceManagerResponse) obj;
+
+            return that.canEqual(this) && new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(connectionInfo, that.connectionInfo)
+                    .append(deviceManagerUrl, that.deviceManagerUrl)
+                    .append(deviceManagerVersion, that.deviceManagerVersion)
+                    .append(isInternal, that.isInternal)
+                    .append(managedSansUri, that.managedSansUri)
+                    .append(providerDisplayName, that.providerDisplayName)
+                    .append(providerUri, that.providerUri)
+                    .append(refreshState, that.refreshState)
+                    .append(unimportedSansUri, that.unimportedSansUri)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public final int hashCode() {
+        return new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                .append(connectionInfo)
+                .append(deviceManagerUrl)
+                .append(deviceManagerVersion)
+                .append(isInternal)
+                .append(managedSansUri)
+                .append(providerDisplayName)
+                .append(providerUri)
+                .append(refreshState)
+                .append(unimportedSansUri)
+                .toHashCode();
+    }
+
+    @Override
+    public final String toString() {
+        return new ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("connectionInfo", connectionInfo)
+                .append("deviceManagerUrl", deviceManagerUrl)
+                .append("deviceManagerVersion", deviceManagerVersion)
+                .append("isInternal", isInternal)
+                .append("managedSansUri", managedSansUri)
+                .append("providerDisplayName", providerDisplayName)
+                .append("providerUri", providerUri)
+                .append("refreshState", refreshState)
+                .append("unimportedSansUri", unimportedSansUri)
+                .toString();
+    }
 }
