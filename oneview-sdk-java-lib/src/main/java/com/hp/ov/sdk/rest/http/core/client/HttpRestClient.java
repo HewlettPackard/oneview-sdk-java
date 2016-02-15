@@ -60,9 +60,10 @@ import com.hp.ov.sdk.exceptions.SDKUnauthorizedException;
 import com.hp.ov.sdk.exceptions.SdkRuntimeException;
 import com.hp.ov.sdk.util.UrlUtils;
 
-public final class HttpRestClient {
+public class HttpRestClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpRestClient.class);
+
     private static final String ACCEPT = "application/json";
     private static final String ACCEPT_LANGUAGE = "en_US";
     private static final String CHAR_SET = "UTF-8";
@@ -71,12 +72,19 @@ public final class HttpRestClient {
     private static final String LOCATION_HEADER = "Location";
     private static final int TIMEOUT = 0; //???
 
-    /**
-     * this method mainly used to get sync response from REST API
-     *
-     * @throws SDKResourceNotFoundException
-     * @throws SDKNoSuchUrlException
-     */
+    private static final class HttpRestClientHolder {
+        private static final HttpRestClient INSTANCE = new HttpRestClient();
+    }
+
+    public static HttpRestClient getClient() {
+        return HttpRestClientHolder.INSTANCE;
+    }
+    public String sendRequest(RestParams restParams) {
+        return sendRequestToHPOV(restParams);
+    }
+    public String sendRequest(RestParams restParams, JSONObject jsonObject) {
+        return sendRequestToHPOV(restParams, jsonObject);
+    }
 
     /**
      * Send the request to OV and read the response.
@@ -290,7 +298,6 @@ public final class HttpRestClient {
 
     /**
      * Gets a connection and configures it, does NOT open the connection.
-
      * @return a connection to the URL
      * @throws ProtocolException if method (GET/PUT/...) not supported
      * @throws SDKNoSuchUrlException on invalid URL

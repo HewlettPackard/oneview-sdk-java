@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import com.google.common.base.Strings;
 import com.hp.ov.sdk.adaptors.DeviceManagerAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
@@ -38,21 +39,27 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
     private static final Logger LOGGER = LoggerFactory.getLogger(FcSansDeviceManagerClientImpl.class);
 
     private final DeviceManagerAdaptor adaptor;
+    private final HttpRestClient restClient;
 
     private JSONObject jsonObject;
 
-    protected FcSansDeviceManagerClientImpl(DeviceManagerAdaptor adaptor) {
+    protected FcSansDeviceManagerClientImpl(DeviceManagerAdaptor adaptor,
+            HttpRestClient restClient) {
+
         this.adaptor = adaptor;
+        this.restClient = restClient;
     }
 
     public static FcSansDeviceManagerClient getClient() {
-        return new FcSansDeviceManagerClientImpl(new DeviceManagerAdaptor());
+        return new FcSansDeviceManagerClientImpl(
+                new DeviceManagerAdaptor(),
+                HttpRestClient.getClient());
     }
 
     @Override
     public DeviceManagerResponse createDeviceManager(final RestParams params, final String providerUrl,
             final DeviceManagerResponse addDeviceManagerResponseDto, final boolean aSync, final boolean useJsonRequest) {
-        LOGGER.info("DeviceManagerClientImpl : createDeviceManager : Start");
+        LOGGER.trace("DeviceManagerClientImpl : createDeviceManager : Start");
         String returnObj = null;
 
         // validate params
@@ -71,43 +78,44 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(addDeviceManagerResponseDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = restClient.sendRequest(params, jsonObject);
         // convert returnObj to deviceManagerResponseDto
         DeviceManagerResponse deviceManagerResponseDto = adaptor.buildDto(returnObj);
 
         LOGGER.debug("DeviceManagerClientImpl : createDeviceManager : returnObj =" + returnObj);
         LOGGER.debug("DeviceManagerClientImpl : createDeviceManager : DeviceManagerResponse =" + deviceManagerResponseDto);
 
-        LOGGER.info("DeviceManagerClientImpl : createDeviceManager : End");
+        LOGGER.trace("DeviceManagerClientImpl : createDeviceManager : End");
 
         return deviceManagerResponseDto;
     }
 
     @Override
     public DeviceManagerResponseCollection getAllDeviceManager(final RestParams params) {
-        DeviceManagerResponseCollection deviceManagerResponseCollectionDto = null;
-        LOGGER.info("DeviceManagerClientImpl : getAllDeviceManager : Start");
-
+        LOGGER.trace("DeviceManagerClientImpl : getAllDeviceManager : Start");
         // validate args
         if (null == params) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument,
+                    null, null, null, SdkConstants.APPLIANCE, null);
         }
+
         // set the additional params
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_SANS_DEVICE_MANAGER_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("DeviceManagerClientImpl : getAllDeviceManager : response from OV :" + returnObj);
-        if (null == returnObj || returnObj.equals("")) {
-            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.DEVICE_MANAGER,
-                    null);
-        }
-        // Call adaptor to convert to DTO
 
-        deviceManagerResponseCollectionDto = adaptor.buildCollectionDto(returnObj);
+        if (Strings.isNullOrEmpty(returnObj)) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance,
+                    null, null, null, SdkConstants.DEVICE_MANAGER, null);
+        }
+
+        // Call adaptor to convert to DTO
+        DeviceManagerResponseCollection deviceManagerResponseCollectionDto = adaptor.buildCollectionDto(returnObj);
 
         LOGGER.debug("DeviceManagerClientImpl : getAllDeviceManager : count :" + deviceManagerResponseCollectionDto.getCount());
-        LOGGER.info("DeviceManagerClientImpl : getAllDeviceManager : End");
+        LOGGER.trace("DeviceManagerClientImpl : getAllDeviceManager : End");
 
         return deviceManagerResponseCollectionDto;
     }
@@ -115,7 +123,7 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
     @Override
     public DeviceManagerResponse getDeviceManager(final RestParams params, final String resourceId) {
         DeviceManagerResponse deviceManagerResponseDto = null;
-        LOGGER.info("DeviceManagerClientImpl : getDeviceManager : Start");
+        LOGGER.trace("DeviceManagerClientImpl : getDeviceManager : Start");
 
         // validate args
         if (null == params) {
@@ -125,9 +133,9 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_SANS_DEVICE_MANAGER_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("DeviceManagerClientImpl : getDeviceManager : response from OV :" + returnObj);
-        if (null == returnObj || returnObj.equals("")) {
+        if (Strings.isNullOrEmpty(returnObj)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.DEVICE_MANAGER,
                     null);
         }
@@ -136,38 +144,32 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
         deviceManagerResponseDto = adaptor.buildDto(returnObj);
 
         LOGGER.debug("DeviceManagerClientImpl : getDeviceManager : name :" + deviceManagerResponseDto.getName());
-        LOGGER.info("DeviceManagerClientImpl : getDeviceManager : End");
+        LOGGER.trace("DeviceManagerClientImpl : getDeviceManager : End");
 
         return deviceManagerResponseDto;
     }
 
     @Override
-    public String deleteDeviceManager(final RestParams params, final String resourceId) {
-        LOGGER.info("DeviceManagerClientImpl : deleteDeviceManager : Start");
+    public void deleteDeviceManager(final RestParams params, final String resourceId) {
+        LOGGER.trace("DeviceManagerClientImpl : deleteDeviceManager : Start");
 
         // validate args
         if (null == params) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument,
+                    null, null, null, SdkConstants.APPLIANCE, null);
         }
         // set the additional params
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_SANS_DEVICE_MANAGER_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("DeviceManagerClientImpl : deleteDeviceManager : response from OV :" + returnObj);
-        /************ Returns Response code 204 *********************************/
-
-        LOGGER.debug("DeviceManagerClientImpl : deleteDeviceManager : returnObj =" + returnObj);
-
-        LOGGER.info("DeviceManagerClientImpl : deleteDeviceManager : End");
-
-        return "Deleted";
     }
 
     @Override
     public DeviceManagerResponse updateDeviceManager(final RestParams params, final String resourceId,
             final DeviceManagerResponse updateDeviceManagerResponseDto, final boolean useJsonRequest) {
-        LOGGER.info("DeviceManagerClientImpl : updateDeviceManager : Start");
+        LOGGER.trace("DeviceManagerClientImpl : updateDeviceManager : Start");
         String returnObj = null;
 
         // validate params
@@ -186,14 +188,14 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(updateDeviceManagerResponseDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = restClient.sendRequest(params, jsonObject);
         // convert returnObj to deviceManagerResponseDto
         final DeviceManagerResponse deviceManagerResponseDto = adaptor.buildDto(returnObj);
 
         LOGGER.debug("DeviceManagerClientImpl : updateDeviceManager : returnObj =" + returnObj);
         LOGGER.debug("DeviceManagerClientImpl : updateDeviceManager : DeviceManagerResponse =" + deviceManagerResponseDto);
 
-        LOGGER.info("DeviceManagerClientImpl : updateDeviceManager : End");
+        LOGGER.trace("DeviceManagerClientImpl : updateDeviceManager : End");
 
         return deviceManagerResponseDto;
     }
@@ -201,7 +203,7 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
     @Override
     public DeviceManagerResponse getDeviceManagerByName(final RestParams params, final String name) {
         DeviceManagerResponse deviceManagerResponseDto = null;
-        LOGGER.info("DeviceManagerClientImpl : getDeviceManagerByName : Start");
+        LOGGER.trace("DeviceManagerClientImpl : getDeviceManagerByName : Start");
         final String query = UrlUtils.createQueryString(name);
 
         // validate args
@@ -210,17 +212,20 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.FC_SANS_DEVICE_MANAGER_URI, query));
+        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(),
+                ResourceUris.FC_SANS_DEVICE_MANAGER_URI, query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("DeviceManagerClientImpl : getDeviceManagerByName : response from OV :" + returnObj);
-        if (null == returnObj || returnObj.equals("")) {
+
+        if (Strings.isNullOrEmpty(returnObj)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.DEVICE_MANAGER,
                     null);
         }
-        // Call adaptor to convert to DTO
 
+        // Call adaptor to convert to DTO
         final DeviceManagerResponseCollection deviceManagerResponseCollectionDto = adaptor.buildCollectionDto(returnObj);
+
         if (deviceManagerResponseCollectionDto.getCount() != 0) {
             deviceManagerResponseDto = deviceManagerResponseCollectionDto.getMembers().get(0);
         } else {
@@ -232,16 +237,16 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
             throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.DEVICE_MANAGER,
                     null);
         }
-        LOGGER.info("DeviceManagerClientImpl : getDeviceManagerByName : End");
+        LOGGER.trace("DeviceManagerClientImpl : getDeviceManagerByName : End");
 
         return deviceManagerResponseDto;
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        DeviceManagerResponse deviceManagerResponseDto = getDeviceManagerByName(creds, name);
+        DeviceManagerResponse deviceManagerResponseDto = getDeviceManagerByName(params, name);
 
         if (null != deviceManagerResponseDto.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(deviceManagerResponseDto.getUri());
