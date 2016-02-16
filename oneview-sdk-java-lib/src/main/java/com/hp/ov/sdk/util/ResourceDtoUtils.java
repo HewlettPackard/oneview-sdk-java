@@ -19,6 +19,7 @@ import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ConnectionBoot;
 import com.hp.ov.sdk.dto.ConnectionBoot.BootControl;
+import com.hp.ov.sdk.dto.PortInfo;
 import com.hp.ov.sdk.dto.ProfileConnectionV3;
 import com.hp.ov.sdk.dto.StorageTargetPortCollection;
 import com.hp.ov.sdk.dto.generated.Bandwidth;
@@ -27,14 +28,14 @@ import com.hp.ov.sdk.dto.generated.Boot;
 import com.hp.ov.sdk.dto.generated.Firmware;
 import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.generated.InterconnectMapTemplate;
-import com.hp.ov.sdk.dto.generated.InterconnectTypes;
+import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.dto.generated.LocalStorage;
 import com.hp.ov.sdk.dto.generated.LocationEntry;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
 import com.hp.ov.sdk.dto.generated.LogicalLocation;
 import com.hp.ov.sdk.dto.generated.LogicalPortConfigInfo;
 import com.hp.ov.sdk.dto.generated.NetworkSets;
-import com.hp.ov.sdk.dto.generated.PortInfo;
+
 import com.hp.ov.sdk.dto.generated.SanStorage;
 import com.hp.ov.sdk.dto.generated.ServerProfile;
 import com.hp.ov.sdk.dto.generated.StoragePath;
@@ -166,7 +167,7 @@ public class ResourceDtoUtils {
 
             final String permittedInterconnectTypeUri = SdkUtils.getInstance().getPermittedInterconnectTypeUriForLigBasedOnBay(params, ligName,
                     bayRelativeValue);
-            final InterconnectTypes interconnectTypeDto = interconnectTypeClient.getInterconnectType(params,
+            final InterconnectType interconnectTypeDto = interconnectTypeClient.getInterconnectType(params,
                     (permittedInterconnectTypeUri.substring(permittedInterconnectTypeUri.lastIndexOf("/") + 1)));
 
             for (int i = 0; i < portNames.size(); i++) {

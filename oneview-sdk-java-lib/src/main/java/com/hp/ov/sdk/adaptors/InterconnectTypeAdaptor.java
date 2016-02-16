@@ -15,33 +15,33 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
-import com.hp.ov.sdk.dto.InterconnectTypeCollectionV2;
-import com.hp.ov.sdk.dto.generated.InterconnectTypes;
+import com.hp.ov.sdk.dto.InterconnectTypeCollection;
+import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
-public class InterconnectTypeAdaptor extends BaseAdaptor<InterconnectTypes, Object> {
+public class InterconnectTypeAdaptor extends BaseAdaptor<InterconnectType, Object> {
 
     @Override
-    public InterconnectTypes buildDto(final Object source) {
+    public InterconnectType buildDto(final Object source) {
         // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        final InterconnectTypes interconnectTypeDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), InterconnectTypes.class);
+        final InterconnectType interconnectTypeDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), InterconnectType.class);
         return interconnectTypeDto;
     }
 
-    public InterconnectTypeCollectionV2 buildCollectionDto(final Object source) {
+    public InterconnectTypeCollection buildCollectionDto(final Object source) {
         // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         // convert json Object to DTO, replace quotes and back slash in the file
-        final InterconnectTypeCollectionV2 interconnectTypeCollectionDto = converter.convertJsonToObject(
+        final InterconnectTypeCollection interconnectTypeCollectionDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
-                        .convertObjectToJsonString(source))), InterconnectTypeCollectionV2.class);
+                        .convertObjectToJsonString(source))), InterconnectTypeCollection.class);
         return interconnectTypeCollectionDto;
     }
 

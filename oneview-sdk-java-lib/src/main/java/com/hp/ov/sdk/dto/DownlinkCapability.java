@@ -15,15 +15,16 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
-public enum PortCapabilityType {
+public enum DownlinkCapability {
+    FCoE,
+    Flex10_4SubPort,
     Ethernet,
-    FibreChannel,
-    EnetFcoe,
-    Unknown,
-    Extension,
-    Dcc,
+    Flex20_4SubPort,
     PortExtender,
-    Stacking,
+    Unknown,
+    NotApplicable,
+    FibreChannel,
+    Dcc,
     Qbg,
     ConnectionReservation,
     ConnectionDeployment;

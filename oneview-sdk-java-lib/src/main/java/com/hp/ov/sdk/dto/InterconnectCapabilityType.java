@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,6 +15,13 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
-public enum UnsupportedCapabilities {
-    BladeSystem_C7000_G1, Unknown
+public enum InterconnectCapabilityType {
+    Unknown,
+    NotApplicable,
+    FibreChannel,
+    Ethernet,
+    Flex,
+    PassThru,
+    EnetFcoe,
+    PortExtender;
 }

@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
-public enum DownlinkCapabilities {
-    Ethernet, FCoE, FibreChannel, Flex10_4SubPort, Flex20_4SubPort, NotApplicable, PortExtender, Unknown
+public enum UnsupportedCapability {
+    BladeSystem_C7000_G1,
+    Unknown
 }
