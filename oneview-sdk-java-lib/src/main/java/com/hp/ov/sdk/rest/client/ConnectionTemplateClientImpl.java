@@ -61,7 +61,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ConnectionTemplateImpl : getConnectionTemplate : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -94,7 +94,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI, query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ConnectionTemplateClientImpl : getConnectionTemplateByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -172,7 +172,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ConnectionTemplateImpl : getAllConnectionTemplates : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -201,7 +201,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.DEFAULT_CONNECTION_TEMPLATE_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,

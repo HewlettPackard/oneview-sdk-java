@@ -85,7 +85,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ServerProfileClientImpl : getServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -112,7 +112,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ServerProfileClientImpl : getAllServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILES,
@@ -143,7 +143,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ServerProfileClientImpl : getServerProfileByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILES,
@@ -183,7 +183,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.AVAILABLE_NETWORKS_URI, query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ServerProfileClientImpl : getAvailableNetworksForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -217,7 +217,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.AVAILABLE_SERVERS_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -253,7 +253,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.AVAILABLE_SERVERS_URI, query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -289,7 +289,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.AVAILABLE_SERVERS_URI, query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -325,7 +325,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.PROFILE_PORTS_URI, query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ServerProfileClientImpl : getProfilePortsForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -446,7 +446,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ServerProfileClientImpl : deleteServerProfile : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -492,7 +492,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ServerProfileClientImpl : deleteServerProfileByFilter : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {

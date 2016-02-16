@@ -103,7 +103,7 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_SANS_DEVICE_MANAGER_URI));
 
-        final String returnObj = restClient.sendRequest(params, null);
+        final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("DeviceManagerClientImpl : getAllDeviceManager : response from OV :" + returnObj);
 
         if (Strings.isNullOrEmpty(returnObj)) {
@@ -133,8 +133,7 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_SANS_DEVICE_MANAGER_URI, resourceId));
 
-        final String returnObj = restClient.sendRequest(params, null);
-
+        final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("DeviceManagerClientImpl : getDeviceManager : response from OV :" + returnObj);
         if (Strings.isNullOrEmpty(returnObj)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.DEVICE_MANAGER,
@@ -161,13 +160,10 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
         }
         // set the additional params
         params.setType(HttpMethodType.DELETE);
-        params.setUrl(UrlUtils.createRestUrl(params.getHostname(),
-                ResourceUris.FC_SANS_DEVICE_MANAGER_URI, resourceId));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_SANS_DEVICE_MANAGER_URI, resourceId));
 
-        final String returnObj = restClient.sendRequest(params, null);
-
+        final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("DeviceManagerClientImpl : deleteDeviceManager : response from OV :" + returnObj);
-        LOGGER.trace("DeviceManagerClientImpl : deleteDeviceManager : returnObj =" + returnObj);
     }
 
     @Override
@@ -219,7 +215,7 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
         params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(),
                 ResourceUris.FC_SANS_DEVICE_MANAGER_URI, query));
 
-        final String returnObj = restClient.sendRequest(params, null);
+        final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("DeviceManagerClientImpl : getDeviceManagerByName : response from OV :" + returnObj);
 
         if (Strings.isNullOrEmpty(returnObj)) {

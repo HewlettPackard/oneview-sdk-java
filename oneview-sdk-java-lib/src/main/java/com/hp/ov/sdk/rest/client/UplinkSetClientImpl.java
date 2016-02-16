@@ -73,7 +73,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("UplinkSetClientImpl : getUplinkSet : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.UPLINKSET, null);
@@ -100,7 +100,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("UplinkSetClientImpl : getAllUplinkSet : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.UPLINKSETS, null);
@@ -127,7 +127,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("UplinkSetClientImpl : deleteUplinkSet : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {

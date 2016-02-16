@@ -21,6 +21,8 @@ import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
 import com.hp.ov.sdk.dto.FwBaselineOptions;
 import com.hp.ov.sdk.dto.LicensingIntent;
+import com.hp.ov.sdk.dto.Patch;
+import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
 import com.hp.ov.sdk.dto.RefreshStateConfig.RefreshForceOptions;
@@ -67,7 +69,7 @@ public class EnclosureClientSample {
     private static final String hostname = "172.18.1.11";
     private static final String username = "dcs";
     private static final String password = "dcs";
-    private static final String firmware = "HP Service Pack For ProLiant OneView 2014 11 13";
+    private static final String firmware = "Service Pack for ProLiant";
     private static final String resourceId = "09SGH100X6J1";
     // ================================
 
@@ -227,7 +229,7 @@ public class EnclosureClientSample {
             if (null != enclosureDto.getUri()) {
                 resourceId = UrlUtils.getResourceIdFromUri(enclosureDto.getUri());
             }
-            enclosureDto.setName(resourceName);
+            enclosureDto.setName(resourceName + "_Updated");
 
             /**
              * then make sdk service call to get resource aSync parameter
@@ -235,6 +237,62 @@ public class EnclosureClientSample {
              * whether json input request present or not
              */
             taskResourceV2 = enclosureClient.updateEnclosure(params, resourceId, enclosureDto, false, false);
+
+            System.out.println("EnclosureClientTest : updateEnclosure : " + "Enclosure task object returned to client : "
+                    + taskResourceV2.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("EnclosureClientTest : updateEnclosure :" + " resource you are looking is not found for update ");
+            return;
+        } catch (final SDKBadRequestException ex) {
+            System.out.println("EnclosureClientTest : updateEnclosure :" + " bad request, try again : "
+                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("EnclosureClientTest : updateEnclosure :" + " no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("EnclosureClientTest : updateEnclosure :" + " Applicance Not reachabe at : " + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("EnclosureClientTest : updateEnclosure :" + " No response from appliance : " + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("EnclosureClientTest : updateEnclosure : " + "arguments are null ");
+            return;
+        } catch (final SDKTasksException e) {
+            System.out.println("EnclosureClientTest : updateEnclosure : " + "errors in task, please check task "
+                    + "resource for more details ");
+            return;
+        }
+
+    }
+
+    private void patchEnclosure() throws InstantiationException, IllegalAccessException {
+        String resourceId = null;
+        Enclosures enclosureDto = null;
+        Patch patchDto = new Patch();
+        try {
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
+
+            // fetch resource Id using resource name
+            enclosureDto = enclosureClient.getEnclosureByName(params, resourceName);
+
+            if (null != enclosureDto.getUri()) {
+                resourceId = UrlUtils.getResourceIdFromUri(enclosureDto.getUri());
+            }
+
+            // Enclosure patch supports the update of Name and Rack Name
+            patchDto.setOp(PatchOperation.replace);
+            patchDto.setPath("/name");
+            patchDto.setValue(resourceName + "_Updated");
+
+            /**
+             * then make sdk service call to get resource aSync parameter
+             * indicates sync vs async useJsonRequest parameter indicates
+             * whether json input request present or not
+             */
+            taskResourceV2 = enclosureClient.patchEnclosure(params, resourceId, patchDto, false, false);
 
             System.out.println("EnclosureClientTest : updateEnclosure : " + "Enclosure task object returned to client : "
                     + taskResourceV2.toString());
@@ -808,19 +866,27 @@ public class EnclosureClientSample {
         client.getActiveOaSsoUrl();
         client.getEnclosureByName();
         client.getActiveOaSsoUrl();
-        client.updateCompliance();
         client.updateConfiguration();
-        client.updateEnclosureFwBaseline();
+
+        client.updateCompliance(); // For 2.0 use LogicalEnclosure.updateFromGroup() method
+        client.updateEnclosureFwBaseline(); // For 2.0 use LogicalEnclosure.patch() method
+
         client.getEnvironmentalConfiguration();
         // Check if the privilege exists
         client.updateEnvironmentalConfiguration();
 
         client.updateRefreshState();
-        client.updateScript();
+
+        client.updateScript(); // For 2.0 use LogicalEnclosure.updateScript() method
+
         client.getScript();
         client.getStandbyOaSsoUrl();
         client.getUtilization();
-        client.updateEnclosure();
+
+        client.updateEnclosure(); // For 2.0 use patchEnclosure() method
+
+        client.patchEnclosure();
+
         client.deleteEnclosure();
     }
 }

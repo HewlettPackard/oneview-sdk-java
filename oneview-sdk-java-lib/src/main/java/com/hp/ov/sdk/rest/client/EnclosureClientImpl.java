@@ -15,6 +15,11 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.adaptors.EnclosureAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -24,6 +29,7 @@ import com.hp.ov.sdk.dto.EnclosureCollectionV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -38,13 +44,13 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class EnclosureClientImpl implements EnclosureClient {
 
+    private static final String ROLE_STANDBY = "?role=Standby";
+    private static final String ROLE_ACTIVE = "?role=Active";
+    private static final int VERSION_200 = 200;
     private static final Logger LOGGER = LoggerFactory.getLogger(EnclosureClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
 
@@ -79,7 +85,7 @@ public class EnclosureClientImpl implements EnclosureClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureV2Client : getEnclosure : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE, null);
@@ -106,7 +112,7 @@ public class EnclosureClientImpl implements EnclosureClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI));
 
         // call rest client
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureClientImpl : getAllEnclosureV2s : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -138,7 +144,7 @@ public class EnclosureClientImpl implements EnclosureClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureClientImpl : getEnclosureByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE, null);
@@ -168,7 +174,7 @@ public class EnclosureClientImpl implements EnclosureClient {
         String returnObj = null;
 
         // validate params
-        if (enclosureDto == null) {
+        if (enclosureDto == null || params == null) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.ENCLOSURE, null);
         }
         // set the additional params
@@ -250,6 +256,51 @@ public class EnclosureClientImpl implements EnclosureClient {
     }
 
     @Override
+    public TaskResourceV2 patchEnclosure(RestParams params, String resourceId, Patch patchDto, boolean aSync,
+            boolean useJsonRequest) {
+        LOGGER.info("EnclosureClientImpl : patchEnclosure : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // validate params
+        if (patchDto == null) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.NETWORK, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.PATCH);
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId));
+        String returnObj = null;
+
+        // TODO - check for json request in the input dto. if it is present,
+        // then convert that into jsonObject and pass it rest client
+        // idea is : user can create json string and call the sdk api.
+        // user can save time in creating network dto.
+
+        // create JSON request from dto
+        JSONArray jsonArray = adaptor.buildJsonArrayDto(patchDto);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonArray);
+        // convert returnObj to taskResource
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
+
+        LOGGER.debug("EnclosureClientImpl : patchEnclosure : returnObj =" + returnObj);
+        LOGGER.debug("EnclosureClientImpl : patchEnclosure : taskResource =" + taskResourceV2);
+
+        // check for aSync flag. if user is asking async mode, return directly
+        // the TaskResourceV2
+        // if user is asking for sync mode, call task monitor polling method and
+        // send the update
+        // once task is complete or exceeds the timeout.
+        if (taskResourceV2 != null && aSync == false) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        LOGGER.info("EnclosureClientImpl : patchEnclosure : End");
+
+        return taskResourceV2;
+    }
+
+    @Override
     public TaskResourceV2 deleteEnclosure(final RestParams params, final String resourceId, final boolean aSync) {
 
         LOGGER.info("EnclosureClientImpl : deleteEnclosure : Start");
@@ -262,7 +313,7 @@ public class EnclosureClientImpl implements EnclosureClient {
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureV2Client : deleteEnclosure : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -297,10 +348,14 @@ public class EnclosureClientImpl implements EnclosureClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId,
-                SdkConstants.ACTIVE_OA_SSO_URL));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        String restUrl = SdkConstants.ACTIVE_OA_SSO_URL;
+        if (VERSION_200 == params.getApiVersion()) {
+            restUrl = SdkConstants.ACTIVE_OA_SSO_URL_V200 + ROLE_ACTIVE;
+        }
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, restUrl));
+
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureClientImpl : getActiveOaSsoUrl : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE, null);
@@ -326,7 +381,7 @@ public class EnclosureClientImpl implements EnclosureClient {
         params.setType(HttpMethodType.PUT);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.COMPLIANCE));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureClientImpl : updateCompliance : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE, null);
@@ -364,7 +419,7 @@ public class EnclosureClientImpl implements EnclosureClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId,
                 SdkConstants.CONFIGURATION));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureClientImpl : updateConfiguration : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.CONFIGURATION,
@@ -451,7 +506,7 @@ public class EnclosureClientImpl implements EnclosureClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId,
                 SdkConstants.ENVIRONMENTAL_CONFIGURATION));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureV2Client : getEnvironmentalConfiguration : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE, null);
@@ -566,7 +621,7 @@ public class EnclosureClientImpl implements EnclosureClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.SCRIPT));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureV2Client : getScript : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SCRIPT, null);
@@ -632,10 +687,14 @@ public class EnclosureClientImpl implements EnclosureClient {
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId,
-                SdkConstants.STANDBY_OA_SSO_URL));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        String restUrl = SdkConstants.STANDBY_OA_SSO_URL;
+        if (VERSION_200 == params.getApiVersion()) {
+            restUrl = SdkConstants.STANDBY_OA_SSO_URL_V200 + ROLE_STANDBY;
+        }
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, restUrl));
+
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureClientImpl : getStandbyOaSsoUrl : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE, null);
@@ -661,7 +720,7 @@ public class EnclosureClientImpl implements EnclosureClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.UTILIZATION));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureClientImpl : getUtilization : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE, null);

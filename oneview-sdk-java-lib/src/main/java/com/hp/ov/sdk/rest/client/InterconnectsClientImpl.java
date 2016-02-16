@@ -60,7 +60,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("InterconnectsClientImpl : getInterconnects : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.INTERCONNECT,
@@ -88,7 +88,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_URI));
 
         // call rest client
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("InterconnectsClientImpl : getAllInterconnects : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {

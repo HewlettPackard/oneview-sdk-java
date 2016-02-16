@@ -15,6 +15,35 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.http.core.client;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLHandshakeException;
+import javax.net.ssl.TrustManager;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpPatch;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -29,25 +58,7 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKSSLHandshakeException;
 import com.hp.ov.sdk.exceptions.SDKUnauthorizedException;
 import com.hp.ov.sdk.exceptions.SdkRuntimeException;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLException;
-import javax.net.ssl.SSLHandshakeException;
-import javax.net.ssl.TrustManager;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
+import com.hp.ov.sdk.util.UrlUtils;
 
 public class HttpRestClient {
 
@@ -56,8 +67,9 @@ public class HttpRestClient {
     private static final String ACCEPT = "application/json";
     private static final String ACCEPT_LANGUAGE = "en_US";
     private static final String CHAR_SET = "UTF-8";
-    private static final String CONTENT_TYPE = "application/json; charset=" + CHAR_SET;
-    private static final String CONTENT_TYPE_STRING = "text/plain; charset=" + CHAR_SET;
+    private static final String CONTENT_TYPE = "application/json; charset="+CHAR_SET;
+    private static final String CONTENT_TYPE_STRING = "text/plain; charset="+CHAR_SET;
+    private static final String LOCATION_HEADER = "Location";
     private static final int TIMEOUT = 0; //???
 
     private static final class HttpRestClientHolder {
@@ -67,9 +79,21 @@ public class HttpRestClient {
     public static HttpRestClient getClient() {
         return HttpRestClientHolder.INSTANCE;
     }
-
+    public String sendRequest(RestParams restParams) {
+        return sendRequestToHPOV(restParams);
+    }
     public String sendRequest(RestParams restParams, JSONObject jsonObject) {
         return sendRequestToHPOV(restParams, jsonObject);
+    }
+
+    /**
+     * Send the request to OV and read the response.
+     * @return a string representing the response data.
+     * @throws SDKBadRequestException on unsupported method (PUT, GET..)
+     **/
+    public static String sendRequestToHPOV(final RestParams params) {
+        LOGGER.debug("Rest params passed, params=: " + params);
+        return sendRequestToHPOV(params, null, CONTENT_TYPE);
     }
 
     /**
@@ -82,6 +106,25 @@ public class HttpRestClient {
 
         LOGGER.debug("Rest params passed, params=: " + params
                      + " jsonObject = :" + jsonObject);
+        if (jsonObject == null) {
+           return sendRequestToHPOV(params, null, CONTENT_TYPE);
+        }
+        return sendRequestToHPOV(params, jsonObject.toString(), CONTENT_TYPE);
+    }
+
+    /**
+     * Send the request to OV and read the response.
+     * @return a string representing the response data.
+     * @throws SDKBadRequestException on unsupported method (PUT, GET..)
+     **/
+    public static String sendRequestToHPOV(final RestParams params,
+                                    final JSONArray jsonObject) {
+
+        LOGGER.debug("Rest params passed, params=: " + params
+                     + " jsonObject = :" + jsonObject);
+
+        // TODO: Throw an exception when this parameter is null.
+        // We a have a method that does not need this parameter
         if (jsonObject == null) {
            return sendRequestToHPOV(params, null, CONTENT_TYPE);
         }
@@ -109,6 +152,10 @@ public class HttpRestClient {
         LOGGER.debug("Rest params passed, params= " + params
                      + "object = " + scriptObject
                      + "contentType = " + contentType);
+
+        if (HttpMethodType.PATCH.equals(params.getType())) {
+            return sendPatchRequest(params, scriptObject, contentType);
+        }
 
         BufferedReader bufferedReader = null;
         final StringBuilder sb = new StringBuilder();
@@ -195,9 +242,65 @@ public class HttpRestClient {
         return sb.toString();
     }
 
+    private static String sendPatchRequest(RestParams params, String jsonBody, String contentType) {
+        CloseableHttpClient client = HttpClientBuilder.create().build();
+
+        LOGGER.debug("Using URL: " + params.getUrl());
+        HttpPatch patch = new HttpPatch(params.getUrl());
+
+        StringEntity entity = new StringEntity(jsonBody, CHAR_SET);
+        patch.setEntity(entity);
+
+        if (params.getSessionId() != null) {
+            patch.setHeader("auth", params.getSessionId());
+        }
+        patch.setHeader("Accept", ACCEPT);
+        patch.setHeader("accept-language", ACCEPT_LANGUAGE);
+        patch.setHeader("X-API-Version", String.valueOf(params.getApiVersion()));
+        patch.setHeader("Content-Type", contentType);
+
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectionRequestTimeout(TIMEOUT)
+                .setConnectTimeout(TIMEOUT)
+                .setSocketTimeout(TIMEOUT)
+                .build();
+        patch.setConfig(requestConfig);
+
+        //connection = configureSSL(connection, params);
+        StringBuffer result = new StringBuffer();
+        try {
+            HttpResponse response = client.execute(patch);
+            int responseCode = response.getStatusLine().getStatusCode();
+            LOGGER.debug("Response code: " + responseCode);
+
+            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            String line = "";
+            while ((line = rd.readLine()) != null) {
+                result.append(line);
+            }
+
+            if (HttpURLConnection.HTTP_ACCEPTED == responseCode
+                    && result.length() == 0
+                    && response.containsHeader(LOCATION_HEADER)) {
+                params.setUrl(UrlUtils.createRestUrl(params.getHostname(), response.getFirstHeader(LOCATION_HEADER).getValue()));
+                params.setType(HttpMethodType.GET);
+
+                return sendRequestToHPOV(params);
+            }
+
+        } catch (IOException e) {
+            LOGGER.error("IO Error: ", e);
+            throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
+                    null, null, null,
+                    SdkConstants.APPLIANCE, e);
+        }
+
+
+        return result.toString();
+    }
+
     /**
      * Gets a connection and configures it, does NOT open the connection.
-
      * @return a connection to the URL
      * @throws ProtocolException if method (GET/PUT/...) not supported
      * @throws SDKNoSuchUrlException on invalid URL

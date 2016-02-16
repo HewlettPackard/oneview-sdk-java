@@ -85,7 +85,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ServerHardwareClient : getServerHardware : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_HARDWARE,
@@ -112,7 +112,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI));
 
         // call rest client
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ServerHardwareClientImpl : getAllServerHardwares : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -142,7 +142,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI));
 
         // call rest client
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ServerHardwareClientImpl : getServerHardwareWithNoProfile : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -293,7 +293,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_HARWARE_URI, resourceId, SdkConstants.BIOS));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("ServerHardwareClient : getBiosForServerHardware : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_HARDWARE,

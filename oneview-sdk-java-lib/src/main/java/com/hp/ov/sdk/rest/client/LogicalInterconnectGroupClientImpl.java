@@ -86,7 +86,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("LogicalInterconnectGroupClientImpl : getLogicalInterconnectGroup : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -114,7 +114,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("LogicalInterconnectGroupClientImpl : getAllLogicalInterconnectGroups : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -146,7 +146,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("LogicalInterconnectGroupClientImpl : getLogicalInterconnectGroupByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -272,7 +272,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("LogicalInterconnectGroupClient : deleteLogicalInterconnectGroup : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -311,7 +311,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI,
                 SdkConstants.DEFAULT_SETTINGS));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("LogicalInterconnectGroupClientImpl : getDefaultInterconnectSettings : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -338,7 +338,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId,
                 SdkConstants.SETTINGS, settingId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("LogicalInterconnectGroupClientImpl : getInterconnectSettings : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,

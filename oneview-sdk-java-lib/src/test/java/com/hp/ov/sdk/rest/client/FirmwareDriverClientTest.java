@@ -62,8 +62,7 @@ public class FirmwareDriverClientTest {
     public void testGetFirmwareDriver() {
         firmwareDriverJson = this.getJsonFromFile("FirmwareDriverGet.json");
         Mockito.when(HttpRestClient.sendRequestToHPOV(
-                Mockito.any(RestParams.class),
-                Mockito.any(JSONObject.class)))
+                Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
 
         FwBaseline firmwareDriverDto = client.getFirmwareDriver(params, resourceId);
@@ -73,7 +72,7 @@ public class FirmwareDriverClientTest {
         rp.setType(HttpMethodType.GET);
 
         PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
 
         assertNotNull(firmwareDriverDto);
     }
@@ -97,8 +96,7 @@ public class FirmwareDriverClientTest {
     public void testGetAllFirmwareDrivers() {
         firmwareDriverJson = this.getJsonFromFile("FirmwareDriverGetAll.json");
         Mockito.when(HttpRestClient.sendRequestToHPOV(
-                Mockito.any(RestParams.class),
-                Mockito.any(JSONObject.class)))
+                Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
 
         FwBaselineCollection firmwareDriverCollection = client.getAllFirmwareDrivers(params);
@@ -108,7 +106,7 @@ public class FirmwareDriverClientTest {
         rp.setType(HttpMethodType.GET);
 
         PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
 
         assertNotNull(firmwareDriverCollection);
         assertEquals("Based on the JSON file, the return object must have 1 elements",
@@ -134,8 +132,7 @@ public class FirmwareDriverClientTest {
     public void testGetFirmwareDriverByName() {
         firmwareDriverJson = this.getJsonFromFile("FirmwareDriverGetAll.json");
         Mockito.when(HttpRestClient.sendRequestToHPOV(
-                Mockito.any(RestParams.class),
-                Mockito.any(JSONObject.class)))
+                Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
 
         FwBaseline firmwareDriverDto = client.getFirmwareDriverByName(params, resourceName);
@@ -145,7 +142,7 @@ public class FirmwareDriverClientTest {
         rp.setType(HttpMethodType.GET);
 
         PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
 
         assertNotNull(firmwareDriverDto);
     }
@@ -159,8 +156,7 @@ public class FirmwareDriverClientTest {
     public void testGetFirmwareDriverByNameNotFound() {
         firmwareDriverJson = this.getJsonFromFile("FirmwareDriverGetAll.json");
         Mockito.when(HttpRestClient.sendRequestToHPOV(
-                Mockito.any(RestParams.class),
-                Mockito.any(JSONObject.class)))
+                Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
 
         client.getFirmwareDriverByName(params, "wrong name");
@@ -170,8 +166,7 @@ public class FirmwareDriverClientTest {
     public void testDeleteFirmwareDriver() {
         firmwareDriverJson = this.getJsonFromFile("FirmwareDriverDeleteTask.json");
         Mockito.when(HttpRestClient.sendRequestToHPOV(
-                Mockito.any(RestParams.class),
-                Mockito.any(JSONObject.class)))
+                Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
 
         String jsonDeleteTaskCompleted = this.getJsonFromFile("FirmwareDriverDeleteTaskCompleted.json");
@@ -189,7 +184,7 @@ public class FirmwareDriverClientTest {
         rp.setType(HttpMethodType.DELETE);
 
         PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
 
         assertEquals("A success delete firmware call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -213,8 +208,7 @@ public class FirmwareDriverClientTest {
     public void testGetId() {
         firmwareDriverJson = this.getJsonFromFile("FirmwareDriverGetAll.json");
         Mockito.when(HttpRestClient.sendRequestToHPOV(
-                Mockito.any(RestParams.class),
-                Mockito.any(JSONObject.class)))
+                Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
 
         String id = client.getId(params, resourceName);
@@ -224,7 +218,7 @@ public class FirmwareDriverClientTest {
         rp.setType(HttpMethodType.GET);
 
         PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
 
         assertNotNull(id);
         assertEquals("Based on the JSON file, the return ID must be \"" + resourceId + "\"", resourceId, id);

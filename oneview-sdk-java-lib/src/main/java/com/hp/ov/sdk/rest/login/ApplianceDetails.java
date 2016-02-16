@@ -39,7 +39,7 @@ public class ApplianceDetails {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.APPLIANCE_VERSION));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         final ApplianceDetailsDto applianceDetailsDto = adaptor.buildDto(returnObj);
 
         LOGGER.debug("ApplianceDetails : getVersion =" + applianceDetailsDto.getCurrentVersion());

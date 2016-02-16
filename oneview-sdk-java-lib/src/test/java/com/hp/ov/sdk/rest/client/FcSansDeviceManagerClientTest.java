@@ -111,7 +111,7 @@ public class FcSansDeviceManagerClientTest {
     public void shouldGetAllDeviceManagers() throws IOException {
         String deviceManagerResponseList = this.getJsonFromFile("DeviceManagerResponseList.json");
 
-        given(client.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(deviceManagerResponseList);
+        given(client.sendRequest(any(RestParams.class))).willReturn(deviceManagerResponseList);
         given(adaptor.buildCollectionDto(anyObject())).willReturn(new DeviceManagerResponseCollection());
 
         RestParams expectedRestParams = new RestParams();
@@ -121,7 +121,7 @@ public class FcSansDeviceManagerClientTest {
 
         this.deviceManagerClient.getAllDeviceManager(new RestParams());
 
-        then(client).should().sendRequest(eq(expectedRestParams), isNull(JSONObject.class));
+        then(client).should().sendRequest(eq(expectedRestParams));
         then(adaptor).should().buildCollectionDto(deviceManagerResponseList);
     }
 
@@ -132,7 +132,7 @@ public class FcSansDeviceManagerClientTest {
 
     @Test(expected = SDKNoResponseException.class)
     public void shouldThrowExceptionWhenServerReturnsNoAnswerForGetDeviceManager() throws IOException {
-        given(client.sendRequest(any(RestParams.class), isNull(JSONObject.class))).willReturn("");
+        given(client.sendRequest(any(RestParams.class))).willReturn("");
 
         this.deviceManagerClient.getDeviceManager(new RestParams(), ANY_RESOURCE_ID);
     }
@@ -141,7 +141,7 @@ public class FcSansDeviceManagerClientTest {
     public void shouldGetDeviceManager() throws IOException {
         String deviceManagerResponse = this.getJsonFromFile("DeviceManagerResponse.json");
 
-        given(client.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(deviceManagerResponse);
+        given(client.sendRequest(any(RestParams.class))).willReturn(deviceManagerResponse);
         given(adaptor.buildDto(anyObject())).willReturn(new DeviceManagerResponse());
 
         RestParams expectedRestParams = new RestParams();
@@ -151,7 +151,7 @@ public class FcSansDeviceManagerClientTest {
 
         this.deviceManagerClient.getDeviceManager(new RestParams(), ANY_RESOURCE_ID);
 
-        then(client).should().sendRequest(eq(expectedRestParams), isNull(JSONObject.class));
+        then(client).should().sendRequest(eq(expectedRestParams));
         then(adaptor).should().buildDto(deviceManagerResponse);
     }
 
@@ -169,7 +169,7 @@ public class FcSansDeviceManagerClientTest {
 
         this.deviceManagerClient.deleteDeviceManager(new RestParams(), ANY_RESOURCE_ID);
 
-        then(client).should().sendRequest(eq(expectedRestParams), isNull(JSONObject.class));
+        then(client).should().sendRequest(eq(expectedRestParams));
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -203,7 +203,7 @@ public class FcSansDeviceManagerClientTest {
 
     @Test(expected = SDKNoResponseException.class)
     public void shouldThrowExceptionWhenServerReturnsNoAnswerForGetDeviceManagerByName() throws IOException {
-        given(client.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(null);
+        given(client.sendRequest(any(RestParams.class))).willReturn(null);
 
         this.deviceManagerClient.getDeviceManagerByName(new RestParams(), "");
     }
@@ -216,7 +216,7 @@ public class FcSansDeviceManagerClientTest {
         DeviceManagerResponseCollection deviceManagerResponse = new DeviceManagerResponseCollection();
         deviceManagerResponse.setCount(0);
 
-        given(client.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(deviceManagerResponseList);
+        given(client.sendRequest(any(RestParams.class))).willReturn(deviceManagerResponseList);
         given(adaptor.buildCollectionDto(anyObject())).willReturn(deviceManagerResponse);
 
         this.deviceManagerClient.getDeviceManagerByName(new RestParams(), anyName);
@@ -232,7 +232,7 @@ public class FcSansDeviceManagerClientTest {
         deviceManagerResponse.setCount(1);
         deviceManagerResponse.setMembers(Lists.newArrayList(new DeviceManagerResponse()));
 
-        given(client.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(deviceManagerResponseList);
+        given(client.sendRequest(any(RestParams.class))).willReturn(deviceManagerResponseList);
         given(adaptor.buildCollectionDto(anyObject())).willReturn(deviceManagerResponse);
 
         RestParams expectedRestParams = new RestParams();
@@ -242,7 +242,7 @@ public class FcSansDeviceManagerClientTest {
 
         this.deviceManagerClient.getDeviceManagerByName(new RestParams(), anyName);
 
-        then(client).should().sendRequest(eq(expectedRestParams), isNull(JSONObject.class));
+        then(client).should().sendRequest(eq(expectedRestParams));
         then(adaptor).should().buildCollectionDto(deviceManagerResponseList);
     }
 

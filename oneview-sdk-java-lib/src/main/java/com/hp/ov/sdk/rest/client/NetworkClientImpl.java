@@ -82,7 +82,7 @@ public class NetworkClientImpl implements NetworkClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("NetworkClient : getNetwork : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -109,7 +109,7 @@ public class NetworkClientImpl implements NetworkClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI));
 
         // call rest client
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("NetworkClientImpl : getAllNetworks : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -141,7 +141,7 @@ public class NetworkClientImpl implements NetworkClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.ETHERNET_URI, query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("NetworkClientImpl : getNetworkByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKS, null);
@@ -303,7 +303,7 @@ public class NetworkClientImpl implements NetworkClient {
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params, null);
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("NetworkClient : deleteNetwork : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
