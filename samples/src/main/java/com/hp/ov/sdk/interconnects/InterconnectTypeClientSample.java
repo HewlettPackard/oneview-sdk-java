@@ -15,8 +15,8 @@
  *******************************************************************************/
 package com.hp.ov.sdk.interconnects;
 
-import com.hp.ov.sdk.dto.InterconnectTypeCollectionV2;
-import com.hp.ov.sdk.dto.generated.InterconnectTypes;
+import com.hp.ov.sdk.dto.InterconnectTypeCollection;
+import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -28,7 +28,7 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * InterconnectTypeClientSample is a sample program to consume the characteristics model of an interconnect in 
+ * InterconnectTypeClientSample is a sample program to consume the characteristics model of an interconnect in
  * HP OneView.It invokes APIs of InterconnectTypeClient which is in sdk library to perform GET
  * operations on interconnect type resource
  */
@@ -49,7 +49,7 @@ public class InterconnectTypeClientSample {
     }
 
     private void getInterconnectTypeById() throws InstantiationException, IllegalAccessException {
-        InterconnectTypes interconnectTypeDto = null;
+        InterconnectType interconnectTypeDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -82,7 +82,7 @@ public class InterconnectTypeClientSample {
 
     private void getAllInterconnectType() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        InterconnectTypeCollectionV2 interconnectTypeCollectionDto = null;
+        InterconnectTypeCollection interconnectTypeCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -113,7 +113,7 @@ public class InterconnectTypeClientSample {
     }
 
     private void getInterconnectTypeByName() throws InstantiationException, IllegalAccessException {
-        InterconnectTypes interconnectTypeDto = null;
+        InterconnectType interconnectTypeDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();

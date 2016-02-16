@@ -23,21 +23,21 @@ public interface InterconnectsClient {
     /**
      * The module aids in fetching the Interconnect details for the specified
      * Interconnect resourceId
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
      * @param resourceId
      *            The resourceId for InterConnect as seen in HP OneView.
      * @return interconnectTypesDto, which is a object containing the
-     *         InterconnectTypes details.
+     *         InterconnectType details.
      */
     public Interconnects getInterconnects(final RestParams params, final String resourceId);
 
     /**
      * The module aids in fetching the Interconnect details for the
      * FirmwareDriver name as specified in HP OneView.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -52,7 +52,7 @@ public interface InterconnectsClient {
     /**
      * The module aids in fetching the Interconnects details for all the
      * Interconnects found under the current HP OneView.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -64,7 +64,7 @@ public interface InterconnectsClient {
     /**
      * The module aids in fetching the Interconnect driver details for the
      * Interconnect driver name as specified in HP OneView.
-     * 
+     *
      * @param creds
      *            The RestParams is a structure containing the connection
      *            details.
