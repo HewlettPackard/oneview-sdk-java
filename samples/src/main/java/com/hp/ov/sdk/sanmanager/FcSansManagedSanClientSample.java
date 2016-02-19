@@ -15,9 +15,14 @@
  *******************************************************************************/
 package com.hp.ov.sdk.sanmanager;
 
-import com.hp.ov.sdk.dto.RefreshState;
+import com.hp.ov.sdk.dto.EndpointResponseCollection;
+import com.hp.ov.sdk.dto.FcIssueResponse;
+import com.hp.ov.sdk.dto.FcSansManagedSanTask;
+import com.hp.ov.sdk.dto.SanPolicy;
+import com.hp.ov.sdk.dto.SanRequest;
 import com.hp.ov.sdk.dto.SanResponse;
 import com.hp.ov.sdk.dto.SanResponseCollection;
+import com.hp.ov.sdk.dto.ZoningPolicy;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -25,6 +30,7 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
+import com.hp.ov.sdk.rest.client.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.rest.client.FcSansManagedSanClient;
 import com.hp.ov.sdk.rest.client.FcSansManagedSanClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -43,7 +49,7 @@ public class FcSansManagedSanClientSample {
 
     // test values - user input
     // ================================
-    private static final String resourceId = "991bde39-d13e-4e7b-a2b4-04f2af701881";
+    private static final String resourceId = "e9d79564-1244-4f0e-83a3-215dcb1f6b1f";
     private static final String resourceName = "SAN1_0";
     // ================================
 
@@ -79,7 +85,6 @@ public class FcSansManagedSanClientSample {
             System.out.println("ManagedSanClientTest : getManagedSan :" + " arguments are null ");
             return;
         }
-
     }
 
     private void getAllManagedSan() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
@@ -112,28 +117,27 @@ public class FcSansManagedSanClientSample {
             System.out.println("ManagedSanClientTest : getAllManagedSan :" + " arguments are null ");
             return;
         }
-
     }
 
     private void updateManagedSan() throws InstantiationException, IllegalAccessException {
-        SanResponse sanResponseReturnDto = null;
-        String resourceId = null;
-        SanResponse sanResponseDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
 
-            // get resource ID
-            resourceId = fcSansManagedSanClient.getId(params, resourceName);
+            SanRequest sanRequest = new SanRequest();
+            SanPolicy sanPolicy = new SanPolicy();
 
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            sanResponseDto = new SanResponse();
-            sanResponseDto.setRefreshState(RefreshState.RefreshPending);
-            sanResponseReturnDto = fcSansManagedSanClient.updateManagedSan(params, resourceId, sanResponseDto, false, false);
+            sanPolicy.setEnableAliasing(Boolean.TRUE);
+            sanPolicy.setZoningPolicy(ZoningPolicy.SingleInitiatorAllTargets);
+            sanPolicy.setInitiatorNameFormat("sample_initiator_name_format");
+            sanPolicy.setTargetGroupNameFormat("sample_target_group_name_format");
+            sanPolicy.setTargetNameFormat("sample_target_name_format");
+            sanPolicy.setZoneNameFormat("sample_zone_name_format");
+
+            sanRequest.setSanPolicy(sanPolicy);
+            sanRequest.setRefreshState(SanResponse.RefreshState.RefreshPending);
+
+            SanResponse sanResponseReturnDto = fcSansManagedSanClient.updateManagedSan(params, resourceId, sanRequest, false, false);
 
             System.out.println("ManagedSanClientTest : updateManagedSan : " + " device manager object returned to client : "
                     + sanResponseReturnDto.toString());
@@ -165,11 +169,84 @@ public class FcSansManagedSanClientSample {
         }
     }
 
+    private void getEndpointsOfManagedSan() throws InstantiationException, IllegalAccessException {
+        try {
+            params = HPOneViewCredential.createCredentials();
+
+            EndpointResponseCollection endpointResponseCollection
+                    = fcSansManagedSanClient.getEndpointsOfManagedSan(params, resourceId);
+
+            System.out.println("FcSansManagedSanClientTest#getEndpointsOfManagedSan :" + " device manager object returned to client : "
+                    + endpointResponseCollection.toString());
+        } catch (SDKResourceNotFoundException ex) {
+            System.out.println("FcSansManagedSanClientTest#getEndpointsOfManagedSan :" + " resource you are looking is not found ");
+        } catch (SDKNoSuchUrlException ex) {
+            System.out.println("FcSansManagedSanClientTest#getEndpointsOfManagedSan :" + " no such url : " + params.getUrl());
+        } catch (SDKApplianceNotReachableException e) {
+            System.out.println("FcSansManagedSanClientTest#getEndpointsOfManagedSan :" + " Applicance Not reachabe at : " + params.getHostname());
+        } catch (SDKNoResponseException ex) {
+            System.out.println("FcSansManagedSanClientTest#getEndpointsOfManagedSan :" + " No response from appliance : " + params.getHostname());
+        } catch (SDKInvalidArgumentException ex) {
+            System.out.println("FcSansManagedSanClientTest#getEndpointsOfManagedSan :" + " arguments are null ");
+        }
+    }
+
+    private void createManagedSanIssuesReport() throws InstantiationException, IllegalAccessException {
+        try {
+            params = HPOneViewCredential.createCredentials();
+
+            String resourceId = fcSansManagedSanClient.getId(params, resourceName);
+            FcSansManagedSanTask task = fcSansManagedSanClient.createManagedSanIssuesReport(params, resourceId, false);
+
+            for (FcIssueResponse issue : task.getIssues()) {
+                System.out.println("FcSansManagedSanClientTest#createManagedSanIssuesReport :" + " issue : "
+                        /*+ adaptor.buildDto(issue).toString());*/
+                        + issue.toString());
+            }
+            System.out.println("FcSansManagedSanClientTest#createManagedSanIssuesReport :" + " device manager object returned to client : "
+                    + task.getTask().toString());
+        } catch (SDKResourceNotFoundException ex) {
+            System.out.println("FcSansManagedSanClientTest#createManagedSanIssuesReport :" + " resource you are looking is not found ");
+        } catch (SDKNoSuchUrlException ex) {
+            System.out.println("FcSansManagedSanClientTest#createManagedSanIssuesReport :" + " no such url : " + params.getUrl());
+        } catch (SDKApplianceNotReachableException e) {
+            System.out.println("FcSansManagedSanClientTest#createManagedSanIssuesReport :" + " Applicance Not reachable at : " + params.getHostname());
+        } catch (SDKNoResponseException ex) {
+            System.out.println("FcSansManagedSanClientTest#createManagedSanIssuesReport :" + " No response from appliance : " + params.getHostname());
+        } catch (SDKInvalidArgumentException ex) {
+            System.out.println("FcSansManagedSanClientTest#createManagedSanIssuesReport :" + " arguments are null ");
+        }
+    }
+
+    private void createEndpointsCsvOfManagedSan() throws InstantiationException, IllegalAccessException {
+        try {
+            params = HPOneViewCredential.createCredentials();
+
+            EndpointsCsvFileResponse response = fcSansManagedSanClient.createEndpointsCsvOfManagedSan(params, resourceId);
+
+            System.out.println("FcSansManagedSanClientTest#createEndpointsCsvOfManagedSan :" + " response object returned to client : "
+                    + response);
+        } catch (SDKResourceNotFoundException ex) {
+            System.out.println("FcSansManagedSanClientTest#createEndpointsCsvOfManagedSan :" + " resource you are looking is not found ");
+        } catch (SDKNoSuchUrlException ex) {
+            System.out.println("FcSansManagedSanClientTest#createEndpointsCsvOfManagedSan :" + " no such url : " + params.getUrl());
+        } catch (SDKApplianceNotReachableException e) {
+            System.out.println("FcSansManagedSanClientTest#createEndpointsCsvOfManagedSan :" + " Applicance Not reachable at : " + params.getHostname());
+        } catch (SDKNoResponseException ex) {
+            System.out.println("FcSansManagedSanClientTest#createEndpointsCsvOfManagedSan :" + " No response from appliance : " + params.getHostname());
+        } catch (SDKInvalidArgumentException ex) {
+            System.out.println("FcSansManagedSanClientTest#createEndpointsCsvOfManagedSan :" + " arguments are null ");
+        }
+    }
+
     public static void main(final String[] args) throws Exception {
         FcSansManagedSanClientSample client = new FcSansManagedSanClientSample();
 
         client.getAllManagedSan();
         client.getManagedSan();
         client.updateManagedSan();
+        client.getEndpointsOfManagedSan();
+        client.createManagedSanIssuesReport();
+        client.createEndpointsCsvOfManagedSan();
     }
 }

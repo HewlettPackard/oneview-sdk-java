@@ -33,8 +33,7 @@ public class TaskServiceManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskServiceManager.class);
 
     public TaskResourceV2 getTaskResource(final RestParams params, final String taskUri) {
-
-        LOGGER.info("TaskServiceManager : getTaskResource : Start");
+        LOGGER.trace("TaskServiceManager : getTaskResource : Start");
 
         // validate args
         if (null == params) {
@@ -54,7 +53,7 @@ public class TaskServiceManager {
         final TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(returnObj);
 
         LOGGER.debug("TaskServiceManager : getTaskResource : taskstate :" + taskResourceV2.getTaskState());
-        LOGGER.info("TaskServiceManager : getTaskResource : End");
+        LOGGER.trace("TaskServiceManager : getTaskResource : End");
 
         return taskResourceV2;
     }

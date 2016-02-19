@@ -49,6 +49,8 @@ public class ResourceUris {
     public static final String STORAGE_VOLUME_URI = "/rest/storage-volumes";
     public static final String FC_SANS_DEVICE_MANAGER_URI = "/rest/fc-sans/device-managers";
     public static final String FC_SANS_MANAGED_SAN_URI = "/rest/fc-sans/managed-sans";
+    public static final String FC_SANS_MANAGED_SAN_ENDPOINTS = "endpoints";
+    public static final String FC_SANS_MANAGED_SAN_ISSUES = "issues";
     public static final String FC_SANS_PROVIDER_URI = "/rest/fc-sans/providers";
     public static final String SWITCHES_URI = "/rest/switches";
     public static final String ENVIRONMENT_CONFIGURATION_URI = "environmentalConfiguration";

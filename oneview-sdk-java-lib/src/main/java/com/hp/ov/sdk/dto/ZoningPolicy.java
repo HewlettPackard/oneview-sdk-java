@@ -16,5 +16,9 @@
 package com.hp.ov.sdk.dto;
 
 public enum ZoningPolicy {
-    NoZoning, SingleInitiatorAllTargets, SingleInitiatorSingleStorageSystem, Unknown
+    NoZoning,
+    SingleInitiatorAllTargets,
+    SingleInitiatorSingleStorageSystem,
+    SingleInitiatorSingleTarget,
+    Unknown
 }
