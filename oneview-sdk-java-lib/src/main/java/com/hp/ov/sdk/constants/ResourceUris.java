@@ -34,6 +34,7 @@ public class ResourceUris {
     public static final String UPLINK_SETS_URI = "/rest/uplink-sets";
     public static final String ENCLOSURE_GROUP_URI = "/rest/enclosure-groups";
     public static final String ENCLOSURE_URI = "/rest/enclosures";
+    public static final String LOGICAL_ENCLOSURE_URI = "/rest/logical-enclosures";
     public static final String INTERCONNECT_TYPE_URI = "/rest/interconnect-types";
     public static final String LOGICAL_INTERCONNECT_URI = "/rest/logical-interconnects";
     public static final String SERVER_PROFILE_URI = "/rest/server-profiles";

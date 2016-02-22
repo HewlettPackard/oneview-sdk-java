@@ -49,7 +49,7 @@ import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * EnclosureClientSample is a sample program to consume the REST API of c7000 enclosure managed 
+ * EnclosureClientSample is a sample program to consume the REST API of c7000 enclosure managed
  * by HP OneView. It invokes APIs of EnclosureClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on enclosure resource
  */
