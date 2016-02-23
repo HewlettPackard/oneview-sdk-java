@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,7 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
-import com.hp.ov.sdk.adaptors.ConnectionTemplateAdaptor;
+import java.util.List;
+
+import com.google.common.base.Strings;
 import com.hp.ov.sdk.adaptors.NetworkAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -43,19 +45,19 @@ public class NetworkClientImpl implements NetworkClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(NetworkClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
 
+    private final HttpRestClient restClient;
     private final ConnectionTemplateClient connectionTemplateClient;
     private final NetworkAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
 
-    private JSONObject jsonObject;
+    protected NetworkClientImpl(HttpRestClient restClient,
+            ConnectionTemplateClient connectionTemplateClient,
+            NetworkAdaptor adaptor,
+            TaskAdaptor taskAdaptor,
+            TaskMonitorManager taskMonitor) {
 
-    protected NetworkClientImpl(
-        ConnectionTemplateClient connectionTemplateClient,
-        NetworkAdaptor adaptor,
-        TaskAdaptor taskAdaptor,
-        TaskMonitorManager taskMonitor) {
-
+        this.restClient = restClient;
         this.connectionTemplateClient = connectionTemplateClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
@@ -64,6 +66,7 @@ public class NetworkClientImpl implements NetworkClient {
 
     public static NetworkClient getClient() {
         return new NetworkClientImpl(
+                HttpRestClient.getClient(),
                 ConnectionTemplateClientImpl.getClient(),
                 new NetworkAdaptor(),
                 TaskAdaptor.getInstance(),
@@ -72,7 +75,7 @@ public class NetworkClientImpl implements NetworkClient {
 
     @Override
     public Network getNetwork(final RestParams params, final String resourceId) {
-        LOGGER.info("NetworkClientImpl : getNetwork : Start");
+        LOGGER.trace("NetworkClientImpl : getNetwork : Start");
 
         // validate args
         if (null == params) {
@@ -82,24 +85,23 @@ public class NetworkClientImpl implements NetworkClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("NetworkClient : getNetwork : response from OV :" + returnObj);
 
-        if (null == returnObj || returnObj.equals("")) {
+        if (Strings.isNullOrEmpty(returnObj)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKS, null);
         }
-        // Call adaptor to convert to DTO
         final Network networkDto = adaptor.buildDto(returnObj);
 
         LOGGER.debug("NetworkClient : getNetwork : vlanID :" + networkDto.getVlanId());
-        LOGGER.info("NetworkClientImpl : getNetwork : End");
+        LOGGER.trace("NetworkClientImpl : getNetwork : End");
 
         return networkDto;
     }
 
     @Override
     public NetworkCollection getAllNetworks(final RestParams params) {
-        LOGGER.info("NetworkClientImpl : getAllNetworks : Start");
+        LOGGER.trace("NetworkClientImpl : getAllNetworks : Start");
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
@@ -109,30 +111,27 @@ public class NetworkClientImpl implements NetworkClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI));
 
         // call rest client
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("NetworkClientImpl : getAllNetworks : response from OV :" + returnObj);
 
-        if (null == returnObj || returnObj.equals("")) {
+        if (Strings.isNullOrEmpty(returnObj)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKS, null);
         }
-        // Call adaptor to convert to DTO
-
         final NetworkCollection networkCollectionDto = adaptor.buildCollectionDto(returnObj);
 
         LOGGER.debug("NetworkClient : getAllNetworks : members count :" + networkCollectionDto.getCount());
-        LOGGER.info("NetworkClientImpl : getAllNetworks : End");
+        LOGGER.trace("NetworkClientImpl : getAllNetworks : End");
 
         return networkCollectionDto;
-
     }
 
     @Override
     public Network getNetworkByName(final RestParams params, final String name) {
-        LOGGER.info("NetworkClientImpl : getNetworkByName : Start");
+        LOGGER.trace("NetworkClientImpl : getNetworkByName : Start");
 
         final String query = UrlUtils.createFilterString(name);
         LOGGER.debug("NetworkClientImpl : getNetworkByName : query = " + query);
-        Network networkDto = null;
+
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
@@ -141,25 +140,25 @@ public class NetworkClientImpl implements NetworkClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.ETHERNET_URI, query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("NetworkClientImpl : getNetworkByName : response from OV :" + returnObj);
-        if (null == returnObj || returnObj.equals("")) {
+
+        if (Strings.isNullOrEmpty(returnObj)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKS, null);
         }
-        // Call adaptor to convert to DTO
 
-        final NetworkCollection networkCollectionDto = adaptor.buildCollectionDto(returnObj);
+        Network networkDto = null;
+        NetworkCollection networkCollectionDto = adaptor.buildCollectionDto(returnObj);
+
         if (networkCollectionDto.getCount() != 0) {
             networkDto = networkCollectionDto.getMembers().get(0);
-        } else {
-            networkDto = null;
         }
 
         if (networkDto == null) {
             LOGGER.error("NetworkClientImpl : getNetworkByName : resource not Found for name :" + name);
             throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.NETWORKS, null);
         }
-        LOGGER.info("NetworkClientImpl : getNetworkByName : End");
+        LOGGER.trace("NetworkClientImpl : getNetworkByName : End");
 
         return networkDto;
     }
@@ -167,46 +166,49 @@ public class NetworkClientImpl implements NetworkClient {
     @Override
     public TaskResourceV2 createNetwork(final RestParams params, final Network dto, final boolean aSync,
             final boolean useJsonRequest) {
-        ConnectionTemplate connectionTemplateDto, tempDto;
-        LOGGER.info("NetworkClientImpl : createNetwork : Start");
-        String returnObj = null;
-        String networkName = null;
-        Network networkDto = null;
-        // validate params
-        if (dto == null) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.NETWORKS, null);
+        LOGGER.trace("NetworkClientImpl : createNetwork : Start");
+
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
+                SdkConstants.APPLIANCE, null);
+        } else if (dto == null) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
+                SdkConstants.NETWORK, null);
         }
+
         // set the additional params
         params.setType(HttpMethodType.POST);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI));
 
         // check for json request in the input dto. if it is present,
-        // then
-        // convert that into jsonObject and pass it rest client
+        // then convert that into jsonObject and pass it rest client
         // idea is : user can create json string and call the sdk api.
         // user can save time in creating network dto.
+        ConnectionTemplate networkConnectionTemplate = null;
+        String networkName = null;
+        JSONObject jsonObject = null;
 
-        if (useJsonRequest == true) {
-            networkDto = adaptor.buildDto(dto.getJsonRequest().getBody());
+        if (useJsonRequest) {
+            Network networkDto = adaptor.buildDto(dto.getJsonRequest().getBody());
             // create json object
-            tempDto = networkDto.getConnectionTemplate();
+            networkConnectionTemplate = networkDto.getConnectionTemplate();
             networkDto.setConnectionTemplate(null);
             networkName = networkDto.getName();
-            jsonObject = adaptor.buildJsonObjectFromDto(networkDto);
+            jsonObject = adaptor.buildJsonObjectFromDto(networkDto, params.getApiVersion());
         } else {
-            tempDto = dto.getConnectionTemplate();
+            networkConnectionTemplate = dto.getConnectionTemplate();
             dto.setConnectionTemplate(null);
             networkName = dto.getName();
             // create JSON request from dto
-            jsonObject = adaptor.buildJsonObjectFromDto(dto);
+            jsonObject = adaptor.buildJsonObjectFromDto(dto, params.getApiVersion());
         }
 
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        String returnObj = restClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
-        LOGGER.debug("NetworkClientImpl : createNetwork : returnObj =" + returnObj);
-        LOGGER.debug("NetworkClientImpl : createNetwork : taskResource =" + taskResourceV2);
+        LOGGER.debug("NetworkClientImpl : createNetwork : returnObj = " + returnObj);
+        LOGGER.debug("NetworkClientImpl : createNetwork : taskResource = " + taskResourceV2);
 
         // check for aSync flag. if user is asking async mode, return directly
         // the TaskResourceV2
@@ -215,62 +217,73 @@ public class NetworkClientImpl implements NetworkClient {
         // once task is complete or exceeds the timeout.
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
-        }
 
-        if (tempDto != null) {
-            networkDto = getNetworkByName(params, networkName);
-            final String connectionTemplateUri = networkDto.getConnectionTemplateUri();
-            connectionTemplateDto = connectionTemplateClient.getConnectionTemplate(params,
-                    (connectionTemplateUri.substring(connectionTemplateUri.lastIndexOf("/") + 1)));
-            connectionTemplateDto.setBandwidth(tempDto.getBandwidth());
+            //TODO: set the connection template bandwidth according to the network parameter.
+            // However, the API mentions that the networkConnectionTemplate parameter
+            // MUST be null. Thus, I believe we should remove this logic and let the user
+            // perform the operation of changing the bandwidth values.
+            setConnectionTemplateBandwidth(params, networkConnectionTemplate, networkName);
+        }
+        LOGGER.trace("NetworkClientImpl : createNetwork : End");
+
+        return taskResourceV2;
+    }
+
+    private void setConnectionTemplateBandwidth(RestParams params,
+            ConnectionTemplate networkConnectionTemplate, String networkName) {
+
+        ConnectionTemplate connectionTemplate;
+
+        if (networkConnectionTemplate != null) {
+            Network network = getNetworkByName(params, networkName);
+
+            String connectionTemplateUri = network.getConnectionTemplateUri();
+            String connectionTemplateId = connectionTemplateUri.substring(connectionTemplateUri.lastIndexOf("/") + 1);
+
+            connectionTemplate = connectionTemplateClient.getConnectionTemplate(params, connectionTemplateId);
+            connectionTemplate.setBandwidth(networkConnectionTemplate.getBandwidth());
 
             /**
              * then make sdk service call to get resource aSync parameter
              * indicates sync vs async useJsonRequest parameter indicates
              * whether json input request present or not
              */
-            connectionTemplateDto = connectionTemplateClient.updateConnectionTemplate(params,
-                    (connectionTemplateUri.substring(connectionTemplateUri.lastIndexOf("/") + 1)), connectionTemplateDto, false);
+            connectionTemplateClient.updateConnectionTemplate(params, connectionTemplateId, connectionTemplate, false);
         }
-        LOGGER.info("NetworkClientImpl : createNetwork : End");
-
-        return taskResourceV2;
     }
 
     @Override
     public TaskResourceV2 updateNetwork(final RestParams params, final String resourceId, final Network dto,
             final boolean asyncOrSyncMode, final boolean useJsonRequest) {
-        LOGGER.info("NetworkClientImpl : updateNetwork : Start");
-        Network networkDto = null;
-        // validate args
+        LOGGER.trace("NetworkClientImpl : updateNetwork : Start");
+
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
-        }
-        // validate params
-        if (dto == null) {
+        } else if (dto == null) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.NETWORK, null);
         }
+
         // set the additional params
         params.setType(HttpMethodType.PUT);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI, resourceId));
-        String returnObj = null;
 
         // check for json request in the input dto. if it is present,
         // then
         // convert that into jsonObject and pass it rest client
         // idea is : user can create json string and call the sdk api.
         // user can save time in creating network dto.
+        JSONObject jsonObject = null;
 
-        if (useJsonRequest == true) {
-            networkDto = adaptor.buildDto(dto.getJsonRequest().getBody());
+        if (useJsonRequest) {
+            Network networkDto = adaptor.buildDto(dto.getJsonRequest().getBody());
             // create json object
-            jsonObject = adaptor.buildJsonObjectFromDto(networkDto);
+            jsonObject = adaptor.buildJsonObjectFromDto(networkDto, params.getApiVersion());
         } else {
             // create JSON request from dto
-            jsonObject = adaptor.buildJsonObjectFromDto(dto);
+            jsonObject = adaptor.buildJsonObjectFromDto(dto, params.getApiVersion());
         }
 
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        String returnObj = restClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -285,15 +298,14 @@ public class NetworkClientImpl implements NetworkClient {
         if (taskResourceV2 != null && asyncOrSyncMode == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        LOGGER.info("NetworkClientImpl : updateNetwork : End");
+        LOGGER.trace("NetworkClientImpl : updateNetwork : End");
 
         return taskResourceV2;
     }
 
     @Override
     public TaskResourceV2 deleteNetwork(final RestParams params, final String resourceId, final boolean aSync) {
-
-        LOGGER.info("NetworkClientImpl : deleteNetwork : Start");
+        LOGGER.trace("NetworkClientImpl : deleteNetwork : Start");
 
         // validate args
         if (null == params) {
@@ -303,10 +315,10 @@ public class NetworkClientImpl implements NetworkClient {
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        String returnObj = restClient.sendRequest(params);
         LOGGER.debug("NetworkClient : deleteNetwork : response from OV :" + returnObj);
 
-        if (null == returnObj || returnObj.equals("")) {
+        if (Strings.isNullOrEmpty(returnObj)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKS, null);
         }
 
@@ -323,7 +335,7 @@ public class NetworkClientImpl implements NetworkClient {
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        LOGGER.info("NetworkClientImpl : deleteNetwork : End");
+        LOGGER.trace("NetworkClientImpl : deleteNetwork : End");
 
         return taskResourceV2;
     }
@@ -331,34 +343,37 @@ public class NetworkClientImpl implements NetworkClient {
     @Override
     public TaskResourceV2 createNetworkInBulk(final RestParams params, final BulkEthernetNetwork bulkEthernetDto,
             final boolean aSync, final boolean useJsonRequest) {
-        LOGGER.info("NetworkClientImpl : createNetworkInBulk : Start");
-        String returnObj = null;
 
-        // validate params
-        if (bulkEthernetDto == null) {
+        LOGGER.trace("NetworkClientImpl : createNetworkInBulk : Start");
+
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
+                    SdkConstants.APPLIANCE, null);
+        } else if (bulkEthernetDto == null) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
                     SdkConstants.BULK_ETHERNET_NETWORK, null);
         }
+
         // set the additional params
         params.setType(HttpMethodType.POST);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.BULK_ETHERNET_URI));
 
         // check for json request in the input bulkEthernetDto. if it is
-        // present,
-        // then
-        // convert that into jsonObject and pass it rest client
+        // present, then convert that into jsonObject and pass it rest client
         // idea is : user can create json string and call the sdk api.
         // user can save time in creating network bulkEthernetDto.
 
-        if (useJsonRequest == true) {
-            final BulkEthernetNetwork bulkEthernetNetworkDto = adaptor.buildBulkEthernetDto(bulkEthernetDto.getJsonRequest()
-                    .getBody());
+        JSONObject jsonObject = null;
+
+        if (useJsonRequest) {
+            final BulkEthernetNetwork bulkEthernetNetworkDto = adaptor.buildBulkEthernetDto(
+                    bulkEthernetDto.getJsonRequest().getBody());
             jsonObject = adaptor.buildJsonObjectFromBulkEthernetDto(bulkEthernetNetworkDto);
         } else {
             // create JSON request from bulkEthernetDto
             jsonObject = adaptor.buildJsonObjectFromBulkEthernetDto(bulkEthernetDto);
         }
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        String returnObj = restClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -373,9 +388,67 @@ public class NetworkClientImpl implements NetworkClient {
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
         }
-        LOGGER.info("NetworkClientImpl : createNetworkInBulk : End");
+        LOGGER.trace("NetworkClientImpl : createNetworkInBulk : End");
 
         return taskResourceV2;
+    }
+
+    @Override
+    public List<String> getNetworkAssociatedProfiles(RestParams params, String resourceId) {
+        LOGGER.trace("NetworkClientImpl : getNetworkAssociatedProfiles : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
+                    SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(),
+                ResourceUris.ETHERNET_URI, resourceId, ResourceUris.ASSOCIATED_PROFILES));
+
+        String returnObj = restClient.sendRequest(params);
+        LOGGER.debug("NetworkClient : getNetworkAssociatedProfiles : response from OV :" + returnObj);
+
+        if (Strings.isNullOrEmpty(returnObj)) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKS, null);
+        }
+
+        List<String> uris = adaptor.buildCollectionOfUris(returnObj);
+
+        LOGGER.debug("NetworkClient : getNetworkAssociatedProfiles : uris :" + uris);
+        LOGGER.trace("NetworkClientImpl : getNetworkAssociatedProfiles : End");
+
+        return uris;
+    }
+
+    @Override
+    public List<String> getNetworkAssociatedUplinkGroups(RestParams params, String resourceId) {
+        LOGGER.trace("NetworkClientImpl : getNetworkAssociatedUplinkGroups : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
+                    SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(),
+                ResourceUris.ETHERNET_URI, resourceId, ResourceUris.ASSOCIATED_UPLINK_GROUPS));
+
+        String returnObj = restClient.sendRequest(params);
+        LOGGER.debug("NetworkClient : getNetworkAssociatedUplinkGroups : response from OV :" + returnObj);
+
+        if (Strings.isNullOrEmpty(returnObj)) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKS, null);
+        }
+
+        List<String> uris = adaptor.buildCollectionOfUris(returnObj);
+
+        LOGGER.debug("NetworkClient : getNetworkAssociatedUplinkGroups : uris :" + uris);
+        LOGGER.trace("NetworkClientImpl : getNetworkAssociatedUplinkGroups : End");
+
+        return uris;
     }
 
     @Override

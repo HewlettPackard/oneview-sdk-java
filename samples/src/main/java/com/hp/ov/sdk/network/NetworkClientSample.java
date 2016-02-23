@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  *******************************************************************************/
 package com.hp.ov.sdk.network;
+
+import java.util.List;
 
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.JsonRequest;
@@ -51,8 +53,8 @@ public class NetworkClientSample {
     // ================================
     private static final String resourceId = "609c1f1e-8def-431a-ad4e-e01ce9184005";
     private static final String resourceName = "Eth-demo";
-    private static final Double maxBandwidth = Double.valueOf(8000);
-    private static final Double minBandwidth = Double.valueOf(2000);
+    private static final Double maximumBandwidth = Double.valueOf(8000);
+    private static final Double preferredBandwidth = Double.valueOf(3000);
     private static final Integer vlanId = 333;
     private static final String bulkNetworkName = "Prod";
     private static final String vlanRange = "401-405";
@@ -193,19 +195,17 @@ public class NetworkClientSample {
     }
 
     private void updateNetwork() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        Network networkDto = null;
-        // first get the session Id
         try {
+            // first get the session Id
+            String resourceId = null;
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
 
-            networkDto = networkClient.getNetworkByName(params, resourceName);
+            Network networkDto = networkClient.getNetworkByName(params, resourceName);
             // test values
             networkDto.setName(resourceName + "_updated");
-            // Negative test case
-            // networkDto.setVlanId(5000);
-            // end
+            networkDto.setPurpose(Network.Purpose.VMMigration);
+
             if (null != networkDto.getUri()) {
                 resourceId = UrlUtils.getResourceIdFromUri(networkDto.getUri());
             }
@@ -245,14 +245,13 @@ public class NetworkClientSample {
     }
 
     private void deleteNetwork() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
         // first get the session Id
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
 
             // get resource ID
-            resourceId = networkClient.getId(params, resourceName);
+            String resourceId = networkClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
             taskResourceV2 = networkClient.deleteNetwork(params, resourceId, false);
@@ -350,57 +349,133 @@ public class NetworkClientSample {
             System.out.println("NetworkClientTest : createNetworkUsingJsonRequest : arguments are null ");
             return;
         } catch (final SDKTasksException e) {
-            System.out
-                    .println("NetworkClientTest : createNetworkUsingJsonRequest : errors in task, please check task resource for more details ");
+            System.out.println("NetworkClientTest : createNetworkUsingJsonRequest : errors in task, please check task resource for more details ");
+            return;
+        }
+    }
+
+    private void getNetworkAssociatedProfiles() throws InstantiationException, IllegalAccessException {
+        try {
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
+
+            // then make sdk service call to get resource
+            List<String> uris = networkClient.getNetworkAssociatedProfiles(params, resourceId);
+
+            for (String uri : uris) {
+                System.out.println("NetworkClientTest : getNetworkAssociatedProfiles : uri object returned to client : " + uri);
+            }
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("NetworkClientTest : getNetworkAssociatedProfiles : resource you are looking is not found");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("NetworkClientTest : getNetworkAssociatedProfiles : no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("NetworkClientTest : getNetworkAssociatedProfiles : Applicance Not reachabe at : " + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("NetworkClientTest : getNetworkAssociatedProfiles : No response from appliance : " + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("NetworkClientTest : getNetworkAssociatedProfiles : arguments are null ");
+            return;
+        }
+    }
+
+    private void getNetworkAssociatedUplinkGroups() throws InstantiationException, IllegalAccessException {
+        try {
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
+
+            // then make sdk service call to get resource
+            List<String> uris = networkClient.getNetworkAssociatedUplinkGroups(params, resourceId);
+
+            for (String uri : uris) {
+                System.out.println("NetworkClientTest : getNetworkAssociatedUplinkGroups : uri object returned to client : " + uri);
+            }
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("NetworkClientTest : getNetworkAssociatedUplinkGroups : resource you are looking is not found");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("NetworkClientTest : getNetworkAssociatedUplinkGroups : no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("NetworkClientTest : getNetworkAssociatedUplinkGroups : Applicance Not reachabe at : " + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("NetworkClientTest : getNetworkAssociatedUplinkGroups : No response from appliance : " + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("NetworkClientTest : getNetworkAssociatedUplinkGroups : arguments are null ");
             return;
         }
     }
 
     private Network buildNetworkDto() {
-        final Network dto = new Network();
+        Network dto = new Network();
         dto.setVlanId(vlanId);
         dto.setPurpose(Network.Purpose.General);
         dto.setName(resourceName);
         dto.setPrivateNetwork(false);
         dto.setSmartLink(true);
-        dto.setConnectionTemplateUri(null);
         dto.setEthernetNetworkType(Network.EthernetNetworkType.Tagged);
-        dto.setType(ResourceCategory.RC_NETWORK);
+        dto.setConnectionTemplateUri(null);
+        //dto.setType(ResourceCategory.RC_NETWORK); // v120
+        dto.setType(ResourceCategory.RC_NETWORK_V200); // v200
 
-        final ConnectionTemplate connectionTemplate = new ConnectionTemplate();
+        Bandwidth bandwidth = new Bandwidth();
+        bandwidth.setMaximumBandwidth(maximumBandwidth);
+        bandwidth.setTypicalBandwidth(preferredBandwidth);
 
-        final Bandwidth bandwidth = new Bandwidth();
-        bandwidth.setMaximumBandwidth(maxBandwidth);
-        bandwidth.setTypicalBandwidth(minBandwidth);
+        ConnectionTemplate connectionTemplate = new ConnectionTemplate();
         connectionTemplate.setBandwidth(bandwidth);
+
         dto.setConnectionTemplate(connectionTemplate);
 
         return dto;
     }
 
     private BulkEthernetNetwork buildBulkEthernetNetworkDto() {
-        final BulkEthernetNetwork bulkEthernetNetworkDto = new BulkEthernetNetwork();
+        BulkEthernetNetwork bulkEthernetNetworkDto = new BulkEthernetNetwork();
 
         bulkEthernetNetworkDto.setVlanIdRange(vlanRange);
-        bulkEthernetNetworkDto.setPurpose(BulkEthernetNetwork.Purpose.General);
+        bulkEthernetNetworkDto.setPurpose(Network.Purpose.General);
         bulkEthernetNetworkDto.setNamePrefix(bulkNetworkName);
         bulkEthernetNetworkDto.setSmartLink(false);
         bulkEthernetNetworkDto.setPrivateNetwork(false);
         bulkEthernetNetworkDto.setType(ResourceCategory.RC_BULK_NETWORK);
 
-        final Bandwidth bandwidth = new Bandwidth();
-        bandwidth.setMaximumBandwidth(maxBandwidth);
-        bandwidth.setTypicalBandwidth(minBandwidth);
+        Bandwidth bandwidth = new Bandwidth();
+        bandwidth.setMaximumBandwidth(maximumBandwidth);
+        bandwidth.setTypicalBandwidth(preferredBandwidth);
 
         bulkEthernetNetworkDto.setBandwidth(bandwidth);
+
         return bulkEthernetNetworkDto;
     }
 
     private Network buildTestNetworkDtoWithJsonRequest() {
-        final Network networkDto = new Network();
-        final JsonRequest jsonRequest = new JsonRequest();
-        jsonRequest
-                .setBody("{\"type\":\"ethernet-networkV2\",\"vlanId\":103,\"smartLink\":true,\"privateNetwork\":false,\"purpose\":\"General\",\"ethernetNetworkType\":\"Tagged\",\"description\":null,\"name\":\"Test_3\",\"category\":\"ethernet-networks\"}");
+        Network networkDto = new Network();
+        JsonRequest jsonRequest = new JsonRequest();
+
+        jsonRequest.setBody("{" +
+//                "\"type\":\"ethernet-networkV2\"," + //v120
+                "\"type\":\"ethernet-networkV3\"," + //v200
+                "\"vlanId\":321," +
+                "\"smartLink\":true," +
+                "\"privateNetwork\":false," +
+                "\"purpose\":\"General\"," +
+                "\"ethernetNetworkType\":\"Tagged\"," +
+                "\"description\":null," +
+                "\"name\":\"Test_321\"," +
+                "\"category\":\"ethernet-networks\"," +
+                "\"connectionTemplate\" : {" +
+                    "\"bandwidth\" : {" +
+                        "\"maximumBandwidth\" : 8500," +
+                        "\"typicalBandwidth\" : 5500" +
+                "}}}");
+
         networkDto.setJsonRequest(jsonRequest);
 
         return networkDto;
@@ -419,5 +494,8 @@ public class NetworkClientSample {
         client.deleteNetwork();
         client.createNetworkInBulk();
         client.createNetworkUsingJsonRequest();
+        client.getNetworkAssociatedProfiles();
+        client.getNetworkAssociatedUplinkGroups();
     }
+
 }

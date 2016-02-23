@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,6 +15,10 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.NetworkCollection;
 import com.hp.ov.sdk.dto.generated.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.generated.Network;
@@ -60,10 +64,10 @@ public class NetworkAdaptor extends BaseAdaptor<Network, Object> {
         return networkCollectionDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final Network source) {
+    public JSONObject buildJsonObjectFromDto(final Network source, int apiVersion) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
-        return new JSONObject(converter.convertObjectToJsonString(source));
+        return new JSONObject(converter.convertObjectToJsonString(source, apiVersion));
     }
 
     public JSONObject buildJsonObjectFromBulkEthernetDto(final BulkEthernetNetwork source) {
@@ -72,4 +76,11 @@ public class NetworkAdaptor extends BaseAdaptor<Network, Object> {
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
+    public List<String> buildCollectionOfUris(String source) {
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
+        Type listOfString = new TypeToken<List<String>>(){}.getType();
+
+        return (List<String>) converter.convertJsonToListObject(source, listOfString);
+    }
 }
