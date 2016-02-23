@@ -26,24 +26,13 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.TrustManager;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpPatch;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.google.common.base.Strings;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -59,6 +48,16 @@ import com.hp.ov.sdk.exceptions.SDKSSLHandshakeException;
 import com.hp.ov.sdk.exceptions.SDKUnauthorizedException;
 import com.hp.ov.sdk.exceptions.SdkRuntimeException;
 import com.hp.ov.sdk.util.UrlUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpPatch;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpRestClient {
 
@@ -67,8 +66,8 @@ public class HttpRestClient {
     private static final String ACCEPT = "application/json";
     private static final String ACCEPT_LANGUAGE = "en_US";
     private static final String CHAR_SET = "UTF-8";
-    private static final String CONTENT_TYPE = "application/json; charset="+CHAR_SET;
-    private static final String CONTENT_TYPE_STRING = "text/plain; charset="+CHAR_SET;
+    private static final String CONTENT_TYPE = "application/json; charset=" + CHAR_SET;
+    private static final String CONTENT_TYPE_STRING = "text/plain; charset=" + CHAR_SET;
     private static final String LOCATION_HEADER = "Location";
     private static final int TIMEOUT = 0; //???
 
@@ -198,11 +197,20 @@ public class HttpRestClient {
                     sb.append(string);
                 }
             }
-            // TODO - for responseCode == 202
-            // Implement review comment from Geoff
-            // Async APIs should return Task URI in header, eg response = 202,
-            // check location header vs returned object.  SDK should check 202,
-            // get URI from location header then GET task as needed.
+
+            if ((responseCode == HttpURLConnection.HTTP_ACCEPTED)
+                    && (sb.length() == 0)
+                    && !Strings.isNullOrEmpty(connection.getHeaderField(LOCATION_HEADER))) {
+                // Implement review comment from Geoff
+                // Async APIs should return Task URI in header, eg response = 202,
+                // check location header vs returned object.  SDK should check 202,
+                // get URI from location header then GET task as needed.
+                params.setUrl(UrlUtils.createRestUrl(params.getHostname(), connection.getHeaderField(LOCATION_HEADER)));
+                params.setType(HttpMethodType.GET);
+
+                return sendRequestToHPOV(params);
+            }
+
             LOGGER.trace("string returned from server = " + sb);
 
         // TODO - exceptions
@@ -238,7 +246,6 @@ public class HttpRestClient {
             }
             connection.disconnect();
         }
-
         return sb.toString();
     }
 

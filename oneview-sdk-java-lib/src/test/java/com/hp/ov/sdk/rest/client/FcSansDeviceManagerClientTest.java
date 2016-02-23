@@ -15,6 +15,21 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.mockito.BDDMockito.anyObject;
+import static org.mockito.BDDMockito.anyString;
+import static org.mockito.BDDMockito.doReturn;
+import static org.mockito.BDDMockito.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.spy;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.any;
+
+import java.io.IOException;
+
 import com.google.common.collect.Lists;
 import com.hp.ov.sdk.adaptors.DeviceManagerAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -34,22 +49,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.io.IOException;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.mockito.BDDMockito.anyObject;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.doReturn;
-import static org.mockito.BDDMockito.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.isNull;
-import static org.mockito.BDDMockito.spy;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.any;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FcSansDeviceManagerClientTest {

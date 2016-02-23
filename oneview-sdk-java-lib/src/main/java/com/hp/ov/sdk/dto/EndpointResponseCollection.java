@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,7 +15,22 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
-public enum DataFormat {
+import java.util.ArrayList;
+import java.util.List;
 
-    IPAddressOrHostname, None, SecuritySensitive
+public class EndpointResponseCollection extends BaseCollectionResource<EndpointResponse> {
+
+    private static final long serialVersionUID = -3935580835025785500L;
+
+    private List<EndpointResponse> members = new ArrayList<>();
+
+    @Override
+    public List<EndpointResponse> getMembers() {
+        return members;
+    }
+
+    @Override
+    public void setMembers(List<EndpointResponse> members) {
+        this.members = members;
+    }
 }

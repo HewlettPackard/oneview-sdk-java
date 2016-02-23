@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
+import com.hp.ov.sdk.dto.SanRequest;
 import com.hp.ov.sdk.dto.SanResponse;
 import com.hp.ov.sdk.dto.SanResponseCollection;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
@@ -42,9 +43,10 @@ public class ManagedSanAdaptor extends BaseAdaptor<SanResponse, Object> {
         return deviceManagerResponseCollectionDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final SanResponse source) {
+    public JSONObject buildJsonObjectFromDto(final SanRequest source, int apiVersion) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        return new JSONObject(converter.convertObjectToJsonString(source));
+
+        return new JSONObject(converter.convertObjectToJsonString(source, apiVersion));
     }
 
 }
