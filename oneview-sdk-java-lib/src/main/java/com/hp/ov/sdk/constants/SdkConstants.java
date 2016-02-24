@@ -31,6 +31,7 @@ public class SdkConstants {
     public static final String ENCLOSURE_GROUPS = ENCLOSURE_GROUP + "s";
     public static final String ENCLOSURE = "enclosures";
     public static final String ENCLOSURES = ENCLOSURE + "s";
+    public static final String LOGICAL_ENCLOSURE = "logical-enclosures";
     public static final String INTERCONNECT_TYPE = "interconnect-type";
     public static final String INTERCONNECT_TYPES = INTERCONNECT_TYPE + "s";
     public static final String LOGICAL_INTERCONNECT = "logical-interconnects";
@@ -79,6 +80,7 @@ public class SdkConstants {
     public static final String ACTIVE_OA_SSO_URL = "activeOaSsoUrl";
     public static final String ACTIVE_OA_SSO_URL_V200 = "sso";
     public static final String COMPLIANCE = "compliance";
+    public static final String UPDATE_FROM_GROUP = "updateFromGroup";
     public static final String CONFIGURATION = "configuration";
     public static final String ENCLOSURE_FW_BASELINE = "enclosureFwBaseline";
     public static final String ENVIRONMENTAL_CONFIGURATION = "environmentalConfiguration";
@@ -88,6 +90,7 @@ public class SdkConstants {
     public static final String UTILIZATION = "utilization";
     public static final String BIOS = "bios";
     public static final String INTERCONNECT = "interconnect";
+    public static final String SUPPORT_DUMP = "support-dumps";
     /**
 	 * 
 	 */

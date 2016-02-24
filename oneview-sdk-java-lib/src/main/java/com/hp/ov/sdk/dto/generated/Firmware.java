@@ -29,11 +29,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "forceInstallFirmware", "firmwareBaselineUri", "manageFirmware" })
+@JsonPropertyOrder({
+    "forceInstallFirmware",
+    "firmwareBaselineUri",
+    "manageFirmware" })
 public class Firmware implements Serializable {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
     @JsonProperty("forceInstallFirmware")
@@ -44,7 +47,7 @@ public class Firmware implements Serializable {
     private Boolean manageFirmware;
 
     /**
-     * 
+     *
      * @return The forceInstallFirmware
      */
     @JsonProperty("forceInstallFirmware")
@@ -53,7 +56,7 @@ public class Firmware implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param forceInstallFirmware
      *            The forceInstallFirmware
      */
@@ -63,7 +66,7 @@ public class Firmware implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The firmwareBaselineUri
      */
     @JsonProperty("firmwareBaselineUri")
@@ -72,7 +75,7 @@ public class Firmware implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param firmwareBaselineUri
      *            The firmwareBaselineUri
      */
@@ -82,7 +85,7 @@ public class Firmware implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The manageFirmware
      */
     @JsonProperty("manageFirmware")
@@ -91,7 +94,7 @@ public class Firmware implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param manageFirmware
      *            The manageFirmware
      */
@@ -122,5 +125,6 @@ public class Firmware implements Serializable {
         return new EqualsBuilder().append(forceInstallFirmware, rhs.forceInstallFirmware)
                 .append(firmwareBaselineUri, rhs.firmwareBaselineUri).append(manageFirmware, rhs.manageFirmware).isEquals();
     }
+
 
 }

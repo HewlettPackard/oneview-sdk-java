@@ -220,7 +220,7 @@ public class EnclosureClientImpl implements EnclosureClient {
         }
         // validate params
         if (enclosureDto == null) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.NETWORK, null);
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.ENCLOSURE, null);
         }
         // set the additional params
         params.setType(HttpMethodType.PUT);
@@ -266,7 +266,7 @@ public class EnclosureClientImpl implements EnclosureClient {
         }
         // validate params
         if (patchDto == null) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.NETWORK, null);
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.ENCLOSURE, null);
         }
         // set the additional params
         params.setType(HttpMethodType.PATCH);

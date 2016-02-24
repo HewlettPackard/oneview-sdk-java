@@ -26,7 +26,7 @@ public class Patch implements Serializable {
     private String from;
     private PatchOperation op;
     private String path;
-    private String value;
+    private Object value;
 
     /**
      * @return the from
@@ -73,14 +73,14 @@ public class Patch implements Serializable {
     /**
      * @return the value
      */
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(String value) {
+    public void setValue(Object value) {
         this.value = value;
     }
 

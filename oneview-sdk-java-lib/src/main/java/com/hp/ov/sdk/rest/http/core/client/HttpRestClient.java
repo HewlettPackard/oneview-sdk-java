@@ -182,10 +182,23 @@ public class HttpRestClient {
             responseCode = connection.getResponseCode();
             // Handle the response code checks
             // Throws exception if not in 200 family.
-            responseCode = checkResponse(responseCode);
+
+            //responseCode = checkResponse(responseCode);
 
             if (responseCode == HttpsURLConnection.HTTP_NO_CONTENT) {
                 sb.append("{}");
+            } else if (HttpsURLConnection.HTTP_BAD_REQUEST == responseCode) {
+                final DataInputStream inputStream =
+                        new DataInputStream(connection.getErrorStream());
+                final InputStreamReader inputStreamReader =
+                    new InputStreamReader(inputStream);
+                bufferedReader = new BufferedReader(inputStreamReader);
+                String string = null;
+                while ((string = bufferedReader.readLine()) != null) {
+                    sb.append(string);
+                }
+                LOGGER.error("Request error: " + sb.toString());
+                checkResponse(responseCode);
             } else {
                 final DataInputStream inputStream =
                     new DataInputStream(connection.getInputStream());
