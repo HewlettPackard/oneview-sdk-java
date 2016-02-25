@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
+
+import java.util.List;
 
 import com.hp.ov.sdk.dto.NetworkCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -65,6 +67,11 @@ public interface NetworkClient {
      * The module aids in creation of Network when provided with the Network
      * details as Network object or JsonRequest. It can process the request
      * asynchronously or synchronously based on flag input.
+     *
+     * <b>ATTENTION:</b> if you use async mode equals to <code>true</code>
+     * and you set some connection template data this information will not be used.
+     * Thus, we strongly recommend the value <code>false</code> for async flag if
+     * you want to set bandwidth values.
      * 
      * @param params
      *            The RestParams is a structure containing the connection
@@ -73,7 +80,8 @@ public interface NetworkClient {
      *            This is a object containing the Network details, used to
      *            create a Network
      * @param aSync
-     *            Flag input to process request asynchronously or synchronously.
+     *            Flag input to process request asynchronously or synchronously
+     *            (preferable <code>false</code>).
      * @param useJsonRequest
      *            The JsonRequest body is part of Network Object which takes in
      *            a String containing the new Network details, which is
@@ -147,6 +155,28 @@ public interface NetworkClient {
      */
     public TaskResourceV2 createNetworkInBulk(final RestParams params, final BulkEthernetNetwork bulkEthernetDto,
             final boolean aSync, final boolean useJsonRequest);
+
+    /**
+     * Get a list of profile URIs for the ethernet network.
+     *
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param resourceId
+     *            The resourceId for Network as seen in HP OneView.
+     */
+    List<String> getNetworkAssociatedProfiles(RestParams params, String resourceId);
+
+    /**
+     * Gets the uplink sets which are using an ethernet network.
+     *
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param resourceId
+     *            The resourceId for Network as seen in HP OneView.
+     */
+    List<String> getNetworkAssociatedUplinkGroups(RestParams params, String resourceId);
 
     /**
      * The module aids in fetching the Network details for the Network name as

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.hp.ov.sdk.constants;
 public class ResourceCategory {
 
     public static final String RC_NETWORK = "ethernet-networkV2";
+    public static final String RC_NETWORK_V200 = "ethernet-networkV3";
     public static final String RC_BULK_NETWORK = "bulk-ethernet-network";
     public static final String RC_FCNETWORK = "fc-networkV2";
     public static final String RC_SERVERHARDWARE = "server-hardware";

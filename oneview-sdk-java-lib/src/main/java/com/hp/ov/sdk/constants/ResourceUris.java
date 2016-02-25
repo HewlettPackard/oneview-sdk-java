@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package com.hp.ov.sdk.constants;
 public class ResourceUris {
 
     public static final String ETHERNET_URI = "/rest/ethernet-networks";
+    public static final String ASSOCIATED_UPLINK_GROUPS = "associatedUplinkGroups";
+    public static final String ASSOCIATED_PROFILES = "associatedProfiles";
     public static final String CONNECTION_TEMPLATE_URI = "/rest/connection-templates";
     public static final String DEFAULT_CONNECTION_TEMPLATE_URI = "/rest/connection-templates/defaultConnectionTemplate";
     public static final String BULK_ETHERNET_URI = "/rest/ethernet-networks/bulk";
