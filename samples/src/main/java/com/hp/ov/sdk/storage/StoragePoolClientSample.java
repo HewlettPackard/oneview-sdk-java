@@ -49,8 +49,8 @@ public class StoragePoolClientSample {
     // These are variables to be defined by user
     // ================================
     private static final String resourceName = "FST_CPG1";
-    private static final String storageSystemName = "ThreePAR7200-4166";
-    private static final String resourceId = "EEDD9919-42DC-4BD1-804A-A8B3B1140C11";
+    private static final String storageSystemName = "ThreePAR7200-4310";
+    private static final String resourceId = "20FCB7C5-3719-4AEC-AB06-8B51C0615743";
     // ================================
 
     private StoragePoolClientSample() {
@@ -148,11 +148,9 @@ public class StoragePoolClientSample {
             System.out.println("StoragePoolClientTest : getStoragePoolByName : arguments are null ");
             return;
         }
-
     }
 
     private void createStoragePool() throws InstantiationException, IllegalAccessException {
-
         String createStoragePool = null;
         AddStoragePool addStoragePoolDto = null;
         try {
@@ -187,11 +185,9 @@ public class StoragePoolClientSample {
             System.out.println("StoragePoolClientTest : createStoragePool : arguments are null ");
             return;
         } catch (final SDKTasksException e) {
-            System.out
-                    .println("StoragePoolClientTest : createStoragePool : errors in task, please check task resource for more details ");
+            System.out.println("StoragePoolClientTest : createStoragePool : errors in task, please check task resource for more details ");
             return;
         }
-
     }
 
     private void updateStoragePool() throws InstantiationException, IllegalAccessException {
@@ -199,6 +195,7 @@ public class StoragePoolClientSample {
         String updateStoragePool = null;
         String resourceId = null;
         StoragePool storagePoolDto = null;
+
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -281,16 +278,15 @@ public class StoragePoolClientSample {
             System.out.println("StoragePoolClientTest : deleteStoragePool : arguments are null ");
             return;
         }
-
     }
 
     // TODO - Move Uri fetch logic to SdkUtils
-
     private AddStoragePool buildTestStoragePoolDto() {
         final AddStoragePool dto = new AddStoragePool();
 
         dto.setPoolName(resourceName);
         dto.setStorageSystemUri(getStorageSystemUri());
+
         return dto;
     }
 
