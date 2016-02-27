@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -22,9 +22,8 @@ import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 import org.json.JSONObject;
 
+
 public class StoragePoolAdaptor extends BaseAdaptor<StoragePool, Object> {
-
-
 
     @Override
     public StoragePool buildDto(final Object source) {
@@ -34,6 +33,7 @@ public class StoragePoolAdaptor extends BaseAdaptor<StoragePool, Object> {
         // convert json object to DTO, replace quotes and back slash in the file
         final StoragePool storagePoolDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), StoragePool.class);
+
         return storagePoolDto;
     }
 
@@ -47,16 +47,19 @@ public class StoragePoolAdaptor extends BaseAdaptor<StoragePool, Object> {
         final StoragePoolCollection storagePoolCollectionDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
                         .convertObjectToJsonString(source))), StoragePoolCollection.class);
+
         return storagePoolCollectionDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final StoragePool source) {
+    public JSONObject buildJsonObjectFromDto(final StoragePool source, int apiVersion) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        return new JSONObject(converter.convertObjectToJsonString(source));
+
+        return new JSONObject(converter.convertObjectToJsonString(source, apiVersion));
     }
 
     public JSONObject buildJsonObjectFromDto(final AddStoragePool source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
