@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -14,6 +14,10 @@
  * limitations under the License.
  *******************************************************************************/
 package com.hp.ov.sdk.storage;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
 import com.hp.ov.sdk.dto.StoragePoolCollection;
@@ -37,10 +41,6 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /*
  * StorageSystemClientSample is a sample program consume the storage server managed by HP OneView.
  * It invokes APIs of StorageSystemClient which is in sdk library to perform GET/PUT/POST/DELETE
@@ -55,14 +55,14 @@ public class StorageSystemClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String targetPortId = "15FC4E34-E6B9-41ED-B821-204E265393C9";
-    private static final String resourceName = "ThreePAR7200-4166";
+    private static final String targetPortId = "2788DF7C-23BE-4E42-B4EB-61C59246AEE7";
+    private static final String resourceName = "ThreePAR7200-4555";
     private static final String username = "dcs";
     private static final String password = "dcs";
-    private static final String ipAddress = "172.18.11.11";
+    private static final String ipAddress = "172.18.11.12";
     private static final List<String> fcNetworkName_A = Arrays.asList("FC_Network_A");
     private static final List<String> fcNetworkName_B = Arrays.asList("FC_Network_B");
-    private static final String resourceId = "TXQ1000307";
+    private static final String resourceId = "TXQ1010307";
     private static final String unManagedPort_A = "0:1:1";
     private static final String unManagedPort_B = "0:1:2";
     private static final String managedDomain = "TestDomain";
@@ -218,6 +218,43 @@ public class StorageSystemClientSample {
             return;
         } catch (final SDKInvalidArgumentException ex) {
             System.out.println("StorageSystemClientTest : getManagedPortsForStorageSystem : arguments are null ");
+            return;
+        }
+    }
+
+    private void getStorageSystemHostTypes()
+            throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException, SDKNoSuchUrlException {
+        List<String> hostTypes = null;
+        try {
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
+
+            // then make sdk service call to get resource
+            hostTypes = storageSystemClient.getStorageSystemHostTypes(params);
+
+            System.out.println(
+                    "StorageSystemClientTest : getStorageSystemHostTypes : list object returned to client : "
+                            + Arrays.toString(hostTypes.toArray()));
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println(
+                    "StorageSystemClientTest : getStorageSystemHostTypes : resource you are looking is not found");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("StorageSystemClientTest : getStorageSystemHostTypes : no such url : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out
+                    .println("StorageSystemClientTest : getStorageSystemHostTypes : Applicance Not reachabe at : "
+                            + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out
+                    .println("StorageSystemClientTest : getStorageSystemHostTypes : No response from appliance : "
+                            + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("StorageSystemClientTest : getStorageSystemHostTypes : arguments are null ");
             return;
         }
     }
@@ -501,7 +538,9 @@ public class StorageSystemClientSample {
         client.getAllStorageSystem();
         client.getManagedPortsForStorageSystem();
         client.getStoragePoolsForStorageSystem();
+        client.getStorageSystemHostTypes();
         client.getStorageSystemByName();
         client.deleteStorageSystem();
     }
+
 }

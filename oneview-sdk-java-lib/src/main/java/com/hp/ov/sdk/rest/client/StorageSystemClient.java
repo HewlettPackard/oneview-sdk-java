@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.List;
+
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
 import com.hp.ov.sdk.dto.StoragePoolCollection;
 import com.hp.ov.sdk.dto.StorageSystemCollection;
@@ -28,7 +30,7 @@ public interface StorageSystemClient {
     /**
      * The module aids in fetching the StorageSystem details for the specified
      * StorageSystem resourceId.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -42,7 +44,7 @@ public interface StorageSystemClient {
     /**
      * This module aids in retrieving a list of storage pools belonging to the
      * storage system referred by the Path property {arrayId} parameters
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -56,7 +58,7 @@ public interface StorageSystemClient {
     /**
      * This module aids in retrieving all managed target ports for the specified
      * storage system
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -70,7 +72,7 @@ public interface StorageSystemClient {
     /**
      * This module aids in retrieving a managed target ports for the specified
      * storage system
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -85,9 +87,19 @@ public interface StorageSystemClient {
             final String targetPortId);
 
     /**
+     * The module aids in fetching the list of supported host types.
+     *
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @return a list containing the names of the supported host types
+     */
+    public List<String> getStorageSystemHostTypes(final RestParams params);
+
+    /**
      * The module aids in fetching the StorageSystem details for all the
      * StorageSystem found under the current HP OneView.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -99,7 +111,7 @@ public interface StorageSystemClient {
     /**
      * The module aids in fetching the StorageSystem details for the
      * StorageSystem name as specified in HP OneView.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -114,7 +126,7 @@ public interface StorageSystemClient {
      * The module aids in creation of StorageSystem when provided with the
      * StorageSystem details as AddStorageSystemCredential object or
      * JsonRequest.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -135,7 +147,7 @@ public interface StorageSystemClient {
      * The module takes in an StorageSystem object or JsonRequest and updates
      * the existing StorageSystem based on resource Id. This can also be used
      * for updating the storage path of StorageSystem.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -156,7 +168,7 @@ public interface StorageSystemClient {
     /**
      * The module aids in deleting a StorageSystem for the specified
      * StorageSystem resourceId.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -169,7 +181,7 @@ public interface StorageSystemClient {
     /**
      * The module aids in fetching the StorageSystem details for the
      * StorageSystem name as specified in HP OneView.
-     * 
+     *
      * @param creds
      *            The RestParams is a structure containing the connection
      *            details.
