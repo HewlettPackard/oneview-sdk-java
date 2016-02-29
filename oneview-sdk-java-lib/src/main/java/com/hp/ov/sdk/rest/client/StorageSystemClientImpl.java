@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -14,6 +14,12 @@
  * limitations under the License.
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
+
+import java.util.List;
+
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.adaptors.StorageSystemAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -32,9 +38,6 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class StorageSystemClientImpl implements StorageSystemClient {
 
@@ -169,6 +172,34 @@ public class StorageSystemClientImpl implements StorageSystemClient {
     }
 
     @Override
+    public List<String> getStorageSystemHostTypes(RestParams params) {
+        LOGGER.info("StorageSystemClientImpl : getStorageSystemHostTypes : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, ResourceUris.STORAGE_SYSTEM_HOST_TYPES_URI));
+
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        LOGGER.debug("StorageSystemClientImpl : getStorageSystemHostTypes : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_SYSTEMS,
+                    null);
+        }
+        // Call adaptor to convert to DTO
+
+        final List<String> hostTypes = adaptor.buildHostTypesCollectionDto(returnObj);
+
+        LOGGER.debug("StorageSystemClientImpl : getStorageSystemHostTypes : count :" + hostTypes.size());
+        LOGGER.info("StorageSystemClientImpl : getStorageSystemHostTypes : End");
+
+        return hostTypes;
+    }
+
+    @Override
     public StorageSystemCollection getAllStorageSystems(final RestParams params) {
         LOGGER.info("StorageSystemClientImpl : getAllStorageSystems : Start");
 
@@ -244,6 +275,10 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         String returnObj = null;
 
         // validate params
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+
         if (addStorageSystemCredentialsDto == null) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.STORAGE_SYSTEMS,
                     null);
@@ -260,7 +295,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         // user can save time in creating storageSystem storageSystemDto.
 
         // create JSON request from storageSystemDto
-        jsonObject = adaptor.buildJsonObjectFromDto(addStorageSystemCredentialsDto);
+        jsonObject = adaptor.buildJsonObjectFromDto(addStorageSystemCredentialsDto, params.getApiVersion());
         returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
 
@@ -301,7 +336,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         // user can save time in creating storageSystem dto.
 
         // create JSON request from dto
-        jsonObject = adaptor.buildJsonObjectFromDto(storageSystemDto);
+        jsonObject = adaptor.buildJsonObjectFromDto(storageSystemDto, params.getApiVersion());
         returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         if (!returnObj.isEmpty() || returnObj != null) {
@@ -328,7 +363,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, resourceId));
 
         String returnObj = HttpRestClient.sendRequestToHPOV(params);
-        if (!returnObj.isEmpty() || returnObj != null) {
+        if (returnObj != null && !returnObj.isEmpty()) {
             returnObj = "Deleted";
         }
 
