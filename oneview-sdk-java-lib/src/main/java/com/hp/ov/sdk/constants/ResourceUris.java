@@ -62,6 +62,7 @@ public class ResourceUris {
     public static final String STORAGE_SYSTEM_URI = "/rest/storage-systems";
     public static final String STORAGE_SYSTEM_HOST_TYPES_URI = "/host-types";
     public static final String STORAGE_VOLUME_URI = "/rest/storage-volumes";
+    public static final String STORAGE_VOLUME_TEMPLATE_CONNECTABLE_URI = "connectable-volume-templates";
     public static final String STORAGE_VOLUME_TEMPLATE_URI = "/rest/storage-volume-templates";
     public static final String SWITCHES_URI = "/rest/switches";
     public static final String TASK_URI = "/rest/tasks";
