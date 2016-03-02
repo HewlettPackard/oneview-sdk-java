@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,9 +15,15 @@
  *******************************************************************************/
 package com.hp.ov.sdk.logicalinterconnectgroup;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.LogicalInterconnectGroupCollectionV2;
 import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
 import com.hp.ov.sdk.dto.generated.UplinkSet;
 import com.hp.ov.sdk.dto.samples.UplinkSetValue;
@@ -35,11 +41,6 @@ import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 import com.hp.ov.sdk.util.samples.ResourceDtoUtilsWrapper;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 /*
  * LogicalInterconnectGroupClientSample is a sample program, acts as a recipe for representing the available networks,
@@ -69,8 +70,8 @@ public class LogicalInterconnectGroupClientSample {
     private static final String ethUplinkSetName = "EthernetUplinkSet";
     private static final String fcAUplinkSetName = "FCUplinkSetA";
     private static final String fcBUplinkSetName = "FCUplinkSetB";
-    private static final String resourceId = "e77a2b15-0b6d-4b86-9766-068c6a8eeb7a";
-    private static final String settingId = "98a35420-b01e-47b2-9ddd-dee264ebacca";
+    private static final String resourceId = "6cc44430-c1d4-45d8-860c-fa5689e37edb";
+    private static final String settingId = "d969f74b-afb5-494d-91d8-b1a9b1ef5aa9";
     // ================================
 
     private LogicalInterconnectGroupClientSample() {
@@ -395,7 +396,14 @@ public class LogicalInterconnectGroupClientSample {
         bayPermittedInterconnectMaps.put(1, permittedInterconnectType);
         bayPermittedInterconnectMaps.put(2, permittedInterconnectType);
 
-        return resourceDtoUtils.buildLogicalInterconnectGroupDto(params, resourceName, bayPermittedInterconnectMaps);
+        LogicalInterconnectGroups dto = resourceDtoUtils.buildLogicalInterconnectGroupDto(params, resourceName, bayPermittedInterconnectMaps);
+        dto.setEnclosureIndexes(Arrays.asList(1));
+
+        for (InterconnectMapEntryTemplate entry : dto.getInterconnectMapTemplate().getInterconnectMapEntryTemplates()) {
+            entry.setEnclosureIndex(1);
+        }
+
+        return  dto;
     }
 
     private List<UplinkSet> buildUplinkSetGroupDto() {
@@ -444,12 +452,14 @@ public class LogicalInterconnectGroupClientSample {
     public static void main(final String[] args) throws Exception {
         LogicalInterconnectGroupClientSample client = new LogicalInterconnectGroupClientSample();
 
-        client.getAllLogicalInterconnectGroups();
         client.createLogicalInterconnectGroup();
+        client.getAllLogicalInterconnectGroups();
         client.getLogicalInterconnectGroupById();
         client.getLogicalInterconnectGroupByName();
         client.getDefaultInterconnectSettings();
-        // To run getInterconnectSettings, need settingID and resourceID of LIG
+
+        // To run getInterconnectSettings on OneView 1.2, you need settingID and resourceID of LIG
+        // for OV 2.0, you just need the resourceID
         client.getInterconnectSettings();
         client.updateLogicalInterconnectGroup();
         client.deleteLogicalInterconnectGroup();

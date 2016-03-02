@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,10 +15,16 @@
  *******************************************************************************/
 package com.hp.ov.sdk.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ConnectionBoot;
 import com.hp.ov.sdk.dto.ConnectionBoot.BootControl;
+import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.dto.PortInfo;
 import com.hp.ov.sdk.dto.ProfileConnectionV3;
 import com.hp.ov.sdk.dto.StorageTargetPortCollection;
@@ -28,14 +34,12 @@ import com.hp.ov.sdk.dto.generated.Boot;
 import com.hp.ov.sdk.dto.generated.Firmware;
 import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.generated.InterconnectMapTemplate;
-import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.dto.generated.LocalStorage;
 import com.hp.ov.sdk.dto.generated.LocationEntry;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
 import com.hp.ov.sdk.dto.generated.LogicalLocation;
 import com.hp.ov.sdk.dto.generated.LogicalPortConfigInfo;
 import com.hp.ov.sdk.dto.generated.NetworkSets;
-
 import com.hp.ov.sdk.dto.generated.SanStorage;
 import com.hp.ov.sdk.dto.generated.ServerProfile;
 import com.hp.ov.sdk.dto.generated.StoragePath;
@@ -50,14 +54,11 @@ import com.hp.ov.sdk.rest.client.StorageSystemClient;
 import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-
 public class ResourceDtoUtils {
 
     private static final String ACTIVE = "Active";
+
+    private static final int API_200 = 200;
 
     private final StorageSystemClient storageSystemClient;
 
@@ -136,7 +137,11 @@ public class ResourceDtoUtils {
         dto.setInterconnectMapTemplate(interconnectMapTemplateDto);
 
         dto.setUri(null);
-        dto.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP);
+        if (params.getApiVersion() < API_200) {
+            dto.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP);
+        } else {
+            dto.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200);
+        }
         return dto;
     }
 

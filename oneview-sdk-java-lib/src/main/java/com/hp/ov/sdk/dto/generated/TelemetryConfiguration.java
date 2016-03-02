@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -26,63 +26,46 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.hp.ov.sdk.dto.BaseModelResource;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "sampleInterval", "enableTelemetry", "sampleCount", "description", "status", "name", "state", "eTag",
-        "created", "modified", "category", "uri", "type" })
-public class TelemetryConfiguration implements Serializable {
+@JsonPropertyOrder({
+    "sampleInterval",
+    "enableTelemetry",
+    "sampleCount"})
+public class TelemetryConfiguration extends BaseModelResource implements Serializable {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      */
     @JsonProperty("sampleInterval")
     private Integer sampleInterval = 300;
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      */
     @JsonProperty("enableTelemetry")
     private Boolean enableTelemetry = true;
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      */
     @JsonProperty("sampleCount")
     private Integer sampleCount = 12;
-    @JsonProperty("description")
-    private String description;
-    @JsonProperty("status")
-    private String status;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("state")
-    private String state;
-    @JsonProperty("eTag")
-    private String eTag;
-    @JsonProperty("created")
-    private String created;
-    @JsonProperty("modified")
-    private String modified;
-    @JsonProperty("category")
-    private String category;
-    @JsonProperty("uri")
-    private String uri;
-    @JsonProperty("type")
-    private String type;
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The sampleInterval
      */
     @JsonProperty("sampleInterval")
@@ -91,9 +74,9 @@ public class TelemetryConfiguration implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param sampleInterval
      *            The sampleInterval
      */
@@ -103,9 +86,9 @@ public class TelemetryConfiguration implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The enableTelemetry
      */
     @JsonProperty("enableTelemetry")
@@ -114,9 +97,9 @@ public class TelemetryConfiguration implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param enableTelemetry
      *            The enableTelemetry
      */
@@ -126,9 +109,9 @@ public class TelemetryConfiguration implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The sampleCount
      */
     @JsonProperty("sampleCount")
@@ -137,203 +120,15 @@ public class TelemetryConfiguration implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param sampleCount
      *            The sampleCount
      */
     @JsonProperty("sampleCount")
     public void setSampleCount(final Integer sampleCount) {
         this.sampleCount = sampleCount;
-    }
-
-    /**
-     * 
-     * @return The description
-     */
-    @JsonProperty("description")
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * 
-     * @param description
-     *            The description
-     */
-    @JsonProperty("description")
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    /**
-     * 
-     * @return The status
-     */
-    @JsonProperty("status")
-    public String getStatus() {
-        return status;
-    }
-
-    /**
-     * 
-     * @param status
-     *            The status
-     */
-    @JsonProperty("status")
-    public void setStatus(final String status) {
-        this.status = status;
-    }
-
-    /**
-     * 
-     * @return The name
-     */
-    @JsonProperty("name")
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * 
-     * @param name
-     *            The name
-     */
-    @JsonProperty("name")
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    /**
-     * 
-     * @return The state
-     */
-    @JsonProperty("state")
-    public String getState() {
-        return state;
-    }
-
-    /**
-     * 
-     * @param state
-     *            The state
-     */
-    @JsonProperty("state")
-    public void setState(final String state) {
-        this.state = state;
-    }
-
-    /**
-     * 
-     * @return The eTag
-     */
-    @JsonProperty("eTag")
-    public String getETag() {
-        return eTag;
-    }
-
-    /**
-     * 
-     * @param eTag
-     *            The eTag
-     */
-    @JsonProperty("eTag")
-    public void setETag(final String eTag) {
-        this.eTag = eTag;
-    }
-
-    /**
-     * 
-     * @return The created
-     */
-    @JsonProperty("created")
-    public String getCreated() {
-        return created;
-    }
-
-    /**
-     * 
-     * @param created
-     *            The created
-     */
-    @JsonProperty("created")
-    public void setCreated(final String created) {
-        this.created = created;
-    }
-
-    /**
-     * 
-     * @return The modified
-     */
-    @JsonProperty("modified")
-    public String getModified() {
-        return modified;
-    }
-
-    /**
-     * 
-     * @param modified
-     *            The modified
-     */
-    @JsonProperty("modified")
-    public void setModified(final String modified) {
-        this.modified = modified;
-    }
-
-    /**
-     * 
-     * @return The category
-     */
-    @JsonProperty("category")
-    public String getCategory() {
-        return category;
-    }
-
-    /**
-     * 
-     * @param category
-     *            The category
-     */
-    @JsonProperty("category")
-    public void setCategory(final String category) {
-        this.category = category;
-    }
-
-    /**
-     * 
-     * @return The uri
-     */
-    @JsonProperty("uri")
-    public String getUri() {
-        return uri;
-    }
-
-    /**
-     * 
-     * @param uri
-     *            The uri
-     */
-    @JsonProperty("uri")
-    public void setUri(final String uri) {
-        this.uri = uri;
-    }
-
-    /**
-     * @return the type
-     */
-    @JsonProperty("type")
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * @param type
-     *            the type to set
-     */
-    @JsonProperty("type")
-    public void setType(final String type) {
-        this.type = type;
     }
 
     @Override
@@ -343,9 +138,12 @@ public class TelemetryConfiguration implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(type).append(sampleInterval).append(enableTelemetry).append(sampleCount)
-                .append(description).append(status).append(name).append(state).append(eTag).append(created).append(modified)
-                .append(category).append(uri).toHashCode();
+        return new HashCodeBuilder()
+                .append(sampleInterval)
+                .append(enableTelemetry)
+                .append(sampleCount)
+                .appendSuper(super.hashCode())
+                .toHashCode();
     }
 
     @Override
@@ -357,11 +155,12 @@ public class TelemetryConfiguration implements Serializable {
             return false;
         }
         final TelemetryConfiguration rhs = ((TelemetryConfiguration) other);
-        return new EqualsBuilder().append(type, rhs.type).append(sampleInterval, rhs.sampleInterval)
-                .append(enableTelemetry, rhs.enableTelemetry).append(sampleCount, rhs.sampleCount)
-                .append(description, rhs.description).append(status, rhs.status).append(name, rhs.name).append(state, rhs.state)
-                .append(eTag, rhs.eTag).append(created, rhs.created).append(modified, rhs.modified).append(category, rhs.category)
-                .append(uri, rhs.uri).isEquals();
+        return new EqualsBuilder()
+                .append(sampleInterval, rhs.sampleInterval)
+                .append(enableTelemetry, rhs.enableTelemetry)
+                .append(sampleCount, rhs.sampleCount)
+                .appendSuper(super.equals(other))
+                .isEquals();
     }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -26,25 +26,34 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.google.gson.annotations.Since;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "permittedInterconnectTypeUri", "logicalLocation", "logicalDownlinkUri" })
+@JsonPropertyOrder({
+    "permittedInterconnectTypeUri",
+    "logicalLocation",
+    "enclosureIndex",
+    "logicalDownlinkUri"
+    })
 public class InterconnectMapEntryTemplate implements Serializable {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
     @JsonProperty("permittedInterconnectTypeUri")
     private String permittedInterconnectTypeUri;
     @JsonProperty("logicalLocation")
     private LogicalLocation logicalLocation;
+    @Since(200)
+    @JsonProperty("enclosureIndex")
+    private int enclosureIndex;
     @JsonProperty("logicalDownlinkUri")
     private String logicalDownlinkUri;
 
     /**
-     * 
+     *
      * @return The permittedInterconnectTypeUri
      */
     @JsonProperty("permittedInterconnectTypeUri")
@@ -53,7 +62,7 @@ public class InterconnectMapEntryTemplate implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param permittedInterconnectTypeUri
      *            The permittedInterconnectTypeUri
      */
@@ -63,7 +72,7 @@ public class InterconnectMapEntryTemplate implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The logicalLocation
      */
     @JsonProperty("logicalLocation")
@@ -72,7 +81,7 @@ public class InterconnectMapEntryTemplate implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param logicalLocation
      *            The logicalLocation
      */
@@ -82,7 +91,26 @@ public class InterconnectMapEntryTemplate implements Serializable {
     }
 
     /**
-     * 
+     *
+     * @return The enclosureIndex
+     */
+    @JsonProperty("enclosureIndex")
+    public int getEnclosureIndex() {
+        return enclosureIndex;
+    }
+
+    /**
+     *
+     * @param enclosureIndex
+     *            The enclosureIndex
+     */
+    @JsonProperty("enclosureIndex")
+    public void setEnclosureIndex(final int enclosureIndex) {
+        this.enclosureIndex = enclosureIndex;
+    }
+
+    /**
+     *
      * @return The logicalDownlinkUri
      */
     @JsonProperty("logicalDownlinkUri")
@@ -91,7 +119,7 @@ public class InterconnectMapEntryTemplate implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param logicalDownlinkUri
      *            The logicalDownlinkUri
      */
@@ -107,7 +135,11 @@ public class InterconnectMapEntryTemplate implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(permittedInterconnectTypeUri).append(logicalLocation).append(logicalDownlinkUri)
+        return new HashCodeBuilder()
+                .append(permittedInterconnectTypeUri)
+                .append(logicalLocation)
+                .append(enclosureIndex)
+                .append(logicalDownlinkUri)
                 .toHashCode();
     }
 
@@ -120,8 +152,12 @@ public class InterconnectMapEntryTemplate implements Serializable {
             return false;
         }
         final InterconnectMapEntryTemplate rhs = ((InterconnectMapEntryTemplate) other);
-        return new EqualsBuilder().append(permittedInterconnectTypeUri, rhs.permittedInterconnectTypeUri)
-                .append(logicalLocation, rhs.logicalLocation).append(logicalDownlinkUri, rhs.logicalDownlinkUri).isEquals();
+        return new EqualsBuilder()
+                .append(permittedInterconnectTypeUri, rhs.permittedInterconnectTypeUri)
+                .append(logicalLocation, rhs.logicalLocation)
+                .append(enclosureIndex, rhs.enclosureIndex)
+                .append(logicalDownlinkUri, rhs.logicalDownlinkUri)
+                .isEquals();
     }
 
 }

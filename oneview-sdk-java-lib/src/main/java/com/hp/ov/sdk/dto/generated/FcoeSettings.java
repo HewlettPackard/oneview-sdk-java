@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -33,71 +33,34 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "relativeValue", "value", "type" })
-public class LocationEntry implements Serializable {
+@JsonPropertyOrder({
+    "fcoeMode"
+})
+public class FcoeSettings implements Serializable{
 
-    /**
-	 *
-	 */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("relativeValue")
-    private Integer relativeValue;
-    @JsonProperty("value")
-    private String value;
-    @JsonProperty("type")
-    private LocationEntry.Type type;
+
+    @JsonProperty("fcoeMode")
+    private FcoeSettings.FcoeMode fcoeMode;
 
     /**
      *
-     * @return The value
+     * @return
+     *     The fcoeMode
      */
-    @JsonProperty("value")
-    public String getValue() {
-        return value;
+    @JsonProperty("fcoeMode")
+    public FcoeSettings.FcoeMode getFcoeMode() {
+        return fcoeMode;
     }
 
     /**
      *
-     * @param value
-     *            The value
+     * @param fcoeMode
+     *     The fcoeMode
      */
-    @JsonProperty("value")
-    public void setValue(final String value) {
-        this.value = value;
-    }
-
-    /**
-     *
-     * @return The type
-     */
-    @JsonProperty("type")
-    public LocationEntry.Type getType() {
-        return type;
-    }
-
-    /**
-     *
-     * @param type
-     *            The type
-     */
-    @JsonProperty("type")
-    public void setType(final LocationEntry.Type type) {
-        this.type = type;
-    }
-
-    /**
-     * @return the relativeValue
-     */
-    public Integer getRelativeValue() {
-        return relativeValue;
-    }
-
-    /**
-     * @param relativeValue
-     *            the relativeValue to set
-     */
-    public void setRelativeValue(final Integer relativeValue) {
-        this.relativeValue = relativeValue;
+    @JsonProperty("fcoeMode")
+    public void setFcoeMode(FcoeSettings.FcoeMode fcoeMode) {
+        this.fcoeMode = fcoeMode;
     }
 
     @Override
@@ -107,36 +70,42 @@ public class LocationEntry implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(relativeValue).append(value).append(type).toHashCode();
+        return new HashCodeBuilder()
+                .append(fcoeMode)
+                .toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
-        if ((other instanceof LocationEntry) == false) {
+        if ((other instanceof FcoeSettings) == false) {
             return false;
         }
-        final LocationEntry rhs = ((LocationEntry) other);
-        return new EqualsBuilder().append(relativeValue, rhs.relativeValue).append(value, rhs.value).append(type, rhs.type)
+        FcoeSettings rhs = ((FcoeSettings) other);
+        return new EqualsBuilder()
+                .append(fcoeMode, rhs.fcoeMode)
                 .isEquals();
     }
 
     @Generated("org.jsonschema2pojo")
-    public static enum Type {
+    public static enum FcoeMode {
 
-        Port("Port"), Bay("Bay"), Enclosure("Enclosure"), Ip ("Ip"), Password ("Password"), UserId ("UserId");
+        TRANSIT("Transit"),
+        FCF_NPV("FcfNpv"),
+        UNKNOWN("Unknown"),
+        NOT_APPLICABLE("NotApplicable");
         private final String value;
-        private static Map<String, LocationEntry.Type> constants = new HashMap<String, LocationEntry.Type>();
+        private final static Map<String, FcoeSettings.FcoeMode> CONSTANTS = new HashMap<String, FcoeSettings.FcoeMode>();
 
         static {
-            for (final LocationEntry.Type c : values()) {
-                constants.put(c.value, c);
+            for (FcoeSettings.FcoeMode c: values()) {
+                CONSTANTS.put(c.value, c);
             }
         }
 
-        private Type(final String value) {
+        private FcoeMode(String value) {
             this.value = value;
         }
 
@@ -147,8 +116,8 @@ public class LocationEntry implements Serializable {
         }
 
         @JsonCreator
-        public static LocationEntry.Type fromValue(final String value) {
-            final LocationEntry.Type constant = constants.get(value);
+        public static FcoeSettings.FcoeMode fromValue(String value) {
+            FcoeSettings.FcoeMode constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
             } else {

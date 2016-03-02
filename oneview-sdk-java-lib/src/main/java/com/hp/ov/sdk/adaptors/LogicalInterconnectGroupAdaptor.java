@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,12 +15,13 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
+import org.json.JSONObject;
+
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.LogicalInterconnectGroupCollectionV2;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
-import org.json.JSONObject;
 
 public class LogicalInterconnectGroupAdaptor extends BaseAdaptor<LogicalInterconnectGroups, Object> {
 
@@ -53,10 +54,10 @@ public class LogicalInterconnectGroupAdaptor extends BaseAdaptor<LogicalIntercon
         return logicalInterconnectGroupCollectionDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final LogicalInterconnectGroups source) {
+    public JSONObject buildJsonObjectFromDto(final LogicalInterconnectGroups source, final double version) {
         // return the JSON object.
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        return new JSONObject(converter.convertObjectToJsonString(source));
+        return new JSONObject(converter.convertObjectToJsonString(source, version));
     }
 
 }

@@ -24,6 +24,7 @@ public class ResourceCategory {
     public static final String RC_SERVERHARDWARE = "server-hardware";
     public static final String RC_NETWORKSET = "network-set";
     public static final String RC_LOGICALINTERCONNECTGROUP = "logical-interconnect-groupV2";
+    public static final String RC_LOGICALINTERCONNECTGROUP_V200 = "logical-interconnect-groupV3";
     public static final String RC_UPLINKSET = "uplink-sets";
     public static final String RC_ENCLOSURE_GROUP = "EnclosureGroupV2";
     public static final String RC_ENCLOSURE_GROUP_V200 = "EnclosureGroupV200";

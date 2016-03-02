@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -32,6 +32,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.BaseModelResource;
 
 /**
  * The LogicalInterconnectGroups data transfer object (DTO) contains the
@@ -45,158 +47,91 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "stackingMode", "stackingHealth", "interconnectMapTemplate", "uplinkSets", "snmpConfiguration",
-        "telemetryConfiguration", "ethernetSettings", "description", "status", "name", "state", "eTag", "created", "modified",
-        "category", "uri", "type" })
-public class LogicalInterconnectGroups implements Serializable {
+@JsonPropertyOrder({
+    "uplinkSets",
+    "telemetryConfiguration",
+    "snmpConfiguration",
+    "qosConfiguration",
+    "enclosureType",
+    "stackingHealth",
+    "fabricUri",
+    "stackingMode",
+    "fcoeSettings",
+    "ethernetSettings",
+    "enclosureIndexes",
+    "interconnectBaySet",
+    "redundancyType",
+    "interconnectMapTemplate",
+    "internalNetworkUris",
+    "description",
+})
+public class LogicalInterconnectGroups extends BaseModelResource implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-    /**
-     * 
+     *
      * (Required)
-     * 
-     */
-    @JsonProperty("stackingMode")
-    private LogicalInterconnectGroups.StackingMode stackingMode;
-    @JsonProperty("stackingHealth")
-    private LogicalInterconnectGroups.StackingHealth stackingHealth;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("interconnectMapTemplate")
-    private InterconnectMapTemplate interconnectMapTemplate;
-    /**
-     * 
-     * (Required)
-     * 
+     *
      */
     @JsonProperty("uplinkSets")
     private List<UplinkSet> uplinkSets = new ArrayList<UplinkSet>();
-    @JsonProperty("snmpConfiguration")
-    private SnmpConfiguration snmpConfiguration;
     @JsonProperty("telemetryConfiguration")
     private TelemetryConfiguration telemetryConfiguration;
+    @JsonProperty("snmpConfiguration")
+    private SnmpConfiguration snmpConfiguration;
+    @Since(200)
+    @JsonProperty("qosConfiguration")
+    private QosConfiguration qosConfiguration;
+    /**
+     *
+     * (Required)
+     *
+     */
+    @Since(200)
+    @JsonProperty("enclosureType")
+    private LogicalInterconnectGroups.EnclosureType enclosureType;
+    @JsonProperty("stackingHealth")
+    private LogicalInterconnectGroups.StackingHealth stackingHealth;
+    @Since(200)
+    @JsonProperty("fabricUri")
+    private String fabricUri;
+    /**
+     *
+     * (Required)
+     *
+     */
+    @JsonProperty("stackingMode")
+    private LogicalInterconnectGroups.StackingMode stackingMode;
+    @JsonProperty("fcoeSettings")
+    private FcoeSettings fcoeSettings;
     @JsonProperty("ethernetSettings")
     private EthernetSettings ethernetSettings;
-    @JsonProperty("description")
-    private String description;
-    @JsonProperty("status")
-    private String status;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("state")
-    private String state;
-    @JsonProperty("eTag")
-    private String eTag;
-    @JsonProperty("created")
-    private String created;
-    @JsonProperty("modified")
-    private String modified;
-    @JsonProperty("category")
-    private String category;
-    @JsonProperty("uri")
-    private String uri;
-    @JsonProperty("type")
-    private String type;
-
+    @Since(200)
+    @JsonProperty("enclosureIndexes")
+    private List<Integer> enclosureIndexes = new ArrayList<Integer>();
+    @JsonProperty("interconnectBaySet")
+    private Integer interconnectBaySet;
+    @Since(200)
+    @JsonProperty("redundancyType")
+    private LogicalInterconnectGroups.RedundancyType redundancyType;
     /**
-     * 
+     *
      * (Required)
-     * 
-     * @return The type
-     */
-    @JsonProperty("type")
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * 
-     * (Required)
-     * 
-     * @param type
-     *            The type
-     */
-    @JsonProperty("type")
-    public void setType(final String type) {
-        this.type = type;
-    }
-
-    /**
-     * 
-     * (Required)
-     * 
-     * @return The stackingMode
-     */
-    @JsonProperty("stackingMode")
-    public LogicalInterconnectGroups.StackingMode getStackingMode() {
-        return stackingMode;
-    }
-
-    /**
-     * 
-     * (Required)
-     * 
-     * @param stackingMode
-     *            The stackingMode
-     */
-    @JsonProperty("stackingMode")
-    public void setStackingMode(final LogicalInterconnectGroups.StackingMode stackingMode) {
-        this.stackingMode = stackingMode;
-    }
-
-    /**
-     * 
-     * @return The stackingHealth
-     */
-    @JsonProperty("stackingHealth")
-    public LogicalInterconnectGroups.StackingHealth getStackingHealth() {
-        return stackingHealth;
-    }
-
-    /**
-     * 
-     * @param stackingHealth
-     *            The stackingHealth
-     */
-    @JsonProperty("stackingHealth")
-    public void setStackingHealth(final LogicalInterconnectGroups.StackingHealth stackingHealth) {
-        this.stackingHealth = stackingHealth;
-    }
-
-    /**
-     * 
-     * (Required)
-     * 
-     * @return The interconnectMapTemplate
+     *
      */
     @JsonProperty("interconnectMapTemplate")
-    public InterconnectMapTemplate getInterconnectMapTemplate() {
-        return interconnectMapTemplate;
-    }
+    private InterconnectMapTemplate interconnectMapTemplate;
+    @Since(200)
+    @JsonProperty("internalNetworkUris")
+    private List<String> internalNetworkUris = new ArrayList<String>();
 
     /**
-     * 
+     *
      * (Required)
-     * 
-     * @param interconnectMapTemplate
-     *            The interconnectMapTemplate
-     */
-    @JsonProperty("interconnectMapTemplate")
-    public void setInterconnectMapTemplate(final InterconnectMapTemplate interconnectMapTemplate) {
-        this.interconnectMapTemplate = interconnectMapTemplate;
-    }
-
-    /**
-     * 
-     * (Required)
-     * 
-     * @return The uplinkSets
+     *
+     * @return
+     *     The uplinkSets
      */
     @JsonProperty("uplinkSets")
     public List<UplinkSet> getUplinkSets() {
@@ -204,39 +139,21 @@ public class LogicalInterconnectGroups implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param uplinkSets
-     *            The uplinkSets
+     *     The uplinkSets
      */
     @JsonProperty("uplinkSets")
-    public void setUplinkSets(final List<UplinkSet> uplinkSets) {
+    public void setUplinkSets(List<UplinkSet> uplinkSets) {
         this.uplinkSets = uplinkSets;
     }
 
     /**
-     * 
-     * @return The snmpConfiguration
-     */
-    @JsonProperty("snmpConfiguration")
-    public SnmpConfiguration getSnmpConfiguration() {
-        return snmpConfiguration;
-    }
-
-    /**
-     * 
-     * @param snmpConfiguration
-     *            The snmpConfiguration
-     */
-    @JsonProperty("snmpConfiguration")
-    public void setSnmpConfiguration(final SnmpConfiguration snmpConfiguration) {
-        this.snmpConfiguration = snmpConfiguration;
-    }
-
-    /**
-     * 
-     * @return The telemetryConfiguration
+     *
+     * @return
+     *     The telemetryConfiguration
      */
     @JsonProperty("telemetryConfiguration")
     public TelemetryConfiguration getTelemetryConfiguration() {
@@ -244,18 +161,167 @@ public class LogicalInterconnectGroups implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param telemetryConfiguration
-     *            The telemetryConfiguration
+     *     The telemetryConfiguration
      */
     @JsonProperty("telemetryConfiguration")
-    public void setTelemetryConfiguration(final TelemetryConfiguration telemetryConfiguration) {
+    public void setTelemetryConfiguration(TelemetryConfiguration telemetryConfiguration) {
         this.telemetryConfiguration = telemetryConfiguration;
     }
 
     /**
-     * 
-     * @return The ethernetSettings
+     *
+     * @return
+     *     The snmpConfiguration
+     */
+    @JsonProperty("snmpConfiguration")
+    public SnmpConfiguration getSnmpConfiguration() {
+        return snmpConfiguration;
+    }
+
+    /**
+     *
+     * @param snmpConfiguration
+     *     The snmpConfiguration
+     */
+    @JsonProperty("snmpConfiguration")
+    public void setSnmpConfiguration(SnmpConfiguration snmpConfiguration) {
+        this.snmpConfiguration = snmpConfiguration;
+    }
+
+    /**
+     *
+     * @return
+     *     The qosConfiguration
+     */
+    @JsonProperty("qosConfiguration")
+    public QosConfiguration getQosConfiguration() {
+        return qosConfiguration;
+    }
+
+    /**
+     *
+     * @param qosConfiguration
+     *     The qosConfiguration
+     */
+    @JsonProperty("qosConfiguration")
+    public void setQosConfiguration(QosConfiguration qosConfiguration) {
+        this.qosConfiguration = qosConfiguration;
+    }
+
+    /**
+     *
+     * (Required)
+     *
+     * @return
+     *     The enclosureType
+     */
+    @JsonProperty("enclosureType")
+    public LogicalInterconnectGroups.EnclosureType getEnclosureType() {
+        return enclosureType;
+    }
+
+    /**
+     *
+     * (Required)
+     *
+     * @param enclosureType
+     *     The enclosureType
+     */
+    @JsonProperty("enclosureType")
+    public void setEnclosureType(LogicalInterconnectGroups.EnclosureType enclosureType) {
+        this.enclosureType = enclosureType;
+    }
+
+    /**
+     *
+     * @return
+     *     The stackingHealth
+     */
+    @JsonProperty("stackingHealth")
+    public LogicalInterconnectGroups.StackingHealth getStackingHealth() {
+        return stackingHealth;
+    }
+
+    /**
+     *
+     * @param stackingHealth
+     *     The stackingHealth
+     */
+    @JsonProperty("stackingHealth")
+    public void setStackingHealth(LogicalInterconnectGroups.StackingHealth stackingHealth) {
+        this.stackingHealth = stackingHealth;
+    }
+
+    /**
+     *
+     * @return
+     *     The fabricUri
+     */
+    @JsonProperty("fabricUri")
+    public String getFabricUri() {
+        return fabricUri;
+    }
+
+    /**
+     *
+     * @param fabricUri
+     *     The fabricUri
+     */
+    @JsonProperty("fabricUri")
+    public void setFabricUri(String fabricUri) {
+        this.fabricUri = fabricUri;
+    }
+
+    /**
+     *
+     * (Required)
+     *
+     * @return
+     *     The stackingMode
+     */
+    @JsonProperty("stackingMode")
+    public LogicalInterconnectGroups.StackingMode getStackingMode() {
+        return stackingMode;
+    }
+
+    /**
+     *
+     * (Required)
+     *
+     * @param stackingMode
+     *     The stackingMode
+     */
+    @JsonProperty("stackingMode")
+    public void setStackingMode(LogicalInterconnectGroups.StackingMode stackingMode) {
+        this.stackingMode = stackingMode;
+    }
+
+    /**
+     *
+     * @return
+     *     The fcoeSettings
+     */
+    @JsonProperty("fcoeSettings")
+    public FcoeSettings getFcoeSettings() {
+        return fcoeSettings;
+    }
+
+    /**
+     *
+     * @param fcoeSettings
+     *     The fcoeSettings
+     */
+    @JsonProperty("fcoeSettings")
+    public void setFcoeSettings(FcoeSettings fcoeSettings) {
+        this.fcoeSettings = fcoeSettings;
+    }
+
+    /**
+     *
+     * @return
+     *     The ethernetSettings
      */
     @JsonProperty("ethernetSettings")
     public EthernetSettings getEthernetSettings() {
@@ -263,184 +329,117 @@ public class LogicalInterconnectGroups implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param ethernetSettings
-     *            The ethernetSettings
+     *     The ethernetSettings
      */
     @JsonProperty("ethernetSettings")
-    public void setEthernetSettings(final EthernetSettings ethernetSettings) {
+    public void setEthernetSettings(EthernetSettings ethernetSettings) {
         this.ethernetSettings = ethernetSettings;
     }
 
     /**
-     * 
-     * @return The description
+     *
+     * @return
+     *     The enclosureIndexes
      */
-    @JsonProperty("description")
-    public String getDescription() {
-        return description;
+    @JsonProperty("enclosureIndexes")
+    public List<Integer> getEnclosureIndexes() {
+        return enclosureIndexes;
     }
 
     /**
-     * 
-     * @param description
-     *            The description
+     *
+     * @param enclosureIndexes
+     *     The enclosureIndexes
      */
-    @JsonProperty("description")
-    public void setDescription(final String description) {
-        this.description = description;
+    @JsonProperty("enclosureIndexes")
+    public void setEnclosureIndexes(List<Integer> enclosureIndexes) {
+        this.enclosureIndexes = enclosureIndexes;
     }
 
     /**
-     * 
-     * @return The status
+     *
+     * @return
+     *     The interconnectBaySet
      */
-    @JsonProperty("status")
-    public String getStatus() {
-        return status;
+    @JsonProperty("interconnectBaySet")
+    public Integer getInterconnectBaySet() {
+        return interconnectBaySet;
     }
 
     /**
-     * 
-     * @param status
-     *            The status
+     *
+     * @param interconnectBaySet
+     *     The interconnectBaySet
      */
-    @JsonProperty("status")
-    public void setStatus(final String status) {
-        this.status = status;
+    @JsonProperty("interconnectBaySet")
+    public void setInterconnectBaySet(Integer interconnectBaySet) {
+        this.interconnectBaySet = interconnectBaySet;
     }
 
     /**
-     * 
-     * @return The name
+     *
+     * @return
+     *     The redundancyType
      */
-    @JsonProperty("name")
-    public String getName() {
-        return name;
+    @JsonProperty("redundancyType")
+    public LogicalInterconnectGroups.RedundancyType getRedundancyType() {
+        return redundancyType;
     }
 
     /**
-     * 
-     * @param name
-     *            The name
+     *
+     * @param redundancyType
+     *     The redundancyType
      */
-    @JsonProperty("name")
-    public void setName(final String name) {
-        this.name = name;
+    @JsonProperty("redundancyType")
+    public void setRedundancyType(LogicalInterconnectGroups.RedundancyType redundancyType) {
+        this.redundancyType = redundancyType;
     }
 
     /**
-     * 
-     * @return The state
+     *
+     * (Required)
+     *
+     * @return
+     *     The interconnectMapTemplate
      */
-    @JsonProperty("state")
-    public String getState() {
-        return state;
+    @JsonProperty("interconnectMapTemplate")
+    public InterconnectMapTemplate getInterconnectMapTemplate() {
+        return interconnectMapTemplate;
     }
 
     /**
-     * 
-     * @param state
-     *            The state
+     *
+     * (Required)
+     *
+     * @param interconnectMapTemplate
+     *     The interconnectMapTemplate
      */
-    @JsonProperty("state")
-    public void setState(final String state) {
-        this.state = state;
+    @JsonProperty("interconnectMapTemplate")
+    public void setInterconnectMapTemplate(InterconnectMapTemplate interconnectMapTemplate) {
+        this.interconnectMapTemplate = interconnectMapTemplate;
     }
 
     /**
-     * 
-     * @return The eTag
+     *
+     * @return
+     *     The internalNetworkUris
      */
-    @JsonProperty("eTag")
-    public String getETag() {
-        return eTag;
+    @JsonProperty("internalNetworkUris")
+    public List<String> getInternalNetworkUris() {
+        return internalNetworkUris;
     }
 
     /**
-     * 
-     * @param eTag
-     *            The eTag
+     *
+     * @param internalNetworkUris
+     *     The internalNetworkUris
      */
-    @JsonProperty("eTag")
-    public void setETag(final String eTag) {
-        this.eTag = eTag;
-    }
-
-    /**
-     * 
-     * @return The created
-     */
-    @JsonProperty("created")
-    public String getCreated() {
-        return created;
-    }
-
-    /**
-     * 
-     * @param created
-     *            The created
-     */
-    @JsonProperty("created")
-    public void setCreated(final String created) {
-        this.created = created;
-    }
-
-    /**
-     * 
-     * @return The modified
-     */
-    @JsonProperty("modified")
-    public String getModified() {
-        return modified;
-    }
-
-    /**
-     * 
-     * @param modified
-     *            The modified
-     */
-    @JsonProperty("modified")
-    public void setModified(final String modified) {
-        this.modified = modified;
-    }
-
-    /**
-     * 
-     * @return The category
-     */
-    @JsonProperty("category")
-    public String getCategory() {
-        return category;
-    }
-
-    /**
-     * 
-     * @param category
-     *            The category
-     */
-    @JsonProperty("category")
-    public void setCategory(final String category) {
-        this.category = category;
-    }
-
-    /**
-     * 
-     * @return The uri
-     */
-    @JsonProperty("uri")
-    public String getUri() {
-        return uri;
-    }
-
-    /**
-     * 
-     * @param uri
-     *            The uri
-     */
-    @JsonProperty("uri")
-    public void setUri(final String uri) {
-        this.uri = uri;
+    @JsonProperty("internalNetworkUris")
+    public void setInternalNetworkUris(List<String> internalNetworkUris) {
+        this.internalNetworkUris = internalNetworkUris;
     }
 
     @Override
@@ -450,44 +449,72 @@ public class LogicalInterconnectGroups implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(type).append(stackingMode).append(stackingHealth).append(interconnectMapTemplate)
-                .append(uplinkSets).append(snmpConfiguration).append(telemetryConfiguration).append(ethernetSettings)
-                .append(description).append(status).append(name).append(state).append(eTag).append(created).append(modified)
-                .append(category).append(uri).toHashCode();
+        return new HashCodeBuilder()
+                .append(uplinkSets)
+                .append(telemetryConfiguration)
+                .append(snmpConfiguration)
+                .append(qosConfiguration)
+                .append(enclosureType)
+                .append(stackingHealth)
+                .append(fabricUri)
+                .append(stackingMode)
+                .append(fcoeSettings)
+                .append(ethernetSettings)
+                .append(enclosureIndexes)
+                .append(interconnectBaySet)
+                .append(redundancyType)
+                .append(interconnectMapTemplate)
+                .append(internalNetworkUris)
+                .appendSuper(super.hashCode())
+                .toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
         if ((other instanceof LogicalInterconnectGroups) == false) {
             return false;
         }
-        final LogicalInterconnectGroups rhs = ((LogicalInterconnectGroups) other);
-        return new EqualsBuilder().append(type, rhs.type).append(stackingMode, rhs.stackingMode)
-                .append(stackingHealth, rhs.stackingHealth).append(interconnectMapTemplate, rhs.interconnectMapTemplate)
-                .append(uplinkSets, rhs.uplinkSets).append(snmpConfiguration, rhs.snmpConfiguration)
-                .append(telemetryConfiguration, rhs.telemetryConfiguration).append(ethernetSettings, rhs.ethernetSettings)
-                .append(description, rhs.description).append(status, rhs.status).append(name, rhs.name).append(state, rhs.state)
-                .append(eTag, rhs.eTag).append(created, rhs.created).append(modified, rhs.modified).append(category, rhs.category)
-                .append(uri, rhs.uri).isEquals();
+        LogicalInterconnectGroups rhs = ((LogicalInterconnectGroups) other);
+        return new EqualsBuilder()
+                .append(uplinkSets, rhs.uplinkSets)
+                .append(telemetryConfiguration, rhs.telemetryConfiguration)
+                .append(snmpConfiguration, rhs.snmpConfiguration)
+                .append(qosConfiguration, rhs.qosConfiguration)
+                .append(enclosureType, rhs.enclosureType)
+                .append(stackingHealth, rhs.stackingHealth)
+                .append(fabricUri, rhs.fabricUri)
+                .append(stackingMode, rhs.stackingMode)
+                .append(fcoeSettings, rhs.fcoeSettings)
+                .append(ethernetSettings, rhs.ethernetSettings)
+                .append(enclosureIndexes, rhs.enclosureIndexes)
+                .append(interconnectBaySet, rhs.interconnectBaySet)
+                .append(redundancyType, rhs.redundancyType)
+                .append(interconnectMapTemplate, rhs.interconnectMapTemplate)
+                .append(internalNetworkUris, rhs.internalNetworkUris)
+                .appendSuper(super.equals(other))
+                .isEquals();
     }
 
     @Generated("org.jsonschema2pojo")
-    public static enum StackingHealth {
+    public static enum EnclosureType {
 
-        Unknown("Unknown"), Connected("Connected"), BiConnected("BiConnected"), Disconnected("Disconnected");
+        Unknown("Unknown"),
+        NotApplicable("NotApplicable"),
+        C7000("C7000"),
+        SY12000("SY12000");
         private final String value;
-        private static Map<String, LogicalInterconnectGroups.StackingHealth> constants = new HashMap<String, LogicalInterconnectGroups.StackingHealth>();
+        private final static Map<String, LogicalInterconnectGroups.EnclosureType> CONSTANTS = new HashMap<String, LogicalInterconnectGroups.EnclosureType>();
 
         static {
-            for (final LogicalInterconnectGroups.StackingHealth c : values()) {
-                constants.put(c.value, c);
+            for (LogicalInterconnectGroups.EnclosureType c: values()) {
+                CONSTANTS.put(c.value, c);
             }
         }
 
-        private StackingHealth(final String value) {
+        private EnclosureType(String value) {
             this.value = value;
         }
 
@@ -498,8 +525,86 @@ public class LogicalInterconnectGroups implements Serializable {
         }
 
         @JsonCreator
-        public static LogicalInterconnectGroups.StackingHealth fromValue(final String value) {
-            final LogicalInterconnectGroups.StackingHealth constant = constants.get(value);
+        public static LogicalInterconnectGroups.EnclosureType fromValue(String value) {
+            LogicalInterconnectGroups.EnclosureType constant = CONSTANTS.get(value);
+            if (constant == null) {
+                throw new IllegalArgumentException(value);
+            } else {
+                return constant;
+            }
+        }
+
+    }
+
+    @Generated("org.jsonschema2pojo")
+    public static enum RedundancyType {
+
+        HighlyAvailable("HighlyAvailable"),
+        Redundant("Redundant"),
+        NonRedundantASide("NonRedundantASide"),
+        NonRedundantBSide("NonRedundantBSide");
+        private final String value;
+        private final static Map<String, LogicalInterconnectGroups.RedundancyType> CONSTANTS = new HashMap<String, LogicalInterconnectGroups.RedundancyType>();
+
+        static {
+            for (LogicalInterconnectGroups.RedundancyType c: values()) {
+                CONSTANTS.put(c.value, c);
+            }
+        }
+
+        private RedundancyType(String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+        @JsonCreator
+        public static LogicalInterconnectGroups.RedundancyType fromValue(String value) {
+            LogicalInterconnectGroups.RedundancyType constant = CONSTANTS.get(value);
+            if (constant == null) {
+                throw new IllegalArgumentException(value);
+            } else {
+                return constant;
+            }
+        }
+
+    }
+
+    @Generated("org.jsonschema2pojo")
+    public static enum StackingHealth {
+
+        Unknown("Unknown"),
+        Connected("Connected"),
+        BiConnected("BiConnected"),
+        Disconnected("Disconnected"),
+        DisconnectedShutdown("DisconnectedShutdown"),
+        NotApplicable("NotApplicable");
+        private final String value;
+        private final static Map<String, LogicalInterconnectGroups.StackingHealth> CONSTANTS = new HashMap<String, LogicalInterconnectGroups.StackingHealth>();
+
+        static {
+            for (LogicalInterconnectGroups.StackingHealth c: values()) {
+                CONSTANTS.put(c.value, c);
+            }
+        }
+
+        private StackingHealth(String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+        @JsonCreator
+        public static LogicalInterconnectGroups.StackingHealth fromValue(String value) {
+            LogicalInterconnectGroups.StackingHealth constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
             } else {
@@ -512,17 +617,20 @@ public class LogicalInterconnectGroups implements Serializable {
     @Generated("org.jsonschema2pojo")
     public static enum StackingMode {
 
-        None("None"), Enclosure("Enclosure"), SwitchPairs("SwitchPairs"), MultiEnclosure("MultiEnclosure");
+        None("None"),
+        Enclosure("Enclosure"),
+        SwitchPairs("SwitchPairs"),
+        MultiEnclosure("MultiEnclosure");
         private final String value;
-        private static Map<String, LogicalInterconnectGroups.StackingMode> constants = new HashMap<String, LogicalInterconnectGroups.StackingMode>();
+        private final static Map<String, LogicalInterconnectGroups.StackingMode> CONSTANTS = new HashMap<String, LogicalInterconnectGroups.StackingMode>();
 
         static {
-            for (final LogicalInterconnectGroups.StackingMode c : values()) {
-                constants.put(c.value, c);
+            for (LogicalInterconnectGroups.StackingMode c: values()) {
+                CONSTANTS.put(c.value, c);
             }
         }
 
-        private StackingMode(final String value) {
+        private StackingMode(String value) {
             this.value = value;
         }
 
@@ -533,8 +641,8 @@ public class LogicalInterconnectGroups implements Serializable {
         }
 
         @JsonCreator
-        public static LogicalInterconnectGroups.StackingMode fromValue(final String value) {
-            final LogicalInterconnectGroups.StackingMode constant = constants.get(value);
+        public static LogicalInterconnectGroups.StackingMode fromValue(String value) {
+            LogicalInterconnectGroups.StackingMode constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
             } else {

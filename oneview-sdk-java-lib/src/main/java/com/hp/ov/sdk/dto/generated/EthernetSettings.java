@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,16 +29,26 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.BaseModelResource;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "interconnectType", "enableIgmpSnooping", "igmpIdleTimeoutInterval", "enableFastMacCacheFailover",
-        "macRefreshInterval", "enableNetworkLoopProtection", "enablePauseFloodProtection", "dependentResourceUri", "name", "id",
-        "description", "status", "state", "eTag", "created", "modified", "category", "uri", "type" })
-public class EthernetSettings implements Serializable {
+@JsonPropertyOrder({
+    "interconnectType",
+    "enableIgmpSnooping",
+    "igmpIdleTimeoutInterval",
+    "enableFastMacCacheFailover",
+    "macRefreshInterval",
+    "enableNetworkLoopProtection",
+    "enablePauseFloodProtection",
+    "enableRichTLV",
+    "dependentResourceUri",
+    "id"})
+public class EthernetSettings extends BaseModelResource {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
     @JsonProperty("interconnectType")
@@ -56,33 +65,16 @@ public class EthernetSettings implements Serializable {
     private Boolean enableNetworkLoopProtection = true;
     @JsonProperty("enablePauseFloodProtection")
     private Boolean enablePauseFloodProtection = true;
+    @Since(200)
+    @JsonProperty("enableRichTLV")
+    private Boolean enableRichTLV = true;
     @JsonProperty("dependentResourceUri")
     private String dependentResourceUri;
-    @JsonProperty("name")
-    private String name;
     @JsonProperty("id")
     private String id;
-    @JsonProperty("description")
-    private String description;
-    @JsonProperty("status")
-    private String status;
-    @JsonProperty("state")
-    private String state;
-    @JsonProperty("eTag")
-    private String eTag;
-    @JsonProperty("created")
-    private String created;
-    @JsonProperty("modified")
-    private String modified;
-    @JsonProperty("category")
-    private String category;
-    @JsonProperty("uri")
-    private String uri;
-    @JsonProperty("type")
-    private String type;
 
     /**
-     * 
+     *
      * @return The interconnectType
      */
     @JsonProperty("interconnectType")
@@ -91,7 +83,7 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param interconnectType
      *            The interconnectType
      */
@@ -101,7 +93,7 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The enableIgmpSnooping
      */
     @JsonProperty("enableIgmpSnooping")
@@ -110,7 +102,7 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param enableIgmpSnooping
      *            The enableIgmpSnooping
      */
@@ -120,7 +112,7 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The igmpIdleTimeoutInterval
      */
     @JsonProperty("igmpIdleTimeoutInterval")
@@ -129,7 +121,7 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param igmpIdleTimeoutInterval
      *            The igmpIdleTimeoutInterval
      */
@@ -139,7 +131,7 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The enableFastMacCacheFailover
      */
     @JsonProperty("enableFastMacCacheFailover")
@@ -148,7 +140,7 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param enableFastMacCacheFailover
      *            The enableFastMacCacheFailover
      */
@@ -158,7 +150,7 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The macRefreshInterval
      */
     @JsonProperty("macRefreshInterval")
@@ -167,7 +159,7 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param macRefreshInterval
      *            The macRefreshInterval
      */
@@ -177,7 +169,7 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The enableNetworkLoopProtection
      */
     @JsonProperty("enableNetworkLoopProtection")
@@ -186,7 +178,7 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param enableNetworkLoopProtection
      *            The enableNetworkLoopProtection
      */
@@ -196,7 +188,7 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The enablePauseFloodProtection
      */
     @JsonProperty("enablePauseFloodProtection")
@@ -205,7 +197,7 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param enablePauseFloodProtection
      *            The enablePauseFloodProtection
      */
@@ -215,7 +207,26 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
+     * @return The enableRichTLV
+     */
+    @JsonProperty("enableRichTLV")
+    public Boolean getEnableRichTLV() {
+        return enableRichTLV;
+    }
+
+    /**
+     *
+     * @param enableRichTLV
+     *            The enableRichTLV
+     */
+    @JsonProperty("enableRichTLV")
+    public void setEnableRichTLV(final Boolean enableRichTLV) {
+        this.enableRichTLV = enableRichTLV;
+    }
+
+    /**
+     *
      * @return The dependentResourceUri
      */
     @JsonProperty("dependentResourceUri")
@@ -224,7 +235,7 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param dependentResourceUri
      *            The dependentResourceUri
      */
@@ -234,26 +245,7 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
-     * @return The name
-     */
-    @JsonProperty("name")
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * 
-     * @param name
-     *            The name
-     */
-    @JsonProperty("name")
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    /**
-     * 
+     *
      * @return The id
      */
     @JsonProperty("id")
@@ -262,184 +254,13 @@ public class EthernetSettings implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param id
      *            The id
      */
     @JsonProperty("id")
     public void setId(final String id) {
         this.id = id;
-    }
-
-    /**
-     * 
-     * @return The description
-     */
-    @JsonProperty("description")
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * 
-     * @param description
-     *            The description
-     */
-    @JsonProperty("description")
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    /**
-     * 
-     * @return The status
-     */
-    @JsonProperty("status")
-    public String getStatus() {
-        return status;
-    }
-
-    /**
-     * 
-     * @param status
-     *            The status
-     */
-    @JsonProperty("status")
-    public void setStatus(final String status) {
-        this.status = status;
-    }
-
-    /**
-     * 
-     * @return The state
-     */
-    @JsonProperty("state")
-    public String getState() {
-        return state;
-    }
-
-    /**
-     * 
-     * @param state
-     *            The state
-     */
-    @JsonProperty("state")
-    public void setState(final String state) {
-        this.state = state;
-    }
-
-    /**
-     * 
-     * @return The eTag
-     */
-    @JsonProperty("eTag")
-    public String getETag() {
-        return eTag;
-    }
-
-    /**
-     * 
-     * @param eTag
-     *            The eTag
-     */
-    @JsonProperty("eTag")
-    public void setETag(final String eTag) {
-        this.eTag = eTag;
-    }
-
-    /**
-     * 
-     * @return The created
-     */
-    @JsonProperty("created")
-    public String getCreated() {
-        return created;
-    }
-
-    /**
-     * 
-     * @param created
-     *            The created
-     */
-    @JsonProperty("created")
-    public void setCreated(final String created) {
-        this.created = created;
-    }
-
-    /**
-     * 
-     * @return The modified
-     */
-    @JsonProperty("modified")
-    public String getModified() {
-        return modified;
-    }
-
-    /**
-     * 
-     * @param modified
-     *            The modified
-     */
-    @JsonProperty("modified")
-    public void setModified(final String modified) {
-        this.modified = modified;
-    }
-
-    /**
-     * 
-     * @return The category
-     */
-    @JsonProperty("category")
-    public String getCategory() {
-        return category;
-    }
-
-    /**
-     * 
-     * @param category
-     *            The category
-     */
-    @JsonProperty("category")
-    public void setCategory(final String category) {
-        this.category = category;
-    }
-
-    /**
-     * 
-     * @return The uri
-     */
-    @JsonProperty("uri")
-    public String getUri() {
-        return uri;
-    }
-
-    /**
-     * 
-     * @param uri
-     *            The uri
-     */
-    @JsonProperty("uri")
-    public void setUri(final String uri) {
-        this.uri = uri;
-    }
-
-    /**
-     * 
-     * @return The type
-     */
-    @JsonProperty("type")
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * 
-     * @param type
-     *            The type
-     */
-    @JsonProperty("type")
-    public void setType(final String type) {
-        this.type = type;
     }
 
     @Override
@@ -449,10 +270,18 @@ public class EthernetSettings implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(interconnectType).append(enableIgmpSnooping).append(igmpIdleTimeoutInterval)
-                .append(enableFastMacCacheFailover).append(macRefreshInterval).append(enableNetworkLoopProtection)
-                .append(enablePauseFloodProtection).append(dependentResourceUri).append(name).append(id).append(description)
-                .append(status).append(state).append(eTag).append(created).append(modified).append(category).append(uri)
+        return new HashCodeBuilder()
+                .append(interconnectType)
+                .append(enableIgmpSnooping)
+                .append(igmpIdleTimeoutInterval)
+                .append(enableFastMacCacheFailover)
+                .append(macRefreshInterval)
+                .append(enableNetworkLoopProtection)
+                .append(enablePauseFloodProtection)
+                .append(enableRichTLV)
+                .append(dependentResourceUri)
+                .append(id)
+                .appendSuper(super.hashCode())
                 .toHashCode();
     }
 
@@ -465,15 +294,18 @@ public class EthernetSettings implements Serializable {
             return false;
         }
         final EthernetSettings rhs = ((EthernetSettings) other);
-        return new EqualsBuilder().append(interconnectType, rhs.interconnectType)
-                .append(enableIgmpSnooping, rhs.enableIgmpSnooping).append(igmpIdleTimeoutInterval, rhs.igmpIdleTimeoutInterval)
+        return new EqualsBuilder()
+                .append(interconnectType, rhs.interconnectType)
+                .append(enableIgmpSnooping, rhs.enableIgmpSnooping)
+                .append(igmpIdleTimeoutInterval, rhs.igmpIdleTimeoutInterval)
                 .append(enableFastMacCacheFailover, rhs.enableFastMacCacheFailover)
                 .append(macRefreshInterval, rhs.macRefreshInterval)
                 .append(enableNetworkLoopProtection, rhs.enableNetworkLoopProtection)
                 .append(enablePauseFloodProtection, rhs.enablePauseFloodProtection)
-                .append(dependentResourceUri, rhs.dependentResourceUri).append(name, rhs.name).append(id, rhs.id)
-                .append(description, rhs.description).append(status, rhs.status).append(state, rhs.state).append(eTag, rhs.eTag)
-                .append(created, rhs.created).append(modified, rhs.modified).append(category, rhs.category).append(uri, rhs.uri)
+                .append(enableRichTLV, rhs.enableRichTLV)
+                .append(dependentResourceUri, rhs.dependentResourceUri)
+                .append(id, rhs.id)
+                .appendSuper(super.equals(other))
                 .isEquals();
     }
 
