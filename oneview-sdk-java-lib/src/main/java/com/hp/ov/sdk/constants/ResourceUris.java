@@ -21,6 +21,7 @@ public class ResourceUris {
      * PLEASE, try to keep it in alphabetical order
      */
     public static final String SERVER_PROFILE_URI = "/rest/server-profiles";
+    public static final String STORAGE_VOLUME_ATTACHMENT_URI = "/rest/storage-volume-attachments";
 
     public static final String APPLIANCE_VERSION = "/rest/version";
     public static final String ASSOCIATED_PROFILES = "associatedProfiles";
@@ -61,6 +62,8 @@ public class ResourceUris {
     public static final String STORAGE_POOL_URI = "/rest/storage-pools";
     public static final String STORAGE_SYSTEM_URI = "/rest/storage-systems";
     public static final String STORAGE_SYSTEM_HOST_TYPES_URI = "/host-types";
+    public static final String STORAGE_VOLUME_ATTACHMENT_PATH_URI = "paths";
+    public static final String STORAGE_VOLUME_ATTACHMENT_REPAIR_URI = STORAGE_VOLUME_ATTACHMENT_URI + "/repair";
     public static final String STORAGE_VOLUME_URI = "/rest/storage-volumes";
     public static final String STORAGE_VOLUME_TEMPLATE_CONNECTABLE_URI = "connectable-volume-templates";
     public static final String STORAGE_VOLUME_TEMPLATE_URI = "/rest/storage-volume-templates";

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -46,6 +46,7 @@ public class SdkConstants {
     public static final String STORAGE_POOLS = STORAGE_POOL + "s";
     public static final String CONNECTION_TEMPLATE = "connection-template";
     public static final String BULK_ETHERNET_NETWORK = "bulk-ethernet-network";
+    public static final String STORAGE_VOLUME_ATTACHMENTS = "storage-volume-attachments";
     public static final String STORAGE_VOLUME_TEMPLATE = "storage-volume-template";
     public static final String STORAGE_VOLUME_TEMPLATES = STORAGE_VOLUME_TEMPLATE + "s";
     public static final String STORAGE_VOLUME = "storage-volume";
@@ -91,9 +92,7 @@ public class SdkConstants {
     public static final String BIOS = "bios";
     public static final String INTERCONNECT = "interconnect";
     public static final String SUPPORT_DUMP = "support-dumps";
-    /**
-	 * 
-	 */
+
     public static final int BAD_REQUEST = 400;
     public static final int UNAUTHORIZED = 401;
     public static final int FORBIDDEN_REQUEST = 403;
