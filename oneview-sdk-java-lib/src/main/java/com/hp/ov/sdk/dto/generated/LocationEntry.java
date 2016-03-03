@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -33,11 +33,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "relativeValue", "value", "type" })
+@JsonPropertyOrder({
+    "relativeValue",
+    "value",
+    "type"})
 public class LocationEntry implements Serializable {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
     @JsonProperty("relativeValue")
@@ -48,7 +51,7 @@ public class LocationEntry implements Serializable {
     private LocationEntry.Type type;
 
     /**
-     * 
+     *
      * @return The value
      */
     @JsonProperty("value")
@@ -57,7 +60,7 @@ public class LocationEntry implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param value
      *            The value
      */
@@ -67,7 +70,7 @@ public class LocationEntry implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The type
      */
     @JsonProperty("type")
@@ -76,7 +79,7 @@ public class LocationEntry implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param type
      *            The type
      */
@@ -107,7 +110,11 @@ public class LocationEntry implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(relativeValue).append(value).append(type).toHashCode();
+        return new HashCodeBuilder()
+                .append(relativeValue)
+                .append(value)
+                .append(type)
+                .toHashCode();
     }
 
     @Override
@@ -119,14 +126,17 @@ public class LocationEntry implements Serializable {
             return false;
         }
         final LocationEntry rhs = ((LocationEntry) other);
-        return new EqualsBuilder().append(relativeValue, rhs.relativeValue).append(value, rhs.value).append(type, rhs.type)
+        return new EqualsBuilder()
+                .append(relativeValue, rhs.relativeValue)
+                .append(value, rhs.value)
+                .append(type, rhs.type)
                 .isEquals();
     }
 
     @Generated("org.jsonschema2pojo")
     public static enum Type {
 
-        Port("Port"), Bay("Bay"), Enclosure("Enclosure");
+        Port("Port"), Bay("Bay"), Enclosure("Enclosure"), Ip ("Ip"), Password ("Password"), UserId ("UserId");
         private final String value;
         private static Map<String, LocationEntry.Type> constants = new HashMap<String, LocationEntry.Type>();
 
