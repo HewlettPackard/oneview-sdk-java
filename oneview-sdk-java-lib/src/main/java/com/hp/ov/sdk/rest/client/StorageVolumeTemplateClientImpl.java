@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,8 +15,11 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.google.common.base.Strings;
 import com.hp.ov.sdk.adaptors.StorageVolumeTemplateAdaptor;
-import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplateCollection;
@@ -30,34 +33,32 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StorageVolumeTemplateClientImpl.class);
 
+    private final HttpRestClient restClient;
     private final StorageVolumeTemplateAdaptor adaptor;
-    private final TaskAdaptor taskAdaptor;
 
-    private JSONObject jsonObject;
+    protected StorageVolumeTemplateClientImpl(
+            HttpRestClient restClient,
+            StorageVolumeTemplateAdaptor adaptor) {
 
-    protected StorageVolumeTemplateClientImpl(StorageVolumeTemplateAdaptor adaptor, TaskAdaptor taskAdaptor) {
+        this.restClient = restClient;
         this.adaptor = adaptor;
-        this.taskAdaptor = taskAdaptor;
     }
 
     public static StorageVolumeTemplateClient getClient() {
         return new StorageVolumeTemplateClientImpl(
-                new StorageVolumeTemplateAdaptor(),
-                TaskAdaptor.getInstance());
+                HttpRestClient.getClient(),
+                new StorageVolumeTemplateAdaptor());
     }
 
     @Override
     public StorageVolumeTemplate getStorageVolumeTemplate(final RestParams params, final String resourceId) {
-        LOGGER.info("StorageVolumeTemplateClientImpl : getStorageVolumeTemplate : Start");
+        LOGGER.trace("StorageVolumeTemplateClientImpl : getStorageVolumeTemplate : Start");
 
         // validate args
         if (null == params) {
@@ -67,25 +68,24 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_TEMPLATE_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("StorageVolumeTemplateClientImpl : getStorageVolumeTemplate : response from OV :" + returnObj);
-        if (null == returnObj || returnObj.equals("")) {
+
+        if (Strings.isNullOrEmpty(returnObj)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.STORAGE_VOLUME_TEMPLATE, null);
         }
-        // Call adaptor to convert to DTO
-
         final StorageVolumeTemplate storageVolumeTemplateDto = adaptor.buildDto(returnObj);
 
         LOGGER.debug("StorageVolumeTemplateClientImpl : getStorageVolumeTemplate : Name :" + storageVolumeTemplateDto.getName());
-        LOGGER.info("StorageVolumeTemplateClientImpl : getStorageVolumeTemplate : End");
+        LOGGER.trace("StorageVolumeTemplateClientImpl : getStorageVolumeTemplate : End");
 
         return storageVolumeTemplateDto;
     }
 
     @Override
     public StorageVolumeTemplateCollection getAllStorageVolumeTemplates(final RestParams params) {
-        LOGGER.info("StorageVolumeTemplateClientImpl : getAllStorageVolumeTemplates : Start");
+        LOGGER.trace("StorageVolumeTemplateClientImpl : getAllStorageVolumeTemplates : Start");
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
@@ -94,29 +94,26 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_TEMPLATE_URI));
 
-        // call rest client
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("StorageVolumeTemplateClientImpl : getAllStorageVolumeTemplates : response from OV :" + returnObj);
 
-        if (null == returnObj || returnObj.equals("")) {
+        if (Strings.isNullOrEmpty(returnObj)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.STORAGE_VOLUME_TEMPLATES, null);
         }
-        // Call adaptor to convert to DTO
-
-        final StorageVolumeTemplateCollection storageVolumeTemplateCollectionDto = adaptor.buildCollectionDto(returnObj);
+        final StorageVolumeTemplateCollection storageVolumeTemplateCollectionDto
+                = adaptor.buildStorageVolumeTemplateCollection(returnObj);
 
         LOGGER.debug("StorageVolumeTemplateClientImpl : getAllStorageVolumeTemplates : members count :"
                 + storageVolumeTemplateCollectionDto.getCount());
-        LOGGER.info("StorageVolumeTemplateClientImpl : getAllStorageVolumeTemplates : End");
+        LOGGER.trace("StorageVolumeTemplateClientImpl : getAllStorageVolumeTemplates : End");
 
         return storageVolumeTemplateCollectionDto;
     }
 
     @Override
     public StorageVolumeTemplate getStorageVolumeTemplateByName(final RestParams params, final String name) {
-        StorageVolumeTemplate storageVolumeTemplateDto = null;
-        LOGGER.info("StorageVolumeTemplateClientImpl : getNetworkSetByName : Start");
+        LOGGER.trace("StorageVolumeTemplateClientImpl : getNetworkSetByName : Start");
         // final String query = "filter=\"name=\'" + name + "\'\"";
         final String query = UrlUtils.createFilterString(name);
 
@@ -128,19 +125,20 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_TEMPLATE_URI, query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("StorageVolumeTemplateClientImpl : getStorageVolumeTemplateByName : response from OV :" + returnObj);
-        if (null == returnObj || returnObj.equals("")) {
+
+        if (Strings.isNullOrEmpty(returnObj)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.STORAGE_VOLUME_TEMPLATE, null);
         }
-        // Call adaptor to convert to DTO
 
-        final StorageVolumeTemplateCollection storageVolumeTemplateCollectionDto = adaptor.buildCollectionDto(returnObj);
+        StorageVolumeTemplate storageVolumeTemplateDto = null;
+        StorageVolumeTemplateCollection storageVolumeTemplateCollectionDto
+                = adaptor.buildStorageVolumeTemplateCollection(returnObj);
+
         if (storageVolumeTemplateCollectionDto.getCount() != 0) {
             storageVolumeTemplateDto = storageVolumeTemplateCollectionDto.getMembers().get(0);
-        } else {
-            storageVolumeTemplateDto = null;
         }
 
         if (storageVolumeTemplateDto == null) {
@@ -148,7 +146,7 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
             throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null,
                     SdkConstants.STORAGE_VOLUME_TEMPLATE, null);
         }
-        LOGGER.info("StorageVolumeTemplateClientImpl : getStorageVolumeTemplateByName : End");
+        LOGGER.trace("StorageVolumeTemplateClientImpl : getStorageVolumeTemplateByName : End");
 
         return storageVolumeTemplateDto;
     }
@@ -156,11 +154,13 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
     @Override
     public StorageVolumeTemplate createStorageVolumeTemplate(final RestParams params,
             StorageVolumeTemplate storageVolumeTemplateDto, final boolean aSync, final boolean useJsonRequest) {
-        LOGGER.info("StorageVolumeTemplateClientImpl : createStorageVolumeTemplate : Start");
-        String returnObj = null;
+        LOGGER.trace("StorageVolumeTemplateClientImpl : createStorageVolumeTemplate : Start");
 
         // validate params
-        if (storageVolumeTemplateDto == null) {
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
+                    SdkConstants.APPLIANCE, null);
+        } else if (storageVolumeTemplateDto == null) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
                     SdkConstants.STORAGE_VOLUME_TEMPLATE, null);
         }
@@ -169,14 +169,14 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_TEMPLATE_URI));
 
         // TODO - check for json request in the input dto. if it is present,
-        // then
-        // convert that into jsonObject and pass it rest client
+        // then convert that into jsonObject and pass it rest client
         // idea is : user can create json string and call the sdk api.
         // user can save time in creating storageVolumeTemplate dto.
 
         // create JSON request from dto
-        jsonObject = adaptor.buildJsonObjectFromDto(storageVolumeTemplateDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        JSONObject jsonObject = adaptor.buildJsonObjectFromDto(storageVolumeTemplateDto);
+        String returnObj = restClient.sendRequest(params, jsonObject);
+
         // convert returnObj to storageVolumeTemplate
         storageVolumeTemplateDto = adaptor.buildDto(returnObj);
 
@@ -184,7 +184,7 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
         LOGGER.debug("StorageVolumeTemplateClientImpl : createStorageVolumeTemplate : StorageVolumeTemplate ="
                 + storageVolumeTemplateDto.toString());
 
-        LOGGER.info("StorageVolumeTemplateClientImpl : createStorageVolumeTemplate : End");
+        LOGGER.trace("StorageVolumeTemplateClientImpl : createStorageVolumeTemplate : End");
 
         return storageVolumeTemplateDto;
     }
@@ -192,31 +192,28 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
     @Override
     public StorageVolumeTemplate updateStorageVolumeTemplate(final RestParams params, final String resourceId,
             StorageVolumeTemplate storageVolumeTemplateDto, final boolean useJsonRequest) {
-        LOGGER.info("StorageVolumeTemplateClientImpl : updateStorageVolumeTemplate : Start");
+        LOGGER.trace("StorageVolumeTemplateClientImpl : updateStorageVolumeTemplate : Start");
 
         // validate args
         if (null == params) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
-        }
-        // validate params
-        if (storageVolumeTemplateDto == null) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
+                    SdkConstants.APPLIANCE, null);
+        } else if (storageVolumeTemplateDto == null) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
                     SdkConstants.STORAGE_VOLUME_TEMPLATE, null);
         }
         // set the additional params
         params.setType(HttpMethodType.PUT);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_TEMPLATE_URI, resourceId));
-        String returnObj = null;
 
         // TODO - check for json request in the input dto. if it is present,
-        // then
-        // convert that into jsonObject and pass it rest client
+        // then convert that into jsonObject and pass it rest client
         // idea is : user can create json string and call the sdk api.
         // user can save time in creating storageVolumeTemplate dto.
 
         // create JSON request from dto
-        jsonObject = adaptor.buildJsonObjectFromDto(storageVolumeTemplateDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        JSONObject jsonObject = adaptor.buildJsonObjectFromDto(storageVolumeTemplateDto);
+        String returnObj = restClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         storageVolumeTemplateDto = adaptor.buildDto(returnObj);
 
@@ -224,7 +221,7 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
         LOGGER.debug("StorageVolumeTemplateClientImpl : updateStorageVolumeTemplate : storageVolumeTemplate ="
                 + storageVolumeTemplateDto.toString());
 
-        LOGGER.info("StorageVolumeTemplateClientImpl : updateStorageVolumeTemplate : End");
+        LOGGER.trace("StorageVolumeTemplateClientImpl : updateStorageVolumeTemplate : End");
 
         return storageVolumeTemplateDto;
 
@@ -232,41 +229,71 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
 
     @Override
     public String deleteStorageVolumeTemplate(final RestParams params, final String resourceId) {
-        LOGGER.info("StorageVolumeTemplateClientImpl : deleteStorageVolumeTemplate : Start");
+        LOGGER.trace("StorageVolumeTemplateClientImpl : deleteStorageVolumeTemplate : Start");
 
         // validate args
         if (null == params) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
+                    SdkConstants.APPLIANCE, null);
         }
         // set the additional params
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_TEMPLATE_URI, resourceId));
 
-        String returnObj = HttpRestClient.sendRequestToHPOV(params);
-        if (!returnObj.isEmpty() || returnObj != null) {
+        String returnObj = restClient.sendRequest(params);
+
+        if (!Strings.isNullOrEmpty(returnObj)) {
             returnObj = "Deleted";
         }
         LOGGER.debug("StorageVolumeTemplateClientImpl : deleteStorageVolumeTemplate : response from OV :" + returnObj);
 
-        if (null == returnObj || returnObj.equals("")) {
+        if (Strings.isNullOrEmpty(returnObj)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.STORAGE_VOLUME_TEMPLATE, null);
         }
-        /************ Returns Response code 204 *********************************/
-        // taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
         LOGGER.debug("StorageVolumeTemplateClientImpl : deleteStorageVolumeTemplate : returnObj =" + returnObj);
+        LOGGER.trace("StorageVolumeTemplateClientImpl : deleteStorageVolumeTemplate : End");
 
-        LOGGER.info("StorageVolumeTemplateClientImpl : deleteStorageVolumeTemplate : End");
-
-        return null;
+        return returnObj;
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public ConnectableStorageVolumeTemplateCollection getConnectableVolumeTemplates(final RestParams params) {
+        LOGGER.trace("StorageVolumeTemplateClientImpl : getConnectableVolumeTemplates : Start");
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(),
+                ResourceUris.STORAGE_VOLUME_TEMPLATE_URI,
+                ResourceUris.STORAGE_VOLUME_TEMPLATE_CONNECTABLE_URI));
+
+        String returnObj = restClient.sendRequest(params);
+
+        LOGGER.debug("StorageVolumeTemplateClientImpl : getConnectableVolumeTemplates : response from OV :" + returnObj);
+
+        if (Strings.isNullOrEmpty(returnObj)) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
+                    SdkConstants.STORAGE_VOLUME_TEMPLATES, null);
+        }
+        ConnectableStorageVolumeTemplateCollection connectableCollection
+                = adaptor.buildConnectableStorageVolumeTemplateCollection(returnObj);
+
+        LOGGER.debug("StorageVolumeTemplateClientImpl : getConnectableVolumeTemplates : members count :"
+                + connectableCollection.getCount());
+        LOGGER.trace("StorageVolumeTemplateClientImpl : getConnectableVolumeTemplates : End");
+
+        return connectableCollection;
+    }
+
+    @Override
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        StorageVolumeTemplate storageVolumeTemplateDto = getStorageVolumeTemplateByName(creds, name);
+        StorageVolumeTemplate storageVolumeTemplateDto = getStorageVolumeTemplateByName(params, name);
 
         if (null != storageVolumeTemplateDto.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(storageVolumeTemplateDto.getUri());
@@ -274,10 +301,5 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
         return resourceId;
     }
 
-    @Override
-    public ConnectableStorageVolumeTemplateCollection getConnectableVolumeTemplates(final RestParams params) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
-    }
 
 }

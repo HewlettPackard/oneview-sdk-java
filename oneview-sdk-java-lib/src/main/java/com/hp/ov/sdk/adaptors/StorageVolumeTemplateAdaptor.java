@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,11 +15,12 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
+import org.json.JSONObject;
+import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplateCollection;
 import com.hp.ov.sdk.dto.StorageVolumeTemplate;
 import com.hp.ov.sdk.dto.StorageVolumeTemplateCollection;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
-import org.json.JSONObject;
 
 public class StorageVolumeTemplateAdaptor extends BaseAdaptor<StorageVolumeTemplate, Object> {
 
@@ -34,18 +35,23 @@ public class StorageVolumeTemplateAdaptor extends BaseAdaptor<StorageVolumeTempl
         return storageVolumeTemplateDto;
     }
 
-    public StorageVolumeTemplateCollection buildCollectionDto(final Object source) {
-        // TODO - exceptions
-        if (null == source || source.equals("")) {
-            return null;
-        }
+    public StorageVolumeTemplateCollection buildStorageVolumeTemplateCollection(String source) {
+        return this.buildCollectionDto(source, StorageVolumeTemplateCollection.class);
+    }
+
+    public ConnectableStorageVolumeTemplateCollection buildConnectableStorageVolumeTemplateCollection(String source) {
+        return this.buildCollectionDto(source, ConnectableStorageVolumeTemplateCollection.class);
+    }
+
+    private <T> T buildCollectionDto(Object source, Class<T> clazz) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
         // convert json Object to DTO, replace quotes and back slash in the file
-        final StorageVolumeTemplateCollection storageVolumeTemplateCollectionDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
-                        .convertObjectToJsonString(source))), StorageVolumeTemplateCollection.class);
-        return storageVolumeTemplateCollectionDto;
+        T collection = converter.convertJsonToObject(StringUtil.replaceQuotesBackSlashWithQuote(
+                StringUtil.replaceQuotesAndBackSlash(
+                        converter.convertObjectToJsonString(source))), clazz);
+
+        return collection;
     }
 
     public JSONObject buildJsonObjectFromDto(final StorageVolumeTemplate source) {
