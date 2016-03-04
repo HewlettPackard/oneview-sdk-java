@@ -51,6 +51,9 @@ public class SdkConstants {
     public static final String STORAGE_VOLUME_TEMPLATES = STORAGE_VOLUME_TEMPLATE + "s";
     public static final String STORAGE_VOLUME = "storage-volume";
     public static final String STORAGE_VOLUMES = STORAGE_VOLUME + "s";
+    public static final String STORAGE_SNAPSHOT = "storage-snapshot";
+    public static final String STORAGE_SNAPSHOTS = STORAGE_SNAPSHOT + "s";
+    public static final String STORAGE_ATTACHABLE_VOLUMES = "attachable-volumes";
     public static final String DEVICE_MANAGER = "device-managers";
     public static final String DEVICE_MANAGERS = DEVICE_MANAGER + "s";
     public static final String MANAGED_SAN = "managed-sans";

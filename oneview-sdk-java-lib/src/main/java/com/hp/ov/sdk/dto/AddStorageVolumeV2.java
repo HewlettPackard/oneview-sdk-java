@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -16,155 +16,113 @@
 package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
+import com.google.gson.annotations.Since;
 
 public class AddStorageVolumeV2 implements Serializable {
 
-    /**
-	 * 
-	 */
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -2745402537486462067L;
 
     private String description;
     private Boolean isPermanent;
     private String name;
     private StorageVolumeProvisioningParameters provisioningParameters;
+
+    @Since(200)
+    private String snapshotPoolUri;
+    @Since(200)
+    private String snapshotUri;
+    @Since(200)
+    private String storageSystemVolumeName;
+
     private String storageSystemUri;
     private String templateUri;
     private String wwn;
     private String type;
 
-    /**
-     * 
-     * @return The description
-     */
     public String getDescription() {
         return description;
     }
 
-    /**
-     * 
-     * @param description
-     *            The description
-     */
     public void setDescription(final String description) {
         this.description = description;
     }
 
-    /**
-     * 
-     * @return The isPermanent
-     */
     public Boolean getIsPermanent() {
         return isPermanent;
     }
 
-    /**
-     * 
-     * @param isPermanent
-     *            The isPermanent
-     */
     public void setIsPermanent(final Boolean isPermanent) {
         this.isPermanent = isPermanent;
     }
 
-    /**
-     * 
-     * @return The name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * 
-     * @param name
-     *            The name
-     */
     public void setName(final String name) {
         this.name = name;
     }
 
-    /**
-     * 
-     * @return The provisioningParameters
-     */
     public StorageVolumeProvisioningParameters getProvisioningParameters() {
         return provisioningParameters;
     }
 
-    /**
-     * 
-     * @param provisioningParameters
-     *            The provisioningParameters
-     */
     public void setProvisioningParameters(final StorageVolumeProvisioningParameters provisioningParameters) {
         this.provisioningParameters = provisioningParameters;
     }
 
-    /**
-     * 
-     * @return The storageSystemUri
-     */
+    public String getSnapshotPoolUri() {
+        return snapshotPoolUri;
+    }
+
+    public void setSnapshotPoolUri(String snapshotPoolUri) {
+        this.snapshotPoolUri = snapshotPoolUri;
+    }
+
+    public String getSnapshotUri() {
+        return snapshotUri;
+    }
+
+    public void setSnapshotUri(String snapshotUri) {
+        this.snapshotUri = snapshotUri;
+    }
+
+    public String getStorageSystemVolumeName() {
+        return storageSystemVolumeName;
+    }
+
+    public void setStorageSystemVolumeName(String storageSystemVolumeName) {
+        this.storageSystemVolumeName = storageSystemVolumeName;
+    }
+
     public String getStorageSystemUri() {
         return storageSystemUri;
     }
 
-    /**
-     * 
-     * @param storageSystemUri
-     *            The storageSystemUri
-     */
     public void setStorageSystemUri(final String storageSystemUri) {
         this.storageSystemUri = storageSystemUri;
     }
 
-    /**
-     * 
-     * @return The templateUri
-     */
     public String getTemplateUri() {
         return templateUri;
     }
 
-    /**
-     * 
-     * @param templateUri
-     *            The templateUri
-     */
     public void setTemplateUri(final String templateUri) {
         this.templateUri = templateUri;
     }
 
-    /**
-     * 
-     * @return The wwn
-     */
     public String getWwn() {
         return wwn;
     }
 
-    /**
-     * 
-     * @param wwn
-     *            The wwn
-     */
     public void setWwn(final String wwn) {
         this.wwn = wwn;
     }
 
-    /**
-     * 
-     * @return The type
-     */
     public String getType() {
         return type;
     }
 
-    /**
-     * 
-     * @param type
-     *            The type
-     */
     public void setType(final String type) {
         this.type = type;
     }

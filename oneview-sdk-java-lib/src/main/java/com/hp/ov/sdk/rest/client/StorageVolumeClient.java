@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -17,12 +17,18 @@ package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.AddStorageVolumeV2;
 import com.hp.ov.sdk.dto.AttachableStorageVolumeCollection;
+import com.hp.ov.sdk.dto.ExtraStorageVolumeCollection;
+import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
 import com.hp.ov.sdk.dto.StorageVolumeCollection;
+import com.hp.ov.sdk.dto.StorageVolumeSnapshot;
+import com.hp.ov.sdk.dto.StorageVolumeSnapshotCollection;
 import com.hp.ov.sdk.dto.StorageVolumeV2;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface StorageVolumeClient {
+
+    String REPAIR_FILTER = "alertFixType=ExtraManagedStorageVolumePaths";
 
     /**
      * The module aids in fetching the StorageVolume details for the specified
@@ -36,7 +42,7 @@ public interface StorageVolumeClient {
      * @return storageVolumeDto, which is a object containing the StorageVolume
      *         details.
      */
-    public StorageVolumeV2 getStorageVolume(final RestParams params, final String resourceId);
+    StorageVolumeV2 getStorageVolume(final RestParams params, final String resourceId);
 
     /**
      * The module aids in fetching the StorageVolume details for all the
@@ -48,7 +54,7 @@ public interface StorageVolumeClient {
      * @return storageVolumeCollectionDto, which is a object containing a
      *         collection of StorageVolume details.
      */
-    public StorageVolumeCollection getAllStorageVolumes(final RestParams params);
+    StorageVolumeCollection getAllStorageVolumes(final RestParams params);
 
     /**
      * The module aids in fetching the StorageVolume details for the
@@ -62,7 +68,7 @@ public interface StorageVolumeClient {
      * @return storageVolumeDto, which is a object containing the StorageVolume
      *         details.
      */
-    public StorageVolumeV2 getStorageVolumeByName(final RestParams params, final String name);
+    StorageVolumeV2 getStorageVolumeByName(final RestParams params, final String name);
 
     /**
      * The module aids in creation of StorageVolume when provided with the
@@ -84,7 +90,7 @@ public interface StorageVolumeClient {
      *            processed.
      * @return taskResource which returns the task status for the process
      */
-    public TaskResourceV2 createStorageVolume(final RestParams params, final AddStorageVolumeV2 addStorageVolumeDto,
+    TaskResourceV2 createStorageVolume(final RestParams params, final AddStorageVolumeV2 addStorageVolumeDto,
             final boolean aSync, final boolean useJsonRequest);
 
     /**
@@ -105,7 +111,7 @@ public interface StorageVolumeClient {
      *            converted to StorageVolume Object using adaptor and processed.
      * @return String, is Updated if successful.
      */
-    public String updateStorageVolume(final RestParams params, final String resourceId, final StorageVolumeV2 storageVolumeDto,
+    String updateStorageVolume(final RestParams params, final String resourceId, final StorageVolumeV2 storageVolumeDto,
             final boolean useJsonRequest);
 
     /**
@@ -122,7 +128,7 @@ public interface StorageVolumeClient {
      *            Flag input to process request asynchronously or synchronously.
      * @return taskResource which returns the task status for the process
      */
-    public TaskResourceV2 deleteStorageVolume(final RestParams params, final String resourceId, final boolean aSync);
+    TaskResourceV2 deleteStorageVolume(final RestParams params, final String resourceId, final boolean aSync);
 
     /**
      * This method aids in fetching the volumes that are connected on the
@@ -135,13 +141,84 @@ public interface StorageVolumeClient {
      * @return attachableStorageVolumeCollection, volume object that are
      *         attached to storage system.
      */
-    public AttachableStorageVolumeCollection getAttachableVolumes(final RestParams params);
+    AttachableStorageVolumeCollection getAttachableVolumes(final RestParams params);
+
+    /**
+     * Gets a snapshot of a volume.
+     *
+     * @param params structure containing the connection details.
+     * @param storageVolumeId resourceId for storage volume as seen in HP OneView.
+     * @param snapshotId resourceId for the snapshot of the storage volume.
+     *
+     * @return a {@link StorageVolumeSnapshot} or null in case the parameter snapshotId
+     * does not match any existing snapshot.
+     */
+    StorageVolumeSnapshot getStorageVolumeSnapshot(RestParams params, String storageVolumeId, String snapshotId);
+
+    /**
+     * Gets all snapshots of a volume.
+     *
+     * @param params structure containing the connection details.
+     * @param storageVolumeId resourceId for storage volume as seen in HP OneView.
+     *
+     * @return a {@link StorageVolumeSnapshotCollection} containing all snapshots for
+     * a storage volume.
+     */
+    StorageVolumeSnapshotCollection getAllStorageVolumeSnapshots(RestParams params, String storageVolumeId);
+
+    /**
+     * Creates a snapshot for the volume specified.
+     *
+     * @param params structure containing the connection details.
+     * @param storageVolumeId resourceId for storage volume as seen in HP OneView.
+     * @param snapshot {@link StorageVolumeSnapshot} object containing the data to be used during
+     * the snapshot creation.
+     * @param aSync flag input to process request asynchronously or synchronously.
+     *
+     * @return {@link TaskResourceV2} which returns the task status for the process.
+     */
+    TaskResourceV2 createStorageVolumeSnapshot(RestParams params, String storageVolumeId,
+            StorageVolumeSnapshot snapshot, boolean aSync);
+
+    /**
+     * Deletes a snapshot from OneView and storage system.
+     *
+     * @param params structure containing the connection details.
+     * @param storageVolumeId resourceId for storage volume as seen in HP OneView.
+     * @param snapshotId resourceId for the snapshot of the storage volume.
+     * @param aSync flag input to process request asynchronously or synchronously.
+     *
+     * @return {@link TaskResourceV2} which returns the task status for the process.
+     */
+    TaskResourceV2 deleteStorageVolumeSnapshot(RestParams params, String storageVolumeId,
+            String snapshotId, boolean aSync);
+
+    /**
+     * Gets the list of extra managed storage volume paths.
+     *
+     * @param params structure containing the connection details.
+     *
+     * @return {@link ExtraStorageVolumeCollection} containing the resources found.
+     */
+    ExtraStorageVolumeCollection getExtraManagedStorageVolumePaths(RestParams params);
+
+    /**
+     * Removes extra presentations from a specified volume on the storage system.
+     *
+     * @param params structure containing the connection details.
+     * @param repair information about the extra paths to delete.
+     * @param aSync flag input to process request asynchronously or synchronously.
+     *
+     * @return {@link TaskResourceV2} which returns the task status for the process.
+     */
+    TaskResourceV2 repairExtraManagedStorageVolumePath(RestParams params,
+            ExtraStorageVolumeRepair repair, boolean aSync);
 
     /**
      * The module aids in fetching the StorageVolume details for the
      * StorageVolume name as specified in HP OneView.
      * 
-     * @param creds
+     * @param params
      *            The RestParams is a structure containing the connection
      *            details.
      * @param name
@@ -150,5 +227,5 @@ public interface StorageVolumeClient {
      * @return String, which is a resource Id for the StorageVolume name as seen
      *         in HPOneView.
      */
-    public String getId(final RestParams creds, final String name);
+    String getId(final RestParams params, final String name);
 }
