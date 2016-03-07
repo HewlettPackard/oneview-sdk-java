@@ -234,10 +234,10 @@ public class StorageVolumeAttachmentsClientImpl implements StorageVolumeAttachme
     }
 
     @Override
-    public TaskResourceV2 repairExtraUnmanagedStorageVolumeAttachments(RestParams params,
+    public TaskResourceV2 repairExtraUnmanagedStorageVolumeAttachment(RestParams params,
             ExtraStorageVolumeRepair repair, boolean aSync) {
 
-        LOGGER.trace("StorageVolumeAttachmentsClientImpl : repairExtraUnmanagedStorageVolumeAttachments : Start");
+        LOGGER.trace("StorageVolumeAttachmentsClientImpl : repairExtraUnmanagedStorageVolumeAttachment : Start");
 
         if (params == null) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
@@ -252,7 +252,7 @@ public class StorageVolumeAttachmentsClientImpl implements StorageVolumeAttachme
         String response = restClient.sendRequest(params, jsonObject);
 
         LOGGER.debug("StorageVolumeAttachmentsClientImpl : " +
-                "repairExtraUnmanagedStorageVolumeAttachments : response from OV : " + response);
+                "repairExtraUnmanagedStorageVolumeAttachment : response from OV : " + response);
 
         if (Strings.isNullOrEmpty(response)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -265,7 +265,7 @@ public class StorageVolumeAttachmentsClientImpl implements StorageVolumeAttachme
             task = taskMonitor.checkStatus(params, task.getUri(), TIMEOUT);
         }
 
-        LOGGER.trace("StorageVolumeAttachmentsClientImpl : repairExtraUnmanagedStorageVolumeAttachments : End");
+        LOGGER.trace("StorageVolumeAttachmentsClientImpl : repairExtraUnmanagedStorageVolumeAttachment : End");
 
         return task;
     }

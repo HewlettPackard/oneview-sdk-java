@@ -191,7 +191,7 @@ public class StorageVolumeAttachmentClientSample {
         }
     }
 
-    private void repairExtraUnmanagedStorageVolumeAttachaments() {
+    private void repairExtraUnmanagedStorageVolumeAttachment() {
         RestParams params = null;
         try {
             params = HPOneViewCredential.createCredentials();
@@ -201,31 +201,31 @@ public class StorageVolumeAttachmentClientSample {
             repair.setType("ExtraUnmanagedStorageVolumes");
             repair.setResourceUri(String.format("%s/%s", ResourceUris.SERVER_PROFILE_URI, SERVER_PROFILE_ID));
 
-            TaskResourceV2 task = this.storageVolumeAttachmentsClient.repairExtraUnmanagedStorageVolumeAttachments(
+            TaskResourceV2 task = this.storageVolumeAttachmentsClient.repairExtraUnmanagedStorageVolumeAttachment(
                     params, repair, false);
 
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachaments :" +
+            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment :" +
                     "task object returned to client : " + task);
         } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachaments : " +
+            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment : " +
                     "resource you are looking is not found");
         } catch (final SDKBadRequestException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachaments : " +
+            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment : " +
                     "bad request, may be duplicate resource name or invalid inputs. check inputs and try again");
         } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachaments : " +
+            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment : " +
                     "no such url : " + params.getHostname());
         } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachaments :" +
+            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment :" +
                     "appliance not reachable at : " + params.getHostname());
         } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachaments : " +
+            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment : " +
                     "No response from appliance : " + params.getHostname());
         } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachaments : " +
+            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment : " +
                     "arguments are null ");
         } catch (final SDKTasksException e) {
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachaments : "
+            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment : "
                     + "errors in task, please check task resource for more details ");
         }
     }
@@ -238,7 +238,7 @@ public class StorageVolumeAttachmentClientSample {
         client.getStorageVolumeAttachmentPath();
         client.getAllStorageVolumeAttachmentPaths();
         client.getExtraUnmanagedStorageVolumeAttachaments();
-        client.repairExtraUnmanagedStorageVolumeAttachaments();
+        client.repairExtraUnmanagedStorageVolumeAttachment();
     }
 
 }

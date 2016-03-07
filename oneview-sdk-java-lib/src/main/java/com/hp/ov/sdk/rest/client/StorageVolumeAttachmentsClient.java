@@ -100,7 +100,7 @@ public interface StorageVolumeAttachmentsClient {
      *
      * @return taskResource which returns the task status for the process
      */
-    TaskResourceV2 repairExtraUnmanagedStorageVolumeAttachments(RestParams params,
+    TaskResourceV2 repairExtraUnmanagedStorageVolumeAttachment(RestParams params,
             ExtraStorageVolumeRepair repair, boolean aSync);
 
 }

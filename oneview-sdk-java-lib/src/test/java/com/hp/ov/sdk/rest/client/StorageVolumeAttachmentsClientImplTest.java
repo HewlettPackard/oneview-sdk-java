@@ -236,21 +236,21 @@ public class StorageVolumeAttachmentsClientImplTest {
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
-    public void shouldThrowExceptionWhenTryingToRepairExtraUnmanagedStorageVolumeAttachmentsWithoutParams() {
-        this.storageClient.repairExtraUnmanagedStorageVolumeAttachments(null,
+    public void shouldThrowExceptionWhenTryingToRepairExtraUnmanagedStorageVolumeAttachmentWithoutParams() {
+        this.storageClient.repairExtraUnmanagedStorageVolumeAttachment(null,
                 new ExtraStorageVolumeRepair(), false);
     }
 
     @Test(expected = SDKNoResponseException.class)
-    public void shouldThrowExceptionWhenServerReturnsNoAnswerForRepairExtraUnmanagedStorageVolumeAttachments() {
+    public void shouldThrowExceptionWhenServerReturnsNoAnswerForRepairExtraUnmanagedStorageVolumeAttachment() {
         given(restClient.sendRequest(any(RestParams.class))).willReturn("");
 
-        this.storageClient.repairExtraUnmanagedStorageVolumeAttachments(new RestParams(),
+        this.storageClient.repairExtraUnmanagedStorageVolumeAttachment(new RestParams(),
                 new ExtraStorageVolumeRepair(), false);
     }
 
     @Test
-    public void shouldSynchronousRepairExtraUnmanagedStorageVolumeAttachments() {
+    public void shouldSynchronousRepairExtraUnmanagedStorageVolumeAttachment() {
         String taskAsJson = "{\"type\" : \"taskResource\"}";
         JSONObject jsonObject = new JSONObject();
 
@@ -265,7 +265,7 @@ public class StorageVolumeAttachmentsClientImplTest {
         expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(),
                 ResourceUris.STORAGE_VOLUME_ATTACHMENT_REPAIR_URI));
 
-        this.storageClient.repairExtraUnmanagedStorageVolumeAttachments(new RestParams(),
+        this.storageClient.repairExtraUnmanagedStorageVolumeAttachment(new RestParams(),
                 new ExtraStorageVolumeRepair(), false);
 
         then(restClient).should().sendRequest(eq(expectedRestParams), eq(jsonObject));
