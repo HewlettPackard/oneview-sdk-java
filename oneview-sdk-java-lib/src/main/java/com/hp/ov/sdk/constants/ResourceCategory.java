@@ -21,6 +21,7 @@ public class ResourceCategory {
     public static final String RC_NETWORK_V200 = "ethernet-networkV3";
     public static final String RC_BULK_NETWORK = "bulk-ethernet-network";
     public static final String RC_FCNETWORK = "fc-networkV2";
+    public static final String RC_FCOE_NETWORK = "fcoe-network";
     public static final String RC_SERVERHARDWARE = "server-hardware";
     public static final String RC_NETWORKSET = "network-set";
     public static final String RC_LOGICALINTERCONNECTGROUP = "logical-interconnect-groupV2";
