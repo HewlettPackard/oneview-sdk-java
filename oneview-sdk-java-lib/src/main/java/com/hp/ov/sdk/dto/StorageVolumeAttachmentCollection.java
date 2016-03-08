@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -18,19 +18,19 @@ package com.hp.ov.sdk.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AttachableStorageVolumeCollection extends BaseCollectionResource<AttachableStorageVolume> {
+public class StorageVolumeAttachmentCollection extends BaseCollectionResource<StorageVolumeAttachment> {
 
-    private static final long serialVersionUID = 2079392089525884653L;
+    private static final long serialVersionUID = -8177794621886051041L;
 
-    private final List<AttachableStorageVolume> members = new ArrayList<>();
+    private final List<StorageVolumeAttachment> members = new ArrayList<>();
 
     @Override
-    public List<AttachableStorageVolume> getMembers() {
+    public List<StorageVolumeAttachment> getMembers() {
         return new ArrayList<>(this.members);
     }
 
     @Override
-    public void setMembers(final List<AttachableStorageVolume> members) {
+    public void setMembers(List<StorageVolumeAttachment> members) {
         if (members != null) {
             this.members.clear();
             this.members.addAll(members);
@@ -38,5 +38,4 @@ public class AttachableStorageVolumeCollection extends BaseCollectionResource<At
             super.setCount(this.members.size());
         }
     }
-
 }

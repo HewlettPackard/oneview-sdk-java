@@ -223,6 +223,7 @@ public class StorageVolumeTemplateClientSample {
             if (null != storageVolumeTemplateDto.getUri()) {
                 resourceId = UrlUtils.getResourceIdFromUri(storageVolumeTemplateDto.getUri());
             }
+            storageVolumeTemplateDto.setType(ResourceCategory.RC_STORAGE_VOLUME_TEMPLATE_V200); //QXCR1001472124
             storageVolumeTemplateDto.setName(resourceName + "_Updated");
 
             /**

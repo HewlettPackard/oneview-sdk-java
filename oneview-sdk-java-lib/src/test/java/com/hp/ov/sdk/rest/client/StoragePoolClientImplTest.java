@@ -149,7 +149,7 @@ public class StoragePoolClientImplTest {
     }
 
     @Test(expected = SDKResourceNotFoundException.class)
-    public void shouldThrowExceptionWhenEmptyStoragePoolCollectionisReturnedForTheGivenName() {
+    public void shouldThrowExceptionWhenEmptyStoragePoolCollectionIsReturnedForTheGivenName() {
         String anyStoragePoolName = "random-NAME";
         String anyStorageSystemUri = "random-URI";
         String storagePoolCollectionValue = "{\"type\":\"StoragePoolList\"," +
