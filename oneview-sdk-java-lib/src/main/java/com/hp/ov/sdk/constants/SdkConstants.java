@@ -40,6 +40,8 @@ public class SdkConstants {
     public static final String SERVER_PROFILES = SERVER_PROFILE + "s";
     public static final String FC_NETWORK = "FC_NETWORK";
     public static final String FC_NETWORKS = FC_NETWORK + "s";
+    public static final String FCOE_NETWORK = "FCOE_NETWORK";
+    public static final String FCOE_NETWORKS = FCOE_NETWORK + "s";
     public static final String STORAGE_SYSTEM = "storage-system";
     public static final String STORAGE_SYSTEMS = STORAGE_SYSTEM + "s";
     public static final String STORAGE_POOL = "storage-pool";
