@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,75 +31,95 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.BaseModelResource;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "reachability", "networkType", "portConfigInfos", "networkUris", "fcNetworkUris", "logicalInterconnectUri",
-        "lacpTimer", "manualLoginRedistributionState", "connectionMode", "ethernetNetworkType", "primaryPortLocation",
-        "nativeNetworkUri", "description", "status", "name", "state", "created", "eTag", "modified", "category", "uri", "type" })
-public class UplinkSets implements Serializable {
+@JsonPropertyOrder({
+    "reachability",
+    "networkType",
+    "portConfigInfos",
+    "networkUris",
+    "fcNetworkUris",
+    "logicalInterconnectUri",
+    "lacpTimer",
+    "manualLoginRedistributionState",
+    "connectionMode",
+    "ethernetNetworkType",
+    "primaryPortLocation",
+    "nativeNetworkUri"})
+public class UplinkSets extends BaseModelResource {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
     @JsonProperty("reachability")
     private UplinkSets.Reachability reachability;
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      */
     @JsonProperty("networkType")
     private UplinkSets.NetworkType networkType;
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      */
     @JsonProperty("portConfigInfos")
     private List<PortConfigInfo> portConfigInfos = new ArrayList<PortConfigInfo>();
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      */
     @JsonProperty("networkUris")
     private List<String> networkUris = new ArrayList<String>();
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      */
     @JsonProperty("fcNetworkUris")
     private List<String> fcNetworkUris = new ArrayList<String>();
     /**
-     * 
+    *
+    * (Required)
+    *
+    */
+    @Since(200)
+    @JsonProperty("fcoeNetworkUris")
+    private List<String> fcoeNetworkUris = new ArrayList<String>();
+    /**
+     *
      * (Required)
-     * 
+     *
      */
     @JsonProperty("logicalInterconnectUri")
     private String logicalInterconnectUri;
     @JsonProperty("lacpTimer")
     private UplinkSets.LacpTimer lacpTimer;
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      */
     @JsonProperty("manualLoginRedistributionState")
     private UplinkSets.ManualLoginRedistributionState manualLoginRedistributionState;
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      */
     @JsonProperty("connectionMode")
     private UplinkSets.ConnectionMode connectionMode;
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      */
     @JsonProperty("ethernetNetworkType")
     private UplinkSets.EthernetNetworkType ethernetNetworkType;
@@ -108,29 +127,9 @@ public class UplinkSets implements Serializable {
     private PrimaryPortLocation primaryPortLocation;
     @JsonProperty("nativeNetworkUri")
     private String nativeNetworkUri;
-    @JsonProperty("description")
-    private String description;
-    @JsonProperty("status")
-    private String status;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("state")
-    private String state;
-    @JsonProperty("created")
-    private String created;
-    @JsonProperty("eTag")
-    private String eTag;
-    @JsonProperty("modified")
-    private String modified;
-    @JsonProperty("category")
-    private String category;
-    @JsonProperty("uri")
-    private String uri;
-    @JsonProperty("type")
-    private String type;
 
     /**
-     * 
+     *
      * @return The reachability
      */
     @JsonProperty("reachability")
@@ -139,7 +138,7 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param reachability
      *            The reachability
      */
@@ -149,9 +148,9 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The networkType
      */
     @JsonProperty("networkType")
@@ -160,9 +159,9 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param networkType
      *            The networkType
      */
@@ -172,9 +171,9 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The portConfigInfos
      */
     @JsonProperty("portConfigInfos")
@@ -183,9 +182,9 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param portConfigInfos
      *            The portConfigInfos
      */
@@ -195,9 +194,9 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The networkUris
      */
     @JsonProperty("networkUris")
@@ -206,9 +205,9 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param networkUris
      *            The networkUris
      */
@@ -218,9 +217,9 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The fcNetworkUris
      */
     @JsonProperty("fcNetworkUris")
@@ -229,9 +228,9 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param fcNetworkUris
      *            The fcNetworkUris
      */
@@ -241,9 +240,32 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
+     * @return The fcoeNetworkUris
+     */
+    @JsonProperty("fcoeNetworkUris")
+    public List<String> getFcoeNetworkUris() {
+        return fcoeNetworkUris;
+    }
+
+    /**
+     *
+     * (Required)
+     *
+     * @param fcoeNetworkUris
+     *            The fcoeNetworkUris
+     */
+    @JsonProperty("fcoeNetworkUris")
+    public void setFcoeNetworkUris(final List<String> fcoeNetworkUris) {
+        this.fcoeNetworkUris = fcoeNetworkUris;
+    }
+
+    /**
+     *
+     * (Required)
+     *
      * @return The logicalInterconnectUri
      */
     @JsonProperty("logicalInterconnectUri")
@@ -252,9 +274,9 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param logicalInterconnectUri
      *            The logicalInterconnectUri
      */
@@ -264,7 +286,7 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The lacpTimer
      */
     @JsonProperty("lacpTimer")
@@ -273,7 +295,7 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param lacpTimer
      *            The lacpTimer
      */
@@ -283,9 +305,9 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The manualLoginRedistributionState
      */
     @JsonProperty("manualLoginRedistributionState")
@@ -294,9 +316,9 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param manualLoginRedistributionState
      *            The manualLoginRedistributionState
      */
@@ -306,9 +328,9 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The connectionMode
      */
     @JsonProperty("connectionMode")
@@ -317,9 +339,9 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param connectionMode
      *            The connectionMode
      */
@@ -329,9 +351,9 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The ethernetNetworkType
      */
     @JsonProperty("ethernetNetworkType")
@@ -340,9 +362,9 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param ethernetNetworkType
      *            The ethernetNetworkType
      */
@@ -352,7 +374,7 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The primaryPortLocation
      */
     @JsonProperty("primaryPortLocation")
@@ -361,7 +383,7 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param primaryPortLocation
      *            The primaryPortLocation
      */
@@ -371,7 +393,7 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The nativeNetworkUri
      */
     @JsonProperty("nativeNetworkUri")
@@ -380,199 +402,13 @@ public class UplinkSets implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param nativeNetworkUri
      *            The nativeNetworkUri
      */
     @JsonProperty("nativeNetworkUri")
     public void setNativeNetworkUri(final String nativeNetworkUri) {
         this.nativeNetworkUri = nativeNetworkUri;
-    }
-
-    /**
-     * 
-     * @return The description
-     */
-    @JsonProperty("description")
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * 
-     * @param description
-     *            The description
-     */
-    @JsonProperty("description")
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    /**
-     * 
-     * @return The status
-     */
-    @JsonProperty("status")
-    public String getStatus() {
-        return status;
-    }
-
-    /**
-     * 
-     * @param status
-     *            The status
-     */
-    @JsonProperty("status")
-    public void setStatus(final String status) {
-        this.status = status;
-    }
-
-    /**
-     * 
-     * @return The name
-     */
-    @JsonProperty("name")
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * 
-     * @param name
-     *            The name
-     */
-    @JsonProperty("name")
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    /**
-     * 
-     * @return The state
-     */
-    @JsonProperty("state")
-    public String getState() {
-        return state;
-    }
-
-    /**
-     * 
-     * @param state
-     *            The state
-     */
-    @JsonProperty("state")
-    public void setState(final String state) {
-        this.state = state;
-    }
-
-    /**
-     * 
-     * @return The created
-     */
-    @JsonProperty("created")
-    public String getCreated() {
-        return created;
-    }
-
-    /**
-     * 
-     * @param created
-     *            The created
-     */
-    @JsonProperty("created")
-    public void setCreated(final String created) {
-        this.created = created;
-    }
-
-    /**
-     * 
-     * @return The eTag
-     */
-    @JsonProperty("eTag")
-    public String getETag() {
-        return eTag;
-    }
-
-    /**
-     * 
-     * @param eTag
-     *            The eTag
-     */
-    @JsonProperty("eTag")
-    public void setETag(final String eTag) {
-        this.eTag = eTag;
-    }
-
-    /**
-     * 
-     * @return The modified
-     */
-    @JsonProperty("modified")
-    public String getModified() {
-        return modified;
-    }
-
-    /**
-     * 
-     * @param modified
-     *            The modified
-     */
-    @JsonProperty("modified")
-    public void setModified(final String modified) {
-        this.modified = modified;
-    }
-
-    /**
-     * 
-     * @return The category
-     */
-    @JsonProperty("category")
-    public String getCategory() {
-        return category;
-    }
-
-    /**
-     * 
-     * @param category
-     *            The category
-     */
-    @JsonProperty("category")
-    public void setCategory(final String category) {
-        this.category = category;
-    }
-
-    /**
-     * 
-     * @return The uri
-     */
-    @JsonProperty("uri")
-    public String getUri() {
-        return uri;
-    }
-
-    /**
-     * 
-     * @param uri
-     *            The uri
-     */
-    @JsonProperty("uri")
-    public void setUri(final String uri) {
-        this.uri = uri;
-    }
-
-    /**
-     * @return the type
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * @param type
-     *            the type to set
-     */
-    public void setType(final String type) {
-        this.type = type;
     }
 
     @Override
@@ -582,11 +418,22 @@ public class UplinkSets implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(type).append(reachability).append(networkType).append(portConfigInfos)
-                .append(networkUris).append(fcNetworkUris).append(logicalInterconnectUri).append(lacpTimer)
-                .append(manualLoginRedistributionState).append(connectionMode).append(ethernetNetworkType)
-                .append(primaryPortLocation).append(nativeNetworkUri).append(description).append(status).append(name).append(state)
-                .append(created).append(eTag).append(modified).append(category).append(uri).toHashCode();
+        return new HashCodeBuilder()
+                .append(reachability)
+                .append(networkType)
+                .append(portConfigInfos)
+                .append(networkUris)
+                .append(fcNetworkUris)
+                .append(fcoeNetworkUris)
+                .append(logicalInterconnectUri)
+                .append(lacpTimer)
+                .append(manualLoginRedistributionState)
+                .append(connectionMode)
+                .append(ethernetNetworkType)
+                .append(primaryPortLocation)
+                .append(nativeNetworkUri)
+                .appendSuper(super.hashCode())
+                .toHashCode();
     }
 
     @Override
@@ -598,16 +445,22 @@ public class UplinkSets implements Serializable {
             return false;
         }
         final UplinkSets rhs = ((UplinkSets) other);
-        return new EqualsBuilder().append(type, rhs.type).append(reachability, rhs.reachability)
-                .append(networkType, rhs.networkType).append(portConfigInfos, rhs.portConfigInfos)
-                .append(networkUris, rhs.networkUris).append(fcNetworkUris, rhs.fcNetworkUris)
-                .append(logicalInterconnectUri, rhs.logicalInterconnectUri).append(lacpTimer, rhs.lacpTimer)
+        return new EqualsBuilder()
+                .append(reachability, rhs.reachability)
+                .append(networkType, rhs.networkType)
+                .append(portConfigInfos, rhs.portConfigInfos)
+                .append(networkUris, rhs.networkUris)
+                .append(fcNetworkUris, rhs.fcNetworkUris)
+                .append(fcoeNetworkUris, rhs.fcoeNetworkUris)
+                .append(logicalInterconnectUri, rhs.logicalInterconnectUri)
+                .append(lacpTimer, rhs.lacpTimer)
                 .append(manualLoginRedistributionState, rhs.manualLoginRedistributionState)
-                .append(connectionMode, rhs.connectionMode).append(ethernetNetworkType, rhs.ethernetNetworkType)
-                .append(primaryPortLocation, rhs.primaryPortLocation).append(nativeNetworkUri, rhs.nativeNetworkUri)
-                .append(description, rhs.description).append(status, rhs.status).append(name, rhs.name).append(state, rhs.state)
-                .append(created, rhs.created).append(eTag, rhs.eTag).append(modified, rhs.modified).append(category, rhs.category)
-                .append(uri, rhs.uri).isEquals();
+                .append(connectionMode, rhs.connectionMode)
+                .append(ethernetNetworkType, rhs.ethernetNetworkType)
+                .append(primaryPortLocation, rhs.primaryPortLocation)
+                .append(nativeNetworkUri, rhs.nativeNetworkUri)
+                .appendSuper(super.equals(other))
+                .isEquals();
     }
 
     @Generated("org.jsonschema2pojo")

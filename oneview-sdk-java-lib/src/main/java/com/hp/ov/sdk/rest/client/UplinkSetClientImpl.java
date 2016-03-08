@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -14,6 +14,10 @@
  * limitations under the License.
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
+
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.adaptors.UplinkSetAdaptor;
@@ -31,11 +35,6 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
 
 
 public class UplinkSetClientImpl implements UplinkSetClient {
@@ -80,7 +79,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
         }
         // Call adaptor to convert to DTO
 
-        final UplinkSets uplinkSetDto = adaptor.buildDto(returnObj);
+        final UplinkSets uplinkSetDto = adaptor.buildDto(returnObj, params.getApiVersion());
 
         LOGGER.debug("UplinkSetClientImpl : getUplinkSet : Name :" + uplinkSetDto.getName());
         LOGGER.info("UplinkSetClientImpl : getUplinkSet : End");
@@ -178,7 +177,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
         // idea is : user can create json string and call the sdk api.
         // user can save time in creating uplinksets dto.
 
-        jsonObject = adaptor.buildJsonObjectFromDto(uplinkDto);
+        jsonObject = adaptor.buildJsonObjectFromDto(uplinkDto, params.getApiVersion());
 
         returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
@@ -201,19 +200,41 @@ public class UplinkSetClientImpl implements UplinkSetClient {
     }
 
     @Override
-    public UplinkSets getUplinkSetsByName(final RestParams params, final String uplinkSetName) {
+    public UplinkSets getUplinkSetsByName(final RestParams params, final String name) {
+        UplinkSets uplinkSetDto = null;
         LOGGER.info("UplinkSetClientImpl : getUplinkSetsByName : start");
-        final UplinkSetCollectionV2 uplinkSetCollectionDto = getAllUplinkSet(params);
+        final String query = UrlUtils.createFilterString(name);
 
-        for (final UplinkSets uplinkSetDto : new ArrayList<>(uplinkSetCollectionDto.getMembers())) {
-            if (uplinkSetDto.getName().equals(uplinkSetName)) {
-                System.out.println(uplinkSetDto.getName());
-                LOGGER.info("UplinkSetClientImpl : getUplinkSetsByName : End");
-                return uplinkSetDto;
-            }
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
-        LOGGER.error("UplinkSetClientImpl : getUplinkSetsByName : Not found for name :" + uplinkSetName);
-        throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.UPLINKSET, null);
+
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI, query));
+
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        LOGGER.debug("UplinkSetClientImpl : getUplinkSetsByName : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.UPLINKSET, null);
+        }
+
+        // Call adaptor to convert to DTO
+        final UplinkSetCollectionV2 uplinkSetCollectionDto = adaptor.buildCollectionDto(returnObj, params.getApiVersion());
+        if (uplinkSetCollectionDto.getCount() != 0) {
+            uplinkSetDto = uplinkSetCollectionDto.getMembers().get(0);
+        } else {
+            uplinkSetDto = null;
+        }
+
+        if (uplinkSetDto == null) {
+            LOGGER.error("UplinkSetClientImpl : getUplinkSetsByName : resource not Found for name :" + name);
+            throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.UPLINKSET, null);
+        }
+        LOGGER.info("UplinkSetClientImpl : getUplinkSetsByName : End");
+
+        return uplinkSetDto;
     }
 
     @Override
@@ -240,7 +261,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
         // user can save time in creating network dto.
 
         // create JSON request from dto
-        jsonObject = adaptor.buildJsonObjectFromDto(uplinkSetDto);
+        jsonObject = adaptor.buildJsonObjectFromDto(uplinkSetDto, params.getApiVersion());
         returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);

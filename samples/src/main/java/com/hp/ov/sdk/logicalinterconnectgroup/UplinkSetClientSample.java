@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -14,6 +14,10 @@
  * limitations under the License.
  *******************************************************************************/
 package com.hp.ov.sdk.logicalinterconnectgroup;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.UplinkSetCollectionV2;
@@ -44,10 +48,6 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /*
  * UplinkSetClientSample is a sample program to assign/consume networks of HP OneView to uplink ports of interconnect.
  * It invokes APIs of UplinkSetClient which is in sdk library to perform GET/PUT/POST/DELETE operations
@@ -66,14 +66,16 @@ public class UplinkSetClientSample {
     // These are variables to be defined by user
     // ================================
     private static final String resourceName = "Test_uplink_eth_one";
-    private static final String resourceId = "37bc8d44-eb9b-4b0d-91c1-bf1c50e7eb52";
+    private static final String resourceId = "7cf7240e-6bb3-4b5a-87e1-843d6e00ba3a";
     private static final String category = "logical-interconnects";
-    private static final List<String> fcNetworkName_A = Arrays.asList("FC_Network_D");
+    private static final List<String> fcNetworkName_A = Arrays.asList("FC_Network_A");
     private static final String type = "uplink-setV2";
+    private static final String typeV200 = "uplink-setV3";
     private static final String enclosureName = "Encl1";
     private static final String portValue = "X3";
     private static final String bayValue = "2";
     // ================================
+    private static final int API_200 = 200;
 
     private UplinkSetClientSample() {
         uplinkSetClient = UplinkSetClientImpl.getClient();
@@ -144,6 +146,38 @@ public class UplinkSetClientSample {
 
     }
 
+    private void getUplinkSetByName() throws InstantiationException, IllegalAccessException {
+        UplinkSets uplinkSetDto = null;
+        // first get the session Id
+        try {
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
+
+            // then make sdk service call to get resource
+            uplinkSetDto = uplinkSetClient.getUplinkSetsByName(params, resourceName);
+
+            System.out.println("UplinkSetClientTest : getUplinkSetByName :" + " uplink set object returned to client : "
+                    + uplinkSetDto.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("UplinkSetClientTest : getUplinkSetByName :" + " resource you are looking is not found ");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("UplinkSetClientTest : getUplinkSetByName :" + " no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("UplinkSetClientTest : getUplinkSetByName :" + " Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("UplinkSetClientTest : getUplinkSetByName :" + " No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("UplinkSetClientTest : getUplinkSetByName :" + " arguments are null ");
+            return;
+        }
+    }
+
     private void deleteUplinkSet() throws InstantiationException, IllegalAccessException {
         String resourceId = null;
         try {
@@ -192,7 +226,7 @@ public class UplinkSetClientSample {
             }
 
             // Change updateSetName
-            uplinkSetDto.setName(uplinkSetDto.getName());
+            uplinkSetDto.setName(resourceName + "_Updated");
 
             // update uplink set
             taskResourceV2 = uplinkSetClient.updateUplinkSet(params, resourceId, uplinkSetDto, false, false);
@@ -232,7 +266,10 @@ public class UplinkSetClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // create network request body
-            final UplinkSets uplinkSetsDto = buildTestUplinkSetDto();
+            UplinkSets uplinkSetsDto = buildTestUplinkSetDto();
+            if (params.getApiVersion() >= API_200) {
+                uplinkSetsDto.setType(typeV200);
+            }
             /**
              * then make sdk service call to get resource aSync parameter
              * indicates sync vs async useJsonRequest parameter indicates
@@ -240,7 +277,7 @@ public class UplinkSetClientSample {
              */
             taskResourceV2 = uplinkSetClient.createUplinkSet(params, uplinkSetsDto, false, false);
 
-            System.out.println("UplinkSetClientTest : createUplinkSet : enclosure object returned to client : "
+            System.out.println("UplinkSetClientTest : createUplinkSet : uplink set object returned to client : "
                     + taskResourceV2.toString());
         } catch (final SDKResourceNotFoundException ex) {
             System.out.println("UplinkSetClientTest : createUplinkSet : resource you are looking is not found ");
@@ -338,9 +375,9 @@ public class UplinkSetClientSample {
 
         client.createUplinkSet();
         client.getAllUplinkSet();
+        client.getUplinkSetByName();
         client.getUplinkSetById();
         client.updateUplinkSet();
         client.deleteUplinkSet();
     }
-
 }
