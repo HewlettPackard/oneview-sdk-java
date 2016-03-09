@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,246 +12,99 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.dto.generated;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.annotation.Generated;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "valueFormat", "valueType", "propertyName", "value" })
 public class ConnectionProperty implements Serializable {
 
-    /**
-	 * 
-	 */
-    private static final long serialVersionUID = 1L;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("valueFormat")
-    private ConnectionProperty.ValueFormat valueFormat;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("valueType")
-    private ConnectionProperty.ValueType valueType;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("propertyName")
+    private static final long serialVersionUID = -3262431131387010966L;
+
     private String propertyName;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("value")
     private String value;
+    private ValueFormat valueFormat;
+    private ValueType valueType;
 
-    /**
-     * 
-     * (Required)
-     * 
-     * @return The valueFormat
-     */
-    @JsonProperty("valueFormat")
-    public ConnectionProperty.ValueFormat getValueFormat() {
-        return valueFormat;
-    }
+    public ConnectionProperty() { }
 
-    /**
-     * 
-     * (Required)
-     * 
-     * @param valueFormat
-     *            The valueFormat
-     */
-    @JsonProperty("valueFormat")
-    public void setValueFormat(final ConnectionProperty.ValueFormat valueFormat) {
+    public ConnectionProperty(String propertyName, String value, ValueFormat valueFormat, ValueType valueType) {
+        this.propertyName = propertyName;
+        this.value = value;
         this.valueFormat = valueFormat;
-    }
-
-    /**
-     * 
-     * (Required)
-     * 
-     * @return The valueType
-     */
-    @JsonProperty("valueType")
-    public ConnectionProperty.ValueType getValueType() {
-        return valueType;
-    }
-
-    /**
-     * 
-     * (Required)
-     * 
-     * @param valueType
-     *            The valueType
-     */
-    @JsonProperty("valueType")
-    public void setValueType(final ConnectionProperty.ValueType valueType) {
         this.valueType = valueType;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     * @return The propertyName
-     */
-    @JsonProperty("propertyName")
     public String getPropertyName() {
         return propertyName;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     * @param propertyName
-     *            The propertyName
-     */
-    @JsonProperty("propertyName")
-    public void setPropertyName(final String propertyName) {
+    public void setPropertyName(String propertyName) {
         this.propertyName = propertyName;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     * @return The value
-     */
-    @JsonProperty("value")
     public String getValue() {
         return value;
     }
 
-    /**
-     * 
-     * (Required)
-     * 
-     * @param value
-     *            The value
-     */
-    @JsonProperty("value")
-    public void setValue(final String value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
+    public ValueFormat getValueFormat() {
+        return valueFormat;
+    }
+
+    public void setValueFormat(ValueFormat valueFormat) {
+        this.valueFormat = valueFormat;
+    }
+
+    public ValueType getValueType() {
+        return valueType;
+    }
+
+    public void setValueType(ValueType valueType) {
+        this.valueType = valueType;
+    }
+
     @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        ConnectionProperty that = (ConnectionProperty) obj;
+
+        return new EqualsBuilder()
+                .append(propertyName, that.propertyName)
+                .append(value, that.value)
+                .append(valueFormat, that.valueFormat)
+                .append(valueType, that.valueType)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(valueFormat).append(valueType).append(propertyName).append(value).toHashCode();
+        return new HashCodeBuilder()
+                .append(propertyName)
+                .append(value)
+                .append(valueFormat)
+                .append(valueType)
+                .toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof ConnectionProperty) == false) {
-            return false;
-        }
-        final ConnectionProperty rhs = ((ConnectionProperty) other);
-        return new EqualsBuilder().append(valueFormat, rhs.valueFormat).append(valueType, rhs.valueType)
-                .append(propertyName, rhs.propertyName).append(value, rhs.value).isEquals();
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("propertyName", propertyName)
+                .append("value", value)
+                .append("valueFormat", valueFormat)
+                .append("valueType", valueType)
+                .toString();
     }
-
-    @Generated("org.jsonschema2pojo")
-    public static enum ValueFormat {
-
-        SecuritySensitive("SecuritySensitive"), Unknown("Unknown");
-        private final String value;
-        private static Map<String, ConnectionProperty.ValueFormat> constants = new HashMap<String, ConnectionProperty.ValueFormat>();
-
-        static {
-            for (final ConnectionProperty.ValueFormat c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private ValueFormat(final String value) {
-            this.value = value;
-        }
-
-        @JsonValue
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        @JsonCreator
-        public static ConnectionProperty.ValueFormat fromValue(final String value) {
-            final ConnectionProperty.ValueFormat constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
-    }
-
-    @Generated("org.jsonschema2pojo")
-    public static enum ValueType {
-
-        Integer("Integer"), String("String"), Float("Float"), Double("Double"), Boolean("Boolean"), Unknown("Unknown");
-        private final String value;
-        private static Map<String, ConnectionProperty.ValueType> constants = new HashMap<String, ConnectionProperty.ValueType>();
-
-        static {
-            for (final ConnectionProperty.ValueType c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private ValueType(final String value) {
-            this.value = value;
-        }
-
-        @JsonValue
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        @JsonCreator
-        public static ConnectionProperty.ValueType fromValue(final String value) {
-            final ConnectionProperty.ValueType constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
-    }
-
 }

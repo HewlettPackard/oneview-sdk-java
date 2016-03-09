@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -13,10 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto;
 
-public enum LocationType {
+package com.hp.ov.sdk.dto.generated;
 
-    Bay, Enclosure, Ip, Password, Port, UserId
+
+public enum CapabilityType {
+
+    DCC,
+    ENET_FCOE,
+    ETHERNET,
+    EXTENSION,
+    FIBRE_CHANNEL,
+    PORT_EXTENDER,
+    QBG,
+    STACKING,
+    UNKNOWN
 
 }
