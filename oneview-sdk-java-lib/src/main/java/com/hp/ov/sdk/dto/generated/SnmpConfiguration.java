@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,12 +37,10 @@ import com.hp.ov.sdk.dto.BaseModelResource;
     "trapDestinations",
     "snmpAccess",
     "enabled"})
-public class SnmpConfiguration extends BaseModelResource implements Serializable {
+public class SnmpConfiguration extends BaseModelResource {
 
-    /**
-	 *
-	 */
     private static final long serialVersionUID = 1L;
+
     @JsonProperty("readCommunity")
     private String readCommunity = "public";
     @JsonProperty("systemContact")

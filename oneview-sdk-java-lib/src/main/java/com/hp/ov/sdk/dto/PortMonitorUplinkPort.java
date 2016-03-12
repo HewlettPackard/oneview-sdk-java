@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -17,40 +17,50 @@ package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
 
-public class LocationEntry implements Serializable {
+public class PortMonitorUplinkPort implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
-    private LocationType type;
-    private String value;
+    private String portName;
+    private String interconnectName;
+    private String uri;
 
     /**
-     * @return the type
+     * @return the portName
      */
-    public LocationType getType() {
-        return type;
+    public String getPortName() {
+        return portName;
+    }
+    /**
+     * @param portName the portName to set
+     */
+    public void setPortName(String portName) {
+        this.portName = portName;
+    }
+    /**
+     * @return the interconnectName
+     */
+    public String getInterconnectName() {
+        return interconnectName;
+    }
+    /**
+     * @param interconnectName the interconnectName to set
+     */
+    public void setInterconnectName(String interconnectName) {
+        this.interconnectName = interconnectName;
+    }
+    /**
+     * @return the uri
+     */
+    public String getUri() {
+        return uri;
+    }
+    /**
+     * @param uri the uri to set
+     */
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
-    /**
-     * @param type
-     *            the type to set
-     */
-    public void setType(final LocationType type) {
-        this.type = type;
-    }
-
-    /**
-     * @return the value
-     */
-    public String getValue() {
-        return value;
-    }
-
-    /**
-     * @param value
-     *            the value to set
-     */
-    public void setValue(final String value) {
-        this.value = value;
-    }
 
 }

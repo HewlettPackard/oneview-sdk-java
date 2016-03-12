@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -22,54 +22,50 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class InterconnectFibData extends BaseCollectionResource<InterconnectFibDataEntry> {
+public class InternalVlanAssociationCollection extends BaseCollectionResource<InternalVlanAssociation> {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
-    private final List<InterconnectFibDataEntry> members = new ArrayList<InterconnectFibDataEntry>();
+
+    private final List<InternalVlanAssociation> members = new ArrayList<>();
 
     @Override
-    public List<InterconnectFibDataEntry> getMembers() {
-        final List<InterconnectFibDataEntry> _members = new ArrayList<InterconnectFibDataEntry>();
-        if (this.members != null && !this.members.isEmpty()) {
-            _members.addAll(this.members);
-        }
-        return _members;
+    public List<InternalVlanAssociation> getMembers() {
+        return new ArrayList<>(this.members);
     }
 
     @Override
-    public void setMembers(final List<InterconnectFibDataEntry> _members) {
+    public void setMembers(final List<InternalVlanAssociation> members) {
         this.members.clear();
-        if (_members != null && !_members.isEmpty()) {
-            this.members.addAll(_members);
+
+        if (members != null ) {
+            this.members.addAll(members);
+
             this.setCount(this.members.size());
         }
     }
 
-    /*
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    /*
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(final Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
 
-    /*
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
+    }
+
+    public InternalVlanAssociation searchName(final String value) {
+        for (InternalVlanAssociation member : this.members) {
+            if (member.getName().equalsIgnoreCase(value)) {
+                return member;
+            }
+        }
+        return null;
     }
 
 }

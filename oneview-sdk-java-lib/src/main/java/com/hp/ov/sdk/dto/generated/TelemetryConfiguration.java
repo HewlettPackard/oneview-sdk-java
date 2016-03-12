@@ -15,8 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
-import java.io.Serializable;
-
 import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -34,11 +32,8 @@ import com.hp.ov.sdk.dto.BaseModelResource;
     "sampleInterval",
     "enableTelemetry",
     "sampleCount"})
-public class TelemetryConfiguration extends BaseModelResource implements Serializable {
+public class TelemetryConfiguration extends BaseModelResource {
 
-    /**
-	 *
-	 */
     private static final long serialVersionUID = 1L;
     /**
      *

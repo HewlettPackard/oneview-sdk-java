@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,20 +15,31 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.adaptors.LogicalInterconnectAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
+import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.InterconnectFibData;
 import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
+import com.hp.ov.sdk.dto.InterconnectSettingsV2;
+import com.hp.ov.sdk.dto.InternalVlanAssociationCollection;
 import com.hp.ov.sdk.dto.LiFirmware;
 import com.hp.ov.sdk.dto.LogicalInterconnectCollectionV2;
 import com.hp.ov.sdk.dto.PortMonitor;
 import com.hp.ov.sdk.dto.PortMonitorUplinkPortCollection;
-import com.hp.ov.sdk.dto.SwitchDumpDataInfo;
-import com.hp.ov.sdk.dto.SwitchDumpGenerationInfo;
+import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
 import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.generated.Location;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
 import com.hp.ov.sdk.dto.generated.SnmpConfiguration;
 import com.hp.ov.sdk.dto.generated.TelemetryConfiguration;
@@ -40,11 +51,6 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
 
 
 public class LogicalInterconnectClientImpl implements LogicalInterconnectClient {
@@ -92,7 +98,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         }
         // Call adaptor to convert to DTO
 
-        final LogicalInterconnects logicalInterconnectDto = adaptor.buildDto(returnObj);
+        final LogicalInterconnects logicalInterconnectDto = adaptor.buildDto(returnObj, params.getApiVersion());
 
         LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnect : Name :" + logicalInterconnectDto.getName());
         LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnect : End");
@@ -132,10 +138,12 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     @Override
     public LogicalInterconnects getLogicalInterconnectByName(final RestParams params, final String logicalInterconnectName) {
         LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectByName : start");
+
+        // Filters are not supported
         final LogicalInterconnectCollectionV2 logicalInterconnectCollectionDto = getAllLogicalInterconnects(params);
 
         for (final LogicalInterconnects logicalInterconnectDto : new ArrayList<>(logicalInterconnectCollectionDto.getMembers())) {
-            if (logicalInterconnectDto.getName().equals(logicalInterconnectName)) {
+            if (logicalInterconnectDto.getName().equalsIgnoreCase(logicalInterconnectName)) {
                 System.out.println(logicalInterconnectDto.getName());
                 LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectByName : End");
                 return logicalInterconnectDto;
@@ -157,7 +165,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId, "firmware"));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId, SdkConstants.FIRMWARE));
 
         final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectFirmwareById : response from OV :" + returnObj);
@@ -191,8 +199,11 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         }
         // set the additional params
         params.setType(HttpMethodType.PUT);
-        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId + "/"
-                + "snmp-configuration"));
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.SNMP_CONFIGURATION));
         String returnObj = null;
 
         // TODO - check for json request in the input dto. if it is present,
@@ -225,6 +236,44 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     }
 
     @Override
+    public TaskResourceV2 updateLogicalInterconnectCompliance(RestParams params, List<String> resourceUris, boolean async) {
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectCompliance : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+
+        // set the additional params
+        params.setType(HttpMethodType.PUT);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                SdkConstants.COMPLIANCE));
+        String returnObj = null;
+
+        // create JSON request from dto
+        jsonObject = new JSONObject();
+        jsonObject.put("uris", resourceUris);
+
+
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        // convert returnObj to taskResource
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
+
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectCompliance : returnObj =" + returnObj);
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectCompliance : taskResource =" + taskResourceV2);
+
+        // once task is complete or exceeds the timeout.
+        if (taskResourceV2 != null && async == false) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectCompliance  : End");
+
+        return taskResourceV2;
+    }
+
+    @Override
     public TaskResourceV2 updateLogicalInterconnectComplianceById(final RestParams params, final String resourceId,
             final boolean asyncOrSyncMode) {
         LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectComplianceById : Start");
@@ -236,8 +285,11 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         // set the additional params
         params.setType(HttpMethodType.PUT);
-        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId + "/"
-                + "compliance"));
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.COMPLIANCE));
         String returnObj = null;
 
         // create JSON request from dto
@@ -275,8 +327,11 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         }
         // set the additional params
         params.setType(HttpMethodType.PUT);
-        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId + "/"
-                + "firmware"));
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.FIRMWARE));
         String returnObj = null;
 
         // TODO - check for json request in the input dto. if it is present,
@@ -308,6 +363,598 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     }
 
     @Override
+    public InterconnectFibData getLogicalInterconnectForwardingInformationBase(RestParams params, String resourceId) {
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectForwardingInformationBase : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.FORWARDING_INFORMATION_BASE));
+
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectForwardingInformationBase : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
+                    SdkConstants.LOGICAL_INTERCONNECT, null);
+        }
+        // Call adaptor to convert to DTO
+
+        final InterconnectFibData fibDataDto = adaptor.buildInterconnectFibDataDto(returnObj);
+
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectForwardingInformationBase : End");
+
+        return fibDataDto;
+    }
+
+    @Override
+    public InterconnectFibDataInfo createLogicalInterconnectForwardingInformationBase(RestParams params, String resourceId) {
+        LOGGER.info("LogicalInterconnectClientImpl : createLogicalInterconnectForwardingInformationBase : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.POST);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.FORWARDING_INFORMATION_BASE));
+
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        LOGGER.debug("LogicalInterconnectClientImpl : createLogicalInterconnectForwardingInformationBase : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
+                    SdkConstants.LOGICAL_INTERCONNECT, null);
+        }
+        // Call adaptor to convert to DTO
+
+        final InterconnectFibDataInfo fibDataDto = adaptor.buildInterconnectFibDataInfoDto(returnObj);
+
+        LOGGER.info("LogicalInterconnectClientImpl : createLogicalInterconnectForwardingInformationBase : End");
+
+        return fibDataDto;
+    }
+
+    @Override
+    public SnmpConfiguration getLogicalInterconnectSnmpConfigurationById(RestParams params, String resourceId) {
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectSnmpConfigurationById : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.SNMP_CONFIGURATION));
+
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectSnmpConfigurationById : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
+                    SdkConstants.LOGICAL_INTERCONNECT, null);
+        }
+        // Call adaptor to convert to DTO
+
+        final SnmpConfiguration snmpConfigDto = adaptor.buildSnmpConfigurationDto(returnObj);
+
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectSnmpConfigurationById : End");
+
+        return snmpConfigDto;
+    }
+
+    @Override
+    public PortMonitorUplinkPortCollection getLogicalInterconnectUnassignedUplinkPortsForPortMonitor(RestParams params,
+            String resourceId) {
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectUnassignedUplinkPortsForPortMonitor : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.UNASSIGNED_UPLINK_PORTS_FOR_PORT_MONITOR));
+
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectUnassignedUplinkPortsForPortMonitor : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
+                    SdkConstants.LOGICAL_INTERCONNECT, null);
+        }
+        // Call adaptor to convert to DTO
+
+        final PortMonitorUplinkPortCollection uplinkPortCollection = adaptor.buildPortMonitorUplinkPortCollectioDto(returnObj);
+
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectUnassignedUplinkPortsForPortMonitor : End");
+
+        return uplinkPortCollection;
+    }
+
+    @Override
+    public TaskResourceV2 updateLogicalInterconnectConfiguration(RestParams params, String resourceId) {
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectConfiguration : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+
+        // set the additional params
+        params.setType(HttpMethodType.PUT);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.CONFIGURATION));
+        String returnObj = null;
+
+        // create JSON request from dto
+        returnObj = HttpRestClient.sendRequestToHPOV(params);
+        // convert returnObj to taskResource
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
+
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectConfiguration : returnObj =" + returnObj);
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectConfiguration : taskResource =" + taskResourceV2);
+
+        // once task is complete or exceeds the timeout.
+        if (taskResourceV2 != null) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectConfiguration  : End");
+
+        return taskResourceV2;
+    }
+
+    // TODO
+    @Override
+    public PortMonitor getLogicalInterconnectPortMonitorConfiguration(RestParams params, String resourceId) {
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectPortMonitorConfiguration : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.PORT_MONITOR));
+
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectPortMonitorConfiguration : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
+                    SdkConstants.LOGICAL_INTERCONNECT, null);
+        }
+        // Call adaptor to convert to DTO
+
+        final PortMonitor portMonitorDto = adaptor.buildPortMonitorDto(returnObj);
+
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectPortMonitorConfiguration : End");
+
+        return portMonitorDto;
+    }
+
+    @Override
+    public TaskResourceV2 updateLogicalInterconnectPortMonitorConfiguration(RestParams params, String resourceId, PortMonitor portMonitorDto) {
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectPortMonitorConfiguration : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+
+        // set the additional params
+        params.setType(HttpMethodType.PUT);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.PORT_MONITOR));
+        String returnObj = null;
+
+        // create JSON request from dto
+        jsonObject = adaptor.buildJsonObjectFromDto(portMonitorDto);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        // convert returnObj to taskResource
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
+
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectPortMonitorConfiguration : returnObj =" + returnObj);
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectPortMonitorConfiguration : taskResource =" + taskResourceV2);
+
+        // once task is complete or exceeds the timeout.
+        if (taskResourceV2 != null) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectPortMonitorConfiguration  : End");
+
+        return taskResourceV2;
+    }
+
+    @Override
+    public TelemetryConfiguration getLogicalInterconnectTelemetryConfiguration(RestParams params, String resourceId,
+            String telemetryConfigurationId) {
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectTelemetryConfiguration : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.TELEMETRY_CONFIGURATIONS,
+                telemetryConfigurationId));
+
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectTelemetryConfiguration : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
+                    SdkConstants.LOGICAL_INTERCONNECT, null);
+        }
+        // Call adaptor to convert to DTO
+
+        final TelemetryConfiguration telemetryConfigDto = adaptor.buildTelemetryConfigurationsDto(returnObj);
+
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectTelemetryConfiguration : End");
+
+        return telemetryConfigDto;
+    }
+
+    @Override
+    public TaskResourceV2 updateLogicalInterconnectTelemetryConfiguration(RestParams params, String resourceId,
+            String TelemetryConfigurationId, TelemetryConfiguration telemetryConfigurationDto) {
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectTelemetryConfiguration : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+
+        // set the additional params
+        params.setType(HttpMethodType.PUT);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.TELEMETRY_CONFIGURATIONS,
+                TelemetryConfigurationId));
+        String returnObj = null;
+
+        // create JSON request from dto
+        jsonObject = adaptor.buildJsonObjectFromDto(telemetryConfigurationDto);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        // convert returnObj to taskResource
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
+
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectTelemetryConfiguration : returnObj =" + returnObj);
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectTelemetryConfiguration : taskResource =" + taskResourceV2);
+
+        // once task is complete or exceeds the timeout.
+        if (taskResourceV2 != null) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectTelemetryConfiguration  : End");
+
+        return taskResourceV2;
+    }
+
+    @Override
+    public TaskResourceV2 updateEthernetSettings(RestParams params, String resourceId,
+            EthernetInterconnectSettingsV2 EthernetInterconnectSettingsDto, boolean asyncOrSyncMode) {
+        LOGGER.info("LogicalInterconnectClientImpl : updateEthernetSettings : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+
+        // set the additional params
+        params.setType(HttpMethodType.PUT);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.ETHERNET_SETTINGS));
+        String returnObj = null;
+
+        // create JSON request from dto
+        jsonObject = adaptor.buildJsonObjectFromDto(EthernetInterconnectSettingsDto, params.getApiVersion());
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        // convert returnObj to taskResource
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
+
+        LOGGER.debug("LogicalInterconnectClientImpl : updateEthernetSettings : returnObj =" + returnObj);
+        LOGGER.debug("LogicalInterconnectClientImpl : updateEthernetSettings : taskResource =" + taskResourceV2);
+
+        // once task is complete or exceeds the timeout.
+        if (taskResourceV2 != null && asyncOrSyncMode == false) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        LOGGER.info("LogicalInterconnectClientImpl : updateEthernetSettings  : End");
+
+        return taskResourceV2;
+    }
+
+    @Override
+    public TaskResourceV2 createLogicalInterconnect(RestParams params, Location locationDto, boolean aSync,
+            boolean useJsonRequest) {
+        LOGGER.info("LogicalInterconnectClientImpl : createLogicalInterconnect : Start");
+        String returnObj = null;
+
+        // validate params
+        if (locationDto == null || params == null) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.LOGICAL_INTERCONNECT, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.POST);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                SdkConstants.LOCATIONS,
+                SdkConstants.INTERCONNECTS));
+
+        // TODO - check for json request in the input dto. if it is present,
+        // then convert that into jsonObject and pass it rest client
+        // idea is : user can create json string and call the sdk api.
+        // user can save time in creating network dto.
+
+        // create JSON request from dto
+        jsonObject = adaptor.buildJsonObjectFromDto(locationDto);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        // convert returnObj to taskResource
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
+
+        LOGGER.debug("LogicalInterconnectClientImpl : createLogicalInterconnect : returnObj =" + returnObj);
+        LOGGER.debug("LogicalInterconnectClientImpl : createLogicalInterconnect : taskResource =" + taskResourceV2);
+
+        // check for aSync flag. if user is asking async mode, return directly
+        // the TaskResourceV2
+        // if user is asking for sync mode, call task monitor polling method and
+        // send the update
+        // once task is complete or exceeds the timeout.
+        if (taskResourceV2 != null && aSync == false) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        LOGGER.info("LogicalInterconnectClientImpl : createLogicalInterconnect : End");
+
+        return taskResourceV2;
+    }
+
+    @Override
+    public TaskResourceV2 deleteLogicalInterconnect(RestParams params, String enclosureUri, String bay, boolean aSync) {
+        LOGGER.info("LogicalInterconnectClientImpl : deleteLogicalInterconnect : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.DELETE);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                SdkConstants.LOCATIONS,
+                SdkConstants.INTERCONNECTS +
+                "?location=Enclosure:" + enclosureUri + ",Bay:" + bay));
+
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        LOGGER.debug("LogicalInterconnectClientImpl : deleteLogicalInterconnect : response from OV :" + returnObj);
+
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.LOGICAL_ENCLOSURE, null);
+        }
+
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
+
+        LOGGER.debug("LogicalInterconnectClientImpl : deleteLogicalInterconnect : returnObj =" + returnObj);
+        LOGGER.debug("LogicalInterconnectClientImpl : deleteLogicalInterconnect : taskResource =" + taskResourceV2);
+
+        // check for asyncOrSyncMode. if user is asking async mode, return the
+        // directly the TaskResourceV2
+        // if user is asking for sync mode, calling the tasking polling method
+        // and send the update
+        // once task is complete.
+        if (taskResourceV2 != null && aSync == false) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        LOGGER.info("LogicalInterconnectClientImpl : deleteLogicalInterconnect : End");
+
+        return taskResourceV2;
+    }
+
+    @Override
+    public TaskResourceV2 updateLogicalInterconnectInternalNetworks(RestParams params, String resourceId, List<String> networkUris) {
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectInternalNetworks : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+
+        // set the additional params
+        params.setType(HttpMethodType.PUT);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.INTERNAL_NETWORKS));
+        String returnObj = null;
+
+        // create JSON request from dto
+        returnObj = HttpRestClient.sendRequestToHPOV(params, new JSONArray(networkUris));
+        // convert returnObj to taskResource
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
+
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectInternalNetworks : returnObj =" + returnObj);
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectInternalNetworks : taskResource =" + taskResourceV2);
+
+        // once task is complete or exceeds the timeout.
+        if (taskResourceV2 != null) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectInternalNetworks  : End");
+
+        return taskResourceV2;
+    }
+
+    @Override
+    public InternalVlanAssociationCollection getLogicalInterconnectInternalVlans(RestParams params, String resourceId) {
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectInternalVlans : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.INTERNAL_VLANS));
+
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectInternalVlans : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
+                    SdkConstants.LOGICAL_INTERCONNECT, null);
+        }
+        // Call adaptor to convert to DTO
+
+        final InternalVlanAssociationCollection vlanCollectionDto = adaptor.buildInternalVlanCollectionDto(returnObj);
+
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectInternalVlans : End");
+
+        return vlanCollectionDto;
+    }
+
+    @Override
+    public QosAggregatedConfiguration getLogicalInterconnectQosAggregatedConfiguration(RestParams params, String resourceId) {
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectQosAggregatedConfiguration : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        // set the additional params
+        params.setType(HttpMethodType.GET);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.QOS_AGGREGATED_CONFIGURATION));
+
+        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectQosAggregatedConfiguration : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
+                    SdkConstants.LOGICAL_INTERCONNECT, null);
+        }
+        // Call adaptor to convert to DTO
+
+        final QosAggregatedConfiguration qosConfigurationDto = adaptor.buildQosConfigurationDto(returnObj);
+
+        LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectQosAggregatedConfiguration : End");
+
+        return qosConfigurationDto;
+    }
+
+    @Override
+    public TaskResourceV2 updateLogicalInterconnectQosAggregatedConfiguration(RestParams params, String resourceId, QosAggregatedConfiguration qosAggregatedConfigurationDto) {
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectQosAggregatedConfiguration : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+
+        // set the additional params
+        params.setType(HttpMethodType.PUT);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.QOS_AGGREGATED_CONFIGURATION));
+        String returnObj = null;
+
+        // create JSON request from dto
+        jsonObject = adaptor.buildJsonObjectFromDto(qosAggregatedConfigurationDto);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        // convert returnObj to taskResource
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
+
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectQosAggregatedConfiguration : returnObj =" + returnObj);
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectQosAggregatedConfiguration : taskResource =" + taskResourceV2);
+
+        // once task is complete or exceeds the timeout.
+        if (taskResourceV2 != null) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectQosAggregatedConfiguration  : End");
+
+        return taskResourceV2;
+    }
+
+    @Override
+    public TaskResourceV2 updateLogicalInterconnectSettings(RestParams params, String resourceId, InterconnectSettingsV2 interconnectSettings) {
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectSettings : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+
+        // set the additional params
+        params.setType(HttpMethodType.PUT);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.SETTINGS));
+        String returnObj = null;
+
+        // create JSON request from dto
+        jsonObject = adaptor.buildJsonObjectFromDto(interconnectSettings, params.getApiVersion());
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        // convert returnObj to taskResource
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
+
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectSettings : returnObj =" + returnObj);
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectSettings : taskResource =" + taskResourceV2);
+
+        // once task is complete or exceeds the timeout.
+        if (taskResourceV2 != null) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectSettings  : End");
+
+        return taskResourceV2;
+    }
+
+    @Override
     public String getId(final RestParams creds, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
@@ -318,86 +965,4 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         }
         return resourceId;
     }
-
-    // TODO
-    @Override
-    public InterconnectFibData getLogicalInterconnectForwardingInformationBase(RestParams params, String resourceId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
-    }
-
-    // TODO
-    @Override
-    public InterconnectFibDataInfo createLogicalInterconnectForwardingInformationBase(RestParams params, String resourceId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
-    }
-
-    // TODO
-    @Override
-    public void getLogicalInterconnectForwardingInformationBaseDump(RestParams params, String resourceId, String fileName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
-    }
-
-    // TODO
-    @Override
-    public SnmpConfiguration getLogicalInterconnectSnmpConfigurationById(RestParams params, String resourceId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
-    }
-
-    // TODO
-    @Override
-    public SwitchDumpDataInfo createLogicalInterconnectSupportDump(RestParams params, String resourceId,
-            SwitchDumpGenerationInfo switchDumpGenerationInfo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
-    }
-
-    // TODO
-    @Override
-    public PortMonitorUplinkPortCollection getLogicalInterconnectUnassignedUplinkPortsForPortMonitor(RestParams params,
-            String resourceId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
-    }
-
-    // TODO
-    @Override
-    public TaskResourceV2 updateLogicalInterconnectConfiguration(RestParams params, String resourceId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
-    }
-
-    // TODO
-    @Override
-    public PortMonitor getLogicalInterconnectPortMonitorConfiguration(RestParams params, String resourceId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
-    }
-
-    // TODO
-    @Override
-    public TaskResourceV2 updateLogicalInterconnectPortMonitorConfiguration(RestParams params, String resourceId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
-    }
-
-    // TODO
-    @Override
-    public TelemetryConfiguration getLogicalInterconnectTelementaryConfiguration(RestParams params, String resourceId,
-            String telementaryConfigurationId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
-    }
-
-    // TODO
-    @Override
-    public TelemetryConfiguration updateLogicalInterconnectTelementaryConfiguration(RestParams params, String resourceId,
-            String telementaryConfigurationId, TelemetryConfiguration telemetryConfiguration) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
-    }
-
 }

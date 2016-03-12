@@ -324,7 +324,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
                     SdkConstants.LOGICAL_INTERCONNECT_GROUP, null);
         }
         // Call adaptor to convert to DTO
-        final InterconnectSettingsV2 interconnectSettingsDto = adaptor.buildInterconnectSettingsDto(returnObj);
+        final InterconnectSettingsV2 interconnectSettingsDto = adaptor.buildInterconnectSettingsDto(returnObj, params.getApiVersion());
 
         LOGGER.info("LogicalInterconnectGroupClientImpl : getDefaultInterconnectSettings : End");
 
@@ -361,7 +361,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
                     SdkConstants.LOGICAL_INTERCONNECT_GROUP, null);
         }
         // Call adaptor to convert to DTO
-        final InterconnectSettingsV2 interconnectSettingsDto = adaptor.buildInterconnectSettingsDto(returnObj);
+        final InterconnectSettingsV2 interconnectSettingsDto = adaptor.buildInterconnectSettingsDto(returnObj, params.getApiVersion());
 
         LOGGER.info("LogicalInterconnectGroupClientImpl : getInterconnectSettings : End");
 

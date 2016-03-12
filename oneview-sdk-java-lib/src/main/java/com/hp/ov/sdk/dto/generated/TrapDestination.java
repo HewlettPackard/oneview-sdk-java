@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -35,14 +35,18 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "trapSeverities", "enetTrapCategories", "fcTrapCategories", "vcmTrapCategories", "trapFormat",
-        "trapDestination", "communityString" })
+@JsonPropertyOrder({
+    "trapSeverities",
+    "enetTrapCategories",
+    "fcTrapCategories",
+    "vcmTrapCategories",
+    "trapFormat",
+    "trapDestination",
+    "communityString" })
 public class TrapDestination implements Serializable {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
+
     @JsonProperty("trapSeverities")
     private List<String> trapSeverities = new ArrayList<String>();
     @JsonProperty("enetTrapCategories")
@@ -59,7 +63,7 @@ public class TrapDestination implements Serializable {
     private String communityString = "public";
 
     /**
-     * 
+     *
      * @return The trapSeverities
      */
     @JsonProperty("trapSeverities")
@@ -68,7 +72,7 @@ public class TrapDestination implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param trapSeverities
      *            The trapSeverities
      */
@@ -78,7 +82,7 @@ public class TrapDestination implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The enetTrapCategories
      */
     @JsonProperty("enetTrapCategories")
@@ -87,7 +91,7 @@ public class TrapDestination implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param enetTrapCategories
      *            The enetTrapCategories
      */
@@ -97,7 +101,7 @@ public class TrapDestination implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The fcTrapCategories
      */
     @JsonProperty("fcTrapCategories")
@@ -106,7 +110,7 @@ public class TrapDestination implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param fcTrapCategories
      *            The fcTrapCategories
      */
@@ -116,7 +120,7 @@ public class TrapDestination implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The vcmTrapCategories
      */
     @JsonProperty("vcmTrapCategories")
@@ -125,7 +129,7 @@ public class TrapDestination implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param vcmTrapCategories
      *            The vcmTrapCategories
      */
@@ -135,7 +139,7 @@ public class TrapDestination implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The trapFormat
      */
     @JsonProperty("trapFormat")
@@ -144,7 +148,7 @@ public class TrapDestination implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param trapFormat
      *            The trapFormat
      */
@@ -154,7 +158,7 @@ public class TrapDestination implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The trapDestination
      */
     @JsonProperty("trapDestination")
@@ -163,7 +167,7 @@ public class TrapDestination implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param trapDestination
      *            The trapDestination
      */
@@ -173,7 +177,7 @@ public class TrapDestination implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The communityString
      */
     @JsonProperty("communityString")
@@ -182,7 +186,7 @@ public class TrapDestination implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param communityString
      *            The communityString
      */
@@ -198,8 +202,15 @@ public class TrapDestination implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(trapSeverities).append(enetTrapCategories).append(fcTrapCategories)
-                .append(vcmTrapCategories).append(trapFormat).append(trapDestination).append(communityString).toHashCode();
+        return new HashCodeBuilder()
+                .append(trapSeverities)
+                .append(enetTrapCategories)
+                .append(fcTrapCategories)
+                .append(vcmTrapCategories)
+                .append(trapFormat)
+                .append(trapDestination)
+                .append(communityString)
+                .toHashCode();
     }
 
     @Override
@@ -211,16 +222,21 @@ public class TrapDestination implements Serializable {
             return false;
         }
         final TrapDestination rhs = ((TrapDestination) other);
-        return new EqualsBuilder().append(trapSeverities, rhs.trapSeverities).append(enetTrapCategories, rhs.enetTrapCategories)
-                .append(fcTrapCategories, rhs.fcTrapCategories).append(vcmTrapCategories, rhs.vcmTrapCategories)
-                .append(trapFormat, rhs.trapFormat).append(trapDestination, rhs.trapDestination)
-                .append(communityString, rhs.communityString).isEquals();
+        return new EqualsBuilder()
+                .append(trapSeverities, rhs.trapSeverities)
+                .append(enetTrapCategories, rhs.enetTrapCategories)
+                .append(fcTrapCategories, rhs.fcTrapCategories)
+                .append(vcmTrapCategories, rhs.vcmTrapCategories)
+                .append(trapFormat, rhs.trapFormat)
+                .append(trapDestination, rhs.trapDestination)
+                .append(communityString, rhs.communityString)
+                .isEquals();
     }
 
     @Generated("org.jsonschema2pojo")
     public static enum TrapFormat {
 
-        SNMPv1("SNMPv1"), SNMPv2("SNMPv2");
+        SNMPv1("SNMPv1"), SNMPv2("SNMPv2"), SNMPv3("SNMPv3");
         private final String value;
         private static Map<String, TrapDestination.TrapFormat> constants = new HashMap<String, TrapDestination.TrapFormat>();
 

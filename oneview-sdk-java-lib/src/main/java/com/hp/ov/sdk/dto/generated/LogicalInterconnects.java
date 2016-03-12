@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +31,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.BaseModelResource;
+import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
+import com.hp.ov.sdk.dto.FcoeInterconnectSettings;
 import com.hp.ov.sdk.dto.InterconnectMap;
 import com.hp.ov.sdk.dto.PortMonitor;
 
@@ -48,19 +51,28 @@ import com.hp.ov.sdk.dto.PortMonitor;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "stackingHealth", "snmpConfiguration", "telemetryConfiguration", "ethernetSettings", "description", "status",
-        "name", "state", "eTag", "created", "modified", "category", "uri", "type", "domainUri", "consistencyStatus",
-        "enclosureUris", "interconnectMap", "interconnects", "logicalInterconnectGroupUri", "portMonitor" })
-public class LogicalInterconnects implements Serializable {
+@JsonPropertyOrder({
+    "stackingHealth",
+    "snmpConfiguration",
+    "telemetryConfiguration",
+    "ethernetSettings",
+    "domainUri",
+    "consistencyStatus",
+    "enclosureUris",
+    "interconnectMap",
+    "interconnects",
+    "logicalInterconnectGroupUri",
+    "portMonitor" })
+public class LogicalInterconnects extends BaseModelResource {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      */
     @JsonProperty("stackingHealth")
     private LogicalInterconnects.StackingHealth stackingHealth;
@@ -69,27 +81,10 @@ public class LogicalInterconnects implements Serializable {
     @JsonProperty("telemetryConfiguration")
     private TelemetryConfiguration telemetryConfiguration;
     @JsonProperty("ethernetSettings")
-    private EthernetSettings ethernetSettings;
-    @JsonProperty("description")
-    private String description;
-    @JsonProperty("status")
-    private String status;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("state")
-    private String state;
-    @JsonProperty("eTag")
-    private String eTag;
-    @JsonProperty("created")
-    private String created;
-    @JsonProperty("modified")
-    private String modified;
-    @JsonProperty("category")
-    private String category;
-    @JsonProperty("uri")
-    private String uri;
-    @JsonProperty("type")
-    private String type;
+    private EthernetInterconnectSettingsV2 ethernetSettings;
+    @JsonProperty("fcoeSettings")
+    @Since(200)
+    private FcoeInterconnectSettings fcoeSettings;
     @JsonProperty("consistencyStatus")
     private Compliance consistencyStatus;
     @JsonProperty("domainUri")
@@ -106,7 +101,7 @@ public class LogicalInterconnects implements Serializable {
     private PortMonitor portMonitor;
 
     /**
-     * 
+     *
      * @return The stackingHealth
      */
     @JsonProperty("stackingHealth")
@@ -115,7 +110,7 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param stackingHealth
      *            The stackingHealth
      */
@@ -125,7 +120,7 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The snmpConfiguration
      */
     @JsonProperty("snmpConfiguration")
@@ -134,7 +129,7 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param snmpConfiguration
      *            The snmpConfiguration
      */
@@ -144,7 +139,7 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The telemetryConfiguration
      */
     @JsonProperty("telemetryConfiguration")
@@ -153,7 +148,7 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param telemetryConfiguration
      *            The telemetryConfiguration
      */
@@ -163,222 +158,47 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The ethernetSettings
      */
     @JsonProperty("ethernetSettings")
-    public EthernetSettings getEthernetSettings() {
+    public EthernetInterconnectSettingsV2 getEthernetSettings() {
         return ethernetSettings;
     }
 
     /**
-     * 
+     *
      * @param ethernetSettings
      *            The ethernetSettings
      */
     @JsonProperty("ethernetSettings")
-    public void setEthernetSettings(final EthernetSettings ethernetSettings) {
+    public void setEthernetSettings(final EthernetInterconnectSettingsV2 ethernetSettings) {
         this.ethernetSettings = ethernetSettings;
     }
 
     /**
-     * 
-     * @return The description
-     */
-    @JsonProperty("description")
-    public String getDescription() {
-        return description;
+    *
+    * @return The fcoeSettings
+    */
+    @JsonProperty("fcoeSettings")
+    public FcoeInterconnectSettings getFcoeSettings() {
+        return fcoeSettings;
     }
 
     /**
-     * 
-     * @param description
-     *            The description
+     *
+     * @param fcoeSettings
+     *            The fcoeSettings
      */
-    @JsonProperty("description")
-    public void setDescription(final String description) {
-        this.description = description;
+    @JsonProperty("fcoeSettings")
+    public void setFcoeSettings(final FcoeInterconnectSettings fcoeSettings) {
+        this.fcoeSettings = fcoeSettings;
     }
 
     /**
-     * 
-     * @return The status
-     */
-    @JsonProperty("status")
-    public String getStatus() {
-        return status;
-    }
-
-    /**
-     * 
-     * @param status
-     *            The status
-     */
-    @JsonProperty("status")
-    public void setStatus(final String status) {
-        this.status = status;
-    }
-
-    /**
-     * 
-     * @return The name
-     */
-    @JsonProperty("name")
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * 
-     * @param name
-     *            The name
-     */
-    @JsonProperty("name")
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    /**
-     * 
-     * @return The state
-     */
-    @JsonProperty("state")
-    public String getState() {
-        return state;
-    }
-
-    /**
-     * 
-     * @param state
-     *            The state
-     */
-    @JsonProperty("state")
-    public void setState(final String state) {
-        this.state = state;
-    }
-
-    /**
-     * 
-     * @return The eTag
-     */
-    @JsonProperty("eTag")
-    public String getETag() {
-        return eTag;
-    }
-
-    /**
-     * 
-     * @param eTag
-     *            The eTag
-     */
-    @JsonProperty("eTag")
-    public void setETag(final String eTag) {
-        this.eTag = eTag;
-    }
-
-    /**
-     * 
-     * @return The created
-     */
-    @JsonProperty("created")
-    public String getCreated() {
-        return created;
-    }
-
-    /**
-     * 
-     * @param created
-     *            The created
-     */
-    @JsonProperty("created")
-    public void setCreated(final String created) {
-        this.created = created;
-    }
-
-    /**
-     * 
-     * @return The modified
-     */
-    @JsonProperty("modified")
-    public String getModified() {
-        return modified;
-    }
-
-    /**
-     * 
-     * @param modified
-     *            The modified
-     */
-    @JsonProperty("modified")
-    public void setModified(final String modified) {
-        this.modified = modified;
-    }
-
-    /**
-     * 
-     * @return The category
-     */
-    @JsonProperty("category")
-    public String getCategory() {
-        return category;
-    }
-
-    /**
-     * 
-     * @param category
-     *            The category
-     */
-    @JsonProperty("category")
-    public void setCategory(final String category) {
-        this.category = category;
-    }
-
-    /**
-     * 
-     * @return The uri
-     */
-    @JsonProperty("uri")
-    public String getUri() {
-        return uri;
-    }
-
-    /**
-     * 
-     * @param uri
-     *            The uri
-     */
-    @JsonProperty("uri")
-    public void setUri(final String uri) {
-        this.uri = uri;
-    }
-
-    /**
-     * 
+     *
      * (Required)
-     * 
-     * @return The type
-     */
-    @JsonProperty("type")
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * 
-     * (Required)
-     * 
-     * @param type
-     *            The type
-     */
-    @JsonProperty("type")
-    public void setType(final String type) {
-        this.type = type;
-    }
-
-    /**
-     * 
-     * (Required)
-     * 
+     *
      * @return The domainUri
      */
     @JsonProperty("domain")
@@ -387,9 +207,9 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param domainUri
      *            The domainUri
      */
@@ -399,9 +219,9 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The enclosureUris
      */
     @JsonProperty("enclosureUris")
@@ -410,9 +230,9 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param enclosureUris
      *            The enclosureUris
      */
@@ -422,9 +242,9 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The interconnectMap
      */
     @JsonProperty("interconnectMap")
@@ -433,9 +253,9 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param interconnectMap
      *            The interconnectMap
      */
@@ -445,9 +265,9 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The interconnects
      */
     @JsonProperty("interconnects")
@@ -456,9 +276,9 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param interconnects
      *            The interconnects
      */
@@ -468,9 +288,9 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The logicalInterconnectGroupUri
      */
     @JsonProperty("logicalInterconnectGroupUri")
@@ -479,9 +299,9 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param logicalInterconnectGroupUri
      *            The logicalInterconnectGroupUri
      */
@@ -491,9 +311,9 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The portMonitor
      */
     @JsonProperty("portMonitor")
@@ -502,9 +322,9 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param portMonitor
      *            The portMonitor
      */
@@ -514,9 +334,9 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The consistencyStatus
      */
     @JsonProperty("consistencyStatus")
@@ -525,9 +345,9 @@ public class LogicalInterconnects implements Serializable {
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param consistencyStatus
      *            The consistencyStatus
      */
@@ -543,11 +363,21 @@ public class LogicalInterconnects implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(consistencyStatus).append(domainUri).append(enclosureUris).append(interconnectMap)
-                .append(interconnects).append(logicalInterconnectGroupUri).append(portMonitor).append(type).append(stackingHealth)
-                .append(snmpConfiguration).append(telemetryConfiguration).append(ethernetSettings).append(description)
-                .append(status).append(name).append(state).append(eTag).append(created).append(modified).append(category)
-                .append(uri).toHashCode();
+        return new HashCodeBuilder()
+                .append(consistencyStatus)
+                .append(domainUri)
+                .append(enclosureUris)
+                .append(interconnectMap)
+                .append(interconnects)
+                .append(logicalInterconnectGroupUri)
+                .append(portMonitor)
+                .append(stackingHealth)
+                .append(snmpConfiguration)
+                .append(telemetryConfiguration)
+                .append(ethernetSettings)
+                .append(fcoeSettings)
+                .appendSuper(super.hashCode())
+                .toHashCode();
     }
 
     @Override
@@ -559,20 +389,31 @@ public class LogicalInterconnects implements Serializable {
             return false;
         }
         final LogicalInterconnects rhs = ((LogicalInterconnects) other);
-        return new EqualsBuilder().append(consistencyStatus, rhs.consistencyStatus).append(domainUri, rhs.domainUri)
-                .append(enclosureUris, rhs.enclosureUris).append(interconnectMap, rhs.interconnectMap)
-                .append(interconnects, rhs.interconnects).append(logicalInterconnectGroupUri, rhs.logicalInterconnectGroupUri)
-                .append(portMonitor, rhs.portMonitor).append(type, rhs.type).append(stackingHealth, rhs.stackingHealth)
-                .append(snmpConfiguration, rhs.snmpConfiguration).append(telemetryConfiguration, rhs.telemetryConfiguration)
-                .append(ethernetSettings, rhs.ethernetSettings).append(description, rhs.description).append(status, rhs.status)
-                .append(name, rhs.name).append(state, rhs.state).append(eTag, rhs.eTag).append(created, rhs.created)
-                .append(modified, rhs.modified).append(category, rhs.category).append(uri, rhs.uri).isEquals();
+        return new EqualsBuilder()
+                .append(consistencyStatus, rhs.consistencyStatus)
+                .append(domainUri, rhs.domainUri)
+                .append(enclosureUris, rhs.enclosureUris)
+                .append(interconnectMap, rhs.interconnectMap)
+                .append(interconnects, rhs.interconnects)
+                .append(logicalInterconnectGroupUri, rhs.logicalInterconnectGroupUri)
+                .append(portMonitor, rhs.portMonitor)
+                .append(stackingHealth, rhs.stackingHealth)
+                .append(snmpConfiguration, rhs.snmpConfiguration)
+                .append(telemetryConfiguration, rhs.telemetryConfiguration)
+                .append(ethernetSettings, rhs.ethernetSettings)
+                .append(fcoeSettings, rhs.fcoeSettings)
+                .appendSuper(super.equals(other))
+                .isEquals();
     }
 
     @Generated("org.jsonschema2pojo")
     public static enum StackingHealth {
 
-        Unknown("Unknown"), Connected("Connected"), BiConnected("BiConnected"), Disconnected("Disconnected");
+        Unknown("Unknown"),
+        Connected("Connected"),
+        BiConnected("BiConnected"),
+        Disconnected("Disconnected");
+
         private final String value;
         private static Map<String, LogicalInterconnects.StackingHealth> constants = new HashMap<String, LogicalInterconnects.StackingHealth>();
 

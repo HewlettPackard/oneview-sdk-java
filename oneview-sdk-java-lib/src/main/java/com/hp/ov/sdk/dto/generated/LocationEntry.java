@@ -136,7 +136,13 @@ public class LocationEntry implements Serializable {
     @Generated("org.jsonschema2pojo")
     public static enum Type {
 
-        Port("Port"), Bay("Bay"), Enclosure("Enclosure"), Ip ("Ip"), Password ("Password"), UserId ("UserId");
+        Port("Port"),
+        Bay("Bay"),
+        Enclosure("Enclosure"),
+        Ip("Ip"),
+        Password("Password"),
+        UserId("UserId");
+
         private final String value;
         private static Map<String, LocationEntry.Type> constants = new HashMap<String, LocationEntry.Type>();
 
