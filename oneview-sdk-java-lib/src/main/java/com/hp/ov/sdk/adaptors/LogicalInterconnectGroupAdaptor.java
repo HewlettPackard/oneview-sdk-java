@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -35,12 +35,12 @@ public class LogicalInterconnectGroupAdaptor extends BaseAdaptor<LogicalIntercon
         return logicalInterconnectGroupDto;
     }
 
-    public InterconnectSettingsV2 buildInterconnectSettingsDto(final Object source) {
+    public InterconnectSettingsV2 buildInterconnectSettingsDto(final Object source, final double version) {
         // write json object to a file
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final InterconnectSettingsV2 interconnectSettingsDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), InterconnectSettingsV2.class);
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version)), InterconnectSettingsV2.class);
         return interconnectSettingsDto;
     }
 

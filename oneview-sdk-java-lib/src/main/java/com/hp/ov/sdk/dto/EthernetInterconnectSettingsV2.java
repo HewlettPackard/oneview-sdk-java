@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,10 +15,12 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
+import com.google.gson.annotations.Since;
+
 public class EthernetInterconnectSettingsV2 extends BaseModelResource {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -27,6 +29,8 @@ public class EthernetInterconnectSettingsV2 extends BaseModelResource {
     private Boolean enableIgmpSnooping;
     private Boolean enableNetworkLoopProtection;
     private Boolean enablePauseFloodProtection;
+    @Since(200)
+    private Boolean enableRichTLV;
     private String id;
     private Integer igmpIdleTimeoutInterval;
     private NetworkType interconnectType;
@@ -165,6 +169,20 @@ public class EthernetInterconnectSettingsV2 extends BaseModelResource {
      */
     public void setMacRefreshInterval(final Integer macRefreshInterval) {
         this.macRefreshInterval = macRefreshInterval;
+    }
+
+    /**
+     * @return the enableRichTLV
+     */
+    public Boolean getEnableRichTLV() {
+        return enableRichTLV;
+    }
+
+    /**
+     * @param enableRichTLV the enableRichTLV to set
+     */
+    public void setEnableRichTLV(Boolean enableRichTLV) {
+        this.enableRichTLV = enableRichTLV;
     }
 
 }

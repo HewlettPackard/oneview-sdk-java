@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,13 +15,24 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
+import org.json.JSONObject;
+
+import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
+import com.hp.ov.sdk.dto.InterconnectFibData;
+import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
+import com.hp.ov.sdk.dto.InterconnectSettingsV2;
+import com.hp.ov.sdk.dto.InternalVlanAssociationCollection;
 import com.hp.ov.sdk.dto.LiFirmware;
 import com.hp.ov.sdk.dto.LogicalInterconnectCollectionV2;
+import com.hp.ov.sdk.dto.PortMonitor;
+import com.hp.ov.sdk.dto.PortMonitorUplinkPortCollection;
+import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
+import com.hp.ov.sdk.dto.generated.Location;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
 import com.hp.ov.sdk.dto.generated.SnmpConfiguration;
+import com.hp.ov.sdk.dto.generated.TelemetryConfiguration;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
-import org.json.JSONObject;
 
 public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects, Object> {
 
@@ -32,6 +43,15 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final LogicalInterconnects logicalInterconnectsDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), LogicalInterconnects.class);
+        return logicalInterconnectsDto;
+    }
+
+    public LogicalInterconnects buildDto(final Object source, final double version) {
+        // TODO - exceptions
+        // convert json Object to DTO, replace quotes and back slash in the file
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        final LogicalInterconnects logicalInterconnectsDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version)), LogicalInterconnects.class);
         return logicalInterconnectsDto;
     }
 
@@ -67,6 +87,126 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
         // return the JSON object.
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
+    }
+
+    public JSONObject buildJsonObjectFromDto(PortMonitor source) {
+        // return the JSON object.
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        return new JSONObject(converter.convertObjectToJsonString(source));
+    }
+
+    public JSONObject buildJsonObjectFromDto(TelemetryConfiguration source) {
+        // return the JSON object.
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        return new JSONObject(converter.convertObjectToJsonString(source));
+    }
+
+    public JSONObject buildJsonObjectFromDto(EthernetInterconnectSettingsV2 source, final double version) {
+        // return the JSON object.
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        return new JSONObject(converter.convertObjectToJsonString(source, version));
+    }
+
+    public JSONObject buildJsonObjectFromDto(Location source) {
+        // return the JSON object.
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        return new JSONObject(converter.convertObjectToJsonString(source));
+    }
+
+    public JSONObject buildJsonObjectFromDto(QosAggregatedConfiguration source) {
+        // return the JSON object.
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        return new JSONObject(converter.convertObjectToJsonString(source));
+    }
+
+    public JSONObject buildJsonObjectFromDto(InterconnectSettingsV2 source, final double version) {
+        // return the JSON object.
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        return new JSONObject(converter.convertObjectToJsonString(source, version));
+    }
+
+    public InterconnectFibData buildInterconnectFibDataDto(String source) {
+        // TODO - exceptions
+        // convert json Object to DTO, replace quotes and back slash in the file
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        final InterconnectFibData fibDataDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), InterconnectFibData.class);
+        return fibDataDto;
+    }
+
+    public InterconnectFibDataInfo buildInterconnectFibDataInfoDto(String source) {
+        // TODO - exceptions
+        // convert json Object to DTO, replace quotes and back slash in the file
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        final InterconnectFibDataInfo fibDataDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)),
+                InterconnectFibDataInfo.class);
+        return fibDataDto;
+    }
+
+    public SnmpConfiguration buildSnmpConfigurationDto(String source) {
+        // TODO - exceptions
+        // convert json Object to DTO, replace quotes and back slash in the file
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        final SnmpConfiguration snmpConfigDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)),
+                SnmpConfiguration.class);
+        return snmpConfigDto;
+    }
+
+    public InternalVlanAssociationCollection buildInternalVlanCollectionDto(String source) {
+        // TODO - exceptions
+        if (null == source || source.equals("")) {
+            return null;
+        }
+        // convert json Object to DTO, replace quotes and back slash in the file
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        final InternalVlanAssociationCollection vlanCollectionDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
+                        .convertObjectToJsonString(source))), InternalVlanAssociationCollection.class);
+        return vlanCollectionDto;
+    }
+
+    public PortMonitorUplinkPortCollection buildPortMonitorUplinkPortCollectioDto(String source) {
+        // TODO - exceptions
+        if (null == source || source.equals("")) {
+            return null;
+        }
+        // convert json Object to DTO, replace quotes and back slash in the file
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        final PortMonitorUplinkPortCollection upLinkCollectionDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
+                        .convertObjectToJsonString(source))), PortMonitorUplinkPortCollection.class);
+        return upLinkCollectionDto;
+    }
+
+    public PortMonitor buildPortMonitorDto(String source) {
+        // TODO - exceptions
+        // convert json Object to DTO, replace quotes and back slash in the file
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        final PortMonitor portMonitorDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)),
+                PortMonitor.class);
+        return portMonitorDto;
+    }
+
+    public TelemetryConfiguration buildTelemetryConfigurationsDto(String source) {
+        // TODO - exceptions
+        // convert json Object to DTO, replace quotes and back slash in the file
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        final TelemetryConfiguration portMonitorDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), TelemetryConfiguration.class);
+        return portMonitorDto;
+    }
+
+    public QosAggregatedConfiguration buildQosConfigurationDto(String source) {
+        // TODO - exceptions
+        // convert json Object to DTO, replace quotes and back slash in the file
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+        final QosAggregatedConfiguration qosConfigurationDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)),
+                QosAggregatedConfiguration.class);
+        return qosConfigurationDto;
     }
 
 }

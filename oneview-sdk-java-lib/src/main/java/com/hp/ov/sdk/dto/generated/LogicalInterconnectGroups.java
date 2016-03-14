@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
+import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
 
 /**
  * The LogicalInterconnectGroups data transfer object (DTO) contains the
@@ -65,7 +65,7 @@ import com.hp.ov.sdk.dto.BaseModelResource;
     "internalNetworkUris",
     "description",
 })
-public class LogicalInterconnectGroups extends BaseModelResource implements Serializable {
+public class LogicalInterconnectGroups extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
@@ -106,7 +106,7 @@ public class LogicalInterconnectGroups extends BaseModelResource implements Seri
     @JsonProperty("fcoeSettings")
     private FcoeSettings fcoeSettings;
     @JsonProperty("ethernetSettings")
-    private EthernetSettings ethernetSettings;
+    private EthernetInterconnectSettingsV2 ethernetSettings;
     @Since(200)
     @JsonProperty("enclosureIndexes")
     private List<Integer> enclosureIndexes = new ArrayList<Integer>();
@@ -324,7 +324,7 @@ public class LogicalInterconnectGroups extends BaseModelResource implements Seri
      *     The ethernetSettings
      */
     @JsonProperty("ethernetSettings")
-    public EthernetSettings getEthernetSettings() {
+    public EthernetInterconnectSettingsV2 getEthernetSettings() {
         return ethernetSettings;
     }
 
@@ -334,7 +334,7 @@ public class LogicalInterconnectGroups extends BaseModelResource implements Seri
      *     The ethernetSettings
      */
     @JsonProperty("ethernetSettings")
-    public void setEthernetSettings(EthernetSettings ethernetSettings) {
+    public void setEthernetSettings(EthernetInterconnectSettingsV2 ethernetSettings) {
         this.ethernetSettings = ethernetSettings;
     }
 

@@ -1,0 +1,1 @@
+{"count":1,"members":[{"entryType":"interconnect-fib-data-entry","externalVlan":"","interconnectName":"Encl1-LIG_PROD","interconnectUri":"/rest/logical-interconnects/b63caa92-556e-4816-99b8-76ac2b3ddb96","internalVlan":"","macAddress":"","networkInterface":"","networkName":"Eth-demo","networkUri":"/rest/ethernet-networks/017151de-5706-4b50-ba03-d7b652c3850b"}]}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,17 +15,21 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
+import com.google.gson.annotations.Since;
+
 public class InterconnectSettingsV2 extends BaseModelResource {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
 
     private EthernetInterconnectSettingsV2 ethernetSettings;
+    @Since(200)
+    private FcoeInterconnectSettings fcoeSettings;
 
     /**
-     * 
+     *
      * @return The ethernetSettings
      */
     public EthernetInterconnectSettingsV2 getEthernetSettings() {
@@ -33,12 +37,26 @@ public class InterconnectSettingsV2 extends BaseModelResource {
     }
 
     /**
-     * 
+     *
      * @param ethernetSettings
      *            The ethernetSettings
      */
     public void setEthernetSettings(final EthernetInterconnectSettingsV2 ethernetSettings) {
         this.ethernetSettings = ethernetSettings;
+    }
+
+    /**
+     * @return the fcoeSettings
+     */
+    public FcoeInterconnectSettings getFcoeSettings() {
+        return fcoeSettings;
+    }
+
+    /**
+     * @param fcoeSettings the fcoeSettings to set
+     */
+    public void setFcoeSettings(FcoeInterconnectSettings fcoeSettings) {
+        this.fcoeSettings = fcoeSettings;
     }
 
 }

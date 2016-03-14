@@ -1,0 +1,223 @@
+/*******************************************************************************
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
+package com.hp.ov.sdk.dto;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Generated;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Generated("org.jsonschema2pojo")
+@JsonPropertyOrder({
+    "configType",
+    "downlinkClassificationType",
+    "uplinkClassificationType",
+    "qosTrafficClassifiers"})
+public class QosConfiguration extends BaseModelResource {
+
+    private static final long serialVersionUID = 1L;
+
+    @JsonProperty("configType")
+    private QosConfiguration.QosConfigType configType;
+    @JsonProperty("downlinkClassificationType")
+    private QosConfiguration.QosClassificationType downlinkClassificationType;
+    @JsonProperty("uplinkClassificationType")
+    private QosConfiguration.QosClassificationType uplinkClassificationType;
+
+    @JsonProperty("qosTrafficClassifiers")
+    private List<QosTrafficClassifier> qosTrafficClassifiers;
+
+    /**
+     * @return the configType
+     */
+    public QosConfigType getConfigType() {
+        return configType;
+    }
+
+    /**
+     * @param configType the configType to set
+     */
+    public void setConfigType(QosConfigType configType) {
+        this.configType = configType;
+    }
+
+    /**
+     * @return the downlinkClassificationType
+     */
+    public QosClassificationType getDownlinkClassificationType() {
+        return downlinkClassificationType;
+    }
+
+    /**
+     * @param downlinkClassificationType the downlinkClassificationType to set
+     */
+    public void setDownlinkClassificationType(QosClassificationType downlinkClassificationType) {
+        this.downlinkClassificationType = downlinkClassificationType;
+    }
+
+    /**
+     * @return the uplinkClassificationType
+     */
+    public QosClassificationType getUplinkClassificationType() {
+        return uplinkClassificationType;
+    }
+
+    /**
+     * @param uplinkClassificationType the uplinkClassificationType to set
+     */
+    public void setUplinkClassificationType(QosClassificationType uplinkClassificationType) {
+        this.uplinkClassificationType = uplinkClassificationType;
+    }
+
+    /**
+     * @return the qosTrafficClassifiers
+     */
+    public List<QosTrafficClassifier> getQosTrafficClassifiers() {
+        return qosTrafficClassifiers;
+    }
+
+    /**
+     * @param qosTrafficClassifiers the qosTrafficClassifiers to set
+     */
+    public void setQosTrafficClassifiers(List<QosTrafficClassifier> qosTrafficClassifiers) {
+        this.qosTrafficClassifiers = qosTrafficClassifiers;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(configType)
+                .append(downlinkClassificationType)
+                .append(uplinkClassificationType)
+                .append(qosTrafficClassifiers)
+                .appendSuper(super.hashCode())
+                .toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        if (other == this) {
+            return true;
+        }
+        if ((other instanceof QosConfiguration) == false) {
+            return false;
+        }
+        final QosConfiguration rhs = ((QosConfiguration) other);
+        return new EqualsBuilder()
+                .append(configType, rhs.configType)
+                .append(downlinkClassificationType, rhs.downlinkClassificationType)
+                .append(uplinkClassificationType, rhs.uplinkClassificationType)
+                .append(qosTrafficClassifiers, rhs.qosTrafficClassifiers)
+                .appendSuper(super.equals(other))
+                .isEquals();
+    }
+
+    @Generated("org.jsonschema2pojo")
+    public static enum QosConfigType {
+
+        Passthrough("Passthrough"),
+        CustomWithFCoE("CustomWithFCoE"),
+        CustomNoFCoE("CustomNoFCoE"),
+        Unknown("Unknown"),
+        NA("NA");
+
+        private final String value;
+        private static Map<String, QosConfiguration.QosConfigType> constants = new HashMap<String, QosConfiguration.QosConfigType>();
+
+        static {
+            for (final QosConfiguration.QosConfigType c : values()) {
+                constants.put(c.value, c);
+            }
+        }
+
+        private QosConfigType(final String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+        @JsonCreator
+        public static QosConfiguration.QosConfigType fromValue(final String value) {
+            final QosConfiguration.QosConfigType constant = constants.get(value);
+            if (constant == null) {
+                throw new IllegalArgumentException(value);
+            } else {
+                return constant;
+            }
+        }
+    }
+
+    @Generated("org.jsonschema2pojo")
+    public static enum QosClassificationType {
+
+        DOT1P("DOT1P"),
+        DSCP("DSCP"),
+        DOT1P_AND_DSCP("DOT1P_AND_DSCP"),
+        Unknown("Unknown"),
+        NA("NA");
+
+        private final String value;
+        private static Map<String, QosConfiguration.QosClassificationType> constants = new HashMap<String, QosConfiguration.QosClassificationType>();
+
+        static {
+            for (final QosConfiguration.QosClassificationType c : values()) {
+                constants.put(c.value, c);
+            }
+        }
+
+        private QosClassificationType(final String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+        @JsonCreator
+        public static QosConfiguration.QosClassificationType fromValue(final String value) {
+            final QosConfiguration.QosClassificationType constant = constants.get(value);
+            if (constant == null) {
+                throw new IllegalArgumentException(value);
+            } else {
+                return constant;
+            }
+        }
+    }
+
+}
