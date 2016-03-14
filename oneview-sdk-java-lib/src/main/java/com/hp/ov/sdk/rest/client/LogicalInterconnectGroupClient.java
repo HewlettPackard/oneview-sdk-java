@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ public interface LogicalInterconnectGroupClient {
     /**
      * The module aids in fetching the LogicalInterconnectGroups details for the
      * specified LogicalInterconnectGroups resourceId.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -44,7 +44,7 @@ public interface LogicalInterconnectGroupClient {
     /**
      * The module aids in fetching the LogicalInterconnects details for all the
      * LogicalInterconnectGroups found under the current HP OneView.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -56,7 +56,7 @@ public interface LogicalInterconnectGroupClient {
     /**
      * The module aids in fetching the LogicalInterconnectGroups details for the
      * LogicalInterconnectGroups name as specified in HP OneView.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -73,7 +73,7 @@ public interface LogicalInterconnectGroupClient {
      * with the LogicalInterconnectGroups details as LogicalInterconnectGroups
      * object or JsonRequest. It can process the request asynchronously or
      * synchronously based on flag input.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -96,7 +96,7 @@ public interface LogicalInterconnectGroupClient {
      * The module takes in an UplinkSet object or JsonRequest and updates the
      * existing LogicalInterconnect based on resource Id. It can process the
      * request asynchronously or synchronously based on flag input.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -122,7 +122,7 @@ public interface LogicalInterconnectGroupClient {
      * The module aids in deleting a LogicalInterconnectGroup for the specified
      * LogicalInterconnectGroup resourceId. It can process the request
      * asynchronously or synchronously based on flag input.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -138,7 +138,7 @@ public interface LogicalInterconnectGroupClient {
     /**
      * The module aids in fetching the default interconnect settings details for
      * the LIG found under the current HP OneView.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -147,10 +147,26 @@ public interface LogicalInterconnectGroupClient {
      */
     public InterconnectSettingsV2 getDefaultInterconnectSettings(RestParams params);
 
+
+    /**
+     * The module aids in fetching the interconnect settings details for the LIG
+     * found under the current HP OneView 2.0.
+     *
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param resourceId
+     *            The resourceId for LogicalInterconnectGroups as seen in HP
+     *            OneView.
+     * @return interconnectSettingsDto, which is a object containing the
+     *         interconnect setting details.
+     */
+    public InterconnectSettingsV2 getInterconnectSettings(RestParams params, String resourceId);
+
     /**
      * The module aids in fetching the interconnect settings details for the LIG
      * found under the current HP OneView.
-     * 
+     *
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
@@ -168,7 +184,7 @@ public interface LogicalInterconnectGroupClient {
     /**
      * The module aids in fetching the LogicalInterconnectGroup details for the
      * LogicalInterconnectGroups name as specified in HP OneView.
-     * 
+     *
      * @param creds
      *            The RestParams is a structure containing the connection
      *            details.
@@ -179,4 +195,5 @@ public interface LogicalInterconnectGroupClient {
      *         name as seen in HPOneView.
      */
     public String getId(final RestParams creds, final String name);
+
 }

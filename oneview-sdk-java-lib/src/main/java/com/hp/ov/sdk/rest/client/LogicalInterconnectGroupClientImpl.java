@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -14,6 +14,12 @@
  * limitations under the License.
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
+
+import java.util.List;
+
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.adaptors.LogicalInterconnectGroupAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
@@ -33,16 +39,12 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGroupClient {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(LogicalInterconnectGroupClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
+    private static final int API_200 = 200;
 
     private final LogicalInterconnectGroupAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
@@ -179,6 +181,10 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         String returnObj = null;
 
         // validate params
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+
         if (logicalInterconnectGroupDto == null) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
                     SdkConstants.LOGICAL_INTERCONNECT_GROUP, null);
@@ -194,7 +200,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         // user can save time in creating dto.
 
         // create JSON request from dto
-        jsonObject = adaptor.buildJsonObjectFromDto(logicalInterconnectGroupDto);
+        jsonObject = adaptor.buildJsonObjectFromDto(logicalInterconnectGroupDto, params.getApiVersion());
         returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
@@ -236,7 +242,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         // fetch LIG data using resourceId and create JSON request from dto
         final LogicalInterconnectGroups logicalInterconnectGroupDto = getLogicalInterconnectGroup(params, resourceId);
         logicalInterconnectGroupDto.setUplinkSets(uplinkSetDto);
-        jsonObject = adaptor.buildJsonObjectFromDto(logicalInterconnectGroupDto);
+        jsonObject = adaptor.buildJsonObjectFromDto(logicalInterconnectGroupDto, params.getApiVersion());
 
         // set the additional params
         params.setType(HttpMethodType.PUT);
@@ -326,6 +332,11 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
     }
 
     @Override
+    public InterconnectSettingsV2 getInterconnectSettings(final RestParams params, final String resourceId) {
+        return this.getInterconnectSettings(params, resourceId, "placeholder");
+    }
+
+    @Override
     public InterconnectSettingsV2 getInterconnectSettings(final RestParams params, final String resourceId, final String settingId) {
         LOGGER.info("LogicalInterconnectGroupClientImpl : getInterconnectSettings : Start");
 
@@ -335,8 +346,13 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId,
-                SdkConstants.SETTINGS, settingId));
+        if (params.getApiVersion() < API_200) {
+            params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId,
+                    SdkConstants.SETTINGS, settingId));
+        } else {
+            params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId,
+                    SdkConstants.SETTINGS));
+        }
 
         final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("LogicalInterconnectGroupClientImpl : getInterconnectSettings : response from OV :" + returnObj);
