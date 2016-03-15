@@ -164,42 +164,6 @@ public class LogicalInterconnectClientTest {
     }
 
     @Test
-    public void testUpdateLogicalInterconnectCompliance() {
-        String jsonCreateTaskCompleted = this.getJsonFromFile("LogicalInterconnectCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
-
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
-                Mockito.any(RestParams.class),
-                Mockito.any(JSONObject.class)))
-        .thenReturn(jsonCreateTaskCompleted);
-
-        Mockito.when(taskMonitorManager.checkStatus(
-                Mockito.any(RestParams.class),
-                Mockito.anyString(),
-                Mockito.anyInt()))
-        .thenReturn(taskResourceV2);
-
-        TaskResourceV2 result = client.updateLogicalInterconnectCompliance(params, Arrays.asList(""), false);
-
-        RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestUrl(
-                params.getHostname(),
-                ResourceUris.LOGICAL_INTERCONNECT_URI,
-                SdkConstants.COMPLIANCE));
-        rp.setType(HttpMethodType.PUT);
-
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
-
-        assertEquals("A success update compliance call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
-    }
-
-    @Test (expected = SDKInvalidArgumentException.class)
-    public void testUpdateLogicalInterconnectComplianceWithNullParams() {
-        client.updateLogicalInterconnectCompliance(null, Arrays.asList(""), false);
-    }
-
-    @Test
     public void testUpdateLogicalInterconnectComplianceById() {
         String jsonCreateTaskCompleted = this.getJsonFromFile("LogicalInterconnectCreateTaskCompleted.json");
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);

@@ -27,8 +27,6 @@ import com.hp.ov.sdk.dto.LogicalInterconnectCollectionV2;
 import com.hp.ov.sdk.dto.PortMonitor;
 import com.hp.ov.sdk.dto.PortMonitorUplinkPortCollection;
 import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
-import com.hp.ov.sdk.dto.SwitchDumpDataInfo;
-import com.hp.ov.sdk.dto.SwitchDumpGenerationInfo;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.Location;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
@@ -63,28 +61,6 @@ public interface LogicalInterconnectClient {
      *         collection of LogicalInterconnects details.
      */
     public LogicalInterconnectCollectionV2 getAllLogicalInterconnects(final RestParams params);
-
-    /**
-     * Returns logical interconnects to a consistent state. The current logical
-     * interconnect state is compared to the associated logical interconnect group.
-     * Any differences identified are corrected, bringing the logical interconnect
-     * back to a consistent state. Changes are asynchronously applied to all managed
-     * interconnects. Note that if the changes detected involve differences in the
-     * interconnect map between the logical interconnect group and the logical
-     * interconnect, the process of bringing the logical interconnect back to a
-     * consistent state may involve automatically removing existing interconnects
-     * from management and/or adding new interconnects for management.
-     *
-     * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @param resourceUris
-     *            A list of URI resourceId for the LogicalInterconnects as seen in HP OneView.
-     * @param asyncOrSyncMode
-     *            Flag input to process request asynchronously or synchronously.
-     * @return taskResource which returns the task status for the process
-     */
-    public TaskResourceV2 updateLogicalInterconnectCompliance(final RestParams params, List<String> resourceUris, final boolean asyncOrSyncMode);
 
     /**
      * Returns a logical interconnect to a consistent state. The current logical
