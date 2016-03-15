@@ -733,44 +733,6 @@ public class LogicalInterconnectClientSample {
         }
     }
 
-    private void updateLogicalInterconnectCompliance() {
-        LogicalInterconnects li = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
-
-            // get resource ID
-            li = logicalInterconnectClient.getLogicalInterconnect(params, resourceId);
-
-            List<String> resourceUris = Arrays.asList(li.getUri());
-            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectCompliance(params, resourceUris , false);
-
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectCompliance : status of "
-                    + "task object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectCompliance : resource you are looking is not found for update"
-                    + params.getHostname());
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectCompliance : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectCompliance : no such url : "
-                    + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectCompliance : Applicance Not reachabe at : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectCompliance : arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectCompliance : errors in task, "
-                    + "please check task resource for more details ");
-        }
-    }
-
     private void updateEthernetSettings() {
         try {
             // OneView credentials
@@ -987,8 +949,6 @@ public class LogicalInterconnectClientSample {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
 
-            LogicalInterconnects logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnect(params, resourceId);
-
             QosAggregatedConfiguration qosConfigDto = logicalInterconnectClient.getLogicalInterconnectQosAggregatedConfiguration(params, resourceId);
             qosConfigDto.getActiveQosConfig().setConfigType(QosConfigType.Passthrough);
 
@@ -1075,8 +1035,8 @@ public class LogicalInterconnectClientSample {
 
         client.updateLogicalInterconnectSnmpConfigurationById();
 
-        client.getLogicalInterconnectForwardingInformationBase();
         client.createLogicalInterconnectForwardingInformationBase();
+        client.getLogicalInterconnectForwardingInformationBase();
         client.getLogicalInterconnectSnmpConfigurationById();
         client.getLogicalInterconnectUnassignedUplinkPortsForPortMonitor();
         client.updateLogicalInterconnectConfiguration();
@@ -1084,7 +1044,7 @@ public class LogicalInterconnectClientSample {
         client.updateLogicalInterconnectPortMonitorConfiguration();
         client.getLogicalInterconnectTelemetryConfiguration();
         client.updateLogicalInterconnectTelemetryConfiguration();
-        client.updateLogicalInterconnectCompliance();
+
         client.updateEthernetSettings();
         client.createLogicalInterconnect();
         client.deleteLogicalInterconnect();
@@ -1094,19 +1054,8 @@ public class LogicalInterconnectClientSample {
         client.updateLogicalInterconnectQosAggregatedConfiguration();
         client.updateLogicalInterconnectSettings();
 
-        /*
-         * TODO the methods below could not be executed due to the following
-         * error:
-         *
-         * "recommendedActions": [ "Firmware staging/update operation is only
-         * allowed at this state. Please retry the operation with stage/update
-         * command."] "errorCode": "ACTIVATE_OPERATION_NOT_ALLOWED", "message":
-         * "Activate operation is not allowed at this state. One or more
-         * interconnects may not have been baselined to this firmware or all
-         * interconnects are already activated/activating to this baseline."
-         */
-//         client.updateLogicalInterconnectFirmwareActiveById();
-//         client.updateLogicalInterconnectFirmwareUpdateById();
+        client.updateLogicalInterconnectFirmwareActiveById();
+        client.updateLogicalInterconnectFirmwareUpdateById();
 
     }
 

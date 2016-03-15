@@ -236,44 +236,6 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     }
 
     @Override
-    public TaskResourceV2 updateLogicalInterconnectCompliance(RestParams params, List<String> resourceUris, boolean async) {
-        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectCompliance : Start");
-
-        // validate args
-        if (null == params) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
-        }
-
-        // set the additional params
-        params.setType(HttpMethodType.PUT);
-        params.setUrl(UrlUtils.createRestUrl(
-                params.getHostname(),
-                ResourceUris.LOGICAL_INTERCONNECT_URI,
-                SdkConstants.COMPLIANCE));
-        String returnObj = null;
-
-        // create JSON request from dto
-        jsonObject = new JSONObject();
-        jsonObject.put("uris", resourceUris);
-
-
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
-        // convert returnObj to taskResource
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
-
-        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectCompliance : returnObj =" + returnObj);
-        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectCompliance : taskResource =" + taskResourceV2);
-
-        // once task is complete or exceeds the timeout.
-        if (taskResourceV2 != null && async == false) {
-            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
-        }
-        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectCompliance  : End");
-
-        return taskResourceV2;
-    }
-
-    @Override
     public TaskResourceV2 updateLogicalInterconnectComplianceById(final RestParams params, final String resourceId,
             final boolean asyncOrSyncMode) {
         LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectComplianceById : Start");
