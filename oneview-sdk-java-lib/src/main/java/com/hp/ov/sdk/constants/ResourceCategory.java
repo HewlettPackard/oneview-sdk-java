@@ -33,6 +33,7 @@ public class ResourceCategory {
     public static final String RC_STORAGE_VOLUME_TEMPLATE_V200 = "StorageVolumeTemplateV3";
     public static final String RC_STORAGE_SYSTEM = "StorageSystemV2";
     public static final String RC_STORAGE_SYSTEM_V200 = "StorageSystemV3";
+    public static final String RC_SWITCH = "switch";
     public static final String RC_ADD_STORAGE_VOLUME = "AddStorageVolumeV2";
     public static final String RC_ADD_STORAGE_VOLUME_200 = "AddStorageVolumeV3";
     public static final String RC_SERVER_PROFILE = "ServerProfileV4";

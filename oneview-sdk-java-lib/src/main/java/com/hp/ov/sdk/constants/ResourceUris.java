@@ -71,6 +71,8 @@ public class ResourceUris {
     public static final String STORAGE_VOLUME_SNAPSHOTS_URI = "snapshots";
     public static final String STORAGE_VOLUME_TEMPLATE_URI = "/rest/storage-volume-templates";
     public static final String STORAGE_VOLUME_TEMPLATE_CONNECTABLE_URI = "connectable-volume-templates";
+    public static final String SWITCHES_ENVIRONMENTAL_CONFIGURATION_URI = "environmentalConfiguration";
+    public static final String SWITCHES_STATISTICS_URI = "statistics";
     public static final String SWITCHES_URI = "/rest/switches";
     public static final String TASK_URI = "/rest/tasks";
     public static final String UPLINK_SETS_URI = "/rest/uplink-sets";
