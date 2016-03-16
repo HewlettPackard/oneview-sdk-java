@@ -52,6 +52,8 @@ public class ResourceUris {
     public static final String LOGICAL_ENCLOSURE_URI = "/rest/logical-enclosures";
     public static final String LOGICAL_INTERCONNECT_GROUPS_URI = "/rest/logical-interconnect-groups";
     public static final String LOGICAL_INTERCONNECT_URI = "/rest/logical-interconnects";
+    public static final String LOGICAL_SWITCH_GROUPS_URI = "/rest/logical-switch-groups";
+    public static final String LOGICAL_SWITCHES = "/rest/logical-switches";
     public static final String LOGIN_SESSIONS = "/rest/login-sessions";
     public static final String MANANGED_PORTS_STORAGE_SYSTEM_URI = "managedPorts";
     public static final String NETWORK_SETS_URI = "/rest/network-sets";
