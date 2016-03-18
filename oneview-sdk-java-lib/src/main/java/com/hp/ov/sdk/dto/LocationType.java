@@ -17,6 +17,6 @@ package com.hp.ov.sdk.dto;
 
 public enum LocationType {
 
-    Bay, Enclosure, Ip, Password, Port, UserId
+    Bay, Enclosure, Ip, Password, Port, UserId, StackingDomainId, StackingMemberId
 
 }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -14,28 +14,31 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.generated;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+package com.hp.ov.sdk.dto;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class LogicalLocation implements Serializable {
+public class LogicalSwitchGroup extends BaseModelResource {
 
-    private static final long serialVersionUID = 2956396709126593171L;
+    private String fabricUri;
+    private SwitchMapTemplate switchMapTemplate;
 
-    private List<LocationEntry> locationEntries = new ArrayList<>();
-
-    public List<LocationEntry> getLocationEntries() {
-        return locationEntries;
+    public String getFabricUri() {
+        return fabricUri;
     }
 
-    public void setLocationEntries(List<LocationEntry> locationEntries) {
-        this.locationEntries = locationEntries;
+    public void setFabricUri(String fabricUri) {
+        this.fabricUri = fabricUri;
+    }
+
+    public SwitchMapTemplate getSwitchMapTemplate() {
+        return switchMapTemplate;
+    }
+
+    public void setSwitchMapTemplate(SwitchMapTemplate switchMapTemplate) {
+        this.switchMapTemplate = switchMapTemplate;
     }
 
     @Override
@@ -44,24 +47,30 @@ public class LogicalLocation implements Serializable {
 
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        LogicalLocation that = (LogicalLocation) obj;
+        LogicalSwitchGroup that = (LogicalSwitchGroup) obj;
 
         return new EqualsBuilder()
-                .append(locationEntries, that.locationEntries)
+                .appendSuper(super.equals(obj))
+                .append(fabricUri, that.fabricUri)
+                .append(switchMapTemplate, that.switchMapTemplate)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(locationEntries)
+                .appendSuper(super.hashCode())
+                .append(fabricUri)
+                .append(switchMapTemplate)
                 .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("locationEntries", locationEntries)
+                .appendSuper(super.toString())
+                .append("fabricUri", fabricUri)
+                .append("switchMapTemplate", switchMapTemplate)
                 .toString();
     }
 }

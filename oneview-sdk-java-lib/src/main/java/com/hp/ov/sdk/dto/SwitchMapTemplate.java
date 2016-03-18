@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -14,28 +14,25 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class LogicalLocation implements Serializable {
+public class SwitchMapTemplate implements Serializable {
 
-    private static final long serialVersionUID = 2956396709126593171L;
+    private List<SwitchMapEntryTemplate> switchMapEntryTemplates;
 
-    private List<LocationEntry> locationEntries = new ArrayList<>();
-
-    public List<LocationEntry> getLocationEntries() {
-        return locationEntries;
+    public List<SwitchMapEntryTemplate> getSwitchMapEntryTemplates() {
+        return switchMapEntryTemplates;
     }
 
-    public void setLocationEntries(List<LocationEntry> locationEntries) {
-        this.locationEntries = locationEntries;
+    public void setSwitchMapEntryTemplates(List<SwitchMapEntryTemplate> switchMapEntryTemplates) {
+        this.switchMapEntryTemplates = switchMapEntryTemplates;
     }
 
     @Override
@@ -44,24 +41,24 @@ public class LogicalLocation implements Serializable {
 
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        LogicalLocation that = (LogicalLocation) obj;
+        SwitchMapTemplate that = (SwitchMapTemplate) obj;
 
         return new EqualsBuilder()
-                .append(locationEntries, that.locationEntries)
+                .append(switchMapEntryTemplates, that.switchMapEntryTemplates)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(locationEntries)
+                .append(switchMapEntryTemplates)
                 .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("locationEntries", locationEntries)
+                .append("switchMapEntryTemplates", switchMapEntryTemplates)
                 .toString();
     }
 }

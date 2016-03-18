@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -14,28 +14,35 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class LogicalLocation implements Serializable {
+import com.hp.ov.sdk.dto.generated.LogicalLocation;
 
-    private static final long serialVersionUID = 2956396709126593171L;
+public class SwitchMapEntryTemplate implements Serializable{
 
-    private List<LocationEntry> locationEntries = new ArrayList<>();
+    private LogicalLocation logicalLocation;
+    private String permittedSwitchTypeUri;
 
-    public List<LocationEntry> getLocationEntries() {
-        return locationEntries;
+    public LogicalLocation getLogicalLocation() {
+        return logicalLocation;
     }
 
-    public void setLocationEntries(List<LocationEntry> locationEntries) {
-        this.locationEntries = locationEntries;
+    public void setLogicalLocation(LogicalLocation logicalLocation) {
+        this.logicalLocation = logicalLocation;
+    }
+
+    public String getPermittedSwitchTypeUri() {
+        return permittedSwitchTypeUri;
+    }
+
+    public void setPermittedSwitchTypeUri(String permittedSwitchTypeUri) {
+        this.permittedSwitchTypeUri = permittedSwitchTypeUri;
     }
 
     @Override
@@ -44,24 +51,27 @@ public class LogicalLocation implements Serializable {
 
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        LogicalLocation that = (LogicalLocation) obj;
+        SwitchMapEntryTemplate that = (SwitchMapEntryTemplate) obj;
 
         return new EqualsBuilder()
-                .append(locationEntries, that.locationEntries)
+                .append(logicalLocation, that.logicalLocation)
+                .append(permittedSwitchTypeUri, that.permittedSwitchTypeUri)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(locationEntries)
+                .append(logicalLocation)
+                .append(permittedSwitchTypeUri)
                 .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("locationEntries", locationEntries)
+                .append("logicalLocation", logicalLocation)
+                .append("permittedSwitchTypeUri", permittedSwitchTypeUri)
                 .toString();
     }
 }
