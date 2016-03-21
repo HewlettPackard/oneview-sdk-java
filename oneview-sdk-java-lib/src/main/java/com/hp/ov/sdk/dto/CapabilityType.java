@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto;
 
 
-public enum DcbxStatus {
+public enum CapabilityType {
 
-    Failed,
-    NotApplicable,
-    Ok,
-    Unknown
+    DCC,
+    ENET_FCOE,
+    ETHERNET,
+    EXTENSION,
+    FIBRE_CHANNEL,
+    PORT_EXTENDER,
+    QBG,
+    STACKING,
+    UNKNOWN
 
 }

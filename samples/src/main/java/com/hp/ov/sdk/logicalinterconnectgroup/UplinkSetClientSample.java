@@ -336,7 +336,7 @@ public class UplinkSetClientSample {
                     resourceId = UrlUtils.getResourceIdFromUri(enclosuresDto.getInterconnectBays().get(i).getInterconnectUri());
                 }
 
-                Interconnects interconnectsDto = interconnectClient.getInterconnects(params, resourceId);
+                Interconnects interconnectsDto = interconnectClient.getInterconnectById(params, resourceId);
                 for (int j = 0; j < interconnectsDto.getPortCount(); j++) {
                     if (interconnectsDto.getPorts().get(j).getPortName().equalsIgnoreCase(portValue)) {
                         portConfigInfo.setPortUri(interconnectsDto.getPorts().get(j).getUri());

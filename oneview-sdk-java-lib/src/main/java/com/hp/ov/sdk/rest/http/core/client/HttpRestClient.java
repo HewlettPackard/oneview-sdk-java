@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -26,11 +26,23 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.TrustManager;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpPatch;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 import com.hp.ov.sdk.constants.SdkConstants;
@@ -48,16 +60,6 @@ import com.hp.ov.sdk.exceptions.SDKSSLHandshakeException;
 import com.hp.ov.sdk.exceptions.SDKUnauthorizedException;
 import com.hp.ov.sdk.exceptions.SdkRuntimeException;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpPatch;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class HttpRestClient {
 
@@ -302,7 +304,9 @@ public class HttpRestClient {
             if (HttpURLConnection.HTTP_ACCEPTED == responseCode
                     && result.length() == 0
                     && response.containsHeader(LOCATION_HEADER)) {
-                params.setUrl(UrlUtils.createRestUrl(params.getHostname(), response.getFirstHeader(LOCATION_HEADER).getValue()));
+                String restUri = response.getFirstHeader(LOCATION_HEADER).getValue();
+                restUri = restUri.substring(restUri.indexOf("/rest"));
+                params.setUrl(UrlUtils.createRestUrl(params.getHostname(), restUri));
                 params.setType(HttpMethodType.GET);
 
                 return sendRequestToHPOV(params);
