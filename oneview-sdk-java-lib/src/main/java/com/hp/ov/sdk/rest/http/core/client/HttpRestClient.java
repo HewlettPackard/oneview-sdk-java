@@ -89,6 +89,9 @@ public class HttpRestClient {
 
     /**
      * Send the request to OV and read the response.
+     *
+     * @param params connection parameters.
+     *
      * @return a string representing the response data.
      * @throws SDKBadRequestException on unsupported method (PUT, GET..)
      **/
@@ -99,6 +102,10 @@ public class HttpRestClient {
 
     /**
      * Send the request to OV and read the response.
+     *
+     * @param params connection parameters.
+     * @param jsonObject request body.
+     *
      * @return a string representing the response data.
      * @throws SDKBadRequestException on unsupported method (PUT, GET..)
      **/
@@ -115,6 +122,10 @@ public class HttpRestClient {
 
     /**
      * Send the request to OV and read the response.
+     *
+     * @param params connection parameters.
+     * @param jsonObject request body.
+     *
      * @return a string representing the response data.
      * @throws SDKBadRequestException on unsupported method (PUT, GET..)
      **/
@@ -142,6 +153,11 @@ public class HttpRestClient {
 
     /**
      * Send the request to OV and read the response.
+     *
+     * @param params connection parameters.
+     * @param scriptObject request body.
+     * @param contentType content type.
+     *
      * @return a string representing the response data.
      * @throws SDKBadRequestException on unsupported method (PUT, GET..)
      **/
@@ -325,6 +341,10 @@ public class HttpRestClient {
 
     /**
      * Gets a connection and configures it, does NOT open the connection.
+     *
+     * @param params connection parameters.
+     * @param contentType content type.
+     *
      * @return a connection to the URL
      * @throws ProtocolException if method (GET/PUT/...) not supported
      * @throws SDKNoSuchUrlException on invalid URL
@@ -340,6 +360,14 @@ public class HttpRestClient {
 
     /**
      * Gets a connection and configures it, does NOT open the connection.
+     *
+     * @param params connection parameters.
+     * @param contentType content type.
+     * @param doInput flag to indicate if the connection would be used to do input
+     *                {@see HttpsURLConnection#setDoInput}
+     * @param doOutput flag to indicate if the connection would be used to do output
+     *                {@see HttpsURLConnection#setDoOutput}
+     *
      * @return a connection to the URL
      * @throws ProtocolException if method (GET/PUT/...) not supported
      * @throws SDKNoSuchUrlException on invalid URL
@@ -398,6 +426,9 @@ public class HttpRestClient {
 
     /**
      * Checks the HTTP response codes, on error throws the correct exception.
+     *
+     * @param responseCode the response code.
+     *
      * @return the response code
      */
     private static int checkResponse(final int responseCode) {
@@ -407,6 +438,10 @@ public class HttpRestClient {
     /**
      * Checks the HTTP response codes, on error throws the correct exception.
      * Sets the exception cause as e if it throws one.
+     *
+     * @param responseCode response code.
+     * @param e throwable instance.
+     *
      * @return the response code
      */
     private static int checkResponse(final int responseCode, Throwable e) {
@@ -480,6 +515,10 @@ public class HttpRestClient {
 
     /**
      * Configure all the SSL handlers for the connection.
+     *
+     * @param conn http connection.
+     * @param params connection parameters.
+     *
      * @return the connection
      */
     private static HttpsURLConnection configureSSL(final HttpsURLConnection conn,

@@ -207,7 +207,7 @@ public interface ServerProfileClient {
      *            String, specifying the Enclosure Group URI.
      * @param serverHardwareTypeUri
      *            String, specifying the Server Hardware Type URI.
-     * @param enclosureGroupUri
+     * @param storageSystemId
      *            String, specifying the Storage System ID.
      * @return AvailableStorageSystem, which is a object containing the storage
      *         system details

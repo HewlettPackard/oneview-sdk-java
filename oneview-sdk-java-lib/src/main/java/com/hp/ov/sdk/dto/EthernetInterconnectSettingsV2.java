@@ -149,7 +149,7 @@ public class EthernetInterconnectSettingsV2 extends BaseModelResource {
     }
 
     /**
-     * @param networkType
+     * @param interconnectType
      *            the networkType to set
      */
     public void setNetworkType(final NetworkType interconnectType) {

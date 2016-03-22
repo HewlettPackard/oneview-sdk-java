@@ -161,7 +161,7 @@ public interface EnclosureClient {
      * This method aids in fetching data that can be used to construct a single
      * sign-on URL for an Onboard Administrator.
      * 
-     * @param param
+     * @param params
      *            The RestParams is a structure containing the connection
      *            details.
      * @param resourceId
@@ -175,7 +175,7 @@ public interface EnclosureClient {
      * This method aids in updating the enclosure configuration with that of
      * enclosure group script not applicable if enclosure is monitored.
      * 
-     * @param param
+     * @param params
      *            The RestParams is a structure containing the connection
      *            details.
      * @param resourceId
@@ -189,7 +189,7 @@ public interface EnclosureClient {
     /**
      * This method aids in reapplying the enclosure configuration.
      * 
-     * @param param
+     * @param params
      *            The RestParams is a structure containing the connection
      *            details.
      * @param resourceId
@@ -206,7 +206,7 @@ public interface EnclosureClient {
      * and server profiles in the enclosure. Not applicable if enclosure is
      * monitored.
      * 
-     * @param param
+     * @param params
      *            The RestParams is a structure containing the connection
      *            details.
      * @param resourceId
@@ -266,7 +266,7 @@ public interface EnclosureClient {
     /**
      * This method aids in refreshing the enclosure to fix configuration issues.
      * 
-     * @param param
+     * @param params
      *            The RestParams is a structure containing the connection
      *            details.
      * @param resourceId
@@ -326,7 +326,7 @@ public interface EnclosureClient {
      * This method aids in fetching data that can be used to construct a single
      * sign-on URL for an Onboard Administrator.
      * 
-     * @param param
+     * @param params
      *            The RestParams is a structure containing the connection
      *            details.
      * @param resourceId
@@ -340,7 +340,7 @@ public interface EnclosureClient {
      * This method aids in retrieving historical utilization data for the
      * specified enclosure.
      * 
-     * @param param
+     * @param params
      *            The RestParams is a structure containing the connection
      *            details.
      * @param resourceId

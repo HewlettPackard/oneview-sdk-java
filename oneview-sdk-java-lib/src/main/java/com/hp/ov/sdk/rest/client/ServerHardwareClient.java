@@ -147,8 +147,8 @@ public interface ServerHardwareClient {
 
     /**
      * This module aids in fetching the settings that describe the environmental
-     * configuration (supported feature set, calibrated minimum & maximum power,
-     * location & dimensions, ...) of the server hardware resource.
+     * configuration (supported feature set, calibrated minimum and maximum power,
+     * location and dimensions, ...) of the server hardware resource.
      * 
      * @param params
      *            The RestParams is a structure containing the connection details.

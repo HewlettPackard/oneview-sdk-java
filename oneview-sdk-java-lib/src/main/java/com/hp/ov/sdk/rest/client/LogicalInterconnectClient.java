@@ -89,14 +89,14 @@ public interface LogicalInterconnectClient {
      *            details.
      * @param resourceId
      *            The resourceId for LogicalInterconnects as seen in HP OneView.
-     * @param EthernetInterconnectSettingsV2
+     * @param ethernetInterconnectSettingsDto
      *            The Ethernet settings for LogicalInterconnect as seen in HP OneView.
      * @param asyncOrSyncMode
      *            Flag input to process request asynchronously or synchronously.
      * @return taskResource which returns the task status for the process
      */
-    public TaskResourceV2 updateEthernetSettings(final RestParams params, String resouceId,
-            final EthernetInterconnectSettingsV2 EthernetInterconnectSettingsDto,
+    public TaskResourceV2 updateEthernetSettings(final RestParams params, String resourceId,
+            final EthernetInterconnectSettingsV2 ethernetInterconnectSettingsDto,
             final boolean asyncOrSyncMode);
 
     /**

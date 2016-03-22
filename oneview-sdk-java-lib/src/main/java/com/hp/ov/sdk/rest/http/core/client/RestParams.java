@@ -204,8 +204,9 @@ public class RestParams {
 
     /**
      * Sets a new TrustManager for future connections.
-     * @see TrustManager
-     * @see getTrustManager
+     *
+     * @param trustMgr {@link TrustManager} trust manager.
+     *
      * @return the old TrustManager
      **/
     public TrustManager setTrustManager(final TrustManager trustMgr) {
@@ -233,8 +234,9 @@ public class RestParams {
 
     /**
      * Sets a new HostnameVerifier for future connections.
-     * @see HostnameVerifier
-     * @see getHostnameVerifier
+     *
+     * @param verifier {@link HostnameVerifier} hostname verifier.
+     *
      * @return the old HostnameVerifier
      **/
     public HostnameVerifier
