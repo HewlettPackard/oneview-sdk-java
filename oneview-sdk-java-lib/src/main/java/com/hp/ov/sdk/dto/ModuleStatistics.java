@@ -28,6 +28,12 @@ public class ModuleStatistics implements Serializable {
 
     private String cpuUsage;
     private String memoryUsage;
+
+    /**
+     * This field has a special treatment when serialization/deserialization occurs
+     *
+     * @see com.hp.ov.sdk.adaptors.PortTelemetrySerializationAdapter
+     */
     private PortTelemetry portTelemetry;
     private Integer portTelemetryEntryCount;
     private Integer portTelemetryPeriod;
