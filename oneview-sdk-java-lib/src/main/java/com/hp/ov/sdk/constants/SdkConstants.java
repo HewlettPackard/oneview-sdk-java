@@ -62,6 +62,7 @@ public class SdkConstants {
     public static final String LOGICAL_INTERCONNECT_GROUP = "logical-interconnect-group";
     public static final String LOGICAL_INTERCONNECT_GROUPS = LOGICAL_INTERCONNECT_GROUP + "s";
     public static final String LOGICAL_SWITCH_GROUPS = "logical-switch-groups";
+    public static final String LOGICAL_SWITCHES = "logical-switches";
     public static final String MANAGED_SAN = "managed-sans";
     public static final String MANAGED_SANS = MANAGED_SAN + "s";
     public static final String MSMB_ALERTS_ROUTING_KEY = "msmb.#";

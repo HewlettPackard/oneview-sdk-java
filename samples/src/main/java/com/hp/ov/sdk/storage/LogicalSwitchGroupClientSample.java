@@ -41,8 +41,9 @@ public class LogicalSwitchGroupClientSample {
 
     // These are variables to be defined by user
     // ================================
+    public static final String LOGICAL_SWITCH_GROUP_NAME = "LOGICAL_SWITCH_GROUP-Sample";
+
     private static final String RESOURCE_ID = "b231a2fe-5fc8-43de-997b-324b7a1fbcca";
-    private static final String LOGICAL_SWITCH_GROUP_NAME = "TEST_LSG";
 
     //TODO once the switch types API is implemented remove the id and use the client to retrieve the id
     private static final String SWITCH_TYPE_ID = "3a5f0656-17be-46b3-b604-e89059354012"; //Cisco Nexus 55xx
@@ -202,8 +203,6 @@ public class LogicalSwitchGroupClientSample {
                     + "errors in task, please check task resource for more details");
         }
     }
-
-
 
     private void deleteLogicalSwitchGroup() {
         RestParams params = null;
