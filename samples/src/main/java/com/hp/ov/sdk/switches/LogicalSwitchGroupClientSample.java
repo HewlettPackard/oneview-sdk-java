@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.storage;
+package com.hp.ov.sdk.switches;
 
 import com.google.common.collect.Lists;
 import com.hp.ov.sdk.constants.ResourceCategory;
+import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.dto.LogicalSwitchGroup;
 import com.hp.ov.sdk.dto.LogicalSwitchGroupCollection;
 import com.hp.ov.sdk.dto.SwitchMapEntryTemplate;
@@ -33,6 +34,8 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.LogicalSwitchGroupClient;
 import com.hp.ov.sdk.rest.client.LogicalSwitchGroupClientImpl;
+import com.hp.ov.sdk.rest.client.SwitchTypeClient;
+import com.hp.ov.sdk.rest.client.SwitchTypeClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
@@ -44,15 +47,14 @@ public class LogicalSwitchGroupClientSample {
     public static final String LOGICAL_SWITCH_GROUP_NAME = "LOGICAL_SWITCH_GROUP-Sample";
 
     private static final String RESOURCE_ID = "b231a2fe-5fc8-43de-997b-324b7a1fbcca";
-
-    //TODO once the switch types API is implemented remove the id and use the client to retrieve the id
-    private static final String SWITCH_TYPE_ID = "3a5f0656-17be-46b3-b604-e89059354012"; //Cisco Nexus 55xx
     // ================================
 
     private final LogicalSwitchGroupClient logicalSwitchGroupClient;
+    private final SwitchTypeClient switchTypeClient;
 
     public LogicalSwitchGroupClientSample() {
         this.logicalSwitchGroupClient = LogicalSwitchGroupClientImpl.getClient();
+        this.switchTypeClient = SwitchTypeClientImpl.getClient();
     }
 
     private void getLogicalSwitchGroup() {
@@ -142,7 +144,7 @@ public class LogicalSwitchGroupClientSample {
         try {
             params = HPOneViewCredential.createCredentials();
 
-            LogicalSwitchGroup group = buildLogicalSwitchGroup();
+            LogicalSwitchGroup group = buildLogicalSwitchGroup(params);
 
             TaskResourceV2 task = this.logicalSwitchGroupClient.createLogicalSwitchGroup(params, group, false);
 
@@ -236,7 +238,9 @@ public class LogicalSwitchGroupClientSample {
         }
     }
 
-    private LogicalSwitchGroup buildLogicalSwitchGroup() {
+    private LogicalSwitchGroup buildLogicalSwitchGroup(RestParams params) {
+        InterconnectType type = switchTypeClient.getSwitchTypeByName(params, SwitchTypeClientSample.SWITCH_TYPE_NAME);
+
         LogicalSwitchGroup group = new LogicalSwitchGroup();
 
         group.setType(ResourceCategory.RC_LOGICAL_SWITCH_GROUP);
@@ -250,7 +254,7 @@ public class LogicalSwitchGroupClientSample {
         logicalLocation.setLocationEntries(Lists.newArrayList(new LocationEntry(Integer.valueOf(1), null,
                 LocationEntry.Type.StackingMemberId)));
         switchMapEntryTemplate.setLogicalLocation(logicalLocation);
-        switchMapEntryTemplate.setPermittedSwitchTypeUri("/rest/switch-types/" + SWITCH_TYPE_ID);
+        switchMapEntryTemplate.setPermittedSwitchTypeUri(type.getUri());
 
         switchMapTemplate.setSwitchMapEntryTemplates(Lists.newArrayList(switchMapEntryTemplate));
 
@@ -260,6 +264,9 @@ public class LogicalSwitchGroupClientSample {
     }
 
     private LogicalSwitchGroup buildUpdateLogicalSwitchGroup(RestParams params) {
+        InterconnectType type = this.switchTypeClient.getSwitchTypeByName(params,
+                SwitchTypeClientSample.SWITCH_TYPE_NAME);
+
         LogicalSwitchGroup group = this.logicalSwitchGroupClient.getLogicalSwitchGroupByName(params,
                 LOGICAL_SWITCH_GROUP_NAME);
 
@@ -271,7 +278,7 @@ public class LogicalSwitchGroupClientSample {
         logicalLocation.setLocationEntries(Lists.newArrayList(new LocationEntry(Integer.valueOf(2),
                 null, LocationEntry.Type.StackingMemberId)));
         switchMapEntryTemplate.setLogicalLocation(logicalLocation);
-        switchMapEntryTemplate.setPermittedSwitchTypeUri("/rest/switch-types/" + SWITCH_TYPE_ID);
+        switchMapEntryTemplate.setPermittedSwitchTypeUri(type.getUri());
 
         switchMapTemplate.getSwitchMapEntryTemplates().add(switchMapEntryTemplate);
 

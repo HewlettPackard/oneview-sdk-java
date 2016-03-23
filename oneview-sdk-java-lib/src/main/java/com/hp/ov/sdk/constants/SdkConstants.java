@@ -106,6 +106,7 @@ public class SdkConstants {
     public static final String STORAGE_VOLUME_TEMPLATE = "storage-volume-template";
     public static final String STORAGE_VOLUME_TEMPLATES = STORAGE_VOLUME_TEMPLATE + "s";
     public static final String SUPPORT_DUMP = "support-dumps";
+    public static final String SWITCH_TYPES = "switch-types";
     public static final String SWITCHES = "switches";
     public static final String TELEMETRY_CONFIGURATIONS = "telemetry-configurations";
     public static final String UNASSIGNED_UPLINK_PORTS_FOR_PORT_MONITOR = "unassignedUplinkPortsForPortMonitor";
