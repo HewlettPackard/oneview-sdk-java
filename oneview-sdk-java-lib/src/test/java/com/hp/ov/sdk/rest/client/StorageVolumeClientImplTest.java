@@ -215,7 +215,7 @@ public class StorageVolumeClientImplTest {
         String taskAsJson = "{\"type\" : \"taskResource\"}";
         JSONObject jsonObject = new JSONObject();
 
-        given(resourceAdaptor.buildJsonRequest(any(AddStorageVolumeV2.class), any(Integer.class)))
+        given(resourceAdaptor.buildJsonRequest(any(AddStorageVolumeV2.class), any(Double.class)))
                 .willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(taskAsJson);
         given(taskAdaptor.buildDto(any(String.class))).willReturn(new TaskResourceV2());
@@ -248,7 +248,7 @@ public class StorageVolumeClientImplTest {
         JSONObject jsonObject = new JSONObject();
         String nonEmptyResponse = "random-RESPONSE";
 
-        given(resourceAdaptor.buildJsonRequest(any(StorageVolumeV2.class), any(Integer.class)))
+        given(resourceAdaptor.buildJsonRequest(any(StorageVolumeV2.class), any(Double.class)))
                 .willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(nonEmptyResponse);
 
@@ -422,7 +422,7 @@ public class StorageVolumeClientImplTest {
         JSONObject jsonObject = new JSONObject();
 
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(taskAsJson);
-        given(resourceAdaptor.buildJsonRequest(any(StorageVolumeSnapshot.class), any(Integer.class)))
+        given(resourceAdaptor.buildJsonRequest(any(StorageVolumeSnapshot.class), any(Double.class)))
                 .willReturn(jsonObject);
         given(taskAdaptor.buildDto(any(String.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), any(String.class), any(Integer.class)))
@@ -518,7 +518,7 @@ public class StorageVolumeClientImplTest {
         String taskAsJson = "{\"type\" : \"taskResource\"}";
         JSONObject jsonObject = new JSONObject();
 
-        given(resourceAdaptor.buildJsonRequest(any(ExtraStorageVolumeRepair.class), any(Integer.class)))
+        given(resourceAdaptor.buildJsonRequest(any(ExtraStorageVolumeRepair.class), any(Double.class)))
                 .willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(taskAsJson);
         given(taskAdaptor.buildDto(any(String.class))).willReturn(new TaskResourceV2());
