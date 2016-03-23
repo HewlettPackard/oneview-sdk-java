@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,96 +12,71 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
 
-public class VirtualPort implements Serializable {
+import com.google.gson.annotations.Since;
 
-    /**
-	 * 
-	 */
-    private static final long serialVersionUID = 1L;
+public class ServerFabricVirtualPort implements Serializable {
+
+    private static final long serialVersionUID = -5087503882656435993L;
+
+    @Since(200)
+    private Integer currentAllocatedVirtualFunctionCount;
+
     private String mac;
     private String portFunction;
     private Integer portNumber;
     private String wwnn;
     private String wwpn;
 
-    /**
-     * @return the mac
-     */
+    public Integer getCurrentAllocatedVirtualFunctionCount() {
+        return currentAllocatedVirtualFunctionCount;
+    }
+
+    public void setCurrentAllocatedVirtualFunctionCount(Integer currentAllocatedVirtualFunctionCount) {
+        this.currentAllocatedVirtualFunctionCount = currentAllocatedVirtualFunctionCount;
+    }
+
     public String getMac() {
         return mac;
     }
 
-    /**
-     * @param mac
-     *            the mac to set
-     */
-    public void setMac(final String mac) {
+    public void setMac(String mac) {
         this.mac = mac;
     }
 
-    /**
-     * @return the portFunction
-     */
     public String getPortFunction() {
         return portFunction;
     }
 
-    /**
-     * @param portFunction
-     *            the portFunction to set
-     */
-    public void setPortFunction(final String portFunction) {
+    public void setPortFunction(String portFunction) {
         this.portFunction = portFunction;
     }
 
-    /**
-     * @return the portNumber
-     */
     public Integer getPortNumber() {
         return portNumber;
     }
 
-    /**
-     * @param portNumber
-     *            the portNumber to set
-     */
-    public void setPortNumber(final Integer portNumber) {
+    public void setPortNumber(Integer portNumber) {
         this.portNumber = portNumber;
     }
 
-    /**
-     * @return the wwnn
-     */
     public String getWwnn() {
         return wwnn;
     }
 
-    /**
-     * @param wwnn
-     *            the wwnn to set
-     */
-    public void setWwnn(final String wwnn) {
+    public void setWwnn(String wwnn) {
         this.wwnn = wwnn;
     }
 
-    /**
-     * @return the wwpn
-     */
     public String getWwpn() {
         return wwpn;
     }
 
-    /**
-     * @param wwpn
-     *            the wwpn to set
-     */
-    public void setWwpn(final String wwpn) {
+    public void setWwpn(String wwpn) {
         this.wwpn = wwpn;
     }
-
 }

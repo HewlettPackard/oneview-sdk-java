@@ -270,7 +270,7 @@ public class SwitchClientImpl implements SwitchClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(),
                 ResourceUris.SWITCHES_URI, resourceId,
-                ResourceUris.SWITCHES_ENVIRONMENTAL_CONFIGURATION_URI));
+                ResourceUris.ENVIRONMENT_CONFIGURATION_URI));
 
         String response = restClient.sendRequest(params);
 

@@ -578,7 +578,8 @@ public class EnclosureClientTest {
         EnvironmentalConfiguration enclosureDto = client.getEnvironmentalConfiguration(params, resourceId);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.ENVIRONMENTAL_CONFIGURATION));
+        rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId,
+                ResourceUris.ENVIRONMENT_CONFIGURATION_URI));
         rp.setType(HttpMethodType.GET);
 
         PowerMockito.verifyStatic();
@@ -619,7 +620,8 @@ public class EnclosureClientTest {
                 false);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.ENVIRONMENTAL_CONFIGURATION));
+        rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId,
+                ResourceUris.ENVIRONMENT_CONFIGURATION_URI));
         rp.setType(HttpMethodType.PUT);
 
         PowerMockito.verifyStatic();

@@ -23,7 +23,6 @@ public class SdkConstants {
     public static final String ACTIVE_OA_SSO_URL = "activeOaSsoUrl";
     public static final String ACTIVE_OA_SSO_URL_V200 = "sso";
     public static final String APPLIANCE = "appliance";
-    public static final String BIOS = "bios";
     public static final String BULK_ETHERNET_NETWORK = "bulk-ethernet-network";
     public static final String CERTS = "appliance-certificates";
     public static final String COMPLIANCE = "compliance";
@@ -38,7 +37,6 @@ public class SdkConstants {
     public static final String ENCLOSURE_FW_BASELINE = "enclosureFwBaseline";
     public static final String ENCLOSURE_GROUP = "enclosure-group";
     public static final String ENCLOSURE_GROUPS = ENCLOSURE_GROUP + "s";
-    public static final String ENVIRONMENTAL_CONFIGURATION = "environmentalConfiguration";
     public static final String ETHERNET = "Ethernet";
     public static final String ETHERNET_SETTINGS = "ethernetSettings";
     public static final String FIBRE_CHANNEL = "FibreChannel";

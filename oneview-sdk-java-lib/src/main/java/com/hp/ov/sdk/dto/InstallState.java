@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -13,21 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.hp.ov.sdk.dto;
 
-import java.io.Serializable;
+public enum InstallState {
 
-public class EnvironmentalConfigurationUpdate implements Serializable {
+    Installed, NotInstalled, Unknown
 
-    private static final long serialVersionUID = 2702121719623728176L;
-
-    private Integer calibratedMaxPower;
-
-    public Integer getCalibratedMaxPower() {
-        return calibratedMaxPower;
-    }
-
-    public void setCalibratedMaxPower(Integer calibratedMaxPower) {
-        this.calibratedMaxPower = calibratedMaxPower;
-    }
 }

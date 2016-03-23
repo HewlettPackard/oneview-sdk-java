@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -13,29 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class AddServer implements Serializable {
+public class RefreshStateRequest implements Serializable {
 
-    private static final long serialVersionUID = -8835431804296816200L;
+    private static final long serialVersionUID = -4044039478220689482L;
 
-    private ConfigurationState configurationState;
     private Boolean force;
     private String hostname;
-    private LicensingIntent licensingIntent;
     private String password;
+    private List<RefreshAction> refreshActions = new ArrayList<>();
+    private final RefreshState refreshState = RefreshState.RefreshPending;
     private Boolean restore;
     private String username;
-
-    public ConfigurationState getConfigurationState() {
-        return configurationState;
-    }
-
-    public void setConfigurationState(ConfigurationState configurationState) {
-        this.configurationState = configurationState;
-    }
 
     public Boolean getForce() {
         return force;
@@ -53,20 +48,20 @@ public class AddServer implements Serializable {
         this.hostname = hostname;
     }
 
-    public LicensingIntent getLicensingIntent() {
-        return licensingIntent;
-    }
-
-    public void setLicensingIntent(LicensingIntent licensingIntent) {
-        this.licensingIntent = licensingIntent;
-    }
-
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<RefreshAction> getRefreshActions() {
+        return refreshActions;
+    }
+
+    public void setRefreshActions(List<RefreshAction> refreshActions) {
+        this.refreshActions = refreshActions;
     }
 
     public Boolean getRestore() {
@@ -84,5 +79,4 @@ public class AddServer implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
-
 }

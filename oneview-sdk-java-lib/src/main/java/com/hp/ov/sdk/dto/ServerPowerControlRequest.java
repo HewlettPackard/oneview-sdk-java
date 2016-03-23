@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,62 +12,39 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.dto;
 
-public class ServerPowerControlRequest {
+import java.io.Serializable;
+
+public class ServerPowerControlRequest implements Serializable {
+
+    private static final long serialVersionUID = 7954518736138061854L;
 
     private PhysicalServerPowerControl powerControl;
     private Boolean powerRequestIssued;
     private PhysicalServerPowerState powerState;
 
-    /**
-     * 
-     * @return The powerControl
-     */
     public PhysicalServerPowerControl getPowerControl() {
         return powerControl;
     }
 
-    /**
-     * 
-     * @param powerControl
-     *            The powerControl
-     */
     public void setPowerControl(final PhysicalServerPowerControl powerControl) {
         this.powerControl = powerControl;
     }
 
-    /**
-     * 
-     * @return The powerRequestIssued
-     */
     public Boolean getPowerRequestIssued() {
         return powerRequestIssued;
     }
 
-    /**
-     * 
-     * @param powerRequestIssued
-     *            The powerRequestIssued
-     */
     public void setPowerRequestIssued(final Boolean powerRequestIssued) {
         this.powerRequestIssued = powerRequestIssued;
     }
 
-    /**
-     * 
-     * @return The powerState
-     */
     public PhysicalServerPowerState getPowerState() {
         return powerState;
     }
 
-    /**
-     * 
-     * @param powerState
-     *            The powerState
-     */
     public void setPowerState(final PhysicalServerPowerState powerState) {
         this.powerState = powerState;
     }
