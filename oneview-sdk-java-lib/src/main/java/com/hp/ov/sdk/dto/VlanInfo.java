@@ -17,6 +17,7 @@
 package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -26,14 +27,14 @@ public class VlanInfo implements Serializable {
 
     private static final long serialVersionUID = -8115420911286947803L;
 
-    private RestUri restUri;
+    private List<RestUri> restUri;
     private String vlanNumber;
 
-    public RestUri getRestUri() {
+    public List<RestUri> getRestUri() {
         return restUri;
     }
 
-    public void setRestUri(RestUri restUri) {
+    public void setRestUri(List<RestUri> restUri) {
         this.restUri = restUri;
     }
 
