@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,10 +27,10 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.ProfileConnectionV3;
 
 /**
@@ -42,31 +41,10 @@ import com.hp.ov.sdk.dto.ProfileConnectionV3;
  * be applied to servers. It is passed in to the add/update server profile REST
  * api, as well as the add/update server profile through java client api.
  */
+public class ServerProfile extends BaseModelResource {
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "uri", "name", "description", "serialNumber", "uuid", "serverHardwareUri", "serverHardwareTypeUri",
-        "enclosureGroupUri", "enclosureUri", "enclosureBay", "affinity", "associatedServer", "hideUnusedFlexNics", "firmware",
-        "macType", "wwnType", "serialNumberType", "category", "created", "modified", "status", "state", "inProgress", "taskUri",
-        "connections", "bootMode", "boot", "bios", "localStorage", "sanStorage", "eTag", "type" })
-public class ServerProfile implements Serializable {
-
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("uri")
-    private String uri;
-    /**
-     * 
-     * (Required)
-     * 
-     */
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("description")
-    private String description;
     @JsonProperty("serialNumber")
     private String serialNumber;
     @JsonProperty("uuid")
@@ -95,16 +73,6 @@ public class ServerProfile implements Serializable {
     private AssignmentType wwnType = ServerProfile.AssignmentType.Virtual;
     @JsonProperty("serialNumberType")
     private AssignmentType serialNumberType = ServerProfile.AssignmentType.Virtual;
-    @JsonProperty("category")
-    private String category;
-    @JsonProperty("created")
-    private String created;
-    @JsonProperty("modified")
-    private String modified;
-    @JsonProperty("status")
-    private String status;
-    @JsonProperty("state")
-    private String state;
     @JsonProperty("inProgress")
     private Boolean inProgress;
     @JsonProperty("taskUri")
@@ -121,74 +89,15 @@ public class ServerProfile implements Serializable {
     private LocalStorage localStorage = null;
     @JsonProperty("sanStorage")
     private SanStorage sanStorage;
-    @JsonProperty("eTag")
-    private String eTag;
-    @JsonProperty("type")
-    private String type;
+    @JsonProperty("serverProfileTemplateUri")
+    @Since(200)
+    private String serverProfileTemplateUri;
+    @JsonProperty("templateCompliance")
+    @Since(200)
+    private TemplateCompliance templateCompliance = ServerProfile.TemplateCompliance.Unknown;
 
     /**
-     * 
-     * @return The uri
-     */
-    @JsonProperty("uri")
-    public String getUri() {
-        return uri;
-    }
-
-    /**
-     * 
-     * @param uri
-     *            The uri
-     */
-    @JsonProperty("uri")
-    public void setUri(final String uri) {
-        this.uri = uri;
-    }
-
-    /**
-     * 
-     * (Required)
-     * 
-     * @return The name
-     */
-    @JsonProperty("name")
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * 
-     * (Required)
-     * 
-     * @param name
-     *            The name
-     */
-    @JsonProperty("name")
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    /**
-     * 
-     * @return The description
-     */
-    @JsonProperty("description")
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * 
-     * @param description
-     *            The description
-     */
-    @JsonProperty("description")
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    /**
-     * 
+     *
      * @return The serialNumber
      */
     @JsonProperty("serialNumber")
@@ -197,7 +106,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param serialNumber
      *            The serialNumber
      */
@@ -207,7 +116,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The uuid
      */
     @JsonProperty("uuid")
@@ -216,7 +125,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param uuid
      *            The uuid
      */
@@ -226,7 +135,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The serverHardwareUri
      */
     @JsonProperty("serverHardwareUri")
@@ -235,7 +144,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param serverHardwareUri
      *            The serverHardwareUri
      */
@@ -245,7 +154,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The serverHardwareTypeUri
      */
     @JsonProperty("serverHardwareTypeUri")
@@ -254,7 +163,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param serverHardwareTypeUri
      *            The serverHardwareTypeUri
      */
@@ -264,7 +173,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The enclosureGroupUri
      */
     @JsonProperty("enclosureGroupUri")
@@ -273,7 +182,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param enclosureGroupUri
      *            The enclosureGroupUri
      */
@@ -283,7 +192,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The enclosureUri
      */
     @JsonProperty("enclosureUri")
@@ -292,7 +201,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param enclosureUri
      *            The enclosureUri
      */
@@ -302,7 +211,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The enclosureBay
      */
     @JsonProperty("enclosureBay")
@@ -311,7 +220,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param enclosureBay
      *            The enclosureBay
      */
@@ -321,7 +230,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The affinity
      */
     @JsonProperty("affinity")
@@ -330,7 +239,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param affinity
      *            The affinity
      */
@@ -340,7 +249,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The associatedServer
      */
     @JsonProperty("associatedServer")
@@ -349,7 +258,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param associatedServer
      *            The associatedServer
      */
@@ -359,7 +268,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The hideUnusedFlexNics
      */
     @JsonProperty("hideUnusedFlexNics")
@@ -368,7 +277,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param hideUnusedFlexNics
      *            The hideUnusedFlexNics
      */
@@ -378,7 +287,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The firmware
      */
     @JsonProperty("firmware")
@@ -387,7 +296,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param firmware
      *            The firmware
      */
@@ -397,7 +306,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The macType
      */
     @JsonProperty("macType")
@@ -406,7 +315,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param macType
      *            The macType
      */
@@ -416,7 +325,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The wwnType
      */
     @JsonProperty("wwnType")
@@ -425,7 +334,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param wwnType
      *            The wwnType
      */
@@ -435,7 +344,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The serialNumberType
      */
     @JsonProperty("serialNumberType")
@@ -444,7 +353,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param serialNumberType
      *            The serialNumberType
      */
@@ -454,102 +363,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
-     * @return The category
-     */
-    @JsonProperty("category")
-    public String getCategory() {
-        return category;
-    }
-
-    /**
-     * 
-     * @param category
-     *            The category
-     */
-    @JsonProperty("category")
-    public void setCategory(final String category) {
-        this.category = category;
-    }
-
-    /**
-     * 
-     * @return The created
-     */
-    @JsonProperty("created")
-    public String getCreated() {
-        return created;
-    }
-
-    /**
-     * 
-     * @param created
-     *            The created
-     */
-    @JsonProperty("created")
-    public void setCreated(final String created) {
-        this.created = created;
-    }
-
-    /**
-     * 
-     * @return The modified
-     */
-    @JsonProperty("modified")
-    public String getModified() {
-        return modified;
-    }
-
-    /**
-     * 
-     * @param modified
-     *            The modified
-     */
-    @JsonProperty("modified")
-    public void setModified(final String modified) {
-        this.modified = modified;
-    }
-
-    /**
-     * 
-     * @return The status
-     */
-    @JsonProperty("status")
-    public String getStatus() {
-        return status;
-    }
-
-    /**
-     * 
-     * @param status
-     *            The status
-     */
-    @JsonProperty("status")
-    public void setStatus(final String status) {
-        this.status = status;
-    }
-
-    /**
-     * 
-     * @return The state
-     */
-    @JsonProperty("state")
-    public String getState() {
-        return state;
-    }
-
-    /**
-     * 
-     * @param state
-     *            The state
-     */
-    @JsonProperty("state")
-    public void setState(final String state) {
-        this.state = state;
-    }
-
-    /**
-     * 
+     *
      * @return The inProgress
      */
     @JsonProperty("inProgress")
@@ -558,7 +372,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param inProgress
      *            The inProgress
      */
@@ -568,7 +382,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The taskUri
      */
     @JsonProperty("taskUri")
@@ -577,7 +391,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param taskUri
      *            The taskUri
      */
@@ -587,7 +401,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The connections
      */
     @JsonProperty("connections")
@@ -596,7 +410,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param connections
      *            The connections
      */
@@ -606,7 +420,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The bootMode
      */
     @JsonProperty("bootMode")
@@ -615,7 +429,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param bootMode
      *            The bootMode
      */
@@ -625,7 +439,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The boot
      */
     @JsonProperty("boot")
@@ -634,7 +448,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param boot
      *            The boot
      */
@@ -644,7 +458,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The bios
      */
     @JsonProperty("bios")
@@ -653,7 +467,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param bios
      *            The bios
      */
@@ -663,7 +477,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The localStorage
      */
     @JsonProperty("localStorage")
@@ -672,7 +486,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param localStorage
      *            The localStorage
      */
@@ -682,7 +496,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The sanStorage
      */
     @JsonProperty("sanStorage")
@@ -691,7 +505,7 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param sanStorage
      *            The sanStorage
      */
@@ -701,39 +515,31 @@ public class ServerProfile implements Serializable {
     }
 
     /**
-     * 
-     * @return The eTag
+     * @return the serverProfileTemplateUri
      */
-    @JsonProperty("eTag")
-    public String getETag() {
-        return eTag;
+    public String getServerProfileTemplateUri() {
+        return serverProfileTemplateUri;
     }
 
     /**
-     * 
-     * @param eTag
-     *            The eTag
+     * @param serverProfileTemplateUri the serverProfileTemplateUri to set
      */
-    @JsonProperty("eTag")
-    public void setETag(final String eTag) {
-        this.eTag = eTag;
+    public void setServerProfileTemplateUri(String serverProfileTemplateUri) {
+        this.serverProfileTemplateUri = serverProfileTemplateUri;
     }
 
     /**
-     * 
-     * @return The type
+     * @return the templateCompliance
      */
-    public String getType() {
-        return type;
+    public TemplateCompliance getTemplateCompliance() {
+        return templateCompliance;
     }
 
     /**
-     * 
-     * @param type
-     *            The type
+     * @param templateCompliance the templateCompliance to set
      */
-    public void setType(final String type) {
-        this.type = type;
+    public void setTemplateCompliance(TemplateCompliance templateCompliance) {
+        this.templateCompliance = templateCompliance;
     }
 
     @Override
@@ -743,12 +549,33 @@ public class ServerProfile implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(type).append(uri).append(name).append(description).append(serialNumber).append(uuid)
-                .append(serverHardwareUri).append(serverHardwareTypeUri).append(enclosureGroupUri).append(enclosureUri)
-                .append(enclosureBay).append(affinity).append(associatedServer).append(hideUnusedFlexNics).append(firmware)
-                .append(macType).append(wwnType).append(serialNumberType).append(category).append(created).append(modified)
-                .append(status).append(state).append(inProgress).append(taskUri).append(connections).append(bootMode).append(boot)
-                .append(bios).append(localStorage).append(sanStorage).append(eTag).toHashCode();
+        return new HashCodeBuilder()
+                .append(serialNumber)
+                .append(uuid)
+                .append(serverHardwareUri)
+                .append(serverHardwareTypeUri)
+                .append(enclosureGroupUri)
+                .append(enclosureUri)
+                .append(enclosureBay)
+                .append(affinity)
+                .append(associatedServer)
+                .append(hideUnusedFlexNics)
+                .append(firmware)
+                .append(macType)
+                .append(wwnType)
+                .append(serialNumberType)
+                .append(inProgress)
+                .append(taskUri)
+                .append(connections)
+                .append(bootMode)
+                .append(boot)
+                .append(bios)
+                .append(localStorage)
+                .append(sanStorage)
+                .append(serverProfileTemplateUri)
+                .append(templateCompliance)
+                .appendSuper(super.hashCode())
+                .toHashCode();
     }
 
     @Override
@@ -760,24 +587,41 @@ public class ServerProfile implements Serializable {
             return false;
         }
         final ServerProfile rhs = ((ServerProfile) other);
-        return new EqualsBuilder().append(type, rhs.type).append(uri, rhs.uri).append(name, rhs.name)
-                .append(description, rhs.description).append(serialNumber, rhs.serialNumber).append(uuid, rhs.uuid)
-                .append(serverHardwareUri, rhs.serverHardwareUri).append(serverHardwareTypeUri, rhs.serverHardwareTypeUri)
-                .append(enclosureGroupUri, rhs.enclosureGroupUri).append(enclosureUri, rhs.enclosureUri)
-                .append(enclosureBay, rhs.enclosureBay).append(affinity, rhs.affinity)
-                .append(associatedServer, rhs.associatedServer).append(hideUnusedFlexNics, rhs.hideUnusedFlexNics)
-                .append(firmware, rhs.firmware).append(macType, rhs.macType).append(wwnType, rhs.wwnType)
-                .append(serialNumberType, rhs.serialNumberType).append(category, rhs.category).append(created, rhs.created)
-                .append(modified, rhs.modified).append(status, rhs.status).append(state, rhs.state)
-                .append(inProgress, rhs.inProgress).append(taskUri, rhs.taskUri).append(connections, rhs.connections)
-                .append(bootMode, rhs.bootMode).append(boot, rhs.boot).append(bios, rhs.bios)
-                .append(localStorage, rhs.localStorage).append(sanStorage, rhs.sanStorage).append(eTag, rhs.eTag).isEquals();
+        return new EqualsBuilder()
+                .append(serialNumber, rhs.serialNumber)
+                .append(uuid, rhs.uuid)
+                .append(serverHardwareUri, rhs.serverHardwareUri)
+                .append(serverHardwareTypeUri, rhs.serverHardwareTypeUri)
+                .append(enclosureGroupUri, rhs.enclosureGroupUri)
+                .append(enclosureUri, rhs.enclosureUri)
+                .append(enclosureBay, rhs.enclosureBay)
+                .append(affinity, rhs.affinity)
+                .append(associatedServer, rhs.associatedServer)
+                .append(hideUnusedFlexNics, rhs.hideUnusedFlexNics)
+                .append(firmware, rhs.firmware)
+                .append(macType, rhs.macType)
+                .append(wwnType, rhs.wwnType)
+                .append(serialNumberType, rhs.serialNumberType)
+                .append(inProgress, rhs.inProgress)
+                .append(taskUri, rhs.taskUri)
+                .append(connections, rhs.connections)
+                .append(bootMode, rhs.bootMode)
+                .append(boot, rhs.boot)
+                .append(bios, rhs.bios)
+                .append(localStorage, rhs.localStorage)
+                .append(sanStorage, rhs.sanStorage)
+                .append(serverProfileTemplateUri, rhs.serverProfileTemplateUri)
+                .append(templateCompliance, rhs.templateCompliance)
+                .appendSuper(super.equals(other))
+                .isEquals();
     }
 
     @Generated("org.jsonschema2pojo")
     public static enum ProfileAffinity {
 
-        Bay("Bay"), BayAndServer("BayAndServer");
+        Bay("Bay"),
+        BayAndServer("BayAndServer");
+
         private final String value;
         private static Map<String, ServerProfile.ProfileAffinity> constants = new HashMap<String, ServerProfile.ProfileAffinity>();
 
@@ -812,7 +656,10 @@ public class ServerProfile implements Serializable {
     @Generated("org.jsonschema2pojo")
     public static enum AssignmentType {
 
-        Physical("Physical"), UserDefined("UserDefined"), Virtual("Virtual");
+        Physical("Physical"),
+        UserDefined("UserDefined"),
+        Virtual("Virtual");
+
         private final String value;
         private static Map<String, ServerProfile.AssignmentType> constants = new HashMap<String, ServerProfile.AssignmentType>();
 
@@ -841,7 +688,44 @@ public class ServerProfile implements Serializable {
                 return constant;
             }
         }
+    }
 
+
+    @Generated("org.jsonschema2pojo")
+    public static enum TemplateCompliance {
+
+        Compliant("Compliant"),
+        NonCompliant("NonCompliant"),
+        Unknown("Unknown");
+
+        private final String value;
+        private static Map<String, ServerProfile.TemplateCompliance> constants = new HashMap<String, ServerProfile.TemplateCompliance>();
+
+        static {
+            for (final ServerProfile.TemplateCompliance c : values()) {
+                constants.put(c.value, c);
+            }
+        }
+
+        private TemplateCompliance(final String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+        @JsonCreator
+        public static ServerProfile.TemplateCompliance fromValue(final String value) {
+            final ServerProfile.TemplateCompliance constant = constants.get(value);
+            if (constant == null) {
+                throw new IllegalArgumentException(value);
+            } else {
+                return constant;
+            }
+        }
     }
 
 }

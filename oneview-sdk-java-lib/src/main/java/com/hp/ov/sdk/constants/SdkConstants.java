@@ -27,6 +27,7 @@ public class SdkConstants {
     public static final String BULK_ETHERNET_NETWORK = "bulk-ethernet-network";
     public static final String CERTS = "appliance-certificates";
     public static final String COMPLIANCE = "compliance";
+    public static final String COMPLIANCE_PREVIEW = "compliance-preview";
     public static final String CONFIGURATION = "configuration";
     public static final String CONNECTION_TEMPLATE = "connection-template";
     public static final String DEFAULT_SETTINGS = "defaultSettings";
@@ -64,6 +65,7 @@ public class SdkConstants {
     public static final String LOGICAL_SWITCH_GROUPS = "logical-switch-groups";
     public static final String MANAGED_SAN = "managed-sans";
     public static final String MANAGED_SANS = MANAGED_SAN + "s";
+    public static final String MESSAGES = "messages";
     public static final String MSMB_ALERTS_ROUTING_KEY = "msmb.#";
     public static final String MSMB_EXCHANGE_NAME = "msmb";
     public static final String NETWORK = "ethernet-network";
@@ -107,6 +109,7 @@ public class SdkConstants {
     public static final String SUPPORT_DUMP = "support-dumps";
     public static final String SWITCHES = "switches";
     public static final String TELEMETRY_CONFIGURATIONS = "telemetry-configurations";
+    public static final String TRANSFORMATION = "transformation";
     public static final String UNASSIGNED_UPLINK_PORTS_FOR_PORT_MONITOR = "unassignedUplinkPortsForPortMonitor";
     public static final String UPDATE_FROM_GROUP = "updateFromGroup";
     public static final String UPLINKSET = "uplink-set";

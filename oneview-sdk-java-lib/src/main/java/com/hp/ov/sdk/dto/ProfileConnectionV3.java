@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -19,10 +19,12 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gson.annotations.Since;
+
 public class ProfileConnectionV3 implements Serializable {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
 
@@ -42,9 +44,13 @@ public class ProfileConnectionV3 implements Serializable {
     private String wwnn;
     private String wwpn;
     private AssignmentType wwpnType;
+    @Since(200)
+    private String requestedVFs;
+    @Since(200)
+    private Integer allocatedVFs;
 
     /**
-     * 
+     *
      * @return The allocatedMbps
      */
     public Integer getAllocatedMbps() {
@@ -52,7 +58,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param allocatedMbps
      *            The allocatedMbps
      */
@@ -61,7 +67,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The boot
      */
     public ConnectionBoot getBoot() {
@@ -69,7 +75,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param boot
      *            The boot
      */
@@ -78,7 +84,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The deploymentStatus
      */
     public ConnectionStatus getDeploymentStatus() {
@@ -86,7 +92,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param deploymentStatus
      *            The deploymentStatus
      */
@@ -95,7 +101,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The functionType
      */
     public FunctionType getFunctionType() {
@@ -103,7 +109,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param functionType
      *            The functionType
      */
@@ -112,7 +118,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The id
      */
     public Integer getId() {
@@ -120,7 +126,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param id
      *            The id
      */
@@ -129,7 +135,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The interconnectUri
      */
     public String getInterconnectUri() {
@@ -137,7 +143,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param interconnectUri
      *            The interconnectUri
      */
@@ -146,7 +152,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The mac
      */
     public String getMac() {
@@ -154,7 +160,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param mac
      *            The mac
      */
@@ -163,7 +169,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The macType
      */
     public AssignmentType getMacType() {
@@ -171,7 +177,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param macType
      *            The macType
      */
@@ -180,7 +186,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The maximumMbps
      */
     public Integer getMaximumMbps() {
@@ -188,7 +194,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param maximumMbps
      *            The maximumMbps
      */
@@ -197,7 +203,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The name
      */
     public String getName() {
@@ -205,7 +211,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param name
      *            The name
      */
@@ -214,7 +220,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The networkUri
      */
     public String getNetworkUri() {
@@ -222,7 +228,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param networkUri
      *            The networkUri
      */
@@ -231,7 +237,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The portId
      */
     public String getPortId() {
@@ -239,7 +245,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param portId
      *            The portId
      */
@@ -248,7 +254,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The requestedMbps
      */
     public String getRequestedMbps() {
@@ -256,7 +262,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param requestedMbps
      *            The requestedMbps
      */
@@ -265,7 +271,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The wwnn
      */
     public String getWwnn() {
@@ -273,7 +279,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param wwnn
      *            The wwnn
      */
@@ -282,7 +288,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The wwpn
      */
     public String getWwpn() {
@@ -290,7 +296,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param wwpn
      *            The wwpn
      */
@@ -299,7 +305,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The wwpnType
      */
     public AssignmentType getWwpnType() {
@@ -307,7 +313,7 @@ public class ProfileConnectionV3 implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param wwpnType
      *            The wwpnType
      */
@@ -315,9 +321,40 @@ public class ProfileConnectionV3 implements Serializable {
         this.wwpnType = wwpnType;
     }
 
+    /**
+     * @return the requestedVFs
+     */
+    public String getRequestedVFs() {
+        return requestedVFs;
+    }
+
+    /**
+     * @param requestedVFs the requestedVFs to set
+     */
+    public void setRequestedVFs(String requestedVFs) {
+        this.requestedVFs = requestedVFs;
+    }
+
+    /**
+     * @return the allocatedVFs
+     */
+    public Integer getAllocatedVFs() {
+        return allocatedVFs;
+    }
+
+    /**
+     * @param allocatedVFs the allocatedVFs to set
+     */
+    public void setAllocatedVFs(Integer allocatedVFs) {
+        this.allocatedVFs = allocatedVFs;
+    }
+
     public static enum AssignmentType {
 
-        Physical("Physical"), UserDefined("UserDefined"), Virtual("Virtual");
+        Physical("Physical"),
+        UserDefined("UserDefined"),
+        Virtual("Virtual");
+
         private final String value;
         private static Map<String, ProfileConnectionV3.AssignmentType> constants = new HashMap<String, ProfileConnectionV3.AssignmentType>();
 
@@ -349,7 +386,9 @@ public class ProfileConnectionV3 implements Serializable {
 
     public static enum FunctionType {
 
-        Ethernet("Ethernet"), FibreChannel("FibreChannel");
+        Ethernet("Ethernet"),
+        FibreChannel("FibreChannel");
+
         private final String value;
         private static Map<String, ProfileConnectionV3.FunctionType> constants = new HashMap<String, ProfileConnectionV3.FunctionType>();
 
@@ -380,7 +419,10 @@ public class ProfileConnectionV3 implements Serializable {
 
     public static enum ConnectionStatus {
 
-        Deployed("Deployed"), Reserved("Reserved"), Undefined("Undefined");
+        Deployed("Deployed"),
+        Reserved("Reserved"),
+        Undefined("Undefined");
+
         private final String value;
         private static Map<String, ProfileConnectionV3.ConnectionStatus> constants = new HashMap<String, ProfileConnectionV3.ConnectionStatus>();
 
@@ -408,4 +450,5 @@ public class ProfileConnectionV3 implements Serializable {
             }
         }
     }
+
 }

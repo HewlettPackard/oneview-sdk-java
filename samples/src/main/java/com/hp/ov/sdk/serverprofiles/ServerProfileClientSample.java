@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -19,23 +19,30 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.hp.ov.sdk.dto.AvailableStorageSystem;
+import com.hp.ov.sdk.dto.AvailableStorageSystems;
+import com.hp.ov.sdk.dto.AvailableTargets;
 import com.hp.ov.sdk.dto.ConnectionBoot.BootControl;
-import com.hp.ov.sdk.dto.samples.NetworkForServerProfile;
-import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile;
-import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile.StorageVolume;
+import com.hp.ov.sdk.dto.Patch;
+import com.hp.ov.sdk.dto.Patch.PatchOperation;
+import com.hp.ov.sdk.dto.ProfileConnectionV3;
 import com.hp.ov.sdk.dto.ServerProfileCollection;
-import com.hp.ov.sdk.dto.samples.ServerProfileValue;
+import com.hp.ov.sdk.dto.ServerProfileCompliancePreview;
+import com.hp.ov.sdk.dto.ServerProfileHealth;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.AvailableNetworks;
 import com.hp.ov.sdk.dto.generated.AvailableServers;
 import com.hp.ov.sdk.dto.generated.Bios;
 import com.hp.ov.sdk.dto.generated.Boot;
+import com.hp.ov.sdk.dto.generated.Firmware;
 import com.hp.ov.sdk.dto.generated.ProfilePorts;
+import com.hp.ov.sdk.dto.generated.ServerProfile;
 import com.hp.ov.sdk.dto.generated.ServerProfile.ProfileAffinity;
 import com.hp.ov.sdk.dto.generated.StoragePath.StorageTargetType;
-import com.hp.ov.sdk.dto.ProfileConnectionV3;
-import com.hp.ov.sdk.dto.generated.Firmware;
-import com.hp.ov.sdk.dto.generated.ServerProfile;
+import com.hp.ov.sdk.dto.samples.NetworkForServerProfile;
+import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile;
+import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile.StorageVolume;
+import com.hp.ov.sdk.dto.samples.ServerProfileValue;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -72,19 +79,17 @@ public class ServerProfileClientSample {
     // test values - user input
     // ================================
     private static final String templateName = "ServerProfile_Template"; // used
-    // for
-    // delete,
-    // get of server
-    // profile or server
-    // profile template
-    private static final String bayName = "Encl1, bay 15";
-    private static final String profileName = "ServerProfile-Bay15";
-    private static final String enclosureGroupName = "Enclosure_Test";
+//    private static final String bayName = "Encl1, bay 15";
+    private static final String bayName = "Encl2, bay 3";
+//    private static final String profileName = "ServerProfile-Bay15";
+    private static final String profileName = "sprofile2";
+//    private static final String enclosureGroupName = "Enclosure_Test";
+    private static final String enclosureGroupName = "encl_group";
     private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402");
     private static final List<String> storageVolumeName = Arrays.asList("Volume101");
     private static final List<String> fcNetworkNames = Arrays.asList("FC_Network_A", "FC_Network_B");
     private static final Boolean useBayNameForServerHardwareUri = false;
-    private static final String resourceId = "10fbed31-21cd-4c40-9401-3d70511cff00";
+    private static final String resourceId = "97655d5c-31a1-4c2a-a01e-92570dee88f8";
     // ================================
 
     private ServerProfileClientSample() {
@@ -93,7 +98,7 @@ public class ServerProfileClientSample {
         enclosureGroupClient = EnclosureGroupClientImpl.getClient();
     }
 
-    public void getServerProfileById() throws InstantiationException, IllegalAccessException {
+    private void getServerProfileById() throws InstantiationException, IllegalAccessException {
         ServerProfile serverProfileDto = null;
         // first get the session Id
         try {
@@ -126,7 +131,7 @@ public class ServerProfileClientSample {
 
     }
 
-    public void getAllServerProfile() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
+    private void getAllServerProfile() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
         ServerProfileCollection serverProfileCollectionDto = null;
         try {
@@ -158,7 +163,7 @@ public class ServerProfileClientSample {
         }
     }
 
-    public void getServerProfileByName() throws InstantiationException, IllegalAccessException {
+    private void getServerProfileByName() throws InstantiationException, IllegalAccessException {
         ServerProfile serverProfileDto = null;
         // first get the session Id
         try {
@@ -191,7 +196,113 @@ public class ServerProfileClientSample {
 
     }
 
-    public void getAvailableNetworksForServerProfile() {
+    private void getServerProfileCompliancePreview() {
+        ServerProfileCompliancePreview compliancePreviewDto = null;
+        // first get the session Id
+        try {
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
+
+            // then make sdk service call to get resource
+            compliancePreviewDto = serverProfileClient.getServerProfileCompliancePreview(params, resourceId);
+
+            System.out.println("ServerProfileClientTest : getServerProfileCompliancePreview : Compliance Preview object returned to client : "
+                    + compliancePreviewDto.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("ServerProfileClientTest : getServerProfileCompliancePreview : resource you are looking is not found");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("ServerProfileClientTest : getServerProfileCompliancePreview : no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("ServerProfileClientTest : getServerProfileCompliancePreview : Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("ServerProfileClientTest : getServerProfileCompliancePreview : No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("ServerProfileClientTest : getServerProfileCompliancePreview : arguments are null ");
+            return;
+        }
+    }
+
+    private void getServerProfileMessages() {
+        ServerProfileHealth healthDto = null;
+        // first get the session Id
+        try {
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
+
+            // then make sdk service call to get resource
+            healthDto = serverProfileClient.getServerProfileMessages(params, resourceId);
+
+            System.out.println("ServerProfileClientTest : getServerProfileMessages : Compliance Preview object returned to client : "
+                    + healthDto.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("ServerProfileClientTest : getServerProfileMessages : resource you are looking is not found");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("ServerProfileClientTest : getServerProfileMessages : no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("ServerProfileClientTest : getServerProfileMessages : Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("ServerProfileClientTest : getServerProfileMessages : No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("ServerProfileClientTest : getServerProfileMessages : arguments are null ");
+            return;
+        }
+    }
+
+    private void getServerProfileTransformation() {
+        ServerProfile serverProfileDto = null;
+        try {
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
+
+            // fetch enclosure group uri from enclosure name
+            final String enclosureGroupUri = enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();
+
+            // fetch server hardware type uri from server hardware
+            final String serverHardwareTypeUri = serverHardwareClient.getServerHardwareByName(params, bayName)
+                    .getServerHardwareTypeUri();
+
+            // then make sdk service call to get resource
+            serverProfileDto = serverProfileClient.getServerProfileTransformation(params, resourceId, serverHardwareTypeUri,
+                    enclosureGroupUri);
+
+            System.out
+                    .println("ServerProfileClientTest : getServerProfileTransformation : serverProfile object returned to client : "
+                            + serverProfileDto.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out
+                    .println("ServerProfileClientTest : getServerProfileTransformation : resource you are looking is not found");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("ServerProfileClientTest : getServerProfileTransformation : no such url : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("ServerProfileClientTest : getServerProfileTransformation : Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("ServerProfileClientTest : getServerProfileTransformation : No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("ServerProfileClientTest : getServerProfileTransformation : arguments are null ");
+            return;
+        }
+    }
+
+    private void getAvailableNetworksForServerProfile() {
         AvailableNetworks availableNetworksDto = null;
         try {
             // OneView credentials
@@ -209,7 +320,7 @@ public class ServerProfileClientSample {
                     enclosureGroupUri);
 
             System.out
-                    .println("ServerProfileClientTest : getAvailableNetworksForServerProfile : serverProfile object returned to client : "
+                    .println("ServerProfileClientTest : getAvailableNetworksForServerProfile : AvailableNetworks object returned to client : "
                             + availableNetworksDto.toString());
         } catch (final SDKResourceNotFoundException ex) {
             System.out
@@ -234,7 +345,7 @@ public class ServerProfileClientSample {
 
     }
 
-    public void getAvailableServersForServerProfileUsingServerHardwareTypeAndEnclosureGroup() {
+    private void getAvailableServersForServerProfileUsingServerHardwareTypeAndEnclosureGroup() {
         List<AvailableServers> availableServersCollectionDto = null;
         try {
             // OneView credentials
@@ -280,7 +391,7 @@ public class ServerProfileClientSample {
         }
     }
 
-    public void getAvailableServersForServerProfile() {
+    private void getAvailableServersForServerProfile() {
         List<AvailableServers> availableServersCollectionDto = null;
         try {
             // OneView credentials
@@ -314,7 +425,7 @@ public class ServerProfileClientSample {
         }
     }
 
-    public void getAvailableServersForServerProfileUsingProfile() {
+    private void getAvailableServersForServerProfileUsingProfile() {
         List<AvailableServers> availableServersCollectionDto = null;
         try {
             // OneView credentials
@@ -353,7 +464,130 @@ public class ServerProfileClientSample {
         }
     }
 
-    public void getProfilePortsForServerProfile() {
+    private void getAvailableStorageSystemsForServerProfile() {
+        AvailableStorageSystems storageSystemDto = null;
+        try {
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
+
+            // fetch enclosure group uri from enclosure name
+            final String enclosureGroupUri = enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();
+
+            // fetch server hardware type uri from server hardware
+            final String serverHardwareTypeUri = serverHardwareClient.getServerHardwareByName(params, bayName)
+                    .getServerHardwareTypeUri();
+
+            // then make sdk service call to get resource
+            storageSystemDto = serverProfileClient.getAvailableStorageSystemsForServerProfile(params, enclosureGroupUri, serverHardwareTypeUri);
+
+            System.out
+                    .println("ServerProfileClientTest : getAvailableStorageSystemsForServerProfile : storage system object returned to client : "
+                            + storageSystemDto.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out
+                    .println("ServerProfileClientTest : getAvailableStorageSystemsForServerProfile : resource you are looking is not found");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("ServerProfileClientTest : getAvailableStorageSystemsForServerProfile : no such url : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("ServerProfileClientTest : getAvailableStorageSystemsForServerProfile : Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("ServerProfileClientTest : getAvailableStorageSystemsForServerProfile : No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("ServerProfileClientTest : getAvailableStorageSystemsForServerProfile : arguments are null ");
+            return;
+        }
+    }
+
+    private void getAvailableStorageSystemForServerProfile() {
+        AvailableStorageSystem storageSystemDto = null;
+        try {
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
+
+            // fetch enclosure group uri from enclosure name
+            final String enclosureGroupUri = enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();
+
+            // fetch server hardware type uri from server hardware
+            final String serverHardwareTypeUri = serverHardwareClient.getServerHardwareByName(params, bayName)
+                    .getServerHardwareTypeUri();
+
+            // fetch storage system uri from server hardware
+            String storageSystemId = serverProfileClient.getAvailableStorageSystemsForServerProfile(params, enclosureGroupUri, serverHardwareTypeUri)
+                    .getMembers().get(0).getStorageSystemUri();
+            // Use just the {ID} not "/rest/storage-systems/{ID}"
+            storageSystemId = storageSystemId.replace("/rest/storage-systems/", "");
+
+            // then make sdk service call to get resource
+            storageSystemDto = serverProfileClient.getAvailableStorageSystemForServerProfile(params, enclosureGroupUri, serverHardwareTypeUri,
+                    storageSystemId);
+
+            System.out
+                    .println("ServerProfileClientTest : getAvailableStorageSystemForServerProfile : storage system object returned to client : "
+                            + storageSystemDto.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out
+                    .println("ServerProfileClientTest : getAvailableStorageSystemForServerProfile : resource you are looking is not found");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("ServerProfileClientTest : getAvailableStorageSystemForServerProfile : no such url : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("ServerProfileClientTest : getAvailableStorageSystemForServerProfile : Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("ServerProfileClientTest : getAvailableStorageSystemForServerProfile : No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("ServerProfileClientTest : getAvailableStorageSystemForServerProfile : arguments are null ");
+            return;
+        }
+    }
+
+    private void getAvailableTargetsForServerProfile() {
+        AvailableTargets targetsDto = null;
+        try {
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
+
+            // then make sdk service call to get resource
+            targetsDto = serverProfileClient.getAvailableTargetsForServerProfile(params);
+
+            System.out
+                    .println("ServerProfileClientTest : getAvailableTargetsForServerProfile : storage system object returned to client : "
+                            + targetsDto.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out
+                    .println("ServerProfileClientTest : getAvailableTargetsForServerProfile : resource you are looking is not found");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("ServerProfileClientTest : getAvailableTargetsForServerProfile : no such url : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("ServerProfileClientTest : getAvailableTargetsForServerProfile : Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("ServerProfileClientTest : getAvailableTargetsForServerProfile : No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("ServerProfileClientTest : getAvailableTargetsForServerProfile : arguments are null ");
+            return;
+        }
+    }
+
+    private void getProfilePortsForServerProfile() {
         ProfilePorts profilePortsDto = null;
         try {
             // OneView credentials
@@ -392,7 +626,7 @@ public class ServerProfileClientSample {
         }
     }
 
-    public void createServerProfile() throws InstantiationException, IllegalAccessException {
+    private void createServerProfile() throws InstantiationException, IllegalAccessException {
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -433,7 +667,7 @@ public class ServerProfileClientSample {
 
     }
 
-    public void updateServerProfile() throws InstantiationException, IllegalAccessException {
+    private void updateServerProfile() throws InstantiationException, IllegalAccessException {
         String resourceId = null;
         ServerProfile serverProfileDto = null;
         try {
@@ -441,9 +675,9 @@ public class ServerProfileClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // fetch resource Id using resource name
-            serverProfileDto = serverProfileClient.getServerProfileByName(params, templateName);
+            serverProfileDto = serverProfileClient.getServerProfileByName(params, profileName + "_Update");
 
-            serverProfileDto.setName(templateName);
+            serverProfileDto.setName(profileName);
 
             if (null != serverProfileDto.getUri()) {
                 resourceId = UrlUtils.getResourceIdFromUri(serverProfileDto.getUri());
@@ -486,7 +720,54 @@ public class ServerProfileClientSample {
         }
     }
 
-    public void deleteServerProfile() throws InstantiationException, IllegalAccessException {
+    private void patchServerProfile() {
+        try {
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
+
+            Patch patchDto = new Patch();
+
+            // Server Profile patch supports the update of template compliance status
+            patchDto.setOp(PatchOperation.replace);
+            patchDto.setPath("/templateCompliance");
+            patchDto.setValue("Compliant");
+
+            /**
+             * then make sdk service call to get resource aSync parameter
+             * indicates sync vs async useJsonRequest parameter indicates
+             * whether json input request present or not
+             */
+            taskResourceV2 = serverProfileClient.patchServerProfile(params, resourceId, patchDto, false);
+
+            System.out.println("ServerProfileClientTest : patchServerProfile : task object returned to client : "
+                    + taskResourceV2.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("ServerProfileClientTest : patchServerProfile : resource you are looking is not found for update ");
+            return;
+        } catch (final SDKBadRequestException ex) {
+            System.out.println("ServerProfileClientTest : patchServerProfile : bad request, try again : "
+                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("ServerProfileClientTest : patchServerProfile : no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("ServerProfileClientTest : patchServerProfile : Applicance Not reachabe at : " + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("ServerProfileClientTest : patchServerProfile : No response from appliance : " + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("ServerProfileClientTest : patchServerProfile : arguments are null ");
+            return;
+        } catch (final SDKTasksException e) {
+            System.out.println("ServerProfileClientTest : patchServerProfile : errors in task, please check task "
+                    + "resource for more details ");
+            return;
+        }
+    }
+
+    private void deleteServerProfile() throws InstantiationException, IllegalAccessException {
         String resourceId = null;
         // first get the session Id
         try {
@@ -522,7 +803,7 @@ public class ServerProfileClientSample {
 
     }
 
-    public void deleteServerProfileByFilter() throws InstantiationException, IllegalAccessException {
+    private void deleteServerProfileByFilter() throws InstantiationException, IllegalAccessException {
         // first get the session Id
         Boolean matches = false;
         try {
@@ -555,7 +836,7 @@ public class ServerProfileClientSample {
         }
     }
 
-    public void deleteServerProfileByFilterWithMatch() throws InstantiationException, IllegalAccessException {
+    private void deleteServerProfileByFilterWithMatch() throws InstantiationException, IllegalAccessException {
         // first get the session Id
         Boolean matches = true;
         try {
@@ -563,7 +844,7 @@ public class ServerProfileClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
-            taskResourceV2 = serverProfileClient.deleteServerProfileByFilter(params, templateName, matches, false);
+            taskResourceV2 = serverProfileClient.deleteServerProfileByFilter(params, "_Temp", matches, false);
 
             System.out
                     .println("ServerProfileClientTest : deleteServerProfileByFilterWithMatch : serverProfile object returned to client : "
@@ -590,45 +871,6 @@ public class ServerProfileClientSample {
 
     }
 
-    public void copyServerProfile() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
-
-            // then make sdk service call to get resource
-            taskResourceV2 = serverProfileClient.copyServerProfile(params, templateName, bayName, profileName, false);
-
-            System.out.println("ServerProfileClientTest : copyServerProfile : serverProfile object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ServerProfileClientTest : copyServerProfile : resource you are looking is not found : ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ServerProfileClientTest : copyServerProfile : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out
-                    .println("ServerProfileClientTest : copyServerProfile : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out
-                    .println("ServerProfileClientTest : copyServerProfile : No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ServerProfileClientTest : copyServerProfile : arguments are null ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("ServerProfileClientTest : copyServerProfile : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out
-                    .println("ServerProfileClientTest : copyServerProfile : errors in task, please check task resource for more details ");
-            return;
-        }
-
-    }
-
     private ServerProfile buildTestServerProfileDto(final RestParams params) {
 
         final ServerProfileValue serverProfileValue = new ServerProfileValue();
@@ -639,10 +881,6 @@ public class ServerProfileClientSample {
 
         final Boot boot = new Boot();
         final List<String> order = new ArrayList<String>();
-        order.add("PXE");
-        order.add("CD");
-        order.add("Floppy");
-        order.add("USB");
         order.add("HardDisk");
         boot.setOrder(order);
         boot.setManageBoot(true);
@@ -716,14 +954,26 @@ public class ServerProfileClientSample {
         client.getAllServerProfile();
         client.getServerProfileByName();
         client.getAvailableNetworksForServerProfile();
+
         client.getAvailableServersForServerProfile();
         client.getAvailableServersForServerProfileUsingProfile();
         client.getAvailableServersForServerProfileUsingServerHardwareTypeAndEnclosureGroup();
+
         client.getProfilePortsForServerProfile();
+
+        client.getServerProfileCompliancePreview();
+        client.getServerProfileMessages();
+        client.getServerProfileTransformation();
+        client.getAvailableStorageSystemsForServerProfile();
+        client.getAvailableStorageSystemForServerProfile();
+        client.getAvailableTargetsForServerProfile();
+        client.patchServerProfile();
+
         client.updateServerProfile();
-        client.copyServerProfile();
+
         client.deleteServerProfile();
         client.deleteServerProfileByFilter();
         client.deleteServerProfileByFilterWithMatch();
     }
+
 }

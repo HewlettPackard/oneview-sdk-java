@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package com.hp.ov.sdk.dto.generated;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -28,6 +27,9 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.google.gson.annotations.Since;
+import com.google.gson.annotations.Until;
+import com.hp.ov.sdk.dto.LocalStorageEmbeddedController;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
@@ -35,19 +37,25 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class LocalStorage implements Serializable {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("logicalDrives")
-    private List<LogicalDrife> logicalDrives = new ArrayList<LogicalDrife>();
+    @Until(199)
+    private List<LogicalDrife> logicalDrives;
     @JsonProperty("manageLocalStorage")
+    @Until(199)
     private Boolean manageLocalStorage;
     @JsonProperty("initialize")
+    @Until(199)
     private Boolean initialize;
+    @JsonProperty("controllers")
+    @Since(200)
+    private List<LocalStorageEmbeddedController> controllers;
 
     /**
-     * 
+     *
      * @return The logicalDrives
      */
     @JsonProperty("logicalDrives")
@@ -56,7 +64,7 @@ public class LocalStorage implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param logicalDrives
      *            The logicalDrives
      */
@@ -66,7 +74,7 @@ public class LocalStorage implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The manageLocalStorage
      */
     @JsonProperty("manageLocalStorage")
@@ -75,7 +83,7 @@ public class LocalStorage implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param manageLocalStorage
      *            The manageLocalStorage
      */
@@ -85,7 +93,7 @@ public class LocalStorage implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The initialize
      */
     @JsonProperty("initialize")
@@ -94,7 +102,7 @@ public class LocalStorage implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param initialize
      *            The initialize
      */

@@ -31,6 +31,7 @@ import com.hp.ov.sdk.dto.StorageTargetPortCollection;
 import com.hp.ov.sdk.dto.generated.Bandwidth;
 import com.hp.ov.sdk.dto.generated.Bios;
 import com.hp.ov.sdk.dto.generated.Boot;
+import com.hp.ov.sdk.dto.generated.BootMode;
 import com.hp.ov.sdk.dto.generated.Firmware;
 import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.generated.InterconnectMapTemplate;
@@ -303,7 +304,13 @@ public class ResourceDtoUtils {
             final Boot boot, final Bios bios, final Firmware firmware) {
         final ServerProfile serverProfileDto = new ServerProfile();
         serverProfileDto.setDescription("profile");
-        serverProfileDto.setType(ResourceCategory.RC_SERVER_PROFILE);
+
+        if (params.getApiVersion() < API_200) {
+            serverProfileDto.setType(ResourceCategory.RC_SERVER_PROFILE);
+        } else {
+            serverProfileDto.setType(ResourceCategory.RC_SERVER_PROFILE_V200);
+        }
+
         serverProfileDto.setName(profileName);
         if (serverHardwareName != null && serverHardwareName.length() != 0) {
             final String serverHardwareTypeUri = SdkUtils.getInstance().getServerHardwareTypeUri(params, serverHardwareName);
@@ -335,6 +342,11 @@ public class ResourceDtoUtils {
 
         serverProfileDto.setConnections(connections);
         serverProfileDto.setBoot(boot);
+
+        BootMode bootMode = new BootMode();
+        bootMode.setManageMode(true);
+        bootMode.setMode("UEFI");
+        serverProfileDto.setBootMode(bootMode);
         serverProfileDto.setBios(bios);
         serverProfileDto.setLocalStorage(localStorage);
 
