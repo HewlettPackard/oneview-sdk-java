@@ -126,11 +126,6 @@ public class LogicalSwitchGroupClientImplTest {
         given(adaptor.buildResourceObject(anyString(), eq(LogicalSwitchGroupCollection.class)))
                 .willReturn(new LogicalSwitchGroupCollection());
 
-        RestParams expectedRestParams = new RestParams();
-        expectedRestParams.setType(HttpMethodType.GET);
-        expectedRestParams.setUrl(UrlUtils.createRestQueryUrl(expectedRestParams.getHostname(),
-                ResourceUris.LOGICAL_SWITCH_GROUPS_URI, UrlUtils.createFilterString(anyLogicalSwitchGroupName)));
-
         this.switchClient.getLogicalSwitchGroupByName(new RestParams(), anyLogicalSwitchGroupName);
     }
 
