@@ -39,6 +39,7 @@ import com.hp.ov.sdk.rest.client.LogicalSwitchClient;
 import com.hp.ov.sdk.rest.client.LogicalSwitchClientImpl;
 import com.hp.ov.sdk.rest.client.LogicalSwitchGroupClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
+import com.hp.ov.sdk.switches.LogicalSwitchGroupClientSample;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
