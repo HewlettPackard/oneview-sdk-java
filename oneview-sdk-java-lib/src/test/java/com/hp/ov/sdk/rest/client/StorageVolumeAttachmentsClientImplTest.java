@@ -254,7 +254,7 @@ public class StorageVolumeAttachmentsClientImplTest {
         String taskAsJson = "{\"type\" : \"taskResource\"}";
         JSONObject jsonObject = new JSONObject();
 
-        given(adaptor.buildJsonRequest(any(ExtraStorageVolume.class), any(Integer.class))).willReturn(jsonObject);
+        given(adaptor.buildJsonRequest(any(ExtraStorageVolume.class), any(Double.class))).willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(taskAsJson);
         given(taskAdaptor.buildDto(any(String.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), any(String.class), any(Integer.class)))

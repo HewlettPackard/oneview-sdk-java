@@ -18,6 +18,15 @@ package com.hp.ov.sdk.dto;
 
 public enum PortTelemetry {
 
-    DISABLED, ENABLED
+    DISABLED, ENABLED;
+
+    public static boolean contains(String value) {
+        for (PortTelemetry portTelemetry : PortTelemetry.values()) {
+            if (portTelemetry.name().equals(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

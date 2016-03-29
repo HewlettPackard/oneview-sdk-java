@@ -17,6 +17,7 @@
 package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -28,9 +29,15 @@ public class ModuleStatistics implements Serializable {
 
     private String cpuUsage;
     private String memoryUsage;
+
+    /**
+     * This field has a special treatment when serialization/deserialization occurs
+     *
+     * @see com.hp.ov.sdk.adaptors.PortTelemetrySerializationAdapter
+     */
     private PortTelemetry portTelemetry;
-    private Integer portTelemetryEntryCount;
-    private Integer portTelemetryPeriod;
+    private BigInteger portTelemetryEntryCount;
+    private BigInteger portTelemetryPeriod;
     private String type;
 
     public String getCpuUsage() {
@@ -57,19 +64,19 @@ public class ModuleStatistics implements Serializable {
         this.portTelemetry = portTelemetry;
     }
 
-    public Integer getPortTelemetryEntryCount() {
+    public BigInteger getPortTelemetryEntryCount() {
         return portTelemetryEntryCount;
     }
 
-    public void setPortTelemetryEntryCount(Integer portTelemetryEntryCount) {
+    public void setPortTelemetryEntryCount(BigInteger portTelemetryEntryCount) {
         this.portTelemetryEntryCount = portTelemetryEntryCount;
     }
 
-    public Integer getPortTelemetryPeriod() {
+    public BigInteger getPortTelemetryPeriod() {
         return portTelemetryPeriod;
     }
 
-    public void setPortTelemetryPeriod(Integer portTelemetryPeriod) {
+    public void setPortTelemetryPeriod(BigInteger portTelemetryPeriod) {
         this.portTelemetryPeriod = portTelemetryPeriod;
     }
 

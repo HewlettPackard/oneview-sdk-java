@@ -16,11 +16,19 @@
 
 package com.hp.ov.sdk.rest.client;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.BDDMockito.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.anyString;
+import static org.mockito.BDDMockito.doReturn;
+import static org.mockito.BDDMockito.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.spy;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.*;
 
 import org.json.JSONObject;
 import org.junit.Test;
@@ -31,7 +39,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
-import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.LogicalSwitchGroup;
@@ -118,11 +125,6 @@ public class LogicalSwitchGroupClientImplTest {
         given(restClient.sendRequest(any(RestParams.class))).willReturn(logicalSwitchGroupCollectionValue);
         given(adaptor.buildResourceObject(anyString(), eq(LogicalSwitchGroupCollection.class)))
                 .willReturn(new LogicalSwitchGroupCollection());
-
-        RestParams expectedRestParams = new RestParams();
-        expectedRestParams.setType(HttpMethodType.GET);
-        expectedRestParams.setUrl(UrlUtils.createRestQueryUrl(expectedRestParams.getHostname(),
-                ResourceUris.LOGICAL_SWITCH_GROUPS_URI, UrlUtils.createFilterString(anyLogicalSwitchGroupName)));
 
         this.switchClient.getLogicalSwitchGroupByName(new RestParams(), anyLogicalSwitchGroupName);
     }

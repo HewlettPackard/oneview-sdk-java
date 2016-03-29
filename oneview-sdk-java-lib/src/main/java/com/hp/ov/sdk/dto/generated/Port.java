@@ -24,6 +24,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
+import com.hp.ov.sdk.dto.CapabilityType;
+import com.hp.ov.sdk.dto.DcbxInfo;
 import com.hp.ov.sdk.dto.PortMonitorConfigInfo;
 import com.hp.ov.sdk.dto.PortStatus;
 

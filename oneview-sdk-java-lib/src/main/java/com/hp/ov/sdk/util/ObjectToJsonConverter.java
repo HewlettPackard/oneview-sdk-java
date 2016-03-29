@@ -20,16 +20,19 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hp.ov.sdk.adaptors.PortTelemetrySerializationAdapter;
 import com.hp.ov.sdk.adaptors.StoragePoolSerializationAdapter;
 import com.hp.ov.sdk.constants.SdkConstants;
+import com.hp.ov.sdk.dto.PortTelemetry;
 import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKFileNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKInternalException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ObjectToJsonConverter {
 
@@ -110,6 +113,7 @@ public class ObjectToJsonConverter {
     private Gson getGson() {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(StoragePool.class, new StoragePoolSerializationAdapter())
+                .registerTypeAdapter(PortTelemetry.class, new PortTelemetrySerializationAdapter())
                 .create();
 
         return gson;
@@ -118,6 +122,7 @@ public class ObjectToJsonConverter {
     private Gson getGson(double apiVersion) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(StoragePool.class, new StoragePoolSerializationAdapter())
+                .registerTypeAdapter(PortTelemetry.class, new PortTelemetrySerializationAdapter())
                 .setVersion(apiVersion)
                 .create();
 

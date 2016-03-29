@@ -356,7 +356,7 @@ public class SwitchClientSample {
         client.updateSwitch();
 
         /* methods available only in version 200 */
-        client.getSwitchStatistics(); //BUG with response - portTelemetry!
+        client.getSwitchStatistics();
         client.getSwitchPortStatistics();
     }
 

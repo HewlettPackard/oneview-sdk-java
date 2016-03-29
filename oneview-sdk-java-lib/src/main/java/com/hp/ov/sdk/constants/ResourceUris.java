@@ -56,7 +56,8 @@ public class ResourceUris {
     public static final String LOGICAL_INTERCONNECT_GROUPS_URI = "/rest/logical-interconnect-groups";
     public static final String LOGICAL_INTERCONNECT_URI = "/rest/logical-interconnects";
     public static final String LOGICAL_SWITCH_GROUPS_URI = "/rest/logical-switch-groups";
-    public static final String LOGICAL_SWITCHES = "/rest/logical-switches";
+    public static final String LOGICAL_SWITCHES_REFRESH_URI = "refresh";
+    public static final String LOGICAL_SWITCHES_URI = "/rest/logical-switches";
     public static final String LOGIN_SESSIONS = "/rest/login-sessions";
     public static final String MANANGED_PORTS_STORAGE_SYSTEM_URI = "managedPorts";
     public static final String NETWORK_SETS_URI = "/rest/network-sets";
@@ -76,6 +77,7 @@ public class ResourceUris {
     public static final String STORAGE_VOLUME_SNAPSHOTS_URI = "snapshots";
     public static final String STORAGE_VOLUME_TEMPLATE_URI = "/rest/storage-volume-templates";
     public static final String STORAGE_VOLUME_TEMPLATE_CONNECTABLE_URI = "connectable-volume-templates";
+    public static final String SWITCH_TYPE_URI = "/rest/switch-types";
     public static final String SWITCHES_ENVIRONMENTAL_CONFIGURATION_URI = "environmentalConfiguration";
     public static final String SWITCHES_STATISTICS_URI = "statistics";
     public static final String SWITCHES_URI = "/rest/switches";

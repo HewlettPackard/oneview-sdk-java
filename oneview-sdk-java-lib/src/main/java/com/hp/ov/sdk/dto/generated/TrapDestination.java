@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,192 +12,122 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.dto.generated;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Generated;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "trapSeverities",
-    "enetTrapCategories",
-    "fcTrapCategories",
-    "vcmTrapCategories",
-    "trapFormat",
-    "trapDestination",
-    "communityString" })
 public class TrapDestination implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 892678631593032566L;
 
-    @JsonProperty("trapSeverities")
-    private List<String> trapSeverities = new ArrayList<String>();
-    @JsonProperty("enetTrapCategories")
-    private List<String> enetTrapCategories = new ArrayList<String>();
-    @JsonProperty("fcTrapCategories")
-    private List<String> fcTrapCategories = new ArrayList<String>();
-    @JsonProperty("vcmTrapCategories")
-    private List<String> vcmTrapCategories = new ArrayList<String>();
-    @JsonProperty("trapFormat")
-    private TrapDestination.TrapFormat trapFormat = TrapDestination.TrapFormat.fromValue("SNMPv1");
-    @JsonProperty("trapDestination")
+    public enum TrapFormat {
+        SNMPv1, SNMPv2, SNMPv3
+    }
+
+    public enum TrapSeverity {
+        Critical, Info, Major, Minor, Normal, Unknown, Warning
+    }
+
+    public enum EnetTrapCategory {
+        Other, PortStatus, PortThresholds
+    }
+
+    public enum FcTrapCategory {
+        Other, PortStatus
+    }
+
+    public enum VcmTrapCategory {
+        Legacy
+    }
+
+    private List<TrapSeverity> trapSeverities = new ArrayList<>();
+    private List<EnetTrapCategory> enetTrapCategories = new ArrayList<>();
+    private List<FcTrapCategory> fcTrapCategories = new ArrayList<>();
+    private List<VcmTrapCategory> vcmTrapCategories = new ArrayList<>();
+    private TrapFormat trapFormat = TrapFormat.SNMPv1;
     private String trapDestination = "";
-    @JsonProperty("communityString")
     private String communityString = "public";
 
-    /**
-     *
-     * @return The trapSeverities
-     */
-    @JsonProperty("trapSeverities")
-    public List<String> getTrapSeverities() {
+    public List<TrapSeverity> getTrapSeverities() {
         return trapSeverities;
     }
 
-    /**
-     *
-     * @param trapSeverities
-     *            The trapSeverities
-     */
-    @JsonProperty("trapSeverities")
-    public void setTrapSeverities(final List<String> trapSeverities) {
+    public void setTrapSeverities(List<TrapSeverity> trapSeverities) {
         this.trapSeverities = trapSeverities;
     }
 
-    /**
-     *
-     * @return The enetTrapCategories
-     */
-    @JsonProperty("enetTrapCategories")
-    public List<String> getEnetTrapCategories() {
+    public List<EnetTrapCategory> getEnetTrapCategories() {
         return enetTrapCategories;
     }
 
-    /**
-     *
-     * @param enetTrapCategories
-     *            The enetTrapCategories
-     */
-    @JsonProperty("enetTrapCategories")
-    public void setEnetTrapCategories(final List<String> enetTrapCategories) {
+    public void setEnetTrapCategories(final List<EnetTrapCategory> enetTrapCategories) {
         this.enetTrapCategories = enetTrapCategories;
     }
 
-    /**
-     *
-     * @return The fcTrapCategories
-     */
-    @JsonProperty("fcTrapCategories")
-    public List<String> getFcTrapCategories() {
+    public List<FcTrapCategory> getFcTrapCategories() {
         return fcTrapCategories;
     }
 
-    /**
-     *
-     * @param fcTrapCategories
-     *            The fcTrapCategories
-     */
-    @JsonProperty("fcTrapCategories")
-    public void setFcTrapCategories(final List<String> fcTrapCategories) {
+    public void setFcTrapCategories(final List<FcTrapCategory> fcTrapCategories) {
         this.fcTrapCategories = fcTrapCategories;
     }
 
-    /**
-     *
-     * @return The vcmTrapCategories
-     */
-    @JsonProperty("vcmTrapCategories")
-    public List<String> getVcmTrapCategories() {
+    public List<VcmTrapCategory> getVcmTrapCategories() {
         return vcmTrapCategories;
     }
 
-    /**
-     *
-     * @param vcmTrapCategories
-     *            The vcmTrapCategories
-     */
-    @JsonProperty("vcmTrapCategories")
-    public void setVcmTrapCategories(final List<String> vcmTrapCategories) {
+    public void setVcmTrapCategories(final List<VcmTrapCategory> vcmTrapCategories) {
         this.vcmTrapCategories = vcmTrapCategories;
     }
 
-    /**
-     *
-     * @return The trapFormat
-     */
-    @JsonProperty("trapFormat")
     public TrapDestination.TrapFormat getTrapFormat() {
         return trapFormat;
     }
 
-    /**
-     *
-     * @param trapFormat
-     *            The trapFormat
-     */
-    @JsonProperty("trapFormat")
     public void setTrapFormat(final TrapDestination.TrapFormat trapFormat) {
         this.trapFormat = trapFormat;
     }
 
-    /**
-     *
-     * @return The trapDestination
-     */
-    @JsonProperty("trapDestination")
     public String getTrapDestination() {
         return trapDestination;
     }
 
-    /**
-     *
-     * @param trapDestination
-     *            The trapDestination
-     */
-    @JsonProperty("trapDestination")
     public void setTrapDestination(final String trapDestination) {
         this.trapDestination = trapDestination;
     }
 
-    /**
-     *
-     * @return The communityString
-     */
-    @JsonProperty("communityString")
     public String getCommunityString() {
         return communityString;
     }
 
-    /**
-     *
-     * @param communityString
-     *            The communityString
-     */
-    @JsonProperty("communityString")
     public void setCommunityString(final String communityString) {
         this.communityString = communityString;
     }
 
     @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        TrapDestination that = (TrapDestination) obj;
+
+        return new EqualsBuilder()
+                .append(trapSeverities, that.trapSeverities)
+                .append(enetTrapCategories, that.enetTrapCategories)
+                .append(fcTrapCategories, that.fcTrapCategories)
+                .append(vcmTrapCategories, that.vcmTrapCategories)
+                .append(trapFormat, that.trapFormat)
+                .append(trapDestination, that.trapDestination)
+                .append(communityString, that.communityString)
+                .isEquals();
     }
 
     @Override
@@ -214,58 +144,15 @@ public class TrapDestination implements Serializable {
     }
 
     @Override
-    public boolean equals(final Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof TrapDestination) == false) {
-            return false;
-        }
-        final TrapDestination rhs = ((TrapDestination) other);
-        return new EqualsBuilder()
-                .append(trapSeverities, rhs.trapSeverities)
-                .append(enetTrapCategories, rhs.enetTrapCategories)
-                .append(fcTrapCategories, rhs.fcTrapCategories)
-                .append(vcmTrapCategories, rhs.vcmTrapCategories)
-                .append(trapFormat, rhs.trapFormat)
-                .append(trapDestination, rhs.trapDestination)
-                .append(communityString, rhs.communityString)
-                .isEquals();
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("trapSeverities", trapSeverities)
+                .append("enetTrapCategories", enetTrapCategories)
+                .append("fcTrapCategories", fcTrapCategories)
+                .append("vcmTrapCategories", vcmTrapCategories)
+                .append("trapFormat", trapFormat)
+                .append("trapDestination", trapDestination)
+                .append("communityString", communityString)
+                .toString();
     }
-
-    @Generated("org.jsonschema2pojo")
-    public static enum TrapFormat {
-
-        SNMPv1("SNMPv1"), SNMPv2("SNMPv2"), SNMPv3("SNMPv3");
-        private final String value;
-        private static Map<String, TrapDestination.TrapFormat> constants = new HashMap<String, TrapDestination.TrapFormat>();
-
-        static {
-            for (final TrapDestination.TrapFormat c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private TrapFormat(final String value) {
-            this.value = value;
-        }
-
-        @JsonValue
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        @JsonCreator
-        public static TrapDestination.TrapFormat fromValue(final String value) {
-            final TrapDestination.TrapFormat constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
-    }
-
 }

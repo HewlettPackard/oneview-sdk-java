@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -52,6 +52,18 @@ public final class UrlUtils {
         final String subElement, final String targetId) {
 
         return SdkConstants.HTTPS + hostname + uri + "/" + resourceId + "/" + subElement + "/" + targetId;
+    }
+
+    public static String createRestUrl(String hostname, String uri, String resourceId, String subElement,
+            String targetId, String subElement2, int targetId2) {
+        return SdkConstants.HTTPS
+                + hostname
+                + uri + "/"
+                + resourceId + "/"
+                + subElement + "/"
+                + targetId + "/"
+                + subElement2 + "/"
+                + targetId2;
     }
 
     public static String createRestQueryUrl(final String hostname, final String uri, final String query) {
