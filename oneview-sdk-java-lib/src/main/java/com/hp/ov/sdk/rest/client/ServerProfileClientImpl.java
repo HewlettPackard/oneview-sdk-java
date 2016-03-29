@@ -607,7 +607,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         // user can save time in creating network dto.
 
         // create JSON request from dto
-        jsonObject = adaptor.buildJsonObjectFromDto(serverProfileDto);
+        jsonObject = adaptor.buildJsonObjectFromDto(serverProfileDto, params.getApiVersion());
         returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
@@ -653,7 +653,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         // user can save time in creating server profile dto.
 
         // create JSON request from dto
-        jsonObject = adaptor.buildJsonObjectFromDto(serverProfileDto);
+        jsonObject = adaptor.buildJsonObjectFromDto(serverProfileDto, params.getApiVersion());
         returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);

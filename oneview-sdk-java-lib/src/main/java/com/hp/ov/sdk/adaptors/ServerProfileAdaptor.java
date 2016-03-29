@@ -187,9 +187,9 @@ public class ServerProfileAdaptor extends BaseAdaptor<ServerProfile, Object> {
         return profilePortsDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final ServerProfile source) {
+    public JSONObject buildJsonObjectFromDto(final ServerProfile source, final double version) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        return new JSONObject(converter.convertObjectToJsonString(source));
+        return new JSONObject(converter.convertObjectToJsonString(source, version));
     }
 
     public JSONArray buildJsonArrayDto(Patch source) {
