@@ -29,6 +29,9 @@ public class ResourceUris {
     public static final String ASSOCIATED_UPLINK_GROUPS = "associatedUplinkGroups";
     public static final String AVAILABLE_NETWORKS_URI = SERVER_PROFILE_URI + "/available-networks";
     public static final String AVAILABLE_SERVERS_URI = SERVER_PROFILE_URI + "/available-servers";
+    public static final String AVAILABLE_STORAGE_SYSTEM = SERVER_PROFILE_URI + "/available-storage-system";
+    public static final String AVAILABLE_STORAGE_SYSTEMS = AVAILABLE_STORAGE_SYSTEM + "s";
+    public static final String AVAILABLE_TARGETS = SERVER_PROFILE_URI + "/available-targets";
     public static final String BULK_ETHERNET_URI = "/rest/ethernet-networks/bulk";
     public static final String CA_CERT_URI = "/rest/certificates/ca";
     public static final String CONNECTION_TEMPLATES = "/rest/connection-templates";

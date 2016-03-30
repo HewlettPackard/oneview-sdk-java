@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 package com.hp.ov.sdk.dto.generated;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -23,28 +25,24 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.annotations.Since;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "forceInstallFirmware",
-    "firmwareBaselineUri",
-    "manageFirmware" })
 public class Firmware implements Serializable {
 
-    /**
-	 *
-	 */
     private static final long serialVersionUID = 1L;
+
     @JsonProperty("forceInstallFirmware")
     private Boolean forceInstallFirmware;
     @JsonProperty("firmwareBaselineUri")
     private String firmwareBaselineUri;
     @JsonProperty("manageFirmware")
     private Boolean manageFirmware;
+    @JsonProperty("firmwareInstallType")
+    @Since(200)
+    private FirmwareInstallType firmwareInstallType;
 
     /**
      *
@@ -103,6 +101,22 @@ public class Firmware implements Serializable {
         this.manageFirmware = manageFirmware;
     }
 
+    /**
+     * @return the firmwareInstallType
+     */
+    @JsonProperty("firmwareInstallType")
+    public FirmwareInstallType getFirmwareInstallType() {
+        return firmwareInstallType;
+    }
+
+    /**
+     * @param firmwareInstallType the firmwareInstallType to set
+     */
+    @JsonProperty("firmwareInstallType")
+    public void setFirmwareInstallType(FirmwareInstallType firmwareInstallType) {
+        this.firmwareInstallType = firmwareInstallType;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
@@ -127,4 +141,41 @@ public class Firmware implements Serializable {
     }
 
 
+    @Generated("org.jsonschema2pojo")
+    public static enum FirmwareInstallType {
+
+        FirmwareOnly("FirmwareOnly"),
+        FirmwareAndOSDrivers("FirmwareAndOSDrivers"),
+        FirmwareOnlyOfflineMode("FirmwareOnlyOfflineMode");
+
+        private final String value;
+        private static Map<String, Firmware.FirmwareInstallType> constants = new HashMap<String, Firmware.FirmwareInstallType>();
+
+        static {
+            for (final Firmware.FirmwareInstallType c : values()) {
+                constants.put(c.value, c);
+            }
+        }
+
+        private FirmwareInstallType(final String value) {
+            this.value = value;
+        }
+
+        @JsonValue
+        @Override
+        public String toString() {
+            return this.value;
+        }
+
+        @JsonCreator
+        public static Firmware.FirmwareInstallType fromValue(final String value) {
+            final Firmware.FirmwareInstallType constant = constants.get(value);
+            if (constant == null) {
+                throw new IllegalArgumentException(value);
+            } else {
+                return constant;
+            }
+        }
+
+    }
 }
