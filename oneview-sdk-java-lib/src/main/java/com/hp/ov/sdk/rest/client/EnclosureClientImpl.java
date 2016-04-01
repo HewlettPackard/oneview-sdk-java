@@ -504,7 +504,7 @@ public class EnclosureClientImpl implements EnclosureClient {
         // set the additional params
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId,
-                SdkConstants.ENVIRONMENTAL_CONFIGURATION));
+                ResourceUris.ENVIRONMENT_CONFIGURATION_URI));
 
         final String returnObj = HttpRestClient.sendRequestToHPOV(params);
         LOGGER.debug("EnclosureV2Client : getEnvironmentalConfiguration : response from OV :" + returnObj);
@@ -532,12 +532,12 @@ public class EnclosureClientImpl implements EnclosureClient {
         // validate params
         if (environmentalConfigurationUpdateDto == null) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
-                    SdkConstants.ENVIRONMENTAL_CONFIGURATION, null);
+                    SdkConstants.ENCLOSURE, null);
         }
         // set the additional params
         params.setType(HttpMethodType.PUT);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId,
-                SdkConstants.ENVIRONMENTAL_CONFIGURATION));
+                ResourceUris.ENVIRONMENT_CONFIGURATION_URI));
         String returnObj = null;
 
         // TODO - check for json request in the input dto. if it is present,

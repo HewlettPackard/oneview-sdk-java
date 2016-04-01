@@ -36,7 +36,7 @@ public class SwitchTypeClientSample {
     // ================================
     private static final String SWITCH_TYPE_ID = "3a5f0656-17be-46b3-b604-e89059354012";
 
-    public static final String SWITCH_TYPE_NAME = "Cisco Nexus 50xx";
+    public static final String SWITCH_TYPE_NAME = "Cisco Nexus 55xx";
     // ================================
 
     public SwitchTypeClientSample() {

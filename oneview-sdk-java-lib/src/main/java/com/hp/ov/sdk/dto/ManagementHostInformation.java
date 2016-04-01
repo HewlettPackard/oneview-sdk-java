@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -13,23 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PortMap implements Serializable {
+public class ManagementHostInformation implements Serializable {
 
-    private static final long serialVersionUID = -7989760359299407273L;
+    private static final long serialVersionUID = 246858883682244699L;
 
-    private List<ServerFabricDevice> deviceSlots = new ArrayList<>();
+    private String mpHostName;
+    private List<ManagementIpAddress> mpIpAddresses = new ArrayList<>();
 
-    public List<ServerFabricDevice> getDeviceSlots() {
-        return deviceSlots;
+    public String getMpHostName() {
+        return mpHostName;
     }
 
-    public void setDeviceSlots(List<ServerFabricDevice> deviceSlots) {
-        this.deviceSlots = deviceSlots;
+    public void setMpHostName(String mpHostName) {
+        this.mpHostName = mpHostName;
+    }
+
+    public List<ManagementIpAddress> getMpIpAddresses() {
+        return mpIpAddresses;
+    }
+
+    public void setMpIpAddresses(List<ManagementIpAddress> mpIpAddresses) {
+        this.mpIpAddresses = mpIpAddresses;
     }
 }

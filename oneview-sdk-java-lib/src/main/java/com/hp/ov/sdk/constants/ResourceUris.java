@@ -65,7 +65,14 @@ public class ResourceUris {
     public static final String PROFILE_PORTS_URI = SERVER_PROFILE_URI + "/profile-ports";
     public static final String RABBIT_MQ_CLIENT_CERT = "/rest/certificates/client/rabbitmq";
     public static final String RABBIT_MQ_CLIENT_CERT_KEYPAIR = "/rest/certificates/client/rabbitmq/keypair/default";
-    public static final String SERVER_HARWARE_URI = "/rest/server-hardware";
+    public static final String SERVER_HARDWARE_BIOS_URI = "bios";
+    public static final String SERVER_HARDWARE_ILO_SSO_URI = "iloSsoUrl";
+    public static final String SERVER_HARDWARE_JAVA_REMOTE_CONSOLE_URI = "javaRemoteConsoleUrl";
+    public static final String SERVER_HARDWARE_MP_FIRMWARE_URI = "mpFirmwareVersion";
+    public static final String SERVER_HARDWARE_REFRESH_STATE_URI = "refreshState";
+    public static final String SERVER_HARDWARE_REMOTE_CONSOLE_URI = "remoteConsoleUrl";
+    public static final String SERVER_HARDWARE_URI = "/rest/server-hardware";
+    public static final String SERVER_HARDWARE_UTILIZATION_URI = "utilization";
     public static final String STORAGE_POOL_STORAGE_SYSTEM_URI = "storage-pools";
     public static final String STORAGE_POOL_URI = "/rest/storage-pools";
     public static final String STORAGE_SYSTEM_URI = "/rest/storage-systems";
@@ -78,7 +85,6 @@ public class ResourceUris {
     public static final String STORAGE_VOLUME_TEMPLATE_URI = "/rest/storage-volume-templates";
     public static final String STORAGE_VOLUME_TEMPLATE_CONNECTABLE_URI = "connectable-volume-templates";
     public static final String SWITCH_TYPE_URI = "/rest/switch-types";
-    public static final String SWITCHES_ENVIRONMENTAL_CONFIGURATION_URI = "environmentalConfiguration";
     public static final String SWITCHES_STATISTICS_URI = "statistics";
     public static final String SWITCHES_URI = "/rest/switches";
     public static final String TASK_URI = "/rest/tasks";

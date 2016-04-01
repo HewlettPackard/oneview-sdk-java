@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,9 +12,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
+
 package com.hp.ov.sdk.dto;
 
-public class IloSsoUrlResult {
-    // TODO
+import java.io.Serializable;
+
+public class IloSsoUrlResult implements Serializable {
+
+    private static final long serialVersionUID = 327108905010107099L;
+
+    private String iloSsoUrl;
+
+    public String getIloSsoUrl() {
+        return iloSsoUrl;
+    }
+
+    public void setIloSsoUrl(String iloSsoUrl) {
+        this.iloSsoUrl = iloSsoUrl;
+    }
 }

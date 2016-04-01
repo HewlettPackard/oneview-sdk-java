@@ -296,7 +296,7 @@ public class SwitchClientImplTest {
         expectedRestParams.setType(HttpMethodType.GET);
         expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(),
                 ResourceUris.SWITCHES_URI, ANY_SWITCH_ID,
-                ResourceUris.SWITCHES_ENVIRONMENTAL_CONFIGURATION_URI));
+                ResourceUris.ENVIRONMENT_CONFIGURATION_URI));
 
         this.switchClient.getSwitchEnvironmentalConfiguration(new RestParams(), ANY_SWITCH_ID);
 

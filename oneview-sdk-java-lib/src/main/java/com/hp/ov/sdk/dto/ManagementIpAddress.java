@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -13,21 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
 
-public class EnvironmentalConfigurationUpdate implements Serializable {
+public class ManagementIpAddress implements Serializable {
 
-    private static final long serialVersionUID = 2702121719623728176L;
+    private static final long serialVersionUID = -8647358852083350678L;
 
-    private Integer calibratedMaxPower;
+    private String address;
+    private InetAddressType type;
 
-    public Integer getCalibratedMaxPower() {
-        return calibratedMaxPower;
+    public String getAddress() {
+        return address;
     }
 
-    public void setCalibratedMaxPower(Integer calibratedMaxPower) {
-        this.calibratedMaxPower = calibratedMaxPower;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public InetAddressType getType() {
+        return type;
+    }
+
+    public void setType(InetAddressType type) {
+        this.type = type;
     }
 }

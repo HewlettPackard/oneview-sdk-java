@@ -19,88 +19,67 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeviceSlot implements Serializable {
-    private static final long serialVersionUID = 1L;
+import com.google.gson.annotations.Since;
+import com.google.gson.annotations.Until;
+
+public class ServerFabricDevice implements Serializable {
+
+    private static final long serialVersionUID = 542979167339380410L;
 
     private String deviceName;
-    private String location;
+    @Since(200)
+    private Integer deviceNumber;
+    private ServerFabricDeviceLocation location;
+    @Until(199)
     private Integer oaSlotNumber;
-    private List<PhysicalPort> physicalPorts = new ArrayList<PhysicalPort>();
+    private List<ServerFabricPhysicalPort> physicalPorts = new ArrayList<>();
     private Integer slotNumber;
 
-    /**
-     * @return the deviceName
-     */
     public String getDeviceName() {
         return deviceName;
     }
 
-    /**
-     * @param deviceName
-     *            the deviceName to set
-     */
-    public void setDeviceName(final String deviceName) {
+    public void setDeviceName(String deviceName) {
         this.deviceName = deviceName;
     }
 
-    /**
-     * @return the location
-     */
-    public String getLocation() {
+    public Integer getDeviceNumber() {
+        return deviceNumber;
+    }
+
+    public void setDeviceNumber(Integer deviceNumber) {
+        this.deviceNumber = deviceNumber;
+    }
+
+    public ServerFabricDeviceLocation getLocation() {
         return location;
     }
 
-    /**
-     * @param location
-     *            the location to set
-     */
-    public void setLocation(final String location) {
+    public void setLocation(ServerFabricDeviceLocation location) {
         this.location = location;
     }
 
-    /**
-     * @return the oaSlotNumber
-     */
     public Integer getOaSlotNumber() {
         return oaSlotNumber;
     }
 
-    /**
-     * @param oaSlotNumber
-     *            the oaSlotNumber to set
-     */
-    public void setOaSlotNumber(final Integer oaSlotNumber) {
+    public void setOaSlotNumber(Integer oaSlotNumber) {
         this.oaSlotNumber = oaSlotNumber;
     }
 
-    /**
-     * @return the physicalPorts
-     */
-    public List<PhysicalPort> getPhysicalPorts() {
+    public List<ServerFabricPhysicalPort> getPhysicalPorts() {
         return physicalPorts;
     }
 
-    /**
-     * @param physicalPorts
-     *            the physicalPorts to set
-     */
-    public void setPhysicalPorts(final List<PhysicalPort> physicalPorts) {
+    public void setPhysicalPorts(List<ServerFabricPhysicalPort> physicalPorts) {
         this.physicalPorts = physicalPorts;
     }
 
-    /**
-     * @return the slotNumber
-     */
     public Integer getSlotNumber() {
         return slotNumber;
     }
 
-    /**
-     * @param slotNumber
-     *            the slotNumber to set
-     */
-    public void setSlotNumber(final Integer slotNumber) {
+    public void setSlotNumber(Integer slotNumber) {
         this.slotNumber = slotNumber;
     }
-
 }
