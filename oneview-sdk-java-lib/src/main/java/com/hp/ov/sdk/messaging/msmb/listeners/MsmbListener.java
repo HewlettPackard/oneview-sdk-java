@@ -21,7 +21,7 @@ public interface MsmbListener {
 
     /**
      * 
-     * @param message
+     * @param alertsDto alert message dto
      */
     public void handleMsmbMessage(final MsmbAlertsMessageDto alertsDto);
 

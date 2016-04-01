@@ -21,7 +21,7 @@ public class Patch implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public enum PatchOperation { add, copy, move, remove, replace, test };
+    public enum PatchOperation { add, copy, move, remove, replace, test }
 
     private String from;
     private PatchOperation op;
@@ -50,7 +50,7 @@ public class Patch implements Serializable {
     }
 
     /**
-     * @param operation the operation to set
+     * @param op the operation to set
      */
     public void setOp(PatchOperation op) {
         this.op = op;

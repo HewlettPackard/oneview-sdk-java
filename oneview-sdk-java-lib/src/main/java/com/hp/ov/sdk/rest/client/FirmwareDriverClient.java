@@ -72,6 +72,15 @@ public interface FirmwareDriverClient {
      *            details.
      * @param resourceId
      *            The resourceId for FirmwareDriver as seen in HP OneView.
+     * @param isForce
+     *            Indicates whether the delete should run with forced mode or not.
+     * @param aSync
+     *            Flag input to process request asynchronously or synchronously.
+     * @param useJsonRequest
+     *            The JsonRequest body is part of ServerPowerControlRequest
+     *            Object which takes in a String containing the update to be
+     *            made, which is converted to ServerPowerControlRequest Object
+     *            using adaptor and processed.
      * @return TaskResourceV2,which returns the task status for the process
      */
     public TaskResourceV2 deleteFirmwareDriver(final RestParams params, final String resourceId, final Boolean isForce,

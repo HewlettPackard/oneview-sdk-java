@@ -164,6 +164,8 @@ public interface NetworkClient {
      *            details.
      * @param resourceId
      *            The resourceId for Network as seen in HP OneView.
+     *
+     * @return list of profile URIs for the specified ethernet network.
      */
     List<String> getNetworkAssociatedProfiles(RestParams params, String resourceId);
 
@@ -175,6 +177,8 @@ public interface NetworkClient {
      *            details.
      * @param resourceId
      *            The resourceId for Network as seen in HP OneView.
+     *
+     * @return list of uplinks using the specified ethernet network.
      */
     List<String> getNetworkAssociatedUplinkGroups(RestParams params, String resourceId);
 

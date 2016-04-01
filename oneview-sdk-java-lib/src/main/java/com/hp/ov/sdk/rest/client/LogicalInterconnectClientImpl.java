@@ -625,7 +625,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
     @Override
     public TaskResourceV2 updateEthernetSettings(RestParams params, String resourceId,
-            EthernetInterconnectSettingsV2 EthernetInterconnectSettingsDto, boolean asyncOrSyncMode) {
+            EthernetInterconnectSettingsV2 ethernetInterconnectSettingsDto, boolean asyncOrSyncMode) {
         LOGGER.info("LogicalInterconnectClientImpl : updateEthernetSettings : Start");
 
         // validate args
@@ -643,7 +643,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         String returnObj = null;
 
         // create JSON request from dto
-        jsonObject = adaptor.buildJsonObjectFromDto(EthernetInterconnectSettingsDto, params.getApiVersion());
+        jsonObject = adaptor.buildJsonObjectFromDto(ethernetInterconnectSettingsDto, params.getApiVersion());
         returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);

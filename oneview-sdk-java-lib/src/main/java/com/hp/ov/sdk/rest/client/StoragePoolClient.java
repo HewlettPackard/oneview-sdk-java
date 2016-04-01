@@ -57,6 +57,8 @@ public interface StoragePoolClient {
      *            details.
      * @param name
      *            The name is the StoragePool name as seen in HP OneView.
+     * @param storageSystemUri
+     *            URI of the storage system.
      * @return storagePoolDto, which is a object containing the StoragePool
      *         details.
      */

@@ -103,8 +103,8 @@ public class FanBay implements Serializable {
 
     /**
      *
-     *@param bayNumber
-     *           The bayNumber
+     *@param changeState
+     *           The changeState
      */
     @JsonProperty("changeState")
     public void setChangeState(final String changeState) {

@@ -46,7 +46,7 @@ public interface LogicalEnclosureClient {
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
-     * @return List<LogicalEnclosure> which is a object containing the
+     * @return {@link LogicalEnclosureList} which is a object containing the
      *         collection of logical enclosures.
      */
     public LogicalEnclosureList getAllLogicalEnclosures(final RestParams params);
@@ -156,7 +156,7 @@ public interface LogicalEnclosureClient {
      * This method aids in updating the logical enclosure to be consistent with the
      * enclosure group when the logical enclosure is in the Inconsistent state.
      *
-     * @param param
+     * @param params
      *            The RestParams is a structure containing the connection
      *            details.
      * @param resourceId
@@ -170,7 +170,7 @@ public interface LogicalEnclosureClient {
     /**
      * This method aids in reapplying the logical enclosure configuration.
      *
-     * @param param
+     * @param params
      *            The RestParams is a structure containing the connection
      *            details.
      * @param resourceId
@@ -221,8 +221,7 @@ public interface LogicalEnclosureClient {
      * @param params
      *            The RestParams is a structure containing the connection
      *            details.
-     * @param logicalEnclosureId
-     * @param SupportDumpDto
+     * @param supportDumpDto
      *            The details to create the support dump.
      * @param resourceId
      *            The resourceId for logical enclosure as seen in HP OneView.
