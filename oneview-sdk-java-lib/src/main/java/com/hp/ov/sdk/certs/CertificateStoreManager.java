@@ -72,7 +72,7 @@ public class CertificateStoreManager {
         Security.addProvider(new BouncyCastleProvider());
         try {
             // Read client certificate and private key.
-            final byte[] encoded = BaseEncoding.base64().decode(certDto.getBase64SSLKeyData());
+            final byte[] encoded = BaseEncoding.base64().withSeparator("\n", 65).decode(certDto.getBase64SSLKeyData());
 
             final PKCS8EncodedKeySpec keySpec =
                 new PKCS8EncodedKeySpec(encoded);
