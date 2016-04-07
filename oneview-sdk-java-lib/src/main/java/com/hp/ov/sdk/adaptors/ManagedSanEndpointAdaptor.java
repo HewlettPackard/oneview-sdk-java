@@ -17,7 +17,7 @@ package com.hp.ov.sdk.adaptors;
 
 import com.hp.ov.sdk.dto.EndpointResponse;
 import com.hp.ov.sdk.dto.EndpointResponseCollection;
-import com.hp.ov.sdk.rest.client.EndpointsCsvFileResponse;
+import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
