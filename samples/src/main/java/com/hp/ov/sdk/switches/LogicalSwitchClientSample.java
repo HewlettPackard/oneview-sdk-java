@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.storage;
+package com.hp.ov.sdk.switches;
 
 import com.google.common.collect.Lists;
 import com.hp.ov.sdk.constants.ResourceCategory;
@@ -39,7 +39,6 @@ import com.hp.ov.sdk.rest.client.LogicalSwitchClient;
 import com.hp.ov.sdk.rest.client.LogicalSwitchClientImpl;
 import com.hp.ov.sdk.rest.client.LogicalSwitchGroupClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.switches.LogicalSwitchGroupClientSample;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
