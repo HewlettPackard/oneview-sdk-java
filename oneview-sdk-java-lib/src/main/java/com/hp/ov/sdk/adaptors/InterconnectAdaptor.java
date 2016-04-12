@@ -74,9 +74,9 @@ public class InterconnectAdaptor extends BaseAdaptor<Interconnects, Object> {
         return new JSONArray(converter.convertObjectToJsonString(Arrays.asList(source)));
     }
 
-    public JSONArray buildJsonArrayDto(List<Port> source) {
+    public JSONArray buildJsonArrayDto(List<Port> source, final double version) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        return new JSONArray(converter.convertObjectToJsonString(source));
+        return new JSONArray(converter.convertObjectToJsonString(source, version));
     }
 
     public JSONObject buildJsonObjectFromDto(Port source, final double version) {

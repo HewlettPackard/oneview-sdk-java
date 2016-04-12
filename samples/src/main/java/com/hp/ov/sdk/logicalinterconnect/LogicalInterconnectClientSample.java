@@ -69,7 +69,7 @@ public class LogicalInterconnectClientSample {
     // These are variables to be defined by user
     // ================================
     private static final String sppName = "Service Pack for ProLiant";
-    private static final String resourceName = "Encl1-LIG_PROD";
+    private static final String resourceName = "Encl1-LI";
     private static final String resourceId = "b63caa92-556e-4816-99b8-76ac2b3ddb96";
     private static final String telemetryId = "2770fdeb-5c49-499c-aef7-3eac45f2887e";
     private static final String enclosureUri = "/rest/enclosures/09SGH100X6J1";
@@ -705,10 +705,10 @@ public class LogicalInterconnectClientSample {
             TelemetryConfiguration telemetryDto = logicalInterconnectClient.getLogicalInterconnectTelemetryConfiguration(params, resourceId, telemetryId);
             telemetryDto.setEnableTelemetry(!telemetryDto.getEnableTelemetry());
 
-            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectTelemetryConfiguration(params, resourceId, telemetryId, telemetryDto);
+            TelemetryConfiguration updatedDto = logicalInterconnectClient.updateLogicalInterconnectTelemetryConfiguration(params, resourceId, telemetryId, telemetryDto);
 
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectTelemetryConfiguration : status of "
-                    + "task object returned to client : " + taskResourceV2.toString());
+            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectTelemetryConfiguration : "
+                    + "TelemetryConfiguration object returned to client : " + updatedDto.toString());
         } catch (final SDKResourceNotFoundException ex) {
             System.out.println("LogicalInterconnectClientSample : "
                     + "updateLogicalInterconnectTelemetryConfiguration : resource you are looking is not found for update"
@@ -729,6 +729,46 @@ public class LogicalInterconnectClientSample {
         } catch (final SDKTasksException e) {
             System.out.println("LogicalInterconnectClientSample : "
                     + "updateLogicalInterconnectTelemetryConfiguration : errors in task, "
+                    + "please check task resource for more details ");
+        }
+    }
+
+    private void updateLogicalInterconnectTelemetryConfigurationV200() {
+        String resourceId = null;
+        try {
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
+
+            // get resource ID
+            resourceId = logicalInterconnectClient.getId(params, resourceName);
+
+            TelemetryConfiguration telemetryDto = logicalInterconnectClient.getLogicalInterconnectTelemetryConfiguration(params, resourceId, telemetryId);
+            telemetryDto.setEnableTelemetry(!telemetryDto.getEnableTelemetry());
+
+            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectTelemetryConfigurationV200(params, resourceId, telemetryId, telemetryDto);
+
+            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectTelemetryConfigurationV200 : status of "
+                    + "task object returned to client : " + taskResourceV2.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("LogicalInterconnectClientSample : "
+                    + "updateLogicalInterconnectTelemetryConfigurationV200 : resource you are looking is not found for update"
+                    + params.getHostname());
+        } catch (final SDKBadRequestException ex) {
+            System.out.println("LogicalInterconnectClientSample : "
+                    + "updateLogicalInterconnectTelemetryConfigurationV200 : bad request, try again : "
+                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectTelemetryConfigurationV200 : no such url : "
+                    + params.getHostname());
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("LogicalInterconnectClientSample : "
+                    + "updateLogicalInterconnectTelemetryConfigurationV200 : Applicance Not reachabe at : " + params.getHostname());
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("LogicalInterconnectClientSample : "
+                    + "updateLogicalInterconnectTelemetryConfigurationV200 : arguments are null ");
+        } catch (final SDKTasksException e) {
+            System.out.println("LogicalInterconnectClientSample : "
+                    + "updateLogicalInterconnectTelemetryConfigurationV200 : errors in task, "
                     + "please check task resource for more details ");
         }
     }
@@ -1044,6 +1084,7 @@ public class LogicalInterconnectClientSample {
         client.updateLogicalInterconnectPortMonitorConfiguration();
         client.getLogicalInterconnectTelemetryConfiguration();
         client.updateLogicalInterconnectTelemetryConfiguration();
+        client.updateLogicalInterconnectTelemetryConfigurationV200();
 
         client.updateEthernetSettings();
         client.createLogicalInterconnect();

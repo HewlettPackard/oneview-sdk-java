@@ -1007,7 +1007,54 @@ public class LogicalInterconnectClientTest {
                 Mockito.anyInt()))
         .thenReturn(taskResourceV2);
 
-        TaskResourceV2 result = client.updateLogicalInterconnectTelemetryConfiguration(params, resourceId, telemetryId, new TelemetryConfiguration());
+        TelemetryConfiguration result = client.updateLogicalInterconnectTelemetryConfiguration(params, resourceId, telemetryId, new TelemetryConfiguration());
+
+        RestParams rp = new RestParams();
+        rp.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.TELEMETRY_CONFIGURATIONS,
+                telemetryId));
+        rp.setType(HttpMethodType.PUT);
+
+        PowerMockito.verifyStatic();
+        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+
+        assertNotNull(result);
+    }
+
+    @Test (expected = SDKInvalidArgumentException.class)
+    public void testUpdateLogicalInterconnectTelemetryConfigurationWithNullParams() {
+        client.updateLogicalInterconnectTelemetryConfiguration(null, resourceId, telemetryId, new TelemetryConfiguration());
+    }
+
+    @Test (expected = SDKNoResponseException.class)
+    public void testUpdateLogicalInterconnectTelemetryConfigurationWithNullResponse() {
+        Mockito.when(HttpRestClient.sendRequestToHPOV(
+                Mockito.any(RestParams.class),
+                Mockito.any(JSONObject.class)))
+        .thenReturn(null);
+        client.updateLogicalInterconnectTelemetryConfiguration(params, resourceId, telemetryId, new TelemetryConfiguration());
+    }
+
+    @Test
+    public void testUpdateLogicalInterconnectTelemetryConfigurationV200() {
+        String jsonCreateTaskCompleted = this.getJsonFromFile("LogicalInterconnectCreateTaskCompleted.json");
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+
+        Mockito.when(HttpRestClient.sendRequestToHPOV(
+                Mockito.any(RestParams.class),
+                Mockito.any(JSONObject.class)))
+        .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskMonitorManager.checkStatus(
+                Mockito.any(RestParams.class),
+                Mockito.anyString(),
+                Mockito.anyInt()))
+        .thenReturn(taskResourceV2);
+
+        TaskResourceV2 result = client.updateLogicalInterconnectTelemetryConfigurationV200(params, resourceId, telemetryId, new TelemetryConfiguration());
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(
@@ -1025,8 +1072,8 @@ public class LogicalInterconnectClientTest {
     }
 
     @Test (expected = SDKInvalidArgumentException.class)
-    public void testUpdateLogicalInterconnectTelemetryConfigurationWithNullParams() {
-        client.updateLogicalInterconnectTelemetryConfiguration(null, resourceId, telemetryId, new TelemetryConfiguration());
+    public void testUpdateLogicalInterconnectTelemetryConfigurationV200WithNullParams() {
+        client.updateLogicalInterconnectTelemetryConfigurationV200(null, resourceId, telemetryId, new TelemetryConfiguration());
     }
 
     @Test

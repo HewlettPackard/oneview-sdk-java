@@ -586,7 +586,44 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     }
 
     @Override
-    public TaskResourceV2 updateLogicalInterconnectTelemetryConfiguration(RestParams params, String resourceId,
+    public TelemetryConfiguration updateLogicalInterconnectTelemetryConfiguration(RestParams params, String resourceId,
+            String TelemetryConfigurationId, TelemetryConfiguration telemetryConfigurationDto) {
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectTelemetryConfiguration : Start");
+
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+
+        // set the additional params
+        params.setType(HttpMethodType.PUT);
+        params.setUrl(UrlUtils.createRestUrl(
+                params.getHostname(),
+                ResourceUris.LOGICAL_INTERCONNECT_URI,
+                resourceId,
+                SdkConstants.TELEMETRY_CONFIGURATIONS,
+                TelemetryConfigurationId));
+        String returnObj = null;
+
+        // create JSON request from dto
+        jsonObject = adaptor.buildJsonObjectFromDto(telemetryConfigurationDto);
+        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectTelemetryConfiguration : response from OV :" + returnObj);
+        if (null == returnObj || returnObj.equals("")) {
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
+                    SdkConstants.LOGICAL_INTERCONNECT, null);
+        }
+        // Call adaptor to convert to DTO
+
+        final TelemetryConfiguration telemetryConfigUpdatedDto = adaptor.buildTelemetryConfigurationsDto(returnObj);
+
+        LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectTelemetryConfiguration : End");
+
+        return telemetryConfigUpdatedDto;
+    }
+
+    @Override
+    public TaskResourceV2 updateLogicalInterconnectTelemetryConfigurationV200(RestParams params, String resourceId,
             String TelemetryConfigurationId, TelemetryConfiguration telemetryConfigurationDto) {
         LOGGER.info("LogicalInterconnectClientImpl : updateLogicalInterconnectTelemetryConfiguration : Start");
 

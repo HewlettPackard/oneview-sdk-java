@@ -418,9 +418,32 @@ public interface LogicalInterconnectClient {
      *            Telemetry configuration for LogicalInterconnect pointed to
      *            by the above mentioned TelemetryConfigurationId specified
      *            for resourceId.
+     * @return telemetryConfiguration, which is a object containing the
+     *         telemetryConfiguration details.
+     */
+    public TelemetryConfiguration updateLogicalInterconnectTelemetryConfiguration(final RestParams params,
+            final String resourceId, final String TelemetryConfigurationId, final TelemetryConfiguration telemetryConfiguration);
+
+    /**
+     * This module aids in updating the telemetry configuration of a logical
+     * interconnect specified by resourceId on OneView 2.0
+     *
+     * @param params
+     *            The RestParams is a structure containing the connection
+     *            details.
+     * @param resourceId
+     *            The resourceId for LogicalInterconnects as seen in HP OneView.
+     * @param TelemetryConfigurationId
+     *            The TelemetryConfigurationId that specifies the Telemetry
+     *            Id for the resource specified by resourceId
+     * @param telemetryConfiguration
+     *            which is a object containing the update to be made to existing
+     *            Telemetry configuration for LogicalInterconnect pointed to
+     *            by the above mentioned TelemetryConfigurationId specified
+     *            for resourceId.
      * @return TaskResourceV2
      */
-    public TaskResourceV2 updateLogicalInterconnectTelemetryConfiguration(final RestParams params,
+    public TaskResourceV2 updateLogicalInterconnectTelemetryConfigurationV200(final RestParams params,
             final String resourceId, final String TelemetryConfigurationId, final TelemetryConfiguration telemetryConfiguration);
 
     /**

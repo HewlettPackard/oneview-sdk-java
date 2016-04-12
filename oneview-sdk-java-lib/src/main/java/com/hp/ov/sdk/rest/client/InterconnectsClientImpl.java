@@ -454,7 +454,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
         // user can save time in creating network dto.
 
         // create JSON request from dto
-        JSONArray jsonArray = adaptor.buildJsonArrayDto(portsDto);
+        JSONArray jsonArray = adaptor.buildJsonArrayDto(portsDto, params.getApiVersion());
 
         returnObj = HttpRestClient.sendRequestToHPOV(params, jsonArray);
         // convert returnObj to taskResource
