@@ -403,7 +403,7 @@ public interface LogicalInterconnectClient {
 
     /**
      * This module aids in updating the telemetry configuration of a logical
-     * interconnect specified by resourceId
+     * interconnect specified by resourceId on OneView 1.2
      *
      * @param params
      *            The RestParams is a structure containing the connection

@@ -78,12 +78,8 @@ public class ServerProfileClientSample {
 
     // test values - user input
     // ================================
-    private static final String templateName = "ServerProfile_Template"; // used
-//    private static final String bayName = "Encl1, bay 15";
-    private static final String bayName = "Encl2, bay 3";
-//    private static final String profileName = "ServerProfile-Bay15";
-    private static final String profileName = "sprofile2";
-//    private static final String enclosureGroupName = "Enclosure_Test";
+    private static final String serverProfileName = "ServerProfile";
+    private static final String bayName = "Encl1, bay 15";
     private static final String enclosureGroupName = "encl_group";
     private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402");
     private static final List<String> storageVolumeName = Arrays.asList("Volume101");
@@ -171,7 +167,7 @@ public class ServerProfileClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
-            serverProfileDto = serverProfileClient.getServerProfileByName(params, templateName);
+            serverProfileDto = serverProfileClient.getServerProfileByName(params, serverProfileName);
 
             System.out.println("ServerProfileClientTest : getServerProfileByName : serverProfile object returned to client : "
                     + serverProfileDto.toString());
@@ -432,7 +428,7 @@ public class ServerProfileClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // fetch server profile uri using template name
-            final String profileUri = serverProfileClient.getServerProfileByName(params, templateName).getUri();
+            final String profileUri = serverProfileClient.getServerProfileByName(params, serverProfileName).getUri();
             // then make sdk service call to get resource
             availableServersCollectionDto = serverProfileClient.getAvailableServersForServerProfile(params, profileUri);
 
@@ -675,9 +671,9 @@ public class ServerProfileClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // fetch resource Id using resource name
-            serverProfileDto = serverProfileClient.getServerProfileByName(params, profileName + "_Update");
+            serverProfileDto = serverProfileClient.getServerProfileByName(params, serverProfileName);
 
-            serverProfileDto.setName(profileName);
+            serverProfileDto.setName(serverProfileName + "_Update");
 
             if (null != serverProfileDto.getUri()) {
                 resourceId = UrlUtils.getResourceIdFromUri(serverProfileDto.getUri());
@@ -775,7 +771,7 @@ public class ServerProfileClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // get resource ID
-            resourceId = serverProfileClient.getId(params, templateName);
+            resourceId = serverProfileClient.getId(params, serverProfileName);
 
             // then make sdk service call to get resource
             taskResourceV2 = serverProfileClient.deleteServerProfile(params, resourceId, false);
@@ -811,7 +807,7 @@ public class ServerProfileClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
-            taskResourceV2 = serverProfileClient.deleteServerProfileByFilter(params, templateName, matches, false);
+            taskResourceV2 = serverProfileClient.deleteServerProfileByFilter(params, serverProfileName, matches, false);
 
             System.out.println("ServerProfileClientTest : deleteServerProfileByFilter : serverProfile object returned to client : "
                     + taskResourceV2.toString());
@@ -938,7 +934,7 @@ public class ServerProfileClientSample {
         serverProfileValue.setNetworkForServerProfile(networkForServerProfiles);
         serverProfileValue.setSerialNumberType(ServerProfile.AssignmentType.Physical);
         serverProfileValue.setStorageVolumeForServerProfile(sanStorageForServerProfile);
-        serverProfileValue.setTemplateName(templateName);
+        serverProfileValue.setTemplateName(serverProfileName);
         serverProfileValue.setUseBayNameForServerHardwareUri(useBayNameForServerHardwareUri);
         serverProfileValue.setWwnType(ServerProfile.AssignmentType.Virtual);
 
@@ -961,13 +957,20 @@ public class ServerProfileClientSample {
 
         client.getProfilePortsForServerProfile();
 
-        client.getServerProfileCompliancePreview();
+        /*
+        server profile must be manually associated with a server profile template
+        before running some of the methods below
+        */
+        client.getServerProfileCompliancePreview(); //needs a template
         client.getServerProfileMessages();
         client.getServerProfileTransformation();
-        client.getAvailableStorageSystemsForServerProfile();
-        client.getAvailableStorageSystemForServerProfile();
+
+        client.getAvailableStorageSystemsForServerProfile(); //needs a template
+        client.getAvailableStorageSystemForServerProfile(); //needs a template
+
         client.getAvailableTargetsForServerProfile();
-        client.patchServerProfile();
+
+        client.patchServerProfile(); //needs a template
 
         client.updateServerProfile();
 
