@@ -21,7 +21,9 @@ import java.util.List;
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
 import com.hp.ov.sdk.dto.DeviceManagerResponseCollection;
 import com.hp.ov.sdk.dto.Property;
+import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.SanProviderResponse;
+import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -49,18 +51,19 @@ public class FcSansDeviceManagerClientSample {
     private final FcSansProviderClient fcSansProviderClient;
 
     private RestParams params;
+    private TaskResourceV2 taskResourceV2;
 
     // test values - user input
     // ================================
     private static final String providerName = "Brocade Network Advisor";
     private static final String resourceId = "f7aae238-64a3-4008-878c-d46d0a5798fe";
-    private static final String resourceName = "10.10.10.2";// example value
+    private static final String resourceName = "172.18.15.1";// example value
     private static final String hostName = "Host";
-    private static final String hostValue = "10.10.10.2";// example value
+    private static final String hostValue = "172.18.15.1";// example value
     private static final String userName = "Username";
-    private static final String userValue = "Administrator";
+    private static final String userValue = "dcs";
     private static final String passwordName = "Password";
-    private static final String passwordValue = "password";
+    private static final String passwordValue = "dcs";
     private static final String portName = "Port";
     private static final String useSSLName = "UseSsl";
     private static final String useSSLValue = "true";
@@ -86,11 +89,11 @@ public class FcSansDeviceManagerClientSample {
              * indicates sync vs async useJsonRequest parameter indicates
              * whether json input request present or not
              */
-            final DeviceManagerResponse deviceManagerResponseDto = fcSansDeviceManagerClient.createDeviceManager(params,
+            taskResourceV2 = fcSansDeviceManagerClient.createDeviceManager(params,
                     sanProviderResponseDto.getDeviceManagersUri(), addDeviceManagerResponseDto, false, false);
 
-            System.out.println("DeviceManagerClientTest : createDeviceManager : device manager object returned to client : "
-                    + deviceManagerResponseDto.toString());
+            System.out.println("DeviceManagerClientTest : createDeviceManager : task object returned to client : "
+                    + taskResourceV2.toString());
         } catch (final SDKResourceNotFoundException ex) {
             System.out.println("DeviceManagerClientTest : createDeviceManager : resource you are looking is not found ");
             return;
@@ -178,7 +181,6 @@ public class FcSansDeviceManagerClientSample {
     }
 
     private void updateDeviceManager() throws InstantiationException, IllegalAccessException {
-        DeviceManagerResponse deviceManagerResponseReturnDto = null;
         String resourceId = null;
         DeviceManagerResponse deviceManagerResponseDto = null;
         try {
@@ -187,7 +189,7 @@ public class FcSansDeviceManagerClientSample {
 
             // fetch resource Id using resource name
             deviceManagerResponseDto = fcSansDeviceManagerClient.getDeviceManagerByName(params, resourceName);
-
+            deviceManagerResponseDto.setRefreshState(RefreshState.RefreshPending);
             deviceManagerResponseDto = updateHostConnectionDetails(deviceManagerResponseDto);
 
             if (null != deviceManagerResponseDto.getUri()) {
@@ -198,11 +200,11 @@ public class FcSansDeviceManagerClientSample {
              * indicates sync vs async useJsonRequest parameter indicates
              * whether json input request present or not
              */
-            deviceManagerResponseReturnDto = fcSansDeviceManagerClient.updateDeviceManager(params, resourceId,
-                    deviceManagerResponseDto, false);
+            taskResourceV2 = fcSansDeviceManagerClient.updateDeviceManager(params, resourceId,
+                    deviceManagerResponseDto, false, false);
 
-            System.out.println("DeviceManagerClientTest : updateDeviceManager : " + " device manager object returned to client : "
-                    + deviceManagerResponseReturnDto.toString());
+            System.out.println("DeviceManagerClientTest : updateDeviceManager : " + " task object returned to client : "
+                    + taskResourceV2.toString());
         } catch (final SDKResourceNotFoundException ex) {
             System.out.println("DeviceManagerClientTest : updateDeviceManager :"
                     + " resource you are looking is not found for update ");
@@ -241,7 +243,7 @@ public class FcSansDeviceManagerClientSample {
             String resourceId = fcSansDeviceManagerClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
-            fcSansDeviceManagerClient.deleteDeviceManager(params, resourceId);
+            taskResourceV2 = fcSansDeviceManagerClient.deleteDeviceManager(params, resourceId, false);
 
             System.out.println("DeviceManagerClientTest : deleteDeviceManager : " + "device manager object deleted!");
         } catch (final SDKResourceNotFoundException ex) {
@@ -272,10 +274,10 @@ public class FcSansDeviceManagerClientSample {
     private DeviceManagerResponse updateHostConnectionDetails(DeviceManagerResponse deviceManagerResponseDto) {
         for (Property property : deviceManagerResponseDto.getConnectionInfo()) {
             if (property.getName().equalsIgnoreCase("host")) {
-                property.setValue(property.getValue());
+                property.setValue(hostValue);
             }
             if (property.getName().equalsIgnoreCase("password")) {
-                property.setValue("password");
+                property.setValue(passwordValue);
             }
         }
         return deviceManagerResponseDto;
