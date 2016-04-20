@@ -75,7 +75,11 @@ The SDK comes with several sample programs in the `samples` directory. For each 
 
 > Note: If you choose to use Eclipse IDE, you will need to generate the Eclipse IDE files (`\*.classpath`, `\*.project`, `\*.wtpmodules` and the `.settings` folder). You can generate these files using Maven Eclipse Plugin with the command `mvn clean eclipse:clean eclipse:eclipse`
 
-The file `SamplesConstants.java` must be changed according to your `KeyStore` and `TrustStore` passwords. Besides, you also will need to set your OneView credentials and host information.
+The file `SamplesConstants.java` must be changed to match the following information:
+* Paths for both `KeyStore` and `TrustStore` files and their respective passwords
+* OneView credentials and host information
+
+> Note: Instead of changing the location of SSL files you can just place them inside the directory `samples/src/main/resources`
 
 ## License ##
 The OneView SDK for Java is released under version 2.0 of the [Apache License](http://www.apache.org/licenses/LICENSE-2.0).
