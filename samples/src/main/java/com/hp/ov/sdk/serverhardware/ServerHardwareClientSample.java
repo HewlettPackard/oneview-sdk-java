@@ -599,7 +599,7 @@ public class ServerHardwareClientSample {
         client.updateServerHardwareRefreshState();
         client.getServerHardwareEnvironmentConfiguration();
 
-        /* update not working as expected */
+        //update works only with unmanaged device hardware (for example, iPDU)
         client.updateServerHardwareEnvironmentConfiguration();
 
         client.getServerHardwareIloSsoUrl();
@@ -608,7 +608,7 @@ public class ServerHardwareClientSample {
         client.getServerHardwareRemoteConsoleUrl();
         client.getServerHardwareUtilization();
 
-        /* only works with GEN9 hardware types*/
+        //only works with GEN9 hardware types
         client.getServerHardwareBios();
 
         //operations available only in OV 2.0

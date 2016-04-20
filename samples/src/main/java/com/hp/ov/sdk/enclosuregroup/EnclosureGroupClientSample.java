@@ -26,6 +26,7 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
+import com.hp.ov.sdk.logicalinterconnectgroup.LogicalInterconnectGroupClientSample;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClientImpl;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClient;
@@ -367,15 +368,21 @@ public class EnclosureGroupClientSample {
                 logicalInterconnectName).getUri();
 
         final EnclosureGroups dto = new EnclosureGroups();
-        dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP);
+        dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP); //OneView 1.2
+        dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP_V200); //OneView 2.0
         dto.setName(resourceName);
         dto.setStackingMode(EnclosureGroups.StackingMode.Enclosure);
         final List<InterconnectBayMapping> interconnectBayMappings = new ArrayList<InterconnectBayMapping>();
 
         for (int i = 0; i < 8; i++) {
-            final InterconnectBayMapping interconnectBayMapping = new InterconnectBayMapping();
-            interconnectBayMapping.setInterconnectBay(i + 1);
-            interconnectBayMapping.setLogicalInterconnectGroupUri(logicalInterconnectGroupUri);
+            InterconnectBayMapping interconnectBayMapping = new InterconnectBayMapping();
+            int interconnectBay = i + 1;
+
+            interconnectBayMapping.setInterconnectBay(interconnectBay);
+
+            if (LogicalInterconnectGroupClientSample.interconnectEntries.contains(Integer.valueOf(interconnectBay))) {
+                interconnectBayMapping.setLogicalInterconnectGroupUri(logicalInterconnectGroupUri);
+            }
             interconnectBayMappings.add(interconnectBayMapping);
         }
         dto.setInterconnectBayMappings(interconnectBayMappings);

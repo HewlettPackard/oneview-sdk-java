@@ -981,7 +981,7 @@ public class ServerProfileClientTest {
         rp.setUrl(UrlUtils.createRestQueryUrl(
                 params.getHostname(),
                 ResourceUris.SERVER_PROFILE_URI,
-                "filter=name=\"filter\""));
+                UrlUtils.createFilterString("filter")));
         rp.setType(HttpMethodType.DELETE);
 
         PowerMockito.verifyStatic();

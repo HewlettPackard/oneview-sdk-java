@@ -49,6 +49,8 @@ import com.hp.ov.sdk.rest.client.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.client.FirmwareDriverClientImpl;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectClient;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectClientImpl;
+import com.hp.ov.sdk.rest.client.NetworkClient;
+import com.hp.ov.sdk.rest.client.NetworkClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
@@ -62,6 +64,7 @@ public class LogicalInterconnectClientSample {
 
     private final LogicalInterconnectClient logicalInterconnectClient;
     private final FirmwareDriverClient firmwareDriverClient;
+    private final NetworkClient networkClient;
 
     private RestParams params;
     private TaskResourceV2 taskResourceV2;
@@ -73,6 +76,7 @@ public class LogicalInterconnectClientSample {
     private static final String resourceId = "b63caa92-556e-4816-99b8-76ac2b3ddb96";
     private static final String telemetryId = "2770fdeb-5c49-499c-aef7-3eac45f2887e";
     private static final String enclosureUri = "/rest/enclosures/09SGH100X6J1";
+    private static final String networkName = "Prod_401";
 
     // InterconnectUri
     private static final String interconnectNameOne = "Encl1, interconnect 1";
@@ -82,6 +86,7 @@ public class LogicalInterconnectClientSample {
     private LogicalInterconnectClientSample() {
         this.logicalInterconnectClient = LogicalInterconnectClientImpl.getClient();
         this.firmwareDriverClient = FirmwareDriverClientImpl.getClient();
+        this.networkClient = NetworkClientImpl.getClient();
     }
 
     private void getLogicalInterconnectById() throws InstantiationException, IllegalAccessException {
@@ -373,7 +378,7 @@ public class LogicalInterconnectClientSample {
     private LiFirmware buildLIFirmwareActiveDto(final LiFirmware initliFirmware) {
         final LiFirmware liFirmware = new LiFirmware();
 
-        liFirmware.setCommand(Command.ACTIVATE);
+        liFirmware.setCommand(Command.STAGE);
         liFirmware.setSppUri(firmwareDriverClient.getFirmwareDriverByName(params, sppName).getUri());
         final List<PhysicalInterconnectFirmware> interconnects = new ArrayList<PhysicalInterconnectFirmware>();
         for (int i = 0; i < initliFirmware.getInterconnects().size(); i++) {
@@ -635,7 +640,7 @@ public class LogicalInterconnectClientSample {
             resourceId = logicalInterconnectClient.getId(params, resourceName);
 
             PortMonitor portMonitorDto = logicalInterconnectClient.getLogicalInterconnectPortMonitorConfiguration(params, resourceId);
-            portMonitorDto.setEnablePortMonitor(!portMonitorDto.getEnablePortMonitor());
+            portMonitorDto.setEnablePortMonitor(false);
 
             taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectPortMonitorConfiguration(params, resourceId, portMonitorDto);
 
@@ -891,16 +896,16 @@ public class LogicalInterconnectClientSample {
     }
 
     private void updateLogicalInterconnectInternalNetworks() {
-        String resourceId = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
 
             // get resource ID
-            resourceId = logicalInterconnectClient.getId(params, resourceName);
+            String resourceId = logicalInterconnectClient.getId(params, resourceName);
+            String networkUri = networkClient.getNetworkByName(params, networkName).getUri();
 
-            List<String> networkUris = Arrays.asList("/rest/ethernet-networks/017151de-5706-4b50-ba03-d7b652c3850b");
-            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectInternalNetworks(params, resourceId, networkUris);
+            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectInternalNetworks(params,
+                    resourceId, Arrays.asList(networkUri));
 
             System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectCompliance : status of "
                     + "task object returned to client : " + taskResourceV2.toString());
@@ -1081,10 +1086,12 @@ public class LogicalInterconnectClientSample {
         client.getLogicalInterconnectUnassignedUplinkPortsForPortMonitor();
         client.updateLogicalInterconnectConfiguration();
         client.getLogicalInterconnectPortMonitorConfiguration();
+
         client.updateLogicalInterconnectPortMonitorConfiguration();
         client.getLogicalInterconnectTelemetryConfiguration();
-        client.updateLogicalInterconnectTelemetryConfiguration();
-        client.updateLogicalInterconnectTelemetryConfigurationV200();
+
+        client.updateLogicalInterconnectTelemetryConfiguration(); //OneView 1.2
+        client.updateLogicalInterconnectTelemetryConfigurationV200(); //OneView 2.0
 
         client.updateEthernetSettings();
         client.createLogicalInterconnect();

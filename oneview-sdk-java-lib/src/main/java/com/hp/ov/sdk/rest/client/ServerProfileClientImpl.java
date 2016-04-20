@@ -769,7 +769,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
             if (match) {
                 query = "filter=\"name matches \'%25" + filter + "%25\'\"";
             } else {
-                query = "filter=name=\"" + filter + "\"";
+                query = UrlUtils.createFilterString(filter);
             }
         } else {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);

@@ -58,6 +58,8 @@ public class LogicalInterconnectGroupClientSample {
 
     // test values - user input
     // ================================
+    public static final List<Integer> interconnectEntries = Arrays.asList(Integer.valueOf(1), Integer.valueOf(2));
+
     private static final String resourceName = "LIG_PROD";
     private static final String permittedInterconnectType = "HP VC FlexFabric-20/40 F8 Module";
     private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402", "Prod_403");
@@ -391,10 +393,10 @@ public class LogicalInterconnectGroupClientSample {
     }
 
     private LogicalInterconnectGroups buildTestLogicalInterconnectGroup() {
-        HashMap<Integer, String> bayPermittedInterconnectMaps = new HashMap<Integer, String>();
+        HashMap<Integer, String> bayPermittedInterconnectMaps = new HashMap<>(interconnectEntries.size());
 
-        bayPermittedInterconnectMaps.put(1, permittedInterconnectType);
-        bayPermittedInterconnectMaps.put(2, permittedInterconnectType);
+        bayPermittedInterconnectMaps.put(interconnectEntries.get(0), permittedInterconnectType);
+        bayPermittedInterconnectMaps.put(interconnectEntries.get(1), permittedInterconnectType);
 
         LogicalInterconnectGroups dto = resourceDtoUtils.buildLogicalInterconnectGroupDto(params, resourceName, bayPermittedInterconnectMaps);
         dto.setEnclosureIndexes(Arrays.asList(1));
