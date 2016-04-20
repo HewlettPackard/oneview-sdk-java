@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -19,29 +19,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
-import static org.mockito.BDDMockito.anyObject;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.doReturn;
-import static org.mockito.BDDMockito.eq;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.spy;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.any;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 import java.io.IOException;
 
-import com.google.common.collect.Lists;
-import com.hp.ov.sdk.adaptors.DeviceManagerAdaptor;
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.DeviceManagerResponse;
-import com.hp.ov.sdk.dto.DeviceManagerResponseCollection;
-import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.UrlUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -49,6 +38,22 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.google.common.collect.Lists;
+import com.hp.ov.sdk.adaptors.DeviceManagerAdaptor;
+import com.hp.ov.sdk.adaptors.TaskAdaptor;
+import com.hp.ov.sdk.constants.ResourceUris;
+import com.hp.ov.sdk.dto.DeviceManagerResponse;
+import com.hp.ov.sdk.dto.DeviceManagerResponseCollection;
+import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
+import com.hp.ov.sdk.exceptions.SDKNoResponseException;
+import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
+import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
+import com.hp.ov.sdk.rest.http.core.client.RestParams;
+import com.hp.ov.sdk.tasks.TaskMonitorManager;
+import com.hp.ov.sdk.util.UrlUtils;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FcSansDeviceManagerClientTest {
@@ -62,14 +67,27 @@ public class FcSansDeviceManagerClientTest {
             "{\"name\":\"Password\",\"value\":\"password\"}," +
             "{\"name\":\"UseSsl\",\"value\":true}]}";
 
+    private static final String ANY_TASK =  "{" +
+            "\"type\":\"TaskResourceV2\"," +
+            "\"name\":\"random-name\"," +
+            "\"uri\":\"/rest/tasks/random-uuid\"}";
+
     @Mock
     private DeviceManagerAdaptor adaptor;
+    @Mock
+    private TaskAdaptor taskAdaptor;
+    @Mock
+    private TaskMonitorManager taskMonitor;
     @Mock
     private HttpRestClient client;
 
     @InjectMocks
     private FcSansDeviceManagerClientImpl deviceManagerClient;
 
+    @Test
+    public void shouldReturnFcSansDeviceManagerClient() {
+        assertThat(FcSansDeviceManagerClientImpl.getClient(), is(notNullValue()));
+    }
     @Test(expected = SDKInvalidArgumentException.class)
     public void shouldThrowExceptionWhenTryingToCreateDeviceManagerWithoutParams() {
         this.deviceManagerClient.createDeviceManager(null, null, null, false, false);
@@ -78,11 +96,13 @@ public class FcSansDeviceManagerClientTest {
     @Test
     public void shouldCreateDeviceManager() throws IOException {
         String providerUri = "random-URI";
-        JSONObject jsonObject = new JSONObject(ANY_DEVICE_MANAGER);
+        JSONObject jsonObject = new JSONObject(ANY_TASK);
 
-        given(adaptor.buildDto(anyObject())).willReturn(new DeviceManagerResponse());
+        given(taskAdaptor.buildDto(anyObject())).willReturn(new TaskResourceV2());
+        given(taskMonitor.checkStatus(any(RestParams.class), any(String.class), any(Integer.class)))
+        .willReturn(new TaskResourceV2());
         given(adaptor.buildJsonObjectFromDto(any(DeviceManagerResponse.class))).willReturn(jsonObject);
-        given(client.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(ANY_DEVICE_MANAGER);
+        given(client.sendRequest(any(RestParams.class), any(JSONObject.class), any(boolean.class))).willReturn(ANY_TASK);
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.POST);
@@ -90,8 +110,8 @@ public class FcSansDeviceManagerClientTest {
 
         this.deviceManagerClient.createDeviceManager(new RestParams(), providerUri, new DeviceManagerResponse(), false, false);
 
-        then(client).should().sendRequest(expectedRestParams, jsonObject);
-        then(adaptor).should().buildDto(ANY_DEVICE_MANAGER);
+        then(client).should().sendRequest(expectedRestParams, jsonObject, true);
+        then(taskAdaptor).should().buildDto(ANY_TASK);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -156,7 +176,7 @@ public class FcSansDeviceManagerClientTest {
 
     @Test(expected = SDKInvalidArgumentException.class)
     public void shouldThrowExceptionWhenTryingToDeleteDeviceManagerWithoutParams() {
-        this.deviceManagerClient.deleteDeviceManager(null, ANY_RESOURCE_ID);
+        this.deviceManagerClient.deleteDeviceManager(null, ANY_RESOURCE_ID, false);
     }
 
     @Test
@@ -166,14 +186,17 @@ public class FcSansDeviceManagerClientTest {
         expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(),
                 ResourceUris.FC_SANS_DEVICE_MANAGER_URI, ANY_RESOURCE_ID));
 
-        this.deviceManagerClient.deleteDeviceManager(new RestParams(), ANY_RESOURCE_ID);
+        given(client.sendRequest(any(RestParams.class))).willReturn(ANY_TASK);
+        given(taskAdaptor.buildDto(anyObject())).willReturn(new TaskResourceV2());
+
+        this.deviceManagerClient.deleteDeviceManager(new RestParams(), ANY_RESOURCE_ID, false);
 
         then(client).should().sendRequest(eq(expectedRestParams));
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
     public void shouldThrowExceptionWhenTryingToUpdateDeviceManagerWithoutParams() {
-        this.deviceManagerClient.updateDeviceManager(null, ANY_RESOURCE_ID, null, false);
+        this.deviceManagerClient.updateDeviceManager(null, ANY_RESOURCE_ID, null, false, true);
     }
 
     @Test
@@ -182,17 +205,19 @@ public class FcSansDeviceManagerClientTest {
 
         given(adaptor.buildDto(anyObject())).willReturn(new DeviceManagerResponse());
         given(adaptor.buildJsonObjectFromDto(any(DeviceManagerResponse.class))).willReturn(jsonObject);
-        given(client.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(ANY_DEVICE_MANAGER);
+        given(client.sendRequest(any(RestParams.class), any(JSONObject.class), any(boolean.class)))
+        .willReturn(ANY_TASK);
+        given(taskAdaptor.buildDto(anyObject())).willReturn(new TaskResourceV2());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.PUT);
         expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(),
                 ResourceUris.FC_SANS_DEVICE_MANAGER_URI, ANY_RESOURCE_ID));
 
-        this.deviceManagerClient.updateDeviceManager(new RestParams(), ANY_RESOURCE_ID, new DeviceManagerResponse(), false);
+        this.deviceManagerClient.updateDeviceManager(new RestParams(), ANY_RESOURCE_ID, new DeviceManagerResponse(), false, false);
 
-        then(client).should().sendRequest(expectedRestParams, jsonObject);
-        then(adaptor).should().buildDto(ANY_DEVICE_MANAGER);
+        then(client).should().sendRequest(expectedRestParams, jsonObject, true);
+        then(taskAdaptor).should().buildDto(ANY_TASK);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)

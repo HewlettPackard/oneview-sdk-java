@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -23,10 +23,11 @@ package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
 import com.hp.ov.sdk.dto.DeviceManagerResponseCollection;
+import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface FcSansDeviceManagerClient {
-    /*
+    /**
      * The module aids in creating a Device Manager under the specified
      * provider.
      *
@@ -46,13 +47,12 @@ public interface FcSansDeviceManagerClient {
      * which takes in a String containing the new Enclosure details, which is
      * converted to AddEnclosure Object using adaptor and processed.
      *
-     * @return sanProviderResponseCollectionDto, which is a object containing
-     * the SanProviderResponse Collection details.
+     * @return taskResource which returns the task status for the process
      */
-    public DeviceManagerResponse createDeviceManager(final RestParams params, final String providerUrl,
+    public TaskResourceV2 createDeviceManager(final RestParams params, final String providerUrl,
             final DeviceManagerResponse deviceManagerResponseDto, final boolean aSync, final boolean useJsonRequest);
 
-    /*
+    /**
      * The module aids in fetching all the Device Managers registered under
      * current HP OneView
      *
@@ -64,7 +64,7 @@ public interface FcSansDeviceManagerClient {
      */
     public DeviceManagerResponseCollection getAllDeviceManager(final RestParams params);
 
-    /*
+    /**
      * The module aids in fetching the Device Managers registered under current
      * HP OneView
      *
@@ -79,7 +79,7 @@ public interface FcSansDeviceManagerClient {
      */
     public DeviceManagerResponse getDeviceManager(final RestParams params, final String resourceId);
 
-    /*
+    /**
      * The module aids in fetching the Device Managers registered under current
      * HP OneView
      *
@@ -94,7 +94,7 @@ public interface FcSansDeviceManagerClient {
      */
     public DeviceManagerResponse getDeviceManagerByName(final RestParams params, final String name);
 
-    /*
+    /**
      * The module aids in fetching the Device Managers registered under current
      * HP OneView
      *
@@ -104,12 +104,14 @@ public interface FcSansDeviceManagerClient {
      * @param resourceId The resourceId for device manager as seen in HP
      * OneView.
      *
-     * @return DeviceManagerResponseDto, which is a object containing the
-     * DeviceManagerResponse details.
+     * @param aSync
+     *            Flag input to process request asynchronously or synchronously.
+     *
+     * @return taskResource which returns the task status for the process
      */
-    void deleteDeviceManager(final RestParams params, final String resourceId);
+    public TaskResourceV2 deleteDeviceManager(final RestParams params, final String resourceId, final boolean aSync);
 
-    /*
+    /**
      * The module aids in fetching the Device Managers registered under current
      * HP OneView
      *
@@ -117,16 +119,21 @@ public interface FcSansDeviceManagerClient {
      * details.
      *
      * @param resourceId The resourceId for device manager as seen in HP
-     * OneView. *
+     * OneView.
+     *
+     * @param useJsonRequest
+     *            The JsonRequest body is part of DeviceManagerResponse Object which
+     *            takes in a String containing the Device Manager details, which
+     *            is converted to DeviceManagerResponse Object using adaptor and
+     *            processed.
      *
      * @param aSync Flag input to process request asynchronously or
      * synchronously.
      *
-     * @return DeviceManagerResponseDto, which is a object containing the
-     * DeviceManagerResponse details.
+     * @return taskResource which returns the task status for the process
      */
-    public DeviceManagerResponse updateDeviceManager(final RestParams params, final String resourceId,
-            final DeviceManagerResponse updateDeviceManagerResponseDto, final boolean useJsonRequest);
+    public TaskResourceV2 updateDeviceManager(final RestParams params, final String resourceId,
+            final DeviceManagerResponse updateDeviceManagerResponseDto, final boolean useJsonRequest, final boolean aSync);
 
     /**
      * The module aids in fetching the device manager details for the device

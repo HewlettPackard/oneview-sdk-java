@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -15,49 +15,62 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Strings;
 import com.hp.ov.sdk.adaptors.DeviceManagerAdaptor;
+import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
 import com.hp.ov.sdk.dto.DeviceManagerResponseCollection;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskState;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
+import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FcSansDeviceManagerClientImpl.class);
+    private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
 
     private final DeviceManagerAdaptor adaptor;
+    private final TaskAdaptor taskAdaptor;
+    private final TaskMonitorManager taskMonitor;
+
     private final HttpRestClient restClient;
 
     private JSONObject jsonObject;
 
-    protected FcSansDeviceManagerClientImpl(DeviceManagerAdaptor adaptor,
+    protected FcSansDeviceManagerClientImpl(DeviceManagerAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor,
             HttpRestClient restClient) {
 
         this.adaptor = adaptor;
+        this.taskAdaptor = taskAdaptor;
+        this.taskMonitor = taskMonitor;
         this.restClient = restClient;
     }
 
     public static FcSansDeviceManagerClient getClient() {
         return new FcSansDeviceManagerClientImpl(
                 new DeviceManagerAdaptor(),
+                TaskAdaptor.getInstance(),
+                TaskMonitorManager.getInstance(),
                 HttpRestClient.getClient());
     }
 
     @Override
-    public DeviceManagerResponse createDeviceManager(final RestParams params, final String providerUrl,
+    public TaskResourceV2 createDeviceManager(final RestParams params, final String providerUrl,
             final DeviceManagerResponse addDeviceManagerResponseDto, final boolean aSync, final boolean useJsonRequest) {
         LOGGER.trace("DeviceManagerClientImpl : createDeviceManager : Start");
         String returnObj = null;
@@ -78,16 +91,24 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(addDeviceManagerResponseDto);
-        returnObj = restClient.sendRequest(params, jsonObject);
-        // convert returnObj to deviceManagerResponseDto
-        DeviceManagerResponse deviceManagerResponseDto = adaptor.buildDto(returnObj);
+        returnObj = restClient.sendRequest(params, jsonObject, true);
+
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
         LOGGER.debug("DeviceManagerClientImpl : createDeviceManager : returnObj =" + returnObj);
-        LOGGER.debug("DeviceManagerClientImpl : createDeviceManager : DeviceManagerResponse =" + deviceManagerResponseDto);
+        LOGGER.debug("DeviceManagerClientImpl : createDeviceManager : taskResource =" + taskResourceV2);
 
-        LOGGER.trace("DeviceManagerClientImpl : createDeviceManager : End");
+        // check for aSync flag. if user is asking async mode, return directly
+        // the TaskResourceV2
+        // if user is asking for sync mode, call task monitor polling method and
+        // send the update
+        // once task is complete or exceeds the timeout.
+        if (taskResourceV2 != null && aSync == false) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        LOGGER.info("DeviceManagerClientImpl : createDeviceManager : End");
 
-        return deviceManagerResponseDto;
+        return taskResourceV2;
     }
 
     @Override
@@ -150,7 +171,7 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
     }
 
     @Override
-    public void deleteDeviceManager(final RestParams params, final String resourceId) {
+    public TaskResourceV2 deleteDeviceManager(final RestParams params, final String resourceId, final boolean aSync) {
         LOGGER.trace("DeviceManagerClientImpl : deleteDeviceManager : Start");
 
         // validate args
@@ -163,12 +184,35 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_SANS_DEVICE_MANAGER_URI, resourceId));
 
         final String returnObj = restClient.sendRequest(params);
-        LOGGER.debug("DeviceManagerClientImpl : deleteDeviceManager : response from OV :" + returnObj);
+        LOGGER.debug("DeviceManagerClientImpl : deleteDeviceManager : returnObj =" + returnObj);
+
+        TaskResourceV2 taskResourceV2 = new TaskResourceV2();
+        taskResourceV2.setTaskState(TaskState.Completed);
+
+        // OV 2.0 returns code 200 with no task and the string ""OK"" in the body
+        // This IF should catch responses from OV 3.0 +
+        if (!returnObj.equalsIgnoreCase("\"OK\"")) {
+            taskResourceV2 = taskAdaptor.buildDto(returnObj);
+
+            LOGGER.debug("DeviceManagerClientImpl : deleteDeviceManager : taskResource =" + taskResourceV2);
+            // check for aSync flag. if user is asking async mode, return directly
+            // the TaskResourceV2
+            // if user is asking for sync mode, call task monitor polling method and
+            // send the update
+            // once task is complete or exceeds the timeout.
+            if (taskResourceV2 != null && aSync == false) {
+                taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+            }
+        }
+
+        LOGGER.info("DeviceManagerClientImpl : deleteDeviceManager : End");
+
+        return taskResourceV2;
     }
 
     @Override
-    public DeviceManagerResponse updateDeviceManager(final RestParams params, final String resourceId,
-            final DeviceManagerResponse updateDeviceManagerResponseDto, final boolean useJsonRequest) {
+    public TaskResourceV2 updateDeviceManager(final RestParams params, final String resourceId,
+            final DeviceManagerResponse updateDeviceManagerResponseDto, final boolean useJsonRequest, final boolean aSync) {
         LOGGER.trace("DeviceManagerClientImpl : updateDeviceManager : Start");
         String returnObj = null;
 
@@ -188,16 +232,24 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(updateDeviceManagerResponseDto);
-        returnObj = restClient.sendRequest(params, jsonObject);
-        // convert returnObj to deviceManagerResponseDto
-        final DeviceManagerResponse deviceManagerResponseDto = adaptor.buildDto(returnObj);
+        returnObj = restClient.sendRequest(params, jsonObject, true);
+
+        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
         LOGGER.debug("DeviceManagerClientImpl : updateDeviceManager : returnObj =" + returnObj);
-        LOGGER.debug("DeviceManagerClientImpl : updateDeviceManager : DeviceManagerResponse =" + deviceManagerResponseDto);
+        LOGGER.debug("DeviceManagerClientImpl : updateDeviceManager : taskResource =" + taskResourceV2);
 
-        LOGGER.trace("DeviceManagerClientImpl : updateDeviceManager : End");
+        // check for aSync flag. if user is asking async mode, return directly
+        // the TaskResourceV2
+        // if user is asking for sync mode, call task monitor polling method and
+        // send the update
+        // once task is complete or exceeds the timeout.
+        if (taskResourceV2 != null && aSync == false) {
+            taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
+        }
+        LOGGER.info("DeviceManagerClientImpl : updateDeviceManager : End");
 
-        return deviceManagerResponseDto;
+        return taskResourceV2;
     }
 
     @Override

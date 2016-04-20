@@ -80,11 +80,21 @@ public class HttpRestClient {
     public static HttpRestClient getClient() {
         return HttpRestClientHolder.INSTANCE;
     }
+
     public String sendRequest(RestParams restParams) {
         return sendRequestToHPOV(restParams);
     }
+
+    public String sendRequest(RestParams restParams, boolean forceReturnTask) {
+        return sendRequestToHPOV(restParams, forceReturnTask);
+    }
+
     public String sendRequest(RestParams restParams, JSONObject jsonObject) {
         return sendRequestToHPOV(restParams, jsonObject);
+    }
+
+    public String sendRequest(RestParams restParams, JSONObject jsonObject, boolean forceReturnTask) {
+        return sendRequestToHPOV(restParams, jsonObject, forceReturnTask);
     }
 
     /**
@@ -97,7 +107,22 @@ public class HttpRestClient {
      **/
     public static String sendRequestToHPOV(final RestParams params) {
         LOGGER.debug("Rest params passed, params=: " + params);
-        return sendRequestToHPOV(params, null, CONTENT_TYPE);
+        return sendRequestToHPOV(params, null, CONTENT_TYPE, false);
+    }
+
+    /**
+     * Send the request to OV and read the response.
+     *
+     * @param params connection parameters.
+     * @param forceReturnTask Force the return of a task even when the
+     * response body is not empty
+     *
+     * @return a string representing the response data.
+     * @throws SDKBadRequestException on unsupported method (PUT, GET..)
+     **/
+    public static String sendRequestToHPOV(final RestParams params, final boolean forceReturnTask) {
+        LOGGER.debug("Rest params passed, params=: " + params);
+        return sendRequestToHPOV(params, null, CONTENT_TYPE, forceReturnTask);
     }
 
     /**
@@ -115,9 +140,32 @@ public class HttpRestClient {
         LOGGER.debug("Rest params passed, params=: " + params
                      + " jsonObject = :" + jsonObject);
         if (jsonObject == null) {
-           return sendRequestToHPOV(params, null, CONTENT_TYPE);
+           return sendRequestToHPOV(params, null, CONTENT_TYPE, false);
         }
-        return sendRequestToHPOV(params, jsonObject.toString(), CONTENT_TYPE);
+        return sendRequestToHPOV(params, jsonObject.toString(), CONTENT_TYPE, false);
+    }
+
+    /**
+     * Send the request to OV and read the response.
+     *
+     * @param params connection parameters.
+     * @param jsonObject request body.
+     * @param forceReturnTask Force the return of a task even when the
+     * response body is not empty
+     *
+     * @return a string representing the response data.
+     * @throws SDKBadRequestException on unsupported method (PUT, GET..)
+     **/
+    public static String sendRequestToHPOV(final RestParams params,
+                                    final JSONObject jsonObject,
+                                    final boolean forceReturnTask) {
+
+        LOGGER.debug("Rest params passed, params=: " + params
+                     + " jsonObject = :" + jsonObject);
+        if (jsonObject == null) {
+           return sendRequestToHPOV(params, null, CONTENT_TYPE, forceReturnTask);
+        }
+        return sendRequestToHPOV(params, jsonObject.toString(), CONTENT_TYPE, forceReturnTask);
     }
 
     /**
@@ -138,9 +186,9 @@ public class HttpRestClient {
         // TODO: Throw an exception when this parameter is null.
         // We a have a method that does not need this parameter
         if (jsonObject == null) {
-           return sendRequestToHPOV(params, null, CONTENT_TYPE);
+           return sendRequestToHPOV(params, null, CONTENT_TYPE, false);
         }
-        return sendRequestToHPOV(params, jsonObject.toString(), CONTENT_TYPE);
+        return sendRequestToHPOV(params, jsonObject.toString(), CONTENT_TYPE, false);
     }
 
     @Deprecated
@@ -148,7 +196,7 @@ public class HttpRestClient {
                                           String scriptObject) {
         LOGGER.debug("Rest params passed, params=: " + params
                 + " scriptObject = :" + scriptObject);
-        return sendRequestToHPOV(params, scriptObject, CONTENT_TYPE_STRING);
+        return sendRequestToHPOV(params, scriptObject, CONTENT_TYPE_STRING, false);
     }
 
     /**
@@ -157,13 +205,16 @@ public class HttpRestClient {
      * @param params connection parameters.
      * @param scriptObject request body.
      * @param contentType content type.
+     * @param forceReturnTask Force the return of a task even when
+     * the response body is not empty
      *
      * @return a string representing the response data.
      * @throws SDKBadRequestException on unsupported method (PUT, GET..)
      **/
     private static String sendRequestToHPOV(final RestParams params,
                                      final String scriptObject,
-                                     final String contentType)
+                                     final String contentType,
+                                     final boolean forceReturnTask)
                                      throws SDKBadRequestException {
 
         LOGGER.debug("Rest params passed, params= " + params
@@ -229,9 +280,9 @@ public class HttpRestClient {
                 }
             }
 
-            if ((responseCode == HttpURLConnection.HTTP_ACCEPTED)
+            if (forceReturnTask || ((responseCode == HttpURLConnection.HTTP_ACCEPTED)
                     && (sb.length() == 0)
-                    && !Strings.isNullOrEmpty(connection.getHeaderField(LOCATION_HEADER))) {
+                    && !Strings.isNullOrEmpty(connection.getHeaderField(LOCATION_HEADER)))) {
                 // Implement review comment from Geoff
                 // Async APIs should return Task URI in header, eg response = 202,
                 // check location header vs returned object.  SDK should check 202,
