@@ -1,12 +1,12 @@
 # HPE OneView SDK for Java
 
-The **HPE OneView SDK for Java** enables Java developers to easily integrate their Java solutions with the HPE OneView. You can get started in a few minutes downloading the project and building it using [Maven](https://maven.apache.org/) project management tool.
+The **HPE OneView SDK for Java** enables Java developers to easily integrate their Java solutions with the HPE OneView. You can get started in minutes downloading, and building the project using [Maven](https://maven.apache.org/) project management tool.
 
 The SDK provides clients for the REST API specification of each resource type in the HPE OneView resource model.
 
 ## Getting Started ##
 
-### Minimum Requirements ###
+### Minimum requirements ###
 * Java **1.7**
 * Maven **3.0.5**
 * OpenSSL
@@ -19,7 +19,7 @@ mvn clean install
 ```
 
 ### Generate KeyStore and TrustStore to store SSL certificates ###
-In order to enable the SDK to establish a SSL connection between the client and the server, it is necessary to generate `KeyStore` and `TrustStore` files.
+To enable the SDK to establish a SSL connection between the client and the server, it is necessary to generate `KeyStore` and `TrustStore` files.
 
 Below are the steps to perform this task:
 
@@ -47,7 +47,7 @@ curl -X GET -H "Auth:{AUTHORIZATION_TOKEN}" -H "X-Api-Version:200" -k https://{H
 * Paste the content of `base64SSLCertData` into a file called `default-client.crt`
 * Paste the content of `base64SSLKeyData` into a file called `default-client.key`
 
-> Note: Remove the `\n` characters or replace them by an actual *new line*.
+> Note: Remove the `\n` characters or replace them with an actual *new line*.
 
 If you receive a response containing the message `Certificate/Private key file is missing`, you will have to perform a request to the OneView to generate the certificates.
 Example:
@@ -58,9 +58,9 @@ curl -X POST -H "Auth:{AUTHORIZATION_TOKEN}" -H "X-Api-Version:200" -H "Content-
 #### Generate `TrustStore` ####
 Example:
 ```
-keytool -import -v -trustcacerts -alias myservercert file default-server.crt -keystore TrustStore
+keytool -import -v -trustcacerts -alias myservercert -file default-server.crt -keystore TrustStore
 ```
-> Note: Choose the option *yes* if prompted to trust the certificate.
+> Note: Choose the *yes* option, when prompted to trust the certificate.
 
 #### Generate `KeyStore` ####
 Example:
@@ -70,13 +70,13 @@ openssl pkcs12 -export -name myclientcert -in default-client.crt -inkey default-
 keytool -importkeystore -destkeystore KeyStore -srckeystore myclient.p12 -srcstoretype pkcs12 -alias myclientcert
 ```
 
-### Example Programs ###
+### Example programs ###
 The SDK comes with several sample programs in the `samples` directory. For each of the supported resource types, there is a corresponding sample file. To run one of them, we recommend the use of an IDE ([Eclipse](https://eclipse.org/downloads/) or [IntelliJ](https://www.jetbrains.com/idea/download/)).
 
 > Note: If you choose to use Eclipse IDE, you will need to generate the Eclipse IDE files (`\*.classpath`, `\*.project`, `\*.wtpmodules` and the `.settings` folder). You can generate these files using Maven Eclipse Plugin with the command `mvn clean eclipse:clean eclipse:eclipse`
 
-The file `SamplesConstants.java` must be changed to match the following information:
-* Paths for both `KeyStore` and `TrustStore` files and their respective passwords
+The file `SamplesConstants.java` must be updated to contain the following information:
+* Path for both `KeyStore` and `TrustStore` files and their respective passwords
 * OneView credentials and host information
 
 > Note: Instead of changing the location of SSL files you can just place them inside the directory `samples/src/main/resources`
