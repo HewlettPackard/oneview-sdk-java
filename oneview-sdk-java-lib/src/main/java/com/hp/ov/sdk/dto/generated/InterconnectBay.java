@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -17,49 +17,30 @@ package com.hp.ov.sdk.dto.generated;
 
 import java.io.Serializable;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.gson.annotations.Since;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "bayNumber",
-    "interconnectUri",
-    "ipv4Setting",
-    "logicalInterconnectUri",
-    "serialNumber"})
 public class InterconnectBay implements Serializable {
 
     /**
      *
     */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("bayNumber")
     private Integer bayNumber;
-    @JsonProperty("interconnectUri")
     private String interconnectUri;
-    @JsonProperty("ipv4Setting")
     @Since(200)
     private Ipv4Setting ipv4Setting;
-    @JsonProperty("logicalInterconnectUri")
     private String logicalInterconnectUri;
     @Since(200)
-    @JsonProperty("serialNumber")
     private String serialNumber;
 
     /**
      *
      * @return The bayNumber
      */
-    @JsonProperty("bayNumber")
     public Integer getBayNumber() {
         return bayNumber;
     }
@@ -69,7 +50,6 @@ public class InterconnectBay implements Serializable {
      * @param bayNumber
      *            The bayNumber
      */
-    @JsonProperty("bayNumber")
     public void setBayNumber(final Integer bayNumber) {
         this.bayNumber = bayNumber;
     }
@@ -78,7 +58,6 @@ public class InterconnectBay implements Serializable {
      *
      * @return The interconnectUri
      */
-    @JsonProperty("interconnectUri")
     public String getInterconnectUri() {
         return interconnectUri;
     }
@@ -88,7 +67,6 @@ public class InterconnectBay implements Serializable {
      * @param interconnectUri
      *            The interconnectUri
      */
-    @JsonProperty("interconnectUri")
     public void setInterconnectUri(final String interconnectUri) {
         this.interconnectUri = interconnectUri;
     }
@@ -97,7 +75,6 @@ public class InterconnectBay implements Serializable {
      *
      * @return The ipv4Setting
      */
-    @JsonProperty("ipv4Setting")
     public Ipv4Setting getIpv4Setting() {
         return ipv4Setting;
     }
@@ -107,7 +84,6 @@ public class InterconnectBay implements Serializable {
      * @param ipv4Setting
      *            The ipv4Setting
      */
-    @JsonProperty("ipv4Setting")
     public void setIpv4Setting(final Ipv4Setting ipv4Setting) {
         this.ipv4Setting = ipv4Setting;
     }
@@ -116,7 +92,6 @@ public class InterconnectBay implements Serializable {
      *
      * @return The logicalInterconnectUri
      */
-    @JsonProperty("logicalInterconnectUri")
     public String getLogicalInterconnectUri() {
         return logicalInterconnectUri;
     }
@@ -126,7 +101,6 @@ public class InterconnectBay implements Serializable {
      * @param logicalInterconnectUri
      *            The logicalInterconnectUri
      */
-    @JsonProperty("logicalInterconnectUri")
     public void setLogicalInterconnectUri(final String logicalInterconnectUri) {
         this.logicalInterconnectUri = logicalInterconnectUri;
     }
@@ -135,7 +109,6 @@ public class InterconnectBay implements Serializable {
      *
      * @return The serialNumber
      */
-    @JsonProperty("serialNumber")
     public String getSerialNumber() {
         return serialNumber;
     }
@@ -145,7 +118,6 @@ public class InterconnectBay implements Serializable {
      * @param serialNumber
      *            The serialNumber
      */
-    @JsonProperty("serialNumber")
     public void setSerialNumber(final String serialNumber) {
         this.serialNumber = serialNumber;
     }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -21,43 +21,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "deviceName", "location", "oaSlotNumber", "physicalPorts", "slotNumber" })
 public class DeviceSlot implements Serializable {
 
     /**
 	 * 
 	 */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("deviceName")
     private String deviceName;
-    @JsonProperty("location")
     private DeviceSlot.Location location;
-    @JsonProperty("oaSlotNumber")
     private Integer oaSlotNumber;
-    @JsonProperty("physicalPorts")
     private List<PhysicalPort> physicalPorts = new ArrayList<PhysicalPort>();
-    @JsonProperty("slotNumber")
     private Integer slotNumber;
 
     /**
      * 
      * @return The deviceName
      */
-    @JsonProperty("deviceName")
     public String getDeviceName() {
         return deviceName;
     }
@@ -67,7 +52,6 @@ public class DeviceSlot implements Serializable {
      * @param deviceName
      *            The deviceName
      */
-    @JsonProperty("deviceName")
     public void setDeviceName(final String deviceName) {
         this.deviceName = deviceName;
     }
@@ -76,7 +60,6 @@ public class DeviceSlot implements Serializable {
      * 
      * @return The location
      */
-    @JsonProperty("location")
     public DeviceSlot.Location getLocation() {
         return location;
     }
@@ -86,7 +69,6 @@ public class DeviceSlot implements Serializable {
      * @param location
      *            The location
      */
-    @JsonProperty("location")
     public void setLocation(final DeviceSlot.Location location) {
         this.location = location;
     }
@@ -95,7 +77,6 @@ public class DeviceSlot implements Serializable {
      * 
      * @return The oaSlotNumber
      */
-    @JsonProperty("oaSlotNumber")
     public Integer getOaSlotNumber() {
         return oaSlotNumber;
     }
@@ -105,7 +86,6 @@ public class DeviceSlot implements Serializable {
      * @param oaSlotNumber
      *            The oaSlotNumber
      */
-    @JsonProperty("oaSlotNumber")
     public void setOaSlotNumber(final Integer oaSlotNumber) {
         this.oaSlotNumber = oaSlotNumber;
     }
@@ -114,7 +94,6 @@ public class DeviceSlot implements Serializable {
      * 
      * @return The physicalPorts
      */
-    @JsonProperty("physicalPorts")
     public List<PhysicalPort> getPhysicalPorts() {
         return physicalPorts;
     }
@@ -124,7 +103,6 @@ public class DeviceSlot implements Serializable {
      * @param physicalPorts
      *            The physicalPorts
      */
-    @JsonProperty("physicalPorts")
     public void setPhysicalPorts(final List<PhysicalPort> physicalPorts) {
         this.physicalPorts = physicalPorts;
     }
@@ -133,7 +111,6 @@ public class DeviceSlot implements Serializable {
      * 
      * @return The slotNumber
      */
-    @JsonProperty("slotNumber")
     public Integer getSlotNumber() {
         return slotNumber;
     }
@@ -143,7 +120,6 @@ public class DeviceSlot implements Serializable {
      * @param slotNumber
      *            The slotNumber
      */
-    @JsonProperty("slotNumber")
     public void setSlotNumber(final Integer slotNumber) {
         this.slotNumber = slotNumber;
     }
@@ -173,7 +149,6 @@ public class DeviceSlot implements Serializable {
                 .isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum Location {
 
         Lom("Lom"), Flb("Flb"), Mezz("Mezz");
@@ -190,13 +165,11 @@ public class DeviceSlot implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static DeviceSlot.Location fromValue(final String value) {
             final DeviceSlot.Location constant = constants.get(value);
             if (constant == null) {

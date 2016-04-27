@@ -20,8 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 
 public class ProfileConnectionStatus implements Serializable {
 
@@ -93,13 +91,11 @@ public class ProfileConnectionStatus implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static ProfileConnectionStatus.ServerProfileStatus fromValue(final String value) {
             final ProfileConnectionStatus.ServerProfileStatus constant = constants.get(value);
             if (constant == null) {

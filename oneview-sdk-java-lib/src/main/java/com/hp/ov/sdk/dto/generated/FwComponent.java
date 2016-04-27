@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -18,35 +18,23 @@ package com.hp.ov.sdk.dto.generated;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "componentVersion", "swKeyNameList", "name", "fileName" })
 public class FwComponent {
 
-    @JsonProperty("componentVersion")
     private String componentVersion;
-    @JsonProperty("swKeyNameList")
     private List<String> swKeyNameList = new ArrayList<String>();
-    @JsonProperty("name")
     private String name;
-    @JsonProperty("fileName")
     private String fileName;
 
     /**
      * 
      * @return The componentVersion
      */
-    @JsonProperty("componentVersion")
     public String getComponentVersion() {
         return componentVersion;
     }
@@ -56,7 +44,6 @@ public class FwComponent {
      * @param componentVersion
      *            The componentVersion
      */
-    @JsonProperty("componentVersion")
     public void setComponentVersion(final String componentVersion) {
         this.componentVersion = componentVersion;
     }
@@ -65,7 +52,6 @@ public class FwComponent {
      * 
      * @return The swKeyNameList
      */
-    @JsonProperty("swKeyNameList")
     public List<String> getSwKeyNameList() {
         return swKeyNameList;
     }
@@ -75,7 +61,6 @@ public class FwComponent {
      * @param swKeyNameList
      *            The swKeyNameList
      */
-    @JsonProperty("swKeyNameList")
     public void setSwKeyNameList(final List<String> swKeyNameList) {
         this.swKeyNameList = swKeyNameList;
     }
@@ -84,7 +69,6 @@ public class FwComponent {
      * 
      * @return The name
      */
-    @JsonProperty("name")
     public String getName() {
         return name;
     }
@@ -94,7 +78,6 @@ public class FwComponent {
      * @param name
      *            The name
      */
-    @JsonProperty("name")
     public void setName(final String name) {
         this.name = name;
     }
@@ -103,7 +86,6 @@ public class FwComponent {
      * 
      * @return The fileName
      */
-    @JsonProperty("fileName")
     public String getFileName() {
         return fileName;
     }
@@ -113,7 +95,6 @@ public class FwComponent {
      * @param fileName
      *            The fileName
      */
-    @JsonProperty("fileName")
     public void setFileName(final String fileName) {
         this.fileName = fileName;
     }

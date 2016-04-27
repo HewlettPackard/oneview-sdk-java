@@ -15,23 +15,13 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.hp.ov.sdk.dto.BaseModelResource;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "sampleInterval",
-    "enableTelemetry",
-    "sampleCount"})
 public class TelemetryConfiguration extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
@@ -40,21 +30,18 @@ public class TelemetryConfiguration extends BaseModelResource {
      * (Required)
      *
      */
-    @JsonProperty("sampleInterval")
     private Integer sampleInterval = 300;
     /**
      *
      * (Required)
      *
      */
-    @JsonProperty("enableTelemetry")
     private Boolean enableTelemetry = true;
     /**
      *
      * (Required)
      *
      */
-    @JsonProperty("sampleCount")
     private Integer sampleCount = 12;
 
     /**
@@ -63,7 +50,6 @@ public class TelemetryConfiguration extends BaseModelResource {
      *
      * @return The sampleInterval
      */
-    @JsonProperty("sampleInterval")
     public Integer getSampleInterval() {
         return sampleInterval;
     }
@@ -75,7 +61,6 @@ public class TelemetryConfiguration extends BaseModelResource {
      * @param sampleInterval
      *            The sampleInterval
      */
-    @JsonProperty("sampleInterval")
     public void setSampleInterval(final Integer sampleInterval) {
         this.sampleInterval = sampleInterval;
     }
@@ -86,7 +71,6 @@ public class TelemetryConfiguration extends BaseModelResource {
      *
      * @return The enableTelemetry
      */
-    @JsonProperty("enableTelemetry")
     public Boolean getEnableTelemetry() {
         return enableTelemetry;
     }
@@ -98,7 +82,6 @@ public class TelemetryConfiguration extends BaseModelResource {
      * @param enableTelemetry
      *            The enableTelemetry
      */
-    @JsonProperty("enableTelemetry")
     public void setEnableTelemetry(final Boolean enableTelemetry) {
         this.enableTelemetry = enableTelemetry;
     }
@@ -109,7 +92,6 @@ public class TelemetryConfiguration extends BaseModelResource {
      *
      * @return The sampleCount
      */
-    @JsonProperty("sampleCount")
     public Integer getSampleCount() {
         return sampleCount;
     }
@@ -121,7 +103,6 @@ public class TelemetryConfiguration extends BaseModelResource {
      * @param sampleCount
      *            The sampleCount
      */
-    @JsonProperty("sampleCount")
     public void setSampleCount(final Integer sampleCount) {
         this.sampleCount = sampleCount;
     }

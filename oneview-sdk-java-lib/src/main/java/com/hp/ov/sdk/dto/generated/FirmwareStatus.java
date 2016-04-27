@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -19,19 +19,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "status", "messages", "version", "name" })
 public class FirmwareStatus implements Serializable {
 
     /**
@@ -43,28 +36,24 @@ public class FirmwareStatus implements Serializable {
      * (Required)
      * 
      */
-    @JsonProperty("status")
     private String status;
     /**
      * 
      * (Required)
      * 
      */
-    @JsonProperty("messages")
     private List<Message> messages = new ArrayList<Message>();
     /**
      * 
      * (Required)
      * 
      */
-    @JsonProperty("version")
     private String version;
     /**
      * 
      * (Required)
      * 
      */
-    @JsonProperty("name")
     private String name;
 
     /**
@@ -73,7 +62,6 @@ public class FirmwareStatus implements Serializable {
      * 
      * @return The status
      */
-    @JsonProperty("status")
     public String getStatus() {
         return status;
     }
@@ -85,7 +73,6 @@ public class FirmwareStatus implements Serializable {
      * @param status
      *            The status
      */
-    @JsonProperty("status")
     public void setStatus(final String status) {
         this.status = status;
     }
@@ -96,7 +83,6 @@ public class FirmwareStatus implements Serializable {
      * 
      * @return The messages
      */
-    @JsonProperty("messages")
     public List<Message> getMessages() {
         return messages;
     }
@@ -108,7 +94,6 @@ public class FirmwareStatus implements Serializable {
      * @param messages
      *            The messages
      */
-    @JsonProperty("messages")
     public void setMessages(final List<Message> messages) {
         this.messages = messages;
     }
@@ -119,7 +104,6 @@ public class FirmwareStatus implements Serializable {
      * 
      * @return The version
      */
-    @JsonProperty("version")
     public String getVersion() {
         return version;
     }
@@ -131,7 +115,6 @@ public class FirmwareStatus implements Serializable {
      * @param version
      *            The version
      */
-    @JsonProperty("version")
     public void setVersion(final String version) {
         this.version = version;
     }
@@ -142,7 +125,6 @@ public class FirmwareStatus implements Serializable {
      * 
      * @return The name
      */
-    @JsonProperty("name")
     public String getName() {
         return name;
     }
@@ -154,7 +136,6 @@ public class FirmwareStatus implements Serializable {
      * @param name
      *            The name
      */
-    @JsonProperty("name")
     public void setName(final String name) {
         this.name = name;
     }

@@ -17,52 +17,28 @@ package com.hp.ov.sdk.dto.generated;
 
 import java.io.Serializable;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "forceInstallFirmware",
-    "firmwareBaselineUri",
-    "firmwareUpdateOn",
-    "logicalInterconnectUpdateMode",
-    "updateFirmwareOnUnmanagedInterconnect",
-    "validateIfLIFirmwareUpdateIsNonDisruptive",
-    "manageFirmware" })
 public class FirmwareLogicalEnclosure implements Serializable {
 
     /**
 	 *
 	 */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("forceInstallFirmware")
     private Boolean forceInstallFirmware;
-    @JsonProperty("firmwareBaselineUri")
     private String firmwareBaselineUri;
-    @JsonProperty("firmwareUpdateOn")
     private String firmwareUpdateOn;
-    @JsonProperty("logicalInterconnectUpdateMode")
     private String logicalInterconnectUpdateMode;
-    @JsonProperty("updateFirmwareOnUnmanagedInterconnect")
     private boolean updateFirmwareOnUnmanagedInterconnect;
-    @JsonProperty("validateIfLIFirmwareUpdateIsNonDisruptive")
     private boolean validateIfLIFirmwareUpdateIsNonDisruptive;
-    @JsonProperty("manageFirmware")
     private Boolean manageFirmware;
 
     /**
      *
      * @return The forceInstallFirmware
      */
-    @JsonProperty("forceInstallFirmware")
     public Boolean getForceInstallFirmware() {
         return forceInstallFirmware;
     }
@@ -72,7 +48,6 @@ public class FirmwareLogicalEnclosure implements Serializable {
      * @param forceInstallFirmware
      *            The forceInstallFirmware
      */
-    @JsonProperty("forceInstallFirmware")
     public void setForceInstallFirmware(final Boolean forceInstallFirmware) {
         this.forceInstallFirmware = forceInstallFirmware;
     }
@@ -81,7 +56,6 @@ public class FirmwareLogicalEnclosure implements Serializable {
      *
      * @return The firmwareBaselineUri
      */
-    @JsonProperty("firmwareBaselineUri")
     public String getFirmwareBaselineUri() {
         return firmwareBaselineUri;
     }
@@ -91,7 +65,6 @@ public class FirmwareLogicalEnclosure implements Serializable {
      * @param firmwareBaselineUri
      *            The firmwareBaselineUri
      */
-    @JsonProperty("firmwareBaselineUri")
     public void setFirmwareBaselineUri(final String firmwareBaselineUri) {
         this.firmwareBaselineUri = firmwareBaselineUri;
     }
@@ -158,7 +131,6 @@ public class FirmwareLogicalEnclosure implements Serializable {
      *
      * @return The manageFirmware
      */
-    @JsonProperty("manageFirmware")
     public Boolean getManageFirmware() {
         return manageFirmware;
     }
@@ -168,7 +140,6 @@ public class FirmwareLogicalEnclosure implements Serializable {
      * @param manageFirmware
      *            The manageFirmware
      */
-    @JsonProperty("manageFirmware")
     public void setManageFirmware(final Boolean manageFirmware) {
         this.manageFirmware = manageFirmware;
     }

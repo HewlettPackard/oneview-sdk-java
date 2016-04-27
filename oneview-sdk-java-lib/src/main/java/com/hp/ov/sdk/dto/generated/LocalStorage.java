@@ -18,22 +18,15 @@ package com.hp.ov.sdk.dto.generated;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.gson.annotations.Since;
 import com.google.gson.annotations.Until;
 import com.hp.ov.sdk.dto.LocalStorageEmbeddedController;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "logicalDrives", "manageLocalStorage", "initialize" })
 public class LocalStorage implements Serializable {
 
     /**
@@ -41,16 +34,12 @@ public class LocalStorage implements Serializable {
 	 */
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("logicalDrives")
     @Until(199)
     private List<LogicalDrife> logicalDrives;
-    @JsonProperty("manageLocalStorage")
     @Until(199)
     private Boolean manageLocalStorage;
-    @JsonProperty("initialize")
     @Until(199)
     private Boolean initialize;
-    @JsonProperty("controllers")
     @Since(200)
     private List<LocalStorageEmbeddedController> controllers;
 
@@ -58,7 +47,6 @@ public class LocalStorage implements Serializable {
      *
      * @return The logicalDrives
      */
-    @JsonProperty("logicalDrives")
     public List<LogicalDrife> getLogicalDrives() {
         return logicalDrives;
     }
@@ -68,7 +56,6 @@ public class LocalStorage implements Serializable {
      * @param logicalDrives
      *            The logicalDrives
      */
-    @JsonProperty("logicalDrives")
     public void setLogicalDrives(final List<LogicalDrife> logicalDrives) {
         this.logicalDrives = logicalDrives;
     }
@@ -77,7 +64,6 @@ public class LocalStorage implements Serializable {
      *
      * @return The manageLocalStorage
      */
-    @JsonProperty("manageLocalStorage")
     public Boolean getManageLocalStorage() {
         return manageLocalStorage;
     }
@@ -87,7 +73,6 @@ public class LocalStorage implements Serializable {
      * @param manageLocalStorage
      *            The manageLocalStorage
      */
-    @JsonProperty("manageLocalStorage")
     public void setManageLocalStorage(final Boolean manageLocalStorage) {
         this.manageLocalStorage = manageLocalStorage;
     }
@@ -96,7 +81,6 @@ public class LocalStorage implements Serializable {
      *
      * @return The initialize
      */
-    @JsonProperty("initialize")
     public Boolean getInitialize() {
         return initialize;
     }
@@ -106,7 +90,6 @@ public class LocalStorage implements Serializable {
      * @param initialize
      *            The initialize
      */
-    @JsonProperty("initialize")
     public void setInitialize(final Boolean initialize) {
         this.initialize = initialize;
     }

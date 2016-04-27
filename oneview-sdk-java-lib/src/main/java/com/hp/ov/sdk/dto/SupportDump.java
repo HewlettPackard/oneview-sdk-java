@@ -15,18 +15,10 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
-import org.codehaus.jackson.annotate.JsonPropertyOrder;
-import org.codehaus.jackson.annotate.JsonTypeName;
-
 /**
  * The SupportDump data transfer object (DTO) contains the information
  * used to generate a support dump for a logical enclosure.
  */
-@JsonTypeName("SupportDump")
-@JsonPropertyOrder({
-    "errorCode",
-    "encrypt",
-    "excludeApplianceDump"})
 
 public class SupportDump {
     private String errorCode;

@@ -20,17 +20,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
@@ -48,21 +41,6 @@ import com.hp.ov.sdk.dto.PortMonitor;
  * support dumps. It is passed in to the update logicalInterconnects REST api,
  * as well as the update logicalInterconnects through java client api.
  */
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "stackingHealth",
-    "snmpConfiguration",
-    "telemetryConfiguration",
-    "ethernetSettings",
-    "domainUri",
-    "consistencyStatus",
-    "enclosureUris",
-    "interconnectMap",
-    "interconnects",
-    "logicalInterconnectGroupUri",
-    "portMonitor" })
 public class LogicalInterconnects extends BaseModelResource {
 
     /**
@@ -74,37 +52,24 @@ public class LogicalInterconnects extends BaseModelResource {
      * (Required)
      *
      */
-    @JsonProperty("stackingHealth")
     private LogicalInterconnects.StackingHealth stackingHealth;
-    @JsonProperty("snmpConfiguration")
     private SnmpConfiguration snmpConfiguration;
-    @JsonProperty("telemetryConfiguration")
     private TelemetryConfiguration telemetryConfiguration;
-    @JsonProperty("ethernetSettings")
     private EthernetInterconnectSettingsV2 ethernetSettings;
-    @JsonProperty("fcoeSettings")
     @Since(200)
     private FcoeInterconnectSettings fcoeSettings;
-    @JsonProperty("consistencyStatus")
     private Compliance consistencyStatus;
-    @JsonProperty("domainUri")
     private String domainUri;
-    @JsonProperty("enclosureUris")
     private List<String> enclosureUris = new ArrayList<String>();
-    @JsonProperty("interconnectMap")
     private InterconnectMap interconnectMap;
-    @JsonProperty("interconnects")
     private List<String> interconnects = new ArrayList<String>();
-    @JsonProperty("logicalInterconnectGroupUri")
     private String logicalInterconnectGroupUri;
-    @JsonProperty("portMonitor")
     private PortMonitor portMonitor;
 
     /**
      *
      * @return The stackingHealth
      */
-    @JsonProperty("stackingHealth")
     public LogicalInterconnects.StackingHealth getStackingHealth() {
         return stackingHealth;
     }
@@ -114,7 +79,6 @@ public class LogicalInterconnects extends BaseModelResource {
      * @param stackingHealth
      *            The stackingHealth
      */
-    @JsonProperty("stackingHealth")
     public void setStackingHealth(final LogicalInterconnects.StackingHealth stackingHealth) {
         this.stackingHealth = stackingHealth;
     }
@@ -123,7 +87,6 @@ public class LogicalInterconnects extends BaseModelResource {
      *
      * @return The snmpConfiguration
      */
-    @JsonProperty("snmpConfiguration")
     public SnmpConfiguration getSnmpConfiguration() {
         return snmpConfiguration;
     }
@@ -133,7 +96,6 @@ public class LogicalInterconnects extends BaseModelResource {
      * @param snmpConfiguration
      *            The snmpConfiguration
      */
-    @JsonProperty("snmpConfiguration")
     public void setSnmpConfiguration(final SnmpConfiguration snmpConfiguration) {
         this.snmpConfiguration = snmpConfiguration;
     }
@@ -142,7 +104,6 @@ public class LogicalInterconnects extends BaseModelResource {
      *
      * @return The telemetryConfiguration
      */
-    @JsonProperty("telemetryConfiguration")
     public TelemetryConfiguration getTelemetryConfiguration() {
         return telemetryConfiguration;
     }
@@ -152,7 +113,6 @@ public class LogicalInterconnects extends BaseModelResource {
      * @param telemetryConfiguration
      *            The telemetryConfiguration
      */
-    @JsonProperty("telemetryConfiguration")
     public void setTelemetryConfiguration(final TelemetryConfiguration telemetryConfiguration) {
         this.telemetryConfiguration = telemetryConfiguration;
     }
@@ -161,7 +121,6 @@ public class LogicalInterconnects extends BaseModelResource {
      *
      * @return The ethernetSettings
      */
-    @JsonProperty("ethernetSettings")
     public EthernetInterconnectSettingsV2 getEthernetSettings() {
         return ethernetSettings;
     }
@@ -171,7 +130,6 @@ public class LogicalInterconnects extends BaseModelResource {
      * @param ethernetSettings
      *            The ethernetSettings
      */
-    @JsonProperty("ethernetSettings")
     public void setEthernetSettings(final EthernetInterconnectSettingsV2 ethernetSettings) {
         this.ethernetSettings = ethernetSettings;
     }
@@ -180,7 +138,6 @@ public class LogicalInterconnects extends BaseModelResource {
     *
     * @return The fcoeSettings
     */
-    @JsonProperty("fcoeSettings")
     public FcoeInterconnectSettings getFcoeSettings() {
         return fcoeSettings;
     }
@@ -190,7 +147,6 @@ public class LogicalInterconnects extends BaseModelResource {
      * @param fcoeSettings
      *            The fcoeSettings
      */
-    @JsonProperty("fcoeSettings")
     public void setFcoeSettings(final FcoeInterconnectSettings fcoeSettings) {
         this.fcoeSettings = fcoeSettings;
     }
@@ -201,7 +157,6 @@ public class LogicalInterconnects extends BaseModelResource {
      *
      * @return The domainUri
      */
-    @JsonProperty("domain")
     public String getDomainUri() {
         return domainUri;
     }
@@ -213,7 +168,6 @@ public class LogicalInterconnects extends BaseModelResource {
      * @param domainUri
      *            The domainUri
      */
-    @JsonProperty("domain")
     public void setDomainUri(final String domainUri) {
         this.domainUri = domainUri;
     }
@@ -224,7 +178,6 @@ public class LogicalInterconnects extends BaseModelResource {
      *
      * @return The enclosureUris
      */
-    @JsonProperty("enclosureUris")
     public List<String> getEnclosureUris() {
         return enclosureUris;
     }
@@ -236,7 +189,6 @@ public class LogicalInterconnects extends BaseModelResource {
      * @param enclosureUris
      *            The enclosureUris
      */
-    @JsonProperty("enclosureUris")
     public void setEnclosureUris(final List<String> enclosureUris) {
         this.enclosureUris = enclosureUris;
     }
@@ -247,7 +199,6 @@ public class LogicalInterconnects extends BaseModelResource {
      *
      * @return The interconnectMap
      */
-    @JsonProperty("interconnectMap")
     public InterconnectMap getInterconnectMap() {
         return interconnectMap;
     }
@@ -259,7 +210,6 @@ public class LogicalInterconnects extends BaseModelResource {
      * @param interconnectMap
      *            The interconnectMap
      */
-    @JsonProperty("interconnectMap")
     public void setInterconnectMap(final InterconnectMap interconnectMap) {
         this.interconnectMap = interconnectMap;
     }
@@ -270,7 +220,6 @@ public class LogicalInterconnects extends BaseModelResource {
      *
      * @return The interconnects
      */
-    @JsonProperty("interconnects")
     public List<String> getInterconnects() {
         return interconnects;
     }
@@ -282,7 +231,6 @@ public class LogicalInterconnects extends BaseModelResource {
      * @param interconnects
      *            The interconnects
      */
-    @JsonProperty("interconnects")
     public void setInterconnects(final List<String> interconnects) {
         this.interconnects = interconnects;
     }
@@ -293,7 +241,6 @@ public class LogicalInterconnects extends BaseModelResource {
      *
      * @return The logicalInterconnectGroupUri
      */
-    @JsonProperty("logicalInterconnectGroupUri")
     public String getLogicalInterconnectGroupUri() {
         return logicalInterconnectGroupUri;
     }
@@ -305,7 +252,6 @@ public class LogicalInterconnects extends BaseModelResource {
      * @param logicalInterconnectGroupUri
      *            The logicalInterconnectGroupUri
      */
-    @JsonProperty("logicalInterconnectGroupUri")
     public void setLogicalInterconnectGroupUri(final String logicalInterconnectGroupUri) {
         this.logicalInterconnectGroupUri = logicalInterconnectGroupUri;
     }
@@ -316,7 +262,6 @@ public class LogicalInterconnects extends BaseModelResource {
      *
      * @return The portMonitor
      */
-    @JsonProperty("portMonitor")
     public PortMonitor getPortMonitor() {
         return portMonitor;
     }
@@ -328,7 +273,6 @@ public class LogicalInterconnects extends BaseModelResource {
      * @param portMonitor
      *            The portMonitor
      */
-    @JsonProperty("portMonitor")
     public void setPortMonitor(final PortMonitor portMonitor) {
         this.portMonitor = portMonitor;
     }
@@ -339,7 +283,6 @@ public class LogicalInterconnects extends BaseModelResource {
      *
      * @return The consistencyStatus
      */
-    @JsonProperty("consistencyStatus")
     public Compliance getConsistencyStatus() {
         return consistencyStatus;
     }
@@ -351,7 +294,6 @@ public class LogicalInterconnects extends BaseModelResource {
      * @param consistencyStatus
      *            The consistencyStatus
      */
-    @JsonProperty("consistencyStatus")
     public void setConsistencyStatus(final Compliance consistencyStatus) {
         this.consistencyStatus = consistencyStatus;
     }
@@ -406,7 +348,6 @@ public class LogicalInterconnects extends BaseModelResource {
                 .isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum StackingHealth {
 
         Unknown("Unknown"),
@@ -427,13 +368,11 @@ public class LogicalInterconnects extends BaseModelResource {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static LogicalInterconnects.StackingHealth fromValue(final String value) {
             final LogicalInterconnects.StackingHealth constant = constants.get(value);
             if (constant == null) {
@@ -445,7 +384,6 @@ public class LogicalInterconnects extends BaseModelResource {
 
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum Compliance {
 
         CONSISTENT("CONSISTENT"), NOT_CONSISTENT("NOT_CONSISTENT");
@@ -462,13 +400,11 @@ public class LogicalInterconnects extends BaseModelResource {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static LogicalInterconnects.Compliance fromValue(final String value) {
             final LogicalInterconnects.Compliance constant = constants.get(value);
             if (constant == null) {
@@ -480,7 +416,6 @@ public class LogicalInterconnects extends BaseModelResource {
 
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum StackingMode {
 
         None("None"), Enclosure("Enclosure"), SwitchPairs("SwitchPairs"), MultiEnclosure("MultiEnclosure");
@@ -497,13 +432,11 @@ public class LogicalInterconnects extends BaseModelResource {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static LogicalInterconnects.StackingMode fromValue(final String value) {
             final LogicalInterconnects.StackingMode constant = constants.get(value);
             if (constant == null) {

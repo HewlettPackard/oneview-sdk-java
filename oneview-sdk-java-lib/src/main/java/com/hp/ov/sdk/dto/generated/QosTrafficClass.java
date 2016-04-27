@@ -17,41 +17,19 @@ package com.hp.ov.sdk.dto.generated;
 
 import java.io.Serializable;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "bandwidthShare",
-    "egressDot1pValue",
-    "maxBandwidth",
-    "realTime",
-    "className",
-    "enabled"
-})
 public class QosTrafficClass implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("bandwidthShare")
     private String bandwidthShare;
-    @JsonProperty("egressDot1pValue")
     private Integer egressDot1pValue;
-    @JsonProperty("maxBandwidth")
     private Integer maxBandwidth;
-    @JsonProperty("realTime")
     private Boolean realTime;
-    @JsonProperty("className")
     private String className;
-    @JsonProperty("enabled")
     private Boolean enabled;
 
     /**
@@ -59,7 +37,6 @@ public class QosTrafficClass implements Serializable {
      * @return
      *     The bandwidthShare
      */
-    @JsonProperty("bandwidthShare")
     public String getBandwidthShare() {
         return bandwidthShare;
     }
@@ -69,7 +46,6 @@ public class QosTrafficClass implements Serializable {
      * @param bandwidthShare
      *     The bandwidthShare
      */
-    @JsonProperty("bandwidthShare")
     public void setBandwidthShare(String bandwidthShare) {
         this.bandwidthShare = bandwidthShare;
     }
@@ -79,7 +55,6 @@ public class QosTrafficClass implements Serializable {
      * @return
      *     The egressDot1pValue
      */
-    @JsonProperty("egressDot1pValue")
     public Integer getEgressDot1pValue() {
         return egressDot1pValue;
     }
@@ -89,7 +64,6 @@ public class QosTrafficClass implements Serializable {
      * @param egressDot1pValue
      *     The egressDot1pValue
      */
-    @JsonProperty("egressDot1pValue")
     public void setEgressDot1pValue(Integer egressDot1pValue) {
         this.egressDot1pValue = egressDot1pValue;
     }
@@ -99,7 +73,6 @@ public class QosTrafficClass implements Serializable {
      * @return
      *     The maxBandwidth
      */
-    @JsonProperty("maxBandwidth")
     public Integer getMaxBandwidth() {
         return maxBandwidth;
     }
@@ -109,7 +82,6 @@ public class QosTrafficClass implements Serializable {
      * @param maxBandwidth
      *     The maxBandwidth
      */
-    @JsonProperty("maxBandwidth")
     public void setMaxBandwidth(Integer maxBandwidth) {
         this.maxBandwidth = maxBandwidth;
     }
@@ -119,7 +91,6 @@ public class QosTrafficClass implements Serializable {
      * @return
      *     The realTime
      */
-    @JsonProperty("realTime")
     public Boolean getRealTime() {
         return realTime;
     }
@@ -129,7 +100,6 @@ public class QosTrafficClass implements Serializable {
      * @param realTime
      *     The realTime
      */
-    @JsonProperty("realTime")
     public void setRealTime(Boolean realTime) {
         this.realTime = realTime;
     }
@@ -139,7 +109,6 @@ public class QosTrafficClass implements Serializable {
      * @return
      *     The className
      */
-    @JsonProperty("className")
     public String getClassName() {
         return className;
     }
@@ -149,7 +118,6 @@ public class QosTrafficClass implements Serializable {
      * @param className
      *     The className
      */
-    @JsonProperty("className")
     public void setClassName(String className) {
         this.className = className;
     }
@@ -159,7 +127,6 @@ public class QosTrafficClass implements Serializable {
      * @return
      *     The enabled
      */
-    @JsonProperty("enabled")
     public Boolean getEnabled() {
         return enabled;
     }
@@ -169,7 +136,6 @@ public class QosTrafficClass implements Serializable {
      * @param enabled
      *     The enabled
      */
-    @JsonProperty("enabled")
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }

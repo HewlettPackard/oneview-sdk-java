@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -17,127 +17,103 @@ package com.hp.ov.sdk.dto.generated;
 
 import java.io.Serializable;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "serverHardwareUri", "enclosureGroupUri", "serverHardwareTypeUri", "powerState", "name" })
 public class AvailableServers implements Serializable {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("serverHardwareUri")
     private String serverHardwareUri;
-    @JsonProperty("enclosureGroupUri")
     private String enclosureGroupUri;
-    @JsonProperty("serverHardwareTypeUri")
     private String serverHardwareTypeUri;
-    @JsonProperty("powerState")
     private String powerState;
-    @JsonProperty("name")
     private String name;
 
     /**
-     * 
+     *
      * @return The serverHardwareUri
      */
-    @JsonProperty("serverHardwareUri")
     public String getServerHardwareUri() {
         return serverHardwareUri;
     }
 
     /**
-     * 
+     *
      * @param serverHardwareUri
      *            The serverHardwareUri
      */
-    @JsonProperty("serverHardwareUri")
     public void setServerHardwareUri(final String serverHardwareUri) {
         this.serverHardwareUri = serverHardwareUri;
     }
 
     /**
-     * 
+     *
      * @return The enclosureGroupUri
      */
-    @JsonProperty("enclosureGroupUri")
     public String getEnclosureGroupUri() {
         return enclosureGroupUri;
     }
 
     /**
-     * 
+     *
      * @param enclosureGroupUri
      *            The enclosureGroupUri
      */
-    @JsonProperty("enclosureGroupUri")
     public void setEnclosureGroupUri(final String enclosureGroupUri) {
         this.enclosureGroupUri = enclosureGroupUri;
     }
 
     /**
-     * 
+     *
      * @return The serverHardwareTypeUri
      */
-    @JsonProperty("serverHardwareTypeUri")
     public String getServerHardwareTypeUri() {
         return serverHardwareTypeUri;
     }
 
     /**
-     * 
+     *
      * @param serverHardwareTypeUri
      *            The serverHardwareTypeUri
      */
-    @JsonProperty("serverHardwareTypeUri")
     public void setServerHardwareTypeUri(final String serverHardwareTypeUri) {
         this.serverHardwareTypeUri = serverHardwareTypeUri;
     }
 
     /**
-     * 
+     *
      * @return The powerState
      */
-    @JsonProperty("powerState")
     public String getPowerState() {
         return powerState;
     }
 
     /**
-     * 
+     *
      * @param powerState
      *            The powerState
      */
-    @JsonProperty("powerState")
     public void setPowerState(final String powerState) {
         this.powerState = powerState;
     }
 
     /**
-     * 
+     *
      * @return The name
      */
-    @JsonProperty("name")
     public String getName() {
         return name;
     }
 
     /**
-     * 
+     *
      * @param name
      *            The name
      */
-    @JsonProperty("name")
     public void setName(final String name) {
         this.name = name;
     }

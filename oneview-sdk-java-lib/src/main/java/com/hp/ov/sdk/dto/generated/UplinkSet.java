@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -21,264 +21,221 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "mode", "networkUris", "reachability", "networkType", "logicalPortConfigInfos", "lacpTimer",
-        "ethernetNetworkType", "primaryPort", "nativeNetworkUri", "name", "type" })
 public class UplinkSet implements Serializable {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("mode")
     private UplinkSet.Mode mode;
-    @JsonProperty("networkUris")
     private List<String> networkUris = new ArrayList<String>();
-    @JsonProperty("reachability")
     private UplinkSet.Reachability reachability;
-    @JsonProperty("type")
     private String type;
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      */
-    @JsonProperty("networkType")
     private UplinkSet.NetworkType networkType;
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      */
-    @JsonProperty("logicalPortConfigInfos")
     private List<LogicalPortConfigInfo> logicalPortConfigInfos = new ArrayList<LogicalPortConfigInfo>();
-    @JsonProperty("lacpTimer")
     private UplinkSet.LacpTimer lacpTimer;
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      */
-    @JsonProperty("ethernetNetworkType")
     private UplinkSet.EthernetNetworkType ethernetNetworkType;
-    @JsonProperty("primaryPort")
     private PrimaryPort primaryPort;
-    @JsonProperty("nativeNetworkUri")
     private String nativeNetworkUri;
-    @JsonProperty("name")
     private String name;
 
     /**
-     * 
+     *
      * @return The mode
      */
-    @JsonProperty("mode")
     public UplinkSet.Mode getMode() {
         return mode;
     }
 
     /**
-     * 
+     *
      * @param mode
      *            The mode
      */
-    @JsonProperty("mode")
     public void setMode(final UplinkSet.Mode mode) {
         this.mode = mode;
     }
 
     /**
-     * 
+     *
      * @return The networkUris
      */
-    @JsonProperty("networkUris")
     public List<String> getNetworkUris() {
         return networkUris;
     }
 
     /**
-     * 
+     *
      * @param networkUris
      *            The networkUris
      */
-    @JsonProperty("networkUris")
     public void setNetworkUris(final List<String> networkUris) {
         this.networkUris = networkUris;
     }
 
     /**
-     * 
+     *
      * @return The reachability
      */
-    @JsonProperty("reachability")
     public UplinkSet.Reachability getReachability() {
         return reachability;
     }
 
     /**
-     * 
+     *
      * @param reachability
      *            The reachability
      */
-    @JsonProperty("reachability")
     public void setReachability(final UplinkSet.Reachability reachability) {
         this.reachability = reachability;
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The networkType
      */
-    @JsonProperty("networkType")
     public UplinkSet.NetworkType getNetworkType() {
         return networkType;
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param networkType
      *            The networkType
      */
-    @JsonProperty("networkType")
     public void setNetworkType(final UplinkSet.NetworkType networkType) {
         this.networkType = networkType;
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The logicalPortConfigInfos
      */
-    @JsonProperty("logicalPortConfigInfos")
     public List<LogicalPortConfigInfo> getLogicalPortConfigInfos() {
         return logicalPortConfigInfos;
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param logicalPortConfigInfos
      *            The logicalPortConfigInfos
      */
-    @JsonProperty("logicalPortConfigInfos")
     public void setLogicalPortConfigInfos(final List<LogicalPortConfigInfo> logicalPortConfigInfos) {
         this.logicalPortConfigInfos = logicalPortConfigInfos;
     }
 
     /**
-     * 
+     *
      * @return The lacpTimer
      */
-    @JsonProperty("lacpTimer")
     public UplinkSet.LacpTimer getLacpTimer() {
         return lacpTimer;
     }
 
     /**
-     * 
+     *
      * @param lacpTimer
      *            The lacpTimer
      */
-    @JsonProperty("lacpTimer")
     public void setLacpTimer(final UplinkSet.LacpTimer lacpTimer) {
         this.lacpTimer = lacpTimer;
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The ethernetNetworkType
      */
-    @JsonProperty("ethernetNetworkType")
     public UplinkSet.EthernetNetworkType getEthernetNetworkType() {
         return ethernetNetworkType;
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param ethernetNetworkType
      *            The ethernetNetworkType
      */
-    @JsonProperty("ethernetNetworkType")
     public void setEthernetNetworkType(final UplinkSet.EthernetNetworkType ethernetNetworkType) {
         this.ethernetNetworkType = ethernetNetworkType;
     }
 
     /**
-     * 
+     *
      * @return The primaryPort
      */
-    @JsonProperty("primaryPort")
     public PrimaryPort getPrimaryPort() {
         return primaryPort;
     }
 
     /**
-     * 
+     *
      * @param primaryPort
      *            The primaryPort
      */
-    @JsonProperty("primaryPort")
     public void setPrimaryPort(final PrimaryPort primaryPort) {
         this.primaryPort = primaryPort;
     }
 
     /**
-     * 
+     *
      * @return The nativeNetworkUri
      */
-    @JsonProperty("nativeNetworkUri")
     public String getNativeNetworkUri() {
         return nativeNetworkUri;
     }
 
     /**
-     * 
+     *
      * @param nativeNetworkUri
      *            The nativeNetworkUri
      */
-    @JsonProperty("nativeNetworkUri")
     public void setNativeNetworkUri(final String nativeNetworkUri) {
         this.nativeNetworkUri = nativeNetworkUri;
     }
 
     /**
-     * 
+     *
      * @return The name
      */
-    @JsonProperty("name")
     public String getName() {
         return name;
     }
 
     /**
-     * 
+     *
      * @param name
      *            The name
      */
-    @JsonProperty("name")
     public void setName(final String name) {
         this.name = name;
     }
@@ -291,7 +248,6 @@ public class UplinkSet implements Serializable {
     /**
      * @return the type
      */
-    @JsonProperty("type")
     public String getType() {
         return type;
     }
@@ -300,7 +256,6 @@ public class UplinkSet implements Serializable {
      * @param type
      *            the type to set
      */
-    @JsonProperty("type")
     public void setType(final String type) {
         this.type = type;
     }
@@ -328,7 +283,6 @@ public class UplinkSet implements Serializable {
                 .append(nativeNetworkUri, rhs.nativeNetworkUri).append(name, rhs.name).isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum EthernetNetworkType {
 
         Tagged("Tagged"), Untagged("Untagged"), Tunnel("Tunnel"), Unknown("Unknown"), NotApplicable("NotApplicable");
@@ -345,13 +299,11 @@ public class UplinkSet implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static UplinkSet.EthernetNetworkType fromValue(final String value) {
             final UplinkSet.EthernetNetworkType constant = constants.get(value);
             if (constant == null) {
@@ -363,7 +315,6 @@ public class UplinkSet implements Serializable {
 
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum LacpTimer {
 
         Short("Short"), Long("Long");
@@ -380,13 +331,11 @@ public class UplinkSet implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static UplinkSet.LacpTimer fromValue(final String value) {
             final UplinkSet.LacpTimer constant = constants.get(value);
             if (constant == null) {
@@ -398,7 +347,6 @@ public class UplinkSet implements Serializable {
 
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum Mode {
 
         Auto("Auto"), Failover("Failover");
@@ -415,13 +363,11 @@ public class UplinkSet implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static UplinkSet.Mode fromValue(final String value) {
             final UplinkSet.Mode constant = constants.get(value);
             if (constant == null) {
@@ -433,7 +379,6 @@ public class UplinkSet implements Serializable {
 
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum NetworkType {
 
         Ethernet("Ethernet"), FibreChannel("FibreChannel");
@@ -450,13 +395,11 @@ public class UplinkSet implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static UplinkSet.NetworkType fromValue(final String value) {
             final UplinkSet.NetworkType constant = constants.get(value);
             if (constant == null) {
@@ -468,7 +411,6 @@ public class UplinkSet implements Serializable {
 
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum Reachability {
 
         Unknown("Unknown"), NotReachable("NotReachable"), Reachable("Reachable"), RedundantlyReachable("RedundantlyReachable");
@@ -485,13 +427,11 @@ public class UplinkSet implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static UplinkSet.Reachability fromValue(final String value) {
             final UplinkSet.Reachability constant = constants.get(value);
             if (constant == null) {

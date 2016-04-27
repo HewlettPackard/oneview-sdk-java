@@ -20,38 +20,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.hp.ov.sdk.dto.BaseModelResource;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "configType",
-    "uplinkClassificationType",
-    "downlinkClassificationType",
-    "qosTrafficClassifiers"
-})
 public class InactiveFCoEQosConfig extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("configType")
     private InactiveFCoEQosConfig.ConfigType configType;
-    @JsonProperty("uplinkClassificationType")
     private InactiveFCoEQosConfig.LinkClassificationType uplinkClassificationType;
-    @JsonProperty("downlinkClassificationType")
     private InactiveFCoEQosConfig.LinkClassificationType downlinkClassificationType;
-    @JsonProperty("qosTrafficClassifiers")
     private List<QosTrafficClassifier> qosTrafficClassifiers = new ArrayList<QosTrafficClassifier>();
 
     /**
@@ -59,7 +40,6 @@ public class InactiveFCoEQosConfig extends BaseModelResource {
      * @return
      *     The configType
      */
-    @JsonProperty("configType")
     public InactiveFCoEQosConfig.ConfigType getConfigType() {
         return configType;
     }
@@ -69,7 +49,6 @@ public class InactiveFCoEQosConfig extends BaseModelResource {
      * @param configType
      *     The configType
      */
-    @JsonProperty("configType")
     public void setConfigType(InactiveFCoEQosConfig.ConfigType configType) {
         this.configType = configType;
     }
@@ -79,7 +58,6 @@ public class InactiveFCoEQosConfig extends BaseModelResource {
      * @return
      *     The uplinkClassificationType
      */
-    @JsonProperty("uplinkClassificationType")
     public InactiveFCoEQosConfig.LinkClassificationType getUplinkClassificationType() {
         return uplinkClassificationType;
     }
@@ -89,7 +67,6 @@ public class InactiveFCoEQosConfig extends BaseModelResource {
      * @param uplinkClassificationType
      *     The uplinkClassificationType
      */
-    @JsonProperty("uplinkClassificationType")
     public void setUplinkClassificationType(InactiveFCoEQosConfig.LinkClassificationType uplinkClassificationType) {
         this.uplinkClassificationType = uplinkClassificationType;
     }
@@ -99,7 +76,6 @@ public class InactiveFCoEQosConfig extends BaseModelResource {
      * @return
      *     The downlinkClassificationType
      */
-    @JsonProperty("downlinkClassificationType")
     public InactiveFCoEQosConfig.LinkClassificationType getDownlinkClassificationType() {
         return downlinkClassificationType;
     }
@@ -109,7 +85,6 @@ public class InactiveFCoEQosConfig extends BaseModelResource {
      * @param downlinkClassificationType
      *     The downlinkClassificationType
      */
-    @JsonProperty("downlinkClassificationType")
     public void setDownlinkClassificationType(InactiveFCoEQosConfig.LinkClassificationType downlinkClassificationType) {
         this.downlinkClassificationType = downlinkClassificationType;
     }
@@ -119,7 +94,6 @@ public class InactiveFCoEQosConfig extends BaseModelResource {
      * @return
      *     The qosTrafficClassifiers
      */
-    @JsonProperty("qosTrafficClassifiers")
     public List<QosTrafficClassifier> getQosTrafficClassifiers() {
         return qosTrafficClassifiers;
     }
@@ -129,7 +103,6 @@ public class InactiveFCoEQosConfig extends BaseModelResource {
      * @param qosTrafficClassifiers
      *     The qosTrafficClassifiers
      */
-    @JsonProperty("qosTrafficClassifiers")
     public void setQosTrafficClassifiers(List<QosTrafficClassifier> qosTrafficClassifiers) {
         this.qosTrafficClassifiers = qosTrafficClassifiers;
     }
@@ -168,7 +141,6 @@ public class InactiveFCoEQosConfig extends BaseModelResource {
                 .isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum ConfigType {
 
         Passthrough("Passthrough"),
@@ -189,13 +161,11 @@ public class InactiveFCoEQosConfig extends BaseModelResource {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static InactiveFCoEQosConfig.ConfigType fromValue(String value) {
             InactiveFCoEQosConfig.ConfigType constant = CONSTANTS.get(value);
             if (constant == null) {
@@ -207,7 +177,6 @@ public class InactiveFCoEQosConfig extends BaseModelResource {
 
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum LinkClassificationType {
 
         DOT1P("DOT1P"),
@@ -228,13 +197,11 @@ public class InactiveFCoEQosConfig extends BaseModelResource {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static InactiveFCoEQosConfig.LinkClassificationType fromValue(String value) {
             InactiveFCoEQosConfig.LinkClassificationType constant = CONSTANTS.get(value);
             if (constant == null) {

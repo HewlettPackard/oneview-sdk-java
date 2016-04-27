@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -19,93 +19,74 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "ethernetNetworks", "networkSets", "fcNetworks", "type" })
 public class AvailableNetworks implements Serializable {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("ethernetNetworks")
     private List<Object> ethernetNetworks = new ArrayList<Object>();
-    @JsonProperty("networkSets")
     private List<Object> networkSets = new ArrayList<Object>();
-    @JsonProperty("fcNetworks")
     private List<Object> fcNetworks = new ArrayList<Object>();
-    @JsonProperty("type")
     private String type;
 
     /**
-     * 
+     *
      * @return The ethernetNetworks
      */
-    @JsonProperty("ethernetNetworks")
     public List<Object> getEthernetNetworks() {
         return ethernetNetworks;
     }
 
     /**
-     * 
+     *
      * @param ethernetNetworks
      *            The ethernetNetworks
      */
-    @JsonProperty("ethernetNetworks")
     public void setEthernetNetworks(final List<Object> ethernetNetworks) {
         this.ethernetNetworks = ethernetNetworks;
     }
 
     /**
-     * 
+     *
      * @return The networkSets
      */
-    @JsonProperty("networkSets")
     public List<Object> getNetworkSets() {
         return networkSets;
     }
 
     /**
-     * 
+     *
      * @param networkSets
      *            The networkSets
      */
-    @JsonProperty("networkSets")
     public void setNetworkSets(final List<Object> networkSets) {
         this.networkSets = networkSets;
     }
 
     /**
-     * 
+     *
      * @return The fcNetworks
      */
-    @JsonProperty("fcNetworks")
     public List<Object> getFcNetworks() {
         return fcNetworks;
     }
 
     /**
-     * 
+     *
      * @param fcNetworks
      *            The fcNetworks
      */
-    @JsonProperty("fcNetworks")
     public void setFcNetworks(final List<Object> fcNetworks) {
         this.fcNetworks = fcNetworks;
     }
 
     /**
-     * 
+     *
      * @return The type
      */
     public String getType() {
@@ -113,7 +94,7 @@ public class AvailableNetworks implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param type
      *            The type
      */

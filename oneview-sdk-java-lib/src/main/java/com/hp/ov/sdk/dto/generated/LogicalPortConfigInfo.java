@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -19,37 +19,25 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "logicalLocation", "desiredSpeed" })
 public class LogicalPortConfigInfo implements Serializable {
 
     /**
 	 * 
 	 */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("logicalLocation")
     private LogicalLocation logicalLocation;
-    @JsonProperty("desiredSpeed")
     private LogicalPortConfigInfo.DesiredSpeed desiredSpeed;
 
     /**
      * 
      * @return The logicalLocation
      */
-    @JsonProperty("logicalLocation")
     public LogicalLocation getLogicalLocation() {
         return logicalLocation;
     }
@@ -59,7 +47,6 @@ public class LogicalPortConfigInfo implements Serializable {
      * @param logicalLocation
      *            The logicalLocation
      */
-    @JsonProperty("logicalLocation")
     public void setLogicalLocation(final LogicalLocation logicalLocation) {
         this.logicalLocation = logicalLocation;
     }
@@ -68,7 +55,6 @@ public class LogicalPortConfigInfo implements Serializable {
      * 
      * @return The desiredSpeed
      */
-    @JsonProperty("desiredSpeed")
     public LogicalPortConfigInfo.DesiredSpeed getDesiredSpeed() {
         return desiredSpeed;
     }
@@ -78,7 +64,6 @@ public class LogicalPortConfigInfo implements Serializable {
      * @param desiredSpeed
      *            The desiredSpeed
      */
-    @JsonProperty("desiredSpeed")
     public void setDesiredSpeed(final LogicalPortConfigInfo.DesiredSpeed desiredSpeed) {
         this.desiredSpeed = desiredSpeed;
     }
@@ -105,7 +90,6 @@ public class LogicalPortConfigInfo implements Serializable {
         return new EqualsBuilder().append(logicalLocation, rhs.logicalLocation).append(desiredSpeed, rhs.desiredSpeed).isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum DesiredSpeed {
 
         Speed0M("Speed0M"), Speed1M("Speed1M"), Speed10M("Speed10M"), Speed100M("Speed100M"), Speed1G("Speed1G"), Speed2G("Speed2G"), Speed2_5G(
@@ -124,13 +108,11 @@ public class LogicalPortConfigInfo implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static LogicalPortConfigInfo.DesiredSpeed fromValue(final String value) {
             final LogicalPortConfigInfo.DesiredSpeed constant = constants.get(value);
             if (constant == null) {

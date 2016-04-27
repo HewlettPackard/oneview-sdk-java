@@ -18,17 +18,6 @@ package com.hp.ov.sdk.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonPropertyOrder;
-import org.codehaus.jackson.annotate.JsonTypeName;
-
-@JsonTypeName("AddLogicalEnclosure")
-@JsonPropertyOrder({
-    "name",
-    "enclosureUris",
-    "enclosureGroupUri",
-    "firmwareBaselineUri",
-    "forceInstallFirmware" })
-
 public class AddLogicalEnclosure {
     private String name;
     private List<String> enclosureUris = new ArrayList<String>();
