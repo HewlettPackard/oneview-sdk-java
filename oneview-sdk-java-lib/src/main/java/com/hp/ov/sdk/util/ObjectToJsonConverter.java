@@ -57,7 +57,6 @@ public class ObjectToJsonConverter {
             writer.write(json);
             writer.close();
         } catch (final IOException e) {
-            // TODO - exception
             throw new SDKFileNotFoundException(SDKErrorEnum.fileNotFound, null, null, null,
                     SdkConstants.OBJECT_TO_JOSON_CONVERSION, null);
         }

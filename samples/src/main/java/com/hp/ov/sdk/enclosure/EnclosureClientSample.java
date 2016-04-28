@@ -809,8 +809,6 @@ public class EnclosureClientSample {
 
     }
 
-    // TODO - Move Uri fetch logic to SdkUtils
-
     private AddEnclosureV2 buildTestEnclosureDto() {
 
         final String enclosureGroupUri = enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();

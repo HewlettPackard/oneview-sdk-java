@@ -15,6 +15,17 @@
  *******************************************************************************/
 package com.hp.ov.sdk.messaging.msmb.services;
 
+import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.net.ssl.SSLContext;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.certs.CertificateStoreManager;
 import com.hp.ov.sdk.certs.MessagingCertificateManager;
 import com.hp.ov.sdk.constants.SdkConstants;
@@ -29,15 +40,6 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.net.ssl.SSLContext;
-import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class MsmbConnectionManager {
 
@@ -71,14 +73,11 @@ public class MsmbConnectionManager {
             SSLContext sslContext = CertificateStoreManager.getSslContext(mqClientCert, caCert);
             ConnectionFactory connectionFactory = RabbitMqClientConnectionFactory.getConnectionFactory(sslContext, params);
             connectionFactory.setConnectionTimeout(1000);
-            // TODO - exception
+
             try {
                 conn = connectionFactory.newConnection();
                 channel = conn.createChannel();
-                // TODO - temp Solution
-
             } catch (final IOException e) {
-                // TODO Auto-generated catch block
                 throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.APPLIANCE,
                         null);
             }
@@ -130,7 +129,6 @@ public class MsmbConnectionManager {
         }
     }
 
-    // TODO - add proper exception
     public void removeMsmbConnection(final RestParams params) throws SDKInvalidArgumentException,
             SDKScmbConnectionNotFoundException {
         // validate params
@@ -144,10 +142,9 @@ public class MsmbConnectionManager {
             throw new SDKScmbConnectionNotFoundException(SDKErrorEnum.scmbConnectionNotFound, null, null, null,
                     SdkConstants.SCMB_CONNECTION, null);
         } else {
-            // TODO - exception
             try {
                 msmbConnection.getConn().close();
-                // TODO - got below exception, so commenting below code
+                // Got exception, so commenting below code
                 /**
                  * com.rabbitmq.client.AlreadyClosedException: connection is
                  * already closed due to clean connection shutdown; protocol
@@ -159,14 +156,12 @@ public class MsmbConnectionManager {
                     map.remove(params.getHostname());
                 }
             } catch (final IOException e) {
-                // TODO Auto-generated catch block
                 LOGGER.error("MsmbConnectionManager : removeMsmbConnection : error in closing connection");
             }
         }
     }
 
     public void processConsumer(final RestParams params, final String routingKey, final MsmbMessageExecutionQueue messageQueue) {
-        // TODO Auto-generated method stub
         Connection conn = null;
         Channel channel = null;
         // validate params

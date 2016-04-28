@@ -52,9 +52,8 @@ public class MsmbHandler implements MsmbListener {
         msmbMessage.setResourceDataList(alertsDto.getResource().getResourceDataList());
         ServerHardwareMsmbConsumer serverConsumer = new ServerHardwareMsmbConsumer();
         // notify server power usage consumer
-        // TODO - filter logic
-        // if
-        // (alertsDto.getResource().getResourceType().equals(EventTypes.MSMB_SERVER_HARDWARE)){
+        // Optional: - Create filter logic
+        // if (alertsDto.getResource().getResourceType().equals(EventTypes.MSMB_SERVER_HARDWARE)){
         serverConsumer.notifyPowerUsage(msmbMessage);
         // }
 

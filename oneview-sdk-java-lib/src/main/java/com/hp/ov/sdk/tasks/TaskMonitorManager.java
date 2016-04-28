@@ -15,14 +15,15 @@
  *******************************************************************************/
 package com.hp.ov.sdk.tasks;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TaskMonitorManager {
 
@@ -43,12 +44,6 @@ public class TaskMonitorManager {
     public static TaskMonitorManager getInstance() {
         return TaskMonitorManagerHolder.INSTANCE;
     }
-
-    // TODO - for responseCode == 202
-    // Implement review comment from Geoff
-    // Async APIs should return Task URI in header, eg response = 202,
-    // check location header vs returned object. SDK should check 202,
-    // get URI from location header then GET task as needed.
 
     public TaskResourceV2 checkStatus(final RestParams params, final String taskUri, final int timeout) {
         LOGGER.info("TaskMonitorManager : checkStatus : start");

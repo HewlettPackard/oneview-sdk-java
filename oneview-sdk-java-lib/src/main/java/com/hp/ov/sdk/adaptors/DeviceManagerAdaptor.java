@@ -15,21 +15,21 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
+import java.util.List;
+
+import org.json.JSONObject;
+
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
 import com.hp.ov.sdk.dto.DeviceManagerResponseCollection;
 import com.hp.ov.sdk.dto.Property;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
-import org.json.JSONObject;
-
-import java.util.List;
 
 public class DeviceManagerAdaptor extends BaseAdaptor<DeviceManagerResponse, Object> {
 
     @Override
     public DeviceManagerResponse buildDto(Object source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         final DeviceManagerResponse deviceManagerResponseDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), DeviceManagerResponse.class);
@@ -38,7 +38,6 @@ public class DeviceManagerAdaptor extends BaseAdaptor<DeviceManagerResponse, Obj
 
     public DeviceManagerResponseCollection buildCollectionDto(Object source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         final DeviceManagerResponseCollection deviceManagerResponseCollectionDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)),

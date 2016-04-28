@@ -53,7 +53,7 @@ public class SslPropertiesManager {
         if (httpSslProperties.getKeyStoreType() != null && !httpSslProperties.getKeyStoreType().trim().equals("")) {
             System.setProperty("javax.net.ssl.keyStoreType", httpSslProperties.getKeyStoreType());
         }
-        // TODO - verify it later
+
         System.setProperty("https.protocol", "TLSv1.2");
         // System.setProperty("javax.net.debug", "all");
     }

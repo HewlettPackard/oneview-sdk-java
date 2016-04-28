@@ -26,7 +26,6 @@ public class ScmbAlertsMessageAdaptor extends BaseAdaptor<ScmbAlertsMessageDto, 
     @Override
     public ScmbAlertsMessageDto buildDto(final Object source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        // TODO - exceptions
         // convert json object to DTO replace quotes and back slash in the file
         final ScmbAlertsMessageDto scmbAlertsMessageDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), ScmbAlertsMessageDto.class);

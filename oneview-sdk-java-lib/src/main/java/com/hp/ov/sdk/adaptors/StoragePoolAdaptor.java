@@ -15,19 +15,19 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
+import org.json.JSONObject;
+
 import com.hp.ov.sdk.dto.AddStoragePool;
 import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.StoragePoolCollection;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
-import org.json.JSONObject;
 
 
 public class StoragePoolAdaptor extends BaseAdaptor<StoragePool, Object> {
 
     @Override
     public StoragePool buildDto(final Object source) {
-        // TODO - exceptions
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source));
         // convert json object to DTO, replace quotes and back slash in the file
@@ -38,7 +38,6 @@ public class StoragePoolAdaptor extends BaseAdaptor<StoragePool, Object> {
     }
 
     public StoragePoolCollection buildCollectionDto(final Object source) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }

@@ -15,8 +15,8 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
-import com.hp.ov.sdk.dto.InterconnectTypeCollection;
 import com.hp.ov.sdk.dto.InterconnectType;
+import com.hp.ov.sdk.dto.InterconnectTypeCollection;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
@@ -24,7 +24,6 @@ public class InterconnectTypeAdaptor extends BaseAdaptor<InterconnectType, Objec
 
     @Override
     public InterconnectType buildDto(final Object source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final InterconnectType interconnectTypeDto = converter.convertJsonToObject(
@@ -33,7 +32,6 @@ public class InterconnectTypeAdaptor extends BaseAdaptor<InterconnectType, Objec
     }
 
     public InterconnectTypeCollection buildCollectionDto(final Object source) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }

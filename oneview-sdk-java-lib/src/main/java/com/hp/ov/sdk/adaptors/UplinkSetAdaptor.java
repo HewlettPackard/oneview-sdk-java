@@ -26,7 +26,6 @@ public class UplinkSetAdaptor extends BaseAdaptor<UplinkSets, Object> {
 
     @Override
     public UplinkSets buildDto(final Object source) {
-        // TODO - exceptions
         // convert json object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
@@ -36,7 +35,6 @@ public class UplinkSetAdaptor extends BaseAdaptor<UplinkSets, Object> {
     }
 
     public UplinkSets buildDto(final Object source, final double version) {
-        // TODO - exceptions
         // convert json object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
@@ -46,7 +44,6 @@ public class UplinkSetAdaptor extends BaseAdaptor<UplinkSets, Object> {
     }
 
     public UplinkSetCollectionV2 buildCollectionDto(final Object source) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }
@@ -60,7 +57,6 @@ public class UplinkSetAdaptor extends BaseAdaptor<UplinkSets, Object> {
     }
 
     public UplinkSetCollectionV2 buildCollectionDto(final Object source, final double version) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }

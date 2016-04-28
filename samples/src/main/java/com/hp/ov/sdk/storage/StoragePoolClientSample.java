@@ -280,7 +280,6 @@ public class StoragePoolClientSample {
         }
     }
 
-    // TODO - Move Uri fetch logic to SdkUtils
     private AddStoragePool buildTestStoragePoolDto() {
         final AddStoragePool dto = new AddStoragePool();
 

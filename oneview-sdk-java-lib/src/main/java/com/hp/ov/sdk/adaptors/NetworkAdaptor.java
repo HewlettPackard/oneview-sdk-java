@@ -18,20 +18,20 @@ package com.hp.ov.sdk.adaptors;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.NetworkCollection;
 import com.hp.ov.sdk.dto.generated.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.generated.Network;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
-import org.json.JSONObject;
 
 public class NetworkAdaptor extends BaseAdaptor<Network, Object> {
 
     @Override
     public Network buildDto(final Object source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        // TODO - exceptions
         // convert Object to DTO includes replace quotes and back slash
         final Network networkDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), Network.class);
@@ -41,7 +41,6 @@ public class NetworkAdaptor extends BaseAdaptor<Network, Object> {
 
     public BulkEthernetNetwork buildBulkEthernetDto(final Object source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        // TODO - exceptions
         // convert Object to DTO Collection includes replace quotes and back
         // slash
         final BulkEthernetNetwork bulkEthernetNetworkDto = converter.convertJsonToObject(
@@ -51,7 +50,6 @@ public class NetworkAdaptor extends BaseAdaptor<Network, Object> {
     }
 
     public NetworkCollection buildCollectionDto(final Object source) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }

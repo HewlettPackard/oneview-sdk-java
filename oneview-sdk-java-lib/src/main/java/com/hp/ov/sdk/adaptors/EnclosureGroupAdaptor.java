@@ -15,17 +15,17 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
+import org.json.JSONObject;
+
 import com.hp.ov.sdk.dto.EnclosureGroupCollectionV2;
 import com.hp.ov.sdk.dto.generated.EnclosureGroups;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
-import org.json.JSONObject;
 
 public class EnclosureGroupAdaptor extends BaseAdaptor<EnclosureGroups, Object> {
 
     @Override
     public EnclosureGroups buildDto(final Object source) {
-        // TODO - exceptions
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         // convert json Object to DTO, replace quotes and back slash in the file
         final EnclosureGroups enclosureGroupDto = converter.convertJsonToObject(
@@ -34,7 +34,6 @@ public class EnclosureGroupAdaptor extends BaseAdaptor<EnclosureGroups, Object> 
     }
 
     public EnclosureGroupCollectionV2 buildCollectionDto(final Object source) {
-        // TODO - exceptions
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         if (null == source || source.equals("")) {
             return null;

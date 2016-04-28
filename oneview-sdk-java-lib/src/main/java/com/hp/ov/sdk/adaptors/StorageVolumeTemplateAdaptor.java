@@ -16,6 +16,7 @@
 package com.hp.ov.sdk.adaptors;
 
 import org.json.JSONObject;
+
 import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplateCollection;
 import com.hp.ov.sdk.dto.StorageVolumeTemplate;
 import com.hp.ov.sdk.dto.StorageVolumeTemplateCollection;
@@ -26,7 +27,6 @@ public class StorageVolumeTemplateAdaptor extends BaseAdaptor<StorageVolumeTempl
 
     @Override
     public StorageVolumeTemplate buildDto(final Object source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 

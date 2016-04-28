@@ -17,6 +17,7 @@ package com.hp.ov.sdk.messaging.scmb.services;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +44,6 @@ public class ScmbMessageExecutionQueue extends Thread {
 
             }
         } catch (final InterruptedException ex) {
-            // TODO - exception
             logger.error(ex.getMessage());
         } finally {
             messagingTerminated = true;

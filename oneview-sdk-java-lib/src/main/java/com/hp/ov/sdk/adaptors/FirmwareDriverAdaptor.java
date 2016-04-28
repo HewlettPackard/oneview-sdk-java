@@ -24,7 +24,6 @@ public class FirmwareDriverAdaptor extends BaseAdaptor<FwBaseline, Object> {
 
     @Override
     public FwBaseline buildDto(final Object source) {
-        // TODO - exceptions
         // convert json object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final FwBaseline fwBaselineDto = converter.convertJsonToObject(
@@ -33,7 +32,6 @@ public class FirmwareDriverAdaptor extends BaseAdaptor<FwBaseline, Object> {
     }
 
     public FwBaselineCollection buildCollectionDto(final Object source) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }

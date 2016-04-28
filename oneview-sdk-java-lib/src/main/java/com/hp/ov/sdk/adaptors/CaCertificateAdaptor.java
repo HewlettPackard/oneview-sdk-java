@@ -23,7 +23,6 @@ public class CaCertificateAdaptor extends BaseAdaptor<CaCert, Object> {
 
     @Override
     public CaCert buildDto(final Object source) {
-        // TODO - exceptions
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         // convert json object to DTO, replace quotes and back slash in the file
         final CaCert caCert = converter.convertJsonToObject(

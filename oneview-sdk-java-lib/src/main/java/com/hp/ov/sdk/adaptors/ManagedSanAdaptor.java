@@ -15,19 +15,19 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
+import org.json.JSONObject;
+
 import com.hp.ov.sdk.dto.SanRequest;
 import com.hp.ov.sdk.dto.SanResponse;
 import com.hp.ov.sdk.dto.SanResponseCollection;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
-import org.json.JSONObject;
 
 public class ManagedSanAdaptor extends BaseAdaptor<SanResponse, Object> {
 
     @Override
     public SanResponse buildDto(Object source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         final SanResponse deviceManagerResponseDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), SanResponse.class);
@@ -36,7 +36,6 @@ public class ManagedSanAdaptor extends BaseAdaptor<SanResponse, Object> {
 
     public SanResponseCollection buildCollectionDto(Object source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         final SanResponseCollection deviceManagerResponseCollectionDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), SanResponseCollection.class);
@@ -45,7 +44,6 @@ public class ManagedSanAdaptor extends BaseAdaptor<SanResponse, Object> {
 
     public JSONObject buildJsonObjectFromDto(final SanRequest source, int apiVersion) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-
         return new JSONObject(converter.convertObjectToJsonString(source, apiVersion));
     }
 

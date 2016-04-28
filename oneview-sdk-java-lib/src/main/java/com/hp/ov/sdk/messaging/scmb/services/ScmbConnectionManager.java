@@ -15,6 +15,17 @@
  *******************************************************************************/
 package com.hp.ov.sdk.messaging.scmb.services;
 
+import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.net.ssl.SSLContext;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.certs.CertificateStoreManager;
 import com.hp.ov.sdk.certs.MessagingCertificateManager;
 import com.hp.ov.sdk.constants.SdkConstants;
@@ -28,15 +39,6 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.net.ssl.SSLContext;
-import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ScmbConnectionManager {
 
@@ -71,7 +73,6 @@ public class ScmbConnectionManager {
             SSLContext sslContext = CertificateStoreManager.getSslContext(mqClientCert, caCert);
             ConnectionFactory connectionFactory = RabbitMqClientConnectionFactory.getConnectionFactory(sslContext, params);
             connectionFactory.setConnectionTimeout(1000);
-            // TODO - exception
             try {
                 conn = connectionFactory.newConnection();
                 channel = conn.createChannel();
@@ -130,7 +131,6 @@ public class ScmbConnectionManager {
         }
     }
 
-    // TODO - add proper exception
     public void removeScmbConnection(final RestParams params) throws SDKInvalidArgumentException,
             SDKScmbConnectionNotFoundException {
         // validate params
@@ -143,10 +143,9 @@ public class ScmbConnectionManager {
             throw new SDKScmbConnectionNotFoundException(SDKErrorEnum.scmbConnectionNotFound, null, null, null,
                     SdkConstants.SCMB_CONNECTION, null);
         } else {
-            // TODO - exception
             try {
                 scmbConnection.getConn().close();
-                // TODO - got below exception, so commenting below code
+                // got exception below, so commenting below code
                 /**
                  * com.rabbitmq.client.AlreadyClosedException: connection is
                  * already closed due to clean connection shutdown; protocol

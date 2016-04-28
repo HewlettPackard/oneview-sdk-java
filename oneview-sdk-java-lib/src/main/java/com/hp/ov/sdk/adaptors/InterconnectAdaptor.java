@@ -39,7 +39,6 @@ public class InterconnectAdaptor extends BaseAdaptor<Interconnects, Object> {
 
     @Override
     public Interconnects buildDto(Object source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final Interconnects interconnectDto = converter.convertJsonToObject(
@@ -48,7 +47,6 @@ public class InterconnectAdaptor extends BaseAdaptor<Interconnects, Object> {
     }
 
     public Interconnects buildDto(Object source, final double version) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final Interconnects interconnectDto = converter.convertJsonToObject(
@@ -57,7 +55,6 @@ public class InterconnectAdaptor extends BaseAdaptor<Interconnects, Object> {
     }
 
     public InterconnectsCollection buildCollectionDto(Object source) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }
@@ -85,7 +82,6 @@ public class InterconnectAdaptor extends BaseAdaptor<Interconnects, Object> {
     }
 
     public InterconnectsStatistics buildInterconnectStatisticsDto(String source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final InterconnectsStatistics interconnectsStatisticsDto = converter.convertJsonToObject(
@@ -95,7 +91,6 @@ public class InterconnectAdaptor extends BaseAdaptor<Interconnects, Object> {
     }
 
     public PortStatistics buildInterconnectPortStatisticsDto(String source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final PortStatistics interconnectsPortStatisticsDto = converter.convertJsonToObject(
@@ -105,7 +100,6 @@ public class InterconnectAdaptor extends BaseAdaptor<Interconnects, Object> {
     }
 
     public SubportStatistics buildInterconnectSubportStatisticsDto(String source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final SubportStatistics interconnectsSubportStatisticsDto = converter.convertJsonToObject(
@@ -115,7 +109,6 @@ public class InterconnectAdaptor extends BaseAdaptor<Interconnects, Object> {
     }
 
     public List<NameServer> buildInterconnectNameServersCollection(String source) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return Collections.emptyList();
         }

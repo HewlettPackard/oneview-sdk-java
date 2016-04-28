@@ -144,7 +144,6 @@ public class StorageSystemClientSample {
         }
     }
 
-    // TODO-expand the failure scenario to help user
     private void getAllManagedPortsForStorageSystem() throws InstantiationException, IllegalAccessException,
             SDKResourceNotFoundException, SDKNoSuchUrlException {
         String resourceId = null;
@@ -184,7 +183,6 @@ public class StorageSystemClientSample {
         }
     }
 
-    // TODO-expand the failure scenario to help user
     private void getManagedPortsForStorageSystem() throws InstantiationException, IllegalAccessException,
             SDKResourceNotFoundException, SDKNoSuchUrlException {
         String resourceId = null;
@@ -459,7 +457,6 @@ public class StorageSystemClientSample {
 
     }
 
-    // TODO - Move Uri fetch logic to SdkUtils
     private AddStorageSystemCredentials buildTestStorageSystemDto() {
         final AddStorageSystemCredentials dto = new AddStorageSystemCredentials();
         dto.setIp_hostname(ipAddress);
@@ -468,7 +465,6 @@ public class StorageSystemClientSample {
         return dto;
     }
 
-    // TODO - Move Uri fetch logic to SdkUtils
     private StorageSystemV2 buildUpdateStorageSystemDto(final StorageSystemV2 storageSystemDto) {
 
         final List<StorageTargetPortV2> tempStorageTargetPort = new ArrayList<StorageTargetPortV2>();

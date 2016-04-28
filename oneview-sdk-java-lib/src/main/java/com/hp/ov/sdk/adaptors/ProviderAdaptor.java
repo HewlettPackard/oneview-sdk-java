@@ -29,7 +29,6 @@ public class ProviderAdaptor extends BaseAdaptor<SanProviderResponse, Object> {
     @Override
     public SanProviderResponse buildDto(Object source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        // TODO Auto-generated method stub
         final SanProviderResponse sanProviderResponseDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), SanProviderResponse.class);
 
@@ -41,7 +40,6 @@ public class ProviderAdaptor extends BaseAdaptor<SanProviderResponse, Object> {
             return null;
         }
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        // TODO Auto-generated method stub
         final SanProviderResponseCollection sanProviderResponseCollectionDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)),
                 SanProviderResponseCollection.class);

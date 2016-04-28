@@ -15,10 +15,11 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
+import org.json.JSONObject;
+
 import com.hp.ov.sdk.dto.LoginSessionDto;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
-import org.json.JSONObject;
 
 public class LoginSessionAdaptor extends BaseAdaptor<LoginSessionDto, RestParams> {
 
@@ -39,7 +40,6 @@ public class LoginSessionAdaptor extends BaseAdaptor<LoginSessionDto, RestParams
         return target;
     }
 
-    // TODO - add exception
     public String retrieveSessionId(final String request) {
         String sessionId = null;
         String string = request.substring(1, request.length() - 1);

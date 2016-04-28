@@ -35,7 +35,6 @@ public class StorageSystemAdaptor extends BaseAdaptor<StorageSystemV2, Object> {
 
     @Override
     public StorageSystemV2 buildDto(final Object source) {
-        // TODO - exceptions
         // convert json object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final StorageSystemV2 storageSystemDto = converter.convertJsonToObject(
@@ -44,7 +43,6 @@ public class StorageSystemAdaptor extends BaseAdaptor<StorageSystemV2, Object> {
     }
 
     public StorageSystemCollection buildCollectionDto(final Object source) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }
@@ -57,7 +55,6 @@ public class StorageSystemAdaptor extends BaseAdaptor<StorageSystemV2, Object> {
     }
 
     public StoragePoolCollection buildStoragePoolCollectionDto(final Object source) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }
@@ -70,7 +67,6 @@ public class StorageSystemAdaptor extends BaseAdaptor<StorageSystemV2, Object> {
     }
 
     public List<String> buildHostTypesCollectionDto(final String source) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return Collections.emptyList();
         }
@@ -81,7 +77,6 @@ public class StorageSystemAdaptor extends BaseAdaptor<StorageSystemV2, Object> {
     }
 
     public StorageTargetPortCollection buildManagedPortsCollectionDto(final Object source) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }
@@ -94,7 +89,6 @@ public class StorageSystemAdaptor extends BaseAdaptor<StorageSystemV2, Object> {
     }
 
     public StorageTargetPortV2 buildManagedPortsDto(final Object source) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }
