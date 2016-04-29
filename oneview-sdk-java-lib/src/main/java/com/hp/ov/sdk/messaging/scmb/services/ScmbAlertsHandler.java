@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.messaging.scmb.services;
 
 import org.slf4j.Logger;
@@ -23,29 +23,25 @@ import com.hp.ov.sdk.dto.ScmbAlertsMessageDto;
 import com.hp.ov.sdk.messaging.scmb.listeners.ScmbListener;
 
 public class ScmbAlertsHandler {
-    private static final Logger logger = LoggerFactory.getLogger(ScmbAlertsHandler.class);
 
-    private ScmbAlertsMessageAdaptor adaptor;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScmbAlertsHandler.class);
 
-    private ScmbListener scmbListener;
+    private final ScmbListener scmbListener;
+    private final ScmbAlertsMessageAdaptor adaptor;
 
-    public ScmbAlertsHandler() {
-
-    }
-
-    public ScmbAlertsHandler(final ScmbListener scmbListener) {
+    public ScmbAlertsHandler(ScmbListener scmbListener) {
         this.scmbListener = scmbListener;
+
+        this.adaptor = new ScmbAlertsMessageAdaptor();
     }
 
     public void handleMessage(final String message) {
-        logger.debug("ScmbAlertsHandler : handlMessage : Message Received: " + message);
+        LOGGER.debug("ScmbAlertsHandler : handleMessage : Message Received: " + message);
 
-        adaptor = new ScmbAlertsMessageAdaptor();
-        // call adaptor
-        final ScmbAlertsMessageDto alertsDto = adaptor.buildDto(message);
+        ScmbAlertsMessageDto alertsDto = adaptor.buildDto(message);
 
-        logger.debug("ScmbAlertsHandler : handlMessage :  value from Dto : resourceUri: " + alertsDto.getResourceUri());
-        // invoke listener
+        LOGGER.debug("ScmbAlertsHandler : handleMessage :  value from Dto : resourceUri: " + alertsDto.getResourceUri());
+
         scmbListener.handleScmbMessage(alertsDto);
     }
 }

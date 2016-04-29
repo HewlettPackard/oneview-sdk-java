@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.scmb.consumer;
 
 import com.hp.ov.sdk.certs.MessagingCertificateManager;
@@ -23,7 +23,6 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKScmbConnectionNotFoundException;
-import com.hp.ov.sdk.messaging.msmb.services.MsmbConnectionManager;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbAlertsHandler;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbConnectionManager;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbMessageExecutionQueue;
@@ -43,47 +42,42 @@ public class ScmbClient {
 
     public void scmbProcessor() {
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
+            // Get the basic REST parameters like hostname, username and password
             params = SampleRestParams.getInstance().getBasicRestParams();
-
             // update the parameters with version and sessionId
             params = SdkUtils.getInstance().createRestParams(params);
 
             // create MessageExecutionQueue object
             final ScmbMessageExecutionQueue messageQueue = new ScmbMessageExecutionQueue(
-                    new ScmbHandler().getScmbAlertsHandler());
+                    new ScmbAlertsHandler(new TaskMessageHandler()));
 
             // start the dequeue process
             messageQueue.start();
 
             // then start scmb
             objectUnderTest.startScmb(params);
-            objectUnderTest.processConsumer(params, SamplesConstants.SCMB_ALERTS_ROUTING_KEY, messageQueue);
+            objectUnderTest.processConsumer(params, SamplesConstants.SCMB_TASKS_ROUTING_KEY, messageQueue);
+
             // TODO - start next processor with different routing key
             // objectUnderTest.processConsumer(params, "scmb.interconnects.#");
         } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ScmbConnectionManagerImplTest : testGetAllNetwork : resource not found : " + params.getHostname());
+            System.out.println("ScmbClient : scmbProcessor : resource not found : " + params.getHostname());
         } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ScmbConnectionManagerImplTest : testGetAllNetwork : no such url : " + params.getHostname());
+            System.out.println("ScmbClient : scmbProcessor : no such url : " + params.getHostname());
         } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ScmbConnectionManagerImplTest : testScmbProcessor : Applicance Not reachabe at : "
-                    + params.getHostname());
+            System.out.println("ScmbClient : scmbProcessor : Applicance Not reachabe at : " + params.getHostname());
         } catch (final SDKNoResponseException ex) {
-            System.out.println("ScmbConnectionManagerImplTest : testScmbProcessor : No response from appliance : "
-                    + params.getHostname());
+            System.out.println("ScmbClient : scmbProcessor : No response from appliance : " + params.getHostname());
         } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ScmbConnectionManagerImplTest : testScmbProcessor : arguments are null ");
+            System.out.println("ScmbClient : scmbProcessor : arguments are null ");
         } catch (final SDKScmbConnectionNotFoundException ex) {
-            System.out.println("ScmbConnectionManagerImplTest : testScmbProcessor : scmb connection not found ");
+            System.out.println("ScmbClient : scmbProcessor : scmb connection not found ");
         }
-
     }
 
     private void stopScmb() {
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
+            // Get the basic REST parameters like hostname, username and password
             params = SampleRestParams.getInstance().getBasicRestParams();
 
             // update the parameters with version and sessionId
@@ -92,16 +86,15 @@ public class ScmbClient {
             // then stop scmb
             objectUnderTest.stopScmb(params);
         } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ScmbConnectionManagerImplTest : testGetAllNetwork : resource not found : " + params.getHostname());
+            System.out.println("ScmbClient : stopScmb : resource not found : " + params.getHostname());
         } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ScmbConnectionManagerImplTest : testGetAllNetwork : no such url : " + params.getHostname());
+            System.out.println("ScmbClient : stopScmb : no such url : " + params.getHostname());
         } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ScmbConnectionManagerImplTest : testStopScmb : Applicance Not reachabe at : "
-                    + params.getHostname());
+            System.out.println("ScmbClient : stopScmb : Applicance Not reachabe at : " + params.getHostname());
         } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ScmbConnectionManagerImplTest : testStopScmb : arguments are null ");
+            System.out.println("ScmbClient : stopScmb : arguments are null ");
         } catch (final SDKScmbConnectionNotFoundException e) {
-            System.out.println("ScmbConnectionManagerImplTest : testStopScmb : connection not found ");
+            System.out.println("ScmbClient : stopScmb : connection not found ");
         }
     }
 
@@ -111,10 +104,9 @@ public class ScmbClient {
         scmbClient.scmbProcessor();
 
         try {
-            Thread.sleep(300000); // Sample value to before stopping scmb ( 300
-                                  // secs = 5 mins )
+            Thread.sleep(300000); // Sample value to before stopping scmb ( 300 secs = 5 mins )
         } catch (final InterruptedException e) {
-            System.out.println("ScmbConnectionManagerImplTest : mainTest : thread interrupted ");
+            System.out.println("ScmbClient : main : thread interrupted ");
         }
         scmbClient.stopScmb();
     }
