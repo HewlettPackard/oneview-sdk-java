@@ -71,7 +71,7 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
 
     @Override
     public TaskResourceV2 createDeviceManager(final RestParams params, final String providerUrl,
-            final DeviceManagerResponse addDeviceManagerResponseDto, final boolean aSync, final boolean useJsonRequest) {
+            final DeviceManagerResponse addDeviceManagerResponseDto, final boolean aSync) {
         LOGGER.trace("DeviceManagerClientImpl : createDeviceManager : Start");
         String returnObj = null;
 

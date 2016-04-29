@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplateCollection;
@@ -23,140 +23,122 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 public interface StorageVolumeTemplateClient {
 
     /**
-     * The module aids in fetching the StorageVolumeTemplate details for the
-     * specified StorageVolumeTemplate resourceId.
+     * The module aids in fetching the storage volume template details for the
+     * specified storage volume template resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for StorageVolumeTemplate as seen in HP
-     *            OneView.
-     * @return storageVolumeTemplateDto, which is a object containing the
-     *         StorageVolumeTemplate details.
+     *            The resource identifier for storage volume template as seen in HPE OneView.
+     * @return {@link StorageVolumeTemplate} containing the storage volume template details.
      */
-    public StorageVolumeTemplate getStorageVolumeTemplate(final RestParams params, final String resourceId);
+    StorageVolumeTemplate getStorageVolumeTemplate(final RestParams params, final String resourceId);
 
     /**
-     * The module aids in fetching the StorageVolumeTemplate details for all the
-     * StorageVolumeTemplate found under the current HP OneView.
+     * The module aids in fetching the storage volume template details for all the
+     * storage volume templates found under the current HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return storageVolumeTemplateCollectionDto, which is a object containing
-     *         a collection of StorageVolumeTemplate details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link StorageVolumeTemplateCollection} containing a collection of
+     *         storage volume template details.
      */
-    public StorageVolumeTemplateCollection getAllStorageVolumeTemplates(final RestParams params);
+    StorageVolumeTemplateCollection getAllStorageVolumeTemplates(final RestParams params);
 
     /**
-     * The module aids in fetching the StorageVolumeTemplate details for the
-     * StorageVolumeTemplate name as specified in HP OneView.
+     * The module aids in fetching the storage volume template details for the
+     * storage volume template name as specified in HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The name is the StorageVolumeTemplate name as seen in HP
-     *            OneView.
-     * @return storageVolumeTemplateDto, which is a object containing the
-     *         StorageVolumeTemplate details.
+     *            The name is the storage volume template name as seen in HPE OneView.
+     * @return {@link StorageVolumeTemplate} containing the storage volume template details.
      */
-    public StorageVolumeTemplate getStorageVolumeTemplateByName(final RestParams params, final String name);
+    StorageVolumeTemplate getStorageVolumeTemplateByName(final RestParams params, final String name);
 
     /**
-     * The module aids in creation of StorageVolumeTemplate when provided with
-     * the StorageVolumeTemplate details as StorageVolumeTemplate object or
-     * JsonRequest.It can process the request asynchronously or synchronously
-     * based on flag input.
+     * The module aids in the creation of a storage volume template when provided with
+     * the storage volume template details as a StorageVolumeTemplate object or
+     * JsonRequest. It can process the request asynchronously or synchronously,
+     * based on the flag input.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param storageVolumeTemplateDto
-     *            This is a object containing the StorageVolumeTemplate details,
-     *            used to create a StorageVolumeTemplate.
+     *            Object containing the storage volume template details,
+     *            used to create a storage volume template.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
      * @param useJsonRequest
-     *            The JsonRequest body is part of StorageVolumeTemplate Object
-     *            which takes in a String containing new StorageVolumeTemplate
-     *            details, which is converted to StorageVolumeTemplate Object
-     *            using adaptor and processed.
-     * @return storageVolumeTemplateDto, which is a object containing the
-     *         StorageVolumeTemplate details.
+     *            The JsonRequest body is part of StorageVolumeTemplate object
+     *            which takes in a String containing the new storage volume template
+     *            details, which is converted to a StorageVolumeTemplate object
+     *            using an adaptor and processed.
+     * @return {@link StorageVolumeTemplate} containing the storage volume template details.
      */
-    public StorageVolumeTemplate createStorageVolumeTemplate(final RestParams params,
+    StorageVolumeTemplate createStorageVolumeTemplate(final RestParams params,
             final StorageVolumeTemplate storageVolumeTemplateDto, final boolean aSync, final boolean useJsonRequest);
 
     /**
      * The module takes in an StorageVolumeTemplate object or JsonRequest and
-     * updates the existing StorageVolumeTemplate based on resource Id.
+     * updates the existing storage volume template based on the resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for StorageVolumeTemplate as seen in HP
-     *            OneView.
+     *            The resource identifier for storage volume template as seen in HPE OneView.
      * @param storageVolumeTemplateDto
-     *            This is a object containing the StorageVolumeTemplate details,
-     *            used to update a StorageVolumeTemplate.
+     *            This is a object containing the storage volume template details,
+     *            used to update a storage volume template.
      * @param useJsonRequest
-     *            The JsonRequest body is part of StorageVolumeTemplate Object
+     *            The JsonRequest body is part of StorageVolumeTemplate object
      *            which takes in a String containing the update to be made,
-     *            which is converted to StorageVolumeTemplate Object using
+     *            which is converted to StorageVolumeTemplate object using an
      *            adaptor and processed.
-     * @return storageVolumeTemplateDto, which is a object containing the
-     *         StorageVolumeTemplate details.
+     * @return {@link StorageVolumeTemplate} containing the storage volume template details.
      */
-    public StorageVolumeTemplate updateStorageVolumeTemplate(final RestParams params, final String resourceId,
+    StorageVolumeTemplate updateStorageVolumeTemplate(final RestParams params, final String resourceId,
             final StorageVolumeTemplate storageVolumeTemplateDto, final boolean useJsonRequest);
 
     /**
-     * The module aids in deleting a StorageVolumeTemplate for the specified
-     * StorageVolumeTemplate resourceId.
+     * The module aids in deleting a storage volume template for the specified
+     * storage volume template resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for StorageVolumeTemplate as seen in HP
-     *            OneView.
-     * @return String, is Deleted if successful.
+     *            The resource identifier for storage volume template as seen in HPE OneView.
+     * @return String <code>Deleted</code> if successful.
      */
-    public String deleteStorageVolumeTemplate(final RestParams params, final String resourceId);
+    String deleteStorageVolumeTemplate(final RestParams params, final String resourceId);
 
     /**
      * This module aids in fetching the storage volume templates that are
      * available on the specified networks based on the storage system port's
      * expected network connectivity. If there are no storage volume templates
-     * that meets the specified connectivity criteria an empty collection will
-     * be returned
+     * that meets the specified connectivity criteria, an empty collection will
+     * be returned.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return ConnectableStorageVolumeTemplateCollection, fetches the storage
-     *         volume template on specified networks based on the storage system
-     *         port.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link ConnectableStorageVolumeTemplateCollection} storage volume templates
+     *         on the specified networks based on the storage system port.
      * 
      */
-    public ConnectableStorageVolumeTemplateCollection getConnectableVolumeTemplates(final RestParams params);
+    ConnectableStorageVolumeTemplateCollection getConnectableVolumeTemplates(final RestParams params);
 
     /**
-     * The module aids in fetching the StorageVolumeTemplate details for the
-     * StorageVolumeTemplate name as specified in HP OneView.
+     * The module aids in fetching the storage volume template resource identifier for the
+     * storage volume template name as specified in HPE OneView.
      * 
-     * @param creds
-     *            The RestParams is a structure containing the connection
-     *            details.
+     * @param params
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the StorageVolumeTemplate name as seen in
-     *            HP OneView.
-     * @return String, which is a resource Id for the StorageVolumeTemplate name
-     *         as seen in HPOneView.
+     *            The name is the storage volume template name as seen in HPE OneView.
+     * @return String which is the resource identifier for the storage volume template name
+     *         as seen in HPE OneView.
      */
-    public String getId(final RestParams creds, final String name);
+    String getId(final RestParams params, final String name);
 
 }

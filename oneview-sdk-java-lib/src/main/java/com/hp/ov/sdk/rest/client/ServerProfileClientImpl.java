@@ -813,10 +813,10 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        ServerProfile serverProfileDto = getServerProfileByName(creds, name);
+        ServerProfile serverProfileDto = getServerProfileByName(params, name);
 
         if (null != serverProfileDto.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(serverProfileDto.getUri());

@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.EnclosureGroupCollectionV2;
@@ -23,144 +23,126 @@ public interface EnclosureGroupClient {
 
     /**
      * The module aids in fetching the enclosure group details for the specified
-     * enclosure group resourceId
+     * enclosure group resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for enclosure group as seen in HP OneView.
-     * @return enclosureGroupsDto, which is a object containing the enclosure
-     *         group details.
+     *            The resource identifier for enclosure group as seen in HPE OneView.
+     * @return {@link EnclosureGroups} containing the enclosure group details.
      */
-    public EnclosureGroups getEnclosureGroup(final RestParams params, final String resourceId);
+    EnclosureGroups getEnclosureGroup(final RestParams params, final String resourceId);
 
     /**
      * The module aids in fetching the enclosure group details for all enclosure
-     * group registered under current HP OneView
+     * groups registered under the current HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return enclosureGroupsCollectionDto, which is a object containing a
-     *         collection of enclosure group details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link EnclosureGroupCollectionV2} containing a collection of enclosure group details.
      */
-    public EnclosureGroupCollectionV2 getAllEnclosureGroups(final RestParams params);
+    EnclosureGroupCollectionV2 getAllEnclosureGroups(final RestParams params);
 
     /**
      * The module aids in fetching the enclosure group details for the specified
-     * enclosure group name
+     * enclosure group name.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the enclosure group name as seen in HP
-     *            OneView.
-     * @return enclosureGroupsDto, which is a object containing the enclosure
-     *         group details.
+     *            The name is the enclosure group name as seen in HPE OneView.
+     * @return {@link EnclosureGroups} containing the enclosure group details.
      */
-    public EnclosureGroups getEnclosureGroupByName(final RestParams params, final String name);
+    EnclosureGroups getEnclosureGroupByName(final RestParams params, final String name);
 
     /**
-     * The module aids in creation of enclosure group when provided with the
-     * enclosure group details as enclosure group object or JsonRequest.
+     * The module aids in the creation of an enclosure group when provided with the
+     * enclosure group details as EnclosureGroups object or JsonRequest.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param enclosureGroupsDto
-     *            This is a object containing the EnclosureGroup details, used
-     *            to create a Enclosure group.
+     *            This is an object containing the enclosure group details, used
+     *            to create an enclosure group.
      * @param useJsonRequest
-     *            The JsonRequest body is part of EnclosureGroup Object which
-     *            takes in a String containing the new EnclosureGroup details,
-     *            which is converted to EnclosureGroup Object using adaptor and
+     *            The JsonRequest body is part of {@link EnclosureGroups} object which
+     *            takes in a String containing the new enclosure group details,
+     *            which is converted to {@link EnclosureGroups} object using adaptor and
      *            processed.
-     * @return enclosureGroupsDto, which is a object containing the created
-     *         enclosure group details.
+     * @return {@link EnclosureGroups} containing the enclosure group details.
      */
-    public EnclosureGroups createEnclosureGroup(final RestParams params, final EnclosureGroups enclosureGroupsDto,
+    EnclosureGroups createEnclosureGroup(final RestParams params, final EnclosureGroups enclosureGroupsDto,
             final boolean useJsonRequest);
 
     /**
-     * The module takes in an Enclosure group object or JsonRequest and updates
-     * the existing enclosure group based on resource Id.
+     * The module takes in an EnclosureGroups object or JsonRequest and updates
+     * the existing enclosure group based on resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for enclosure group as seen in HP OneView.
+     *            The resource identifier for enclosure group as seen in HPE OneView.
      * @param enclosureGroup
      *            This is a object containing the update to be made to existing
-     *            EnclosureGroup pointed to by the above mentioned resourceId
+     *            EnclosureGroup pointed to by the above mentioned resource identifier.
      * @param useJsonRequest
-     *            The JsonRequest body is part of EnclosureGroup Object which
+     *            The JsonRequest body is part of {@link EnclosureGroups} object which
      *            takes in a String containing the update to be made, which is
-     *            converted to EnclosureGroup Object using adaptor and
+     *            converted to {@link EnclosureGroups} object using adaptor and
      *            processed.
-     * @return enclosureGroupsDto, which is a object containing the updated
-     *         enclosure group details.
+     * @return {@link EnclosureGroups} containing the enclosure group details.
      */
-    public EnclosureGroups updateEnclosureGroup(final RestParams params, final String resourceId,
+    EnclosureGroups updateEnclosureGroup(final RestParams params, final String resourceId,
             final EnclosureGroups enclosureGroup, final boolean useJsonRequest);
 
     /**
-     * The module aids in deleting a enclosure group for the specified enclosure
-     * group resourceId.
+     * The module aids in deleting an enclosure group for the specified enclosure
+     * group resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for enclosure group as seen in HP OneView.
-     * @return a empty String on successful deletion and error otherwise.
+     *            The resource identifier for enclosure group as seen in HPE OneView.
+     * @return an empty String on successful deletion. Otherwise, returns an error message.
      */
-    public String deleteEnclosureGroup(final RestParams params, final String resourceId);
+    String deleteEnclosureGroup(final RestParams params, final String resourceId);
 
     /**
      * The module aids in fetching the configuration script for the specified
-     * enclosure group resourceId.
+     * enclosure group resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for enclosure group as seen in HP OneView.
-     * @return String, the configuration script for the specified enclosure
-     *         group
+     *            The resource identifier for enclosure group as seen in HPE OneView.
+     * @return the configuration script for the specified enclosure group.
      */
-    public String getConfigurationScript(final RestParams params, final String resourceId);
+    String getConfigurationScript(final RestParams params, final String resourceId);
 
     /**
      * The module aids in updating the configuration script for the specified
-     * enclosure group resourceId.
+     * enclosure group resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for enclosure group as seen in HP OneView.
+     *            The resource identifier for enclosure group as seen in HPE OneView.
      * @param scriptData
-     *            THe script data to be updated for enclosure group
-     * @return String, the configuration script for the specified enclosure
-     *         group
+     *            THe script data to be updated for enclosure group.
+     * @return the configuration script for the specified enclosure group.
      */
-    public String updateConfigurationScript(final RestParams params, final String resourceId, final String scriptData);
+    String updateConfigurationScript(final RestParams params, final String resourceId, final String scriptData);
 
     /**
-     * The module aids in fetching the EnclosureGroup details for the
-     * EnclosureGroup name as specified in HP OneView.
+     * The module aids in fetching the enclosure group resource identifier for the
+     * enclosure group name as specified in HPE OneView.
      * 
-     * @param creds
-     *            The RestParams is a structure containing the connection
-     *            details.
+     * @param params
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the EnclosureGroup name as seen in HP
-     *            OneView.
-     * @return String, which is a resource Id for the EnclosureGroup name as
-     *         seen in HPOneView.
+     *            The name is the enclosure group name as seen in HPE OneView.
+     * @return String which is the resource identifier for the enclosure group name
+     *         as seen in HPE OneView.
      */
-    public String getId(final RestParams creds, final String name);
+    String getId(final RestParams params, final String name);
 }

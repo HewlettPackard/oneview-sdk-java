@@ -369,10 +369,10 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        LogicalInterconnectGroups logicalInterconnectGroupDto = getLogicalInterconnectGroupByName(creds, name);
+        LogicalInterconnectGroups logicalInterconnectGroupDto = getLogicalInterconnectGroupByName(params, name);
 
         if (null != logicalInterconnectGroupDto.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(logicalInterconnectGroupDto.getUri());

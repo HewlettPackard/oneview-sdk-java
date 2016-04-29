@@ -279,10 +279,10 @@ public class NetworkSetClientImpl implements NetworkSetClient {
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        NetworkSets networkSets = getNetworkSetsByName(creds, name);
+        NetworkSets networkSets = getNetworkSetsByName(params, name);
 
         if (null != networkSets.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(networkSets.getUri());

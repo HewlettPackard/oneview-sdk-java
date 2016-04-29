@@ -452,10 +452,10 @@ public class NetworkClientImpl implements NetworkClient {
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        Network network = getNetworkByName(creds, name);
+        Network network = getNetworkByName(params, name);
 
         if (null != network.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(network.getUri());

@@ -33,56 +33,51 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 public interface ServerHardwareClient {
 
     /**
-     * The module aids in fetching the ServerHardware details for the specified
-     * ServerHardware resourceId.
+     * The module aids in fetching the server hardware details for the specified
+     * server hardware resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerHardware as seen in HP OneView.
-     * @return {@link ServerHardware} which is a object containing the
-     *         ServerHardware details.
+     *            The resource identifier for server hardware as seen in HPE OneView.
+     * @return {@link ServerHardware} containing the server hardware details.
      */
     ServerHardware getServerHardware(final RestParams params, final String resourceId);
 
     /**
-     * The module aids in fetching the ServerHardware details for all the
-     * ServerHardware found under the current HP OneView.
+     * The module aids in fetching the server hardware details for all the
+     * server hardware found under the current HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection details.
-     * @return {@link ServerHardwareCollection}, which is a object containing a
-     *         collection of ServerHardware details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link ServerHardwareCollection} containing a collection of server hardware details.
      */
     ServerHardwareCollection getAllServerHardware(final RestParams params);
 
     /**
-     * The module aids in fetching the ServerHardware details for the
-     * ServerHardware name as specified in HP OneView.
+     * The module aids in fetching the server hardware details for the
+     * server hardware name as specified in HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param destinationBay
-     *            The destinationBay is the ServerHardware name as seen in HP
-     *            OneView.
-     * @return {@link ServerHardware} which is a object containing the
-     *         ServerHardware details.
+     *            The destinationBay is the server hardware name as seen in HPE OneView.
+     * @return {@link ServerHardware} containing the server hardware details.
      */
     ServerHardware getServerHardwareByName(final RestParams params, final String destinationBay);
 
     /**
-     * Requests a power operation to change the power state of the physical
-     * server.
+     * Requests a power operation to change the power state of the physical server.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerHardware as seen in HP OneView.
+     *            The resource identifier for server hardware as seen in HPE OneView.
      * @param serverPowerControlRequestDto
-     *            This is a object containing the ServerPowerControlRequest details
+     *            This is a object containing the ServerPowerControlRequest details.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     * @return {@link TaskResourceV2} which returns the task status for the process
+     * @return {@link TaskResourceV2} which returns the task status for the process.
      */
     TaskResourceV2 updateServerHardwarePowerState(final RestParams params, final String resourceId,
             final ServerPowerControlRequest serverPowerControlRequestDto, final boolean aSync);
@@ -91,44 +86,43 @@ public interface ServerHardwareClient {
      * Refreshes the server hardware to fix configuration issues.
      *
      * @param params
-     *            The RestParams is a structure containing the connection details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerHardware as seen in HP OneView.
+     *            The resource identifier for server hardware as seen in HPE OneView.
      * @param refreshStateRequest
-     *            This is a object containing the RefreshStateRequest details.
+     *            This is a object containing the refresh state request details.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     * @return {@link TaskResourceV2} which returns the task status for the process
+     * @return {@link TaskResourceV2} which returns the task status for the process.
      */
     TaskResourceV2 updateServerHardwareRefreshState(final RestParams params, final String resourceId,
             final RefreshStateRequest refreshStateRequest, final boolean aSync);
 
     /**
-     * This module aids in adding a rack-mount server for management by the
-     * appliance
+     * This module aids in adding a rack-mount server for management by the appliance.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param addServerDto
      *            Details of the server hardware.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     * @return {@link TaskResourceV2} which returns the task status for the process
+     * @return {@link TaskResourceV2} which returns the task status for the process.
      */
     TaskResourceV2 createServerHardware(final RestParams params, final AddServer addServerDto,
             final boolean aSync);
 
     /**
-     * The module aids in deleting a Server Hardware for the specified Server Hardware
-     * resourceId.
+     * The module aids in deleting a server hardware for the specified server hardware
+     * resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for Server Hardware as seen in HP OneView.
+     *            The resource identifier for server hardware as seen in HPE OneView.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     * @return {@link TaskResourceV2} which returns the task status for the process
+     * @return {@link TaskResourceV2} which returns the task status for the process.
      */
     TaskResourceV2 deleteServerHardware(final RestParams params, final String resourceId, final boolean aSync);
  
@@ -137,11 +131,10 @@ public interface ServerHardwareClient {
      * on the physical server.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerHardware as seen in HP OneView.
-     * @return {@link BiosSettings}, which is a object containing the
-     *         collection of biosSettingsState details.
+     *            The resource identifier for server hardware as seen in HPE OneView.
+     * @return {@link BiosSettings} containing the collection of bios settings state details.
      */
     BiosSettings getServerHardwareBios(final RestParams params, final String resourceId);
 
@@ -151,11 +144,10 @@ public interface ServerHardwareClient {
      * location and dimensions, ...) of the server hardware resource.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerHardware as seen in HP OneView.
-     * @return {@link EnvironmentalConfiguration}, which is a object containing the
-     *         environmentalConfiguration details.
+     *            The resource identifier for server hardware as seen in HPE OneView.
+     * @return {@link EnvironmentalConfiguration} containing the environmental configuration details.
      */
     EnvironmentalConfiguration getServerHardwareEnvironmentConfiguration(final RestParams params,
             final String resourceId);
@@ -165,13 +157,12 @@ public interface ServerHardwareClient {
      * unmanaged or unsupported server hardware resource.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerHardware as seen in HP OneView.
+     *            The resource identifier for server hardware as seen in HPE OneView.
      * @param environmentalConfigurationUpdateDto
      *            Details of the environmental configuration.
-     * @return {@link EnvironmentalConfiguration}, which is a object containing the
-     *         environmentalConfiguration details.
+     * @return {@link EnvironmentalConfiguration} containing the environmental configuration details.
      */
     EnvironmentalConfiguration updateServerHardwareEnvironmentConfiguration(final RestParams params,
             final String resourceId, final EnvironmentalConfigurationUpdate environmentalConfigurationUpdateDto);
@@ -181,11 +172,10 @@ public interface ServerHardwareClient {
      * the iLO web interface
      * 
      * @param params
-     *            The RestParams is a structure containing the connection details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerHardware as seen in HP OneView.
-     * @return {@link IloSsoUrlResult}, which is a object containing the iloSsoUrlResult
-     *         details.
+     *            The resource identifier for server hardware as seen in HPE OneView.
+     * @return {@link IloSsoUrlResult} containing the iLO SSO URL details.
      */
     IloSsoUrlResult getServerHardwareIloSsoUrl(final RestParams params, final String resourceId);
 
@@ -193,29 +183,29 @@ public interface ServerHardwareClient {
      * This module aids in generating a Single Sign-On (SSO) session for the iLO
      * Java Applet console and returns the URL to launch it. If the server
      * hardware is unmanaged or unsupported, the resulting URL will not use SSO
-     * and the iLO Java Applet will prompt for credentials. Note, this is not
-     * supported on G7/iLO3 or earlier servers.
+     * and the iLO Java Applet will prompt for credentials.
+     * <p>
+     * Note: this is not supported on G7/iLO3 or earlier servers.
      *
      * @param params
-     *            The RestParams is a structure containing the connection details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerHardware as seen in HP OneView.
-     * @return {@link JavaRemoteConsoleUrlResult}, which is a object containing the
-     *         javaRemoteConsoleUrlResult details.
+     *            The resource identifier for server hardware as seen in HPE OneView.
+     * @return {@link JavaRemoteConsoleUrlResult} containing the Java remote console URL details.
      */
     JavaRemoteConsoleUrlResult getServerHardwareJavaRemoteConsoleUrl(final RestParams params, final String resourceId);
 
     /**
-     * Updates the iLO firmware on a physical server to a minimum ILO
-     * firmware version required by OneView to manage the server.
+     * Updates the iLO firmware on a physical server to a minimum iLO
+     * firmware version required by HPE OneView to manage the server.
      *
      * @param params
-     *            The RestParams is a structure containing the connection details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerHardware as seen in HP OneView.
+     *            The resource identifier for server hardware as seen in HPE OneView.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     * @return {@link TaskResourceV2} which returns the task status for the process
+     * @return {@link TaskResourceV2} which returns the task status for the process.
      */
     TaskResourceV2 updateServerHardwareMpFirmwareVersion(final RestParams params, final String resourceId, boolean aSync);
 
@@ -228,15 +218,13 @@ public interface ServerHardwareClient {
      * on Windows client.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerHardware as seen in HP OneView.
-     * @return {@link RemoteConsoleUrlResult}, which is a object containing the
-     *         remoteConsoleUrlResult details.
+     *            The resource identifier for server hardware as seen in HPE OneView.
+     * @return {@link RemoteConsoleUrlResult} containing the remote console URL details.
      */
     RemoteConsoleUrlResult getServerHardwareRemoteConsoleUrl(final RestParams params, final String resourceId);
 
-    //TODO filters are not supported yet
     /**
      * This module aids in retrieving historical utilization data for the
      * specified resource, metrics, and time span.
@@ -244,25 +232,23 @@ public interface ServerHardwareClient {
      * <b>Filters are not supported yet.</b>
      * 
      * @param params
-     *            The RestParams is a structure containing the connection details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerHardware as seen in HP OneView.
-     * @return {@link UtilizationData}, which is a object containing the utilizationData
-     *         details.
+     *            The resource identifier for server hardware as seen in HPE OneView.
+     * @return {@link UtilizationData} containing the utilization data details.
      */
     UtilizationData getServerHardwareUtilization(RestParams params, String resourceId);
 
     /**
-     * The module aids in fetching the ServerHardware details for the
-     * ServerHardware name as specified in HP OneView.
+     * The module aids in fetching the server hardware resource identifier for the
+     * server hardware name as specified in HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the ServerHardware name as seen in HP
-     *            OneView.
-     * @return String, which is a resource Id for the ServerHardware name as
-     *         seen in HPOneView.
+     *            The resourceName is the server hardware name as seen in HPE OneView.
+     * @return String which is the resource Id for the ServerHardware name as
+     *         seen in HPE OneView.
      */
     String getId(final RestParams params, final String name);
 

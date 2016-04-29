@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import java.util.List;
@@ -26,79 +26,74 @@ import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 /**
- * Storage Volume Attachments resource represents the connection information for the volume.
- * Create, Update, Delete operations should be performed through the Server-Profiles API.
+ * Storage volume attachments represents the connection information for the storage volume.
  */
 public interface StorageVolumeAttachmentsClient {
 
     String REPAIR_FILTER = "alertFixType=ExtraUnmanagedStorageVolumes";
 
     /**
-     * Retrieves the {@link StorageVolumeAttachment} details for the
-     * specified storage volume attachment resourceId.
+     * Returns the storage volume attachment details for the specified
+     * storage volume attachment resource identifier.
      *
      * @param params structure containing the connection details.
-     * @param resourceId storage volume attachment id as seen in HP OneView.
+     * @param resourceId storage volume attachment identifier as seen in HPE OneView.
      *
-     * @return {@link StorageVolumeAttachment} object containing the details.
+     * @return {@link StorageVolumeAttachment} object containing the storage volume attachment details.
      */
     StorageVolumeAttachment getStorageVolumeAttachment(RestParams params, String resourceId);
 
     /**
-     * Retrieves the {@link StorageVolumeAttachment} details for all the
-     * available storage volume attachments found under current HP OneView.
+     * Returns the storage volume attachments details for all the
+     * available storage volume attachments found under the current HPE OneView.
      *
      * @param params structure containing the connection details.
      *
-     * @return {@link StorageVolumeAttachmentCollection} object containing the details
-     * for all found storage volume attachments.
+     * @return {@link StorageVolumeAttachmentCollection} containing the details
+     * for all storage volume attachments found.
      */
     StorageVolumeAttachmentCollection getAllStorageVolumeAttachments(RestParams params);
 
     /**
-     * Retrieves the {@link StorageVolumeAttachmentPath} details for a
-     * available storage volume attachment.
+     * Returns the storage volume attachment details for a available storage volume attachment.
      *
      * @param params structure containing the connection details.
-     * @param attachmentId storage volume attachment id as seen in HP OneView.
-     * @param pathId storage volume attachment path id as seen in HP OneView.
+     * @param attachmentId storage volume attachment identifier as seen in HPE OneView.
+     * @param pathId storage volume attachment path identifier as seen in HPE OneView.
      *
-     * @return {@link StorageVolumeAttachmentPath} object containing the details.
+     * @return {@link StorageVolumeAttachment} object containing the storage volume attachment details.
      */
     StorageVolumeAttachmentPath getStorageVolumeAttachmentPath(RestParams params, String attachmentId, String pathId);
 
     /**
-     * Retrieves all the {@link StorageVolumeAttachmentPath} details for a
-     * storage volume attachment.
+     * Returns all the storage volume attachment path details for a storage volume attachment.
      *
      * @param params structure containing the connection details.
-     * @param attachmentId storage volume attachment id as seen in HP OneView.
+     * @param attachmentId storage volume attachment identifier as seen in HPE OneView.
      *
      * @return {@link List} of {@link StorageVolumeAttachmentPath} containing the details.
      */
     List<StorageVolumeAttachmentPath> getAllStorageVolumeAttachmentPaths(RestParams params, String attachmentId);
 
     /**
-     * Retrieves the {@link com.hp.ov.sdk.dto.ExtraStorageVolume} details for all the
-     * available extra storage volumes found under current HP OneView.
+     * Returns the extra storage volume details for all the available extra storage volumes
+     * found under the current HPE OneView.
      *
      * @param params structure containing the connection details.
      *
-     * @return {@link ExtraStorageVolumeCollection} containing all extra storage
-     * volumes found.
+     * @return {@link ExtraStorageVolumeCollection} containing all extra storage volumes found.
      */
     ExtraStorageVolumeCollection getExtraUnmanagedStorageVolumeAttachments(RestParams params);
 
     /**
-     * Removes extra presentations of a storage volume from a specific server profile.
+     * Removes extra presentations of a storage volume attachment from a specific server profile.
      *
      * @param params structure containing the connection details.
-     * @param repair data of the server profile that should have their
-     *               storage volumes repaired.
+     * @param repair data of the server profile that should have their storage volumes repaired.
      * @param aSync flag to indicate whether the request should be processed
      *              asynchronously or synchronously.
      *
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
     TaskResourceV2 repairExtraUnmanagedStorageVolumeAttachment(RestParams params,
             ExtraStorageVolumeRepair repair, boolean aSync);

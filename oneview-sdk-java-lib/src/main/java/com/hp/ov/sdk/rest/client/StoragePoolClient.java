@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.AddStoragePool;
@@ -24,116 +24,102 @@ public interface StoragePoolClient {
 
     /**
      * The module aids in fetching the StoragePool details for the specified
-     * StoragePool resourceId.
+     * storage pool resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for StoragePool as seen in HP OneView.
-     * @return storagePoolDto, which is a object containing the StoragePool
-     *         details.
+     *            The resource identifier for storage pool as seen in HPE OneView.
+     * @return {@link StoragePool} containing the storage pool details.
      */
-    public StoragePool getStoragePool(final RestParams params, final String resourceId);
+    StoragePool getStoragePool(final RestParams params, final String resourceId);
 
     /**
-     * The module aids in fetching the StoragePool details for all the
-     * StoragePool found under the current HP OneView.
+     * The module aids in fetching the storage pool details for all the
+     * storage pools found under the current HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return storagePoolCollectionDto, which is a object containing a
-     *         collection of StoragePool details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link StoragePoolCollection} containing a collection of storage pool details.
      */
-    public StoragePoolCollection getAllStoragePools(final RestParams params);
+    StoragePoolCollection getAllStoragePools(final RestParams params);
 
     /**
-     * The module aids in fetching the StoragePool details for the StoragePool
-     * name as specified in HP OneView.
+     * The module aids in fetching the storage pool details for the storage pool
+     * name as specified in HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The name is the StoragePool name as seen in HP OneView.
+     *            The name is the storage pool name as seen in HPE OneView.
      * @param storageSystemUri
      *            URI of the storage system.
-     * @return storagePoolDto, which is a object containing the StoragePool
-     *         details.
+     * @return {@link StoragePool} containing the storage pool details.
      */
-    public StoragePool getStoragePoolByName(final RestParams params, final String name, final String storageSystemUri);
+    StoragePool getStoragePoolByName(final RestParams params, final String name, final String storageSystemUri);
 
     /**
-     * The module aids in creation of StoragePool when provided with the
-     * StoragePool details as AddStoragePool object or JsonRequest.
+     * The module aids in creation of storage pool when provided with the
+     * storage pool details as an AddStoragePool object or JsonRequest.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param storagePoolDto
-     *            This is a object containing the StoragePool details, used to
-     *            create a StoragePool.
+     *            Object containing the storage pool details, used to create a storage pool.
      * @param useJsonRequest
-     *            The JsonRequest body is part of AddStoragePool Object which
-     *            takes in a String containing the new StoragePool Details,
-     *            which is converted to AddStoragePool Object using adaptor and
+     *            The JsonRequest body is part of AddStoragePool object which
+     *            takes in a String containing the new storage pool details,
+     *            which is converted to AddStoragePool object using adaptor and
      *            processed.
-     * @return String, is Created if successful.
+     * @return String <code>Created</code> if successful.
      */
-    public String createStoragePool(final RestParams params, final AddStoragePool storagePoolDto, final boolean useJsonRequest);
+    String createStoragePool(final RestParams params, final AddStoragePool storagePoolDto, final boolean useJsonRequest);
 
     /**
      * This module aids in refreshing the storage pool. To request a refresh of
-     * a storage pool user must set the "refreshState" attribute to
-     * RefreshPending state
+     * a storage pool, the user must set the "refreshState" attribute to
+     * {@link com.hp.ov.sdk.dto.RefreshState#RefreshPending} state.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for StoragePool as seen in HP OneView.
+     *            The resource identifier for storage pool as seen in HPE OneView.
      * @param storagePoolDto
-     *            This is a object containing the StoragePool details, used to
-     *            update a StoragePool.
+     *            Object containing the storage pool details, used to update a storage pool.
      * @param useJsonRequest
-     *            The JsonRequest body is part of StoragePool Object which takes
+     *            The JsonRequest body is part of StoragePool object which takes
      *            in a String containing the update to be made, which is
-     *            converted to StoragePool Object using adaptor and processed.
+     *            converted to StoragePool object using an adaptor and processed.
      * @return String, is Updated if successful.
      */
-    public String updateStoragePool(final RestParams params, final String resourceId, final StoragePool storagePoolDto,
+    String updateStoragePool(final RestParams params, final String resourceId, final StoragePool storagePoolDto,
             final boolean useJsonRequest);
 
     /**
-     * The module aids in deleting a StoragePool for the specified StoragePool
-     * resourceId.
+     * The module aids in deleting a storage pool for the specified storage pool
+     * resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for StoragePool as seen in HP OneView.
-     * @return String, is Deleted if successful.
+     *            The resource identifier for storage pool as seen in HPE OneView.
+     * @return String <code>Deleted</code> if successful.
      */
-    public String deleteStoragePool(final RestParams params, final String resourceId);
+    String deleteStoragePool(final RestParams params, final String resourceId);
 
     /**
-     * The module aids in fetching the StoragePool details for the StoragePool
-     * name as specified in HP OneView.
+     * The module aids in fetching the storage pool resource identifier for the storage pool
+     * name as specified in HPE OneView.
      * 
-     * @param creds
-     *            The RestParams is a structure containing the connection
-     *            details.
+     * @param params
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the StoragePool name as seen in HP
-     *            OneView.
+     *            The resourceName is the storage pool name as seen in HPE OneView.
      * @param storageSystemUri
-     *            The uri of the storage system the storage pool is associated
-     *            with.
-     * @return String, which is a resource Id for the StoragePool name as seen
-     *         in HPOneView.
+     *            The uri of the storage system the storage pool is associated with.
+     * @return String which is the resource identifier for the storage pool name as seen
+     *         in HPE OneView.
      */
-    public String getId(final RestParams creds, final String name, final String storageSystemUri);
+    String getId(final RestParams params, final String name, final String storageSystemUri);
 
 }

@@ -90,7 +90,7 @@ public class FcSansDeviceManagerClientTest {
     }
     @Test(expected = SDKInvalidArgumentException.class)
     public void shouldThrowExceptionWhenTryingToCreateDeviceManagerWithoutParams() {
-        this.deviceManagerClient.createDeviceManager(null, null, null, false, false);
+        this.deviceManagerClient.createDeviceManager(null, null, null, false);
     }
 
     @Test
@@ -108,7 +108,7 @@ public class FcSansDeviceManagerClientTest {
         expectedRestParams.setType(HttpMethodType.POST);
         expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(), providerUri));
 
-        this.deviceManagerClient.createDeviceManager(new RestParams(), providerUri, new DeviceManagerResponse(), false, false);
+        this.deviceManagerClient.createDeviceManager(new RestParams(), providerUri, new DeviceManagerResponse(), false);
 
         then(client).should().sendRequest(expectedRestParams, jsonObject, true);
         then(taskAdaptor).should().buildDto(ANY_TASK);

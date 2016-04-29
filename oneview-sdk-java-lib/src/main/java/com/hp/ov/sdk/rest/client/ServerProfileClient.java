@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import java.util.List;
@@ -34,72 +34,62 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 public interface ServerProfileClient {
 
     /**
-     * The module aids in fetching the ServerProfile details for the specified
-     * ServerProfile resourceId.
+     * The module aids in fetching the server profile details for the specified
+     * server profile resource identifier.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerProfile as seen in HP OneView.
-     * @return serverProfileDto, which is a object containing the ServerProfile
-     *         details.
+     *            The resource identifier for server profile as seen in HPE OneView.
+     * @return {@link ServerProfile} containing the server profile details.
      */
-    public ServerProfile getServerProfile(final RestParams params, final String resourceId);
+     ServerProfile getServerProfile(final RestParams params, final String resourceId);
 
     /**
-     * The module aids in fetching the ServerProfileCollection details for all
-     * the ServerProfileCollection found under the current HP OneView.
+     * The module aids in fetching the server profile details for all
+     * the server profiles found under the current HPE OneView.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return serverProfileCollectionDto, which is a object containing a
-     *         collection of ServerProfile details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link ServerProfileCollection} containing a collection of server profile details.
      */
-    public ServerProfileCollection getAllServerProfile(final RestParams params);
+     ServerProfileCollection getAllServerProfile(final RestParams params);
 
     /**
-     * The module aids in fetching the ServerProfile details for the
-     * ServerProfile name as specified in HP OneView.
+     * The module aids in fetching the server profile details for the
+     * server profile name as specified in HPE OneView.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the ServerProfile name as seen in HP
-     *            OneView.
-     * @return serverProfileDto, which is a object containing the ServerProfile
-     *         details.
+     *            The resourceName is the server profile name as seen in HPE OneView.
+     * @return {@link ServerProfile} containing the server profile details.
      */
-    public ServerProfile getServerProfileByName(final RestParams params, final String name);
+     ServerProfile getServerProfileByName(final RestParams params, final String name);
 
     /**
-     * Gets the preview of manual and automatic updates required to make the
+     * Returns the preview of manual and automatic updates required to make the
      * server profile consistent with its template.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerProfile as seen in HP OneView.
-     * @return ServerProfileCompliancePreview, which is a object containing the
-     *         ServerProfile compliance preview details.
+     *            The resource identifier for server profile as seen in HPE OneView.
+     * @return {@link ServerProfileCompliancePreview} containing the server profile
+     *         compliance preview details.
      */
-    public ServerProfileCompliancePreview getServerProfileCompliancePreview(final RestParams params, final String resourceId);
+    ServerProfileCompliancePreview getServerProfileCompliancePreview(final RestParams params, final String resourceId);
 
     /**
-     * Retrieve the error or status messages associated with the specified profile.
+     * Returns the error or status messages associated with the specified server profile.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerProfile as seen in HP OneView.
-     * @return ServerProfileHealth, which is a object containing the
-     *         ServerProfile health details.
+     *            The resource identifier for server profile as seen in HPE OneView.
+     * @return {@link ServerProfileHealth} containing the server profile health details.
      */
-    public ServerProfileHealth getServerProfileMessages(final RestParams params, final String resourceId);
+    ServerProfileHealth getServerProfileMessages(final RestParams params, final String resourceId);
 
     /**
      * Transforms an existing profile by supplying a new server hardware type and/or
@@ -107,225 +97,202 @@ public interface ServerProfileClient {
      * the capabilities of the supplied server hardware type and/or enclosure group.
      * All deployed connections will have their port assignment set to 'Auto'. Re-selection
      * of the server hardware may also be required. The new profile can subsequently be
-     * used for the PUT https://{appl}/rest/server- profiles/{id} API but is not guaranteed
+     * used for the PUT https://{appl}/rest/server-profiles/{id} API but is not guaranteed
      * to pass validation. Any incompatibilities will be flagged when the transformed server
      * profile is submitted.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerProfile as seen in HP OneView.
+     *            The resource identifier for server profile as seen in HPE OneView.
      * @param serverHardwareTypeUri
-     *            String, specifying the Server Hardware Type URI
+     *            String, specifying the server hardware type URI.
      * @param enclosureGroupUri
-     *            String, specifying the Enclosure Group URI
-     * @return ServerProfile, which is a object containing the
-     *         ServerProfile details.
+     *            String, specifying the enclosure group URI.
+     * @return {@link ServerProfile} containing the server profile details.
      */
-    public ServerProfile getServerProfileTransformation(final RestParams params, final String resourceId,
+    ServerProfile getServerProfileTransformation(final RestParams params, final String resourceId,
             final String serverHardwareTypeUri, final String enclosureGroupUri);
 
     /**
-     * The module aids in retrieving the list of Ethernet networks, Fibre
-     * Channel networks and network sets that are available to a server profile
-     * along with their respective ports for the specified enclosureGroupUri and
-     * serverHardwareTypeUri
+     * The module aids in retrieving the list of ethernet networks, fibre
+     * channel networks and network sets that are available to a server profile
+     * along with their respective ports for the specified enclosure group URI and
+     * server hardware type URI.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param serverHardwareTypeUri
-     *            String, specifying the Server Hardware Type URI
+     *            String, specifying the server hardware type URI.
      * @param enclosureGroupUri
-     *            String, specifying the Enclosure Group URI
-     * @return availableNetworksDto, which is a object containing the
-     *         AvailableNetworks details.
+     *            String, specifying the enclosure group URI.
+     * @return {@link AvailableNetworks} containing the AvailableNetworks details.
      */
-    public AvailableNetworks getAvailableNetworksForServerProfile(final RestParams params, final String serverHardwareTypeUri,
+    AvailableNetworks getAvailableNetworksForServerProfile(final RestParams params, final String serverHardwareTypeUri,
             final String enclosureGroupUri);
 
     /**
-     * Retrieves a list of the servers that are available for assignment to the
+     * Returns a list of the servers that are available for assignment to the
      * server profile. This API differs from the
      * /rest/server-profiles/available-targets API in that this API does not
      * include empty device bays.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return availableServersCollectionDto, which is a object containing a
-     *         collection of AvailableServers details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link List} of {@link AvailableServers} containing a collection of available servers details.
      */
-    public List<AvailableServers> getAvailableServersForServerProfile(final RestParams params);
+    List<AvailableServers> getAvailableServersForServerProfile(final RestParams params);
 
     /**
-     * Retrieves a list of the servers that are available for assignment to the
+     * Returns a list of the servers that are available for assignment to the
      * server profile. This API differs from the
      * /rest/server-profiles/available-targets API in that this API does not
-     * include empty device bays for specified serverHardwareTypeUri and
-     * enclosureGroupUri
+     * include empty device bays for specified server hardware type URI and
+     * enclosure group URI.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param serverHardwareTypeUri
-     *            String, specifying the Server Hardware Type URI.
+     *            String, specifying the server hardware type URI.
      * @param enclosureGroupUri
-     *            String, specifying the Enclosure Group URI.
-     * @return availableServersCollectionDto, which is a object containing a
-     *         collection of AvailableServers details.
+     *            String, specifying the enclosure group URI.
+     * @return {@link List} of {@link AvailableServers} containing a collection of available servers details.
      */
-    public List<AvailableServers> getAvailableServersForServerProfile(final RestParams params, final String serverHardwareTypeUri,
+    List<AvailableServers> getAvailableServersForServerProfile(final RestParams params, final String serverHardwareTypeUri,
             final String enclosureGroupUri);
 
     /**
-     * Retrieves a list of the servers that are available for assignment to the
+     * Returns a list of the servers that are available for assignment to the
      * server profile. This API differs from the
      * /rest/server-profiles/available-targets API in that this API does not
-     * include empty device bays for given profileUri
+     * include empty device bays for given profile URI.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param profileUri
-     *            String, specifying the Server Profile URI.
-     * @return availableServersCollectionDto, which is a object containing a
-     *         collection of AvailableServers details
+     *            String, specifying the server profile URI.
+     * @return {@link List} of {@link AvailableServers} containing a collection of available servers details.
      */
-    public List<AvailableServers> getAvailableServersForServerProfile(final RestParams params, final String profileUri);
+    List<AvailableServers> getAvailableServersForServerProfile(final RestParams params, final String profileUri);
 
     /**
-     * Retrieve a specific storage system and its associated volumes that are
+     * Returns a specific storage system and its associated volumes that are
      * available to the server profile based on the given server hardware type and
      * enclosure group.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param enclosureGroupUri
-     *            String, specifying the Enclosure Group URI.
+     *            String, specifying the enclosure group URI.
      * @param serverHardwareTypeUri
-     *            String, specifying the Server Hardware Type URI.
+     *            String, specifying the server hardware type URI.
      * @param storageSystemId
-     *            String, specifying the Storage System ID.
-     * @return AvailableStorageSystem, which is a object containing the storage
-     *         system details
+     *            String, specifying the storage system identifier.
+     * @return {@link AvailableStorageSystem} containing the storage system details.
      */
-    public AvailableStorageSystem getAvailableStorageSystemForServerProfile(final RestParams params, final String enclosureGroupUri,
+    AvailableStorageSystem getAvailableStorageSystemForServerProfile(final RestParams params, final String enclosureGroupUri,
             final String serverHardwareTypeUri, final String storageSystemId);
 
     /**
-     * Retrieves the list of the storage systems and their associated volumes that
+     * Returns the list of the storage systems and their associated volumes that
      * are available to the server profile based on the given server hardware type and
      * enclosure group.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param enclosureGroupUri
-     *            String, specifying the Enclosure Group URI.
+     *            String, specifying the enclosure group URI.
      * @param serverHardwareTypeUri
-     *            String, specifying the Server Hardware Type URI.
-     * @return AvailableStorageSystems, , which is a object containing a collection of
-     *         StorageSystem details
+     *            String, specifying the server hardware type URI.
+     * @return {@link AvailableStorageSystems} containing a collection of storage system details.
      */
-    public AvailableStorageSystems getAvailableStorageSystemsForServerProfile(final RestParams params, final String enclosureGroupUri,
+    AvailableStorageSystems getAvailableStorageSystemsForServerProfile(final RestParams params, final String enclosureGroupUri,
             final String serverHardwareTypeUri);
 
     /**
-     * Retrieves a list of the target servers and empty device bays that are available
+     * Returns a list of the target servers and empty device bays that are available
      * for assignment to the server profile. This replaces the
      * /rest/server-profiles/available-servers API.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return AvailableTargets, , which is a object containing a collection of Target details
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link AvailableTargets} containing the available target details.
      */
-    public AvailableTargets getAvailableTargetsForServerProfile(final RestParams params);
+    AvailableTargets getAvailableTargetsForServerProfile(final RestParams params);
 
     /**
-     * Retrieves a list of the target servers and empty device bays that are available
+     * Returns a list of the target servers and empty device bays that are available
      * for assignment to the server profile. This replaces the
      * /rest/server-profiles/available-servers API.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param enclosureGroupUri
-     *            String, specifying the Enclosure Group URI.
+     *            String, specifying the enclosure group URI.
      * @param serverHardwareTypeUri
-     *            String, specifying the Server Hardware Type URI.
+     *            String, specifying the server hardware type URI.
      * @param profileUri
-     *            String, specifying the Server Profile URI.
-     * @return AvailableTargets, , which is a object containing a collection of Target details
+     *            String, specifying the server profile URI.
+     * @return {@link AvailableTargets} containing the available target details.
      */
-    public AvailableTargets getAvailableTargetsForServerProfile(final RestParams params, final String enclosureGroupUri,
+    AvailableTargets getAvailableTargetsForServerProfile(final RestParams params, final String enclosureGroupUri,
             final String serverHardwareTypeUri, final String profileUri);
 
     /**
-     * Retrieves the port model associated server hardware type and enclosure
-     * group.
+     * Returns the port model associated server hardware type and enclosure group.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param serverHardwareTypeId
-     *            String, specifying the Server Hardware Type Id.
+     *            String, specifying the server hardware type identifier.
      * @param enclosureGroupId
-     *            String, specifying the Enclosure Group Id.
-     * @return profilePortsDto, which is a object containing the ProfilePorts
-     *         details.
+     *            String, specifying the enclosure group identifier.
+     * @return {@link ProfilePorts} containing the profile ports details.
      */
-    public ProfilePorts getProfilePortsForServerProfile(final RestParams params, final String serverHardwareTypeId,
+    ProfilePorts getProfilePortsForServerProfile(final RestParams params, final String serverHardwareTypeId,
             final String enclosureGroupId);
 
     /**
-     * The module aids in creation of ServerProfile when provided with the
-     * ServerProfile details as ServerProfile object or JsonRequest. It can
-     * process the request asynchronously or synchronously based on flag input.
+     * The module aids in the creation of a server profile when provided with the
+     * server profile details as a ServerProfile object or JsonRequest. It can
+     * process the request asynchronously or synchronously, based on the flag input.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param serverProfileDto
-     *            This is a object containing the ServerProfile details, used to
-     *            create a ServerProfile.
+     *            Object containing the server profile details, used to create a server profile.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
      * @param useJsonRequest
-     *            The JsonRequest body is part of ServerProfile Object which
-     *            takes in a String containing the new ServerProfile details,
-     *            which is converted to ServerProfile Object using adaptor and
+     *            The JsonRequest body is part of ServerProfile object which
+     *            takes in a String containing the new server profile details,
+     *            which is converted to ServerProfile object using an adaptor and
      *            processed.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 createServerProfile(final RestParams params, final ServerProfile serverProfileDto, final boolean aSync,
+    TaskResourceV2 createServerProfile(final RestParams params, final ServerProfile serverProfileDto, final boolean aSync,
             final boolean useJsonRequest);
 
     /**
-     * The module takes in an ServerProfile object or JsonRequest and updates
-     * the existing ServerProfile based on resource Id. It can process the
-     * request asynchronously or synchronously based on flag input.
+     * The module takes in a ServerProfile object or JsonRequest and updates
+     * the existing server profile based on the resource identifier. It can process the
+     * request asynchronously or synchronously, based on the flag input.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerProfile as seen in HP OneView.
+     *            The resource identifier for server profile as seen in HPE OneView.
      * @param serverProfileDto
-     *            This is a object containing the ServerProfile details, used to
-     *            update a ServerProfile.
+     *            Object containing the server profile details, used to update a server profile.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
      * @param useJsonRequest
-     *            The JsonRequest body is part of ServerProfile Object which
+     *            The JsonRequest body is part of ServerProfile object which
      *            takes in a String containing the update to be made, which is
-     *            converted to ServerProfile Object using adaptor and processed.
-     * @return taskResource which returns the task status for the process
+     *            converted to ServerProfile object using an adaptor and processed.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateServerProfile(final RestParams params, final String resourceId,
+    TaskResourceV2 updateServerProfile(final RestParams params, final String resourceId,
             final ServerProfile serverProfileDto, final boolean aSync, final boolean useJsonRequest);
 
     /**
@@ -338,66 +305,60 @@ public interface ServerProfileClient {
      * Value: Compliant
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerProfile as seen in HP OneView.
+     *            The resource identifier for server profile as seen in HPE OneView.
      * @param patchDto
-     *            This is a object containing the patch details, used to
-     *            update a ServerProfile.
+     *            Object containing the patch details, used to update a server profile.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 patchServerProfile(final RestParams params, final String resourceId, final Patch patchDto, final boolean aSync);
+    TaskResourceV2 patchServerProfile(final RestParams params, final String resourceId, final Patch patchDto, final boolean aSync);
 
     /**
-     * The module aids in deleting a ServerProfile for the specified
-     * ServerProfile resourceId. It can process the request asynchronously or
-     * synchronously based on flag input.
+     * The module aids in deleting a server profile for the specified
+     * server profile resource identifier. It can process the request asynchronously or
+     * synchronously, based on the flag input.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for ServerProfile as seen in HP OneView.
+     *            The resource identifier for server profile as seen in HPE OneView.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 deleteServerProfile(final RestParams params, final String resourceId, final boolean aSync);
+    TaskResourceV2 deleteServerProfile(final RestParams params, final String resourceId, final boolean aSync);
 
     /**
-     * This module aids in deleting all Server Profile objects from the
-     * appliance that match the provided filter
+     * This module aids in deleting all server profile objects from the
+     * appliance that match the provided filter.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param filter
-     *            The filter is the ServerProfile name as seen in HP OneView.
+     *            The filter is the server profile name as seen in HPE OneView.
      * @param match
-     *            Flag input to process filter with %filter% or just filter
+     *            Flag input to process filter with %filter% or just filter.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 deleteServerProfileByFilter(final RestParams params, final String filter, final Boolean match,
+    TaskResourceV2 deleteServerProfileByFilter(final RestParams params, final String filter, final Boolean match,
             final boolean aSync);
 
     /**
-     * The module aids in fetching the ServerProfile details for the
-     * ServerProfile name as specified in HP OneView.
+     * The module aids in fetching the server profile resource identifier for the server profile
+     * name as specified in HPE OneView.
      *
-     * @param creds
-     *            The RestParams is a structure containing the connection
-     *            details.
+     * @param params
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the ServerProfile name as seen in HP
-     *            OneView.
-     * @return String, which is a resource Id for the ServerProfile name as seen
-     *         in HPOneView.
+     *            The name is the server profile name as seen in HPE OneView.
+     * @return String which is the resource identifier for the server profile name as seen
+     *         in HPE OneView.
      */
-    public String getId(final RestParams creds, final String name);
+    String getId(final RestParams params, final String name);
 
 }

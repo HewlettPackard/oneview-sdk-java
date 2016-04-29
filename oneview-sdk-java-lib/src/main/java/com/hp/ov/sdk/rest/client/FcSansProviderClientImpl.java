@@ -93,10 +93,10 @@ public class FcSansProviderClientImpl implements FcSansProviderClient {
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        SanProviderResponse sanProviderResponseDto = getProviderByName(creds, name);
+        SanProviderResponse sanProviderResponseDto = getProviderByName(params, name);
 
         if (null != sanProviderResponseDto.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(sanProviderResponseDto.getUri());

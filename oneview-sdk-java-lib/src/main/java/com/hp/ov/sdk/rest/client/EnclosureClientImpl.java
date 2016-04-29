@@ -256,8 +256,7 @@ public class EnclosureClientImpl implements EnclosureClient {
     }
 
     @Override
-    public TaskResourceV2 patchEnclosure(RestParams params, String resourceId, Patch patchDto, boolean aSync,
-            boolean useJsonRequest) {
+    public TaskResourceV2 patchEnclosure(RestParams params, String resourceId, Patch patchDto, boolean aSync) {
         LOGGER.info("EnclosureClientImpl : patchEnclosure : Start");
 
         // validate args
@@ -447,7 +446,7 @@ public class EnclosureClientImpl implements EnclosureClient {
 
     @Override
     public TaskResourceV2 updateEnclosureFwBaseline(final RestParams params, final String resourceId,
-            final FwBaselineConfig fwBaselineConfigDto, final boolean aSync, final boolean useJsonRequest) {
+            final FwBaselineConfig fwBaselineConfigDto, final boolean aSync) {
         LOGGER.info("EnclosureClientImpl : updateEnclosureFwBaseline : Start");
 
         // validate args
@@ -522,7 +521,7 @@ public class EnclosureClientImpl implements EnclosureClient {
 
     @Override
     public EnvironmentalConfiguration updateEnvironmentalConfiguration(final RestParams params, final String resourceId,
-            final EnvironmentalConfigurationUpdate environmentalConfigurationUpdateDto, final boolean useJsonRequest) {
+            final EnvironmentalConfigurationUpdate environmentalConfigurationUpdateDto) {
         LOGGER.info("EnclosureClientImpl : updateEnvironmentalConfiguration : Start");
 
         // validate args
@@ -563,7 +562,7 @@ public class EnclosureClientImpl implements EnclosureClient {
 
     @Override
     public TaskResourceV2 updateRefreshState(final RestParams params, final String resourceId,
-            final RefreshStateConfig refreshStateConfigDto, final boolean aSync, final boolean useJsonRequest) {
+            final RefreshStateConfig refreshStateConfigDto, final boolean aSync) {
         LOGGER.info("EnclosureClientImpl : updateRefreshState : Start");
 
         // validate args
@@ -735,10 +734,10 @@ public class EnclosureClientImpl implements EnclosureClient {
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        Enclosures enclosures = getEnclosureByName(creds, name);
+        Enclosures enclosures = getEnclosureByName(params, name);
 
         if (null != enclosures.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(enclosures.getUri());

@@ -156,7 +156,7 @@ public class FirmwareDriverClientSample {
             resourceId = firmwareDriverClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
-            taskResourceV2 = firmwareDriverClient.deleteFirmwareDriver(params, resourceId, false, false, false);
+            taskResourceV2 = firmwareDriverClient.deleteFirmwareDriver(params, resourceId, false, false);
 
             System.out.println("FirmwareDriverClientTest : deleteFirmwareDriver : "
                     + "fcNetwork group object returned to client : " + taskResourceV2.toString());

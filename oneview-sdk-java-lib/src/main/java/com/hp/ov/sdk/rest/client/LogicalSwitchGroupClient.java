@@ -25,10 +25,10 @@ public interface LogicalSwitchGroupClient {
 
     /**
      * Retrieves the {@link LogicalSwitchGroup} details for the specified
-     * logical switch group resourceId.
+     * logical switch group resource identifier.
      *
      * @param params structure containing the connection details.
-     * @param resourceId logical switch group id as seen in HP OneView.
+     * @param resourceId logical switch group identifier as seen in HPE OneView.
      *
      * @return {@link LogicalSwitchGroup} object containing the details.
      */
@@ -39,7 +39,7 @@ public interface LogicalSwitchGroupClient {
      * logical switch group name.
      *
      * @param params structure containing the connection details.
-     * @param name logical switch group name as seen in HP OneView.
+     * @param name logical switch group name as seen in HPE OneView.
      *
      * @return {@link LogicalSwitchGroup} object containing the details.
      */
@@ -47,12 +47,12 @@ public interface LogicalSwitchGroupClient {
 
     /**
      * Retrieves the logical switch group details for all the
-     * logical switch groups under OneView.
+     * logical switch groups under the current HPE OneView.
      *
      * @param params structure containing the connection details.
      *
      * @return {@link LogicalSwitchGroupCollection} object containing the details
-     * for all the logical switch groups found in OneView.
+     * for all the logical switch groups found in HPE OneView.
      */
     LogicalSwitchGroupCollection getAllLogicalSwitchGroups(RestParams params);
 
@@ -65,7 +65,7 @@ public interface LogicalSwitchGroupClient {
      * @param aSync flag to indicate whether the request should be
      *          processed asynchronously or synchronously.
      *
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
     TaskResourceV2 createLogicalSwitchGroup(RestParams params, LogicalSwitchGroup logicalSwitchGroup,
             boolean aSync);
@@ -75,36 +75,37 @@ public interface LogicalSwitchGroupClient {
      * object. The request can be processed asynchronously or synchronously.
      *
      * @param params structure containing the connection details.
-     * @param resourceId logical switch group id as seen in OneView.
+     * @param resourceId logical switch group identifier as seen in HPE OneView.
      * @param logicalSwitchGroup object containing the logical switch group details.
      * @param aSync flag to indicate whether the request should be
      *          processed asynchronously or synchronously.
      *
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
     TaskResourceV2 updateLogicalSwitchGroup(RestParams params, String resourceId,
             LogicalSwitchGroup logicalSwitchGroup, boolean aSync);
 
     /**
-     * Deletes a logical switch group identified by the provided resourceId.
+     * Deletes a logical switch group identified by the provided resource identifier.
      * The request can be processed asynchronously or synchronously.
      *
      * @param params structure containing the connection details.
-     * @param resourceId logical switch group id as seen in OneView.
+     * @param resourceId logical switch group identifier as seen in HPE OneView.
      * @param aSync flag to indicate whether the request should be
      *          processed asynchronously or synchronously.
      *
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
     TaskResourceV2 deleteLogicalSwitchGroup(RestParams params, String resourceId, boolean aSync);
 
     /**
-     * Retrieves the resourceId for the specified logical switch group name.
+     * Retrieves the logical switch group resource identifier for the specified
+     * logical switch group name.
      *
      * @param params structure containing the connection details.
-     * @param name logical switch group name as seen in HP OneView.
+     * @param name logical switch group name as seen in HPE OneView.
      *
-     * @return the resourceId for the logical switch group
+     * @return the resource identifier for the logical switch group
      */
     String getId(RestParams params, String name);
 

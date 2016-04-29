@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import java.util.List;
@@ -26,173 +26,162 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 public interface NetworkClient {
 
     /**
-     * The module aids in fetching the Network details for the specified Network
-     * resourceId.
+     * The module aids in fetching the Network details for the specified ethernet network
+     * resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for Network as seen in HP OneView.
-     * @return networkDto, which is a object containing the Network details.
+     *            The resource identifier for ethernet network as seen in HPE OneView.
+     * @return {@link Network} containing the ethernet network details.
      */
-    public Network getNetwork(final RestParams params, final String resourceId);
+    Network getNetwork(final RestParams params, final String resourceId);
 
     /**
-     * The module aids in fetching the Network details for all the Networks
-     * found under the current HP OneView.
+     * The module aids in fetching the ethernet network details for all the ethernet networks
+     * found under the current HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return networkCollectionDto, which is a object containing the collection
-     *         of Network details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link NetworkCollection} containing the collection of ethernet network details.
      */
-    public NetworkCollection getAllNetworks(final RestParams params);
+    NetworkCollection getAllNetworks(final RestParams params);
 
     /**
-     * The module aids in fetching the Network details for the Network name as
-     * specified in HP OneView.
+     * The module aids in fetching the ethernet network details for the ethernet network name as
+     * specified in HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the Network name as seen in HP OneView.
-     * @return networkDto, which is a object containing the Network details.
+     *            The resourceName is the ethernet network name as seen in HPE OneView.
+     * @return {@link Network} containing the ethernet network details.
      */
-    public Network getNetworkByName(final RestParams params, final String name);
+    Network getNetworkByName(final RestParams params, final String name);
 
     /**
-     * The module aids in creation of Network when provided with the Network
-     * details as Network object or JsonRequest. It can process the request
-     * asynchronously or synchronously based on flag input.
+     * The module aids in creation of an ethernet network when provided with the ethernet network
+     * details as a Network object or JsonRequest. It can process the request
+     * asynchronously or synchronously, based on the flag input.
      *
      * <b>ATTENTION:</b> if you use async mode equals to <code>true</code>
-     * and you set some connection template data this information will not be used.
-     * Thus, we strongly recommend the value <code>false</code> for async flag if
+     * and you set some connection template data, this information will not be used.
+     * Thus, we strongly recommend the value <code>false</code> for the async flag if
      * you want to set bandwidth values.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param networkDto
-     *            This is a object containing the Network details, used to
-     *            create a Network
+     *            This is a object containing the ethernet network details, used to
+     *            create a ethernet network.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously
      *            (preferable <code>false</code>).
      * @param useJsonRequest
-     *            The JsonRequest body is part of Network Object which takes in
-     *            a String containing the new Network details, which is
-     *            converted to Network Object using adaptor and processed.
-     * @return taskResource which returns the task status for the process
+     *            The JsonRequest body is part of Network object which takes in
+     *            a String containing the new ethernet network details, which is
+     *            converted to Network object using adaptor and processed.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 createNetwork(final RestParams params, final Network networkDto, final boolean aSync,
+    TaskResourceV2 createNetwork(final RestParams params, final Network networkDto, final boolean aSync,
             final boolean useJsonRequest);
 
     /**
-     * The module takes in an Network object or JsonRequest and updates the
-     * existing Network based on resource Id. It can process the request
-     * asynchronously or synchronously based on flag input.
+     * The module takes in a Network object or JsonRequest and updates the
+     * existing ethernet network based on the resource identifier. It can
+     * process the request asynchronously or synchronously, based on the flag input.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for Network as seen in HP OneView.
+     *            The resource identifier for ethernet network as seen in HPE OneView.
      * @param networkDto
-     *            This is a object containing the Network details, used to
-     *            update a Network
+     *            This is a object containing the ethernet network details, used to
+     *            update a ethernet network
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
      * @param useJsonRequest
-     *            The JsonRequest body is part of Network Object which takes in
+     *            The JsonRequest body is part of Network object which takes in
      *            a String containing the update to be made, which is converted
-     *            to Network Object using adaptor and processed.
-     * @return taskResource which returns the task status for the process
+     *            to Network object using adaptor and processed.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateNetwork(final RestParams params, final String resourceId, final Network networkDto,
+    TaskResourceV2 updateNetwork(final RestParams params, final String resourceId, final Network networkDto,
             final boolean aSync, final boolean useJsonRequest);
 
     /**
-     * The module aids in deleting a Network for the specified Network
-     * resourceId. It can process the request asynchronously or synchronously
-     * based on flag input.
+     * The module aids in deleting a ethernet network for the specified ethernet network
+     * resource identifier. It can process the request asynchronously or synchronously,
+     * based on the flag input.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for Network as seen in HP OneView.
+     *            The resource identifier for ethernet network as seen in HPE OneView.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 deleteNetwork(final RestParams params, final String resourceId, final boolean aSync);
+    TaskResourceV2 deleteNetwork(final RestParams params, final String resourceId, final boolean aSync);
 
     /**
-     * The module aids in creation of set of Network when provided with the
-     * Network details as Network object or JsonRequest containing a range of
-     * virtual LAN Id. It can process the request asynchronously or
-     * synchronously based on flag input.
+     * The module aids in creation of set of ethernet networks when provided with the
+     * ethernet network details as a BulkEthernetNetwork object or a JsonRequest containing
+     * a VLAN identifier range. It can process the request asynchronously or synchronously,
+     * based on the flag input.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param bulkEthernetDto
      *            This is a object containing the BulkEthernetNetwork details,
-     *            used to create a set of Networks for the mentioned range with
-     *            virtual LAN Name as suffix
+     *            used to create a set of ethernet networks for the mentioned range with
+     *            VLAN name as suffix.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
      * @param useJsonRequest
-     *            The JsonRequest body is part of BulkEthernetNetwork Object
-     *            which takes in a String containing the new BulkEthernetNetwork
-     *            details, which is converted to BulkEthernetNetwork Object
-     *            using adaptor and processed.
-     * @return taskResource which returns the task status for the process
+     *            The JsonRequest body is part of BulkEthernetNetwork object
+     *            which takes in a String containing the new bulk ethernet network
+     *            details, which is converted to a BulkEthernetNetwork object
+     *            using an adaptor and processed.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 createNetworkInBulk(final RestParams params, final BulkEthernetNetwork bulkEthernetDto,
+    TaskResourceV2 createNetworkInBulk(final RestParams params, final BulkEthernetNetwork bulkEthernetDto,
             final boolean aSync, final boolean useJsonRequest);
 
     /**
-     * Get a list of profile URIs for the ethernet network.
+     * Returns a list of profile URIs for the ethernet network.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for Network as seen in HP OneView.
+     *            The resource identifier for ethernet network as seen in HPE OneView.
      *
      * @return list of profile URIs for the specified ethernet network.
      */
     List<String> getNetworkAssociatedProfiles(RestParams params, String resourceId);
 
     /**
-     * Gets the uplink sets which are using an ethernet network.
+     * Returns the uplink sets which are using an ethernet network.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for Network as seen in HP OneView.
+     *            The resource identifier for ethernet network as seen in HPE OneView.
      *
-     * @return list of uplinks using the specified ethernet network.
+     * @return list of uplink sets using the specified ethernet network.
      */
     List<String> getNetworkAssociatedUplinkGroups(RestParams params, String resourceId);
 
     /**
-     * The module aids in fetching the Network details for the Network name as
-     * specified in HP OneView.
+     * The module aids in fetching the ethernet network resource identifier for the
+     * ethernet network name as specified in HPE OneView.
      * 
-     * @param creds
-     *            The RestParams is a structure containing the connection
-     *            details.
+     * @param params
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the Network name as seen in HP OneView.
-     * @return String, which is a resource Id for the Network name as seen in
-     *         HPOneView.
+     *            The name is the ethernet network name as seen in HPE OneView.
+     * @return String which is the resource identifier for the ethernet network name as seen in
+     *         HPE OneView.
      */
-    public String getId(final RestParams creds, final String name);
+    String getId(final RestParams params, final String name);
 }

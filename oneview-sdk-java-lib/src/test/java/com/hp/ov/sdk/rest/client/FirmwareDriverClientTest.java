@@ -177,7 +177,7 @@ public class FirmwareDriverClientTest {
                 Mockito.anyInt()))
         .thenReturn(taskResourceV2);
 
-        TaskResourceV2 result = client.deleteFirmwareDriver(params, resourceId, false, false, false);
+        TaskResourceV2 result = client.deleteFirmwareDriver(params, resourceId, false, false);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI, resourceId));
@@ -191,7 +191,7 @@ public class FirmwareDriverClientTest {
 
     @Test (expected = SDKInvalidArgumentException.class)
     public void testDeleteFirmwareDriverWithNullParams() {
-        client.deleteFirmwareDriver(null, resourceId, false, false, false);
+        client.deleteFirmwareDriver(null, resourceId, false, false);
     }
 
     @Test (expected = SDKNoResponseException.class)
@@ -201,7 +201,7 @@ public class FirmwareDriverClientTest {
                 Mockito.any(JSONObject.class)))
         .thenReturn(null);
 
-        client.deleteFirmwareDriver(params, resourceId, false, false, false);
+        client.deleteFirmwareDriver(params, resourceId, false, false);
     }
 
     @Test

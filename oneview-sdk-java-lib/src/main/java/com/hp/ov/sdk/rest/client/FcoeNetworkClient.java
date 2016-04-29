@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.FcoeNetwork;
@@ -27,15 +27,15 @@ public interface FcoeNetworkClient {
      * FCoE network.
      *
      * @param params structure containing the connection details.
-     * @param resourceId FCoE network id as seen in HP OneView.
+     * @param resourceId FCoE network resource identifier as seen in HPE OneView.
      *
      * @return {@link FcoeNetwork} object containing the details.
      */
     FcoeNetwork getFcoeNetwork(RestParams params, String resourceId);
 
     /**
-     * Retrieves a {@link FcoeNetworkCollection} containing details
-     * for all the available FCoE networks found under current HP OneView.
+     * Retrieves an {@link FcoeNetworkCollection} containing details
+     * for all the available FCoE networks found under the current HPE OneView.
      *
      * @param params structure containing the connection details.
      *
@@ -49,14 +49,14 @@ public interface FcoeNetworkClient {
      * FCoE network identified by name.
      *
      * @param params structure containing the connection details.
-     * @param name FCoE network name as seen in HP OneView.
+     * @param name FCoE network name as seen in HPE OneView.
      *
      * @return {@link FcoeNetwork} object containing the details.
      */
     FcoeNetwork getFcoeNetworkByName(RestParams params, String name);
 
     /**
-     * Creates a FCoE network according to the provided {@link FcoeNetwork}
+     * Creates an FCoE network according to the provided {@link FcoeNetwork}
      * object. The request can be processed asynchronously or synchronously.
      *
      * @param params structure containing the connection details.
@@ -64,43 +64,43 @@ public interface FcoeNetworkClient {
      * @param aSync flag to indicate whether the request should be
      *          processed asynchronously or synchronously.
      *
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
     TaskResourceV2 createFcoeNetwork(RestParams params, FcoeNetwork fcoeNetwork, boolean aSync);
 
     /**
-     * Updates a {@link FcoeNetwork} identified by the given resourceId.
+     * Updates an {@link FcoeNetwork} identified by the given resource identifier.
      *
      * @param params structure containing the connection details.
-     * @param resourceId FCoE network id as seen in HP OneView.
+     * @param resourceId FCoE network resource identifier as seen in HPE OneView.
      * @param fcoeNetwork object containing the FCoE network details.
      * @param aSync flag to indicate whether the request should be
      *          processed asynchronously or synchronously.
      *
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
     TaskResourceV2 updateFcoeNetwork(RestParams params, String resourceId, FcoeNetwork fcoeNetwork, boolean aSync);
 
     /**
-     * Deletes the {@link FcoeNetwork} identified by the given resourceId.
+     * Deletes the {@link FcoeNetwork} identified by the given resource identifier.
      *
      * @param params structure containing the connection details.
-     * @param resourceId FCoE network id as seen in HP OneView.
+     * @param resourceId FCoE network resource identifier as seen in HPE OneView.
      * @param aSync flag to indicate whether the request should be
      *          processed asynchronously or synchronously.
      *
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
     TaskResourceV2 deleteFcoeNetwork(RestParams params, String resourceId, boolean aSync);
 
     /**
-     * Retrieves the {@link FcoeNetwork} resource id for the specified
+     * Retrieves the FCoE network resource identifier for the specified
      * FCoE network identified by name.
      *
      * @param params structure containing the connection details.
-     * @param name FCoE network name as seen in HP OneView.
+     * @param name FCoE network name as seen in HPE OneView.
      *
-     * @return resourceId for the FCoE network name as seen in HP OneView.
+     * @return resource identifier for the FCoE network name as seen in HPE OneView.
      */
     String getId(RestParams params, final String name);
 }

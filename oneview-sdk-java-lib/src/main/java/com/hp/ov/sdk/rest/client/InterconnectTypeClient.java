@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.InterconnectTypeCollection;
@@ -22,59 +22,51 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 public interface InterconnectTypeClient {
 
     /**
-     * The module aids in fetching the InterconnectType details for the
-     * specified InterconnectType resourceId
+     * The module aids in fetching the interconnect type details for the
+     * specified interconnect type resource identifier.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for InterConnectTypes as seen in HP OneView.
-     * @return interconnectTypesDto, which is a object containing the
-     *         InterconnectType details.
+     *            The resource identifier for interconnect type as seen in HPE OneView.
+     * @return {@link InterconnectType} containing the interconnect type details.
      */
-    public InterconnectType getInterconnectType(final RestParams params, final String resourceId);
+    InterconnectType getInterconnectType(final RestParams params, final String resourceId);
 
     /**
-     * The module aids in fetching the InterconnectType details for all
-     * InterconnectType registered under current HP OneView.
+     * The module aids in fetching the interconnect type details for all
+     * interconnect type registered under the current HPE OneView.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return interconnectTypesCollectionDto, which is a object containing the
-     *         collection of InterconnectType details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link InterconnectTypeCollection} containing the collection
+     *         of interconnect type details.
      */
-    public InterconnectTypeCollection getAllInterconnectType(final RestParams params);
+    InterconnectTypeCollection getAllInterconnectType(final RestParams params);
 
     /**
-     * The module aids in fetching the InterconnectType details for the
-     * specified InterconnectType name as specified in HP OneView.
+     * The module aids in fetching the interconnect type details for the
+     * specified interconnect type name as specified in HPE OneView.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the InterconnectType name as seen in HP
-     *            OneView.
-     * @return interconnectTypesDto, which is a object containing the
-     *         InterconnectType details.
+     *            The name is the interconnect type name as seen in HPE OneView.
+     * @return {@link InterconnectType} containing the interconnect type details.
      */
-    public InterconnectType getInterconnectTypeByName(final RestParams params, final String name);
+    InterconnectType getInterconnectTypeByName(final RestParams params, final String name);
 
     /**
-     * The module aids in fetching the InterconnectType details for the
-     * InterconnectType name as specified in HP OneView.
+     * The module aids in fetching the interconnect type resource identifier for the
+     * interconnect type name as specified in HPE OneView.
      *
-     * @param creds
-     *            The RestParams is a structure containing the connection
-     *            details.
+     * @param params
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the InterconnectType name as seen in HP
-     *            OneView.
-     * @return String, which is a resource Id for the InterconnectType name as
-     *         seen in HPOneView.
+     *            The name is the interconnect type name as seen in HPE OneView.
+     * @return String which is the resource identifier for the interconnect type name as
+     *         seen in HPE OneView.
      */
-    public String getId(final RestParams creds, final String name);
+    String getId(final RestParams params, final String name);
 
 }

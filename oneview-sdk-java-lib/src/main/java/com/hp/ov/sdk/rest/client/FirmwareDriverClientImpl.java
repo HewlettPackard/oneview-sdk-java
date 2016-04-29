@@ -136,8 +136,7 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
     }
 
     @Override
-    public TaskResourceV2 deleteFirmwareDriver(RestParams params, String resourceId, Boolean isForce, final boolean aSync,
-            final boolean useJsonRequest) {
+    public TaskResourceV2 deleteFirmwareDriver(RestParams params, String resourceId, Boolean isForce, final boolean aSync) {
         LOGGER.info("FirmwareDriverClientImpl : deleteFirmwareDriver : Start");
 
         // validate args
@@ -175,10 +174,10 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        FwBaseline fwBaselineDto = getFirmwareDriverByName(creds, name);
+        FwBaseline fwBaselineDto = getFirmwareDriverByName(params, name);
 
         if (null != fwBaselineDto.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(fwBaselineDto.getUri());

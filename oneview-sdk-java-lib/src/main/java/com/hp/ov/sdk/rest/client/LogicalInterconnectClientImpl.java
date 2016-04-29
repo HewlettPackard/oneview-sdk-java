@@ -954,10 +954,10 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        LogicalInterconnects logicalInterconnectsDto = getLogicalInterconnectByName(creds, name);
+        LogicalInterconnects logicalInterconnectsDto = getLogicalInterconnectByName(params, name);
 
         if (null != logicalInterconnectsDto.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(logicalInterconnectsDto.getUri());

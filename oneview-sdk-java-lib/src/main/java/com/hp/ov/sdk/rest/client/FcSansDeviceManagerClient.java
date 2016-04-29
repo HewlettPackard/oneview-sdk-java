@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,13 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-/**
- * A device manager is a hardware system that the SAN Resource Manager can communicate
- * with in order to manage the zones on a SAN. For example, the SAN Resource Manager may
- * communicate with one or more Brocade Network Advisor systems, identified by IP addresses or
- * DNS names, in order to manage the zones on the SANs controlled by those BNA systems.
  */
+
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
@@ -26,127 +21,97 @@ import com.hp.ov.sdk.dto.DeviceManagerResponseCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
+/**
+ * A device manager is a hardware system that the SAN Resource Manager can communicate
+ * with in order to manage the zones on a SAN. For example, the SAN Resource Manager may
+ * communicate with one or more Brocade Network Advisor systems, identified by IP addresses or
+ * DNS names, in order to manage the zones on the SANs controlled by those BNA systems.
+ */
 public interface FcSansDeviceManagerClient {
-    /**
-     * The module aids in creating a Device Manager under the specified
-     * provider.
-     *
-     * @param params The RestParams is a structure containing the connection
-     * details.
-     *
-     * @param providerUrl The provider url based on the switch provider obtained
-     * from one view
-     *
-     * @param deviceManagerResponseDto The deviceManagerResposne object
-     * containing the connection details.
-     *
-     * @param aSync Flag input to process request asynchronously or
-     * synchronously.
-     *
-     * @param useJsonRequest The JsonRequest body is part of AddEnclosure Object
-     * which takes in a String containing the new Enclosure details, which is
-     * converted to AddEnclosure Object using adaptor and processed.
-     *
-     * @return taskResource which returns the task status for the process
-     */
-    public TaskResourceV2 createDeviceManager(final RestParams params, final String providerUrl,
-            final DeviceManagerResponse deviceManagerResponseDto, final boolean aSync, final boolean useJsonRequest);
 
     /**
-     * The module aids in fetching all the Device Managers registered under
-     * current HP OneView
+     * The module aids in creating a device manager under the specified provider.
      *
-     * @param params The RestParams is a structure containing the connection
-     * details.
+     * @param params The {@link RestParams} is a structure containing the connection details.
+     * @param providerUrl The provider URL based on the switch provider obtained from HPE OneView.
+     * @param deviceManagerResponseDto The {@link DeviceManagerResponse} object
+     * containing the device manager details.
+     * @param aSync Flag input to process request asynchronously or synchronously.
      *
-     * @return DeviceManagerResponseCollectionDto, which is a object containing
-     * the DeviceManagerResponse Collection details.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public DeviceManagerResponseCollection getAllDeviceManager(final RestParams params);
+    TaskResourceV2 createDeviceManager(final RestParams params, final String providerUrl,
+            final DeviceManagerResponse deviceManagerResponseDto, final boolean aSync);
 
     /**
-     * The module aids in fetching the Device Managers registered under current
-     * HP OneView
+     * The module aids in fetching all the device managers registered under the
+     * current HPE OneView.
      *
-     * @param params The RestParams is a structure containing the connection
-     * details.
-     *
-     * @param resourceId The resourceId for device manager as seen in HP
-     * OneView.
-     *
-     * @return DeviceManagerResponseDto, which is a object containing the
-     * DeviceManagerResponse details.
+     * @param params The {@link RestParams} is a structure containing the connection details.
+     * @return {@link DeviceManagerResponseCollection} containing the device managers details.
      */
-    public DeviceManagerResponse getDeviceManager(final RestParams params, final String resourceId);
+    DeviceManagerResponseCollection getAllDeviceManager(final RestParams params);
 
     /**
-     * The module aids in fetching the Device Managers registered under current
-     * HP OneView
+     * The module aids in fetching the device manager registered under current HPE OneView.
      *
-     * @param params The RestParams is a structure containing the connection
-     * details.
-     *
-     * @param name The name of resource for device manager as seen in HP
-     * OneView.
-     *
-     * @return DeviceManagerResponseDto, which is a object containing the
-     * DeviceManagerResponse details.
+     * @param params The {@link RestParams} is a structure containing the connection details.
+     * @param resourceId The resource identifier for device manager as seen in HPE OneView.
+     * @return {@link DeviceManagerResponse} containing the device manager details.
      */
-    public DeviceManagerResponse getDeviceManagerByName(final RestParams params, final String name);
+    DeviceManagerResponse getDeviceManager(final RestParams params, final String resourceId);
 
     /**
-     * The module aids in fetching the Device Managers registered under current
-     * HP OneView
+     * The module aids in fetching the device manager registered under the current HPE OneView.
      *
-     * @param params The RestParams is a structure containing the connection
-     * details.
+     * @param params The {@link RestParams} is a structure containing the connection details.
+     * @param name The name is the device manager name as seen in HPE
+     * @return {@link DeviceManagerResponse} containing the device manager details.
+     */
+    DeviceManagerResponse getDeviceManagerByName(final RestParams params, final String name);
+
+    /**
+     * The module aids in deleting a device manager for the specified device manager
+     * resource identifier. It can process the request asynchronously or synchronously,
+     * based on the flag input.
      *
-     * @param resourceId The resourceId for device manager as seen in HP
-     * OneView.
-     *
+     * @param params The {@link RestParams} is a structure containing the connection details.
+     * @param resourceId The resource identifier for device manager as seen in HPE OneView.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     *
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 deleteDeviceManager(final RestParams params, final String resourceId, final boolean aSync);
+    TaskResourceV2 deleteDeviceManager(final RestParams params, final String resourceId, final boolean aSync);
 
     /**
-     * The module aids in fetching the Device Managers registered under current
-     * HP OneView
+     * The module takes in an DeviceManagerResponse object or JsonRequest and updates the
+     * existing device manager based on the resource identifier. It can process the request
+     * asynchronously or synchronously, based on the flag input.
      *
-     * @param params The RestParams is a structure containing the connection
-     * details.
-     *
-     * @param resourceId The resourceId for device manager as seen in HP
-     * OneView.
-     *
+     * @param params The {@link RestParams} is a structure containing the connection details.
+     * @param resourceId The resource identifier for device manager as seen in HPE OneView.
+     * @param updateDeviceManagerResponseDto object containing the device manager details.
      * @param useJsonRequest
-     *            The JsonRequest body is part of DeviceManagerResponse Object which
-     *            takes in a String containing the Device Manager details, which
-     *            is converted to DeviceManagerResponse Object using adaptor and
+     *            The JsonRequest body is part of DeviceManagerResponse object which
+     *            takes in a String containing the device manager details, which
+     *            is converted to DeviceManagerResponse object using adaptor and
      *            processed.
-     *
-     * @param aSync Flag input to process request asynchronously or
-     * synchronously.
-     *
-     * @return taskResource which returns the task status for the process
+     * @param aSync Flag input to process request asynchronously or synchronously.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateDeviceManager(final RestParams params, final String resourceId,
+    TaskResourceV2 updateDeviceManager(final RestParams params, final String resourceId,
             final DeviceManagerResponse updateDeviceManagerResponseDto, final boolean useJsonRequest, final boolean aSync);
 
     /**
-     * The module aids in fetching the device manager details for the device
-     * manager name as specified in HP OneView.
+     * The module aids in fetching the device manager resource identifier for the device
+     * manager name as specified in HPE OneView.
      *
-     * @param creds
-     *            The RestParams is a structure containing the connection
-     *            details.
+     * @param params
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the device manager name as seen in HP
-     *            OneView.
-     * @return String, which is a resource Id for the device manager name as
-     *         seen in HPOneView.
+     *            The resourceName is the device manager name as seen in HPE OneView.
+     * @return String which is the resource identifier for the device manager name as
+     *         seen in HPE OneView.
      */
-    public String getId(final RestParams creds, final String name);
+    String getId(final RestParams params, final String name);
 }
