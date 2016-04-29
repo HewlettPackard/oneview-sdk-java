@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.adaptors.ConnectionTemplateAdaptor;
@@ -219,10 +219,10 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        ConnectionTemplate connectionTemplateDto = getConnectionTemplateByName(creds, name);
+        ConnectionTemplate connectionTemplateDto = getConnectionTemplateByName(params, name);
 
         if (null != connectionTemplateDto.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(connectionTemplateDto.getUri());

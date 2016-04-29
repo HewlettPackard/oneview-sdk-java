@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import java.util.List;
@@ -37,309 +37,287 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 public interface LogicalInterconnectClient {
 
     /**
-     * The module aids in fetching the LogicalInterconnects details for the
-     * specified LogicalInterconnects resourceId
+     * The module aids in fetching the logical interconnect details for the
+     * specified logical interconnect resource identifier.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
-     * @return logicalInterconnectsDto, which is a object containing the
-     *         LogicalInterconnects details.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
+     * @return {@link LogicalInterconnects} containing the logical interconnect details.
      */
-    public LogicalInterconnects getLogicalInterconnect(RestParams params, String resourceId);
+    LogicalInterconnects getLogicalInterconnect(RestParams params, String resourceId);
 
     /**
-     * The module aids in fetching the LogicalInterconnects details for all
-     * LogicalInterconnects found under current HP OneView.
+     * The module aids in fetching the logical interconnect details for all
+     * logical interconnects found under the current HPE OneView.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return logicalInterconnectsCollectionDto, which is a object containing a
-     *         collection of LogicalInterconnects details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link LogicalInterconnectCollectionV2} containing a collection of
+     *         logical interconnect details.
      */
-    public LogicalInterconnectCollectionV2 getAllLogicalInterconnects(final RestParams params);
+    LogicalInterconnectCollectionV2 getAllLogicalInterconnects(final RestParams params);
 
     /**
-     * Returns a logical interconnect to a consistent state. The current logical
+     * This modules aids in fetching a logical interconnect to a consistent state. The current logical
      * interconnect state is compared to the associated logical interconnect
      * group. Any differences identified are corrected, bringing the logical
      * interconnect back to a consistent state. Changes are asynchronously
      * applied to all managed interconnects.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
      * @param asyncOrSyncMode
      *            Flag input to process request asynchronously or synchronously.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateLogicalInterconnectComplianceById(final RestParams params, final String resourceId,
+    TaskResourceV2 updateLogicalInterconnectComplianceById(final RestParams params, final String resourceId,
             final boolean asyncOrSyncMode);
 
     /**
-     * Updates the Ethernet interconnect settings for the logical interconnect.
+     * This method aids in updating the ethernet interconnect settings for the logical interconnect.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
      * @param ethernetInterconnectSettingsDto
-     *            The Ethernet settings for LogicalInterconnect as seen in HP OneView.
+     *            The ethernet settings for logical interconnect as seen in HPE OneView.
      * @param asyncOrSyncMode
      *            Flag input to process request asynchronously or synchronously.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateEthernetSettings(final RestParams params, String resourceId,
+    TaskResourceV2 updateEthernetSettings(final RestParams params, String resourceId,
             final EthernetInterconnectSettingsV2 ethernetInterconnectSettingsDto,
             final boolean asyncOrSyncMode);
 
     /**
-     * Creates an interconnect at the given location.
+     * The module aids in creating an interconnect at the given location.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param locationDto
-     *            The location for the LogicalInterconnect as seen in HP OneView.
+     *            The location for the logical interconnect as seen in HPE OneView.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
      * @param useJsonRequest
-     *            The JsonRequest body is part of LogicalInterconnect Object
+     *            The JsonRequest body is part of LogicalInterconnect object
      *            which takes in a String containing the update to be made,
-     *            which is converted to LogicalInterconnect Object using adaptor
+     *            which is converted to LogicalInterconnect object using adaptor
      *            and processed.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 createLogicalInterconnect(final RestParams params, final Location locationDto, final boolean aSync,
+    TaskResourceV2 createLogicalInterconnect(final RestParams params, final Location locationDto, final boolean aSync,
             final boolean useJsonRequest);
 
     /**
-     * Deletes an interconnect from a location.
+     * The module aids in removing an interconnect from a location.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param enclosureUri
-     *            The enclosure URI as seen in HP OneView.
+     *            The enclosure URI as seen in HPE OneView.
      * @param bay
-     *            The the bay as seen in HP OneView.
+     *            The bay of the interconnect as seen in HPE OneView.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 deleteLogicalInterconnect(final RestParams params, final String enclosureUri,
+    TaskResourceV2 deleteLogicalInterconnect(final RestParams params, final String enclosureUri,
             final String bay, final boolean aSync);
 
     /**
-     * Installs firmware to a logical interconnect. The three operations that
+     * The method installs firmware to a logical interconnect. The three operations that
      * are supported for the firmware update are STAGE (uploads firmware to the
      * interconnect), ACTIVATE (installs firmware on the interconnect) and
      * UPDATE (which does a STAGE and ACTIVATE in a sequential manner).
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
      * @param lIFirmwareDto
-     *            This is a lIFirmware object containing the update to be made
-     *            to existing LogicalInterconnect pointed to by the above
-     *            mentioned resourceId
+     *            This is a LiFirmware object containing the update to be made
+     *            to existing logical interconnect pointed to by the above
+     *            mentioned resource identifier.
      * @param asyncOrSyncMode
      *            Flag input to process request asynchronously or synchronously.
      * @param useJsonRequest
-     *            The JsonRequest body is part of LogicalInterconnect Object
+     *            The JsonRequest body is part of LiFirmware object
      *            which takes in a String containing the update to be made,
-     *            which is converted to LogicalInterconnect Object using adaptor
+     *            which is converted to LiFirmware object using adaptor
      *            and processed.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateLogicalInterconnectFirmwareById(final RestParams params, String resourceId,
+    TaskResourceV2 updateLogicalInterconnectFirmwareById(final RestParams params, String resourceId,
             final LiFirmware lIFirmwareDto, final boolean asyncOrSyncMode, final boolean useJsonRequest);
 
     /**
-     * Updates the SNMP configuration of a logical interconnect. Changes to the
-     * SNMP configuration are asynchronously applied to all managed
-     * interconnects.
+     * This modules aids in updating the SNMP configuration of a logical interconnect. Changes to the
+     * SNMP configuration are asynchronously applied to all managed interconnects.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
      * @param snmpConfigurationDto
-     *            This is a snmpConfiguration object containing the update to be
-     *            made to existing LogicalInterconnect pointed to by the above
-     *            mentioned resourceId
+     *            This is a {@link SnmpConfiguration} object containing the update to be
+     *            made to existing logical interconnect pointed to by the above
+     *            mentioned resource identifier.
      * @param asyncOrSyncMode
      *            Flag input to process request asynchronously or synchronously.
      * @param useJsonRequest
-     *            The JsonRequest body is part of LogicalInterconnect Object
+     *            The JsonRequest body is part of SnmpConfiguration object
      *            which takes in a String containing the update to be made,
-     *            which is converted to LogicalInterconnect Object using adaptor
+     *            which is converted to SnmpConfiguration object using adaptor
      *            and processed.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateLogicalInterconnectSnmpConfigurationById(final RestParams params, String resourceId,
+    TaskResourceV2 updateLogicalInterconnectSnmpConfigurationById(final RestParams params, String resourceId,
             final SnmpConfiguration snmpConfigurationDto, final boolean asyncOrSyncMode, final boolean useJsonRequest);
 
     /**
+     * The module aids in fetching the logical interconnect details for the specified
+     * logical interconnect name.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param logicalInterconnectName
-     *            The logicalInterconnectName is the LogicalInterconnect name as
-     *            seen in HP OneView.
-     * @return LogicalInterconnectDto, which is a object containing the
-     *         LogicalInterconnect Details.
+     *            The logicalInterconnectName is the logical interconnect name as
+     *            seen in HPE OneView.
+     * @return {@link LogicalInterconnects} containing the logical interconnect details.
      */
-    public LogicalInterconnects getLogicalInterconnectByName(RestParams params, String logicalInterconnectName);
+    LogicalInterconnects getLogicalInterconnectByName(RestParams params, String logicalInterconnectName);
 
     /**
+     * The module aids in fetching the logical interconnect firmware for the specified
+     * logical interconnect identified by the resource identifier.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
-     * @return LiFirmwareDto, which is a object containing the LiFirmware
-     *         details.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
+     * @return {@link LiFirmware} containing the LI firmware details.
      */
-    public LiFirmware getLogicalInterconnectFirmwareById(RestParams params, String resourceId);
+    LiFirmware getLogicalInterconnectFirmwareById(RestParams params, String resourceId);
 
     /**
      * This module aids in fetching the forwarding information base data for a
      * logical interconnect.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
-     * @return interconnectFibData, which is a object containing the
-     *         InterconnectFibData details.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
+     * @return {@link InterconnectFibData} containing the interconnect forwarding
+     *         information base data details.
      */
-    public InterconnectFibData getLogicalInterconnectForwardingInformationBase(final RestParams params, String resourceId);
+    InterconnectFibData getLogicalInterconnectForwardingInformationBase(final RestParams params, String resourceId);
 
     /**
      * This module aids in generating the forwarding information base dump file
      * for a logical interconnect.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
-     * @return interconnectFibDataInfo, which is a object containing the
-     *         InterconnectFibDataInfo details.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
+     * @return {@link InterconnectFibData} containing the interconnect forwarding
+     *         information base data details.
      */
-    public InterconnectFibDataInfo createLogicalInterconnectForwardingInformationBase(final RestParams params, String resourceId);
+    InterconnectFibDataInfo createLogicalInterconnectForwardingInformationBase(final RestParams params, String resourceId);
 
     /**
-     * Updates internal networks on the logical interconnect.
+     * This module aids in updating the internal networks of a logical interconnect.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
      * @param networkUris
-     *            A list containing the resourceIds for LogicalInterconnect as seen in HP OneView.
-     * @return taskResource
+     *            A list containing the resource identifiers for logical interconnect
+     *            as seen in HPE OneView.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateLogicalInterconnectInternalNetworks(final RestParams params, final String resourceId, final List<String> networkUris);
+    TaskResourceV2 updateLogicalInterconnectInternalNetworks(final RestParams params, final String resourceId, final List<String> networkUris);
 
     /**
-     * Gets the internal VLAN IDs for the provisioned networks on a logical interconnect.
+     * This module aids in fetching the internal VLAN identifiers for the provisioned networks of a logical interconnect.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
-     * @return InternalVlanAssociationCollection, which is a object containing the
-     *         InternalVlanAssociationCollection details.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
+     * @return {@link InternalVlanAssociationCollection} containing the internal VLAN associations details.
      */
-    public InternalVlanAssociationCollection getLogicalInterconnectInternalVlans(final RestParams params, String resourceId);
+    InternalVlanAssociationCollection getLogicalInterconnectInternalVlans(final RestParams params, String resourceId);
 
     /**
-     * Gets the QoS aggregated configuration for the logical interconnect.
+     * This method aids in fetching the QoS aggregated configuration for the logical interconnect.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
-     * @return QosAggregatedConfiguration, which is a object containing the
-     *         QoS configuration details.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
+     * @return {@link QosAggregatedConfiguration} containing the QoS configuration details.
      */
-    public QosAggregatedConfiguration getLogicalInterconnectQosAggregatedConfiguration(final RestParams params, String resourceId);
+    QosAggregatedConfiguration getLogicalInterconnectQosAggregatedConfiguration(final RestParams params, String resourceId);
 
     /**
-     * Updates the QoS aggregated configuration for the logical interconnect.
+     * This modules aids in updating the QoS aggregated configuration for the logical interconnect.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
      * @param qosAggregatedConfigurationDto
-     *            The QoS configuration for LogicalInterconnect as seen in HP OneView.
-     * @return taskResource
+     *            The QoS configuration for logical interconnect as seen in HPE OneView.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateLogicalInterconnectQosAggregatedConfiguration(final RestParams params,
+    TaskResourceV2 updateLogicalInterconnectQosAggregatedConfiguration(final RestParams params,
             String resourceId, final QosAggregatedConfiguration qosAggregatedConfigurationDto);
 
     /**
-     * Updates interconnect settings on the logical interconnect.
+     * This modules aids in updating interconnect settings on the logical interconnect.
      * Changes to interconnect settings are asynchronously applied to all managed interconnects.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
      * @param interconnectSettings
-     *            The interconnect settings for LogicalInterconnect as seen in HP OneView.
-     * @return taskResource
+     *            The interconnect settings for logical interconnect as seen in HPE OneView.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateLogicalInterconnectSettings(final RestParams params,
+    TaskResourceV2 updateLogicalInterconnectSettings(final RestParams params,
             String resourceId, final InterconnectSettingsV2 interconnectSettings);
 
     /**
      * This module aids in fetching the SNMP configuration for a logical
-     * interconnect that is specified by resourceId.
+     * interconnect that is specified by resource identifier.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
-     * @return snmpConfiguration, which is a object containing the
-     *         snmpConfiguration details.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
+     * @return {@link SnmpConfiguration} containing the SNMP configuration details.
      */
-    public SnmpConfiguration getLogicalInterconnectSnmpConfigurationById(final RestParams params, String resourceId);
+    SnmpConfiguration getLogicalInterconnectSnmpConfigurationById(final RestParams params, String resourceId);
 
     /**
-     * THis module aids in fetching a collection of uplink ports from the member
+     * This module aids in fetching a collection of uplink ports from the member
      * interconnects which are eligible for assignment to an analyzer port.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
-     * @return portMonitorUplinkPortCollection, which is a object containing the
-     *         portMonitorUplinkPortCollection details.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
+     * @return {@link PortMonitorUplinkPortCollection} containing the port monitor uplink port collection details.
      */
-    public PortMonitorUplinkPortCollection getLogicalInterconnectUnassignedUplinkPortsForPortMonitor(final RestParams params,
+    PortMonitorUplinkPortCollection getLogicalInterconnectUnassignedUplinkPortsForPortMonitor(final RestParams params,
             final String resourceId);
 
     /**
@@ -347,117 +325,105 @@ public interface LogicalInterconnectClient {
      * interconnect configuration to all managed interconnects.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
-     * @return taskResource
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateLogicalInterconnectConfiguration(final RestParams params, final String resourceId);
+    TaskResourceV2 updateLogicalInterconnectConfiguration(final RestParams params, final String resourceId);
 
     /**
-     * This module aids in fetching the port monitor configuration of a logical
-     * interconnect.
+     * This module aids in fetching the port monitor configuration of a logical interconnect.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
-     * @return portMonitor, which is a object containing the portMonitor
-     *         details.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
+     * @return {@link PortMonitor} containing the port monitor details.
      */
-    public PortMonitor getLogicalInterconnectPortMonitorConfiguration(final RestParams params, final String resourceId);
+    PortMonitor getLogicalInterconnectPortMonitorConfiguration(final RestParams params, final String resourceId);
 
     /**
-     * This module aids in updating the port monitor configuration of a logical
-     * interconnect.
+     * This module aids in updating the port monitor configuration of a logical interconnect.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
      * @param portMonitorDto
-     *            The port monitor fom the LogicalInterconnects as seen in HP OneView.
-     * @return taskResource
+     *            The port monitor fom the logical interconnect as seen in HPE OneView.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateLogicalInterconnectPortMonitorConfiguration(final RestParams params, final String resourceId, PortMonitor portMonitorDto);
+    TaskResourceV2 updateLogicalInterconnectPortMonitorConfiguration(final RestParams params, final String resourceId, PortMonitor portMonitorDto);
 
     /**
-     * This module aids in fetching the telemetry configuration of a logical
-     * interconnect.
+     * This module aids in fetching the telemetry configuration of a logical interconnect.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
      * @param telemetryConfigurationId
-     *            The telemetry configuration ID for LogicalInterconnects as seen in HP OneView.
-     * @return telemetryConfiguration, which is a object containing the
-     *         telemetryConfiguration details.
+     *            The telemetry configuration identifier for the logical interconnect as seen in HPE OneView.
+     * @return {@link TelemetryConfiguration} containing the telemetry configuration details.
      */
-    public TelemetryConfiguration getLogicalInterconnectTelemetryConfiguration(final RestParams params, final String resourceId,
+    TelemetryConfiguration getLogicalInterconnectTelemetryConfiguration(final RestParams params, final String resourceId,
             final String telemetryConfigurationId);
 
     /**
      * This module aids in updating the telemetry configuration of a logical
-     * interconnect specified by resourceId on OneView 1.2
+     * interconnect specified by resource identifier.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
      * @param TelemetryConfigurationId
-     *            The TelemetryConfigurationId that specifies the Telemetry
-     *            Id for the resource specified by resourceId
+     *            The telemetry configuration identifier that specifies the telemetry identifier
+     *            for the resource specified by resource identifier.
      * @param telemetryConfiguration
-     *            which is a object containing the update to be made to existing
-     *            Telemetry configuration for LogicalInterconnect pointed to
-     *            by the above mentioned TelemetryConfigurationId specified
-     *            for resourceId.
-     * @return telemetryConfiguration, which is a object containing the
-     *         telemetryConfiguration details.
+     *            Object containing the update to be made to existing
+     *            telemetry configuration for logical interconnect pointed to
+     *            by the above mentioned telemetry configuration identifier and resource identifier.
+     * @return {@link TelemetryConfiguration} containing the telemetry configuration details.
+     *
+     * @since HPE OneView 2.0
      */
-    public TelemetryConfiguration updateLogicalInterconnectTelemetryConfiguration(final RestParams params,
+    TelemetryConfiguration updateLogicalInterconnectTelemetryConfiguration(final RestParams params,
             final String resourceId, final String TelemetryConfigurationId, final TelemetryConfiguration telemetryConfiguration);
 
     /**
      * This module aids in updating the telemetry configuration of a logical
-     * interconnect specified by resourceId on OneView 2.0
+     * interconnect specified by resource identifier.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnects as seen in HP OneView.
+     *            The resource identifier for logical interconnect as seen in HPE OneView.
      * @param TelemetryConfigurationId
-     *            The TelemetryConfigurationId that specifies the Telemetry
-     *            Id for the resource specified by resourceId
+     *            The telemetry configuration identifier that specifies the telemetry
+     *            identifier for the resource specified by resource identifier.
      * @param telemetryConfiguration
-     *            which is a object containing the update to be made to existing
-     *            Telemetry configuration for LogicalInterconnect pointed to
-     *            by the above mentioned TelemetryConfigurationId specified
-     *            for resourceId.
-     * @return TaskResourceV2
+     *            Object containing the update to be made to existing
+     *            telemetry configuration for logical interconnect pointed to
+     *            by the above mentioned telemetry configuration identifier and resource identifier.
+     * @return {@link TaskResourceV2} containing the task status for the process.
+     *
+     * @since HPE OneView 2.0
      */
-    public TaskResourceV2 updateLogicalInterconnectTelemetryConfigurationV200(final RestParams params,
+    TaskResourceV2 updateLogicalInterconnectTelemetryConfigurationV200(final RestParams params,
             final String resourceId, final String TelemetryConfigurationId, final TelemetryConfiguration telemetryConfiguration);
 
     /**
-     * The module aids in fetching the LogicalInterconnects details for the
-     * LogicalInterconnects name as specified in HP OneView.
+     * The module aids in fetching the logical interconnect resource identifier for the
+     * logical interconnect name as specified in HPE OneView.
      *
-     * @param creds
-     *            The RestParams is a structure containing the connection
-     *            details.
+     * @param params
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the LogicalInterconnects name as seen in
-     *            HP OneView.
-     * @return String, which is a resource Id for the LogicalInterconnects name
-     *         as seen in HPOneView.
+     *            The name is the logical interconnect name as seen in HPE OneView.
+     * @return String which is the resource identifier for the logical interconnect name
+     *         as seen in HPE OneView.
      */
-    public String getId(final RestParams creds, final String name);
+    String getId(final RestParams params, final String name);
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import java.util.List;
@@ -29,46 +29,40 @@ import com.hp.ov.sdk.dto.generated.Port;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface InterconnectsClient {
+
     /**
-     * The module aids in fetching the Interconnect details for the specified
-     * Interconnect resourceId
+     * The module aids in fetching the interconnect details for the specified
+     * interconnect resource identifier.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for InterConnect as seen in HP OneView.
-     * @return interconnectTypesDto, which is a object containing the
-     *         InterconnectType details.
+     *            The resource identifier for interconnect as seen in HPE OneView.
+     * @return {@link Interconnects} containing the interconnect details.
      */
-    public Interconnects getInterconnectById(final RestParams params, final String resourceId);
+    Interconnects getInterconnectById(final RestParams params, final String resourceId);
 
     /**
-     * The module aids in fetching the Interconnect details for the
-     * FirmwareDriver name as specified in HP OneView.
+     * The module aids in fetching the interconnect details for the interconnect name
+     * as specified in HPE OneView.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param interconnectName
-     *            The interconnectName is the Interconnect name as seen in HP
-     *            OneView.
-     * @return InterconnectsDto, which is a object containing the FirmwareDriver
-     *         details.
+     *            The interconnectName is the interconnect name as seen in HPE OneView.
+     * @return {@link Interconnects} containing the interconnect details.
      */
-    public Interconnects getInterconnectByName(final RestParams params, final String interconnectName);
+    Interconnects getInterconnectByName(final RestParams params, final String interconnectName);
 
     /**
-     * The module aids in fetching the Interconnects details for all the
-     * Interconnects found under the current HP OneView.
+     * The module aids in fetching the interconnects details for all the
+     * interconnects found under the current HPE OneView.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return InterconnectsCollectionDto, which is a object containing a
-     *         collection of Interconnects details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link InterconnectsCollection} containing a collection of interconnects details.
      */
-    public InterconnectsCollection getAllInterconnects(final RestParams params);
+    InterconnectsCollection getAllInterconnects(final RestParams params);
 
     /**
      * Performs a specific patch operation for the given interconnect. There are a limited
@@ -77,146 +71,134 @@ public interface InterconnectsClient {
      * operation is performed and a task is returned through which the results are reported.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for InterConnect as seen in HP OneView.
-     *            details.
+     *            The resource identifier for interconnect as seen in HPE OneView.
      * @param patchDto
-     *            This is a object containing the update to be made to existing
-     *            interconnect
+     *            This is a object containing the update to be made to existing interconnect.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 patchInterconnect(RestParams params, String resourceId, Patch patchDto,  boolean aSync);
+    TaskResourceV2 patchInterconnect(RestParams params, String resourceId, Patch patchDto,  boolean aSync);
 
     /**
      * Updates an interconnect port.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for InterConnect as seen in HP OneView.
-     *            details.
+     *            The resource identifier for interconnect as seen in HPE OneView.
      * @param portDto
      *            This is a object containing the update to be made to existing
-     *            Interconnect pointed to by the above mentioned resourceId
+     *            interconnect pointed to by the above mentioned resource identifier.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
      * @param useJsonRequest
-     *            The JsonRequest body is part of Interconnect Object which takes
+     *            The JsonRequest body is part of Port object which takes
      *            in a String containing the update to be made, which is
-     *            converted to Interconnect Object using adaptor and processed.
-     * @return taskResource which returns the task status for the process
+     *            converted to Port object using adaptor and processed.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateInterconnectPort(final RestParams params, final String resourceId, final Port portDto,
+    TaskResourceV2 updateInterconnectPort(final RestParams params, final String resourceId, final Port portDto,
             final boolean aSync, final boolean useJsonRequest);
 
     /**
      * Triggers a reset of port protection.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for InterConnect as seen in HP OneView.
-     *            details.
+     *            The resource identifier for interconnect as seen in HPE OneView.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 resetInterconnectPortProtection(final RestParams params, final String resourceId, final boolean aSync);
+    TaskResourceV2 resetInterconnectPortProtection(final RestParams params, final String resourceId, final boolean aSync);
 
     /**
      * Gets the statistics from an interconnect.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for InterConnect as seen in HP OneView.
-     * @return InterconnectsStatistics, which is a object containing the
-     *         Interconnect statistics details.
+     *            The resource identifier for interconnect as seen in HPE OneView.
+     * @return {@link InterconnectsStatistics} containing the interconnect statistics details.
      */
-    public InterconnectsStatistics getInterconnectStatistics(final RestParams params, final String resourceId);
+    InterconnectsStatistics getInterconnectStatistics(final RestParams params, final String resourceId);
 
     /**
-     * Gets the Port statistics from an interconnect.
+     * Gets the port statistics from an interconnect.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for InterConnect as seen in HP OneView.
+     *            The resource identifier for interconnect as seen in HPE OneView.
      * @param portName
-     *            The name of the port as seen in HP OneView.
-     * @return PortStatistics, which is a object containing the Port statistics details.
+     *            The name of the port as seen in HPE OneView.
+     * @return {@link PortStatistics} containing the port statistics details.
      */
-    public PortStatistics getInterconnectPortStatistics(final RestParams params, final String resourceId, final String portName);
+    PortStatistics getInterconnectPortStatistics(final RestParams params, final String resourceId, final String portName);
 
     /**
-     * Gets the Subport statistics from an interconnect.
+     * Gets the subport statistics from an interconnect.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for InterConnect as seen in HP OneView.
+     *            The resource identifier for interconnect as seen in HPE OneView.
      * @param portName
-     *            The name of the port as seen in HP OneView.
+     *            The name of the port as seen in HPE OneView.
      * @param subportNumber
-     *            The number of the subport as seen in HP OneView.
-     * @return SubportStatistics, which is a object containing the Subport statistics details.
+     *            The number of the subport as seen in HPE OneView.
+     * @return {@link SubportStatistics} containing the subport statistics details.
      */
-    public SubportStatistics getInterconnectSubportStatistics(final RestParams params, final String resourceId,
+    SubportStatistics getInterconnectSubportStatistics(final RestParams params, final String resourceId,
             final String portName, final int subportNumber);
 
     /**
      * Updates the interconnect ports.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for InterConnect as seen in HP OneView.
-     *            details.
+     *            The resource identifier for interconnect as seen in HPE OneView.
      * @param portsDto
      *            This is an array of objects containing the update to be made to existing
-     *            Interconnect ports
+     *            interconnect ports.
      * @param aSync
-     *            Flag input to process request asynchronously or synchronously.
+     *            Flag input to process request asynchronously or synchronously..
      * @param useJsonRequest
-     *            The JsonRequest body is part of List of ports Object which takes
+     *            The JsonRequest body is part of list of Port object which takes
      *            in a String containing the update to be made, which is
-     *            converted to an array of Ports Object using adaptor and processed.
-     * @return taskResource which returns the task status for the process
+     *            converted to an array of Port object using adaptor and processed.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateInterconnectPorts(final RestParams params, final String resourceId, final List<Port> portsDto,
+    TaskResourceV2 updateInterconnectPorts(final RestParams params, final String resourceId, final List<Port> portsDto,
             final boolean aSync, final boolean useJsonRequest);
 
     /**
      * Gets the named servers for an interconnect.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for InterConnect as seen in HP OneView.
-     * @return List of NameServer, which is an array of objects containing the name servers details.
+     *            The resource identifier for interconnect as seen in HPE OneView.
+     * @return NameServer list, which is an array of objects containing the name servers details.
      */
-    public List<NameServer> getInterconnectNamedServers(final RestParams params, final String resourceId);
+    List<NameServer> getInterconnectNamedServers(final RestParams params, final String resourceId);
 
     /**
-     * The module aids in fetching the Interconnect driver details for the
-     * Interconnect driver name as specified in HP OneView.
+     * The module aids in fetching the interconnect driver resource identifier for
+     * the interconnect name as specified in HPE OneView.
      *
-     * @param creds
-     *            The RestParams is a structure containing the connection
-     *            details.
+     * @param params
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the Interconnect driver name as seen in HP
-     *            OneView.
-     * @return String, which is a resource Id for the Interconnect driver name
-     *         as seen in HPOneView.
+     *            The name is the interconnect driver name as seen in HPE OneView.
+     * @return String which is the resource identifier for the interconnect driver name
+     *         as seen in HPE OneView.
      */
-    public String getId(final RestParams creds, final String name);
+    String getId(final RestParams params, final String name);
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import java.util.List;
@@ -28,168 +28,145 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 public interface StorageSystemClient {
 
     /**
-     * The module aids in fetching the StorageSystem details for the specified
-     * StorageSystem resourceId.
+     * The module aids in fetching the storage system details for the specified
+     * storage system resource identifier.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for StorageSystem as seen in HP OneView.
-     * @return storageSystemDto, which is a object containing the StorageSystem
-     *         details.
+     *            The resource identifier for storage system as seen in HPE OneView.
+     * @return {@link StorageSystemV2} containing the storage system details.
      */
-    public StorageSystemV2 getStorageSystem(final RestParams params, final String resourceId);
+    StorageSystemV2 getStorageSystem(final RestParams params, final String resourceId);
 
     /**
      * This module aids in retrieving a list of storage pools belonging to the
-     * storage system referred by the Path property {arrayId} parameters
+     * storage system referred by the path property {arrayId} parameter.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param arrayId
-     *            The arrayId for StorageSystem as seen in HP OneView.
-     * @return storageSystemCollectionDto, which is a object containing a
-     *         collection of StorageSystem details.
+     *            The array identifier for a storage system as seen in HPE OneView.
+     * @return {@link StoragePoolCollection} containing a collection of storage system details.
      */
-    public StoragePoolCollection getStoragePoolsForStorageSystem(final RestParams params, final String arrayId);
+    StoragePoolCollection getStoragePoolsForStorageSystem(final RestParams params, final String arrayId);
 
     /**
-     * This module aids in retrieving all managed target ports for the specified
-     * storage system
+     * This module aids in retrieving all managed target ports for the specified storage system.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for StorageSystem as seen in HP OneView.
-     * @return storageTargetPortCollectionDto, which is a object containing a
-     *         collection of StorageTargetPort details.
+     *            The resource identifier for a storage system as seen in HPE OneView.
+     * @return {@link StorageTargetPortCollection} containing a collection of storage target port details.
      */
-    public StorageTargetPortCollection getAllManagedPortsForStorageSystem(final RestParams params, final String resourceId);
+    StorageTargetPortCollection getAllManagedPortsForStorageSystem(final RestParams params, final String resourceId);
 
     /**
-     * This module aids in retrieving a managed target ports for the specified
-     * storage system
+     * This module aids in retrieving a managed target ports for the specified storage system.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for StorageSystem as seen in HP OneView.
+     *            The resource identifier for storage system as seen in HPE OneView.
      * @param targetPortId
-     *            The targetPortId where the managed port is defined.
-     * @return storageTargetPortDto, which is a object containing the
-     *         StorageTargetPort details.
+     *            The target port identifier where the managed port is defined.
+     * @return {2link StorageTargetPortV2} containing the storage target port details.
      */
-    public StorageTargetPortV2 getManagedPortsForStorageSystem(final RestParams params, final String resourceId,
+    StorageTargetPortV2 getManagedPortsForStorageSystem(final RestParams params, final String resourceId,
             final String targetPortId);
 
     /**
-     * The module aids in fetching the list of supported host types.
+     * The module aids in fetching the list of supported storage host types.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return a list containing the names of the supported host types
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return a list containing the names of the supported host types.
      */
-    public List<String> getStorageSystemHostTypes(final RestParams params);
+    List<String> getStorageSystemHostTypes(final RestParams params);
 
     /**
-     * The module aids in fetching the StorageSystem details for all the
-     * StorageSystem found under the current HP OneView.
+     * The module aids in fetching the storage system details for all the
+     * storage system found under the current HPE OneView.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return storageSystemCollectionDto, which is a object containing a
-     *         collection StorageSystem details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link StorageSystemCollection} containing a collection storage system details.
      */
-    public StorageSystemCollection getAllStorageSystems(final RestParams params);
+    StorageSystemCollection getAllStorageSystems(final RestParams params);
 
     /**
-     * The module aids in fetching the StorageSystem details for the
-     * StorageSystem name as specified in HP OneView.
+     * The module aids in fetching the storage system details for the
+     * storage system name as specified in HPE OneView.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The name is the StorageSystem name as seen in HP OneView.
-     * @return storageSystemDto, which is a object containing the StorageSystem
-     *         details.
+     *            The name is the storage system name as seen in HPE OneView.
+     * @return {@link StorageSystemV2} containing the storage system details.
      */
-    public StorageSystemV2 getStorageSystemByName(final RestParams params, final String name);
+    StorageSystemV2 getStorageSystemByName(final RestParams params, final String name);
 
     /**
-     * The module aids in creation of StorageSystem when provided with the
-     * StorageSystem details as AddStorageSystemCredential object or
+     * The module aids in creation of storage system when provided with the
+     * storage system details as {@link AddStorageSystemCredentials} object or
      * JsonRequest.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param addStorageSystemCredentialsDto
-     *            This is a object containing the StorageSystem details, used to
-     *            create a StorageSystem.
+     *            Object containing the storage system details, used to create a storage system.
      * @param useJsonRequest
-     *            The JsonRequest body is part of StorageSystem Object which
-     *            takes in a String containing new storageSystem details, which
-     *            is converted to StorageSystem Object using adaptor and
+     *            The JsonRequest body is part of AddStorageSystemCredentials object which
+     *            takes in a String containing new storage system details, which
+     *            is converted to AddStorageSystemCredentials object using an adaptor and
      *            processed.
-     * @return String, is Created if successful.
+     * @return String <code>Created</code> if successful.
      */
-    public String createStorageSystem(final RestParams params, final AddStorageSystemCredentials addStorageSystemCredentialsDto,
+    String createStorageSystem(final RestParams params, final AddStorageSystemCredentials addStorageSystemCredentialsDto,
             final boolean useJsonRequest);
 
     /**
-     * The module takes in an StorageSystem object or JsonRequest and updates
-     * the existing StorageSystem based on resource Id. This can also be used
-     * for updating the storage path of StorageSystem.
+     * The module takes in an {@link StorageSystemV2} object or JsonRequest and updates
+     * the existing storage system based on resource identifier. This can also be used
+     * for updating the storage path of storage system.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for StorageSystem as seen in HP OneView.
+     *            The resource identifier for storage system as seen in HPE OneView.
      * @param storageSystemDto
-     *            This is a object containing the StorageSystem details, used to
-     *            update a StorageSystem.
+     *            Object containing the storage system details, used to update a storage system.
      * @param useJsonRequest
-     *            The JsonRequest body is part of StorageSystem Object which
+     *            The JsonRequest body is part of StorageSystemV2 object which
      *            takes in a String containing the update to be made, which is
-     *            converted to StorageSystem Object using adaptor and processed.
-     * @return String, is Updated if successful.
+     *            converted to StorageSystemV2 object using an adaptor and processed.
+     * @return String <code>Updated</code>if successful.
      */
-    public String updateStorageSystem(final RestParams params, final String resourceId, final StorageSystemV2 storageSystemDto,
+    String updateStorageSystem(final RestParams params, final String resourceId, final StorageSystemV2 storageSystemDto,
             final boolean useJsonRequest);
 
     /**
-     * The module aids in deleting a StorageSystem for the specified
-     * StorageSystem resourceId.
+     * The module aids in deleting a storage system for the specified storage system resource identifier.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for StorageSystem as seen in HP OneView.
-     * @return String, is Deleted if successful.
+     *            The resource identifier for storage system as seen in HPE OneView.
+     * @return String <code>Deleted</code> if successful.
      */
-    public String deleteStorageSystem(final RestParams params, final String resourceId);
+    String deleteStorageSystem(final RestParams params, final String resourceId);
 
     /**
-     * The module aids in fetching the StorageSystem details for the
-     * StorageSystem name as specified in HP OneView.
+     * The module aids in fetching the storage system resource identifier for the
+     * storage system name as specified in HPE OneView.
      *
-     * @param creds
-     *            The RestParams is a structure containing the connection
-     *            details.
+     * @param params
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the StorageSystem name as seen in HP
-     *            OneView.
-     * @return String, which is a resource Id for the StorageSystem name as seen
-     *         in HPOneView.
+     *            The name is the storage system name as seen in HPE OneView.
+     * @return String which is the resource identifier for the storage system name as seen
+     *         in HPE OneView.
      */
-    public String getId(final RestParams creds, final String name);
+    String getId(final RestParams params, final String name);
 }

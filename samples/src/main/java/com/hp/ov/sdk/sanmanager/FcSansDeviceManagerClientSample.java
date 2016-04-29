@@ -90,7 +90,7 @@ public class FcSansDeviceManagerClientSample {
              * whether json input request present or not
              */
             taskResourceV2 = fcSansDeviceManagerClient.createDeviceManager(params,
-                    sanProviderResponseDto.getDeviceManagersUri(), addDeviceManagerResponseDto, false, false);
+                    sanProviderResponseDto.getDeviceManagersUri(), addDeviceManagerResponseDto, false);
 
             System.out.println("DeviceManagerClientTest : createDeviceManager : task object returned to client : "
                     + taskResourceV2.toString());

@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -21,118 +21,107 @@ import com.hp.ov.sdk.dto.generated.UplinkSets;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface UplinkSetClient {
+
     /**
-     * The module aids in fetching the UplinkSet details for the specified
-     * UplinkSet resourceId.
+     * The module aids in fetching the uplink set details for the specified
+     * uplink set resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for UplinkSet as seen in HP OneView.
-     * @return uplinkSetDto, which is a object containing a the uplinkSet
-     *         details.
+     *            The resource identifier for uplink set as seen in HPE OneView.
+     * @return {@link UplinkSets} containing a the uplink set details.
      */
-    public UplinkSets getUplinkSet(final RestParams params, final String resourceId);
+    UplinkSets getUplinkSet(final RestParams params, final String resourceId);
 
     /**
-     * The module aids in fetching the UplinkSet details for all the UplinkSet
-     * found under the current HP OneView.
+     * The module aids in fetching the uplink set details for all the uplink sets
+     * found under the current HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return uplinkSetCollectionDto, which is a object containing a collection
-     *         of uplinkSet details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link UplinkSetCollectionV2} containing a collection of uplink set details.
      */
-    public UplinkSetCollectionV2 getAllUplinkSet(final RestParams params);
+    UplinkSetCollectionV2 getAllUplinkSet(final RestParams params);
 
-    // ToDo - implement the method create, update
+    //TODO implement the method create, update
 
     /**
-     * The module aids in deleting a UplinkSet for the specified UplinkSet
-     * resourceId.
+     * The module aids in deleting a uplink set for the specified uplink set
+     * resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for UplinkSet as seen in HP OneView.
+     *            The resource identifier for uplink set as seen in HPE OneView.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 deleteUplinkSet(final RestParams params, final String resourceId, final boolean aSync);
+    TaskResourceV2 deleteUplinkSet(final RestParams params, final String resourceId, final boolean aSync);
 
     /**
-     * The module takes in an UplinkSet object or JsonRequest and updates the
-     * existing UplinkSet based on resource Id. It can process the request
-     * asynchronously or synchronously based on flag input.
+     * The module takes in an UplinkSet object or a JsonRequest and updates the
+     * existing uplink set based on the resource identifier. It can process the request
+     * asynchronously or synchronously, based on the flag input.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for UplinkSet as seen in HP OneView.
+     *            The resource identifier for uplink set as seen in HPE OneView.
      * @param uplinkDto
-     *            This is a object containing the UplinkSet details, used to
-     *            update a UplinkSet.
+     *            Object containing the uplink set details, used to update a uplink set.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
      * @param useJsonRequest
-     *            The JsonRequest body is part of UplinkSet Object which takes
+     *            The JsonRequest body is part of UplinkSet object which takes
      *            in a String containing the update to be made, which is
-     *            converted to UplinkSet Object using adaptor and processed.
-     * @return taskResource which returns the task status for the process
+     *            converted to UplinkSet object using an adaptor and processed.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateUplinkSet(final RestParams params, final String resourceId, final UplinkSets uplinkDto,
+    TaskResourceV2 updateUplinkSet(final RestParams params, final String resourceId, final UplinkSets uplinkDto,
             final boolean aSync, final boolean useJsonRequest);
 
     /**
-     * The module aids in fetching the UplinkSets details for the specified
-     * UplinkSets name as specified in HP OneView.
+     * The module aids in fetching the uplink set details for the specified
+     * uplink set name as specified in HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param uplinkSetName
-     *            The resourceName is the UplinkSets name as seen in HP OneView.
-     * @return uplinkSetsDto, which is a object containing the UplinkSets
-     *         details.
+     *            The uplinkSetName is the uplink set name as seen in HPE OneView.
+     * @return {@link UplinkSets} containing the uplink set details.
      */
-    public UplinkSets getUplinkSetsByName(final RestParams params, final String uplinkSetName);
+    UplinkSets getUplinkSetsByName(final RestParams params, final String uplinkSetName);
 
     /**
-     * This module aids in creation of uplinkSet.
+     * This module aids in creation of uplink set.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param uplinkSetDto
-     *            This is a object containing the UplinkSet details, used to
-     *            create a UplinkSet.
+     *            Object containing the uplink set details, used to create a uplink set.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
      * @param useJsonRequest
-     *            The JsonRequest body is part of UplinkSet Object which takes
+     *            The JsonRequest body is part of UplinkSet object which takes
      *            in a String containing the update to be made, which is
-     *            converted to UplinkSets Object using adaptor and processed.
-     * @return taskResource which returns the task status for the process
+     *            converted to UplinkSets object using an adaptor and processed.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 createUplinkSet(final RestParams params, final UplinkSets uplinkSetDto, final boolean aSync,
+    TaskResourceV2 createUplinkSet(final RestParams params, final UplinkSets uplinkSetDto, final boolean aSync,
             final boolean useJsonRequest);
 
     /**
-     * The module aids in fetching the Switch details for the Switch name as
-     * specified in HP OneView.
+     * The module aids in fetching the uplink set resource identifier for the uplink set name as
+     * specified in HPE OneView.
      * 
-     * @param creds
-     *            The RestParams is a structure containing the connection
-     *            details.
+     * @param params
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the Switch name as seen in HP OneView.
-     * @return String, which is a resource Id for the Switch name as seen in
-     *         HPOneView.
+     *            The name is the uplink set name as seen in HPE OneView.
+     * @return String which is the resource identifier for the uplink set name as seen in
+     *         HPE OneView.
      */
-    public String getId(final RestParams creds, final String name);
+    String getId(final RestParams params, final String name);
 }

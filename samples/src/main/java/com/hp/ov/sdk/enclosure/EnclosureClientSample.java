@@ -292,7 +292,7 @@ public class EnclosureClientSample {
              * indicates sync vs async useJsonRequest parameter indicates
              * whether json input request present or not
              */
-            taskResourceV2 = enclosureClient.patchEnclosure(params, resourceId, patchDto, false, false);
+            taskResourceV2 = enclosureClient.patchEnclosure(params, resourceId, patchDto, false);
 
             System.out.println("EnclosureClientTest : updateEnclosure : " + "Enclosure task object returned to client : "
                     + taskResourceV2.toString());
@@ -485,7 +485,7 @@ public class EnclosureClientSample {
              * indicates sync vs async useJsonRequest parameter indicates
              * whether json input request present or not
              */
-            taskResourceV2 = enclosureClient.updateEnclosureFwBaseline(params, resourceId, fwBaselineConfigDto, false, false);
+            taskResourceV2 = enclosureClient.updateEnclosureFwBaseline(params, resourceId, fwBaselineConfigDto, false);
 
             System.out.println("EnclosureClientTest : updateEnclosureFwBaseline : " + "Enclosure task object returned to client : "
                     + taskResourceV2.toString());
@@ -576,7 +576,7 @@ public class EnclosureClientSample {
              * whether json input request present or not
              */
             environmentalConfigurationDto = enclosureClient.updateEnvironmentalConfiguration(params, resourceId,
-                    environmentalConfigurationUpdateDto, false);
+                    environmentalConfigurationUpdateDto);
 
             System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration : "
                     + "Enclosure task object returned to client : " + environmentalConfigurationDto.toString());
@@ -626,7 +626,7 @@ public class EnclosureClientSample {
              * indicates sync vs async useJsonRequest parameter indicates
              * whether json input request present or not
              */
-            taskResourceV2 = enclosureClient.updateRefreshState(params, resourceId, refreshStateConfigDto, false, false);
+            taskResourceV2 = enclosureClient.updateRefreshState(params, resourceId, refreshStateConfigDto, false);
 
             System.out.println("EnclosureClientTest : updateRefreshState : " + "Enclosure task object returned to client : "
                     + taskResourceV2.toString());

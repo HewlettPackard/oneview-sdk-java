@@ -150,10 +150,10 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        InterconnectType interconnectTypesDto = getInterconnectTypeByName(creds, name);
+        InterconnectType interconnectTypesDto = getInterconnectTypeByName(params, name);
 
         if (null != interconnectTypesDto.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(interconnectTypesDto.getUri());

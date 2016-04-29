@@ -26,12 +26,12 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 public interface SwitchTypeClient {
 
     /**
-     * This method aids in fetching the switch type for the given resourceId.
+     * This method aids in fetching the switch type for the given resource identifier.
      *
      * @param params structure containing the connection details.
-     * @param resourceId resourceId as seen in OneView.
+     * @param resourceId resource identifier as seen in OneView.
      *
-     * @return InterconnectType, which is a object containing the switch type details.
+     * @return {@link InterconnectType} containing the switch type details.
      */
     InterconnectType getSwitchType(RestParams params, String resourceId);
 
@@ -41,19 +41,18 @@ public interface SwitchTypeClient {
      * @param params structure containing the connection details.
      * @param name name of the switch type.
      *
-     * @return InterconnectType, which is a object containing the switch type details.
+     * @return {@link InterconnectType} containing the switch type details.
      */
     InterconnectType getSwitchTypeByName(RestParams params, String name);
 
     /**
-     * Gets a collection of all the switch types available in OneView.
+     * Returns a collection of all the switch types available in HPE OneView.
      * Filters can be used in the URL to control the number of switch types that are returned.
      * With no filters specified, the API returns all supported switch types.
      *
      * @param params structure containing the connection details.
      *
-     * @return InterconnectTypeCollection, which is a object containing the collection
-     *         of switch types.
+     * @return {@link InterconnectTypeCollection} containing the collection of switch types.
      */
     InterconnectTypeCollection getAllSwitchTypes(RestParams params);
 

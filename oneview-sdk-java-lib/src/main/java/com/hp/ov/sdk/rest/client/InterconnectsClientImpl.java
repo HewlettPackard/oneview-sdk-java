@@ -509,10 +509,10 @@ public class InterconnectsClientImpl implements InterconnectsClient {
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        Interconnects interconnectsDto = getInterconnectByName(creds, name);
+        Interconnects interconnectsDto = getInterconnectByName(params, name);
 
         if (null != interconnectsDto.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(interconnectsDto.getUri());

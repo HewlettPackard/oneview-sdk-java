@@ -283,10 +283,10 @@ public class UplinkSetClientImpl implements UplinkSetClient {
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        UplinkSets uplinkSetsDto = getUplinkSetsByName(creds, name);
+        UplinkSets uplinkSetsDto = getUplinkSetsByName(params, name);
 
         if (null != uplinkSetsDto.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(uplinkSetsDto.getUri());

@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import java.util.List;
@@ -27,172 +27,148 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 public interface LogicalInterconnectGroupClient {
 
     /**
-     * The module aids in fetching the LogicalInterconnectGroups details for the
-     * specified LogicalInterconnectGroups resourceId.
+     * The module aids in fetching the logical interconnect group details for the
+     * specified logical interconnect group resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnectGroups as seen in HP
-     *            OneView.
-     * @return logicalInterconnectGroupsDto, which is a object containing the
-     *         LogicalInterconnectGroups details.
+     *            The resource identifier for logical interconnect group as seen in HPE OneView.
+     * @return {@link LogicalInterconnectGroups} containing the logical interconnect group details.
      */
-    public LogicalInterconnectGroups getLogicalInterconnectGroup(RestParams params, String resourceId);
+    LogicalInterconnectGroups getLogicalInterconnectGroup(RestParams params, String resourceId);
 
     /**
-     * The module aids in fetching the LogicalInterconnects details for all the
-     * LogicalInterconnectGroups found under the current HP OneView.
+     * The module aids in fetching the logical interconnect group details for all the
+     * logical interconnect groups found under the current HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return logicalInterconnectGroupsCollectionDto, which is a object
-     *         containing a collection of LogicalInterconnectGroups details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link LogicalInterconnectGroupCollectionV2} containing a collection of
+     *         logical interconnect group details.
      */
-    public LogicalInterconnectGroupCollectionV2 getAllLogicalInterconnectGroups(final RestParams params);
+    LogicalInterconnectGroupCollectionV2 getAllLogicalInterconnectGroups(final RestParams params);
 
     /**
-     * The module aids in fetching the LogicalInterconnectGroups details for the
-     * LogicalInterconnectGroups name as specified in HP OneView.
+     * The module aids in fetching the logical interconnect group details for the
+     * logical interconnect group name as specified in HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the LogicalInterconnectGroups name as seen
-     *            in HP OneView.
-     * @return logicalInterconnectGroupsDto, which is a object containing the
-     *         LogicalInterconnectGroups details.
+     *            The name is the logical interconnect group name as seen in HPE OneView.
+     * @return {@link LogicalInterconnectGroups} containing the logical interconnect group details.
      */
-    public LogicalInterconnectGroups getLogicalInterconnectGroupByName(RestParams params, String name);
+    LogicalInterconnectGroups getLogicalInterconnectGroupByName(RestParams params, String name);
 
     /**
-     * The module aids in creation of LogicalInterconnectGroups when provided
-     * with the LogicalInterconnectGroups details as LogicalInterconnectGroups
-     * object or JsonRequest. It can process the request asynchronously or
-     * synchronously based on flag input.
+     * The module aids in creation of logical interconnect group when provided
+     * with the logical interconnect group details as LogicalInterconnectGroups
+     * object or a JsonRequest. It can process the request asynchronously or
+     * synchronously, based on the flag input.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param logicalInterconnectGroupDto
-     *            This is a object containing the LogicalInterconnectGroups
-     *            details, used to create a LogicalInterconnectGroups
+     *            Object containing the logical interconnect group details,
+     *            used to create a logical interconnect group.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
      * @param useJsonRequest
      *            The JsonRequest body is part of LogicalInterconnectGroups
-     *            Object which takes in a String containing the new
-     *            LogicalInterconnectGroups details, which is converted to
-     *            LogicalInterconnectGroups Object using adaptor and processed.
-     * @return taskResource which returns the task status for the process
+     *            object which takes in a String containing the new
+     *            logical interconnect group details, which is converted to
+     *            LogicalInterconnectGroups object using adaptor and processed.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 createLogicalInterconnectGroup(final RestParams params,
+    TaskResourceV2 createLogicalInterconnectGroup(final RestParams params,
             final LogicalInterconnectGroups logicalInterconnectGroupDto, final boolean aSync, final boolean useJsonRequest);
 
     /**
-     * The module takes in an UplinkSet object or JsonRequest and updates the
-     * existing LogicalInterconnect based on resource Id. It can process the
-     * request asynchronously or synchronously based on flag input.
+     * The module takes in a list of UplinkSet object or JsonRequest and updates the
+     * existing logical interconnect group based on the resource identifier. It can process the
+     * request asynchronously or synchronously, based on the flag input.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnectGroups as seen in HP
-     *            OneView.
+     *            The resource identifier for logical interconnect group as seen in HPE OneView.
      * @param uplinkSetDto
-     *            This is a object containing the UplinkSet details, used to
-     *            update a LogicalInterconnectGroups
+     *            List of UplinkSet details used to update a logical interconnect group.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
      * @param useJsonRequest
-     *            The JsonRequest body is part of LogicalInterconnectGroups
-     *            Object which takes in a String containing the update to be
-     *            made, which is converted to LogicalInterconnectGroups Object
-     *            using adaptor and processed.
-     * @return taskResource which returns the task status for the process
+     *            The JsonRequest body is part of UplinkSet object which takes
+     *            in a String containing the update to be made, which is
+     *            converted to UplinkSet object using an adaptor and processed.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateLogicalInterconnectGroup(final RestParams params, final String resourceId,
+    TaskResourceV2 updateLogicalInterconnectGroup(final RestParams params, final String resourceId,
             final List<UplinkSet> uplinkSetDto, final boolean aSync, final boolean useJsonRequest);
 
     /**
-     * The module aids in deleting a LogicalInterconnectGroup for the specified
-     * LogicalInterconnectGroup resourceId. It can process the request
-     * asynchronously or synchronously based on flag input.
+     * The module aids in deleting a logical interconnect group for the specified
+     * logical interconnect group resource identifier. It can process the request
+     * asynchronously or synchronously, based on the flag input.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnectGroups as seen in HP
-     *            OneView.
+     *            The resource identifier for logical interconnect group as seen in HPE OneView.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 deleteLogicalInterconnectGroup(final RestParams params, final String resourceId, final boolean aSync);
+    TaskResourceV2 deleteLogicalInterconnectGroup(final RestParams params, final String resourceId, final boolean aSync);
 
     /**
      * The module aids in fetching the default interconnect settings details for
-     * the LIG found under the current HP OneView.
+     * the logical interconnect group found under the current HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return interconnectSettingsDto, which is a object containing the
-     *         interconnect setting details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link InterconnectSettingsV2} containing the interconnect setting details.
      */
-    public InterconnectSettingsV2 getDefaultInterconnectSettings(RestParams params);
-
+    InterconnectSettingsV2 getDefaultInterconnectSettings(RestParams params);
 
     /**
-     * The module aids in fetching the interconnect settings details for the LIG
-     * found under the current HP OneView 2.0.
+     * The module aids in fetching the interconnect settings details for the
+     * logical interconnect group found under the current HPE OneView.
      *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnectGroups as seen in HP
-     *            OneView.
-     * @return interconnectSettingsDto, which is a object containing the
-     *         interconnect setting details.
+     *            The resource identifier for logical interconnect group as seen in HPE OneView.
+     * @return {@link InterconnectSettingsV2} containing the interconnect setting details.
+     *
+     * @since HPE OneView 2.0
      */
-    public InterconnectSettingsV2 getInterconnectSettings(RestParams params, String resourceId);
+    InterconnectSettingsV2 getInterconnectSettings(RestParams params, String resourceId);
 
     /**
-     * The module aids in fetching the interconnect settings details for the LIG
-     * found under the current HP OneView.
+     * The module aids in fetching the interconnect settings details for the
+     * logical interconnect group found under the current HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for LogicalInterconnectGroups as seen in HP
-     *            OneView.
+     *            The resource identifier for logical interconnect group as seen in HPE OneView.
      * @param settingId
-     *            The settingId for LogicalInterconnectGroups as seen in HP
-     *            OneView.
-     * @return interconnectSettingsDto, which is a object containing the
-     *         interconnect setting details.
+     *            The settingId for logical interconnect group as seen in HPE OneView.
+     * @return {@link InterconnectSettingsV2} containing the interconnect setting details.
      */
-    public InterconnectSettingsV2 getInterconnectSettings(RestParams params, final String resourceId, final String settingId);
+    InterconnectSettingsV2 getInterconnectSettings(RestParams params, final String resourceId, final String settingId);
 
     /**
-     * The module aids in fetching the LogicalInterconnectGroup details for the
-     * LogicalInterconnectGroups name as specified in HP OneView.
+     * The module aids in fetching the logical interconnect group resource identifier for the
+     * logical interconnect group name as specified in HPE OneView.
      * 
-     * @param creds
-     *            The RestParams is a structure containing the connection
-     *            details.
+     * @param params
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the LogicalInterconnectGroups name as seen
-     *            in HP OneView.
-     * @return String, which is a resource Id for the LogicalInterconnectGroups
-     *         name as seen in HPOneView.
+     *            The name is the logical interconnect group name as seen in HPE OneView.
+     * @return String which is the resource identifier for the logical interconnect group
+     *         name as seen in HPE OneView.
      */
-    public String getId(final RestParams creds, final String name);
+    String getId(final RestParams params, final String name);
 }

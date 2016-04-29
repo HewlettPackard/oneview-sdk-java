@@ -382,10 +382,10 @@ public class StorageSystemClientImpl implements StorageSystemClient {
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        StorageSystemV2 storageSystemDto = getStorageSystemByName(creds, name);
+        StorageSystemV2 storageSystemDto = getStorageSystemByName(params, name);
 
         if (null != storageSystemDto.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(storageSystemDto.getUri());

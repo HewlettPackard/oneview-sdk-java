@@ -316,10 +316,10 @@ public class FcNetworkClientImpl implements FcNetworkClient {
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        FcNetwork fcNetwork = getFcNetworkByName(creds, name);
+        FcNetwork fcNetwork = getFcNetworkByName(params, name);
 
         if (null != fcNetwork.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(fcNetwork.getUri());

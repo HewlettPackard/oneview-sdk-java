@@ -46,10 +46,10 @@ public interface LogicalSwitchClient {
 
     /**
      * Retrieves the {@link LogicalSwitch} details for the specified
-     * logical switch resourceId.
+     * logical switch resource identifier.
      *
      * @param params structure containing the connection details.
-     * @param resourceId logical switch id as seen in HP OneView.
+     * @param resourceId logical switch identifier as seen in HPE OneView.
      *
      * @return {@link LogicalSwitch} object containing the details.
      */
@@ -60,7 +60,7 @@ public interface LogicalSwitchClient {
      * logical switch name.
      *
      * @param params structure containing the connection details.
-     * @param name logical switch name as seen in HP OneView.
+     * @param name logical switch name as seen in HPE OneView.
      *
      * @return {@link LogicalSwitch} object containing the details.
      */
@@ -68,12 +68,12 @@ public interface LogicalSwitchClient {
 
     /**
      * Retrieves the logical switch details for all the logical switches
-     * under OneView.
+     * under the current HPE OneView.
      *
      * @param params structure containing the connection details.
      *
      * @return {@link LogicalSwitchCollection} object containing the details
-     * for all the logical switches found in OneView.
+     * for all the logical switches found in HPE OneView.
      */
     LogicalSwitchCollection getAllLogicalSwitches(RestParams params);
 
@@ -86,7 +86,7 @@ public interface LogicalSwitchClient {
      * @param aSync flag to indicate whether the request should be
      *          processed asynchronously or synchronously.
      *
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
     TaskResourceV2 createLogicalSwitch(RestParams params, AddLogicalSwitch addLogicalSwitch, boolean aSync);
 
@@ -95,49 +95,49 @@ public interface LogicalSwitchClient {
      * object. The request can be processed asynchronously or synchronously.
      *
      * @param params structure containing the connection details.
-     * @param resourceId logical switch id as seen in OneView.
+     * @param resourceId logical switch identifier as seen in HPE OneView.
      * @param addLogicalSwitch object containing the logical switch details.
      * @param aSync flag to indicate whether the request should be
      *          processed asynchronously or synchronously.
      *
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
     TaskResourceV2 updateLogicalSwitch(RestParams params, String resourceId,
             AddLogicalSwitch addLogicalSwitch, boolean aSync);
 
     /**
-     * Deletes a logical switch identified by the provided resourceId.
+     * Removes a logical switch identified by the provided resource identifier.
      * The request can be processed asynchronously or synchronously.
      *
      * @param params structure containing the connection details.
-     * @param resourceId logical switch id as seen in OneView.
+     * @param resourceId logical switch identifier as seen in HPE OneView.
      * @param aSync flag to indicate whether the request should be
      *          processed asynchronously or synchronously.
      *
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
     TaskResourceV2 deleteLogicalSwitch(RestParams params, String resourceId, boolean aSync);
 
     /**
      * Executes a refresh action for a logical switch identified by the provided
-     * resourceId. The request can be processed asynchronously or synchronously.
+     * resource identifier. The request can be processed asynchronously or synchronously.
      *
      * @param params structure containing the connection details.
-     * @param resourceId logical switch id as seen in OneView.
+     * @param resourceId logical switch identifier as seen in HPE OneView.
      * @param aSync flag to indicate whether the request should be
      *          processed asynchronously or synchronously.
      *
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
     TaskResourceV2 refreshLogicalSwitch(RestParams params, String resourceId, boolean aSync);
 
     /**
-     * Retrieves the resourceId for the specified logical switch name.
+     * Retrieves the logical switch resource identifier for the specified logical switch name.
      *
      * @param params structure containing the connection details.
-     * @param name logical switch name as seen in HP OneView.
+     * @param name logical switch name as seen in HPE OneView.
      *
-     * @return the resourceId for the logical switch
+     * @return the resource identifier for the logical switch.
      */
     String getId(RestParams params, String name);
 

@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.FcNetworkCollection;
@@ -23,133 +23,122 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 public interface FcNetworkClient {
 
     /**
-     * The module aids in fetching the FcNetwork details for the specified
-     * FcNetwork resourceId
+     * The module aids in fetching the FC network details for the specified
+     * FC network resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for FcNetwork as seen in HP OneView.
-     * @return fcNetworkDto, which is a object containing the FcNetwork details.
+     *            The resource identifier for FC network as seen in HPE OneView.
+     * @return {@link FcNetwork} containing the FC network details.
      */
-    public FcNetwork getFcNetwork(final RestParams params, final String resourceId);
+    FcNetwork getFcNetwork(final RestParams params, final String resourceId);
 
     /**
-     * The module aids in fetching the FcNetwork details, where start and count
-     * values are specified to fetch number of FcNetwork.
+     * The module aids in fetching the FC network details, where start and count
+     * values are specified to fetch the number of FC networks.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param start
-     *            Integer value specifying the start count
+     *            Integer value specifying the start count.
      * @param count
-     *            Integer value specifying the number of FcNetwork fetched at
-     *            once.
-     * @return fcNetworkCollectionDto, which is a object containing a collection
-     *         of FcNetwork details.
+     *            Integer value specifying the number of FC network fetched at once.
+     * @return {@link FcNetworkCollection} containing a collection of FC network details.
      */
-    public FcNetworkCollection getFcNetworkByFilter(final RestParams params, final Integer start, final Integer count);
+    FcNetworkCollection getFcNetworkByFilter(final RestParams params, final Integer start, final Integer count);
 
     /**
-     * The module aids in fetching the FcNetwork details for all FcNetwork
-     * registered under current HP OneView.
+     * The module aids in fetching the FC network details for all FC network
+     * registered under the current HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return fcNetworkCollectionDto, which is a object containing the
-     *         collection of FcNetwork details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link FcNetworkCollection} containing a collection of FC network details.
      */
-    public FcNetworkCollection getAllFcNetworks(final RestParams params);
+    FcNetworkCollection getAllFcNetworks(final RestParams params);
 
     /**
-     * The module aids in fetching the FcNetwork details for the specified
-     * FcNetwork name.
+     * The module aids in fetching the FC network details for the specified
+     * FC network name.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the FcNetwork name as seen in HP OneView.
-     * @return fcNetworkDto, which is a object containing the FcNetwork details.
+     *            The resourceName is the FC network name as seen in HPE OneView.
+     * @return {@link FcNetwork} containing the FC network details.
      */
-    public FcNetwork getFcNetworkByName(final RestParams params, final String name);
+    FcNetwork getFcNetworkByName(final RestParams params, final String name);
 
     /**
-     * The module aids in creation of FcNetwork when provided with the FcNetwork
-     * details as FcNetwork object or JsonRequest. It can process the request
-     * asynchronously or synchronously based on flag input.
+     * The module aids in creation of an FC network when provided with the FC network
+     * details as an FcNetwork object or JsonRequest. It can process the request
+     * asynchronously or synchronously, based on the flag input.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param fcNetworkDto
-     *            This is a object containing the FcNetwork details, used to
-     *            create FcNetwork
+     *            This is a object containing the FC network details, used to
+     *            create FC network.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
      * @param useJsonRequest
-     *            The JsonRequest body is part of FcNetwork Object which takes
-     *            in a String containing the new FcNetwork details, which is
-     *            converted to FcNetwork Object using adaptor and processed.
-     * @return taskResource which returns the task status for the process
+     *            The JsonRequest body is part of FcNetwork object which takes
+     *            in a String containing the new FC network details, which is
+     *            converted to FcNetwork object using adaptor and processed.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 createFcNetwork(final RestParams params, final FcNetwork fcNetworkDto, final boolean aSync,
+    TaskResourceV2 createFcNetwork(final RestParams params, final FcNetwork fcNetworkDto, final boolean aSync,
             final boolean useJsonRequest);
 
     /**
      * The module takes in an FcNetwork object or JsonRequest and updates the
-     * existing FcNetwork based on resource Id.It can process the request
-     * asynchronously or synchronously based on flag input.
+     * existing FC network based on the resource identifier. It can process the request
+     * asynchronously or synchronously, based on the flag input.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for FcNetwork as seen in HP OneView.
+     *            The resource identifier for FC network as seen in HPE OneView.
      * @param fcNetworkDto
      *            This is a object containing the update to be made to existing
-     *            FcNetwork pointed to by the above mentioned resourceId
+     *            FC network pointed to by the above mentioned resource identifier.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
      * @param useJsonRequest
-     *            The JsonRequest body is part of FcNetwork Object which takes
+     *            The JsonRequest body is part of FcNetwork object which takes
      *            in a String containing the update to be made, which is
-     *            converted to FcNetwork Object using adaptor and processed.
-     * @return taskResource which returns the task status for the process
+     *            converted to FcNetwork object using adaptor and processed.
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 updateFcNetwork(final RestParams params, final String resourceId, final FcNetwork fcNetworkDto,
+    TaskResourceV2 updateFcNetwork(final RestParams params, final String resourceId, final FcNetwork fcNetworkDto,
             final boolean aSync, final boolean useJsonRequest);
 
     /**
-     * The module aids in deleting a FcNetwork for the specified FcNetwork
-     * resourceId. It can process the request asynchronously or synchronously
-     * based on flag input.
+     * The module aids in deleting an FC network for the specified FC network
+     * resource identifier. It can process the request asynchronously or synchronously,
+     * based on the flag input.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for FcNetwork as seen in HP OneView.
+     *            The resource identifier for FC network as seen in HPE OneView.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
-     * @return taskResource which returns the task status for the process
+     * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 deleteFcNetwork(final RestParams params, final String resourceId, final boolean aSync);
+    TaskResourceV2 deleteFcNetwork(final RestParams params, final String resourceId, final boolean aSync);
 
     /**
-     * The module aids in fetching the FcNetwork details for the FcNetwork name
-     * as specified in HP OneView.
+     * The module aids in fetching the FC network resource identifier for the FC network name
+     * as specified in HPE OneView.
      * 
-     * @param creds
-     *            The RestParams is a structure containing the connection
-     *            details.
+     * @param params
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the FcNetwork name as seen in HP OneView.
-     * @return String, which is a resource Id for the FcNetwork name as seen in
-     *         HPOneView.
+     *            The name is the FC network name as seen in HPE OneView.
+     * @return String which is the resource identifier for the FC network name as seen in
+     *         HPE OneView.
      */
-    public String getId(final RestParams creds, final String name);
+    String getId(final RestParams params, final String name);
 }

@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.ConnectionTemplateCollection;
@@ -23,96 +23,82 @@ public interface ConnectionTemplateClient {
 
     /**
      * The module aids in fetching the connection template when provided with
-     * the ConnectionTemplate resourceId
+     * the ConnectionTemplate resource identifier.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param id
-     *            The resourceId for connection template as seen in HP OneView.
-     * @return connectionTemplateDto, which is a object containing the
-     *         connection template details.
-     * 
+     *            The resource identifier for the connection template as seen in HPE OneView.
+     * @return {@link ConnectionTemplate} containing the connection template details.
      */
-    public ConnectionTemplate getConnectionTemplate(final RestParams params, final String id);
+    ConnectionTemplate getConnectionTemplate(final RestParams params, final String id);
 
     /**
      * The module aids in fetching the connection template when provided with
-     * the connection template name
+     * the connection template name.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceName
-     *            The resourceName is the connection template name as seen in HP
-     *            OneView.
-     * @return connectionTemplateDto, which is a object containing the
-     *         connection template details.
+     *            The resourceName is the connection template name as seen in HPE OneView.
+     * @return {@link ConnectionTemplate} containing the connection template details.
      */
 
-    public ConnectionTemplate getConnectionTemplateByName(final RestParams params, final String resourceName);
+    ConnectionTemplate getConnectionTemplateByName(final RestParams params, final String resourceName);
 
     /**
-     * The module takes in an ConnectionTemplate object or JsonRequest and
-     * updates the existing connection template based on resource Id. It can
-     * process the request asynchronously or synchronously based on flag input.
-     * 
+     * The module takes in a ConnectionTemplate object or JsonRequest and
+     * updates the existing connection template based on the resource identifier.
+     *
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
-     *            The resourceId for connection template as seen in HP OneView.
+     *            The resource identifier for the connection template as seen in HPE OneView.
      * @param connectionTemplateDto
-     *            This is a object containing the update to be made to existing
-     *            ConnectionTempalte pointed to by the above mentioned
-     *            resourceId
+     *            This is a object containing the update to be made to an existing
+     *            ConnectionTemplate pointed to by the above mentioned
+     *            resource identifier.
      * @param useJsonRequest
      *            The JsonRequest body is part of ConnectionTemplate Object
      *            which takes in a String containing the update to be made,
      *            which is converted to ConnectionTemplate Object using adaptor
      *            and processed.
-     * @return connectionTemplateDto, which is a object containing the updated
-     *         connection template details.
+     * @return {@link ConnectionTemplate} containing the updated connection template details.
      */
-    public ConnectionTemplate updateConnectionTemplate(final RestParams params, final String resourceId,
+    ConnectionTemplate updateConnectionTemplate(final RestParams params, final String resourceId,
             final ConnectionTemplate connectionTemplateDto, final boolean useJsonRequest);
 
     /**
-     * The module aids in fetching the Connection template details for all the
-     * Network found under the current HP OneView.
+     * The module aids in fetching the connection template details for all
+     * networks found under the current HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return connectionTemplateCollectionDto, which is a object containing the
-     *         collection of Connection Template details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link ConnectionTemplateCollection} containing the collection
+     *         of connection template details.
      */
-    public ConnectionTemplateCollection getAllConnectionTemplates(final RestParams params);
+    ConnectionTemplateCollection getAllConnectionTemplates(final RestParams params);
 
     /**
-     * The module aids in fetching the default Connection template details for
-     * the Network found under the current HP OneView.
+     * The module aids in fetching the default connection template details for
+     * the network found under the current HPE OneView.
      * 
      * @param params
-     *            The RestParams is a structure containing the connection
-     *            details.
-     * @return connectionTemplateDto, which is a object containing the
-     *         Connection Template details.
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @return {@link ConnectionTemplate} containing the connection template details.
      */
-    public ConnectionTemplate getDefaultConnectionTemplateForConnectionTemplate(final RestParams params);
+    ConnectionTemplate getDefaultConnectionTemplateForConnectionTemplate(final RestParams params);
 
     /**
-     * The module aids in fetching the Connection template details for the
-     * Connection template name as specified in HP OneView.
+     * The module aids in fetching the connection template resource identifier for the
+     * connection template name as specified in HPE OneView.
      * 
-     * @param creds
-     *            The RestParams is a structure containing the connection
-     *            details.
+     * @param params
+     *            The {@link RestParams} is a structure containing the connection details.
      * @param name
-     *            The resourceName is the Connection template name as seen in HP
-     *            OneView.
-     * @return String, which is a resource Id for the Connection template name
-     *         as seen in HPOneView.
+     *            The name is the connection template name as seen in HPE OneView.
+     * @return String which is the resource identifier for the connection template name
+     *         as seen in HPE OneView.
      */
-    public String getId(final RestParams creds, final String name);
+    String getId(final RestParams params, final String name);
 }

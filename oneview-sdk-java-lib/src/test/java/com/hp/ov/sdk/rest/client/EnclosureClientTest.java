@@ -319,7 +319,7 @@ public class EnclosureClientTest {
         patchDto.setPath("/name");
         patchDto.setValue(resourceName);
         
-        TaskResourceV2 result = client.patchEnclosure( params, resourceId, patchDto , false, false);
+        TaskResourceV2 result = client.patchEnclosure( params, resourceId, patchDto , false);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId));
@@ -338,12 +338,12 @@ public class EnclosureClientTest {
                 Mockito.any(JSONArray.class)))
         .thenReturn(enclosureJson);
 
-        client.patchEnclosure( null, resourceId, new Patch(), false, false);
+        client.patchEnclosure( null, resourceId, new Patch(), false);
     }
 
     @Test (expected = SDKInvalidArgumentException.class)
     public void testPatchEnclosureWithNullDto() {
-        client.patchEnclosure( params, resourceId, null, false, false);
+        client.patchEnclosure( params, resourceId, null, false);
     }
 
     @Test
@@ -540,7 +540,7 @@ public class EnclosureClientTest {
         .thenReturn(taskResourceV2);
 
         FwBaselineConfig fwDto = new FwBaselineConfig();
-        TaskResourceV2 result = client.updateEnclosureFwBaseline(params, resourceId, fwDto , false, false);
+        TaskResourceV2 result = client.updateEnclosureFwBaseline(params, resourceId, fwDto , false);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.ENCLOSURE_FW_BASELINE));
@@ -555,7 +555,7 @@ public class EnclosureClientTest {
     @Test (expected = SDKInvalidArgumentException.class)
     public void testUpdateEnclosureFwBaselineWithNullParams() {
         FwBaselineConfig fwDto = new FwBaselineConfig();
-        client.updateEnclosureFwBaseline(null, resourceId, fwDto , false, false);
+        client.updateEnclosureFwBaseline(null, resourceId, fwDto , false);
     }
 
     @Test (expected = SDKInvalidArgumentException.class)
@@ -564,7 +564,6 @@ public class EnclosureClientTest {
                 params,
                 resourceId,
                 null,
-                false,
                 false);
     }
 
@@ -616,8 +615,7 @@ public class EnclosureClientTest {
         EnvironmentalConfiguration config = client.updateEnvironmentalConfiguration(
                 params,
                 resourceId,
-                environmentalConfigurationUpdateDto,
-                false);
+                environmentalConfigurationUpdateDto);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId,
@@ -637,8 +635,7 @@ public class EnclosureClientTest {
         client.updateEnvironmentalConfiguration(
                 null,
                 resourceId,
-                environmentalConfigurationUpdateDto,
-                false);
+                environmentalConfigurationUpdateDto);
     }
 
     @Test (expected = SDKInvalidArgumentException.class)
@@ -646,8 +643,7 @@ public class EnclosureClientTest {
         client.updateEnvironmentalConfiguration(
                 params,
                 resourceId,
-                null,
-                false);
+                null);
     }
 
     @Test
@@ -670,7 +666,7 @@ public class EnclosureClientTest {
         RefreshForceOptions refreshForceOptions = refreshStateConfigDto.getNewRefreshForceOptions();
         refreshStateConfigDto.setRefreshForceOptions(refreshForceOptions);
         refreshStateConfigDto.setRefreshState(RefreshState.RefreshPending);
-        TaskResourceV2 result = client.updateRefreshState(params, resourceId, refreshStateConfigDto , false, false);
+        TaskResourceV2 result = client.updateRefreshState(params, resourceId, refreshStateConfigDto , false);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.REFRESH_STATE));
@@ -692,7 +688,6 @@ public class EnclosureClientTest {
                 null,
                 resourceId,
                 refreshStateConfigDto,
-                false,
                 false);
     }
 
@@ -702,7 +697,6 @@ public class EnclosureClientTest {
                 params,
                 resourceId,
                 null,
-                false,
                 false);
     }
 

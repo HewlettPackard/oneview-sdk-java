@@ -298,10 +298,10 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
     }
 
     @Override
-    public String getId(final RestParams creds, final String name) {
+    public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        EnclosureGroups enclosureGroups = getEnclosureGroupByName(creds, name);
+        EnclosureGroups enclosureGroups = getEnclosureGroupByName(params, name);
 
         if (null != enclosureGroups.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(enclosureGroups.getUri());
