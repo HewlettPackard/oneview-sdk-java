@@ -17,46 +17,28 @@ package com.hp.ov.sdk.dto.generated;
 
 import java.io.Serializable;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.gson.annotations.Since;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "permittedInterconnectTypeUri",
-    "logicalLocation",
-    "enclosureIndex",
-    "logicalDownlinkUri"
-    })
 public class InterconnectMapEntryTemplate implements Serializable {
 
     /**
 	 *
 	 */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("permittedInterconnectTypeUri")
     private String permittedInterconnectTypeUri;
-    @JsonProperty("logicalLocation")
     private LogicalLocation logicalLocation;
     @Since(200)
-    @JsonProperty("enclosureIndex")
     private int enclosureIndex;
-    @JsonProperty("logicalDownlinkUri")
     private String logicalDownlinkUri;
 
     /**
      *
      * @return The permittedInterconnectTypeUri
      */
-    @JsonProperty("permittedInterconnectTypeUri")
     public String getPermittedInterconnectTypeUri() {
         return permittedInterconnectTypeUri;
     }
@@ -66,7 +48,6 @@ public class InterconnectMapEntryTemplate implements Serializable {
      * @param permittedInterconnectTypeUri
      *            The permittedInterconnectTypeUri
      */
-    @JsonProperty("permittedInterconnectTypeUri")
     public void setPermittedInterconnectTypeUri(final String permittedInterconnectTypeUri) {
         this.permittedInterconnectTypeUri = permittedInterconnectTypeUri;
     }
@@ -75,7 +56,6 @@ public class InterconnectMapEntryTemplate implements Serializable {
      *
      * @return The logicalLocation
      */
-    @JsonProperty("logicalLocation")
     public LogicalLocation getLogicalLocation() {
         return logicalLocation;
     }
@@ -85,7 +65,6 @@ public class InterconnectMapEntryTemplate implements Serializable {
      * @param logicalLocation
      *            The logicalLocation
      */
-    @JsonProperty("logicalLocation")
     public void setLogicalLocation(final LogicalLocation logicalLocation) {
         this.logicalLocation = logicalLocation;
     }
@@ -94,7 +73,6 @@ public class InterconnectMapEntryTemplate implements Serializable {
      *
      * @return The enclosureIndex
      */
-    @JsonProperty("enclosureIndex")
     public int getEnclosureIndex() {
         return enclosureIndex;
     }
@@ -104,7 +82,6 @@ public class InterconnectMapEntryTemplate implements Serializable {
      * @param enclosureIndex
      *            The enclosureIndex
      */
-    @JsonProperty("enclosureIndex")
     public void setEnclosureIndex(final int enclosureIndex) {
         this.enclosureIndex = enclosureIndex;
     }
@@ -113,7 +90,6 @@ public class InterconnectMapEntryTemplate implements Serializable {
      *
      * @return The logicalDownlinkUri
      */
-    @JsonProperty("logicalDownlinkUri")
     public String getLogicalDownlinkUri() {
         return logicalDownlinkUri;
     }
@@ -123,7 +99,6 @@ public class InterconnectMapEntryTemplate implements Serializable {
      * @param logicalDownlinkUri
      *            The logicalDownlinkUri
      */
-    @JsonProperty("logicalDownlinkUri")
     public void setLogicalDownlinkUri(final String logicalDownlinkUri) {
         this.logicalDownlinkUri = logicalDownlinkUri;
     }

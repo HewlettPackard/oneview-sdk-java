@@ -15,55 +15,38 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "qosTrafficClass",
-    "qosClassificationMapping"})
 public class QosTrafficClassifier extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("qosTrafficClass")
     private QosTrafficClass qosTrafficClass;
-    @JsonProperty("qosClassificationMapping")
     private QosClassificationMapping qosClassificationMapping;
 
     /**
      * @return the qosTrafficClass
      */
-    @JsonProperty("qosTrafficClass")
     public QosTrafficClass getQosTrafficClass() {
         return qosTrafficClass;
     }
     /**
      * @param qosTrafficClass the qosTrafficClass to set
      */
-    @JsonProperty("qosTrafficClass")
     public void setQosTrafficClass(QosTrafficClass qosTrafficClass) {
         this.qosTrafficClass = qosTrafficClass;
     }
     /**
      * @return the qosClassificationMapping
      */
-    @JsonProperty("qosClassificationMapping")
     public QosClassificationMapping getQosClassificationMapping() {
         return qosClassificationMapping;
     }
     /**
      * @param qosClassificationMapping the qosClassificationMapping to set
      */
-    @JsonProperty("qosClassificationMapping")
     public void setQosClassificationMapping(QosClassificationMapping qosClassificationMapping) {
         this.qosClassificationMapping = qosClassificationMapping;
     }

@@ -20,15 +20,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.ProfileConnectionV3;
@@ -45,54 +41,30 @@ public class ServerProfile extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("serialNumber")
     private String serialNumber;
-    @JsonProperty("uuid")
     private String uuid;
-    @JsonProperty("serverHardwareUri")
     private String serverHardwareUri;
-    @JsonProperty("serverHardwareTypeUri")
     private String serverHardwareTypeUri;
-    @JsonProperty("enclosureGroupUri")
     private String enclosureGroupUri;
-    @JsonProperty("enclosureUri")
     private String enclosureUri;
-    @JsonProperty("enclosureBay")
     private Integer enclosureBay;
-    @JsonProperty("affinity")
     private ProfileAffinity affinity = ServerProfile.ProfileAffinity.Bay;
-    @JsonProperty("associatedServer")
     private String associatedServer;
-    @JsonProperty("hideUnusedFlexNics")
     private Boolean hideUnusedFlexNics;
-    @JsonProperty("firmware")
     private Firmware firmware;
-    @JsonProperty("macType")
     private AssignmentType macType = ServerProfile.AssignmentType.Virtual;
-    @JsonProperty("wwnType")
     private AssignmentType wwnType = ServerProfile.AssignmentType.Virtual;
-    @JsonProperty("serialNumberType")
     private AssignmentType serialNumberType = ServerProfile.AssignmentType.Virtual;
-    @JsonProperty("inProgress")
     private Boolean inProgress;
-    @JsonProperty("taskUri")
     private String taskUri;
-    @JsonProperty("connections")
     private List<ProfileConnectionV3> connections = new ArrayList<ProfileConnectionV3>();
-    @JsonProperty("bootMode")
     private BootMode bootMode;
-    @JsonProperty("boot")
     private Boot boot;
-    @JsonProperty("bios")
     private Bios bios;
-    @JsonProperty("localStorage")
     private LocalStorage localStorage = null;
-    @JsonProperty("sanStorage")
     private SanStorage sanStorage;
-    @JsonProperty("serverProfileTemplateUri")
     @Since(200)
     private String serverProfileTemplateUri;
-    @JsonProperty("templateCompliance")
     @Since(200)
     private TemplateCompliance templateCompliance = ServerProfile.TemplateCompliance.Unknown;
 
@@ -100,7 +72,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The serialNumber
      */
-    @JsonProperty("serialNumber")
     public String getSerialNumber() {
         return serialNumber;
     }
@@ -110,7 +81,6 @@ public class ServerProfile extends BaseModelResource {
      * @param serialNumber
      *            The serialNumber
      */
-    @JsonProperty("serialNumber")
     public void setSerialNumber(final String serialNumber) {
         this.serialNumber = serialNumber;
     }
@@ -119,7 +89,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The uuid
      */
-    @JsonProperty("uuid")
     public String getUuid() {
         return uuid;
     }
@@ -129,7 +98,6 @@ public class ServerProfile extends BaseModelResource {
      * @param uuid
      *            The uuid
      */
-    @JsonProperty("uuid")
     public void setUuid(final String uuid) {
         this.uuid = uuid;
     }
@@ -138,7 +106,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The serverHardwareUri
      */
-    @JsonProperty("serverHardwareUri")
     public String getServerHardwareUri() {
         return serverHardwareUri;
     }
@@ -148,7 +115,6 @@ public class ServerProfile extends BaseModelResource {
      * @param serverHardwareUri
      *            The serverHardwareUri
      */
-    @JsonProperty("serverHardwareUri")
     public void setServerHardwareUri(final String serverHardwareUri) {
         this.serverHardwareUri = serverHardwareUri;
     }
@@ -157,7 +123,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The serverHardwareTypeUri
      */
-    @JsonProperty("serverHardwareTypeUri")
     public String getServerHardwareTypeUri() {
         return serverHardwareTypeUri;
     }
@@ -167,7 +132,6 @@ public class ServerProfile extends BaseModelResource {
      * @param serverHardwareTypeUri
      *            The serverHardwareTypeUri
      */
-    @JsonProperty("serverHardwareTypeUri")
     public void setServerHardwareTypeUri(final String serverHardwareTypeUri) {
         this.serverHardwareTypeUri = serverHardwareTypeUri;
     }
@@ -176,7 +140,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The enclosureGroupUri
      */
-    @JsonProperty("enclosureGroupUri")
     public String getEnclosureGroupUri() {
         return enclosureGroupUri;
     }
@@ -186,7 +149,6 @@ public class ServerProfile extends BaseModelResource {
      * @param enclosureGroupUri
      *            The enclosureGroupUri
      */
-    @JsonProperty("enclosureGroupUri")
     public void setEnclosureGroupUri(final String enclosureGroupUri) {
         this.enclosureGroupUri = enclosureGroupUri;
     }
@@ -195,7 +157,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The enclosureUri
      */
-    @JsonProperty("enclosureUri")
     public String getEnclosureUri() {
         return enclosureUri;
     }
@@ -205,7 +166,6 @@ public class ServerProfile extends BaseModelResource {
      * @param enclosureUri
      *            The enclosureUri
      */
-    @JsonProperty("enclosureUri")
     public void setEnclosureUri(final String enclosureUri) {
         this.enclosureUri = enclosureUri;
     }
@@ -214,7 +174,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The enclosureBay
      */
-    @JsonProperty("enclosureBay")
     public Integer getEnclosureBay() {
         return enclosureBay;
     }
@@ -224,7 +183,6 @@ public class ServerProfile extends BaseModelResource {
      * @param enclosureBay
      *            The enclosureBay
      */
-    @JsonProperty("enclosureBay")
     public void setEnclosureBay(final Integer enclosureBay) {
         this.enclosureBay = enclosureBay;
     }
@@ -233,7 +191,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The affinity
      */
-    @JsonProperty("affinity")
     public ServerProfile.ProfileAffinity getAffinity() {
         return affinity;
     }
@@ -243,7 +200,6 @@ public class ServerProfile extends BaseModelResource {
      * @param affinity
      *            The affinity
      */
-    @JsonProperty("affinity")
     public void setAffinity(final ServerProfile.ProfileAffinity affinity) {
         this.affinity = affinity;
     }
@@ -252,7 +208,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The associatedServer
      */
-    @JsonProperty("associatedServer")
     public String getAssociatedServer() {
         return associatedServer;
     }
@@ -262,7 +217,6 @@ public class ServerProfile extends BaseModelResource {
      * @param associatedServer
      *            The associatedServer
      */
-    @JsonProperty("associatedServer")
     public void setAssociatedServer(final String associatedServer) {
         this.associatedServer = associatedServer;
     }
@@ -271,7 +225,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The hideUnusedFlexNics
      */
-    @JsonProperty("hideUnusedFlexNics")
     public Boolean getHideUnusedFlexNics() {
         return hideUnusedFlexNics;
     }
@@ -281,7 +234,6 @@ public class ServerProfile extends BaseModelResource {
      * @param hideUnusedFlexNics
      *            The hideUnusedFlexNics
      */
-    @JsonProperty("hideUnusedFlexNics")
     public void setHideUnusedFlexNics(final Boolean hideUnusedFlexNics) {
         this.hideUnusedFlexNics = hideUnusedFlexNics;
     }
@@ -290,7 +242,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The firmware
      */
-    @JsonProperty("firmware")
     public Firmware getFirmware() {
         return firmware;
     }
@@ -300,7 +251,6 @@ public class ServerProfile extends BaseModelResource {
      * @param firmware
      *            The firmware
      */
-    @JsonProperty("firmware")
     public void setFirmware(final Firmware firmware) {
         this.firmware = firmware;
     }
@@ -309,7 +259,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The macType
      */
-    @JsonProperty("macType")
     public ServerProfile.AssignmentType getMacType() {
         return macType;
     }
@@ -319,7 +268,6 @@ public class ServerProfile extends BaseModelResource {
      * @param macType
      *            The macType
      */
-    @JsonProperty("macType")
     public void setMacType(final ServerProfile.AssignmentType macType) {
         this.macType = macType;
     }
@@ -328,7 +276,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The wwnType
      */
-    @JsonProperty("wwnType")
     public AssignmentType getWwnType() {
         return wwnType;
     }
@@ -338,7 +285,6 @@ public class ServerProfile extends BaseModelResource {
      * @param wwnType
      *            The wwnType
      */
-    @JsonProperty("wwnType")
     public void setWwnType(final AssignmentType wwnType) {
         this.wwnType = wwnType;
     }
@@ -347,7 +293,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The serialNumberType
      */
-    @JsonProperty("serialNumberType")
     public AssignmentType getSerialNumberType() {
         return serialNumberType;
     }
@@ -357,7 +302,6 @@ public class ServerProfile extends BaseModelResource {
      * @param serialNumberType
      *            The serialNumberType
      */
-    @JsonProperty("serialNumberType")
     public void setSerialNumberType(final AssignmentType serialNumberType) {
         this.serialNumberType = serialNumberType;
     }
@@ -366,7 +310,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The inProgress
      */
-    @JsonProperty("inProgress")
     public Boolean getInProgress() {
         return inProgress;
     }
@@ -376,7 +319,6 @@ public class ServerProfile extends BaseModelResource {
      * @param inProgress
      *            The inProgress
      */
-    @JsonProperty("inProgress")
     public void setInProgress(final Boolean inProgress) {
         this.inProgress = inProgress;
     }
@@ -385,7 +327,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The taskUri
      */
-    @JsonProperty("taskUri")
     public String getTaskUri() {
         return taskUri;
     }
@@ -395,7 +336,6 @@ public class ServerProfile extends BaseModelResource {
      * @param taskUri
      *            The taskUri
      */
-    @JsonProperty("taskUri")
     public void setTaskUri(final String taskUri) {
         this.taskUri = taskUri;
     }
@@ -404,7 +344,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The connections
      */
-    @JsonProperty("connections")
     public List<ProfileConnectionV3> getConnections() {
         return connections;
     }
@@ -414,7 +353,6 @@ public class ServerProfile extends BaseModelResource {
      * @param connections
      *            The connections
      */
-    @JsonProperty("connections")
     public void setConnections(final List<ProfileConnectionV3> connections) {
         this.connections = connections;
     }
@@ -423,7 +361,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The bootMode
      */
-    @JsonProperty("bootMode")
     public BootMode getBootMode() {
         return bootMode;
     }
@@ -433,7 +370,6 @@ public class ServerProfile extends BaseModelResource {
      * @param bootMode
      *            The bootMode
      */
-    @JsonProperty("bootMode")
     public void setBootMode(final BootMode bootMode) {
         this.bootMode = bootMode;
     }
@@ -442,7 +378,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The boot
      */
-    @JsonProperty("boot")
     public Boot getBoot() {
         return boot;
     }
@@ -452,7 +387,6 @@ public class ServerProfile extends BaseModelResource {
      * @param boot
      *            The boot
      */
-    @JsonProperty("boot")
     public void setBoot(final Boot boot) {
         this.boot = boot;
     }
@@ -461,7 +395,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The bios
      */
-    @JsonProperty("bios")
     public Bios getBios() {
         return bios;
     }
@@ -471,7 +404,6 @@ public class ServerProfile extends BaseModelResource {
      * @param bios
      *            The bios
      */
-    @JsonProperty("bios")
     public void setBios(final Bios bios) {
         this.bios = bios;
     }
@@ -480,7 +412,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The localStorage
      */
-    @JsonProperty("localStorage")
     public LocalStorage getLocalStorage() {
         return localStorage;
     }
@@ -490,7 +421,6 @@ public class ServerProfile extends BaseModelResource {
      * @param localStorage
      *            The localStorage
      */
-    @JsonProperty("localStorage")
     public void setLocalStorage(final LocalStorage localStorage) {
         this.localStorage = localStorage;
     }
@@ -499,7 +429,6 @@ public class ServerProfile extends BaseModelResource {
      *
      * @return The sanStorage
      */
-    @JsonProperty("sanStorage")
     public SanStorage getSanStorage() {
         return sanStorage;
     }
@@ -509,7 +438,6 @@ public class ServerProfile extends BaseModelResource {
      * @param sanStorage
      *            The sanStorage
      */
-    @JsonProperty("sanStorage")
     public void setSanStorage(final SanStorage sanStorage) {
         this.sanStorage = sanStorage;
     }
@@ -616,7 +544,6 @@ public class ServerProfile extends BaseModelResource {
                 .isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum ProfileAffinity {
 
         Bay("Bay"),
@@ -635,13 +562,11 @@ public class ServerProfile extends BaseModelResource {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static ServerProfile.ProfileAffinity fromValue(final String value) {
             final ServerProfile.ProfileAffinity constant = constants.get(value);
             if (constant == null) {
@@ -653,7 +578,6 @@ public class ServerProfile extends BaseModelResource {
 
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum AssignmentType {
 
         Physical("Physical"),
@@ -673,13 +597,11 @@ public class ServerProfile extends BaseModelResource {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static ServerProfile.AssignmentType fromValue(final String value) {
             final ServerProfile.AssignmentType constant = constants.get(value);
             if (constant == null) {
@@ -691,7 +613,6 @@ public class ServerProfile extends BaseModelResource {
     }
 
 
-    @Generated("org.jsonschema2pojo")
     public static enum TemplateCompliance {
 
         Compliant("Compliant"),
@@ -711,13 +632,11 @@ public class ServerProfile extends BaseModelResource {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static ServerProfile.TemplateCompliance fromValue(final String value) {
             final ServerProfile.TemplateCompliance constant = constants.get(value);
             if (constant == null) {

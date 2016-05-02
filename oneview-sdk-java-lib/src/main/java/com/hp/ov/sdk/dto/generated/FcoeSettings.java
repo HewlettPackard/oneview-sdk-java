@@ -19,28 +19,14 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "fcoeMode"
-})
 public class FcoeSettings implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("fcoeMode")
     private FcoeSettings.FcoeMode fcoeMode;
 
     /**
@@ -48,7 +34,6 @@ public class FcoeSettings implements Serializable{
      * @return
      *     The fcoeMode
      */
-    @JsonProperty("fcoeMode")
     public FcoeSettings.FcoeMode getFcoeMode() {
         return fcoeMode;
     }
@@ -58,7 +43,6 @@ public class FcoeSettings implements Serializable{
      * @param fcoeMode
      *     The fcoeMode
      */
-    @JsonProperty("fcoeMode")
     public void setFcoeMode(FcoeSettings.FcoeMode fcoeMode) {
         this.fcoeMode = fcoeMode;
     }
@@ -89,7 +73,6 @@ public class FcoeSettings implements Serializable{
                 .isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum FcoeMode {
 
         TRANSIT("Transit"),
@@ -109,13 +92,11 @@ public class FcoeSettings implements Serializable{
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static FcoeSettings.FcoeMode fromValue(String value) {
             FcoeSettings.FcoeMode constant = CONSTANTS.get(value);
             if (constant == null) {

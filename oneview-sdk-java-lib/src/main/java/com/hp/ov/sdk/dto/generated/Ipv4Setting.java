@@ -19,112 +19,85 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "ipAddress",
-    "ipAssignmentState",
-    "ipRangeUri",
-    "mode"})
 public class Ipv4Setting implements Serializable {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("ipAddress")
     private String ipAddress;
-    @JsonProperty("ipAssignmentState")
     private Ipv4Setting.IpAssignmentState ipAssignmentState;
-    @JsonProperty("ipRangeUri")
     private String ipRangeUri;
-    @JsonProperty("mode")
     private Ipv4Setting.Mode mode;
 
     /**
-     * 
+     *
      * @return The ipAddress
      */
-    @JsonProperty("ipAddress")
     public String getIpAddress() {
         return ipAddress;
     }
 
     /**
-     * 
+     *
      * @param ipAddress
      *            The ipAddress
      */
-    @JsonProperty("ipAddress")
     public void setIpAddress(final String ipAddress) {
         this.ipAddress = ipAddress;
     }
 
     /**
-     * 
+     *
      * @return The ipAssignmentState
      */
-    @JsonProperty("ipAssignmentState")
     public IpAssignmentState getIpAssignmentState() {
         return ipAssignmentState;
     }
 
     /**
-     * 
+     *
      * @param ipAssignmentState
      *            The ipAssignmentState
      */
-    @JsonProperty("ipAssignmentState")
     public void setIpAssignmentState(final IpAssignmentState ipAssignmentState) {
         this.ipAssignmentState = ipAssignmentState;
     }
 
     /**
-     * 
+     *
      * @return The ipRangeUri
      */
-    @JsonProperty("ipRangeUri")
     public String getIpRangeUri() {
         return ipRangeUri;
     }
 
     /**
-     * 
+     *
      * @param ipRangeUri
      *            The ipRangeUri
      */
-    @JsonProperty("ipRangeUri")
     public void setIpRangeUri(final String ipRangeUri) {
         this.ipRangeUri = ipRangeUri;
     }
 
     /**
-     * 
+     *
      * @return The mode
      */
-    @JsonProperty("mode")
     public Mode getMode() {
         return mode;
     }
 
     /**
-     * 
+     *
      * @param mode
      *            The mode
      */
-    @JsonProperty("mode")
     public void setMode(final Mode mode) {
         this.mode = mode;
     }
@@ -161,7 +134,6 @@ public class Ipv4Setting implements Serializable {
                 .isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum IpAssignmentState {
 
         Assigned("Assigned"),
@@ -181,13 +153,11 @@ public class Ipv4Setting implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static Ipv4Setting.IpAssignmentState fromValue(final String value) {
             final Ipv4Setting.IpAssignmentState constant = constants.get(value);
             if (constant == null) {
@@ -198,7 +168,6 @@ public class Ipv4Setting implements Serializable {
         }
     }
 
-        @Generated("org.jsonschema2pojo")
         public static enum Mode {
 
             DHCP("DHCP"),
@@ -218,13 +187,11 @@ public class Ipv4Setting implements Serializable {
                 this.value = value;
             }
 
-            @JsonValue
             @Override
             public String toString() {
                 return this.value;
             }
 
-            @JsonCreator
             public static Ipv4Setting.Mode fromValue(final String value) {
                 final Ipv4Setting.Mode constant = constants.get(value);
                 if (constant == null) {

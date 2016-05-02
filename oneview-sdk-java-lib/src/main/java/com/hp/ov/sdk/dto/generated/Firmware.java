@@ -19,28 +19,20 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.gson.annotations.Since;
 
 public class Firmware implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("forceInstallFirmware")
     private Boolean forceInstallFirmware;
-    @JsonProperty("firmwareBaselineUri")
     private String firmwareBaselineUri;
-    @JsonProperty("manageFirmware")
     private Boolean manageFirmware;
-    @JsonProperty("firmwareInstallType")
     @Since(200)
     private FirmwareInstallType firmwareInstallType;
 
@@ -48,7 +40,6 @@ public class Firmware implements Serializable {
      *
      * @return The forceInstallFirmware
      */
-    @JsonProperty("forceInstallFirmware")
     public Boolean getForceInstallFirmware() {
         return forceInstallFirmware;
     }
@@ -58,7 +49,6 @@ public class Firmware implements Serializable {
      * @param forceInstallFirmware
      *            The forceInstallFirmware
      */
-    @JsonProperty("forceInstallFirmware")
     public void setForceInstallFirmware(final Boolean forceInstallFirmware) {
         this.forceInstallFirmware = forceInstallFirmware;
     }
@@ -67,7 +57,6 @@ public class Firmware implements Serializable {
      *
      * @return The firmwareBaselineUri
      */
-    @JsonProperty("firmwareBaselineUri")
     public String getFirmwareBaselineUri() {
         return firmwareBaselineUri;
     }
@@ -77,7 +66,6 @@ public class Firmware implements Serializable {
      * @param firmwareBaselineUri
      *            The firmwareBaselineUri
      */
-    @JsonProperty("firmwareBaselineUri")
     public void setFirmwareBaselineUri(final String firmwareBaselineUri) {
         this.firmwareBaselineUri = firmwareBaselineUri;
     }
@@ -86,7 +74,6 @@ public class Firmware implements Serializable {
      *
      * @return The manageFirmware
      */
-    @JsonProperty("manageFirmware")
     public Boolean getManageFirmware() {
         return manageFirmware;
     }
@@ -96,7 +83,6 @@ public class Firmware implements Serializable {
      * @param manageFirmware
      *            The manageFirmware
      */
-    @JsonProperty("manageFirmware")
     public void setManageFirmware(final Boolean manageFirmware) {
         this.manageFirmware = manageFirmware;
     }
@@ -104,7 +90,6 @@ public class Firmware implements Serializable {
     /**
      * @return the firmwareInstallType
      */
-    @JsonProperty("firmwareInstallType")
     public FirmwareInstallType getFirmwareInstallType() {
         return firmwareInstallType;
     }
@@ -112,7 +97,6 @@ public class Firmware implements Serializable {
     /**
      * @param firmwareInstallType the firmwareInstallType to set
      */
-    @JsonProperty("firmwareInstallType")
     public void setFirmwareInstallType(FirmwareInstallType firmwareInstallType) {
         this.firmwareInstallType = firmwareInstallType;
     }
@@ -141,7 +125,6 @@ public class Firmware implements Serializable {
     }
 
 
-    @Generated("org.jsonschema2pojo")
     public static enum FirmwareInstallType {
 
         FirmwareOnly("FirmwareOnly"),
@@ -161,13 +144,11 @@ public class Firmware implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static Firmware.FirmwareInstallType fromValue(final String value) {
             final Firmware.FirmwareInstallType constant = constants.get(value);
             if (constant == null) {

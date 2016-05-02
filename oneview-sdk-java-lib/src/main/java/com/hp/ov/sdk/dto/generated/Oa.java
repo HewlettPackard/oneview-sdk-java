@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -21,244 +21,202 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "bayNumber", "fwVersion", "role", "ipAddress", "ipv6Addresses", "fqdnHostName", "fwBuildDate", "dhcpEnable",
-        "dhcpIpv6Enable", "state" })
 public class Oa implements Serializable {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      */
-    @JsonProperty("bayNumber")
     private Integer bayNumber;
-    @JsonProperty("fwVersion")
     private String fwVersion;
-    @JsonProperty("role")
     private Oa.Role role;
-    @JsonProperty("ipAddress")
     private String ipAddress;
-    @JsonProperty("ipv6Addresses")
     private List<Ipv6Address> ipv6Addresses = new ArrayList<Ipv6Address>();
-    @JsonProperty("fqdnHostName")
     private String fqdnHostName;
-    @JsonProperty("fwBuildDate")
     private String fwBuildDate;
-    @JsonProperty("dhcpEnable")
     private Boolean dhcpEnable;
-    @JsonProperty("dhcpIpv6Enable")
     private Boolean dhcpIpv6Enable;
-    @JsonProperty("state")
     private Oa.State state;
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @return The bayNumber
      */
-    @JsonProperty("bayNumber")
     public Integer getBayNumber() {
         return bayNumber;
     }
 
     /**
-     * 
+     *
      * (Required)
-     * 
+     *
      * @param bayNumber
      *            The bayNumber
      */
-    @JsonProperty("bayNumber")
     public void setBayNumber(final Integer bayNumber) {
         this.bayNumber = bayNumber;
     }
 
     /**
-     * 
+     *
      * @return The fwVersion
      */
-    @JsonProperty("fwVersion")
     public String getFwVersion() {
         return fwVersion;
     }
 
     /**
-     * 
+     *
      * @param fwVersion
      *            The fwVersion
      */
-    @JsonProperty("fwVersion")
     public void setFwVersion(final String fwVersion) {
         this.fwVersion = fwVersion;
     }
 
     /**
-     * 
+     *
      * @return The role
      */
-    @JsonProperty("role")
     public Oa.Role getRole() {
         return role;
     }
 
     /**
-     * 
+     *
      * @param role
      *            The role
      */
-    @JsonProperty("role")
     public void setRole(final Oa.Role role) {
         this.role = role;
     }
 
     /**
-     * 
+     *
      * @return The ipAddress
      */
-    @JsonProperty("ipAddress")
     public String getIpAddress() {
         return ipAddress;
     }
 
     /**
-     * 
+     *
      * @param ipAddress
      *            The ipAddress
      */
-    @JsonProperty("ipAddress")
     public void setIpAddress(final String ipAddress) {
         this.ipAddress = ipAddress;
     }
 
     /**
-     * 
+     *
      * @return The ipv6Addresses
      */
-    @JsonProperty("ipv6Addresses")
     public List<Ipv6Address> getIpv6Addresses() {
         return ipv6Addresses;
     }
 
     /**
-     * 
+     *
      * @param ipv6Addresses
      *            The ipv6Addresses
      */
-    @JsonProperty("ipv6Addresses")
     public void setIpv6Addresses(final List<Ipv6Address> ipv6Addresses) {
         this.ipv6Addresses = ipv6Addresses;
     }
 
     /**
-     * 
+     *
      * @return The fqdnHostName
      */
-    @JsonProperty("fqdnHostName")
     public String getFqdnHostName() {
         return fqdnHostName;
     }
 
     /**
-     * 
+     *
      * @param fqdnHostName
      *            The fqdnHostName
      */
-    @JsonProperty("fqdnHostName")
     public void setFqdnHostName(final String fqdnHostName) {
         this.fqdnHostName = fqdnHostName;
     }
 
     /**
-     * 
+     *
      * @return The fwBuildDate
      */
-    @JsonProperty("fwBuildDate")
     public String getFwBuildDate() {
         return fwBuildDate;
     }
 
     /**
-     * 
+     *
      * @param fwBuildDate
      *            The fwBuildDate
      */
-    @JsonProperty("fwBuildDate")
     public void setFwBuildDate(final String fwBuildDate) {
         this.fwBuildDate = fwBuildDate;
     }
 
     /**
-     * 
+     *
      * @return The dhcpEnable
      */
-    @JsonProperty("dhcpEnable")
     public Boolean getDhcpEnable() {
         return dhcpEnable;
     }
 
     /**
-     * 
+     *
      * @param dhcpEnable
      *            The dhcpEnable
      */
-    @JsonProperty("dhcpEnable")
     public void setDhcpEnable(final Boolean dhcpEnable) {
         this.dhcpEnable = dhcpEnable;
     }
 
     /**
-     * 
+     *
      * @return The dhcpIpv6Enable
      */
-    @JsonProperty("dhcpIpv6Enable")
     public Boolean getDhcpIpv6Enable() {
         return dhcpIpv6Enable;
     }
 
     /**
-     * 
+     *
      * @param dhcpIpv6Enable
      *            The dhcpIpv6Enable
      */
-    @JsonProperty("dhcpIpv6Enable")
     public void setDhcpIpv6Enable(final Boolean dhcpIpv6Enable) {
         this.dhcpIpv6Enable = dhcpIpv6Enable;
     }
 
     /**
-     * 
+     *
      * @return The state
      */
-    @JsonProperty("state")
     public Oa.State getState() {
         return state;
     }
 
     /**
-     * 
+     *
      * @param state
      *            The state
      */
-    @JsonProperty("state")
     public void setState(final Oa.State state) {
         this.state = state;
     }
@@ -289,7 +247,6 @@ public class Oa implements Serializable {
                 .append(state, rhs.state).isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum Role {
 
         Unknown("Unknown"), OaAbsent("OaAbsent"), Standby("Standby"), Transition("Transition"), Active("Active");
@@ -306,13 +263,11 @@ public class Oa implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static Oa.Role fromValue(final String value) {
             final Oa.Role constant = constants.get(value);
             if (constant == null) {
@@ -324,7 +279,6 @@ public class Oa implements Serializable {
 
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum State {
 
         Online("Online"), Offline("Offline");
@@ -341,13 +295,11 @@ public class Oa implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static Oa.State fromValue(final String value) {
             final Oa.State constant = constants.get(value);
             if (constant == null) {

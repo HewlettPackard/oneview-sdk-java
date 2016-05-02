@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -19,19 +19,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "volumeAttachments", "hostOSType", "manageSanStorage" })
 public class SanStorage implements Serializable {
 
     /**
@@ -39,28 +32,24 @@ public class SanStorage implements Serializable {
 	 */
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("volumeAttachments")
     private List<VolumeAttachment> volumeAttachments = new ArrayList<VolumeAttachment>();
     /**
      * 
      * (Required)
      * 
      */
-    @JsonProperty("hostOSType")
     private String hostOSType;
     /**
      * 
      * (Required)
      * 
      */
-    @JsonProperty("manageSanStorage")
     private Boolean manageSanStorage;
 
     /**
      * 
      * @return The volumeAttachments
      */
-    @JsonProperty("volumeAttachments")
     public List<VolumeAttachment> getVolumeAttachments() {
         return volumeAttachments;
     }
@@ -70,7 +59,6 @@ public class SanStorage implements Serializable {
      * @param volumeAttachments
      *            The volumeAttachments
      */
-    @JsonProperty("volumeAttachments")
     public void setVolumeAttachments(final List<VolumeAttachment> volumeAttachments) {
         this.volumeAttachments = volumeAttachments;
     }
@@ -81,7 +69,6 @@ public class SanStorage implements Serializable {
      * 
      * @return The hostOSType
      */
-    @JsonProperty("hostOSType")
     public String getHostOSType() {
         return hostOSType;
     }
@@ -93,7 +80,6 @@ public class SanStorage implements Serializable {
      * @param hostOSType
      *            The hostOSType
      */
-    @JsonProperty("hostOSType")
     public void setHostOSType(final String hostOSType) {
         this.hostOSType = hostOSType;
     }
@@ -104,7 +90,6 @@ public class SanStorage implements Serializable {
      * 
      * @return The manageSanStorage
      */
-    @JsonProperty("manageSanStorage")
     public Boolean getManageSanStorage() {
         return manageSanStorage;
     }
@@ -116,7 +101,6 @@ public class SanStorage implements Serializable {
      * @param manageSanStorage
      *            The manageSanStorage
      */
-    @JsonProperty("manageSanStorage")
     public void setManageSanStorage(final Boolean manageSanStorage) {
         this.manageSanStorage = manageSanStorage;
     }

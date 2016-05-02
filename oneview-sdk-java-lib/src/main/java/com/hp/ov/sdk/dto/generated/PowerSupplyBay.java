@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -19,180 +19,140 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.gson.annotations.Since;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "bayNumber",
-    "devicePresence",
-    "status",
-    "model",
-    "serialNumber",
-    "partNumber",
-    "sparePartNumber" })
 
 public class PowerSupplyBay implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @JsonProperty("bayNumber")
     private Integer bayNumber;
-    @JsonProperty("changeState")
     @Since(200)
     private PowerSupplyBay.ChangeState changeState;
-    @JsonProperty("devicePresence")
     private PowerSupplyBay.DevicePresence devicePresence;
-    @JsonProperty("status")
     private PowerSupplyBay.Status status;
-    @JsonProperty("model")
     private String model;
-    @JsonProperty("serialNumber")
     private String serialNumber;
-    @JsonProperty("partNumber")
     private String partNumber;
-    @JsonProperty("sparePartNumber")
     private String sparePartNumber;
 
     /**
-     * 
+     *
      * @return The bayNumber
      */
-    @JsonProperty("bayNumber")
     public Integer getBayNumber() {
         return bayNumber;
     }
 
     /**
-     * 
+     *
      * @param bayNumber
      *            The bayNumber
      */
-    @JsonProperty("bayNumber")
     public void setBayNumber(final Integer bayNumber) {
         this.bayNumber = bayNumber;
     }
 
     /**
-     * 
+     *
      * @return The devicePresence
      */
-    @JsonProperty("devicePresence")
     public PowerSupplyBay.DevicePresence getDevicePresence() {
         return devicePresence;
     }
 
     /**
-     * 
+     *
      * @param devicePresence
      *            The devicePresence
      */
-    @JsonProperty("devicePresence")
     public void setDevicePresence(final PowerSupplyBay.DevicePresence devicePresence) {
         this.devicePresence = devicePresence;
     }
 
     /**
-     * 
+     *
      * @return The status
      */
-    @JsonProperty("status")
     public PowerSupplyBay.Status getStatus() {
         return status;
     }
 
     /**
-     * 
+     *
      * @param status
      *            The status
      */
-    @JsonProperty("status")
     public void setStatus(final PowerSupplyBay.Status status) {
         this.status = status;
     }
 
     /**
-     * 
+     *
      * @return The model
      */
-    @JsonProperty("model")
     public String getModel() {
         return model;
     }
 
     /**
-     * 
+     *
      * @param model
      *            The model
      */
-    @JsonProperty("model")
     public void setModel(final String model) {
         this.model = model;
     }
 
     /**
-     * 
+     *
      * @return The serialNumber
      */
-    @JsonProperty("serialNumber")
     public String getSerialNumber() {
         return serialNumber;
     }
 
     /**
-     * 
+     *
      * @param serialNumber
      *            The serialNumber
      */
-    @JsonProperty("serialNumber")
     public void setSerialNumber(final String serialNumber) {
         this.serialNumber = serialNumber;
     }
 
     /**
-     * 
+     *
      * @return The partNumber
      */
-    @JsonProperty("partNumber")
     public String getPartNumber() {
         return partNumber;
     }
 
     /**
-     * 
+     *
      * @param partNumber
      *            The partNumber
      */
-    @JsonProperty("partNumber")
     public void setPartNumber(final String partNumber) {
         this.partNumber = partNumber;
     }
 
     /**
-     * 
+     *
      * @return The sparePartNumber
      */
-    @JsonProperty("sparePartNumber")
     public String getSparePartNumber() {
         return sparePartNumber;
     }
 
     /**
-     * 
+     *
      * @param sparePartNumber
      *            The sparePartNumber
      */
-    @JsonProperty("sparePartNumber")
     public void setSparePartNumber(final String sparePartNumber) {
         this.sparePartNumber = sparePartNumber;
     }
@@ -222,7 +182,6 @@ public class PowerSupplyBay implements Serializable {
                 .append(partNumber, rhs.partNumber).append(sparePartNumber, rhs.sparePartNumber).isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum DevicePresence {
 
         PresenceNoOp("PresenceNoOp"), PresenceUnknown("PresenceUnknown"), Absent("Absent"), Present("Present"), Subsumed("Subsumed");
@@ -239,13 +198,11 @@ public class PowerSupplyBay implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static PowerSupplyBay.DevicePresence fromValue(final String value) {
             final PowerSupplyBay.DevicePresence constant = constants.get(value);
             if (constant == null) {
@@ -257,7 +214,6 @@ public class PowerSupplyBay implements Serializable {
 
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum Status {
 
         Unknown("Unknown"), OK("OK"), Disabled("Disabled"), Warning("Warning"), Critical("Critical");
@@ -274,13 +230,11 @@ public class PowerSupplyBay implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static PowerSupplyBay.Status fromValue(final String value) {
             final PowerSupplyBay.Status constant = constants.get(value);
             if (constant == null) {
@@ -292,7 +246,6 @@ public class PowerSupplyBay implements Serializable {
 
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum ChangeState {
 
         Insert("Insert"),
@@ -313,13 +266,11 @@ public class PowerSupplyBay implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static PowerSupplyBay.ChangeState fromValue(final String value) {
             final PowerSupplyBay.ChangeState constant = constants.get(value);
             if (constant == null) {

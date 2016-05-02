@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -17,35 +17,25 @@ package com.hp.ov.sdk.dto.generated;
 
 import java.io.Serializable;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "bootable", "raidLevel" })
 public class LogicalDrife implements Serializable {
 
     /**
 	 * 
 	 */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("bootable")
     private Boolean bootable;
-    @JsonProperty("raidLevel")
     private String raidLevel;
 
     /**
      * 
      * @return The bootable
      */
-    @JsonProperty("bootable")
     public Boolean getBootable() {
         return bootable;
     }
@@ -55,7 +45,6 @@ public class LogicalDrife implements Serializable {
      * @param bootable
      *            The bootable
      */
-    @JsonProperty("bootable")
     public void setBootable(final Boolean bootable) {
         this.bootable = bootable;
     }
@@ -64,7 +53,6 @@ public class LogicalDrife implements Serializable {
      * 
      * @return The raidLevel
      */
-    @JsonProperty("raidLevel")
     public String getRaidLevel() {
         return raidLevel;
     }
@@ -74,7 +62,6 @@ public class LogicalDrife implements Serializable {
      * @param raidLevel
      *            The raidLevel
      */
-    @JsonProperty("raidLevel")
     public void setRaidLevel(final String raidLevel) {
         this.raidLevel = raidLevel;
     }

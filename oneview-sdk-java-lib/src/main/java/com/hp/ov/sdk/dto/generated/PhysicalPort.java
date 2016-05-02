@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -21,47 +21,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "interconnectPort", "interconnectUri", "mac", "portNumber", "type", "virtualPorts", "wwn" })
 public class PhysicalPort implements Serializable {
 
     /**
 	 * 
 	 */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("interconnectPort")
     private Integer interconnectPort;
-    @JsonProperty("interconnectUri")
     private String interconnectUri;
-    @JsonProperty("mac")
     private String mac;
-    @JsonProperty("portNumber")
     private Integer portNumber;
-    @JsonProperty("type")
     private PhysicalPort.Type type;
-    @JsonProperty("virtualPorts")
     private List<VirtualPort> virtualPorts = new ArrayList<VirtualPort>();
-    @JsonProperty("wwn")
     private String wwn;
 
     /**
      * 
      * @return The interconnectPort
      */
-    @JsonProperty("interconnectPort")
     public Integer getInterconnectPort() {
         return interconnectPort;
     }
@@ -71,7 +54,6 @@ public class PhysicalPort implements Serializable {
      * @param interconnectPort
      *            The interconnectPort
      */
-    @JsonProperty("interconnectPort")
     public void setInterconnectPort(final Integer interconnectPort) {
         this.interconnectPort = interconnectPort;
     }
@@ -80,7 +62,6 @@ public class PhysicalPort implements Serializable {
      * 
      * @return The interconnectUri
      */
-    @JsonProperty("interconnectUri")
     public String getInterconnectUri() {
         return interconnectUri;
     }
@@ -90,7 +71,6 @@ public class PhysicalPort implements Serializable {
      * @param interconnectUri
      *            The interconnectUri
      */
-    @JsonProperty("interconnectUri")
     public void setInterconnectUri(final String interconnectUri) {
         this.interconnectUri = interconnectUri;
     }
@@ -99,7 +79,6 @@ public class PhysicalPort implements Serializable {
      * 
      * @return The mac
      */
-    @JsonProperty("mac")
     public String getMac() {
         return mac;
     }
@@ -109,7 +88,6 @@ public class PhysicalPort implements Serializable {
      * @param mac
      *            The mac
      */
-    @JsonProperty("mac")
     public void setMac(final String mac) {
         this.mac = mac;
     }
@@ -118,7 +96,6 @@ public class PhysicalPort implements Serializable {
      * 
      * @return The portNumber
      */
-    @JsonProperty("portNumber")
     public Integer getPortNumber() {
         return portNumber;
     }
@@ -128,7 +105,6 @@ public class PhysicalPort implements Serializable {
      * @param portNumber
      *            The portNumber
      */
-    @JsonProperty("portNumber")
     public void setPortNumber(final Integer portNumber) {
         this.portNumber = portNumber;
     }
@@ -137,7 +113,6 @@ public class PhysicalPort implements Serializable {
      * 
      * @return The type
      */
-    @JsonProperty("type")
     public PhysicalPort.Type getType() {
         return type;
     }
@@ -147,7 +122,6 @@ public class PhysicalPort implements Serializable {
      * @param type
      *            The type
      */
-    @JsonProperty("type")
     public void setType(final PhysicalPort.Type type) {
         this.type = type;
     }
@@ -156,7 +130,6 @@ public class PhysicalPort implements Serializable {
      * 
      * @return The virtualPorts
      */
-    @JsonProperty("virtualPorts")
     public List<VirtualPort> getVirtualPorts() {
         return virtualPorts;
     }
@@ -166,7 +139,6 @@ public class PhysicalPort implements Serializable {
      * @param virtualPorts
      *            The virtualPorts
      */
-    @JsonProperty("virtualPorts")
     public void setVirtualPorts(final List<VirtualPort> virtualPorts) {
         this.virtualPorts = virtualPorts;
     }
@@ -175,7 +147,6 @@ public class PhysicalPort implements Serializable {
      * 
      * @return The wwn
      */
-    @JsonProperty("wwn")
     public String getWwn() {
         return wwn;
     }
@@ -185,7 +156,6 @@ public class PhysicalPort implements Serializable {
      * @param wwn
      *            The wwn
      */
-    @JsonProperty("wwn")
     public void setWwn(final String wwn) {
         this.wwn = wwn;
     }
@@ -215,7 +185,6 @@ public class PhysicalPort implements Serializable {
                 .append(virtualPorts, rhs.virtualPorts).append(wwn, rhs.wwn).isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum Type {
 
         Ethernet("Ethernet"), FibreChannel("FibreChannel"), InfiniBand("InfiniBand");
@@ -232,13 +201,11 @@ public class PhysicalPort implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static PhysicalPort.Type fromValue(final String value) {
             final PhysicalPort.Type constant = constants.get(value);
             if (constant == null) {

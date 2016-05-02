@@ -21,8 +21,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum QosDot1pValues {
 
@@ -43,12 +41,10 @@ public enum QosDot1pValues {
         this.value = value;
     }
 
-    @JsonValue
     public int getValue() {
         return value;
     }
 
-    @JsonCreator
     public static QosDot1pValues lookup(final int egress) {
 
         return getAllValuesMap().get(egress);

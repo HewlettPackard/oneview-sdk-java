@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -21,53 +21,38 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "storageTargets", "storageTargetType", "connectionId", "isEnabled", "status" })
 public class StoragePath implements Serializable {
 
     /**
 	 * 
 	 */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("storageTargets")
     private List<String> storageTargets = new ArrayList<String>();
-    @JsonProperty("storageTargetType")
     private StoragePath.StorageTargetType storageTargetType;
     /**
      * 
      * (Required)
      * 
      */
-    @JsonProperty("connectionId")
     private Integer connectionId;
     /**
      * 
      * (Required)
      * 
      */
-    @JsonProperty("isEnabled")
     private Boolean isEnabled;
-    @JsonProperty("status")
     private String status;
 
     /**
      * 
      * @return The storageTargets
      */
-    @JsonProperty("storageTargets")
     public List<String> getStorageTargets() {
         return storageTargets;
     }
@@ -77,7 +62,6 @@ public class StoragePath implements Serializable {
      * @param storageTargets
      *            The storageTargets
      */
-    @JsonProperty("storageTargets")
     public void setStorageTargets(final List<String> storageTargets) {
         this.storageTargets = storageTargets;
     }
@@ -86,7 +70,6 @@ public class StoragePath implements Serializable {
      * 
      * @return The storageTargetType
      */
-    @JsonProperty("storageTargetType")
     public StoragePath.StorageTargetType getStorageTargetType() {
         return storageTargetType;
     }
@@ -96,7 +79,6 @@ public class StoragePath implements Serializable {
      * @param storageTargetType
      *            The storageTargetType
      */
-    @JsonProperty("storageTargetType")
     public void setStorageTargetType(final StoragePath.StorageTargetType storageTargetType) {
         this.storageTargetType = storageTargetType;
     }
@@ -107,7 +89,6 @@ public class StoragePath implements Serializable {
      * 
      * @return The connectionId
      */
-    @JsonProperty("connectionId")
     public Integer getConnectionId() {
         return connectionId;
     }
@@ -119,7 +100,6 @@ public class StoragePath implements Serializable {
      * @param connectionId
      *            The connectionId
      */
-    @JsonProperty("connectionId")
     public void setConnectionId(final Integer connectionId) {
         this.connectionId = connectionId;
     }
@@ -130,7 +110,6 @@ public class StoragePath implements Serializable {
      * 
      * @return The isEnabled
      */
-    @JsonProperty("isEnabled")
     public Boolean getIsEnabled() {
         return isEnabled;
     }
@@ -142,7 +121,6 @@ public class StoragePath implements Serializable {
      * @param isEnabled
      *            The isEnabled
      */
-    @JsonProperty("isEnabled")
     public void setIsEnabled(final Boolean isEnabled) {
         this.isEnabled = isEnabled;
     }
@@ -151,7 +129,6 @@ public class StoragePath implements Serializable {
      * 
      * @return The status
      */
-    @JsonProperty("status")
     public String getStatus() {
         return status;
     }
@@ -161,7 +138,6 @@ public class StoragePath implements Serializable {
      * @param status
      *            The status
      */
-    @JsonProperty("status")
     public void setStatus(final String status) {
         this.status = status;
     }
@@ -190,7 +166,6 @@ public class StoragePath implements Serializable {
                 .append(connectionId, rhs.connectionId).append(isEnabled, rhs.isEnabled).append(status, rhs.status).isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum StorageTargetType {
 
         Auto("Auto"), TargetPorts("TargetPorts");
@@ -207,13 +182,11 @@ public class StoragePath implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static StoragePath.StorageTargetType fromValue(final String value) {
             final StoragePath.StorageTargetType constant = constants.get(value);
             if (constant == null) {

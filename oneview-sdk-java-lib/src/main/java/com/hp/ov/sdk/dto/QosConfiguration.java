@@ -19,37 +19,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "configType",
-    "downlinkClassificationType",
-    "uplinkClassificationType",
-    "qosTrafficClassifiers"})
 public class QosConfiguration extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("configType")
     private QosConfiguration.QosConfigType configType;
-    @JsonProperty("downlinkClassificationType")
     private QosConfiguration.QosClassificationType downlinkClassificationType;
-    @JsonProperty("uplinkClassificationType")
     private QosConfiguration.QosClassificationType uplinkClassificationType;
 
-    @JsonProperty("qosTrafficClassifiers")
     private List<QosTrafficClassifier> qosTrafficClassifiers;
 
     /**
@@ -142,7 +123,6 @@ public class QosConfiguration extends BaseModelResource {
                 .isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum QosConfigType {
 
         Passthrough("Passthrough"),
@@ -164,13 +144,11 @@ public class QosConfiguration extends BaseModelResource {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static QosConfiguration.QosConfigType fromValue(final String value) {
             final QosConfiguration.QosConfigType constant = constants.get(value);
             if (constant == null) {
@@ -181,7 +159,6 @@ public class QosConfiguration extends BaseModelResource {
         }
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum QosClassificationType {
 
         DOT1P("DOT1P"),
@@ -203,13 +180,11 @@ public class QosConfiguration extends BaseModelResource {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static QosConfiguration.QosClassificationType fromValue(final String value) {
             final QosConfiguration.QosClassificationType constant = constants.get(value);
             if (constant == null) {

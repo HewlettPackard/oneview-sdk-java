@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -19,33 +19,24 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "locationEntries" })
 public class InterconnectLocation implements Serializable {
 
     /**
 	 * 
 	 */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("locationEntries")
     private List<LocationEntry> locationEntries = new ArrayList<LocationEntry>();
 
     /**
      * 
      * @return The locationEntries
      */
-    @JsonProperty("locationEntries")
     public List<LocationEntry> getLocationEntries() {
         return locationEntries;
     }
@@ -55,7 +46,6 @@ public class InterconnectLocation implements Serializable {
      * @param locationEntries
      *            The locationEntries
      */
-    @JsonProperty("locationEntries")
     public void setLocationEntries(final List<LocationEntry> locationEntries) {
         this.locationEntries = locationEntries;
     }

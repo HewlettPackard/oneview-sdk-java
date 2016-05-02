@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -19,21 +19,12 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "ipAddress", "ipAddressType" })
 public class IpAddressList implements Serializable {
 
     /**
@@ -45,14 +36,12 @@ public class IpAddressList implements Serializable {
      * (Required)
      * 
      */
-    @JsonProperty("ipAddress")
     private String ipAddress;
     /**
      * 
      * (Required)
      * 
      */
-    @JsonProperty("ipAddressType")
     private IpAddressList.IpAddressType ipAddressType;
 
     /**
@@ -61,7 +50,6 @@ public class IpAddressList implements Serializable {
      * 
      * @return The ipAddress
      */
-    @JsonProperty("ipAddress")
     public String getIpAddress() {
         return ipAddress;
     }
@@ -73,7 +61,6 @@ public class IpAddressList implements Serializable {
      * @param ipAddress
      *            The ipAddress
      */
-    @JsonProperty("ipAddress")
     public void setIpAddress(final String ipAddress) {
         this.ipAddress = ipAddress;
     }
@@ -84,7 +71,6 @@ public class IpAddressList implements Serializable {
      * 
      * @return The ipAddressType
      */
-    @JsonProperty("ipAddressType")
     public IpAddressList.IpAddressType getIpAddressType() {
         return ipAddressType;
     }
@@ -96,7 +82,6 @@ public class IpAddressList implements Serializable {
      * @param ipAddressType
      *            The ipAddressType
      */
-    @JsonProperty("ipAddressType")
     public void setIpAddressType(final IpAddressList.IpAddressType ipAddressType) {
         this.ipAddressType = ipAddressType;
     }
@@ -123,7 +108,6 @@ public class IpAddressList implements Serializable {
         return new EqualsBuilder().append(ipAddress, rhs.ipAddress).append(ipAddressType, rhs.ipAddressType).isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum IpAddressType {
 
         Unknown("Unknown"), Ipv4("Ipv4"), Ipv6Static("Ipv6Static"), Ipv6Dhcp("Ipv6Dhcp"), Ipv6Slaac("Ipv6Slaac"), Ipv6LinkLocal(
@@ -141,13 +125,11 @@ public class IpAddressList implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static IpAddressList.IpAddressType fromValue(final String value) {
             final IpAddressList.IpAddressType constant = constants.get(value);
             if (constant == null) {

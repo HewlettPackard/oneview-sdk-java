@@ -19,8 +19,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 
 public class FcoeInterconnectSettings implements Serializable {
 
@@ -62,13 +60,11 @@ public class FcoeInterconnectSettings implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static FcoeInterconnectSettings.FcoeMode fromValue(final String value) {
             final FcoeInterconnectSettings.FcoeMode constant = constants.get(value);
             if (constant == null) {

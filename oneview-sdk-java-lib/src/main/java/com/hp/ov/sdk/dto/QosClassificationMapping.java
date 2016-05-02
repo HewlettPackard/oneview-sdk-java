@@ -18,35 +18,21 @@ package com.hp.ov.sdk.dto;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "dot1pClassMapping",
-    "dscpClassMapping"})
 public class QosClassificationMapping implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("dot1pClassMapping")
     private List<QosDot1pValues> dot1pClassMapping;
 
-    @JsonProperty("dscpClassMapping")
     private List<QosDscpValues> dscpClassMapping;
 
     /**
      * @return the dot1pClassMapping
      */
-    @JsonProperty("dot1pClassMapping")
     public List<QosDot1pValues> getDot1pClassMapping() {
         return dot1pClassMapping;
     }
@@ -54,7 +40,6 @@ public class QosClassificationMapping implements Serializable {
     /**
      * @param dot1pClassMapping the dot1pClassMapping to set
      */
-    @JsonProperty("dot1pClassMapping")
     public void setDot1pClassMapping(List<QosDot1pValues> dot1pClassMapping) {
         this.dot1pClassMapping = dot1pClassMapping;
     }
@@ -62,7 +47,6 @@ public class QosClassificationMapping implements Serializable {
     /**
      * @return the dscpClassMapping
      */
-    @JsonProperty("dscpClassMapping")
     public List<QosDscpValues> getDscpClassMapping() {
         return dscpClassMapping;
     }
@@ -70,7 +54,6 @@ public class QosClassificationMapping implements Serializable {
     /**
      * @param dscpClassMapping the dscpClassMapping to set
      */
-    @JsonProperty("dscpClassMapping")
     public void setDscpClassMapping(List<QosDscpValues> dscpClassMapping) {
         this.dscpClassMapping = dscpClassMapping;
     }

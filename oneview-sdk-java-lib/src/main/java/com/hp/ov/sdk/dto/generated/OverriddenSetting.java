@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -17,19 +17,12 @@ package com.hp.ov.sdk.dto.generated;
 
 import java.io.Serializable;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "id", "value" })
 public class OverriddenSetting implements Serializable {
 
     /**
@@ -41,14 +34,12 @@ public class OverriddenSetting implements Serializable {
      * (Required)
      * 
      */
-    @JsonProperty("id")
     private String id;
     /**
      * 
      * (Required)
      * 
      */
-    @JsonProperty("value")
     private String value;
 
     /**
@@ -57,7 +48,6 @@ public class OverriddenSetting implements Serializable {
      * 
      * @return The id
      */
-    @JsonProperty("id")
     public String getId() {
         return id;
     }
@@ -69,7 +59,6 @@ public class OverriddenSetting implements Serializable {
      * @param id
      *            The id
      */
-    @JsonProperty("id")
     public void setId(final String id) {
         this.id = id;
     }
@@ -80,7 +69,6 @@ public class OverriddenSetting implements Serializable {
      * 
      * @return The value
      */
-    @JsonProperty("value")
     public String getValue() {
         return value;
     }
@@ -92,7 +80,6 @@ public class OverriddenSetting implements Serializable {
      * @param value
      *            The value
      */
-    @JsonProperty("value")
     public void setValue(final String value) {
         this.value = value;
     }

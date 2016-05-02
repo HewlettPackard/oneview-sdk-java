@@ -21,8 +21,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum QosDscpValues {
 
@@ -56,12 +54,10 @@ public enum QosDscpValues {
         this.value = value;
     }
 
-    @JsonValue
     public String getValue() {
         return value;
     }
 
-    @JsonCreator
     public static QosDscpValues lookup(final String dscpVal) {
         return getAllValuesMap().get(dscpVal);
     }

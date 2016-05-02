@@ -19,35 +19,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "dot1pClassMapping",
-    "dscpClassMapping"})
 public class QosClassificationMapping implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("dot1pClassMapping")
     private List<Integer> dot1pClassMapping = new ArrayList<Integer>();
-    @JsonProperty("dscpClassMapping")
     private List<String> dscpClassMapping = new ArrayList<String>();
 
     /**
      *
      * @return The dot1pClassMapping
      */
-    @JsonProperty("dot1pClassMapping")
     public List<Integer> getDot1pClassMapping() {
         return dot1pClassMapping;
     }
@@ -57,7 +43,6 @@ public class QosClassificationMapping implements Serializable {
      * @param dot1pClassMapping
      *            The dot1pClassMapping
      */
-    @JsonProperty("dot1pClassMapping")
     public void setDot1pClassMapping(List<Integer> dot1pClassMapping) {
         this.dot1pClassMapping = dot1pClassMapping;
     }
@@ -66,7 +51,6 @@ public class QosClassificationMapping implements Serializable {
      *
      * @return The dscpClassMapping
      */
-    @JsonProperty("dscpClassMapping")
     public List<String> getDscpClassMapping() {
         return dscpClassMapping;
     }
@@ -76,7 +60,6 @@ public class QosClassificationMapping implements Serializable {
      * @param dscpClassMapping
      *            The dscpClassMapping
      */
-    @JsonProperty("dscpClassMapping")
     public void setDscpClassMapping(List<String> dscpClassMapping) {
         this.dscpClassMapping = dscpClassMapping;
     }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -19,37 +19,25 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonValue;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "address", "type" })
 public class Ipv6Address implements Serializable {
 
     /**
 	 * 
 	 */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("address")
     private String address;
-    @JsonProperty("type")
     private Ipv6Address.Type type;
 
     /**
      * 
      * @return The address
      */
-    @JsonProperty("address")
     public String getAddress() {
         return address;
     }
@@ -59,7 +47,6 @@ public class Ipv6Address implements Serializable {
      * @param address
      *            The address
      */
-    @JsonProperty("address")
     public void setAddress(final String address) {
         this.address = address;
     }
@@ -68,7 +55,6 @@ public class Ipv6Address implements Serializable {
      * 
      * @return The type
      */
-    @JsonProperty("type")
     public Ipv6Address.Type getType() {
         return type;
     }
@@ -78,7 +64,6 @@ public class Ipv6Address implements Serializable {
      * @param type
      *            The type
      */
-    @JsonProperty("type")
     public void setType(final Ipv6Address.Type type) {
         this.type = type;
     }
@@ -105,7 +90,6 @@ public class Ipv6Address implements Serializable {
         return new EqualsBuilder().append(address, rhs.address).append(type, rhs.type).isEquals();
     }
 
-    @Generated("org.jsonschema2pojo")
     public static enum Type {
 
         LinkLocal("LinkLocal"), RouterAdv("RouterAdv"), NotSet("NotSet"), Unknown("Unknown"), Static("Static");
@@ -122,13 +106,11 @@ public class Ipv6Address implements Serializable {
             this.value = value;
         }
 
-        @JsonValue
         @Override
         public String toString() {
             return this.value;
         }
 
-        @JsonCreator
         public static Ipv6Address.Type fromValue(final String value) {
             final Ipv6Address.Type constant = constants.get(value);
             if (constant == null) {

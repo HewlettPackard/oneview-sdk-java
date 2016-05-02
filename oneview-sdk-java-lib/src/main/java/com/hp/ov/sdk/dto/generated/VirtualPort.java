@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -17,41 +17,28 @@ package com.hp.ov.sdk.dto.generated;
 
 import java.io.Serializable;
 
-import javax.annotation.Generated;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({ "mac", "portFunction", "portNumber", "wwnn", "wwpn" })
 public class VirtualPort implements Serializable {
 
     /**
 	 * 
 	 */
     private static final long serialVersionUID = 1L;
-    @JsonProperty("mac")
     private String mac;
-    @JsonProperty("portFunction")
     private String portFunction;
-    @JsonProperty("portNumber")
     private Integer portNumber;
-    @JsonProperty("wwnn")
     private String wwnn;
-    @JsonProperty("wwpn")
     private String wwpn;
 
     /**
      * 
      * @return The mac
      */
-    @JsonProperty("mac")
     public String getMac() {
         return mac;
     }
@@ -61,7 +48,6 @@ public class VirtualPort implements Serializable {
      * @param mac
      *            The mac
      */
-    @JsonProperty("mac")
     public void setMac(final String mac) {
         this.mac = mac;
     }
@@ -70,7 +56,6 @@ public class VirtualPort implements Serializable {
      * 
      * @return The portFunction
      */
-    @JsonProperty("portFunction")
     public String getPortFunction() {
         return portFunction;
     }
@@ -80,7 +65,6 @@ public class VirtualPort implements Serializable {
      * @param portFunction
      *            The portFunction
      */
-    @JsonProperty("portFunction")
     public void setPortFunction(final String portFunction) {
         this.portFunction = portFunction;
     }
@@ -89,7 +73,6 @@ public class VirtualPort implements Serializable {
      * 
      * @return The portNumber
      */
-    @JsonProperty("portNumber")
     public Integer getPortNumber() {
         return portNumber;
     }
@@ -99,7 +82,6 @@ public class VirtualPort implements Serializable {
      * @param portNumber
      *            The portNumber
      */
-    @JsonProperty("portNumber")
     public void setPortNumber(final Integer portNumber) {
         this.portNumber = portNumber;
     }
@@ -108,7 +90,6 @@ public class VirtualPort implements Serializable {
      * 
      * @return The wwnn
      */
-    @JsonProperty("wwnn")
     public String getWwnn() {
         return wwnn;
     }
@@ -118,7 +99,6 @@ public class VirtualPort implements Serializable {
      * @param wwnn
      *            The wwnn
      */
-    @JsonProperty("wwnn")
     public void setWwnn(final String wwnn) {
         this.wwnn = wwnn;
     }
@@ -127,7 +107,6 @@ public class VirtualPort implements Serializable {
      * 
      * @return The wwpn
      */
-    @JsonProperty("wwpn")
     public String getWwpn() {
         return wwpn;
     }
@@ -137,7 +116,6 @@ public class VirtualPort implements Serializable {
      * @param wwpn
      *            The wwpn
      */
-    @JsonProperty("wwpn")
     public void setWwpn(final String wwpn) {
         this.wwpn = wwpn;
     }

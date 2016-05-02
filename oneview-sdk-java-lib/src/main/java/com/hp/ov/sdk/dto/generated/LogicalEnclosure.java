@@ -20,43 +20,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Generated;
-
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.hp.ov.sdk.dto.BaseModelResource;
 
-@Generated("org.jsonschema2pojo")
 public class LogicalEnclosure extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
-    @SerializedName("enclosureGroupUri")
-    @Expose
     private String enclosureGroupUri;
-    @SerializedName("enclosureUris")
-    @Expose
     private List<String> enclosureUris = new ArrayList<String>();
-    @SerializedName("enclosures")
-    @Expose
     private Map<String, LogicalEnclosureContainedEnclosure> enclosures = new HashMap<String, LogicalEnclosureContainedEnclosure>();
-    @SerializedName("logicalInterconnectUris")
-    @Expose
     private List<String> logicalInterconnectUris = new ArrayList<String>();
-    @SerializedName("ipAddressingMode")
-    @Expose
     private Object ipAddressingMode;
-    @SerializedName("ipv4Ranges")
-    @Expose
     private List<Object> ipv4Ranges = new ArrayList<Object>();
-    @SerializedName("powerMode")
-    @Expose
     private Object powerMode;
-    @SerializedName("firmware")
-    @Expose
     private FirmwareLogicalEnclosure firmware;
-    @SerializedName("deleteFailed")
-    @Expose
     private Boolean deleteFailed;
 
     /**

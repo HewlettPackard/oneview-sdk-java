@@ -17,33 +17,18 @@ package com.hp.ov.sdk.dto.generated;
 
 import java.io.Serializable;
 
-import javax.annotation.Generated;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.hp.ov.sdk.dto.BaseModelResource;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("org.jsonschema2pojo")
-@JsonPropertyOrder({
-    "activeQosConfig",
-    "inactiveNonFCoEQosConfig",
-    "inactiveFCoEQosConfig"
-})
 public class QosConfiguration extends BaseModelResource implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @JsonProperty("activeQosConfig")
     private ActiveQosConfig activeQosConfig;
-    @JsonProperty("inactiveNonFCoEQosConfig")
     private InactiveNonFCoEQosConfig inactiveNonFCoEQosConfig;
-    @JsonProperty("inactiveFCoEQosConfig")
     private InactiveFCoEQosConfig inactiveFCoEQosConfig;
 
     /**
@@ -51,7 +36,6 @@ public class QosConfiguration extends BaseModelResource implements Serializable 
      * @return
      *     The activeQosConfig
      */
-    @JsonProperty("activeQosConfig")
     public ActiveQosConfig getActiveQosConfig() {
         return activeQosConfig;
     }
@@ -61,7 +45,6 @@ public class QosConfiguration extends BaseModelResource implements Serializable 
      * @param activeQosConfig
      *     The activeQosConfig
      */
-    @JsonProperty("activeQosConfig")
     public void setActiveQosConfig(ActiveQosConfig activeQosConfig) {
         this.activeQosConfig = activeQosConfig;
     }
@@ -71,7 +54,6 @@ public class QosConfiguration extends BaseModelResource implements Serializable 
      * @return
      *     The inactiveNonFCoEQosConfig
      */
-    @JsonProperty("inactiveNonFCoEQosConfig")
     public InactiveNonFCoEQosConfig getInactiveNonFCoEQosConfig() {
         return inactiveNonFCoEQosConfig;
     }
@@ -81,7 +63,6 @@ public class QosConfiguration extends BaseModelResource implements Serializable 
      * @param inactiveNonFCoEQosConfig
      *     The inactiveNonFCoEQosConfig
      */
-    @JsonProperty("inactiveNonFCoEQosConfig")
     public void setInactiveNonFCoEQosConfig(InactiveNonFCoEQosConfig inactiveNonFCoEQosConfig) {
         this.inactiveNonFCoEQosConfig = inactiveNonFCoEQosConfig;
     }
@@ -91,7 +72,6 @@ public class QosConfiguration extends BaseModelResource implements Serializable 
      * @return
      *     The inactiveFCoEQosConfig
      */
-    @JsonProperty("inactiveFCoEQosConfig")
     public InactiveFCoEQosConfig getInactiveFCoEQosConfig() {
         return inactiveFCoEQosConfig;
     }
@@ -101,7 +81,6 @@ public class QosConfiguration extends BaseModelResource implements Serializable 
      * @param inactiveFCoEQosConfig
      *     The inactiveFCoEQosConfig
      */
-    @JsonProperty("inactiveFCoEQosConfig")
     public void setInactiveFCoEQosConfig(InactiveFCoEQosConfig inactiveFCoEQosConfig) {
         this.inactiveFCoEQosConfig = inactiveFCoEQosConfig;
     }
