@@ -25,7 +25,6 @@ public class MsmbAlertsMessageAdaptor extends BaseAdaptor<MsmbAlertsMessageDto, 
 
     @Override
     public MsmbAlertsMessageDto buildDto(final Object source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final MsmbAlertsMessageDto msmbAlertsMessageDto = converter.convertJsonToObject(

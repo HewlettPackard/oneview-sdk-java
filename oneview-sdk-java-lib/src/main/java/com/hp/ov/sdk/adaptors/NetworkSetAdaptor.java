@@ -15,17 +15,17 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
+import org.json.JSONObject;
+
 import com.hp.ov.sdk.dto.NetworkSetCollection;
 import com.hp.ov.sdk.dto.generated.NetworkSets;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
-import org.json.JSONObject;
 
 public class NetworkSetAdaptor extends BaseAdaptor<NetworkSets, Object> {
 
     @Override
     public NetworkSets buildDto(final Object source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 

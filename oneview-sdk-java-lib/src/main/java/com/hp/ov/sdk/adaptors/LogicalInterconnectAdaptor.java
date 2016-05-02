@@ -38,7 +38,6 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
 
     @Override
     public LogicalInterconnects buildDto(final Object source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final LogicalInterconnects logicalInterconnectsDto = converter.convertJsonToObject(
@@ -47,7 +46,6 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
     }
 
     public LogicalInterconnects buildDto(final Object source, final double version) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final LogicalInterconnects logicalInterconnectsDto = converter.convertJsonToObject(
@@ -56,7 +54,6 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
     }
 
     public LiFirmware buildFirmwareDto(final Object source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final LiFirmware liFirmwareDto = converter.convertJsonToObject(
@@ -65,7 +62,6 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
     }
 
     public LogicalInterconnectCollectionV2 buildCollectionDto(final Object source) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }
@@ -126,7 +122,6 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
     }
 
     public InterconnectFibData buildInterconnectFibDataDto(String source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final InterconnectFibData fibDataDto = converter.convertJsonToObject(
@@ -135,7 +130,6 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
     }
 
     public InterconnectFibDataInfo buildInterconnectFibDataInfoDto(String source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final InterconnectFibDataInfo fibDataDto = converter.convertJsonToObject(
@@ -145,7 +139,6 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
     }
 
     public SnmpConfiguration buildSnmpConfigurationDto(String source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final SnmpConfiguration snmpConfigDto = converter.convertJsonToObject(
@@ -155,7 +148,6 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
     }
 
     public InternalVlanAssociationCollection buildInternalVlanCollectionDto(String source) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }
@@ -168,7 +160,6 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
     }
 
     public PortMonitorUplinkPortCollection buildPortMonitorUplinkPortCollectioDto(String source) {
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }
@@ -181,7 +172,6 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
     }
 
     public PortMonitor buildPortMonitorDto(String source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final PortMonitor portMonitorDto = converter.convertJsonToObject(
@@ -191,7 +181,6 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
     }
 
     public TelemetryConfiguration buildTelemetryConfigurationsDto(String source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final TelemetryConfiguration portMonitorDto = converter.convertJsonToObject(
@@ -200,7 +189,6 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
     }
 
     public QosAggregatedConfiguration buildQosConfigurationDto(String source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final QosAggregatedConfiguration qosConfigurationDto = converter.convertJsonToObject(

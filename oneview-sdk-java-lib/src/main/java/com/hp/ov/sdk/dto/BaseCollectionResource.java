@@ -20,7 +20,7 @@ import java.util.List;
 public abstract class BaseCollectionResource<T> extends BaseModelResource {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -39,13 +39,6 @@ public abstract class BaseCollectionResource<T> extends BaseModelResource {
         this.count = count;
         this.total = total;
     }
-
-    // TODO
-    // public BaseCollectionResource(final BaseCollectionResource<?> toCopy) {
-    // super(toCopy);
-    //
-    //
-    // }
 
     public int getStart() {
         return start;

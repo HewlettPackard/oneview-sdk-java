@@ -85,7 +85,6 @@ public class ScmbProcessor extends Thread {
         try {
             messageQueue.shutDown();
         } catch (final InterruptedException e) {
-            // TODO Auto-generated catch block
             throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null, SdkConstants.APPLIANCE, null);
         }
     }

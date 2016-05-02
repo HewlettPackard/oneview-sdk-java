@@ -15,17 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.certs;
 
-import com.google.common.io.BaseEncoding;
-import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.CaCert;
-import com.hp.ov.sdk.dto.RabbitMqClientCert;
-import com.hp.ov.sdk.exceptions.SDKCertificateException;
-import com.hp.ov.sdk.exceptions.SDKErrorEnum;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -43,6 +32,19 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+import com.google.common.io.BaseEncoding;
+import com.hp.ov.sdk.constants.SdkConstants;
+import com.hp.ov.sdk.dto.CaCert;
+import com.hp.ov.sdk.dto.RabbitMqClientCert;
+import com.hp.ov.sdk.exceptions.SDKCertificateException;
+import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 
 public class CertificateStoreManager {
 
@@ -66,7 +68,6 @@ public class CertificateStoreManager {
         return sslContext;
     }
 
-    // TODO - exception
     private static KeyManagerFactory getInitiazedKeyManager(final RabbitMqClientCert certDto) {
         KeyManagerFactory kmf = null;
         Security.addProvider(new BouncyCastleProvider());
@@ -96,7 +97,6 @@ public class CertificateStoreManager {
 
             kmf = KeyManagerFactory.getInstance("SunX509");
             kmf.init(ks, "password".toCharArray());
-            // TODO - add proper error key
         } catch (final CertificateException e) {
             throw new SDKCertificateException(SDKErrorEnum.certificateError,
                                               null, null, null,
@@ -126,7 +126,6 @@ public class CertificateStoreManager {
         return kmf;
     }
 
-    // TODO - exception
     private static TrustManagerFactory getInitiazedTrustManager(final String caCert) {
         Security.addProvider(new BouncyCastleProvider());
         TrustManagerFactory tmf = null;

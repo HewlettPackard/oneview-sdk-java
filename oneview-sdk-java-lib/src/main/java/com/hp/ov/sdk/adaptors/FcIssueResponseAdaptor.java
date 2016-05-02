@@ -35,7 +35,6 @@ public class FcIssueResponseAdaptor extends BaseAdaptor<FcIssueResponse, Object>
     @Override
     public FcIssueResponse buildDto(Object source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         final FcIssueResponse fcIssueResponse = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)),

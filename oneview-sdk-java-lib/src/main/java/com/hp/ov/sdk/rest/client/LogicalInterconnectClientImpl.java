@@ -484,7 +484,6 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         return taskResourceV2;
     }
 
-    // TODO
     @Override
     public PortMonitor getLogicalInterconnectPortMonitorConfiguration(RestParams params, String resourceId) {
         LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectPortMonitorConfiguration : Start");

@@ -45,7 +45,6 @@ public class MsmbMessageExecutionQueue extends Thread {
 
             }
         } catch (final InterruptedException ex) {
-            // TODO - exception
             logger.error(ex.getMessage());
         } finally {
             messagingTerminated = true;

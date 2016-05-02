@@ -295,7 +295,6 @@ public class HttpRestClient {
 
             LOGGER.trace("string returned from server = " + sb);
 
-        // TODO - exceptions
         } catch (SSLHandshakeException e) {
             throw new SDKSSLHandshakeException(SDKErrorEnum.sslHandshakeException,
                                               null, null, null,

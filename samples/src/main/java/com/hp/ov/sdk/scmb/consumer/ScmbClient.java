@@ -58,7 +58,7 @@ public class ScmbClient {
             objectUnderTest.startScmb(params);
             objectUnderTest.processConsumer(params, SamplesConstants.SCMB_TASKS_ROUTING_KEY, messageQueue);
 
-            // TODO - start next processor with different routing key
+            // Optional:  Start next processor with different routing key
             // objectUnderTest.processConsumer(params, "scmb.interconnects.#");
         } catch (final SDKResourceNotFoundException ex) {
             System.out.println("ScmbClient : scmbProcessor : resource not found : " + params.getHostname());

@@ -15,18 +15,18 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
+import org.json.JSONObject;
+
 import com.hp.ov.sdk.dto.ConnectionTemplateCollection;
 import com.hp.ov.sdk.dto.generated.ConnectionTemplate;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
-import org.json.JSONObject;
 
 public class ConnectionTemplateAdaptor extends BaseAdaptor<ConnectionTemplate, Object> {
 
     @Override
     public ConnectionTemplate buildDto(final Object source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         final ConnectionTemplate connectionTemplateDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), ConnectionTemplate.class);
@@ -35,7 +35,6 @@ public class ConnectionTemplateAdaptor extends BaseAdaptor<ConnectionTemplate, O
 
     public ConnectionTemplateCollection buildCollectionDto(final Object source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        // TODO - exceptions
         if (null == source || source.equals("")) {
             return null;
         }

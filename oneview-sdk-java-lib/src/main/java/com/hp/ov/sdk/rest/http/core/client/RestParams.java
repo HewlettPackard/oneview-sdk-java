@@ -15,15 +15,17 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.http.core.client;
 
-import com.hp.ov.sdk.dto.HttpMethodType;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.TrustManager;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.TrustManager;
-import java.util.ArrayList;
-import java.util.List;
+import com.hp.ov.sdk.dto.HttpMethodType;
 
 public class RestParams {
 
@@ -44,8 +46,6 @@ public class RestParams {
 
     private TrustManager trustManager = null;
     private HostnameVerifier hostVerifier = null;
-
-    // TODO - add remaining ssl properties
 
     public String getRoutingKey() {
         return routingKey;
@@ -194,7 +194,7 @@ public class RestParams {
     }
 
     /**
-     * Gets the current TrustManager. 
+     * Gets the current TrustManager.
      * If using the system default, null is returned.
      * @return the current TrustManager or null if default.
      **/
@@ -224,7 +224,7 @@ public class RestParams {
     }
 
     /**
-     * Gets the current HostnameVerifier. 
+     * Gets the current HostnameVerifier.
      * If using the system default, null is returned.
      * @return the current HostnameVerifier or null if default.
      **/
@@ -255,4 +255,4 @@ public class RestParams {
     }
 
 }
-    
+

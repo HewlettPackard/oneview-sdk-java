@@ -20,13 +20,6 @@ import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplateCollection;
 import com.hp.ov.sdk.dto.StorageVolumeTemplate;
 import com.hp.ov.sdk.dto.StorageVolumeTemplateCollection;
 import com.hp.ov.sdk.dto.TemplateProvisioningData;
-import com.hp.ov.sdk.rest.client.StoragePoolClient;
-import com.hp.ov.sdk.rest.client.StoragePoolClientImpl;
-import com.hp.ov.sdk.rest.client.StorageSystemClient;
-import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
-import com.hp.ov.sdk.rest.client.StorageVolumeTemplateClient;
-import com.hp.ov.sdk.rest.client.StorageVolumeTemplateClientImpl;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -34,6 +27,13 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
+import com.hp.ov.sdk.rest.client.StoragePoolClient;
+import com.hp.ov.sdk.rest.client.StoragePoolClientImpl;
+import com.hp.ov.sdk.rest.client.StorageSystemClient;
+import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
+import com.hp.ov.sdk.rest.client.StorageVolumeTemplateClient;
+import com.hp.ov.sdk.rest.client.StorageVolumeTemplateClientImpl;
+import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
@@ -327,8 +327,6 @@ public class StorageVolumeTemplateClientSample {
             return;
         }
     }
-
-    // TODO - Move Uri fetch logic to SdkUtils
 
     private StorageVolumeTemplate buildTestStorageVolumeTemplateDto() {
         String storageSystemUri = storageSystemClient.getStorageSystemByName(params, storageSystemName).getUri();

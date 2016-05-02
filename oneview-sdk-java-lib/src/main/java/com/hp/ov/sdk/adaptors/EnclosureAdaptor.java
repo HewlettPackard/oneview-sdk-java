@@ -37,7 +37,6 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
 
     @Override
     public Enclosures buildDto(final Object source) {
-        // TODO - exceptions
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         // convert json Object to DTO, replace quotes and back slash in the file
         final Enclosures enclosureDto = converter.convertJsonToObject(
@@ -46,7 +45,6 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
     }
 
     public AddEnclosureV2 buildAddEnclosureDto(final Object source) {
-        // TODO - exceptions
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         // convert json Object to DTO, replace quotes and back slash in the file
         final AddEnclosureV2 enclosureDto = converter.convertJsonToObject(
@@ -55,7 +53,6 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
     }
 
     public EnvironmentalConfiguration buildEnvironmentalConfigurationDto(final Object source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final EnvironmentalConfiguration environmentalConfigurationDto = converter
@@ -65,7 +62,6 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
     }
 
     public SsoUrlData buildSsoUrlData(final Object source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final SsoUrlData ssoUrlData = converter.convertJsonToObject(
@@ -74,7 +70,6 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
     }
 
     public UtilizationData buildUtilizationData(final Object source) {
-        // TODO - exceptions
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final UtilizationData utilizationData = converter.convertJsonToObject(
@@ -83,7 +78,6 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
     }
 
     public EnclosureCollectionV2 buildCollectionDto(final Object source) {
-        // TODO - exceptions
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         if (null == source || source.equals("")) {
             return null;

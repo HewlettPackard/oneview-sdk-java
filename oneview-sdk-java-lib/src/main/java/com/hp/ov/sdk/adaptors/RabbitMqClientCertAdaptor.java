@@ -15,17 +15,17 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
+import org.json.JSONObject;
+
 import com.hp.ov.sdk.dto.RabbitMqClientCert;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
-import org.json.JSONObject;
 
 public class RabbitMqClientCertAdaptor extends BaseAdaptor<RabbitMqClientCert, Object> {
 
     @Override
     public RabbitMqClientCert buildDto(final Object source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        // TODO - exceptions
         // convert json object to DTO, replace quotes and back slash in the file
         final RabbitMqClientCert rabbitMqClientCertDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), RabbitMqClientCert.class);

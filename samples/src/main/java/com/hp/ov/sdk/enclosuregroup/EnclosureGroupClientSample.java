@@ -15,6 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.enclosuregroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.EnclosureGroupCollectionV2;
 import com.hp.ov.sdk.dto.generated.EnclosureGroups;
@@ -35,11 +38,8 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /*
- * EnclosureGroupClientSample is a sample program enables/consume to set a common configuration across the enclosure  
+ * EnclosureGroupClientSample is a sample program enables/consume to set a common configuration across the enclosure
  * resources of HP OneView. It invokes APIs of EnclosureGroupClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on enclosure group resource
  */
@@ -361,7 +361,6 @@ public class EnclosureGroupClientSample {
         }
     }
 
-    // TODO - Move Uri fetch logic to SdkUtils
     private EnclosureGroups buildTestEnclosureGroupDto() {
         // fetch resource Id using resource name
         final String logicalInterconnectGroupUri = logicalInterconnectGroupClient.getLogicalInterconnectGroupByName(params,

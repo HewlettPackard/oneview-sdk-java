@@ -32,7 +32,6 @@ public class LogicalEnclosureAdaptor extends BaseAdaptor<LogicalEnclosure, Objec
 
     @Override
     public LogicalEnclosure buildDto(final Object source) {
-        // TODO - exceptions
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         // convert json Object to DTO, replace quotes and back slash in the file
         final LogicalEnclosure enclosureDto = converter.convertJsonToObject(
@@ -41,7 +40,6 @@ public class LogicalEnclosureAdaptor extends BaseAdaptor<LogicalEnclosure, Objec
     }
 
     public AddLogicalEnclosure buildAddEnclosureDto(final Object source) {
-        // TODO - exceptions
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         // convert json Object to DTO, replace quotes and back slash in the file
         final AddLogicalEnclosure enclosureDto = converter.convertJsonToObject(
@@ -50,7 +48,6 @@ public class LogicalEnclosureAdaptor extends BaseAdaptor<LogicalEnclosure, Objec
     }
 
     public LogicalEnclosureList buildCollectionDto(final Object source) {
-        // TODO - exceptions
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         if (null == source || source.equals("")) {
             return null;

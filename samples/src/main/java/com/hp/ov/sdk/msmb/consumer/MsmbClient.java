@@ -24,7 +24,6 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKScmbConnectionNotFoundException;
-import com.hp.ov.sdk.messaging.msmb.services.MsmbAlertsHandler;
 import com.hp.ov.sdk.messaging.msmb.services.MsmbConnectionManager;
 import com.hp.ov.sdk.messaging.msmb.services.MsmbMessageExecutionQueue;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -61,8 +60,8 @@ public class MsmbClient {
             // then start scmb
             objectUnderTest.startMsmb(params);
             objectUnderTest.processConsumer(params, SamplesConstants.MSMB_ALERTS_ROUTING_KEY, messageQueue);
-            // TODO - start next processor with different routing key
-            // objectUnderTest.processConsumer(params, "scmb.interconnects.#");
+            // Optional: start next processor with different routing key
+            // objectUnderTest.processConsumer(params, "scmb.interconnects.#", messageQueue);
         } catch (final SDKResourceNotFoundException ex) {
             System.out.println("ScmbConnectionManagerImplTest : testScmbProcessor : resource not found : " + params.getHostname());
         } catch (final SDKNoSuchUrlException ex) {

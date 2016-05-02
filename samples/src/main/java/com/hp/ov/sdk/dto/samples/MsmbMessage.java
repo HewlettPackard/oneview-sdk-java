@@ -18,14 +18,12 @@ package com.hp.ov.sdk.dto.samples;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 import com.hp.ov.sdk.dto.ResourceDataList;
 
 
 public class MsmbMessage {
 
-    // TODO - this is sample properties. This can be extended as per user needs.
+    // This is a simple DTO, it can be extended as per user needs.
     private String resourceUri;
     private List<ResourceDataList> resourceDataList = new ArrayList<ResourceDataList>();
 
