@@ -16,7 +16,7 @@
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.FcoeNetwork;
-import com.hp.ov.sdk.dto.FcoeNetworkCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
@@ -34,15 +34,15 @@ public interface FcoeNetworkClient {
     FcoeNetwork getFcoeNetwork(RestParams params, String resourceId);
 
     /**
-     * Retrieves an {@link FcoeNetworkCollection} containing details
+     * Retrieves a {@link ResourceCollection}&lt;{@link FcoeNetwork}&gt; containing details
      * for all the available FCoE networks found under the current HPE OneView.
      *
      * @param params structure containing the connection details.
      *
-     * @return {@link FcoeNetworkCollection} object containing the details
-     * for all found FCoE networks.
+     * @return {@link ResourceCollection}&lt;{@link FcoeNetwork}&gt; containing
+     * the details for all found FCoE networks.
      */
-    FcoeNetworkCollection getAllFcoeNetworks(RestParams params);
+    ResourceCollection<FcoeNetwork> getAllFcoeNetworks(RestParams params);
 
     /**
      * Retrieves the {@link FcoeNetwork} details for the specified

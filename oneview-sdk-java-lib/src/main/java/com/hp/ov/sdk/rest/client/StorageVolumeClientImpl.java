@@ -28,13 +28,12 @@ import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.AddStorageVolumeV2;
-import com.hp.ov.sdk.dto.AttachableStorageVolumeCollection;
-import com.hp.ov.sdk.dto.ExtraStorageVolumeCollection;
+import com.hp.ov.sdk.dto.AttachableStorageVolume;
+import com.hp.ov.sdk.dto.ExtraStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.StorageVolumeCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeSnapshot;
-import com.hp.ov.sdk.dto.StorageVolumeSnapshotCollection;
 import com.hp.ov.sdk.dto.StorageVolumeV2;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
@@ -105,7 +104,7 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
     }
 
     @Override
-    public StorageVolumeCollection getAllStorageVolumes(final RestParams params) {
+    public ResourceCollection<StorageVolumeV2> getAllStorageVolumes(final RestParams params) {
         LOGGER.trace("StorageVolumeClientImpl : getAllStorageVolumes : Start");
 
         // validate args
@@ -124,8 +123,8 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
                     SdkConstants.STORAGE_VOLUMES, null);
         }
 
-        StorageVolumeCollection storageVolumeCollectionDto = resourceAdaptor.buildResourceObject(returnObj,
-                StorageVolumeCollection.class);
+        ResourceCollection<StorageVolumeV2> storageVolumeCollectionDto = resourceAdaptor.buildResourceCollection(
+                returnObj, StorageVolumeV2.class);
 
         LOGGER.debug("StorageVolumeClientImpl : getAllStorageVolumes : count : " + storageVolumeCollectionDto.getCount());
         LOGGER.trace("StorageVolumeClientImpl : getAllStorageVolumes : End");
@@ -159,10 +158,10 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
         }
 
         StorageVolumeV2 storageVolumeDto = null;
-        StorageVolumeCollection storageVolumeCollectionDto = resourceAdaptor.buildResourceObject(returnObj,
-                StorageVolumeCollection.class);
+        ResourceCollection<StorageVolumeV2> storageVolumeCollectionDto = resourceAdaptor.buildResourceCollection(
+                returnObj, StorageVolumeV2.class);
 
-        if (storageVolumeCollectionDto.getCount() != 0) {
+        if (!storageVolumeCollectionDto.isEmpty()) {
             storageVolumeDto = storageVolumeCollectionDto.getMembers().get(0);
         }
 
@@ -294,7 +293,7 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
     }
 
     @Override
-    public AttachableStorageVolumeCollection getAttachableVolumes(final RestParams params) {
+    public ResourceCollection<AttachableStorageVolume> getAttachableVolumes(final RestParams params) {
         LOGGER.trace("StorageVolumeClientImpl : getAttachableVolumes : Start");
 
         // validate args
@@ -314,8 +313,8 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
                     SdkConstants.STORAGE_ATTACHABLE_VOLUMES, null);
         }
 
-        AttachableStorageVolumeCollection attachableVolumes = resourceAdaptor.buildResourceObject(returnObj,
-                AttachableStorageVolumeCollection.class);
+        ResourceCollection<AttachableStorageVolume> attachableVolumes = resourceAdaptor.buildResourceCollection(
+                returnObj, AttachableStorageVolume.class);
 
         LOGGER.debug("StorageVolumeClientImpl : getAttachableVolumes : count :" + attachableVolumes.getCount());
         LOGGER.trace("StorageVolumeClientImpl : getAttachableVolumes : End");
@@ -356,7 +355,7 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
     }
 
     @Override
-    public StorageVolumeSnapshotCollection getAllStorageVolumeSnapshots(RestParams params, String storageVolumeId) {
+    public ResourceCollection<StorageVolumeSnapshot> getAllStorageVolumeSnapshots(RestParams params, String storageVolumeId) {
         LOGGER.trace("StorageVolumeClientImpl : getAllStorageVolumeSnapshots : Start");
 
         // validate args
@@ -378,8 +377,8 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
                     SdkConstants.STORAGE_SNAPSHOTS, null);
         }
 
-        StorageVolumeSnapshotCollection storageVolumeSnapshotCollection
-                = resourceAdaptor.buildResourceObject(returnObj, StorageVolumeSnapshotCollection.class);
+        ResourceCollection<StorageVolumeSnapshot> storageVolumeSnapshotCollection
+                = resourceAdaptor.buildResourceCollection(returnObj, StorageVolumeSnapshot.class);
 
         LOGGER.debug("StorageVolumeClientImpl : getAllStorageVolumeSnapshots : count :"
                 + storageVolumeSnapshotCollection.getCount());
@@ -466,7 +465,7 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
     }
 
     @Override
-    public ExtraStorageVolumeCollection getExtraManagedStorageVolumePaths(RestParams params) {
+    public ResourceCollection<ExtraStorageVolume> getExtraManagedStorageVolumePaths(RestParams params) {
         LOGGER.trace("StorageVolumeClientImpl : getExtraManagedStorageVolumePaths : Start");
 
         // validate args
@@ -491,8 +490,8 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
                     SdkConstants.STORAGE_VOLUMES, null);
         }
 
-        ExtraStorageVolumeCollection extraAccessList = resourceAdaptor.buildResourceObject(returnObj,
-                ExtraStorageVolumeCollection.class);
+        ResourceCollection<ExtraStorageVolume> extraAccessList
+                = resourceAdaptor.buildResourceCollection(returnObj, ExtraStorageVolume.class);
 
         LOGGER.debug("StorageVolumeClientImpl : getExtraManagedStorageVolumePaths : count :"
                 + extraAccessList.getCount());

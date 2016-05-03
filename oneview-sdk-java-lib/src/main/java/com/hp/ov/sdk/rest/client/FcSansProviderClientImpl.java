@@ -20,12 +20,12 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.adaptors.ProviderAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SanProviderResponse;
-import com.hp.ov.sdk.dto.SanProviderResponseCollection;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -39,22 +39,21 @@ public class FcSansProviderClientImpl implements FcSansProviderClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FcSansProviderClientImpl.class);
 
-    private final ProviderAdaptor adaptor;
+    private final ResourceAdaptor adaptor;
+    private final HttpRestClient httpClient;
 
-    private HttpRestClient httpClient;
-
-    protected FcSansProviderClientImpl(HttpRestClient httpClient, ProviderAdaptor adaptor) {
+    protected FcSansProviderClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor) {
         this.httpClient = httpClient;
         this.adaptor = adaptor;
     }
 
     public static FcSansProviderClient getClient() {
-        return new FcSansProviderClientImpl(HttpRestClient.getClient(), new ProviderAdaptor());
+        return new FcSansProviderClientImpl(HttpRestClient.getClient(), new ResourceAdaptor());
     }
 
     @Override
-    public SanProviderResponseCollection getAllProviders(final RestParams params) {
-        SanProviderResponseCollection sanProviderResponseCollectionDto = null;
+    public ResourceCollection<SanProviderResponse> getAllProviders(final RestParams params) {
+        ResourceCollection<SanProviderResponse> sanProviderResponseCollectionDto = null;
         LOGGER.info("ProviderClientImpl : getAllProviders : Start");
 
         // validate args
@@ -70,9 +69,8 @@ public class FcSansProviderClientImpl implements FcSansProviderClient {
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.PROVIDERS, null);
         }
-        // Call adaptor to convert to DTO
 
-        sanProviderResponseCollectionDto = adaptor.buildCollectionDto(returnObj);
+        sanProviderResponseCollectionDto = adaptor.buildResourceCollection(returnObj, SanProviderResponse.class);
 
         LOGGER.debug("ProviderClientImpl : getAllProviders : count :" + sanProviderResponseCollectionDto.getCount());
         LOGGER.info("ProviderClientImpl : getAllProviders : End");
@@ -83,7 +81,7 @@ public class FcSansProviderClientImpl implements FcSansProviderClient {
     @Override
     public SanProviderResponse getProviderByName(final RestParams params, final String displayName) {
         LOGGER.info("ProviderClientImpl : getProviderByName : start");
-        final SanProviderResponseCollection sanProviderResponseCollectionDto = getAllProviders(params);
+        ResourceCollection<SanProviderResponse> sanProviderResponseCollectionDto = getAllProviders(params);
 
         for (final SanProviderResponse sanProviderResponseDto : new ArrayList<>(sanProviderResponseCollectionDto.getMembers())) {
             if (sanProviderResponseDto.getDisplayName().equals(displayName)) {

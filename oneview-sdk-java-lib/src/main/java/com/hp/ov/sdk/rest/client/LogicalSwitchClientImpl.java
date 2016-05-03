@@ -30,7 +30,7 @@ import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.AddLogicalSwitch;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.LogicalSwitch;
-import com.hp.ov.sdk.dto.LogicalSwitchCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -124,9 +124,9 @@ public class LogicalSwitchClientImpl implements LogicalSwitchClient {
         }
 
         LogicalSwitch logicalSwitch = null;
-        LogicalSwitchCollection groupCollection = adaptor.buildResourceObject(response, LogicalSwitchCollection.class);
+        ResourceCollection<LogicalSwitch> groupCollection = adaptor.buildResourceCollection(response, LogicalSwitch.class);
 
-        if (groupCollection.getCount() > 0) {
+        if (!groupCollection.isEmpty()) {
             logicalSwitch = groupCollection.getMembers().get(0);
         }
 
@@ -143,7 +143,7 @@ public class LogicalSwitchClientImpl implements LogicalSwitchClient {
     }
 
     @Override
-    public LogicalSwitchCollection getAllLogicalSwitches(RestParams params) {
+    public ResourceCollection<LogicalSwitch> getAllLogicalSwitches(RestParams params) {
         LOGGER.trace("LogicalSwitchClientImpl : getAllLogicalSwitches : Start");
 
         if (params == null) {
@@ -163,7 +163,7 @@ public class LogicalSwitchClientImpl implements LogicalSwitchClient {
                     SdkConstants.LOGICAL_SWITCHES, null);
         }
 
-        LogicalSwitchCollection collection = adaptor.buildResourceObject(response, LogicalSwitchCollection.class);
+        ResourceCollection<LogicalSwitch> collection = adaptor.buildResourceCollection(response, LogicalSwitch.class);
 
         LOGGER.trace("LogicalSwitchClientImpl : getAllLogicalSwitches : End");
 

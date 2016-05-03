@@ -35,20 +35,22 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 import com.hp.ov.sdk.adaptors.InterconnectAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.InterconnectsCollection;
 import com.hp.ov.sdk.dto.InterconnectsStatistics;
 import com.hp.ov.sdk.dto.NameServer;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.PortStatistics;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SubportStatistics;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.TaskState;
@@ -67,7 +69,9 @@ public class InterconnectsClientTest {
 
     private RestParams params;
 
-    @Mock
+    @Spy
+    private ResourceAdaptor resourceAdaptor;
+    @Spy
     private InterconnectAdaptor adaptor;
     @Mock
     private TaskAdaptor taskAdaptor;
@@ -95,9 +99,6 @@ public class InterconnectsClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
-
-        Mockito.when(adaptor.buildDto(Mockito.anyString(), Mockito.anyDouble()))
-        .thenReturn(new InterconnectAdaptor().buildDto(intJson));
 
         Interconnects interconnectDto = client.getInterconnectById(params, resourceId);
 
@@ -130,9 +131,6 @@ public class InterconnectsClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new InterconnectAdaptor().buildCollectionDto(intJson));
 
         Interconnects interconnectDto = client.getInterconnectByName(params, resourceName);
 
@@ -168,19 +166,11 @@ public class InterconnectsClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetInterconnectByNameWithNoMembers() {
-        InterconnectsCollection interconnects = new InterconnectAdaptor().buildCollectionDto(this.getJsonFromFile("InterconnectGetByName.json"));
-        interconnects.setCount(0);
-        intJson = new Gson().toJson(interconnects);
+        intJson = new Gson().toJson(new ResourceCollection<Interconnects>());
 
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(interconnects);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new InterconnectAdaptor().buildCollectionDto(intJson));
 
         client.getInterconnectByName(params, resourceName);
     }
@@ -192,10 +182,7 @@ public class InterconnectsClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
 
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new InterconnectAdaptor().buildCollectionDto(intJson));
-
-        InterconnectsCollection interconnects = client.getAllInterconnects(params);
+        ResourceCollection<Interconnects> interconnects = client.getAllInterconnects(params);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_URI));
@@ -385,9 +372,6 @@ public class InterconnectsClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
 
-        Mockito.when(adaptor.buildInterconnectStatisticsDto(Mockito.anyString()))
-        .thenReturn(new InterconnectAdaptor().buildInterconnectStatisticsDto(intJson));
-
         InterconnectsStatistics statisticsDto = client.getInterconnectStatistics(params, resourceId);
 
         RestParams rp = new RestParams();
@@ -423,9 +407,6 @@ public class InterconnectsClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
-
-        Mockito.when(adaptor.buildInterconnectPortStatisticsDto(Mockito.anyString()))
-        .thenReturn(new InterconnectAdaptor().buildInterconnectPortStatisticsDto(intJson));
 
         PortStatistics statisticsDto = client.getInterconnectPortStatistics(params, resourceId, resourceName);
 
@@ -463,9 +444,6 @@ public class InterconnectsClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
-
-        Mockito.when(adaptor.buildInterconnectSubportStatisticsDto(Mockito.anyString()))
-        .thenReturn(new InterconnectAdaptor().buildInterconnectSubportStatisticsDto(intJson));
 
         SubportStatistics statisticsDto = client.getInterconnectSubportStatistics(params, resourceId, resourceName, 1);
 
@@ -594,9 +572,6 @@ public class InterconnectsClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new InterconnectAdaptor().buildCollectionDto(intJson));
 
         String id = client.getId(params, resourceName);
 

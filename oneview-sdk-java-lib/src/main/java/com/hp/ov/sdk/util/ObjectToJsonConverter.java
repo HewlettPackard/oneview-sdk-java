@@ -15,8 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.util;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -29,10 +27,12 @@ import com.hp.ov.sdk.adaptors.PortTelemetrySerializationAdapter;
 import com.hp.ov.sdk.adaptors.StoragePoolSerializationAdapter;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.PortTelemetry;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
-import com.hp.ov.sdk.exceptions.SDKFileNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKInternalException;
+
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 public class ObjectToJsonConverter {
 
@@ -46,22 +46,6 @@ public class ObjectToJsonConverter {
 
     public static ObjectToJsonConverter getInstance() {
         return ObjectToJsonConverterHolder.INSTANCE;
-    }
-
-    public void convertObjectToJson(final Object inObj, final String outputFilename) {
-        Gson gson = this.getGson();
-        final String json = gson.toJson(inObj);
-
-        try {
-            final FileWriter writer = new FileWriter(outputFilename);
-            writer.write(json);
-            writer.close();
-        } catch (final IOException e) {
-            throw new SDKFileNotFoundException(SDKErrorEnum.fileNotFound, null, null, null,
-                    SdkConstants.OBJECT_TO_JOSON_CONVERSION, null);
-        }
-
-        LOGGER.info("ObjectJsonConverter : convertObjectToJson: json =" + json);
     }
 
     public String convertObjectToJsonString(final Object inObj) {
@@ -81,18 +65,31 @@ public class ObjectToJsonConverter {
 
         T retObj = null;
         try {
-            retObj = target.newInstance();
             retObj = gson.fromJson(inStr, target);
-        } catch (final InstantiationException e) {
+        } catch (final Exception e) {
             throw new SDKInternalException(SDKErrorEnum.internalError, null, null, null,
-                    SdkConstants.JSON_TO_OBJECT_CONVERSION, null);
-        } catch (final IllegalAccessException e) {
-            throw new SDKInternalException(SDKErrorEnum.internalError, null, null, null,
-                    SdkConstants.JSON_TO_OBJECT_CONVERSION, null);
+                    SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
         }
         LOGGER.debug("ObjectJsonConverter : convertObjectToJson: json to object =" + retObj.toString());
 
         return retObj;
+    }
+
+    public <T> ResourceCollection<T> convertJsonToResourceCollection(String jsonInput, Class<T> resourceClass) {
+        Gson gson = this.getGson();
+        Type type = ParameterizedTypeImpl.make(ResourceCollection.class, new Class<?>[] {resourceClass}, null);
+
+        try {
+            ResourceCollection<T> resourceCollection = gson.fromJson(jsonInput, type);
+
+            LOGGER.info("JSON successfully converted to resource collection of type {} with {} members",
+                    resourceClass.getSimpleName(), Integer.valueOf(resourceCollection.getCount()));
+
+            return resourceCollection;
+        } catch (final Exception e) {
+            throw new SDKInternalException(SDKErrorEnum.internalError, null, null, null,
+                    SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
+        }
     }
 
     public List<?> convertJsonToListObject(final String inStr, final Type mtype) {
@@ -102,8 +99,8 @@ public class ObjectToJsonConverter {
         try {
             retObj = gson.fromJson(inStr, mtype);
         } catch (final Exception e) {
-            throw new SDKInternalException(SDKErrorEnum.internalError, null, null, null, SdkConstants.JSON_TO_OBJECT_CONVERSION,
-                    null);
+            throw new SDKInternalException(SDKErrorEnum.internalError, null, null, null,
+                    SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
         }
         LOGGER.info("ObjectJsonConverter : convertObjectToJson: json to object =" + retObj.toString());
         return retObj;

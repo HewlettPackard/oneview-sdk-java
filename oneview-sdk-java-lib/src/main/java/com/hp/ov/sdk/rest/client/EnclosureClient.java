@@ -16,11 +16,11 @@
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.AddEnclosureV2;
-import com.hp.ov.sdk.dto.EnclosureCollectionV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.UtilizationData;
@@ -48,10 +48,10 @@ public interface EnclosureClient {
      * 
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return enclosureCollectionDto which is a object containing the
-     *         collection of enclosure.
+     * @return {@link ResourceCollection}&lt;{@link Enclosures}&gt; containing
+     * the details for all found enclosures.
      */
-    EnclosureCollectionV2 getAllEnclosures(final RestParams params);
+    ResourceCollection<Enclosures> getAllEnclosures(final RestParams params);
 
     /**
      * The module aids in fetching the enclosure details for the specified

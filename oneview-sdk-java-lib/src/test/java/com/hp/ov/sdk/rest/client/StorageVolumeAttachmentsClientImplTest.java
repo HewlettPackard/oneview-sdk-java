@@ -40,11 +40,10 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ExtraStorageVolume;
-import com.hp.ov.sdk.dto.ExtraStorageVolumeCollection;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeAttachment;
-import com.hp.ov.sdk.dto.StorageVolumeAttachmentCollection;
 import com.hp.ov.sdk.dto.StorageVolumeAttachmentPath;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -125,8 +124,8 @@ public class StorageVolumeAttachmentsClientImplTest {
         String storageVolumeAttachmentsValue = "{\"type\":\"StorageVolumeAttachmentList\"}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(storageVolumeAttachmentsValue);
-        given(adaptor.buildResourceObject(anyString(), eq(StorageVolumeAttachmentCollection.class)))
-                .willReturn(new StorageVolumeAttachmentCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(StorageVolumeAttachment.class)))
+                .willReturn(new ResourceCollection<StorageVolumeAttachment>());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -136,8 +135,8 @@ public class StorageVolumeAttachmentsClientImplTest {
         this.storageClient.getAllStorageVolumeAttachments(new RestParams());
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildResourceObject(eq(storageVolumeAttachmentsValue),
-                eq(StorageVolumeAttachmentCollection.class));
+        then(adaptor).should().buildResourceCollection(eq(storageVolumeAttachmentsValue),
+                eq(StorageVolumeAttachment.class));
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -222,8 +221,8 @@ public class StorageVolumeAttachmentsClientImplTest {
         String extraStorageVolumeAttachmentsValue = "[{\"type\":\"ExtraAccessList\"}]";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(extraStorageVolumeAttachmentsValue);
-        given(adaptor.buildResourceObject(anyString(), eq(ExtraStorageVolumeCollection.class)))
-                .willReturn(new ExtraStorageVolumeCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(ExtraStorageVolume.class)))
+                .willReturn(new ResourceCollection<ExtraStorageVolume>());
 
         RestParams expectedRestParams = new RestParams();
 
@@ -238,8 +237,8 @@ public class StorageVolumeAttachmentsClientImplTest {
         this.storageClient.getExtraUnmanagedStorageVolumeAttachments(new RestParams());
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildResourceObject(eq(extraStorageVolumeAttachmentsValue),
-                eq(ExtraStorageVolumeCollection.class));
+        then(adaptor).should().buildResourceCollection(eq(extraStorageVolumeAttachmentsValue),
+                eq(ExtraStorageVolume.class));
     }
 
     @Test(expected = SDKInvalidArgumentException.class)

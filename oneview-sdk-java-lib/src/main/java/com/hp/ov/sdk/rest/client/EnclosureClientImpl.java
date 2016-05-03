@@ -24,16 +24,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.adaptors.EnclosureAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.AddEnclosureV2;
-import com.hp.ov.sdk.dto.EnclosureCollectionV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.UtilizationData;
@@ -57,16 +58,20 @@ public class EnclosureClientImpl implements EnclosureClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(EnclosureClientImpl.class);
     private static final int TIMEOUT = 1200000; // in milliseconds = 20 mins
 
+    private final ResourceAdaptor resourceAdaptor;
     private final EnclosureAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
-
-    private HttpRestClient httpClient;
+    private final HttpRestClient httpClient;
 
     private JSONObject jsonObject;
 
-    protected EnclosureClientImpl(HttpRestClient httpClient, EnclosureAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+    protected EnclosureClientImpl(HttpRestClient httpClient,
+            ResourceAdaptor resourceAdaptor, EnclosureAdaptor adaptor,
+            TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+
         this.httpClient = httpClient;
+        this.resourceAdaptor = resourceAdaptor;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
@@ -75,6 +80,7 @@ public class EnclosureClientImpl implements EnclosureClient {
     public static EnclosureClient getClient() {
         return new EnclosureClientImpl(
                 HttpRestClient.getClient(),
+                new ResourceAdaptor(),
                 new EnclosureAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
@@ -82,7 +88,6 @@ public class EnclosureClientImpl implements EnclosureClient {
 
     @Override
     public Enclosures getEnclosure(final RestParams params, final String resourceId) {
-
         LOGGER.info("EnclosureClientImpl : getEnclosure : Start");
 
         // validate args
@@ -109,7 +114,7 @@ public class EnclosureClientImpl implements EnclosureClient {
     }
 
     @Override
-    public EnclosureCollectionV2 getAllEnclosures(final RestParams params) {
+    public ResourceCollection<Enclosures> getAllEnclosures(final RestParams params) {
         LOGGER.info("EnclosureClientImpl : getAllEnclosureV2s : Start");
         // validate args
         if (null == params) {
@@ -128,7 +133,8 @@ public class EnclosureClientImpl implements EnclosureClient {
         }
         // Call adaptor to convert to DTO
 
-        final EnclosureCollectionV2 enclosureCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<Enclosures> enclosureCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, Enclosures.class);
 
         LOGGER.debug("EnclosureV2Client : getAllEnclosureV2s : members count :" + enclosureCollectionDto.getCount());
         LOGGER.info("EnclosureClientImpl : getAllEnclosureV2s : End");
@@ -160,9 +166,10 @@ public class EnclosureClientImpl implements EnclosureClient {
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE, null);
         }
-        // Call adaptor to convert to DTO
 
-        final EnclosureCollectionV2 enclosureCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<Enclosures> enclosureCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, Enclosures.class);
+
         if (enclosureCollectionDto.getCount() != 0) {
             enclosureDto = enclosureCollectionDto.getMembers().get(0);
         } else {

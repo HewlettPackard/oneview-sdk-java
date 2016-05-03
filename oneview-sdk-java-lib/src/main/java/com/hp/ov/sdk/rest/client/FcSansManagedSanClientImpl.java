@@ -24,18 +24,17 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 import com.hp.ov.sdk.adaptors.FcIssueResponseAdaptor;
-import com.hp.ov.sdk.adaptors.ManagedSanAdaptor;
-import com.hp.ov.sdk.adaptors.ManagedSanEndpointAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.EndpointResponseCollection;
+import com.hp.ov.sdk.dto.EndpointResponse;
 import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.dto.FcSansManagedSanTask;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SanRequest;
 import com.hp.ov.sdk.dto.SanResponse;
-import com.hp.ov.sdk.dto.SanResponseCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -55,31 +54,27 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
     private static final String EMPTY_JSON_BODY = "{}";
 
     private final HttpRestClient restClient;
-    private final ManagedSanAdaptor adaptor;
+    private final ResourceAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
-    private final ManagedSanEndpointAdaptor endpointAdaptor;
 
     protected FcSansManagedSanClientImpl(HttpRestClient restClient,
-            ManagedSanAdaptor adaptor,
+            ResourceAdaptor adaptor,
             TaskAdaptor taskAdaptor,
-            TaskMonitorManager taskMonitor,
-            ManagedSanEndpointAdaptor endpointAdaptor) {
+            TaskMonitorManager taskMonitor) {
 
         this.restClient = restClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
-        this.endpointAdaptor = endpointAdaptor;
     }
 
     public static FcSansManagedSanClient getClient() {
         return new FcSansManagedSanClientImpl(
                 HttpRestClient.getClient(),
-                new ManagedSanAdaptor(),
+                new ResourceAdaptor(),
                 TaskAdaptor.getInstance(),
-                TaskMonitorManager.getInstance(),
-                new ManagedSanEndpointAdaptor());
+                TaskMonitorManager.getInstance());
     }
 
     @Override
@@ -102,8 +97,7 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.MANAGED_SAN, null);
         }
 
-        // Call adaptor to convert to DTO
-        sanResponseDto = adaptor.buildDto(returnObj);
+        sanResponseDto = adaptor.buildResourceObject(returnObj, SanResponse.class);
 
         LOGGER.debug("ManagedSanClientImpl : getManagedSan : name :" + sanResponseDto.getName());
         LOGGER.trace("ManagedSanClientImpl : getManagedSan : End");
@@ -112,7 +106,7 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
     }
 
     @Override
-    public SanResponseCollection getAllManagedSan(final RestParams params) {
+    public ResourceCollection<SanResponse> getAllManagedSan(final RestParams params) {
         LOGGER.trace("ManagedSanClientImpl : getAllManagedSan : Start");
 
         // validate args
@@ -130,7 +124,8 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.MANAGED_SAN, null);
         }
 
-        SanResponseCollection sanResponseCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<SanResponse> sanResponseCollectionDto
+                = adaptor.buildResourceCollection(returnObj, SanResponse.class);
 
         LOGGER.debug("ManagedSanClientImpl : getAllManagedSan : count :" + sanResponseCollectionDto.getCount());
 
@@ -164,7 +159,8 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
         }
 
         SanResponse sanResponseDto = null;
-        SanResponseCollection sanResponseCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<SanResponse> sanResponseCollectionDto
+                = adaptor.buildResourceCollection(returnObj, SanResponse.class);
 
         if (sanResponseCollectionDto.getCount() != 0) {
             sanResponseDto = sanResponseCollectionDto.getMembers().get(0);
@@ -199,13 +195,13 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
         // user can save time in creating network dto.
 
         // create JSON request from dto
-        JSONObject jsonObject = adaptor.buildJsonObjectFromDto(updateSanRequest, params.getApiVersion());
+        JSONObject jsonObject = adaptor.buildJsonRequest(updateSanRequest, params.getApiVersion());
         String returnObj = restClient.sendRequest(params, jsonObject);
 
         LOGGER.debug("ManagedSanClientImpl : updateManagedSan : returnObj =" + returnObj);
 
         // convert returnObj to sanResponseDto
-        final SanResponse sanResponseDto = adaptor.buildDto(returnObj);
+        final SanResponse sanResponseDto = adaptor.buildResourceObject(returnObj, SanResponse.class);
         LOGGER.debug("ManagedSanClientImpl : updateManagedSan : SanResponse =" + sanResponseDto);
 
         LOGGER.trace("ManagedSanClientImpl : updateManagedSan : End");
@@ -214,7 +210,7 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
     }
 
     @Override
-    public EndpointResponseCollection getEndpointsOfManagedSan(RestParams params, String resourceId) {
+    public ResourceCollection<EndpointResponse> getEndpointsOfManagedSan(RestParams params, String resourceId) {
         LOGGER.trace("ManagedSanClientImpl : getEndpointsOfManagedSan : Start");
         // validate args
         if (null == params) {
@@ -232,7 +228,8 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, params.getUrl(), null);
         }
 
-        EndpointResponseCollection endpointResponseCollection = endpointAdaptor.buildCollectionDto(returnObj);
+        ResourceCollection<EndpointResponse> endpointResponseCollection
+                 = adaptor.buildResourceCollection(returnObj, EndpointResponse.class);
 
         LOGGER.debug("ManagedSanClientImpl : getEndpointsOfManagedSan : response =" + endpointResponseCollection);
         LOGGER.trace("ManagedSanClientImpl : getEndpointsOfManagedSan : End");
@@ -291,7 +288,7 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, params.getUrl(), null);
         }
 
-        EndpointsCsvFileResponse response = endpointAdaptor.buildEndpointCsvFileResponse(returnObj);
+        EndpointsCsvFileResponse response = adaptor.buildResourceObject(returnObj, EndpointsCsvFileResponse.class);
 
         LOGGER.debug("ManagedSanClientImpl : createEndpointsCsvOfManagedSan : response =" + response);
         LOGGER.trace("ManagedSanClientImpl : createEndpointsCsvOfManagedSan : End");

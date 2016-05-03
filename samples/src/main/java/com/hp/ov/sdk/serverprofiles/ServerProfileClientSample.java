@@ -20,13 +20,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.hp.ov.sdk.dto.AvailableStorageSystem;
-import com.hp.ov.sdk.dto.AvailableStorageSystems;
 import com.hp.ov.sdk.dto.AvailableTargets;
 import com.hp.ov.sdk.dto.ConnectionBoot.BootControl;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.ProfileConnectionV3;
-import com.hp.ov.sdk.dto.ServerProfileCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.ServerProfileCompliancePreview;
 import com.hp.ov.sdk.dto.ServerProfileHealth;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -129,7 +128,7 @@ public class ServerProfileClientSample {
 
     private void getAllServerProfile() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        ServerProfileCollection serverProfileCollectionDto = null;
+        ResourceCollection<ServerProfile> serverProfileCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -461,7 +460,7 @@ public class ServerProfileClientSample {
     }
 
     private void getAvailableStorageSystemsForServerProfile() {
-        AvailableStorageSystems storageSystemDto = null;
+        ResourceCollection<AvailableStorageSystem> storageSystemDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();

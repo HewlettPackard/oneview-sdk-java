@@ -21,7 +21,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.hp.ov.sdk.dto.AddEnclosureV2;
-import com.hp.ov.sdk.dto.EnclosureCollectionV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
 import com.hp.ov.sdk.dto.Patch;
@@ -75,18 +74,6 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
         final UtilizationData utilizationData = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), UtilizationData.class);
         return utilizationData;
-    }
-
-    public EnclosureCollectionV2 buildCollectionDto(final Object source) {
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        if (null == source || source.equals("")) {
-            return null;
-        }
-        // convert json Object to DTO, replace quotes and back slash in the file
-        final EnclosureCollectionV2 enclosureCollectionDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
-                        .convertObjectToJsonString(source))), EnclosureCollectionV2.class);
-        return enclosureCollectionDto;
     }
 
     public JSONObject buildJsonObjectFromDto(final Enclosures source) {

@@ -21,7 +21,6 @@ import java.util.List;
 import org.json.JSONObject;
 
 import com.google.common.reflect.TypeToken;
-import com.hp.ov.sdk.dto.NetworkCollection;
 import com.hp.ov.sdk.dto.generated.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.generated.Network;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
@@ -47,19 +46,6 @@ public class NetworkAdaptor extends BaseAdaptor<Network, Object> {
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), BulkEthernetNetwork.class);
 
         return bulkEthernetNetworkDto;
-    }
-
-    public NetworkCollection buildCollectionDto(final Object source) {
-        if (null == source || source.equals("")) {
-            return null;
-        }
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        // convert json object to DTO replace quotes and back slash in the file
-        final NetworkCollection networkCollectionDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
-                        .convertObjectToJsonString(source))), NetworkCollection.class);
-
-        return networkCollectionDto;
     }
 
     public JSONObject buildJsonObjectFromDto(final Network source, int apiVersion) {

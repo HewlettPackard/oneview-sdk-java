@@ -15,8 +15,8 @@
  */
 package com.hp.ov.sdk.rest.client;
 
-import com.hp.ov.sdk.dto.InterconnectTypeCollection;
 import com.hp.ov.sdk.dto.InterconnectType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface InterconnectTypeClient {
@@ -39,10 +39,10 @@ public interface InterconnectTypeClient {
      *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link InterconnectTypeCollection} containing the collection
-     *         of interconnect type details.
+     * @return {@link ResourceCollection}&lt;{@link InterconnectType}&gt; containing
+     * the details for all found interconnect types.
      */
-    InterconnectTypeCollection getAllInterconnectType(final RestParams params);
+    ResourceCollection<InterconnectType> getAllInterconnectType(final RestParams params);
 
     /**
      * The module aids in fetching the interconnect type details for the

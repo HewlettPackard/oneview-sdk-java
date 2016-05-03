@@ -33,20 +33,22 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 import com.hp.ov.sdk.adaptors.LogicalEnclosureAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.AddLogicalEnclosure;
 import com.hp.ov.sdk.dto.FirmwareUpdateOn;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.LogicalEnclosureList;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.PatchFirmwareValue;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SupportDump;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.TaskState;
@@ -64,7 +66,9 @@ public class LogicalEnclosureClientTest {
 
     private RestParams params;
 
-    @Mock
+    @Spy
+    private ResourceAdaptor resourceAdaptor;
+    @Spy
     private LogicalEnclosureAdaptor adaptor;
     @Mock
     private TaskAdaptor taskAdaptor;
@@ -90,8 +94,6 @@ public class LogicalEnclosureClientTest {
     public void testGetLogicalEnclosure() {
         logicalEnclosureJson = this.getJsonFromFile("LogicalEnclosureGet.json");
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(logicalEnclosureJson);
-
-        Mockito.when(adaptor.buildDto(Mockito.anyString())).thenReturn(new LogicalEnclosureAdaptor().buildDto(logicalEnclosureJson));
 
         LogicalEnclosure logicalEnclosureDto = client.getLogicalEnclosure(params, resourceId);
 
@@ -126,10 +128,7 @@ public class LogicalEnclosureClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(logicalEnclosureJson);
 
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new LogicalEnclosureAdaptor().buildCollectionDto(logicalEnclosureJson));
-
-        LogicalEnclosureList logicalEnclosureList = client.getAllLogicalEnclosures(params);
+        ResourceCollection<LogicalEnclosure> logicalEnclosureList = client.getAllLogicalEnclosures(params);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI));
@@ -163,9 +162,6 @@ public class LogicalEnclosureClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(logicalEnclosureJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new LogicalEnclosureAdaptor().buildCollectionDto(logicalEnclosureJson));
 
         LogicalEnclosure logicalEnclosureDto = client.getLogicalEnclosureByName(params, resourceName);
 
@@ -202,16 +198,11 @@ public class LogicalEnclosureClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetLogicalEnclosureGroupByNameWithNoMembers() {
-        LogicalEnclosureList logicalEnclosureList = new LogicalEnclosureAdaptor().buildCollectionDto(this.getJsonFromFile("LogicalEnclosureGetByName.json"));
-        logicalEnclosureList.setCount(0);
-        logicalEnclosureJson = new Gson().toJson(logicalEnclosureList);
+        logicalEnclosureJson = new Gson().toJson(new ResourceCollection<LogicalEnclosure>());
 
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(logicalEnclosureJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(logicalEnclosureList);
 
         client.getLogicalEnclosureByName(params, resourceName);
     }
@@ -621,9 +612,6 @@ public class LogicalEnclosureClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(logicalEnclosureJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new LogicalEnclosureAdaptor().buildCollectionDto(logicalEnclosureJson));
 
         String id = client.getId(params, resourceName);
 

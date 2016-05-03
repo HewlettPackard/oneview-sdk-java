@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hp.ov.sdk.constants.ResourceCategory;
-import com.hp.ov.sdk.dto.SwitchCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SwitchPortStatistics;
 import com.hp.ov.sdk.dto.SwitchStatistics;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -85,7 +85,7 @@ public class SwitchClientSample {
         try {
             params = HPOneViewCredential.createCredentials();
 
-            SwitchCollection switches = this.switchClient.getAllSwitches(params);
+            ResourceCollection<Switch> switches = this.switchClient.getAllSwitches(params);
 
             System.out.println("SwitchClient : getAllSwitches : " +
                     "SwitchCollection object returned to client : " + switches);

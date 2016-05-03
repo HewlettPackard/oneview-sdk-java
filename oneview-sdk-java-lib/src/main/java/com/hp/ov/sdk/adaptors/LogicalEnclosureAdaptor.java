@@ -21,7 +21,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.hp.ov.sdk.dto.AddLogicalEnclosure;
-import com.hp.ov.sdk.dto.LogicalEnclosureList;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.SupportDump;
 import com.hp.ov.sdk.dto.generated.LogicalEnclosure;
@@ -45,18 +44,6 @@ public class LogicalEnclosureAdaptor extends BaseAdaptor<LogicalEnclosure, Objec
         final AddLogicalEnclosure enclosureDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), AddLogicalEnclosure.class);
         return enclosureDto;
-    }
-
-    public LogicalEnclosureList buildCollectionDto(final Object source) {
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        if (null == source || source.equals("")) {
-            return null;
-        }
-        // convert json Object to DTO, replace quotes and back slash in the file
-        final LogicalEnclosureList logicalEnclosureListDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
-                        .convertObjectToJsonString(source))), LogicalEnclosureList.class);
-        return logicalEnclosureListDto;
     }
 
     public JSONObject buildJsonObjectFromDto(final LogicalEnclosure source) {

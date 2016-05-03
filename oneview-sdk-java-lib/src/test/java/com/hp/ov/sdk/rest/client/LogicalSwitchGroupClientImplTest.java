@@ -45,7 +45,7 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.LogicalSwitchGroup;
-import com.hp.ov.sdk.dto.LogicalSwitchGroupCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -126,8 +126,8 @@ public class LogicalSwitchGroupClientImplTest {
         String logicalSwitchGroupCollectionValue = "{\"type\":\"LogicalSwitchGroupCollection\"}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(logicalSwitchGroupCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(LogicalSwitchGroupCollection.class)))
-                .willReturn(new LogicalSwitchGroupCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(LogicalSwitchGroup.class)))
+                .willReturn(new ResourceCollection<LogicalSwitchGroup>());
 
         this.switchClient.getLogicalSwitchGroupByName(new RestParams(), anyLogicalSwitchGroupName);
     }
@@ -136,13 +136,13 @@ public class LogicalSwitchGroupClientImplTest {
     public void shouldGetLogicalSwitchGroupByName() {
         String anyLogicalSwitchGroupName = "random-NAME";
         String logicalSwitchGroupCollectionValue = "{\"type\":\"LogicalSwitchGroupCollection\"}";
-        LogicalSwitchGroupCollection logicalSwitchGroupCollection = new LogicalSwitchGroupCollection();
+        ResourceCollection<LogicalSwitchGroup> logicalSwitchGroupCollection = new ResourceCollection<>();
 
         LogicalSwitchGroup logicalSwitchGroup = new LogicalSwitchGroup();
         logicalSwitchGroupCollection.setMembers(Lists.newArrayList(logicalSwitchGroup));
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(logicalSwitchGroupCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(LogicalSwitchGroupCollection.class)))
+        given(adaptor.buildResourceCollection(anyString(), eq(LogicalSwitchGroup.class)))
                 .willReturn(logicalSwitchGroupCollection);
 
         RestParams expectedRestParams = new RestParams();
@@ -159,8 +159,8 @@ public class LogicalSwitchGroupClientImplTest {
                 anyLogicalSwitchGroupName);
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildResourceObject(eq(logicalSwitchGroupCollectionValue),
-                eq(LogicalSwitchGroupCollection.class));
+        then(adaptor).should().buildResourceCollection(eq(logicalSwitchGroupCollectionValue),
+                eq(LogicalSwitchGroup.class));
 
         assertThat(group, sameInstance(logicalSwitchGroup));
     }
@@ -182,8 +182,8 @@ public class LogicalSwitchGroupClientImplTest {
         String logicalSwitchGroupCollectionValue = "{\"type\":\"LogicalSwitchGroupCollection\"}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(logicalSwitchGroupCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(LogicalSwitchGroupCollection.class)))
-                .willReturn(new LogicalSwitchGroupCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(LogicalSwitchGroup.class)))
+                .willReturn(new ResourceCollection<LogicalSwitchGroup>());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -193,8 +193,8 @@ public class LogicalSwitchGroupClientImplTest {
         this.switchClient.getAllLogicalSwitchGroups(new RestParams());
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildResourceObject(eq(logicalSwitchGroupCollectionValue),
-                eq(LogicalSwitchGroupCollection.class));
+        then(adaptor).should().buildResourceCollection(eq(logicalSwitchGroupCollectionValue),
+                eq(LogicalSwitchGroup.class));
     }
 
     @Test(expected = SDKInvalidArgumentException.class)

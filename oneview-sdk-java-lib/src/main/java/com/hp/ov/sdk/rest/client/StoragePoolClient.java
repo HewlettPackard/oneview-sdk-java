@@ -16,8 +16,8 @@
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.AddStoragePool;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
-import com.hp.ov.sdk.dto.StoragePoolCollection;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface StoragePoolClient {
@@ -40,9 +40,10 @@ public interface StoragePoolClient {
      * 
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link StoragePoolCollection} containing a collection of storage pool details.
+     * @return {@link ResourceCollection}&lt;{@link StoragePool}&gt; containing
+     * the details for all found storage pools.
      */
-    StoragePoolCollection getAllStoragePools(final RestParams params);
+    ResourceCollection<StoragePool> getAllStoragePools(final RestParams params);
 
     /**
      * The module aids in fetching the storage pool details for the storage pool

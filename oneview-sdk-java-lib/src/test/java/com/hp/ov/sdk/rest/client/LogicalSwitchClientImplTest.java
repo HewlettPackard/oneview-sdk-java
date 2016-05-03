@@ -46,7 +46,7 @@ import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.AddLogicalSwitch;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.LogicalSwitch;
-import com.hp.ov.sdk.dto.LogicalSwitchCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -125,8 +125,8 @@ public class LogicalSwitchClientImplTest {
         String logicalSwitchCollectionValue = "{\"type\":\"LogicalSwitchCollection\"}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(logicalSwitchCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(LogicalSwitchCollection.class)))
-                .willReturn(new LogicalSwitchCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(LogicalSwitch.class)))
+                .willReturn(new ResourceCollection<LogicalSwitch>());
 
         RestParams expectedRestParams = new RestParams();
 
@@ -145,13 +145,13 @@ public class LogicalSwitchClientImplTest {
     public void shouldGetLogicalSwitchByName() {
         String anyLogicalSwitchName = "random-NAME";
         String logicalSwitchCollectionValue = "{\"type\":\"LogicalSwitchCollection\"}";
-        LogicalSwitchCollection logicalSwitchCollection = new LogicalSwitchCollection();
+        ResourceCollection<LogicalSwitch> logicalSwitchCollection = new ResourceCollection<>();
 
         LogicalSwitch expectedLogicalSwitch = new LogicalSwitch();
         logicalSwitchCollection.setMembers(Lists.newArrayList(expectedLogicalSwitch));
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(logicalSwitchCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(LogicalSwitchCollection.class)))
+        given(adaptor.buildResourceCollection(anyString(), eq(LogicalSwitch.class)))
                 .willReturn(logicalSwitchCollection);
 
         RestParams expectedRestParams = new RestParams();
@@ -168,8 +168,7 @@ public class LogicalSwitchClientImplTest {
                 anyLogicalSwitchName);
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildResourceObject(eq(logicalSwitchCollectionValue),
-                eq(LogicalSwitchCollection.class));
+        then(adaptor).should().buildResourceCollection(eq(logicalSwitchCollectionValue), eq(LogicalSwitch.class));
 
         assertThat(logicalSwitch, sameInstance(expectedLogicalSwitch));
     }
@@ -191,7 +190,8 @@ public class LogicalSwitchClientImplTest {
         String logicalSwitchValue = "{\"type\":\"LogicalSwitchCollection\"}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(logicalSwitchValue);
-        given(adaptor.buildResourceObject(anyString(), eq(LogicalSwitch.class))).willReturn(new LogicalSwitch());
+        given(adaptor.buildResourceCollection(anyString(), eq(LogicalSwitch.class)))
+                .willReturn(new ResourceCollection<LogicalSwitch>());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -201,7 +201,7 @@ public class LogicalSwitchClientImplTest {
         this.switchClient.getAllLogicalSwitches(new RestParams());
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildResourceObject(eq(logicalSwitchValue), eq(LogicalSwitchCollection.class));
+        then(adaptor).should().buildResourceCollection(eq(logicalSwitchValue), eq(LogicalSwitch.class));
     }
 
     @Test(expected = SDKInvalidArgumentException.class)

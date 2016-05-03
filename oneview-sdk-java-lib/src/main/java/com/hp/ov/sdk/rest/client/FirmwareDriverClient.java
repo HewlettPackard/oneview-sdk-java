@@ -16,7 +16,7 @@
 
 package com.hp.ov.sdk.rest.client;
 
-import com.hp.ov.sdk.dto.FwBaselineCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.FwBaseline;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -41,9 +41,10 @@ public interface FirmwareDriverClient {
      * 
      * @param params
      *            The RestParams is a structure containing the connection details.
-     * @return {@link FwBaselineCollection} containing a collection of firmware driver details.
+     * @return {@link ResourceCollection}&lt;{@link FwBaseline}&gt; containing
+     * the details for all found firmware drivers.
      */
-    FwBaselineCollection getAllFirmwareDrivers(final RestParams params);
+    ResourceCollection<FwBaseline> getAllFirmwareDrivers(final RestParams params);
 
     /**
      * The module aids in fetching the firmware driver details for the

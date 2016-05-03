@@ -16,12 +16,11 @@
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.AddStorageVolumeV2;
-import com.hp.ov.sdk.dto.AttachableStorageVolumeCollection;
-import com.hp.ov.sdk.dto.ExtraStorageVolumeCollection;
+import com.hp.ov.sdk.dto.AttachableStorageVolume;
+import com.hp.ov.sdk.dto.ExtraStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
-import com.hp.ov.sdk.dto.StorageVolumeCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeSnapshot;
-import com.hp.ov.sdk.dto.StorageVolumeSnapshotCollection;
 import com.hp.ov.sdk.dto.StorageVolumeV2;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -46,9 +45,10 @@ public interface StorageVolumeClient {
      * 
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link StorageVolumeCollection} containing a collection of storage volume details.
+     * @return {@link ResourceCollection}&lt;{@link StorageVolumeV2}&gt; containing
+     * the details for all found storage volumes.
      */
-    StorageVolumeCollection getAllStorageVolumes(final RestParams params);
+    ResourceCollection<StorageVolumeV2> getAllStorageVolumes(final RestParams params);
 
     /**
      * The module aids in fetching the storage volume details for the
@@ -123,10 +123,10 @@ public interface StorageVolumeClient {
      * 
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link AttachableStorageVolumeCollection} containing the attached storage
-     *         volume details.
+     * @return {@link ResourceCollection}&lt;{@link AttachableStorageVolume}&gt; containing
+     * the details for all found attachable storage volumes.
      */
-    AttachableStorageVolumeCollection getAttachableVolumes(final RestParams params);
+    ResourceCollection<AttachableStorageVolume> getAttachableVolumes(final RestParams params);
 
     /**
      * Returns a snapshot of a storage volume.
@@ -146,10 +146,10 @@ public interface StorageVolumeClient {
      * @param params structure containing the connection details.
      * @param storageVolumeId resource identifier for the storage volume as seen in HPE OneView.
      *
-     * @return {@link StorageVolumeSnapshotCollection} containing all snapshots for
-     * the storage volume.
+     * @return {@link ResourceCollection}&lt;{@link StorageVolumeSnapshot}&gt; containing
+     * the details for all found storage volume snapshots.
      */
-    StorageVolumeSnapshotCollection getAllStorageVolumeSnapshots(RestParams params, String storageVolumeId);
+    ResourceCollection<StorageVolumeSnapshot> getAllStorageVolumeSnapshots(RestParams params, String storageVolumeId);
 
     /**
      * Creates a snapshot for the storage volume specified by the resource identifier.
@@ -183,9 +183,10 @@ public interface StorageVolumeClient {
      *
      * @param params structure containing the connection details.
      *
-     * @return {@link ExtraStorageVolumeCollection} containing the resources found.
+     * @return {@link ResourceCollection}&lt;{@link ExtraStorageVolume}&gt; containing
+     * the details for all found extra storage volumes.
      */
-    ExtraStorageVolumeCollection getExtraManagedStorageVolumePaths(RestParams params);
+    ResourceCollection<ExtraStorageVolume> getExtraManagedStorageVolumePaths(RestParams params);
 
     /**
      * Removes extra presentations from a specified storage volume on the storage system.

@@ -15,7 +15,7 @@
  */
 package com.hp.ov.sdk.rest.client;
 
-import com.hp.ov.sdk.dto.NetworkSetCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.NetworkSets;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -40,9 +40,10 @@ public interface NetworkSetClient {
      * 
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link NetworkSetCollection} containing a collection of network set details.
+     * @return {@link ResourceCollection}&lt;{@link NetworkSets}&gt; containing
+     * the details for all found network sets.
      */
-    NetworkSetCollection getAllNetworkSets(final RestParams params);
+    ResourceCollection<NetworkSets> getAllNetworkSets(final RestParams params);
 
     /**
      * The module aids in fetching the network set details for the network set

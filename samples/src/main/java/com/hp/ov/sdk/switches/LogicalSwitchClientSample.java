@@ -20,7 +20,7 @@ import com.google.common.collect.Lists;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.AddLogicalSwitch;
 import com.hp.ov.sdk.dto.LogicalSwitch;
-import com.hp.ov.sdk.dto.LogicalSwitchCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SnmpV1Configuration;
 import com.hp.ov.sdk.dto.SnmpVersion;
 import com.hp.ov.sdk.dto.SwitchCredentialConfiguration;
@@ -116,7 +116,7 @@ public class LogicalSwitchClientSample {
         try {
             params = HPOneViewCredential.createCredentials();
 
-            LogicalSwitchCollection collection = this.logicalSwitchClient.getAllLogicalSwitches(params);
+            ResourceCollection<LogicalSwitch> collection = this.logicalSwitchClient.getAllLogicalSwitches(params);
 
             System.out.println("LogicalSwitchClientSample : getAllLogicalSwitches : " +
                     "LogicalSwitchCollection returned to client (count) : " + collection.getCount());

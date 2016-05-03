@@ -26,8 +26,8 @@ import com.hp.ov.sdk.dto.PhysicalServerPowerControl;
 import com.hp.ov.sdk.dto.PhysicalServerPowerState;
 import com.hp.ov.sdk.dto.RefreshStateRequest;
 import com.hp.ov.sdk.dto.RemoteConsoleUrlResult;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.ServerHardware;
-import com.hp.ov.sdk.dto.ServerHardwareCollection;
 import com.hp.ov.sdk.dto.ServerPowerControlRequest;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.UtilizationData;
@@ -137,7 +137,7 @@ public class ServerHardwareClientSample {
         try {
             params = HPOneViewCredential.createCredentials();
 
-            ServerHardwareCollection serverHardwareCollectionDto = serverHardwareClient.getAllServerHardware(params);
+            ResourceCollection<ServerHardware> serverHardwareCollectionDto = serverHardwareClient.getAllServerHardware(params);
 
             System.out.println("ServerHardwareClientTest : getAllServerHardware : "
                     + "server hardware object returned to client (count) : " + serverHardwareCollectionDto.getCount());

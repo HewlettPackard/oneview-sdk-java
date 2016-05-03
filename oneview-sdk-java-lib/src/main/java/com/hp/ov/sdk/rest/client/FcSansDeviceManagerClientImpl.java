@@ -24,12 +24,13 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 import com.hp.ov.sdk.adaptors.DeviceManagerAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
-import com.hp.ov.sdk.dto.DeviceManagerResponseCollection;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.TaskState;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
@@ -48,6 +49,7 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
 
     private final DeviceManagerAdaptor adaptor;
+    private final ResourceAdaptor resourceAdaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
 
@@ -55,10 +57,11 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
 
     private JSONObject jsonObject;
 
-    protected FcSansDeviceManagerClientImpl(DeviceManagerAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor,
-            HttpRestClient restClient) {
+    protected FcSansDeviceManagerClientImpl(DeviceManagerAdaptor adaptor, ResourceAdaptor resourceAdaptor,
+            TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor, HttpRestClient restClient) {
 
         this.adaptor = adaptor;
+        this.resourceAdaptor = resourceAdaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
         this.restClient = restClient;
@@ -67,6 +70,7 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
     public static FcSansDeviceManagerClient getClient() {
         return new FcSansDeviceManagerClientImpl(
                 new DeviceManagerAdaptor(),
+                new ResourceAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance(),
                 HttpRestClient.getClient());
@@ -115,7 +119,7 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
     }
 
     @Override
-    public DeviceManagerResponseCollection getAllDeviceManager(final RestParams params) {
+    public ResourceCollection<DeviceManagerResponse> getAllDeviceManager(final RestParams params) {
         LOGGER.trace("DeviceManagerClientImpl : getAllDeviceManager : Start");
         // validate args
         if (null == params) {
@@ -135,8 +139,8 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
                     null, null, null, SdkConstants.DEVICE_MANAGER, null);
         }
 
-        // Call adaptor to convert to DTO
-        DeviceManagerResponseCollection deviceManagerResponseCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<DeviceManagerResponse> deviceManagerResponseCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, DeviceManagerResponse.class);
 
         LOGGER.debug("DeviceManagerClientImpl : getAllDeviceManager : count :" + deviceManagerResponseCollectionDto.getCount());
         LOGGER.trace("DeviceManagerClientImpl : getAllDeviceManager : End");
@@ -283,10 +287,10 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
                     null);
         }
 
-        // Call adaptor to convert to DTO
-        final DeviceManagerResponseCollection deviceManagerResponseCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<DeviceManagerResponse> deviceManagerResponseCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, DeviceManagerResponse.class);
 
-        if (deviceManagerResponseCollectionDto.getCount() != 0) {
+        if (!deviceManagerResponseCollectionDto.isEmpty()) {
             deviceManagerResponseDto = deviceManagerResponseCollectionDto.getMembers().get(0);
         } else {
             deviceManagerResponseDto = null;

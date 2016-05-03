@@ -18,15 +18,16 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
-import com.hp.ov.sdk.adaptors.EnclosureGroupAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.EnclosureGroupCollectionV2;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.generated.EnclosureGroups;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -40,8 +41,8 @@ public class EnclosureGroupClientTest {
 
     private RestParams params;
 
-    @Mock
-    private EnclosureGroupAdaptor adaptor;
+    @Spy
+    private ResourceAdaptor adaptor;
     @Mock
     private TaskAdaptor taskAdaptor;
     @Mock
@@ -66,9 +67,6 @@ public class EnclosureGroupClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureGroupJson);
-
-        Mockito.when(adaptor.buildDto(Mockito.anyString()))
-        .thenReturn(new EnclosureGroups());
 
         EnclosureGroups enclosureGroupDto = client.getEnclosureGroup(params, resourceId);
 
@@ -104,10 +102,7 @@ public class EnclosureGroupClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureGroupJson);
 
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new EnclosureGroupAdaptor().buildCollectionDto(enclosureGroupJson));
-
-        EnclosureGroupCollectionV2 enclosureGroupCollection = client.getAllEnclosureGroups(params);
+        ResourceCollection<EnclosureGroups> enclosureGroupCollection = client.getAllEnclosureGroups(params);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI));
@@ -142,9 +137,6 @@ public class EnclosureGroupClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureGroupJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new EnclosureGroupAdaptor().buildCollectionDto(enclosureGroupJson));
 
         EnclosureGroups enclosureGroupDto = client.getEnclosureGroupByName(params, resourceName);
 
@@ -182,16 +174,13 @@ public class EnclosureGroupClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetEnclosureGroupByNameWithNoMembers() {
-        EnclosureGroupCollectionV2 enclosureGroupCollectionDto = new EnclosureGroupAdaptor().buildCollectionDto(this.getJsonFromFile("EnclosureGroupGetByName.json"));
-        enclosureGroupCollectionDto.setCount(0);
+        ResourceCollection<EnclosureGroups> enclosureGroupCollectionDto = new ResourceCollection<>();
+
         enclosureGroupJson = new Gson().toJson(enclosureGroupCollectionDto);
 
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureGroupJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(enclosureGroupCollectionDto);
 
         client.getEnclosureGroupByName(params, resourceName);
     }
@@ -199,7 +188,8 @@ public class EnclosureGroupClientTest {
     @Test
     public void testCreateEnclosureGroup() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGet.json");
-        EnclosureGroups enclosureGroupDto = new EnclosureGroupAdaptor().buildDto(enclosureGroupJson);
+
+        EnclosureGroups enclosureGroupDto = adaptor.buildResourceObject(enclosureGroupJson, EnclosureGroups.class);
 
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
@@ -228,7 +218,7 @@ public class EnclosureGroupClientTest {
     @Test (expected = SDKInvalidArgumentException.class)
     public void testCreateEnclosureGroupWithNullParams() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGet.json");
-        EnclosureGroups enclosureGroupDto = adaptor.buildDto(enclosureGroupJson);
+        EnclosureGroups enclosureGroupDto = adaptor.buildResourceObject(enclosureGroupJson, EnclosureGroups.class);
         enclosureGroupDto = client.createEnclosureGroup(
                 null,
                 enclosureGroupDto,
@@ -243,7 +233,8 @@ public class EnclosureGroupClientTest {
     @Test
     public void testUpdateEnclosureGroup() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGet.json");
-        EnclosureGroups enclosureGroupDto = new EnclosureGroupAdaptor().buildDto(enclosureGroupJson);
+
+        EnclosureGroups enclosureGroupDto = adaptor.buildResourceObject(enclosureGroupJson, EnclosureGroups.class);
         enclosureGroupDto.setDescription("updated");
 
         Mockito.when(restClient.sendRequest(
@@ -275,7 +266,9 @@ public class EnclosureGroupClientTest {
     @Test (expected = SDKInvalidArgumentException.class)
     public void testUpdateEnclosureGroupWithNullParams() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGet.json");
-        EnclosureGroups enclosureGroupDto = new EnclosureGroupAdaptor().buildDto(enclosureGroupJson);
+
+        EnclosureGroups enclosureGroupDto = adaptor.buildResourceObject(enclosureGroupJson, EnclosureGroups.class);
+
         enclosureGroupDto.setDescription("outdated");
 
         Mockito.when(restClient.sendRequest(
@@ -293,7 +286,9 @@ public class EnclosureGroupClientTest {
     @Test (expected = SDKInvalidArgumentException.class)
     public void testUpdateEnclosureGroupWithNullDto() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGet.json");
-        EnclosureGroups enclosureGroupDto = new EnclosureGroupAdaptor().buildDto(enclosureGroupJson);
+
+        EnclosureGroups enclosureGroupDto = adaptor.buildResourceObject(enclosureGroupJson, EnclosureGroups.class);
+
         enclosureGroupDto.setDescription("outdated");
 
         Mockito.when(restClient.sendRequest(
@@ -407,9 +402,6 @@ public class EnclosureGroupClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureGroupJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new EnclosureGroupAdaptor().buildCollectionDto(enclosureGroupJson));
 
         String id = client.getId(params, resourceName);
 

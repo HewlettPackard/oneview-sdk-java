@@ -45,7 +45,7 @@ import com.google.common.collect.Lists;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.SwitchCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SwitchPortStatistics;
 import com.hp.ov.sdk.dto.SwitchStatistics;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -125,7 +125,8 @@ public class SwitchClientImplTest {
         String switchCollectionValue = "{\"type\":\"SwitchCollectionV2\", \"members\":[\"type\":\"switchV2\"]}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(switchCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(SwitchCollection.class))).willReturn(new SwitchCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(Switch.class)))
+                .willReturn(new ResourceCollection<Switch>());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -134,7 +135,7 @@ public class SwitchClientImplTest {
         this.switchClient.getAllSwitches(new RestParams());
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildResourceObject(eq(switchCollectionValue), eq(SwitchCollection.class));
+        then(adaptor).should().buildResourceCollection(eq(switchCollectionValue), eq(Switch.class));
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -397,8 +398,8 @@ public class SwitchClientImplTest {
         String switchCollectionValue = "{\"type\":\"SwitchCollectionV2\", \"members\":[]}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(switchCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(SwitchCollection.class)))
-                .willReturn(new SwitchCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(Switch.class)))
+                .willReturn(new ResourceCollection<Switch>());
 
         this.switchClient.getSwitchByName(new RestParams(), anySwitchName);
     }
@@ -407,14 +408,14 @@ public class SwitchClientImplTest {
     public void shouldGetSwitchByName() {
         String anySwitchName = "random-NAME";
         String switchCollectionValue = "{\"type\":\"SwitchCollectionV2\", \"members\":[\"type\":\"switchV2\"]}";
-        SwitchCollection switchCollection = new SwitchCollection();
+        ResourceCollection<Switch> switchCollection = new ResourceCollection<>();
         Switch switchObj = new Switch();
 
         switchObj.setName(anySwitchName);
         switchCollection.setMembers(Lists.newArrayList(switchObj));
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(switchCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(SwitchCollection.class)))
+        given(adaptor.buildResourceCollection(anyString(), eq(Switch.class)))
                 .willReturn(switchCollection);
 
         RestParams expectedRestParams = new RestParams();
@@ -430,7 +431,7 @@ public class SwitchClientImplTest {
         this.switchClient.getSwitchByName(new RestParams(), anySwitchName);
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildResourceObject(eq(switchCollectionValue), eq(SwitchCollection.class));
+        then(adaptor).should().buildResourceCollection(eq(switchCollectionValue), eq(Switch.class));
     }
 
     @Test

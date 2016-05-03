@@ -20,7 +20,7 @@ import com.google.common.collect.Lists;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.dto.LogicalSwitchGroup;
-import com.hp.ov.sdk.dto.LogicalSwitchGroupCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SwitchMapEntryTemplate;
 import com.hp.ov.sdk.dto.SwitchMapTemplate;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -117,7 +117,7 @@ public class LogicalSwitchGroupClientSample {
         try {
             params = HPOneViewCredential.createCredentials();
 
-            LogicalSwitchGroupCollection collection = this.logicalSwitchGroupClient.getAllLogicalSwitchGroups(params);
+            ResourceCollection<LogicalSwitchGroup> collection = this.logicalSwitchGroupClient.getAllLogicalSwitchGroups(params);
 
             System.out.println("LogicalSwitchGroupClientSample : getAllLogicalSwitchGroups : " +
                     "LogicalSwitchGroupCollection object returned to client (count) : " + collection.getCount());

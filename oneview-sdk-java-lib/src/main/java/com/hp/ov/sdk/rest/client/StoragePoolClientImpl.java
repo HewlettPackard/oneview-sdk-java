@@ -23,13 +23,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.StoragePoolAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.AddStoragePool;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
-import com.hp.ov.sdk.dto.StoragePoolCollection;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -43,16 +44,19 @@ public class StoragePoolClientImpl implements StoragePoolClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(StoragePoolClientImpl.class);
 
     private final HttpRestClient restClient;
+    private final ResourceAdaptor resourceAdaptor;
     private final StoragePoolAdaptor adaptor;
 
-    protected StoragePoolClientImpl(HttpRestClient restClient, StoragePoolAdaptor adaptor) {
+    protected StoragePoolClientImpl(HttpRestClient restClient, ResourceAdaptor resourceAdaptor, StoragePoolAdaptor adaptor) {
         this.restClient = restClient;
+        this.resourceAdaptor = resourceAdaptor;
         this.adaptor = adaptor;
     }
 
     public static StoragePoolClient getClient() {
         return new StoragePoolClientImpl(
                 HttpRestClient.getClient(),
+                new ResourceAdaptor(),
                 new StoragePoolAdaptor());
     }
 
@@ -85,7 +89,7 @@ public class StoragePoolClientImpl implements StoragePoolClient {
     }
 
     @Override
-    public StoragePoolCollection getAllStoragePools(final RestParams params) {
+    public ResourceCollection<StoragePool> getAllStoragePools(final RestParams params) {
         LOGGER.trace("StoragePoolClientImpl : getAllStoragePools : Start");
 
         // validate args
@@ -104,7 +108,8 @@ public class StoragePoolClientImpl implements StoragePoolClient {
                     SdkConstants.STORAGE_POOL, null);
         }
 
-        final StoragePoolCollection storagePoolCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<StoragePool> storagePoolCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, StoragePool.class);
 
         LOGGER.debug("StoragePoolClientImpl : getAllStoragePools : count :" + storagePoolCollectionDto.getCount());
         LOGGER.trace("StoragePoolClientImpl : getAllStoragePools : End");
@@ -138,7 +143,8 @@ public class StoragePoolClientImpl implements StoragePoolClient {
                     SdkConstants.STORAGE_POOL, null);
         }
 
-        final StoragePoolCollection storagePoolCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<StoragePool> storagePoolCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, StoragePool.class);
 
         StoragePool storagePoolDto = null;
 

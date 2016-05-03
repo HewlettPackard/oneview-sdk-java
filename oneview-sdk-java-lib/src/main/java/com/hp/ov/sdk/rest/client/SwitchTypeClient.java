@@ -17,7 +17,7 @@
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.InterconnectType;
-import com.hp.ov.sdk.dto.InterconnectTypeCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 /**
@@ -52,8 +52,9 @@ public interface SwitchTypeClient {
      *
      * @param params structure containing the connection details.
      *
-     * @return {@link InterconnectTypeCollection} containing the collection of switch types.
+     * @return {@link ResourceCollection}&lt;{@link InterconnectType}&gt; containing
+     * the details for all found interconnect types.
      */
-    InterconnectTypeCollection getAllSwitchTypes(RestParams params);
+    ResourceCollection<InterconnectType> getAllSwitchTypes(RestParams params);
 
 }

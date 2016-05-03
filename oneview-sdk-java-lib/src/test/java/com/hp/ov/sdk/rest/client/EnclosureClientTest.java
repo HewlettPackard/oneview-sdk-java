@@ -19,15 +19,16 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 import com.hp.ov.sdk.adaptors.EnclosureAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.AddEnclosureV2;
-import com.hp.ov.sdk.dto.EnclosureCollectionV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
 import com.hp.ov.sdk.dto.HttpMethodType;
@@ -36,6 +37,7 @@ import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
 import com.hp.ov.sdk.dto.RefreshStateConfig.RefreshForceOptions;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.TaskState;
@@ -59,7 +61,9 @@ public class EnclosureClientTest {
     private String enclosureJson = "";
     private RestParams params;
 
-    @Mock
+    @Spy
+    private ResourceAdaptor resourceAdaptor;
+    @Spy
     private EnclosureAdaptor adaptor;
     @Mock
     private TaskAdaptor taskAdaptor;
@@ -81,9 +85,6 @@ public class EnclosureClientTest {
         enclosureJson = this.getJsonFromFile("EnclosureGet.json");
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class)))
         .thenReturn(enclosureJson);
-
-        Mockito.when(adaptor.buildDto(enclosureJson))
-        .thenReturn(new EnclosureAdaptor().buildDto(enclosureJson));
 
         Enclosures enclosureDto = client.getEnclosure(params, resourceId);
 
@@ -115,13 +116,9 @@ public class EnclosureClientTest {
     public void testGetAllEnclosures() {
         enclosureJson = this.getJsonFromFile("EnclosureGetAll.json");
 
-        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class)))
-        .thenReturn(enclosureJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(enclosureJson);
 
-        Mockito.when(adaptor.buildCollectionDto(enclosureJson))
-        .thenReturn(new EnclosureAdaptor().buildCollectionDto(enclosureJson));
-
-        EnclosureCollectionV2 enclosureCollection = client.getAllEnclosures(params);
+        ResourceCollection<Enclosures> enclosureCollection = client.getAllEnclosures(params);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI));
@@ -155,9 +152,6 @@ public class EnclosureClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureJson);
-
-        Mockito.when(adaptor.buildCollectionDto(enclosureJson))
-        .thenReturn(new EnclosureAdaptor().buildCollectionDto(enclosureJson));
 
         Enclosures enclosureDto = client.getEnclosureByName(params, resourceName);
 
@@ -194,13 +188,9 @@ public class EnclosureClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetEnclosureGroupByNameWithNoMembers() {
-        EnclosureCollectionV2 enclosureCollectionDto = new EnclosureAdaptor().buildCollectionDto(this.getJsonFromFile("EnclosureGetByName.json"));
-        enclosureCollectionDto.setCount(0);
-        enclosureJson = new Gson().toJson(enclosureCollectionDto);
+        enclosureJson = new Gson().toJson(new ResourceCollection<Enclosures>());
 
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(enclosureJson);
-
-        Mockito.when(adaptor.buildCollectionDto(enclosureJson)).thenReturn(enclosureCollectionDto);
 
         client.getEnclosureByName(params, resourceName);
     }
@@ -408,9 +398,6 @@ public class EnclosureClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonSsoData);
 
-        Mockito.when(adaptor.buildSsoUrlData(Mockito.anyString()))
-        .thenReturn(new SsoUrlData());
-
         SsoUrlData ssoData = client.getActiveOaSsoUrl(params, resourceId);
 
         RestParams rp = new RestParams();
@@ -428,10 +415,6 @@ public class EnclosureClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonSsoData);
-
-        Mockito.when(adaptor.buildSsoUrlData(
-                Mockito.any(String.class)))
-        .thenReturn(new SsoUrlData());
 
         params.setApiVersion(200);
         SsoUrlData ssoData = client.getActiveOaSsoUrl(params, resourceId);
@@ -602,10 +585,6 @@ public class EnclosureClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureJson);
 
-        Mockito.when(adaptor.buildEnvironmentalConfigurationDto(
-                Mockito.any(String.class)))
-        .thenReturn(new EnvironmentalConfiguration());
-
         EnvironmentalConfiguration enclosureDto = client.getEnvironmentalConfiguration(params, resourceId);
 
         RestParams rp = new RestParams();
@@ -645,9 +624,6 @@ public class EnclosureClientTest {
 
         EnvironmentalConfiguration envConfigUpdated = new EnvironmentalConfiguration();
         envConfigUpdated.setCalibratedMaxPower(environmentalConfigurationUpdateDto.getCalibratedMaxPower());
-        Mockito.when(adaptor.buildEnvironmentalConfigurationDto(
-                Mockito.anyString()))
-        .thenReturn(envConfigUpdated );
 
         EnvironmentalConfiguration config = client.updateEnvironmentalConfiguration(
                 params,
@@ -818,9 +794,6 @@ public class EnclosureClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonSsoData);
 
-        Mockito.when(adaptor.buildSsoUrlData(Mockito.anyString()))
-        .thenReturn(new SsoUrlData());
-
         SsoUrlData ssoData = client.getStandbyOaSsoUrl(params, resourceId);
 
         RestParams rp = new RestParams();
@@ -838,9 +811,6 @@ public class EnclosureClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonSsoData);
-
-        Mockito.when(adaptor.buildSsoUrlData(Mockito.anyString()))
-        .thenReturn(new SsoUrlData());
 
         params.setApiVersion(200);
         SsoUrlData ssoData = client.getStandbyOaSsoUrl(params, resourceId);
@@ -877,9 +847,6 @@ public class EnclosureClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(utilizationJson);
 
-        Mockito.when(adaptor.buildUtilizationData(Mockito.anyString()))
-        .thenReturn(new UtilizationData());
-
         UtilizationData utilizationDataDto = client.getUtilization(params, resourceId);
 
         RestParams rp = new RestParams();
@@ -910,9 +877,6 @@ public class EnclosureClientTest {
         enclosureJson = this.getJsonFromFile("EnclosureGetByName.json");
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class)))
         .thenReturn(enclosureJson);
-
-        Mockito.when(adaptor.buildCollectionDto(enclosureJson))
-        .thenReturn(new EnclosureAdaptor().buildCollectionDto(enclosureJson));
 
         String id = client.getId(params, resourceName);
 

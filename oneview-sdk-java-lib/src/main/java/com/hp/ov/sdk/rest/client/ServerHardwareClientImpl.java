@@ -34,8 +34,8 @@ import com.hp.ov.sdk.dto.IloSsoUrlResult;
 import com.hp.ov.sdk.dto.JavaRemoteConsoleUrlResult;
 import com.hp.ov.sdk.dto.RefreshStateRequest;
 import com.hp.ov.sdk.dto.RemoteConsoleUrlResult;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.ServerHardware;
-import com.hp.ov.sdk.dto.ServerHardwareCollection;
 import com.hp.ov.sdk.dto.ServerPowerControlRequest;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.UtilizationData;
@@ -129,7 +129,8 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         }
 
         ServerHardware serverHardware = null;
-        ServerHardwareCollection collection = adaptor.buildResourceObject(response, ServerHardwareCollection.class);
+        ResourceCollection<ServerHardware> collection = adaptor.buildResourceCollection(response,
+                ServerHardware.class);
 
         if (collection.getCount() > 0) {
             serverHardware = collection.getMembers().get(0);
@@ -148,7 +149,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
     }
 
     @Override
-    public ServerHardwareCollection getAllServerHardware(final RestParams params) {
+    public ResourceCollection<ServerHardware> getAllServerHardware(final RestParams params) {
         LOGGER.trace("ServerHardwareClientImpl : getAllServerHardware : Start");
 
         if (null == params) {
@@ -167,8 +168,8 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
                     SdkConstants.SERVER_HARDWARES, null);
         }
 
-        ServerHardwareCollection serverHardwareCollectionDto = adaptor.buildResourceObject(returnObj,
-                ServerHardwareCollection.class);
+        ResourceCollection<ServerHardware> serverHardwareCollectionDto = adaptor.buildResourceCollection(returnObj,
+                ServerHardware.class);
 
         LOGGER.debug("ServerHardwareClientImpl : getAllServerHardware : members count : "
                 + serverHardwareCollectionDto.getCount());

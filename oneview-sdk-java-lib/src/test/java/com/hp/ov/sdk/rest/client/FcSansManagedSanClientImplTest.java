@@ -22,13 +22,12 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.anyString;
+import static org.mockito.BDDMockito.doReturn;
+import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 import java.io.IOException;
@@ -45,17 +44,16 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
-import com.hp.ov.sdk.adaptors.ManagedSanAdaptor;
-import com.hp.ov.sdk.adaptors.ManagedSanEndpointAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.EndpointResponseCollection;
+import com.hp.ov.sdk.dto.EndpointResponse;
 import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.dto.FcSansManagedSanTask;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SanRequest;
 import com.hp.ov.sdk.dto.SanResponse;
-import com.hp.ov.sdk.dto.SanResponseCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -77,13 +75,11 @@ public class FcSansManagedSanClientImplTest {
     @Mock
     private HttpRestClient client;
     @Mock
-    private ManagedSanAdaptor sanAdaptor;
+    private ResourceAdaptor adaptor;
     @Mock
     private TaskAdaptor taskAdaptor;
     @Mock
     private TaskMonitorManager monitorManager;
-    @Mock
-    private ManagedSanEndpointAdaptor endpointAdaptor;
     @InjectMocks
     private FcSansManagedSanClientImpl sanClient;
 
@@ -116,7 +112,7 @@ public class FcSansManagedSanClientImplTest {
     @Test
     public void shouldGetManagedSan() throws IOException {
         given(client.sendRequest(any(RestParams.class))).willReturn(managedSan);
-        given(sanAdaptor.buildDto(anyString())).willReturn(new SanResponse());
+        given(adaptor.buildResourceObject(anyString(), eq(SanResponse.class))).willReturn(new SanResponse());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -126,7 +122,7 @@ public class FcSansManagedSanClientImplTest {
         this.sanClient.getManagedSan(new RestParams(), ANY_RESOURCE_ID);
 
         then(client).should().sendRequest(eq(expectedRestParams));
-        then(sanAdaptor).should().buildDto(managedSan);
+        then(adaptor).should().buildResourceObject(managedSan, SanResponse.class);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -144,7 +140,8 @@ public class FcSansManagedSanClientImplTest {
     @Test
     public void shouldGetAllManagedSan() {
         given(client.sendRequest(any(RestParams.class))).willReturn(managedSanList);
-        given(sanAdaptor.buildCollectionDto(anyString())).willReturn(new SanResponseCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(SanResponse.class)))
+                .willReturn(new ResourceCollection<SanResponse>());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -154,7 +151,7 @@ public class FcSansManagedSanClientImplTest {
         this.sanClient.getAllManagedSan(new RestParams());
 
         then(client).should().sendRequest(eq(expectedRestParams));
-        then(sanAdaptor).should().buildCollectionDto(managedSanList);
+        then(adaptor).should().buildResourceCollection(managedSanList, SanResponse.class);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -175,11 +172,11 @@ public class FcSansManagedSanClientImplTest {
     public void shouldThrowExceptionWhenNoSanManagerIsFoundForTheGivenName() {
         String anyName = "random-NAME";
 
-        SanResponseCollection sanResponseCollection = new SanResponseCollection();
-        sanResponseCollection.setCount(0);
+        ResourceCollection<SanResponse> sanResponseCollection = new ResourceCollection<>();
 
         given(client.sendRequest(any(RestParams.class))).willReturn(managedSanList);
-        given(sanAdaptor.buildCollectionDto(anyObject())).willReturn(sanResponseCollection);
+        given(adaptor.buildResourceCollection(anyString(), eq(SanResponse.class)))
+                .willReturn(sanResponseCollection);
 
         this.sanClient.getManagedSanByName(new RestParams(), anyName);
     }
@@ -188,12 +185,11 @@ public class FcSansManagedSanClientImplTest {
     public void shouldGetSanManagerByName() {
         String anyName = "random-NAME";
 
-        SanResponseCollection sanResponseCollection = new SanResponseCollection();
-        sanResponseCollection.setCount(1);
+        ResourceCollection<SanResponse> sanResponseCollection = new ResourceCollection<>();
         sanResponseCollection.setMembers(Lists.newArrayList(new SanResponse()));
 
         given(client.sendRequest(any(RestParams.class))).willReturn(managedSanList);
-        given(sanAdaptor.buildCollectionDto(anyObject())).willReturn(sanResponseCollection);
+        given(adaptor.buildResourceCollection(anyString(), eq(SanResponse.class))).willReturn(sanResponseCollection);
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -209,7 +205,7 @@ public class FcSansManagedSanClientImplTest {
         this.sanClient.getManagedSanByName(new RestParams(), anyName);
 
         then(client).should().sendRequest(eq(expectedRestParams));
-        then(sanAdaptor).should().buildCollectionDto(managedSanList);
+        then(adaptor).should().buildResourceCollection(managedSanList, SanResponse.class);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -221,8 +217,8 @@ public class FcSansManagedSanClientImplTest {
     public void shouldUpdateManagedSan() {
         JSONObject jsonObject = new JSONObject();
 
-        given(sanAdaptor.buildJsonObjectFromDto(any(SanRequest.class), any(Integer.class))).willReturn(jsonObject);
-        given(sanAdaptor.buildDto(any(String.class))).willReturn(new SanResponse());
+        given(adaptor.buildJsonRequest(any(SanRequest.class), any(Integer.class))).willReturn(jsonObject);
+        given(adaptor.buildResourceObject(any(String.class), eq(SanResponse.class))).willReturn(new SanResponse());
         given(client.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(managedSan);
 
         RestParams expectedRestParams = new RestParams();
@@ -233,7 +229,7 @@ public class FcSansManagedSanClientImplTest {
         this.sanClient.updateManagedSan(new RestParams(), ANY_RESOURCE_ID, new SanRequest(), false, false);
 
         then(client).should().sendRequest(eq(expectedRestParams), eq(jsonObject));
-        then(sanAdaptor).should().buildDto(managedSan);
+        then(adaptor).should().buildResourceObject(managedSan, SanResponse.class);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -253,7 +249,8 @@ public class FcSansManagedSanClientImplTest {
     @Test
     public void shouldGetEndpointsOfManagedSan() {
         given(client.sendRequest(any(RestParams.class))).willReturn(managedSanEndpoints);
-        given(endpointAdaptor.buildCollectionDto(anyString())).willReturn(new EndpointResponseCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(EndpointResponse.class)))
+                .willReturn(new ResourceCollection<EndpointResponse>());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -263,7 +260,7 @@ public class FcSansManagedSanClientImplTest {
         this.sanClient.getEndpointsOfManagedSan(new RestParams(), ANY_RESOURCE_ID);
 
         then(client).should().sendRequest(eq(expectedRestParams));
-        then(endpointAdaptor).should().buildCollectionDto(managedSanEndpoints);
+        then(adaptor).should().buildResourceCollection(managedSanEndpoints, EndpointResponse.class);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -353,7 +350,8 @@ public class FcSansManagedSanClientImplTest {
                 "\"modified\":\"2016-02-22T13:37:02.916Z\"}";
 
         given(client.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(endpointsCsvResponse);
-        given(endpointAdaptor.buildEndpointCsvFileResponse(anyString())).willReturn(new EndpointsCsvFileResponse());
+        given(adaptor.buildResourceObject(anyString(), eq(EndpointsCsvFileResponse.class)))
+                .willReturn(new EndpointsCsvFileResponse());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.POST);
@@ -363,7 +361,7 @@ public class FcSansManagedSanClientImplTest {
         this.sanClient.createEndpointsCsvOfManagedSan(new RestParams(), ANY_RESOURCE_ID);
 
         then(client).should().sendRequest(eq(expectedRestParams), any(JSONObject.class));
-        then(endpointAdaptor).should().buildEndpointCsvFileResponse(endpointsCsvResponse);
+        then(adaptor).should().buildResourceObject(endpointsCsvResponse, EndpointsCsvFileResponse.class);
     }
 
     @Test

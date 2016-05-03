@@ -15,8 +15,8 @@
  */
 package com.hp.ov.sdk.rest.client;
 
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.UplinkSetCollectionV2;
 import com.hp.ov.sdk.dto.generated.UplinkSets;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
@@ -40,9 +40,10 @@ public interface UplinkSetClient {
      *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link UplinkSetCollectionV2} containing a collection of uplink set details.
+     * @return {@link ResourceCollection}&lt;{@link UplinkSets}&gt; containing
+     * the details for all found uplink sets.
      */
-    UplinkSetCollectionV2 getAllUplinkSet(final RestParams params);
+    ResourceCollection<UplinkSets> getAllUplinkSet(final RestParams params);
 
     /**
      * The module aids in deleting a uplink set for the specified uplink set

@@ -15,13 +15,14 @@
  */
 package com.hp.ov.sdk.sanmanager;
 
-import com.hp.ov.sdk.dto.EndpointResponseCollection;
+import com.hp.ov.sdk.dto.EndpointResponse;
+import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.dto.FcIssueResponse;
 import com.hp.ov.sdk.dto.FcSansManagedSanTask;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SanPolicy;
 import com.hp.ov.sdk.dto.SanRequest;
 import com.hp.ov.sdk.dto.SanResponse;
-import com.hp.ov.sdk.dto.SanResponseCollection;
 import com.hp.ov.sdk.dto.ZoningPolicy;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
@@ -30,7 +31,6 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.rest.client.FcSansManagedSanClient;
 import com.hp.ov.sdk.rest.client.FcSansManagedSanClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -89,7 +89,7 @@ public class FcSansManagedSanClientSample {
 
     private void getAllManagedSan() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        SanResponseCollection sanResponseCollectionDto = null;
+        ResourceCollection<SanResponse> sanResponseCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -173,7 +173,7 @@ public class FcSansManagedSanClientSample {
         try {
             params = HPOneViewCredential.createCredentials();
 
-            EndpointResponseCollection endpointResponseCollection
+            ResourceCollection<EndpointResponse> endpointResponseCollection
                     = fcSansManagedSanClient.getEndpointsOfManagedSan(params, resourceId);
 
             System.out.println("FcSansManagedSanClientTest#getEndpointsOfManagedSan :" + " device manager object returned to client : "

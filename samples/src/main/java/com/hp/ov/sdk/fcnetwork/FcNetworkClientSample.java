@@ -16,8 +16,8 @@
 package com.hp.ov.sdk.fcnetwork;
 
 import com.hp.ov.sdk.constants.ResourceCategory;
-import com.hp.ov.sdk.dto.FcNetworkCollection;
 import com.hp.ov.sdk.dto.JsonRequest;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.FcNetwork;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -90,7 +90,7 @@ public class FcNetworkClientSample {
 
     private void getAllFcNetwork() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        FcNetworkCollection fcNetworkCollectionDto = null;
+        ResourceCollection<FcNetwork> fcNetworkCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -120,7 +120,7 @@ public class FcNetworkClientSample {
 
     private void getFcNetworkByFilter() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        FcNetworkCollection fcNetworkCollectionDto = null;
+        ResourceCollection<FcNetwork> fcNetworkCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -148,7 +148,6 @@ public class FcNetworkClientSample {
             System.out.println("FcNetworkClientTest : getFcNetworkByFilter :" + " arguments are null ");
             return;
         }
-
     }
 
     private void getFcNetworkByName() throws InstantiationException, IllegalAccessException {

@@ -34,16 +34,18 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 import com.hp.ov.sdk.adaptors.LogicalInterconnectGroupAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
-import com.hp.ov.sdk.dto.LogicalInterconnectGroupCollectionV2;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.TaskState;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
@@ -61,7 +63,9 @@ public class LogicalInterconnectGroupClientTest {
 
     private RestParams params;
 
-    @Mock
+    @Spy
+    private ResourceAdaptor resourceAdaptor;
+    @Spy
     private LogicalInterconnectGroupAdaptor adaptor;
     @Mock
     private TaskAdaptor taskAdaptor;
@@ -90,9 +94,6 @@ public class LogicalInterconnectGroupClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
-
-        Mockito.when(adaptor.buildDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectGroupAdaptor().buildDto(ligJson));
 
         LogicalInterconnectGroups ligDto = client.getLogicalInterconnectGroup(params, resourceId);
 
@@ -126,10 +127,7 @@ public class LogicalInterconnectGroupClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
 
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectGroupAdaptor().buildCollectionDto(ligJson));
-
-        LogicalInterconnectGroupCollectionV2 ligList = client.getAllLogicalInterconnectGroups(params);
+        ResourceCollection<LogicalInterconnectGroups> ligList = client.getAllLogicalInterconnectGroups(params);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI));
@@ -162,9 +160,6 @@ public class LogicalInterconnectGroupClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectGroupAdaptor().buildCollectionDto(ligJson));
 
         LogicalInterconnectGroups ligDto = client.getLogicalInterconnectGroupByName(params, resourceName);
 
@@ -200,16 +195,13 @@ public class LogicalInterconnectGroupClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetLogicalInterconnectGroupByNameWithNoMembers() {
-        LogicalInterconnectGroupCollectionV2 ligCollection = new LogicalInterconnectGroupAdaptor().buildCollectionDto(this.getJsonFromFile("LogicalInterconnectGroupGetByName.json"));
-        ligCollection.setCount(0);
+        ResourceCollection<LogicalInterconnectGroups> ligCollection = new ResourceCollection<>();
+
         ligJson = new Gson().toJson(ligCollection);
 
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(ligCollection);
 
         client.getLogicalInterconnectGroupByName(params, resourceName);
     }
@@ -226,9 +218,6 @@ public class LogicalInterconnectGroupClientTest {
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonCreateTaskCompleted);
-
-        Mockito.when(adaptor.buildJsonObjectFromDto(Mockito.any(LogicalInterconnectGroups.class), Mockito.anyDouble()))
-        .thenReturn(new LogicalInterconnectGroupAdaptor().buildJsonObjectFromDto(ligDto, 200));
 
         Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
         .thenReturn(taskResourceV2);
@@ -272,9 +261,6 @@ public class LogicalInterconnectGroupClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
-
-        Mockito.when(adaptor.buildDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectGroupAdaptor().buildDto(ligJson));
 
         // UPDATE
         Mockito.when(restClient.sendRequest(
@@ -364,9 +350,6 @@ public class LogicalInterconnectGroupClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
 
-        Mockito.when(adaptor.buildInterconnectSettingsDto(Mockito.anyString(), Mockito.anyDouble()))
-        .thenReturn(new LogicalInterconnectGroupAdaptor().buildInterconnectSettingsDto(ligJson, 200));
-
         InterconnectSettingsV2 settingsDto = client.getDefaultInterconnectSettings(params);
 
         RestParams rp = new RestParams();
@@ -399,9 +382,6 @@ public class LogicalInterconnectGroupClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
 
-        Mockito.when(adaptor.buildInterconnectSettingsDto(Mockito.anyString(), Mockito.anyDouble()))
-        .thenReturn(new LogicalInterconnectGroupAdaptor().buildInterconnectSettingsDto(ligJson, 200));
-
         InterconnectSettingsV2 settingsDto = client.getInterconnectSettings(params, resourceId, settingsId);
 
         RestParams rp = new RestParams();
@@ -424,9 +404,6 @@ public class LogicalInterconnectGroupClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
-
-        Mockito.when(adaptor.buildInterconnectSettingsDto(Mockito.anyString(), Mockito.anyDouble()))
-        .thenReturn(new LogicalInterconnectGroupAdaptor().buildInterconnectSettingsDto(ligJson, 200));
 
         params.setApiVersion(200);
         InterconnectSettingsV2 settingsDto = client.getInterconnectSettings(params, resourceId);
@@ -475,9 +452,6 @@ public class LogicalInterconnectGroupClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectGroupAdaptor().buildCollectionDto(ligJson));
 
         String id = client.getId(params, resourceName);
 

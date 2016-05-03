@@ -24,13 +24,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.adaptors.LogicalEnclosureAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.AddLogicalEnclosure;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.LogicalEnclosureList;
 import com.hp.ov.sdk.dto.Patch;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SupportDump;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.LogicalEnclosure;
@@ -49,16 +50,18 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
     private static final int TIMEOUT = 300000; // in milliseconds
 
     private final LogicalEnclosureAdaptor adaptor;
+    private final ResourceAdaptor resourceAdaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
-
-    private HttpRestClient httpClient;
+    private final HttpRestClient httpClient;
 
     private JSONObject jsonObject;
 
-    protected LogicalEnclosureClientImpl(HttpRestClient httpClient, LogicalEnclosureAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+    protected LogicalEnclosureClientImpl(HttpRestClient httpClient, LogicalEnclosureAdaptor adaptor, ResourceAdaptor resourceAdaptor,
+            TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
         this.httpClient = httpClient;
         this.adaptor = adaptor;
+        this.resourceAdaptor = resourceAdaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
     }
@@ -67,6 +70,7 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
         return new LogicalEnclosureClientImpl(
                 HttpRestClient.getClient(),
                 new LogicalEnclosureAdaptor(),
+                new ResourceAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
     }
@@ -100,7 +104,7 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
     }
 
     @Override
-    public LogicalEnclosureList getAllLogicalEnclosures(RestParams params) {
+    public ResourceCollection<LogicalEnclosure> getAllLogicalEnclosures(RestParams params) {
         LOGGER.info("LogicalEnclosureClientImpl : getAllLogicalEnclosures : Start");
         // validate args
         if (null == params) {
@@ -119,8 +123,8 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.LOGICAL_ENCLOSURE, null);
         }
 
-        // Call adaptor to convert to DTO
-        final LogicalEnclosureList logicalEnclosureListDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<LogicalEnclosure> logicalEnclosureListDto =
+                resourceAdaptor.buildResourceCollection(returnObj, LogicalEnclosure.class);
 
         LOGGER.debug("LogicalEnclosureClientImpl : getAllLogicalEnclosures : members count :" + logicalEnclosureListDto.getCount());
         LOGGER.info("LogicalEnclosureClientImpl : getAllLogicalEnclosures : End");
@@ -151,11 +155,12 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.LOGICAL_ENCLOSURE, null);
         }
-        // Call adaptor to convert to DTO
 
-        final LogicalEnclosureList logicalEnclosureList = adaptor.buildCollectionDto(returnObj);
-        if (logicalEnclosureList.getCount() != 0) {
-            logicalEnclosureDto = logicalEnclosureList.getMembers().get(0);
+        ResourceCollection<LogicalEnclosure> logicalEnclosureListDto =
+                resourceAdaptor.buildResourceCollection(returnObj, LogicalEnclosure.class);
+
+        if (logicalEnclosureListDto.getCount() != 0) {
+            logicalEnclosureDto = logicalEnclosureListDto.getMembers().get(0);
         } else {
             logicalEnclosureDto = null;
         }

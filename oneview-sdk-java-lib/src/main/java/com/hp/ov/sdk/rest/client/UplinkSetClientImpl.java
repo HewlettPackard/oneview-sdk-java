@@ -22,13 +22,13 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
-import com.hp.ov.sdk.adaptors.UplinkSetAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.UplinkSetCollectionV2;
 import com.hp.ov.sdk.dto.generated.UplinkSets;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -45,15 +45,15 @@ public class UplinkSetClientImpl implements UplinkSetClient {
     public static final Logger LOGGER = LoggerFactory.getLogger(UplinkSetClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
 
-    private final UplinkSetAdaptor adaptor;
+    private final ResourceAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
 
-    private HttpRestClient httpClient;
+    private final HttpRestClient httpClient;
 
     private JSONObject jsonObject;
 
-    protected UplinkSetClientImpl(HttpRestClient httpClient, UplinkSetAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+    protected UplinkSetClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
         this.httpClient = httpClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
@@ -63,7 +63,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
     public static UplinkSetClient getClient() {
         return new UplinkSetClientImpl(
                 HttpRestClient.getClient(),
-                new UplinkSetAdaptor(),
+                new ResourceAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
     }
@@ -85,9 +85,8 @@ public class UplinkSetClientImpl implements UplinkSetClient {
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.UPLINKSET, null);
         }
-        // Call adaptor to convert to DTO
 
-        final UplinkSets uplinkSetDto = adaptor.buildDto(returnObj, params.getApiVersion());
+        UplinkSets uplinkSetDto = adaptor.buildResourceObject(returnObj, UplinkSets.class);
 
         LOGGER.debug("UplinkSetClientImpl : getUplinkSet : Name :" + uplinkSetDto.getName());
         LOGGER.info("UplinkSetClientImpl : getUplinkSet : End");
@@ -96,7 +95,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
     }
 
     @Override
-    public UplinkSetCollectionV2 getAllUplinkSet(final RestParams params) {
+    public ResourceCollection<UplinkSets> getAllUplinkSet(final RestParams params) {
         LOGGER.info("UplinkSetClientImpl : getAllUplinkSet : Start");
 
         // validate args
@@ -112,9 +111,9 @@ public class UplinkSetClientImpl implements UplinkSetClient {
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.UPLINKSETS, null);
         }
-        // Call adaptor to convert to DTO
 
-        final UplinkSetCollectionV2 uplinkSetCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<UplinkSets> uplinkSetCollectionDto = adaptor.buildResourceCollection(returnObj,
+                UplinkSets.class);
 
         LOGGER.debug("UplinkSetClientImpl : getAllUplinkSet : members count :" + uplinkSetCollectionDto.getCount());
         LOGGER.info("UplinkSetClientImpl : getAllUplinkSet : End");
@@ -184,7 +183,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
         // idea is : user can create json string and call the sdk api.
         // user can save time in creating uplinksets dto.
 
-        jsonObject = adaptor.buildJsonObjectFromDto(uplinkDto, params.getApiVersion());
+        jsonObject = adaptor.buildJsonRequest(uplinkDto, params.getApiVersion());
 
         returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
@@ -230,8 +229,9 @@ public class UplinkSetClientImpl implements UplinkSetClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.UPLINKSET, null);
         }
 
-        // Call adaptor to convert to DTO
-        final UplinkSetCollectionV2 uplinkSetCollectionDto = adaptor.buildCollectionDto(returnObj, params.getApiVersion());
+        ResourceCollection<UplinkSets> uplinkSetCollectionDto
+                = adaptor.buildResourceCollection(returnObj, UplinkSets.class);
+
         if (uplinkSetCollectionDto.getCount() != 0) {
             uplinkSetDto = uplinkSetCollectionDto.getMembers().get(0);
         } else {
@@ -271,7 +271,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
         // user can save time in creating network dto.
 
         // create JSON request from dto
-        jsonObject = adaptor.buildJsonObjectFromDto(uplinkSetDto, params.getApiVersion());
+        jsonObject = adaptor.buildJsonRequest(uplinkSetDto, params.getApiVersion());
         returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);

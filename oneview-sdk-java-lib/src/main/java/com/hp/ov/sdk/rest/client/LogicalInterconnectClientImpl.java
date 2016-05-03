@@ -24,20 +24,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.adaptors.LogicalInterconnectAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.InterconnectFibData;
+import com.hp.ov.sdk.dto.InterconnectFibDataEntry;
 import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
-import com.hp.ov.sdk.dto.InternalVlanAssociationCollection;
+import com.hp.ov.sdk.dto.InternalVlanAssociation;
 import com.hp.ov.sdk.dto.LiFirmware;
-import com.hp.ov.sdk.dto.LogicalInterconnectCollectionV2;
 import com.hp.ov.sdk.dto.PortMonitor;
-import com.hp.ov.sdk.dto.PortMonitorUplinkPortCollection;
+import com.hp.ov.sdk.dto.PortMonitorUplinkPort;
 import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.Location;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
@@ -58,17 +59,18 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     private static final int TIMEOUT = 300000; // in milliseconds = 1 mins
     public static final Logger LOGGER = LoggerFactory.getLogger(LogicalInterconnectClientImpl.class);
 
+    private final ResourceAdaptor resourceAdaptor;
     private final LogicalInterconnectAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
-
-    private HttpRestClient httpClient;
+    private final HttpRestClient httpClient;
 
     private JSONObject jsonObject;
 
-    protected LogicalInterconnectClientImpl(HttpRestClient httpClient, LogicalInterconnectAdaptor adaptor,
-        TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+    protected LogicalInterconnectClientImpl(HttpRestClient httpClient, ResourceAdaptor resourceAdaptor,
+            LogicalInterconnectAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
         this.httpClient = httpClient;
+        this.resourceAdaptor = resourceAdaptor;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
@@ -77,6 +79,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     public static LogicalInterconnectClient getClient() {
         return new LogicalInterconnectClientImpl(
                 HttpRestClient.getClient(),
+                new ResourceAdaptor(),
                 new LogicalInterconnectAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
@@ -111,7 +114,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     }
 
     @Override
-    public LogicalInterconnectCollectionV2 getAllLogicalInterconnects(final RestParams params) {
+    public ResourceCollection<LogicalInterconnects> getAllLogicalInterconnects(final RestParams params) {
         LOGGER.info("LogicalInterconnectClientImpl : getAllLogicalInterconnects : Start");
 
         // validate args
@@ -128,9 +131,9 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.LOGICAL_INTERCONNECTS, null);
         }
-        // Call adaptor to convert to DTO
 
-        final LogicalInterconnectCollectionV2 logicalInterconnectCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<LogicalInterconnects> logicalInterconnectCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, LogicalInterconnects.class);
 
         LOGGER.debug("LogicalInterconnectClientImpl : getAllLogicalInterconnects : members count :"
                 + logicalInterconnectCollectionDto.getCount());
@@ -144,7 +147,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectByName : start");
 
         // Filters are not supported
-        final LogicalInterconnectCollectionV2 logicalInterconnectCollectionDto = getAllLogicalInterconnects(params);
+        ResourceCollection<LogicalInterconnects> logicalInterconnectCollectionDto = getAllLogicalInterconnects(params);
 
         for (final LogicalInterconnects logicalInterconnectDto : new ArrayList<>(logicalInterconnectCollectionDto.getMembers())) {
             if (logicalInterconnectDto.getName().equalsIgnoreCase(logicalInterconnectName)) {
@@ -327,7 +330,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     }
 
     @Override
-    public InterconnectFibData getLogicalInterconnectForwardingInformationBase(RestParams params, String resourceId) {
+    public ResourceCollection<InterconnectFibDataEntry> getLogicalInterconnectForwardingInformationBase(RestParams params, String resourceId) {
         LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectForwardingInformationBase : Start");
 
         // validate args
@@ -348,9 +351,9 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.LOGICAL_INTERCONNECT, null);
         }
-        // Call adaptor to convert to DTO
 
-        final InterconnectFibData fibDataDto = adaptor.buildInterconnectFibDataDto(returnObj);
+        ResourceCollection<InterconnectFibDataEntry> fibDataDto = resourceAdaptor.buildResourceCollection(returnObj,
+                InterconnectFibDataEntry.class);
 
         LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectForwardingInformationBase : End");
 
@@ -420,7 +423,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     }
 
     @Override
-    public PortMonitorUplinkPortCollection getLogicalInterconnectUnassignedUplinkPortsForPortMonitor(RestParams params,
+    public ResourceCollection<PortMonitorUplinkPort> getLogicalInterconnectUnassignedUplinkPortsForPortMonitor(RestParams params,
             String resourceId) {
         LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectUnassignedUplinkPortsForPortMonitor : Start");
 
@@ -442,9 +445,9 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.LOGICAL_INTERCONNECT, null);
         }
-        // Call adaptor to convert to DTO
 
-        final PortMonitorUplinkPortCollection uplinkPortCollection = adaptor.buildPortMonitorUplinkPortCollectioDto(returnObj);
+        ResourceCollection<PortMonitorUplinkPort> uplinkPortCollection
+                = resourceAdaptor.buildResourceCollection(returnObj, PortMonitorUplinkPort.class);
 
         LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectUnassignedUplinkPortsForPortMonitor : End");
 
@@ -821,7 +824,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     }
 
     @Override
-    public InternalVlanAssociationCollection getLogicalInterconnectInternalVlans(RestParams params, String resourceId) {
+    public ResourceCollection<InternalVlanAssociation> getLogicalInterconnectInternalVlans(RestParams params, String resourceId) {
         LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectInternalVlans : Start");
 
         // validate args
@@ -842,9 +845,9 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.LOGICAL_INTERCONNECT, null);
         }
-        // Call adaptor to convert to DTO
 
-        final InternalVlanAssociationCollection vlanCollectionDto = adaptor.buildInternalVlanCollectionDto(returnObj);
+        ResourceCollection<InternalVlanAssociation> vlanCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, InternalVlanAssociation.class);
 
         LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectInternalVlans : End");
 

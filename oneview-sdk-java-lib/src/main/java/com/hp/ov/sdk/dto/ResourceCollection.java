@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,39 +12,27 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
+
 package com.hp.ov.sdk.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseCollectionResource<T> extends BaseModelResource {
-
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+public class ResourceCollection<T> extends BaseModelResource {
 
     private int start;
     private int count;
     private int total;
     private String prevPageUri;
     private String nextPageUri;
-
-    public BaseCollectionResource() {
-
-    }
-
-    public BaseCollectionResource(final int start, final int count, final int total) {
-        this.start = start;
-        this.count = count;
-        this.total = total;
-    }
+    private List<T> members = new ArrayList<>();
 
     public int getStart() {
         return start;
     }
 
-    public void setStart(final int start) {
+    public void setStart(int start) {
         this.start = start;
     }
 
@@ -52,7 +40,7 @@ public abstract class BaseCollectionResource<T> extends BaseModelResource {
         return count;
     }
 
-    public void setCount(final int count) {
+    public void setCount(int count) {
         this.count = count;
     }
 
@@ -60,7 +48,7 @@ public abstract class BaseCollectionResource<T> extends BaseModelResource {
         return total;
     }
 
-    public void setTotal(final int total) {
+    public void setTotal(int total) {
         this.total = total;
     }
 
@@ -68,7 +56,7 @@ public abstract class BaseCollectionResource<T> extends BaseModelResource {
         return prevPageUri;
     }
 
-    public void setPrevPageUri(final String prevPageUri) {
+    public void setPrevPageUri(String prevPageUri) {
         this.prevPageUri = prevPageUri;
     }
 
@@ -76,12 +64,24 @@ public abstract class BaseCollectionResource<T> extends BaseModelResource {
         return nextPageUri;
     }
 
-    public void setNextPageUri(final String nextPageUri) {
+    public void setNextPageUri(String nextPageUri) {
         this.nextPageUri = nextPageUri;
     }
 
-    public abstract List<T> getMembers();
+    public List<T> getMembers() {
+        return new ArrayList<>(this.members);
+    }
 
-    public abstract void setMembers(List<T> members);
+    public boolean isEmpty() {
+        return this.members.isEmpty();
+    }
 
+    public void setMembers(List<T> members) {
+        this.members.clear();
+
+        if (members != null) {
+            this.members.addAll(members);
+        }
+        this.setCount(this.members.size());
+    }
 }

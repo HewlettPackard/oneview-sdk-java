@@ -25,11 +25,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 import com.hp.ov.sdk.adaptors.NetworkAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.NetworkCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.generated.Network;
@@ -49,17 +50,19 @@ public class NetworkClientImpl implements NetworkClient {
 
     private final HttpRestClient restClient;
     private final NetworkAdaptor adaptor;
+    private final ResourceAdaptor resourceAdaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
 
     protected NetworkClientImpl(HttpRestClient restClient,
-            ConnectionTemplateClient connectionTemplateClient,
             NetworkAdaptor adaptor,
+            ResourceAdaptor resourceAdaptor,
             TaskAdaptor taskAdaptor,
             TaskMonitorManager taskMonitor) {
 
         this.restClient = restClient;
         this.adaptor = adaptor;
+        this.resourceAdaptor = resourceAdaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
     }
@@ -67,8 +70,8 @@ public class NetworkClientImpl implements NetworkClient {
     public static NetworkClient getClient() {
         return new NetworkClientImpl(
                 HttpRestClient.getClient(),
-                ConnectionTemplateClientImpl.getClient(),
                 new NetworkAdaptor(),
+                new ResourceAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
     }
@@ -100,7 +103,7 @@ public class NetworkClientImpl implements NetworkClient {
     }
 
     @Override
-    public NetworkCollection getAllNetworks(final RestParams params) {
+    public ResourceCollection<Network> getAllNetworks(final RestParams params) {
         LOGGER.trace("NetworkClientImpl : getAllNetworks : Start");
         // validate args
         if (null == params) {
@@ -117,12 +120,12 @@ public class NetworkClientImpl implements NetworkClient {
         if (Strings.isNullOrEmpty(returnObj)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKS, null);
         }
-        final NetworkCollection networkCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<Network> networkCollection = resourceAdaptor.buildResourceCollection(returnObj, Network.class);
 
-        LOGGER.debug("NetworkClient : getAllNetworks : members count :" + networkCollectionDto.getCount());
+        LOGGER.debug("NetworkClient : getAllNetworks : members count :" + networkCollection.getCount());
         LOGGER.trace("NetworkClientImpl : getAllNetworks : End");
 
-        return networkCollectionDto;
+        return networkCollection;
     }
 
     @Override
@@ -152,11 +155,11 @@ public class NetworkClientImpl implements NetworkClient {
         }
 
         Network networkDto = null;
-        NetworkCollection networkCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<Network> networkCollection = resourceAdaptor.buildResourceCollection(returnObj, Network.class);
 
-        LOGGER.debug("total matches: " + networkCollectionDto.getCount());
-        if (networkCollectionDto.getCount() != 0) {
-            networkDto = networkCollectionDto.getMembers().get(0);
+        LOGGER.debug("total matches: " + networkCollection.getCount());
+        if (networkCollection.getCount() != 0) {
+            networkDto = networkCollection.getMembers().get(0);
         }
 
         if (networkDto == null) {

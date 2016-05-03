@@ -18,7 +18,6 @@ package com.hp.ov.sdk.adaptors;
 import org.json.JSONObject;
 
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
-import com.hp.ov.sdk.dto.LogicalInterconnectGroupCollectionV2;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
@@ -42,16 +41,6 @@ public class LogicalInterconnectGroupAdaptor extends BaseAdaptor<LogicalIntercon
         final InterconnectSettingsV2 interconnectSettingsDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version)), InterconnectSettingsV2.class);
         return interconnectSettingsDto;
-    }
-
-    public LogicalInterconnectGroupCollectionV2 buildCollectionDto(final Object source) {
-        // write json object to a file
-        // convert json Object to DTO, replace quotes and back slash in the file
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        final LogicalInterconnectGroupCollectionV2 logicalInterconnectGroupCollectionDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
-                        .convertObjectToJsonString(source))), LogicalInterconnectGroupCollectionV2.class);
-        return logicalInterconnectGroupCollectionDto;
     }
 
     public JSONObject buildJsonObjectFromDto(final LogicalInterconnectGroups source, final double version) {

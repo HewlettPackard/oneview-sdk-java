@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
-import com.hp.ov.sdk.dto.LogicalInterconnectGroupCollectionV2;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
@@ -117,7 +117,7 @@ public class LogicalInterconnectGroupClientSample {
     }
 
     private void getAllLogicalInterconnectGroups() throws InstantiationException, IllegalAccessException {
-        LogicalInterconnectGroupCollectionV2 logicalInterconnectGroupCollectionDto = null;
+        ResourceCollection<LogicalInterconnectGroups> logicalInterconnectGroupCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();

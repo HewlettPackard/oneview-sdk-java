@@ -15,7 +15,7 @@
  */
 package com.hp.ov.sdk.rest.client;
 
-import com.hp.ov.sdk.dto.ConnectionTemplateCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.generated.ConnectionTemplate;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
@@ -74,10 +74,10 @@ public interface ConnectionTemplateClient {
      * 
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link ConnectionTemplateCollection} containing the collection
-     *         of connection template details.
+     * @return {@link ResourceCollection}&lt;{@link ConnectionTemplate}&gt; containing
+     * the details for all found connection templates.
      */
-    ConnectionTemplateCollection getAllConnectionTemplates(final RestParams params);
+    ResourceCollection<ConnectionTemplate> getAllConnectionTemplates(final RestParams params);
 
     /**
      * The module aids in fetching the default connection template details for

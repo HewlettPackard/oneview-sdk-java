@@ -23,10 +23,8 @@ import org.json.JSONObject;
 
 import com.google.gson.reflect.TypeToken;
 import com.hp.ov.sdk.dto.AvailableStorageSystem;
-import com.hp.ov.sdk.dto.AvailableStorageSystems;
 import com.hp.ov.sdk.dto.AvailableTargets;
 import com.hp.ov.sdk.dto.Patch;
-import com.hp.ov.sdk.dto.ServerProfileCollection;
 import com.hp.ov.sdk.dto.ServerProfileCompliancePreview;
 import com.hp.ov.sdk.dto.ServerProfileHealth;
 import com.hp.ov.sdk.dto.generated.AvailableNetworks;
@@ -95,42 +93,6 @@ public class ServerProfileAdaptor extends BaseAdaptor<ServerProfile, Object> {
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version)),
                 AvailableStorageSystem.class);
         return storageSystemDto;
-    }
-
-    public ServerProfileCollection buildCollectionDto(String source, final double version) {
-        if (null == source || source.equals("")) {
-            return null;
-        }
-        // convert json file to DTO, replace quotes and back slash in the file
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        final ServerProfileCollection serverProfileCollectionDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
-                        .convertObjectToJsonString(source, version))), ServerProfileCollection.class);
-        return serverProfileCollectionDto;
-    }
-
-    public ServerProfileCollection buildCollectionDto(final Object source) {
-        if (null == source || source.equals("")) {
-            return null;
-        }
-        // convert json file to DTO, replace quotes and back slash in the file
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        final ServerProfileCollection serverProfileCollectionDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
-                        .convertObjectToJsonString(source))), ServerProfileCollection.class);
-        return serverProfileCollectionDto;
-    }
-
-    public AvailableStorageSystems buildAvailableStorageSystemsDto(final String source, final double version) {
-        if (null == source || source.equals("")) {
-            return null;
-        }
-        // convert json file to DTO, replace quotes and back slash in the file
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        final AvailableStorageSystems storageSystemsDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
-                        .convertObjectToJsonString(source, version))), AvailableStorageSystems.class);
-        return storageSystemsDto;
     }
 
     public AvailableTargets buildAvailableTargetsDto(final String source, final double version) {

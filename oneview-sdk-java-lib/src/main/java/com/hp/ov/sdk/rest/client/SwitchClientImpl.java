@@ -28,7 +28,7 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.SwitchCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SwitchPortStatistics;
 import com.hp.ov.sdk.dto.SwitchStatistics;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -98,7 +98,7 @@ public class SwitchClientImpl implements SwitchClient {
     }
 
     @Override
-    public SwitchCollection getAllSwitches(final RestParams params) {
+    public ResourceCollection<Switch> getAllSwitches(final RestParams params) {
         LOGGER.trace("SwitchClientImpl : getAllSwitches : Start");
 
         if (params == null) {
@@ -118,7 +118,7 @@ public class SwitchClientImpl implements SwitchClient {
                     SdkConstants.SWITCHES, null);
         }
 
-        SwitchCollection switches = adaptor.buildResourceObject(response, SwitchCollection.class);
+        ResourceCollection<Switch> switches = adaptor.buildResourceCollection(response, Switch.class);
 
         LOGGER.trace("SwitchClientImpl : getAllSwitches : End");
 
@@ -377,14 +377,12 @@ public class SwitchClientImpl implements SwitchClient {
         }
 
         Switch switchObj = null;
-        SwitchCollection switchCollection = adaptor.buildResourceObject(response, SwitchCollection.class);
+        ResourceCollection<Switch> switchCollection = adaptor.buildResourceCollection(response, Switch.class);
 
-        if (switchCollection.getCount() != 0) {
-            for (Switch member : switchCollection.getMembers()) {
-                if (name.equalsIgnoreCase(member.getName())) {
-                    switchObj = member;
-                    break;
-                }
+        for (Switch member : switchCollection.getMembers()) {
+            if (name.equalsIgnoreCase(member.getName())) {
+                switchObj = member;
+                break;
             }
         }
 

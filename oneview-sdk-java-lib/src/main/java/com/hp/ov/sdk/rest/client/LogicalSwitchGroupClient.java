@@ -17,7 +17,7 @@
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.LogicalSwitchGroup;
-import com.hp.ov.sdk.dto.LogicalSwitchGroupCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
@@ -51,10 +51,10 @@ public interface LogicalSwitchGroupClient {
      *
      * @param params structure containing the connection details.
      *
-     * @return {@link LogicalSwitchGroupCollection} object containing the details
-     * for all the logical switch groups found in HPE OneView.
+     * @return {@link ResourceCollection}&lt;{@link LogicalSwitchGroup}&gt; containing
+     * the details for all found logical switch groups.
      */
-    LogicalSwitchGroupCollection getAllLogicalSwitchGroups(RestParams params);
+    ResourceCollection<LogicalSwitchGroup> getAllLogicalSwitchGroups(RestParams params);
 
     /**
      * Creates a logical switch group according to the provided {@link LogicalSwitchGroup}

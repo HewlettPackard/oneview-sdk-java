@@ -16,8 +16,8 @@
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.AddLogicalEnclosure;
-import com.hp.ov.sdk.dto.LogicalEnclosureList;
 import com.hp.ov.sdk.dto.Patch;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SupportDump;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.LogicalEnclosure;
@@ -43,9 +43,10 @@ public interface LogicalEnclosureClient {
      *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link LogicalEnclosureList} containing the collection of logical enclosures.
+     * @return {@link ResourceCollection}&lt;{@link LogicalEnclosure}&gt; containing
+     * the details for all found logical enclosures.
      */
-    LogicalEnclosureList getAllLogicalEnclosures(final RestParams params);
+    ResourceCollection<LogicalEnclosure> getAllLogicalEnclosures(final RestParams params);
 
     /**
      * The module aids in fetching the logical enclosure details for the specified

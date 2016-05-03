@@ -22,8 +22,8 @@ import com.hp.ov.sdk.dto.IloSsoUrlResult;
 import com.hp.ov.sdk.dto.JavaRemoteConsoleUrlResult;
 import com.hp.ov.sdk.dto.RefreshStateRequest;
 import com.hp.ov.sdk.dto.RemoteConsoleUrlResult;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.ServerHardware;
-import com.hp.ov.sdk.dto.ServerHardwareCollection;
 import com.hp.ov.sdk.dto.ServerPowerControlRequest;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.UtilizationData;
@@ -50,9 +50,10 @@ public interface ServerHardwareClient {
      * 
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link ServerHardwareCollection} containing a collection of server hardware details.
+     * @return {@link ResourceCollection}&lt;{@link ServerHardware}&gt; containing
+     * the details for all found server hardware.
      */
-    ServerHardwareCollection getAllServerHardware(final RestParams params);
+    ResourceCollection<ServerHardware> getAllServerHardware(final RestParams params);
 
     /**
      * The module aids in fetching the server hardware details for the

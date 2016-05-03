@@ -15,7 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.firmwaredriver;
 
-import com.hp.ov.sdk.dto.FwBaselineCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.FwBaseline;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -83,7 +83,7 @@ public class FirmwareDriverClientSample {
 
     private void getAllFirmwareDriver() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        FwBaselineCollection fwBaselineCollectionDto = null;
+        ResourceCollection<FwBaseline> fwBaselineCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();

@@ -25,15 +25,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.adaptors.InterconnectAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.InterconnectsCollection;
 import com.hp.ov.sdk.dto.InterconnectsStatistics;
 import com.hp.ov.sdk.dto.NameServer;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.PortStatistics;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SubportStatistics;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.Interconnects;
@@ -53,14 +54,19 @@ public class InterconnectsClientImpl implements InterconnectsClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(InterconnectsClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
 
+    private final ResourceAdaptor resourceAdaptor;
     private final InterconnectAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
-    private JSONObject jsonObject;
-    private HttpRestClient httpClient;
+    private final HttpRestClient httpClient;
 
-    protected InterconnectsClientImpl(HttpRestClient httpClient, InterconnectAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+    private JSONObject jsonObject;
+
+    protected InterconnectsClientImpl(HttpRestClient httpClient, ResourceAdaptor resourceAdaptor,
+            InterconnectAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+
         this.httpClient = httpClient;
+        this.resourceAdaptor = resourceAdaptor;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
@@ -69,6 +75,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
     public static InterconnectsClient getClient() {
         return new InterconnectsClientImpl(
                 HttpRestClient.getClient(),
+                new ResourceAdaptor(),
                 new InterconnectAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
@@ -106,7 +113,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
     }
 
     @Override
-    public InterconnectsCollection getAllInterconnects(final RestParams params) {
+    public ResourceCollection<Interconnects> getAllInterconnects(final RestParams params) {
         LOGGER.info("InterconnectsClientImpl : getAllInterconnects : Start");
         // validate args
         if (null == params) {
@@ -126,9 +133,9 @@ public class InterconnectsClientImpl implements InterconnectsClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.INTERCONNECT,
                     null);
         }
-        // Call adaptor to convert to DTO
 
-        final InterconnectsCollection interconnectsCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<Interconnects> interconnectsCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, Interconnects.class);
 
         LOGGER.debug("InterconnectsClientImpl : getAllInterconnects : members count :" + interconnectsCollectionDto.getCount());
         LOGGER.info("InterconnectsClientImpl : getAllInterconnects : End");
@@ -163,9 +170,10 @@ public class InterconnectsClientImpl implements InterconnectsClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.INTERCONNECT, null);
         }
-        // Call adaptor to convert to DTO
 
-        final InterconnectsCollection interconnectsCollection = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<Interconnects> interconnectsCollection
+                = resourceAdaptor.buildResourceCollection(returnObj, Interconnects.class);
+
         if (interconnectsCollection.getCount() != 0) {
             interconnectDto = interconnectsCollection.getMembers().get(0);
         } else {

@@ -24,12 +24,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.adaptors.LogicalInterconnectGroupAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
-import com.hp.ov.sdk.dto.LogicalInterconnectGroupCollectionV2;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
 import com.hp.ov.sdk.dto.generated.UplinkSet;
@@ -48,18 +49,22 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
     private static final int API_200 = 200;
 
+    private final ResourceAdaptor resourceAdaptor;
     private final LogicalInterconnectGroupAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
-
-    private HttpRestClient httpClient;
+    private final HttpRestClient httpClient;
 
     private JSONObject jsonObject;
 
-    protected LogicalInterconnectGroupClientImpl(HttpRestClient httpClient, LogicalInterconnectGroupAdaptor adaptor,
+    protected LogicalInterconnectGroupClientImpl(HttpRestClient httpClient,
+        ResourceAdaptor resourceAdaptor,
+        LogicalInterconnectGroupAdaptor adaptor,
         TaskAdaptor taskAdaptor,
         TaskMonitorManager taskMonitor) {
+
         this.httpClient = httpClient;
+        this.resourceAdaptor = resourceAdaptor;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
@@ -68,6 +73,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
     public static LogicalInterconnectGroupClient getClient() {
         return new LogicalInterconnectGroupClientImpl(
                 HttpRestClient.getClient(),
+                new ResourceAdaptor(),
                 new LogicalInterconnectGroupAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
@@ -110,7 +116,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
     }
 
     @Override
-    public LogicalInterconnectGroupCollectionV2 getAllLogicalInterconnectGroups(final RestParams params) {
+    public ResourceCollection<LogicalInterconnectGroups> getAllLogicalInterconnectGroups(final RestParams params) {
         LOGGER.info("LogicalInterconnectGroupClientImpl : getAllLogicalInterconnectGroups : Start");
 
         // validate args
@@ -127,9 +133,9 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.LOGICAL_INTERCONNECT_GROUP, null);
         }
-        // Call adaptor to convert to DTO
 
-        final LogicalInterconnectGroupCollectionV2 logicalInterconnectGroupCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<LogicalInterconnectGroups> logicalInterconnectGroupCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, LogicalInterconnectGroups.class);
 
         LOGGER.debug("LogicalInterconnectGroupClientImpl : getAllLogicalInterconnectGroups : members count :"
                 + logicalInterconnectGroupCollectionDto.getCount());
@@ -161,10 +167,13 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.LOGICAL_INTERCONNECT_GROUP, null);
         }
-        // Call adaptor to convert to DTO
+
         LogicalInterconnectGroups logicalInterconnectGroupDto;
-        final LogicalInterconnectGroupCollectionV2 logicalInterconnectGroupCollectionDto = adaptor.buildCollectionDto(returnObj);
-        if (logicalInterconnectGroupCollectionDto.getCount() != 0) {
+
+        ResourceCollection<LogicalInterconnectGroups> logicalInterconnectGroupCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, LogicalInterconnectGroups.class);
+
+        if (!logicalInterconnectGroupCollectionDto.isEmpty()) {
             logicalInterconnectGroupDto = logicalInterconnectGroupCollectionDto.getMembers().get(0);
         } else {
             logicalInterconnectGroupDto = null;

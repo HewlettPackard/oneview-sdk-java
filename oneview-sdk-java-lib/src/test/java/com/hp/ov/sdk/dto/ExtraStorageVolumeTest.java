@@ -46,8 +46,8 @@ public class ExtraStorageVolumeTest {
 
     @Test
     public void shouldExtraStorageVolumeCollectionContainsThreeEntries() {
-        ExtraStorageVolumeCollection collection = adaptor.buildResourceObject(
-                extraAccessList, ExtraStorageVolumeCollection.class);
+        ResourceCollection<ExtraStorageVolume> collection = adaptor.buildResourceCollection(
+                extraAccessList, ExtraStorageVolume.class);
 
         assertThat(collection.getTotal(), is(Integer.valueOf(3)));
         assertThat(collection.getCount(), is(Integer.valueOf(3)));

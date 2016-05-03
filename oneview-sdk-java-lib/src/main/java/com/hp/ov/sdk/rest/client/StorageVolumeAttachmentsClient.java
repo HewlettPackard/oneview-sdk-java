@@ -17,10 +17,10 @@ package com.hp.ov.sdk.rest.client;
 
 import java.util.List;
 
-import com.hp.ov.sdk.dto.ExtraStorageVolumeCollection;
+import com.hp.ov.sdk.dto.ExtraStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeAttachment;
-import com.hp.ov.sdk.dto.StorageVolumeAttachmentCollection;
 import com.hp.ov.sdk.dto.StorageVolumeAttachmentPath;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -47,10 +47,10 @@ public interface StorageVolumeAttachmentsClient {
      *
      * @param params structure containing the connection details.
      *
-     * @return {@link StorageVolumeAttachmentCollection} containing the details
-     * for all storage volume attachments found.
+     * @return {@link ResourceCollection}&lt;{@link StorageVolumeAttachment}&gt; containing
+     * the details for all found storage volume attachments.
      */
-    StorageVolumeAttachmentCollection getAllStorageVolumeAttachments(RestParams params);
+    ResourceCollection<StorageVolumeAttachment> getAllStorageVolumeAttachments(RestParams params);
 
     /**
      * Returns the storage volume attachment details for a available storage volume attachment.
@@ -79,9 +79,10 @@ public interface StorageVolumeAttachmentsClient {
      *
      * @param params structure containing the connection details.
      *
-     * @return {@link ExtraStorageVolumeCollection} containing all extra storage volumes found.
+     * @return {@link ResourceCollection}&lt;{@link ExtraStorageVolume}&gt; containing
+     * the details for all found extra storage volumes.
      */
-    ExtraStorageVolumeCollection getExtraUnmanagedStorageVolumeAttachments(RestParams params);
+    ResourceCollection<ExtraStorageVolume> getExtraUnmanagedStorageVolumeAttachments(RestParams params);
 
     /**
      * Removes extra presentations of a storage volume attachment from a specific server profile.

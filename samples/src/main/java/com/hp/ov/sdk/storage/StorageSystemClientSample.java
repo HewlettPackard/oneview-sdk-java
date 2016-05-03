@@ -20,12 +20,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
-import com.hp.ov.sdk.dto.StoragePoolCollection;
-import com.hp.ov.sdk.dto.StorageSystemCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.StorageSystemV2;
 import com.hp.ov.sdk.dto.StorageTargetPort;
-import com.hp.ov.sdk.dto.StorageTargetPortCollection;
-import com.hp.ov.sdk.dto.StorageTargetPortV2;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -110,7 +108,7 @@ public class StorageSystemClientSample {
     private void getStoragePoolsForStorageSystem() throws InstantiationException, IllegalAccessException,
             SDKResourceNotFoundException, SDKNoSuchUrlException {
         String resourceId = null;
-        StoragePoolCollection storagePoolCollectionDto = null;
+        ResourceCollection<StoragePool> storagePoolCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -147,7 +145,7 @@ public class StorageSystemClientSample {
     private void getAllManagedPortsForStorageSystem() throws InstantiationException, IllegalAccessException,
             SDKResourceNotFoundException, SDKNoSuchUrlException {
         String resourceId = null;
-        StorageTargetPortCollection storageTargetPortCollectionDto = null;
+        ResourceCollection<StorageTargetPort> storageTargetPortCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -186,7 +184,7 @@ public class StorageSystemClientSample {
     private void getManagedPortsForStorageSystem() throws InstantiationException, IllegalAccessException,
             SDKResourceNotFoundException, SDKNoSuchUrlException {
         String resourceId = null;
-        StorageTargetPortV2 storageTargetPortDto = null;
+        StorageTargetPort storageTargetPortDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -259,7 +257,7 @@ public class StorageSystemClientSample {
 
     private void getAllStorageSystem() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        StorageSystemCollection storageSystemCollectionDto = null;
+        ResourceCollection<StorageSystemV2> storageSystemCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -467,11 +465,11 @@ public class StorageSystemClientSample {
 
     private StorageSystemV2 buildUpdateStorageSystemDto(final StorageSystemV2 storageSystemDto) {
 
-        final List<StorageTargetPortV2> tempStorageTargetPort = new ArrayList<StorageTargetPortV2>();
+        final List<StorageTargetPort> tempStorageTargetPort = new ArrayList<>();
         final List<StorageTargetPort> unMangedStorageTargetPort = new ArrayList<StorageTargetPort>();
         for (int i = 0; i < storageSystemDto.getUnmanagedPorts().size(); i++) {
             if (storageSystemDto.getUnmanagedPorts().get(i).getName().equalsIgnoreCase(unManagedPort_A)) {
-                final StorageTargetPortV2 managed_one = new StorageTargetPortV2();
+                final StorageTargetPort managed_one = new StorageTargetPort();
                 managed_one.setActualNetworkUri(storageSystemDto.getUnmanagedPorts().get(i).getActualNetworkUri());
                 managed_one.setExpectedNetworkName(storageSystemDto.getUnmanagedPorts().get(i).getExpectedNetworkName());
                 managed_one.setGroupName(storageSystemDto.getUnmanagedPorts().get(i).getGroupName());
@@ -491,7 +489,7 @@ public class StorageSystemClientSample {
                 unMangedStorageTargetPort.add(storageSystemDto.getUnmanagedPorts().get(i));
 
             } else if (storageSystemDto.getUnmanagedPorts().get(i).getName().equalsIgnoreCase(unManagedPort_B)) {
-                final StorageTargetPortV2 managed_two = new StorageTargetPortV2();
+                final StorageTargetPort managed_two = new StorageTargetPort();
                 managed_two.setActualNetworkUri(storageSystemDto.getUnmanagedPorts().get(i).getActualNetworkUri());
                 managed_two.setExpectedNetworkName(storageSystemDto.getUnmanagedPorts().get(i).getExpectedNetworkName());
                 managed_two.setGroupName(storageSystemDto.getUnmanagedPorts().get(i).getGroupName());

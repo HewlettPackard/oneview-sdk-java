@@ -18,15 +18,15 @@ package com.hp.ov.sdk.rest.client;
 import java.util.List;
 
 import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
-import com.hp.ov.sdk.dto.InterconnectFibData;
+import com.hp.ov.sdk.dto.InterconnectFibDataEntry;
 import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
-import com.hp.ov.sdk.dto.InternalVlanAssociationCollection;
+import com.hp.ov.sdk.dto.InternalVlanAssociation;
 import com.hp.ov.sdk.dto.LiFirmware;
-import com.hp.ov.sdk.dto.LogicalInterconnectCollectionV2;
 import com.hp.ov.sdk.dto.PortMonitor;
-import com.hp.ov.sdk.dto.PortMonitorUplinkPortCollection;
+import com.hp.ov.sdk.dto.PortMonitorUplinkPort;
 import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.Location;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
@@ -54,10 +54,10 @@ public interface LogicalInterconnectClient {
      *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link LogicalInterconnectCollectionV2} containing a collection of
-     *         logical interconnect details.
+     * @return {@link ResourceCollection}&lt;{@link LogicalInterconnects}&gt; containing
+     * the details for all found logical interconnects.
      */
-    LogicalInterconnectCollectionV2 getAllLogicalInterconnects(final RestParams params);
+    ResourceCollection<LogicalInterconnects> getAllLogicalInterconnects(final RestParams params);
 
     /**
      * This modules aids in fetching a logical interconnect to a consistent state. The current logical
@@ -212,10 +212,10 @@ public interface LogicalInterconnectClient {
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
      *            The resource identifier for logical interconnect as seen in HPE OneView.
-     * @return {@link InterconnectFibData} containing the interconnect forwarding
-     *         information base data details.
+     * @return {@link ResourceCollection}&lt;{@link InterconnectFibDataEntry}&gt; containing
+     * the details for all found interconnect forwarding information base data.
      */
-    InterconnectFibData getLogicalInterconnectForwardingInformationBase(final RestParams params, String resourceId);
+    ResourceCollection<InterconnectFibDataEntry> getLogicalInterconnectForwardingInformationBase(final RestParams params, String resourceId);
 
     /**
      * This module aids in generating the forwarding information base dump file
@@ -225,7 +225,7 @@ public interface LogicalInterconnectClient {
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
      *            The resource identifier for logical interconnect as seen in HPE OneView.
-     * @return {@link InterconnectFibData} containing the interconnect forwarding
+     * @return {@link InterconnectFibDataInfo} containing the interconnect forwarding
      *         information base data details.
      */
     InterconnectFibDataInfo createLogicalInterconnectForwardingInformationBase(final RestParams params, String resourceId);
@@ -251,9 +251,10 @@ public interface LogicalInterconnectClient {
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
      *            The resource identifier for logical interconnect as seen in HPE OneView.
-     * @return {@link InternalVlanAssociationCollection} containing the internal VLAN associations details.
+     * @return {@link ResourceCollection}&lt;{@link InternalVlanAssociation}&gt; containing
+     * the details for all found internal VLAN associations.
      */
-    InternalVlanAssociationCollection getLogicalInterconnectInternalVlans(final RestParams params, String resourceId);
+    ResourceCollection<InternalVlanAssociation> getLogicalInterconnectInternalVlans(final RestParams params, String resourceId);
 
     /**
      * This method aids in fetching the QoS aggregated configuration for the logical interconnect.
@@ -315,9 +316,10 @@ public interface LogicalInterconnectClient {
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
      *            The resource identifier for logical interconnect as seen in HPE OneView.
-     * @return {@link PortMonitorUplinkPortCollection} containing the port monitor uplink port collection details.
+     * @return {@link ResourceCollection}&lt;{@link PortMonitorUplinkPort}&gt; containing
+     * the details for all found uplink ports for port monitor.
      */
-    PortMonitorUplinkPortCollection getLogicalInterconnectUnassignedUplinkPortsForPortMonitor(final RestParams params,
+    ResourceCollection<PortMonitorUplinkPort> getLogicalInterconnectUnassignedUplinkPortsForPortMonitor(final RestParams params,
             final String resourceId);
 
     /**

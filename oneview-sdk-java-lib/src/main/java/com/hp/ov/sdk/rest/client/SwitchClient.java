@@ -16,7 +16,7 @@
 
 package com.hp.ov.sdk.rest.client;
 
-import com.hp.ov.sdk.dto.SwitchCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SwitchPortStatistics;
 import com.hp.ov.sdk.dto.SwitchStatistics;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -42,9 +42,10 @@ public interface SwitchClient {
      *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link SwitchCollection} containing the collection of switch details.
+     * @return {@link ResourceCollection}&lt;{@link Switch}&gt; containing
+     * the details for all found switches.
      */
-    SwitchCollection getAllSwitches(RestParams params);
+    ResourceCollection<Switch> getAllSwitches(RestParams params);
 
 
     /**

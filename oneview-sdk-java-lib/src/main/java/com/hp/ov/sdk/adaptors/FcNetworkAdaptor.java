@@ -17,7 +17,6 @@ package com.hp.ov.sdk.adaptors;
 
 import org.json.JSONObject;
 
-import com.hp.ov.sdk.dto.FcNetworkCollection;
 import com.hp.ov.sdk.dto.generated.FcNetwork;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
@@ -32,19 +31,6 @@ public class FcNetworkAdaptor extends BaseAdaptor<FcNetwork, Object> {
         final FcNetwork fcNetworkDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), FcNetwork.class);
         return fcNetworkDto;
-    }
-
-    public FcNetworkCollection buildCollectionDto(final Object source) {
-        if (null == source || source.equals("")) {
-            return null;
-        }
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-
-        // convert json object to DTO, replace quotes and back slash in the file
-        final FcNetworkCollection fcNetworkCollectionDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
-                        .convertObjectToJsonString(source))), FcNetworkCollection.class);
-        return fcNetworkCollectionDto;
     }
 
     public JSONObject buildJsonObjectFromDto(final FcNetwork source) {

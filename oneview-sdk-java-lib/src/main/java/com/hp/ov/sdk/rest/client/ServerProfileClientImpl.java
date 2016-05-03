@@ -26,16 +26,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.ServerProfileAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.AvailableStorageSystem;
-import com.hp.ov.sdk.dto.AvailableStorageSystems;
 import com.hp.ov.sdk.dto.AvailableTargets;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.Patch;
-import com.hp.ov.sdk.dto.ServerProfileCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.ServerProfileCompliancePreview;
 import com.hp.ov.sdk.dto.ServerProfileHealth;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -58,17 +58,20 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerProfileClientImpl.class);
     private static final int TIMEOUT = 1200000; // in milliseconds = 20 mins
 
+    private final ResourceAdaptor resourceAdaptor;
     private final ServerProfileAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
-
-    private HttpRestClient httpClient;
+    private final HttpRestClient httpClient;
 
     private JSONObject jsonObject;
 
-    protected ServerProfileClientImpl(HttpRestClient httpClient, ServerProfileAdaptor adaptor, TaskAdaptor taskAdaptor,
-        TaskMonitorManager taskMonitor, ServerHardwareClient serverHardwareClientImpl) {
+    protected ServerProfileClientImpl(HttpRestClient httpClient, ResourceAdaptor resourceAdaptor,
+            ServerProfileAdaptor adaptor, TaskAdaptor taskAdaptor,
+            TaskMonitorManager taskMonitor) {
+
         this.httpClient = httpClient;
+        this.resourceAdaptor = resourceAdaptor;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
@@ -77,10 +80,10 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     public static ServerProfileClient getClient() {
         return new ServerProfileClientImpl(
                 HttpRestClient.getClient(),
+                new ResourceAdaptor(),
                 new ServerProfileAdaptor(),
                 TaskAdaptor.getInstance(),
-                TaskMonitorManager.getInstance(),
-                ServerHardwareClientImpl.getClient());
+                TaskMonitorManager.getInstance());
     }
 
     @Override
@@ -111,7 +114,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     }
 
     @Override
-    public ServerProfileCollection getAllServerProfile(final RestParams params) {
+    public ResourceCollection<ServerProfile> getAllServerProfile(final RestParams params) {
         LOGGER.info("ServerProfileClientImpl : getAllServerProfile : Start");
 
         // validate args
@@ -128,9 +131,9 @@ public class ServerProfileClientImpl implements ServerProfileClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILES,
                     null);
         }
-        // Call adaptor to convert to DTO
 
-        final ServerProfileCollection serverProfileCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<ServerProfile> serverProfileCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, ServerProfile.class);
 
         LOGGER.debug("ServerProfileClientImpl : getAllServerProfile : Count :" + serverProfileCollectionDto.getCount());
         LOGGER.info("ServerProfileClientImpl : getAllServerProfile : End");
@@ -162,9 +165,10 @@ public class ServerProfileClientImpl implements ServerProfileClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILES,
                     null);
         }
-        // Call adaptor to convert to DTO
 
-        final ServerProfileCollection serverProfileCollectionDto = adaptor.buildCollectionDto(returnObj, params.getApiVersion());
+        ResourceCollection<ServerProfile> serverProfileCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, ServerProfile.class);
+
         if (serverProfileCollectionDto.getCount() != 0) {
             serverProfileDto = serverProfileCollectionDto.getMembers().get(0);
         } else {
@@ -432,7 +436,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     }
 
     @Override
-    public AvailableStorageSystems getAvailableStorageSystemsForServerProfile(RestParams params,
+    public ResourceCollection<AvailableStorageSystem> getAvailableStorageSystemsForServerProfile(RestParams params,
             String enclosureGroupUri, String serverHardwareTypeUri) {
         LOGGER.info("ServerProfileClientImpl : getAvailableStorageSystemsForServerProfile : Start");
 
@@ -462,9 +466,9 @@ public class ServerProfileClientImpl implements ServerProfileClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
                     null);
         }
-        // Call adaptor to convert to DTO
 
-        final AvailableStorageSystems availableServersCollectionDto = adaptor.buildAvailableStorageSystemsDto(returnObj, params.getApiVersion());
+        ResourceCollection<AvailableStorageSystem> availableServersCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, AvailableStorageSystem.class);
 
         if (availableServersCollectionDto.getTotal() > 0) {
             LOGGER.debug("ServerProfileClientImpl : getAvailableStorageSystemsForServerProfile : value :"
