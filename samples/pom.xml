@@ -17,13 +17,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.hp.ov</groupId>
-    <artifactId>oneview-sdk-java</artifactId>
+    <groupId>com.hpe.oneview</groupId>
+    <artifactId>oneview-java-sdk-pom</artifactId>
     <version>2.0.0</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <groupId>com.hp.ov.samples</groupId>
+  <groupId>com.hpe.oneview</groupId>
   <artifactId>samples</artifactId>
   <packaging>jar</packaging>
   <name>OneView SDK Java Samples</name>
@@ -32,13 +31,17 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.deploy.skip>true</maven.deploy.skip>
+    <maven.source.skip>true</maven.source.skip>
+    <maven.javadoc.skip>true</maven.javadoc.skip>
+    <gpg.skip>true</gpg.skip>
   </properties>
 
   <dependencies>
     <dependency>
-       <groupId>com.hp.ov.lib</groupId>
-       <artifactId>oneview-sdk-java-lib</artifactId>
-       <version>2.0.0</version>
+      <groupId>com.hpe.oneview</groupId>
+      <artifactId>oneview-sdk-java-lib</artifactId>
+      <version>2.0.0</version>
     </dependency>
   </dependencies>
 
