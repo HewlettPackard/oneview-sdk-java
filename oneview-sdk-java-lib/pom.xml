@@ -17,13 +17,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.hp.ov</groupId>
-    <artifactId>oneview-sdk-java</artifactId>
-    <version>2.0.0</version>
-    <relativePath>../pom.xml</relativePath>
+    <groupId>com.hpe.oneview</groupId>
+    <artifactId>oneview-java-sdk-pom</artifactId>
+    <version>2.0.1</version>
   </parent>
 
-  <groupId>com.hp.ov.lib</groupId>
+  <groupId>com.hpe.oneview</groupId>
   <artifactId>oneview-sdk-java-lib</artifactId>
   <packaging>jar</packaging>
   <name>Oneview SDK Java</name>
