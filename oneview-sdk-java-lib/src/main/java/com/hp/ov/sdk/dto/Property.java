@@ -17,6 +17,10 @@ package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class Property implements Serializable {
 
     private static final long serialVersionUID = 3023061337087172134L;
@@ -84,6 +88,47 @@ public class Property implements Serializable {
         this.name = name;
     }
 
-    //TODO equals && hashcode && toString
+    @Override
+    public final boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof Property) {
+            Property that = (Property) obj;
+
+            return new EqualsBuilder()
+                    .append(displayName, that.displayName)
+                    .append(name, that.name)
+                    .append(required, that.required)
+                    .append(value, that.value)
+                    .append(valueFormat, that.valueFormat)
+                    .append(valueType, that.valueType)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(displayName)
+                .append(name)
+                .append(required)
+                .append(value)
+                .append(valueFormat)
+                .append(valueType)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("displayName", displayName)
+                .append("name", name)
+                .append("required", required)
+                .append("value", value)
+                .append("valueFormat", valueFormat)
+                .append("valueType", valueType)
+                .toString();
+    }
 
 }

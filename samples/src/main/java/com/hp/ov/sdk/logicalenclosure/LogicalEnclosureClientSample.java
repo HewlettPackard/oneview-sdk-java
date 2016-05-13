@@ -387,6 +387,11 @@ public class LogicalEnclosureClientSample {
         } catch (final SDKInvalidArgumentException ex) {
             System.out.println("LogicalEnclosureClientTest : updateFromGroup : arguments are null ");
             return;
+        } catch (final SDKTasksException e) {
+            System.out.println("LogicalEnclosureClientTest : updateFromGroup : errors in task, please check task resource for more details ");
+            System.out.println("Task Errors: " + Arrays.toString(e.getMessageParameters()));
+            System.out.println("Task Recomendations: " + Arrays.toString(e.getRecommendedActionsParameters()));
+            return;
         }
 
     }
@@ -423,6 +428,11 @@ public class LogicalEnclosureClientSample {
             return;
         } catch (final SDKInvalidArgumentException ex) {
             System.out.println("LogicalEnclosureClientTest : updateConfiguration : arguments are null ");
+            return;
+        } catch (final SDKTasksException e) {
+            System.out.println("LogicalEnclosureClientTest : updateConfiguration : errors in task, please check task resource for more details ");
+            System.out.println("Task Errors: " + Arrays.toString(e.getMessageParameters()));
+            System.out.println("Task Recomendations: " + Arrays.toString(e.getRecommendedActionsParameters()));
             return;
         }
 
@@ -476,7 +486,7 @@ public class LogicalEnclosureClientSample {
              * indicates sync vs async useJsonRequest parameter indicates
              * whether json input request present or not
              */
-            taskResourceV2 = logicalEnclosureClient.updateScript(params, resourceId, "name=Enclosure_test_two", false);
+            taskResourceV2 = logicalEnclosureClient.updateScript(params, resourceId, "\"name=Enclosure_test_two\"", false);
 
             System.out.println("LogicalEnclosureClientTest : updateScript : Enclosure task object returned to client : "
                     + taskResourceV2.toString());

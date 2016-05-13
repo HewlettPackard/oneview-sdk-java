@@ -15,6 +15,13 @@
  */
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Strings;
 import com.hp.ov.sdk.adaptors.FcIssueResponseAdaptor;
 import com.hp.ov.sdk.adaptors.ManagedSanAdaptor;
@@ -38,9 +45,6 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
@@ -139,15 +143,18 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
     public SanResponse getManagedSanByName(final RestParams params, final String name) {
         LOGGER.trace("ManagedSanClientImpl : getManagedSanByName : Start");
 
-        final String query = UrlUtils.createQueryString(name);
-
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + name + "'");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.FC_SANS_MANAGED_SAN_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_SANS_MANAGED_SAN_URI));
 
         final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("ManagedSanClientImpl : getManagedSanByName : response from OV :" + returnObj);

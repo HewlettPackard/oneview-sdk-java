@@ -15,6 +15,13 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.adaptors.NetworkSetAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -31,9 +38,6 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class NetworkSetClientImpl implements NetworkSetClient {
 
@@ -44,9 +48,12 @@ public class NetworkSetClientImpl implements NetworkSetClient {
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
 
+    private HttpRestClient httpClient;
+
     private JSONObject jsonObject;
 
-    protected NetworkSetClientImpl(NetworkSetAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+    protected NetworkSetClientImpl(HttpRestClient httpClient, NetworkSetAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+        this.httpClient = httpClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
@@ -54,6 +61,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
 
     public static NetworkSetClient getClient() {
         return new NetworkSetClientImpl(
+                HttpRestClient.getClient(),
                 new NetworkSetAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
@@ -71,7 +79,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.NETWORK_SETS_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("NetworkSetClientImpl : getNetworkSet : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKSET, null);
@@ -98,7 +106,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.NETWORK_SETS_URI));
 
         // call rest client
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("NetworkSetClientImpl : getAllNetworkSets : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -119,18 +127,20 @@ public class NetworkSetClientImpl implements NetworkSetClient {
 
         LOGGER.info("NetworkSetClientImpl : getNetworkSetByName : Start");
 
-        final String query = UrlUtils.createFilterString(name);
-        LOGGER.debug("NetworkSetClientImpl : getNetworkSetByName : query = " + query);
-
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + name + "'");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.NETWORK_SETS_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.NETWORK_SETS_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("NetworkSetClientImpl : getNetworkSetsByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKSET, null);
@@ -174,7 +184,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(networkSetDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -220,7 +230,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(networkSetDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -253,7 +263,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.NETWORK_SETS_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("NetworkSetClientImpl : deleteNetworkSet : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {

@@ -15,6 +15,8 @@
  *******************************************************************************/
 package com.hp.ov.sdk.enclosure;
 
+import java.util.Arrays;
+
 import com.hp.ov.sdk.dto.AddEnclosureV2;
 import com.hp.ov.sdk.dto.EnclosureCollectionV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
@@ -209,8 +211,9 @@ public class EnclosureClientSample {
             System.out.println("EnclosureClientTest : createEnclosure : arguments are null ");
             return;
         } catch (final SDKTasksException e) {
-            System.out
-                    .println("EnclosureClientTest : createEnclosure : errors in task, please check task resource for more details ");
+            System.out.println("EnclosureClientTest : createEnclosure : errors in task, please check task resource for more details ");
+            System.out.println("Task Errors: " + Arrays.toString(e.getMessageParameters()));
+            System.out.println("Task Recomendations: " + Arrays.toString(e.getRecommendedActionsParameters()));
             return;
         }
 
@@ -786,6 +789,7 @@ public class EnclosureClientSample {
             resourceId = enclosureClient.getId(params, resourceName);
 
             // then make sdk service call to get resource
+            params.getQuery().clear();
             utilizationDataDto = enclosureClient.getUtilization(params, resourceId);
 
             System.out.println("EnclosureClientTest : getUtilization :"

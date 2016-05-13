@@ -15,7 +15,13 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 import com.hp.ov.sdk.adaptors.NetworkAdaptor;
@@ -26,7 +32,6 @@ import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.NetworkCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.BulkEthernetNetwork;
-import com.hp.ov.sdk.dto.generated.ConnectionTemplate;
 import com.hp.ov.sdk.dto.generated.Network;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -36,9 +41,6 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class NetworkClientImpl implements NetworkClient {
 
@@ -46,7 +48,6 @@ public class NetworkClientImpl implements NetworkClient {
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
 
     private final HttpRestClient restClient;
-    private final ConnectionTemplateClient connectionTemplateClient;
     private final NetworkAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
@@ -58,7 +59,6 @@ public class NetworkClientImpl implements NetworkClient {
             TaskMonitorManager taskMonitor) {
 
         this.restClient = restClient;
-        this.connectionTemplateClient = connectionTemplateClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
@@ -129,16 +129,20 @@ public class NetworkClientImpl implements NetworkClient {
     public Network getNetworkByName(final RestParams params, final String name) {
         LOGGER.trace("NetworkClientImpl : getNetworkByName : Start");
 
-        final String query = UrlUtils.createFilterString(name);
-        LOGGER.debug("NetworkClientImpl : getNetworkByName : query = " + query);
 
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + name + "'");
+        params.setQuery(query);
+
+        LOGGER.debug("NetworkClientImpl : getNetworkByName : query = " + query);
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.ETHERNET_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ETHERNET_URI));
 
         final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("NetworkClientImpl : getNetworkByName : response from OV :" + returnObj);
@@ -150,6 +154,7 @@ public class NetworkClientImpl implements NetworkClient {
         Network networkDto = null;
         NetworkCollection networkCollectionDto = adaptor.buildCollectionDto(returnObj);
 
+        LOGGER.debug("total matches: " + networkCollectionDto.getCount());
         if (networkCollectionDto.getCount() != 0) {
             networkDto = networkCollectionDto.getMembers().get(0);
         }
@@ -184,21 +189,15 @@ public class NetworkClientImpl implements NetworkClient {
         // then convert that into jsonObject and pass it rest client
         // idea is : user can create json string and call the sdk api.
         // user can save time in creating network dto.
-        ConnectionTemplate networkConnectionTemplate = null;
-        String networkName = null;
         JSONObject jsonObject = null;
 
         if (useJsonRequest) {
             Network networkDto = adaptor.buildDto(dto.getJsonRequest().getBody());
             // create json object
-            networkConnectionTemplate = networkDto.getConnectionTemplate();
             networkDto.setConnectionTemplate(null);
-            networkName = networkDto.getName();
             jsonObject = adaptor.buildJsonObjectFromDto(networkDto, params.getApiVersion());
         } else {
-            networkConnectionTemplate = dto.getConnectionTemplate();
             dto.setConnectionTemplate(null);
-            networkName = dto.getName();
             // create JSON request from dto
             jsonObject = adaptor.buildJsonObjectFromDto(dto, params.getApiVersion());
         }
@@ -217,39 +216,10 @@ public class NetworkClientImpl implements NetworkClient {
         // once task is complete or exceeds the timeout.
         if (taskResourceV2 != null && aSync == false) {
             taskResourceV2 = taskMonitor.checkStatus(params, taskResourceV2.getUri(), TIMEOUT);
-
-            //TODO: set the connection template bandwidth according to the network parameter.
-            // However, the API mentions that the networkConnectionTemplate parameter
-            // MUST be null. Thus, I believe we should remove this logic and let the user
-            // perform the operation of changing the bandwidth values.
-            setConnectionTemplateBandwidth(params, networkConnectionTemplate, networkName);
         }
         LOGGER.trace("NetworkClientImpl : createNetwork : End");
 
         return taskResourceV2;
-    }
-
-    private void setConnectionTemplateBandwidth(RestParams params,
-            ConnectionTemplate networkConnectionTemplate, String networkName) {
-
-        ConnectionTemplate connectionTemplate;
-
-        if (networkConnectionTemplate != null) {
-            Network network = getNetworkByName(params, networkName);
-
-            String connectionTemplateUri = network.getConnectionTemplateUri();
-            String connectionTemplateId = connectionTemplateUri.substring(connectionTemplateUri.lastIndexOf("/") + 1);
-
-            connectionTemplate = connectionTemplateClient.getConnectionTemplate(params, connectionTemplateId);
-            connectionTemplate.setBandwidth(networkConnectionTemplate.getBandwidth());
-
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            connectionTemplateClient.updateConnectionTemplate(params, connectionTemplateId, connectionTemplate, false);
-        }
     }
 
     @Override

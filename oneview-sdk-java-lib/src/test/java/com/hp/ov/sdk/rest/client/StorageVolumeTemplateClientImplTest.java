@@ -21,13 +21,16 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.doReturn;
-import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.spy;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.any;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.junit.Test;
@@ -35,6 +38,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
 import com.google.common.collect.Lists;
 import com.hp.ov.sdk.adaptors.StorageVolumeTemplateAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -172,9 +176,14 @@ public class StorageVolumeTemplateClientImplTest {
         given(adaptor.buildStorageVolumeTemplateCollection(anyString())).willReturn(storageVolumeTemplateCollection);
 
         RestParams expectedRestParams = new RestParams();
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + anyStorageVolumeTemplateName + "'");
+        expectedRestParams.setQuery(query);
+
         expectedRestParams.setType(HttpMethodType.GET);
-        expectedRestParams.setUrl(UrlUtils.createRestQueryUrl(expectedRestParams.getHostname(),
-                ResourceUris.STORAGE_VOLUME_TEMPLATE_URI, UrlUtils.createFilterString(anyStorageVolumeTemplateName)));
+        expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(),
+                ResourceUris.STORAGE_VOLUME_TEMPLATE_URI));
 
         StorageVolumeTemplate response = this.storageClient.getStorageVolumeTemplateByName(
                 new RestParams(), anyStorageVolumeTemplateName);

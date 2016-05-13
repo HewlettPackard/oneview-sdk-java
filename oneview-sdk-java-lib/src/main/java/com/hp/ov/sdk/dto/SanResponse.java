@@ -18,6 +18,10 @@ package com.hp.ov.sdk.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import com.google.gson.annotations.Since;
 
 public class SanResponse extends BaseModelResource {
@@ -75,7 +79,7 @@ public class SanResponse extends BaseModelResource {
 
     @Since(200)
     private Integer vLanId;
-    
+
     private Integer zoneCount;
     private String zonesUri;
     private ZoningState zoningState;
@@ -360,6 +364,137 @@ public class SanResponse extends BaseModelResource {
         this.associatedNetworks = associatedNetworks;
     }
 
-    //TODO equals && hashcode && toString
+    @Override
+    public final boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof SanResponse) {
+            SanResponse that = (SanResponse) obj;
+
+            return that.canEqual(this) && new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(aliasCount, that.aliasCount)
+                    .append(aliasesUri, that.aliasesUri)
+                    .append(associatedNetworks, that.associatedNetworks)
+                    .append(deviceManagerName, that.deviceManagerName)
+                    .append(deviceManagersUri, that.deviceManagersUri)
+                    .append(deviceManagerUri, that.deviceManagerUri)
+                    .append(displayName, that.displayName)
+                    .append(endpointsUri, that.endpointsUri)
+                    .append(imported, that.imported)
+                    .append(isActualFc, that.isActualFc)
+                    .append(isActualFcoe, that.isActualFcoe)
+                    .append(isExpectedFc, that.isExpectedFc)
+                    .append(isExpectedFcoe, that.isExpectedFcoe)
+                    .append(isFcCapable, that.isFcCapable)
+                    .append(isFcoeCapable, that.isFcoeCapable)
+                    .append(isInternal, that.isInternal)
+                    .append(portsFreeCount, that.portsFreeCount)
+                    .append(portsTotalCount, that.portsTotalCount)
+                    .append(portsUri, that.portsUri)
+                    .append(portsUsedCount, that.portsUsedCount)
+                    .append(principalSwitch, that.principalSwitch)
+                    .append(providerName, that.providerName)
+                    .append(publicAttributes, that.publicAttributes)
+                    .append(refreshState, that.refreshState)
+                    .append(routingId, that.routingId)
+                    .append(sanPolicy, that.sanPolicy)
+                    .append(sanServicesCount, that.sanServicesCount)
+                    .append(sanServicesUri, that.sanServicesUri)
+                    .append(sanType, that.sanType)
+                    .append(switchCount, that.switchCount)
+                    .append(switchesUri, that.switchesUri)
+                    .append(vLanId, that.vLanId)
+                    .append(zoneCount, that.zoneCount)
+                    .append(zonesUri, that.zonesUri)
+                    .append(zoningState, that.zoningState)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                .append(aliasCount)
+                .append(aliasesUri)
+                .append(associatedNetworks)
+                .append(deviceManagerName)
+                .append(deviceManagersUri)
+                .append(deviceManagerUri)
+                .append(displayName)
+                .append(endpointsUri)
+                .append(imported)
+                .append(isActualFc)
+                .append(isActualFcoe)
+                .append(isExpectedFc)
+                .append(isExpectedFcoe)
+                .append(isFcCapable)
+                .append(isFcoeCapable)
+                .append(isInternal)
+                .append(portsFreeCount)
+                .append(portsTotalCount)
+                .append(portsUri)
+                .append(portsUsedCount)
+                .append(principalSwitch)
+                .append(providerName)
+                .append(publicAttributes)
+                .append(refreshState)
+                .append(routingId)
+                .append(sanPolicy)
+                .append(sanServicesCount)
+                .append(sanServicesUri)
+                .append(sanType)
+                .append(switchCount)
+                .append(switchesUri)
+                .append(vLanId)
+                .append(zoneCount)
+                .append(zonesUri)
+                .append(zoningState)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("aliasCount", aliasCount)
+                .append("aliasesUri", aliasesUri)
+                .append("associatedNetworks", associatedNetworks)
+                .append("deviceManagerName", deviceManagerName)
+                .append("deviceManagersUri", deviceManagersUri)
+                .append("deviceManagerUri", deviceManagerUri)
+                .append("displayName", displayName)
+                .append("endpointsUri", endpointsUri)
+                .append("imported", imported)
+                .append("isActualFc", isActualFc)
+                .append("isActualFcoe", isActualFcoe)
+                .append("isExpectedFc", isExpectedFc)
+                .append("isExpectedFcoe", isExpectedFcoe)
+                .append("isFcCapable", isFcCapable)
+                .append("isFcoeCapable", isFcoeCapable)
+                .append("isInternal", isInternal)
+                .append("portsFreeCount", portsFreeCount)
+                .append("portsTotalCount", portsTotalCount)
+                .append("portsUri", portsUri)
+                .append("portsUsedCount", portsUsedCount)
+                .append("principalSwitch", principalSwitch)
+                .append("providerName", providerName)
+                .append("publicAttributes", publicAttributes)
+                .append("refreshState", refreshState)
+                .append("routingId", routingId)
+                .append("sanPolicy", sanPolicy)
+                .append("sanServicesCount", sanServicesCount)
+                .append("sanServicesUri", sanServicesUri)
+                .append("sanType", sanType)
+                .append("switchCount", switchCount)
+                .append("switchesUri", switchesUri)
+                .append("vLanId", vLanId)
+                .append("zoneCount", zoneCount)
+                .append("zonesUri", zonesUri)
+                .append("zoningState", zoningState)
+                .toString();
+    }
 
 }

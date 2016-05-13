@@ -17,19 +17,22 @@ package com.hp.ov.sdk.rest.client;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
@@ -48,41 +51,41 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({HttpRestClient.class, TaskMonitorManager.class})
+@RunWith(MockitoJUnitRunner.class)
 public class UplinkSetClientTest {
 
     private RestParams params;
+
+    @Mock
     private UplinkSetAdaptor adaptor;
-    private UplinkSetClient client;
+    @Mock
+    private TaskAdaptor taskAdaptor;
+    @Mock
+    private TaskMonitorManager taskMonitorManager;
+    @Mock
+    private HttpRestClient restClient;
+
+    @InjectMocks
+    private UplinkSetClientImpl client;
 
     private static String resourceId = "random-UUID";
     private static String resourceName = "random-name";
     private String uplinkSetJson = "";
 
-    @Mock
-    private TaskMonitorManager taskMonitorManager;
-    private TaskAdaptor taskAdaptor;
-
     @Before
     public void setUp() throws Exception {
         params = new RestParams();
-        taskAdaptor = TaskAdaptor.getInstance();
-        adaptor = new UplinkSetAdaptor();
-
-        PowerMockito.mockStatic(HttpRestClient.class);
-        PowerMockito.mockStatic(TaskMonitorManager.class);
-        PowerMockito.when(TaskMonitorManager.getInstance()).thenReturn(taskMonitorManager);
-
-        this.client = UplinkSetClientImpl.getClient();
     }
 
     @Test
     public void testGetUplinkSet() {
         uplinkSetJson = this.getJsonFromFile("UplinkSetGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(uplinkSetJson);
+
+        Mockito.when(adaptor.buildDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new UplinkSetAdaptor().buildDto(uplinkSetJson, 200));
 
         UplinkSets uplinkSetDto = client.getUplinkSet(params, resourceId);
 
@@ -90,8 +93,7 @@ public class UplinkSetClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI, resourceId));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(uplinkSetDto);
     }
@@ -103,7 +105,7 @@ public class UplinkSetClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetUplinkSetWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -113,9 +115,12 @@ public class UplinkSetClientTest {
     @Test
     public void testGetAllUplinkSet() {
         uplinkSetJson = this.getJsonFromFile("UplinkSetGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(uplinkSetJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new UplinkSetAdaptor().buildCollectionDto(uplinkSetJson));
 
         UplinkSetCollectionV2 upLinkSetCollection = client.getAllUplinkSet(params);
 
@@ -123,8 +128,7 @@ public class UplinkSetClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(upLinkSetCollection);
         assertEquals("Based on the JSON file, the return object must have 1 element",
@@ -138,7 +142,7 @@ public class UplinkSetClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetAllUplinkSetWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -148,11 +152,14 @@ public class UplinkSetClientTest {
     @Test
     public void testDeleteUplinkSet() {
         String jsonDeleteTaskCompleted = this.getJsonFromFile("UplinkSetCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonDeleteTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonDeleteTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonDeleteTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -166,8 +173,7 @@ public class UplinkSetClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI, resourceId));
         rp.setType(HttpMethodType.DELETE);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertEquals("A success delete uplink set call returns \"Completed\"", "Completed", taskResourceV2.getTaskState().toString());
     }
@@ -179,7 +185,7 @@ public class UplinkSetClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testDeleteUplinkSetWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -189,15 +195,18 @@ public class UplinkSetClientTest {
     @Test
     public void testUpdateUplinkSet() {
         uplinkSetJson = this.getJsonFromFile("UplinkSetGet.json");
-        UplinkSets uplinkSetDto = adaptor.buildDto(uplinkSetJson);
+        UplinkSets uplinkSetDto = new UplinkSetAdaptor().buildDto(uplinkSetJson);
 
         String jsonCreateTaskCompleted = this.getJsonFromFile("UplinkSetCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -216,8 +225,7 @@ public class UplinkSetClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI, resourceId));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONObject.class));
 
         assertEquals("A success update uplink set call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -235,21 +243,27 @@ public class UplinkSetClientTest {
     @Test
     public void testGetUplinkSetByName() {
         uplinkSetJson = this.getJsonFromFile("UplinkSetGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(uplinkSetJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new UplinkSetAdaptor().buildCollectionDto(uplinkSetJson, 200));
 
         UplinkSets uplinkSetDto = client.getUplinkSetsByName(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.UPLINK_SETS_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.UPLINK_SETS_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(uplinkSetDto);
     }
@@ -261,7 +275,7 @@ public class UplinkSetClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetUplinkSetsByNameWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -270,11 +284,14 @@ public class UplinkSetClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetUplinkSetByNameWithNoMembers() {
-        UplinkSetCollectionV2 uplinkSetCollection = adaptor.buildCollectionDto(this.getJsonFromFile("UplinkSetGetByName.json"));
+        UplinkSetCollectionV2 uplinkSetCollection = new UplinkSetAdaptor().buildCollectionDto(this.getJsonFromFile("UplinkSetGetByName.json"));
         uplinkSetCollection.setCount(0);
         uplinkSetJson = new Gson().toJson(uplinkSetCollection);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new UplinkSetAdaptor().buildCollectionDto(uplinkSetJson, 200));
+
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(uplinkSetJson);
 
@@ -284,15 +301,18 @@ public class UplinkSetClientTest {
     @Test
     public void testCreateUplinkSet() {
         uplinkSetJson = this.getJsonFromFile("UplinkSetGet.json");
-        UplinkSets uplinkSetDto = adaptor.buildDto(uplinkSetJson);
+        UplinkSets uplinkSetDto = new UplinkSetAdaptor().buildDto(uplinkSetJson);
 
         String jsonCreateTaskCompleted = this.getJsonFromFile("UplinkSetCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -310,8 +330,7 @@ public class UplinkSetClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI));
         rp.setType(HttpMethodType.POST);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONObject.class));
 
         assertEquals("A success create uplink set call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -319,7 +338,7 @@ public class UplinkSetClientTest {
     @Test (expected = SDKInvalidArgumentException.class)
     public void testCreateUplinkSetWithNullParams() {
         uplinkSetJson = this.getJsonFromFile("UplinkSetGet.json");
-        UplinkSets uplinkSetDto = adaptor.buildDto(uplinkSetJson);
+        UplinkSets uplinkSetDto = new UplinkSetAdaptor().buildDto(uplinkSetJson);
         client.createUplinkSet(null, uplinkSetDto, false, false);
     }
 
@@ -331,21 +350,27 @@ public class UplinkSetClientTest {
     @Test
     public void testGetId() {
         uplinkSetJson = this.getJsonFromFile("UplinkSetGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(uplinkSetJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new UplinkSetAdaptor().buildCollectionDto(uplinkSetJson, 200));
 
         String id = client.getId(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.UPLINK_SETS_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.UPLINK_SETS_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(id);
         assertEquals("Based on the JSON file, the return ID must be \"" + resourceId + "\"", resourceId, id);

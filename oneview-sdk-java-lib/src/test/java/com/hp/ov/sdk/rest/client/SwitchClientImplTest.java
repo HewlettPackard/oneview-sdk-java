@@ -21,15 +21,17 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.any;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.hamcrest.MatcherAssert;
 import org.json.JSONObject;
@@ -416,9 +418,14 @@ public class SwitchClientImplTest {
                 .willReturn(switchCollection);
 
         RestParams expectedRestParams = new RestParams();
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + anySwitchName + "'");
+        expectedRestParams.setQuery(query);
+
         expectedRestParams.setType(HttpMethodType.GET);
-        expectedRestParams.setUrl(UrlUtils.createRestQueryUrl(expectedRestParams.getHostname(),
-                ResourceUris.SWITCHES_URI, UrlUtils.createFilterString(anySwitchName)));
+        expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(),
+                ResourceUris.SWITCHES_URI));
 
         this.switchClient.getSwitchByName(new RestParams(), anySwitchName);
 

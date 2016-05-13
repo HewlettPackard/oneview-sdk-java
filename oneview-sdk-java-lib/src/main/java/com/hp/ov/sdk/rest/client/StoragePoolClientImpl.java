@@ -15,6 +15,13 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Strings;
 import com.hp.ov.sdk.adaptors.StoragePoolAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -30,9 +37,6 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class StoragePoolClientImpl implements StoragePoolClient {
 
@@ -112,16 +116,19 @@ public class StoragePoolClientImpl implements StoragePoolClient {
     public StoragePool getStoragePoolByName(final RestParams params, final String name, final String storageSystemUri) {
         LOGGER.trace("StoragePoolClientImpl : getStoragePoolByName : Start");
 
-        // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = UrlUtils.createFilterString(name);
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
                     SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + name + "'");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.STORAGE_POOL_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_POOL_URI));
 
         final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("StoragePoolClientImpl : getStoragePoolByName : response from OV :" + returnObj);

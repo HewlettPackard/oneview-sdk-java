@@ -15,7 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -55,15 +57,19 @@ public class InterconnectsClientImpl implements InterconnectsClient {
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
     private JSONObject jsonObject;
+    private HttpRestClient httpClient;
 
-    protected InterconnectsClientImpl(InterconnectAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+    protected InterconnectsClientImpl(HttpRestClient httpClient, InterconnectAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+        this.httpClient = httpClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
     }
 
     public static InterconnectsClient getClient() {
-        return new InterconnectsClientImpl(new InterconnectAdaptor(),
+        return new InterconnectsClientImpl(
+                HttpRestClient.getClient(),
+                new InterconnectAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
     }
@@ -83,7 +89,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
                 ResourceUris.INTERCONNECT_URI,
                 resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("InterconnectsClientImpl : getInterconnects : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.INTERCONNECT,
@@ -113,7 +119,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
                 ResourceUris.INTERCONNECT_URI));
 
         // call rest client
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("InterconnectsClientImpl : getAllInterconnects : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -134,21 +140,24 @@ public class InterconnectsClientImpl implements InterconnectsClient {
     public Interconnects getInterconnectByName(RestParams params, String interconnectName) {
         Interconnects interconnectDto = null;
         LOGGER.info("InterconnectsClientImpl : getInterconnectByName : start");
-        final String query = UrlUtils.createFilterString(interconnectName);
 
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
                     SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + interconnectName + "'");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(
+        params.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.INTERCONNECT_URI,
-                query));
+                ResourceUris.INTERCONNECT_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("InterconnectsClientImpl : getInterconnectByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -204,7 +213,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
 
         // create JSON request from dto
         JSONArray jsonArray = adaptor.buildJsonArrayDto(patchDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonArray);
+        returnObj = httpClient.sendRequest(params, jsonArray);
 
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -254,7 +263,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(portDto, params.getApiVersion());
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -303,7 +312,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
         // user can save time in creating network dto.
 
         // create JSON request from dto
-        returnObj = HttpRestClient.sendRequestToHPOV(params);
+        returnObj = httpClient.sendRequest(params);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -339,7 +348,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
                 resourceId,
                 SdkConstants.STATISTICS));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("InterconnectsClientImpl : getInterconnectStatistics : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.INTERCONNECT,
@@ -372,7 +381,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
                 SdkConstants.STATISTICS,
                 portName));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("InterconnectsClientImpl : getInterconnectPortStatistics : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.INTERCONNECT,
@@ -408,7 +417,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
                 SdkConstants.SUBPORT,
                 subportNumber));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("InterconnectsClientImpl : getInterconnectSubportStatistics : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.INTERCONNECT,
@@ -456,7 +465,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
         // create JSON request from dto
         JSONArray jsonArray = adaptor.buildJsonArrayDto(portsDto, params.getApiVersion());
 
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonArray);
+        returnObj = httpClient.sendRequest(params, jsonArray);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -492,7 +501,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
                 resourceId,
                 SdkConstants.NAME_SERVERS));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("InterconnectsClientImpl : getInterconnectNamedServers : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.INTERCONNECT,

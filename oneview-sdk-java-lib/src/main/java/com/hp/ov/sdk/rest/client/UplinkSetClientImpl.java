@@ -15,6 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,16 +49,21 @@ public class UplinkSetClientImpl implements UplinkSetClient {
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
 
+    private HttpRestClient httpClient;
+
     private JSONObject jsonObject;
 
-    protected UplinkSetClientImpl(UplinkSetAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+    protected UplinkSetClientImpl(HttpRestClient httpClient, UplinkSetAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+        this.httpClient = httpClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
     }
 
     public static UplinkSetClient getClient() {
-        return new UplinkSetClientImpl(new UplinkSetAdaptor(),
+        return new UplinkSetClientImpl(
+                HttpRestClient.getClient(),
+                new UplinkSetAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
     }
@@ -72,7 +80,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("UplinkSetClientImpl : getUplinkSet : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.UPLINKSET, null);
@@ -99,7 +107,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("UplinkSetClientImpl : getAllUplinkSet : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.UPLINKSETS, null);
@@ -126,7 +134,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("UplinkSetClientImpl : deleteUplinkSet : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -170,8 +178,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI, resourceId));
         String returnObj = null;
 
-        // TODO
-        // check for json request in the input dto. if it is present,
+        // TODO - check for json request in the input dto. if it is present,
         // then
         // convert that into jsonObject and pass it rest client
         // idea is : user can create json string and call the sdk api.
@@ -179,7 +186,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
 
         jsonObject = adaptor.buildJsonObjectFromDto(uplinkDto, params.getApiVersion());
 
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -203,18 +210,21 @@ public class UplinkSetClientImpl implements UplinkSetClient {
     public UplinkSets getUplinkSetsByName(final RestParams params, final String name) {
         UplinkSets uplinkSetDto = null;
         LOGGER.info("UplinkSetClientImpl : getUplinkSetsByName : start");
-        final String query = UrlUtils.createFilterString(name);
 
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
 
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + name + "'");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("UplinkSetClientImpl : getUplinkSetsByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.UPLINKSET, null);
@@ -262,7 +272,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(uplinkSetDto, params.getApiVersion());
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 

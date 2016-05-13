@@ -30,6 +30,8 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
@@ -261,8 +263,13 @@ public class FcSansDeviceManagerClientTest {
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
-        expectedRestParams.setUrl(UrlUtils.createRestQueryUrl(expectedRestParams.getHostname(),
-                ResourceUris.FC_SANS_DEVICE_MANAGER_URI, UrlUtils.createQueryString(anyName)));
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + anyName + "'");
+        expectedRestParams.setQuery(query);
+
+        expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(),
+                ResourceUris.FC_SANS_DEVICE_MANAGER_URI));
 
         this.deviceManagerClient.getDeviceManagerByName(new RestParams(), anyName);
 

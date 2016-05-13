@@ -435,9 +435,10 @@ public class LogicalInterconnectClientSample {
             System.out.println("LogicalInterconnectClientSample : "
                     + "updateLogicalInterconnectFirmwareUpdateById : arguments are null ");
         } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectFirmwareUpdateById : errors in task, "
-                    + "please check task resource for more details ");
+            System.out.println("EnclosureClientTest : createEnclosure : errors in task, please check task resource for more details ");
+            System.out.println("Task Errors: " + Arrays.toString(e.getMessageParameters()));
+            System.out.println("Task Recomendations: " + Arrays.toString(e.getRecommendedActionsParameters()));
+            return;
         }
     }
 
@@ -911,7 +912,7 @@ public class LogicalInterconnectClientSample {
                     + "task object returned to client : " + taskResourceV2.toString());
         } catch (final SDKResourceNotFoundException ex) {
             System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectCompliance : resource you are looking is not found for update"
+                    + "updateLogicalInterconnectCompliance : resource you are looking is not found for update "
                     + params.getHostname());
         } catch (final SDKBadRequestException ex) {
             System.out.println("LogicalInterconnectClientSample : "

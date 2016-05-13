@@ -18,14 +18,16 @@ package com.hp.ov.sdk.rest.client;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.any;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.junit.Test;
@@ -224,9 +226,14 @@ public class StorageVolumeAttachmentsClientImplTest {
                 .willReturn(new ExtraStorageVolumeCollection());
 
         RestParams expectedRestParams = new RestParams();
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("alertFixType", "ExtraUnmanagedStorageVolumes");
+        expectedRestParams.setQuery(query);
+
         expectedRestParams.setType(HttpMethodType.GET);
-        expectedRestParams.setUrl(UrlUtils.createRestQueryUrl(expectedRestParams.getHostname(),
-                ResourceUris.STORAGE_VOLUME_ATTACHMENT_REPAIR_URI, StorageVolumeAttachmentsClient.REPAIR_FILTER));
+        expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(),
+                ResourceUris.STORAGE_VOLUME_ATTACHMENT_REPAIR_URI));
 
         this.storageClient.getExtraUnmanagedStorageVolumeAttachments(new RestParams());
 

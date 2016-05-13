@@ -15,6 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.login;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.adaptors.ApplianceDetailsAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ApplianceDetailsDto;
@@ -22,13 +25,11 @@ import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ApplianceDetails {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplianceDetails.class);
-
+    private HttpRestClient httpClient = HttpRestClient.getClient();
     private ApplianceDetailsAdaptor adaptor;
 
     public ApplianceDetails(ApplianceDetailsAdaptor adaptor) {
@@ -39,7 +40,7 @@ public class ApplianceDetails {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.APPLIANCE_VERSION));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         final ApplianceDetailsDto applianceDetailsDto = adaptor.buildDto(returnObj);
 
         LOGGER.debug("ApplianceDetails : getVersion =" + applianceDetailsDto.getCurrentVersion());

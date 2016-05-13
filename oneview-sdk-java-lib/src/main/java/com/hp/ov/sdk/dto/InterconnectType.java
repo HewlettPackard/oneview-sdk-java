@@ -15,10 +15,14 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
-import com.google.gson.annotations.Since;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import com.google.gson.annotations.Since;
 
 public class InterconnectType extends BaseModelResource {
 
@@ -109,5 +113,58 @@ public class InterconnectType extends BaseModelResource {
         this.downlinkPortCapability = downlinkPortCapability;
     }
 
-    //TODO equals && hashcode && toString
+    @Override
+    public final boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof InterconnectType) {
+            InterconnectType that = (InterconnectType) obj;
+
+            return that.canEqual(this) && new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(downlinkCapabilities, that.downlinkCapabilities)
+                    .append(downlinkCount, that.downlinkCount)
+                    .append(downlinkPortCapability, that.downlinkPortCapability)
+                    .append(interconnectCapabilities, that.interconnectCapabilities)
+                    .append(maximumFirmwareVersion, that.maximumFirmwareVersion)
+                    .append(minimumFirmwareVersion, that.minimumFirmwareVersion)
+                    .append(partNumber, that.partNumber)
+                    .append(portInfos, that.portInfos)
+                    .append(unsupportedCapabilities, that.unsupportedCapabilities)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                .append(downlinkCapabilities)
+                .append(downlinkCount)
+                .append(downlinkPortCapability)
+                .append(interconnectCapabilities)
+                .append(maximumFirmwareVersion)
+                .append(minimumFirmwareVersion)
+                .append(partNumber)
+                .append(portInfos)
+                .append(unsupportedCapabilities)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .appendSuper(super.toString())
+                .append("downlinkCapabilities", downlinkCapabilities)
+                .append("downlinkCount", downlinkCount)
+                .append("downlinkPortCapability", downlinkPortCapability)
+                .append("interconnectCapabilities", interconnectCapabilities)
+                .append("maximumFirmwareVersion", maximumFirmwareVersion)
+                .append("minimumFirmwareVersion", minimumFirmwareVersion)
+                .append("partNumber", partNumber)
+                .append("portInfos", portInfos)
+                .append("unsupportedCapabilities", unsupportedCapabilities)
+                .toString();
+    }
 }

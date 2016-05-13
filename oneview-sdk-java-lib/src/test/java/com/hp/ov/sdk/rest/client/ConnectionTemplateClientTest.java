@@ -1,20 +1,24 @@
 package com.hp.ov.sdk.rest.client;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.adaptors.ConnectionTemplateAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -27,13 +31,18 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(HttpRestClient.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ConnectionTemplateClientTest {
 
     private RestParams params;
+
+    @Mock
     private ConnectionTemplateAdaptor adaptor;
-    private ConnectionTemplateClient client;
+    @Mock
+    private HttpRestClient restClient;
+
+    @InjectMocks
+    private ConnectionTemplateClientImpl client;
 
     private String resourceId = "random-UUID";
     private String resourceName = "random-name";
@@ -42,17 +51,18 @@ public class ConnectionTemplateClientTest {
     @Before
     public void setUp() throws Exception {
         params = new RestParams();
-        adaptor = new ConnectionTemplateAdaptor();
-        PowerMockito.mockStatic(HttpRestClient.class);
-        this.client = ConnectionTemplateClientImpl.getClient();
     }
 
     @Test
     public void testGetConnectionTemplate() throws IOException {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(connectionTemplateJson);
+
+        Mockito.when(adaptor.buildDto(
+                Mockito.anyString()))
+        .thenReturn(new ConnectionTemplate());
 
         ConnectionTemplate connectionTemplateDto = client.getConnectionTemplate(params, "random-UUID");
 
@@ -60,8 +70,7 @@ public class ConnectionTemplateClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI, resourceId));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(connectionTemplateDto);
     }
@@ -69,7 +78,7 @@ public class ConnectionTemplateClientTest {
     @Test (expected = SDKInvalidArgumentException.class)
     public void testGetConnectionTemplateWithNullParams() throws IOException {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(connectionTemplateJson);
@@ -80,7 +89,7 @@ public class ConnectionTemplateClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetConnectionTemplateWithNullResponse() throws IOException {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(null);
@@ -91,21 +100,27 @@ public class ConnectionTemplateClientTest {
     @Test
     public void testGetConnectionTemplateByName() throws IOException {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(connectionTemplateJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new ConnectionTemplateAdaptor().buildCollectionDto(connectionTemplateJson));
 
         ConnectionTemplate connectionTemplateDto = client.getConnectionTemplateByName(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.CONNECTION_TEMPLATE_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.CONNECTION_TEMPLATE_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(connectionTemplateDto);
     }
@@ -113,7 +128,7 @@ public class ConnectionTemplateClientTest {
     @Test (expected = SDKInvalidArgumentException.class)
     public void testGetConnectionTemplateByNameWithNullParams() throws IOException {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(connectionTemplateJson);
@@ -124,7 +139,7 @@ public class ConnectionTemplateClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetConnectionTemplateByNameWithNullResponse() throws IOException {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(null);
@@ -135,13 +150,19 @@ public class ConnectionTemplateClientTest {
     @Test
     public void testUpdateConnectionTemplate() {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGet.json");
-        ConnectionTemplate connectionTemplateDto = adaptor.buildDto(connectionTemplateJson);
-        connectionTemplateDto.setDescription("outdated");
+        ConnectionTemplate connectionTemplateDto = new ConnectionTemplateAdaptor().buildDto(connectionTemplateJson);
+        connectionTemplateDto.setDescription("updated");
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(connectionTemplateJson);
+
+        Mockito.when(adaptor.buildJsonObjectFromDto(Mockito.any(ConnectionTemplate.class)))
+        .thenReturn(new ConnectionTemplateAdaptor().buildJsonObjectFromDto(connectionTemplateDto));
+
+        Mockito.when(adaptor.buildDto(Mockito.anyString()))
+        .thenReturn(connectionTemplateDto);
 
         connectionTemplateDto = client.updateConnectionTemplate(
                 params,
@@ -153,20 +174,19 @@ public class ConnectionTemplateClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI, resourceId));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params), Mockito.any(JSONObject.class));
 
         assertNotNull(connectionTemplateDto);
-        assertFalse("Template description is outdated", connectionTemplateDto.getDescription().contains("outdated"));
+        assertTrue("Template description is outdated", connectionTemplateDto.getDescription().contains("updated"));
     }
 
     @Test (expected = SDKInvalidArgumentException.class)
     public void testUpdateConnectionTemplateWithNullParams() {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGet.json");
-        ConnectionTemplate connectionTemplateDto = adaptor.buildDto(connectionTemplateJson);
+        ConnectionTemplate connectionTemplateDto = new ConnectionTemplateAdaptor().buildDto(connectionTemplateJson);
         connectionTemplateDto.setDescription("outdated");
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(connectionTemplateJson);
@@ -181,10 +201,10 @@ public class ConnectionTemplateClientTest {
     @Test (expected = SDKInvalidArgumentException.class)
     public void testUpdateConnectionTemplateWithNullDto() {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGet.json");
-        ConnectionTemplate connectionTemplateDto = adaptor.buildDto(connectionTemplateJson);
+        ConnectionTemplate connectionTemplateDto = new ConnectionTemplateAdaptor().buildDto(connectionTemplateJson);
         connectionTemplateDto.setDescription("outdated");
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(connectionTemplateJson);
@@ -199,9 +219,12 @@ public class ConnectionTemplateClientTest {
     @Test
     public void testGetAllConnectionTemplates() {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(connectionTemplateJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new ConnectionTemplateAdaptor().buildCollectionDto(connectionTemplateJson));
 
         ConnectionTemplateCollection connectionTemplateCollection = client.getAllConnectionTemplates(params);
 
@@ -209,8 +232,7 @@ public class ConnectionTemplateClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(connectionTemplateCollection);
         assertEquals("Based on the JSON file, the return object must have 3 elements",
@@ -220,7 +242,7 @@ public class ConnectionTemplateClientTest {
     @Test (expected = SDKInvalidArgumentException.class)
     public void testGetAllConnectionTemplatesWithNullParams() {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(connectionTemplateJson);
@@ -231,7 +253,7 @@ public class ConnectionTemplateClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetAllConnectionTemplatesWithNullResponse() {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(null);
@@ -242,9 +264,12 @@ public class ConnectionTemplateClientTest {
     @Test
     public void testGetDefaultConnectionTemplateForConnectionTemplate() {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(connectionTemplateJson);
+
+        Mockito.when(adaptor.buildDto(Mockito.anyString()))
+        .thenReturn(new ConnectionTemplateAdaptor().buildDto(connectionTemplateJson));
 
         ConnectionTemplate connectionTemplateDto = client.getDefaultConnectionTemplateForConnectionTemplate(params);
 
@@ -252,8 +277,7 @@ public class ConnectionTemplateClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.DEFAULT_CONNECTION_TEMPLATE_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(connectionTemplateDto);
     }
@@ -261,7 +285,7 @@ public class ConnectionTemplateClientTest {
     @Test (expected = SDKInvalidArgumentException.class)
     public void testGetDefaultConnectionTemplateForConnectionTemplateWithNullParams() {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(connectionTemplateJson);
@@ -272,7 +296,7 @@ public class ConnectionTemplateClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetDefaultConnectionTemplateForConnectionTemplateWithNullResponse() {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(null);
@@ -283,21 +307,27 @@ public class ConnectionTemplateClientTest {
     @Test
     public void testGetId() {
         connectionTemplateJson = this.getJsonFromFile("ConnectionTemplatesGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(connectionTemplateJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new ConnectionTemplateAdaptor().buildCollectionDto(connectionTemplateJson));
 
         String id = client.getId(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.CONNECTION_TEMPLATE_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.CONNECTION_TEMPLATE_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(id);
         assertEquals("Based on the JSON file, the return ID must be \"defaultConnectionTemplate\"", "defaultConnectionTemplate", id);

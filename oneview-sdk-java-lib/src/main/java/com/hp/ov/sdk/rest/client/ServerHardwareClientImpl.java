@@ -15,6 +15,9 @@
  */
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,9 +111,13 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
                     SdkConstants.APPLIANCE, null);
         }
 
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + destinationBay + "'");
+        params.setQuery(query);
+
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(),
-                ResourceUris.SERVER_HARDWARE_URI, UrlUtils.createFilterString(destinationBay)));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(),
+                ResourceUris.SERVER_HARDWARE_URI));
 
         String response = restClient.sendRequest(params);
 

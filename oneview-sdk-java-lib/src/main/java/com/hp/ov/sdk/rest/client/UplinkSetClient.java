@@ -25,7 +25,7 @@ public interface UplinkSetClient {
     /**
      * The module aids in fetching the uplink set details for the specified
      * uplink set resource identifier.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -37,19 +37,17 @@ public interface UplinkSetClient {
     /**
      * The module aids in fetching the uplink set details for all the uplink sets
      * found under the current HPE OneView.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @return {@link UplinkSetCollectionV2} containing a collection of uplink set details.
      */
     UplinkSetCollectionV2 getAllUplinkSet(final RestParams params);
 
-    //TODO implement the method create, update
-
     /**
      * The module aids in deleting a uplink set for the specified uplink set
      * resource identifier.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -64,7 +62,7 @@ public interface UplinkSetClient {
      * The module takes in an UplinkSet object or a JsonRequest and updates the
      * existing uplink set based on the resource identifier. It can process the request
      * asynchronously or synchronously, based on the flag input.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -85,7 +83,7 @@ public interface UplinkSetClient {
     /**
      * The module aids in fetching the uplink set details for the specified
      * uplink set name as specified in HPE OneView.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param uplinkSetName
@@ -96,7 +94,7 @@ public interface UplinkSetClient {
 
     /**
      * This module aids in creation of uplink set.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param uplinkSetDto
@@ -115,7 +113,7 @@ public interface UplinkSetClient {
     /**
      * The module aids in fetching the uplink set resource identifier for the uplink set name as
      * specified in HPE OneView.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param name

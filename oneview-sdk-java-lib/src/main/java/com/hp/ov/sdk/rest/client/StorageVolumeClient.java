@@ -28,8 +28,6 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface StorageVolumeClient {
 
-    String REPAIR_FILTER = "alertFixType=ExtraManagedStorageVolumePaths";
-
     /**
      * The module aids in fetching the storage volume details for the specified
      * storage volume resource identifier.

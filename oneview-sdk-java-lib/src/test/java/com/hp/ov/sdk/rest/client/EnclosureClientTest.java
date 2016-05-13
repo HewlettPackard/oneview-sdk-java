@@ -3,8 +3,12 @@ package com.hp.ov.sdk.rest.client;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -12,11 +16,10 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 import com.hp.ov.sdk.adaptors.EnclosureAdaptor;
@@ -47,42 +50,40 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({HttpRestClient.class, TaskMonitorManager.class})
+@RunWith(MockitoJUnitRunner.class)
 public class EnclosureClientTest {
-    
-    private RestParams params;
-    private EnclosureAdaptor adaptor;
-    private EnclosureClient client;
 
     private static String resourceId = "random-UUID";
     private static String resourceName = "random-name";
     private static String enclosureScript = "#script";
     private String enclosureJson = "";
+    private RestParams params;
 
     @Mock
-    private TaskMonitorManager taskMonitorManager;
+    private EnclosureAdaptor adaptor;
+    @Mock
     private TaskAdaptor taskAdaptor;
-    
+    @Mock
+    private TaskMonitorManager taskMonitorManager;
+    @Mock
+    private HttpRestClient restClient;
+
+    @InjectMocks
+    private EnclosureClientImpl client;
+
     @Before
     public void setUp() throws Exception {
         params = new RestParams();
-        taskAdaptor = TaskAdaptor.getInstance();
-        adaptor = new EnclosureAdaptor();
-
-        PowerMockito.mockStatic(HttpRestClient.class);
-        PowerMockito.mockStatic(TaskMonitorManager.class);
-        PowerMockito.when(TaskMonitorManager.getInstance()).thenReturn(taskMonitorManager);
-
-        this.client = EnclosureClientImpl.getClient();
     }
 
     @Test
     public void testGetEnclosure() {
         enclosureJson = this.getJsonFromFile("EnclosureGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
-                Mockito.any(RestParams.class)))
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class)))
         .thenReturn(enclosureJson);
+
+        Mockito.when(adaptor.buildDto(enclosureJson))
+        .thenReturn(new EnclosureAdaptor().buildDto(enclosureJson));
 
         Enclosures enclosureDto = client.getEnclosure(params, resourceId);
 
@@ -90,8 +91,7 @@ public class EnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(enclosureDto);
     }
@@ -104,7 +104,7 @@ public class EnclosureClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetEnclosureWithNullResponse() {
         enclosureJson = this.getJsonFromFile("EnclosureGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -114,9 +114,12 @@ public class EnclosureClientTest {
     @Test
     public void testGetAllEnclosures() {
         enclosureJson = this.getJsonFromFile("EnclosureGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
-                Mockito.any(RestParams.class)))
+
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class)))
         .thenReturn(enclosureJson);
+
+        Mockito.when(adaptor.buildCollectionDto(enclosureJson))
+        .thenReturn(new EnclosureAdaptor().buildCollectionDto(enclosureJson));
 
         EnclosureCollectionV2 enclosureCollection = client.getAllEnclosures(params);
 
@@ -124,8 +127,7 @@ public class EnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(enclosureCollection);
         assertEquals("Based on the JSON file, the return object must have 1 element",
@@ -140,7 +142,7 @@ public class EnclosureClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetAllEnclosuresWithNullResponse() {
         enclosureJson = this.getJsonFromFile("EnclosureGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -150,21 +152,27 @@ public class EnclosureClientTest {
     @Test
     public void testGetEnclosureByName() {
         enclosureJson = this.getJsonFromFile("EnclosureGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureJson);
+
+        Mockito.when(adaptor.buildCollectionDto(enclosureJson))
+        .thenReturn(new EnclosureAdaptor().buildCollectionDto(enclosureJson));
 
         Enclosures enclosureDto = client.getEnclosureByName(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.ENCLOSURE_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.ENCLOSURE_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(enclosureDto);
     }
@@ -177,7 +185,7 @@ public class EnclosureClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetEnclosureByNameWithNullResponse() {
         enclosureJson = this.getJsonFromFile("EnclosureGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -186,13 +194,13 @@ public class EnclosureClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetEnclosureGroupByNameWithNoMembers() {
-        EnclosureCollectionV2 enclosureCollectionDto = adaptor.buildCollectionDto(this.getJsonFromFile("EnclosureGetByName.json"));
+        EnclosureCollectionV2 enclosureCollectionDto = new EnclosureAdaptor().buildCollectionDto(this.getJsonFromFile("EnclosureGetByName.json"));
         enclosureCollectionDto.setCount(0);
         enclosureJson = new Gson().toJson(enclosureCollectionDto);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
-                Mockito.any(RestParams.class)))
-        .thenReturn(enclosureJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(enclosureJson);
+
+        Mockito.when(adaptor.buildCollectionDto(enclosureJson)).thenReturn(enclosureCollectionDto);
 
         client.getEnclosureByName(params, resourceName);
     }
@@ -200,15 +208,17 @@ public class EnclosureClientTest {
     @Test
     public void testCreateEnclosure() {
         enclosureJson = this.getJsonFromFile("EnclosureGet.json");
-        AddEnclosureV2 enclosureDto = adaptor.buildAddEnclosureDto(enclosureJson);
+        AddEnclosureV2 enclosureDto = new EnclosureAdaptor().buildAddEnclosureDto(enclosureJson);
 
         String jsonCreateTaskCompleted = this.getJsonFromFile("EnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.any(String.class))).thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -222,12 +232,7 @@ public class EnclosureClientTest {
                 false,
                 false);
 
-        RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI));
-        rp.setType(HttpMethodType.POST);
-
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.any(RestParams.class), Mockito.any(JSONObject.class));
 
         assertEquals("A success create enclosure call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -247,15 +252,19 @@ public class EnclosureClientTest {
     @Test
     public void testUpdateEnclosure() {
         enclosureJson = this.getJsonFromFile("EnclosureGet.json");
-        Enclosures enclosureDto = adaptor.buildDto(enclosureJson);
-        
-        String jsonCreateTaskCompleted = this.getJsonFromFile("EnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        Enclosures enclosureDto = new EnclosureAdaptor().buildDto(enclosureJson);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        String jsonCreateTaskCompleted = this.getJsonFromFile("EnclosureCreateTaskCompleted.json");
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
+
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(
+                Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -274,8 +283,7 @@ public class EnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params), Mockito.any(JSONObject.class));
 
         assertEquals("A success update enclosure call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -285,7 +293,7 @@ public class EnclosureClientTest {
         enclosureJson = this.getJsonFromFile("EnclosureGet.json");
         Enclosures enclosureDto = adaptor.buildDto(enclosureJson);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(enclosureJson);
@@ -301,12 +309,16 @@ public class EnclosureClientTest {
     @Test
     public void testPatchEnclosure() {
         String jsonCreateTaskCompleted = this.getJsonFromFile("EnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONArray.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(
+                Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -318,22 +330,21 @@ public class EnclosureClientTest {
         patchDto.setOp(PatchOperation.replace);
         patchDto.setPath("/name");
         patchDto.setValue(resourceName);
-        
+
         TaskResourceV2 result = client.patchEnclosure( params, resourceId, patchDto , false);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId));
         rp.setType(HttpMethodType.PATCH);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONArray.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params), Mockito.any(JSONArray.class));
 
         assertEquals("A success patch enclosure call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
 
     @Test (expected = SDKInvalidArgumentException.class)
     public void testPatchEnclosureWithNullParams() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONArray.class)))
         .thenReturn(enclosureJson);
@@ -349,11 +360,15 @@ public class EnclosureClientTest {
     @Test
     public void testDeleteEnclosure() {
         String jsonDeleteTaskCompleted = this.getJsonFromFile("EnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonDeleteTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonDeleteTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonDeleteTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(
+                Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -367,8 +382,7 @@ public class EnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId));
         rp.setType(HttpMethodType.DELETE);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertEquals("A success delete enclosure call returns \"Completed\"", "Completed", taskResourceV2.getTaskState().toString());
     }
@@ -380,7 +394,7 @@ public class EnclosureClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testDeleteEnclosureWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -390,9 +404,12 @@ public class EnclosureClientTest {
     @Test
     public void testGetActiveOaSsoUrl() {
         String jsonSsoData = new Gson().toJson(new SsoUrlData());
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonSsoData);
+
+        Mockito.when(adaptor.buildSsoUrlData(Mockito.anyString()))
+        .thenReturn(new SsoUrlData());
 
         SsoUrlData ssoData = client.getActiveOaSsoUrl(params, resourceId);
 
@@ -400,8 +417,7 @@ public class EnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.ACTIVE_OA_SSO_URL));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(ssoData);
     }
@@ -409,9 +425,13 @@ public class EnclosureClientTest {
     @Test
     public void testGetActiveOaSsoUrlV200() {
         String jsonSsoData = new Gson().toJson(new SsoUrlData());
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonSsoData);
+
+        Mockito.when(adaptor.buildSsoUrlData(
+                Mockito.any(String.class)))
+        .thenReturn(new SsoUrlData());
 
         params.setApiVersion(200);
         SsoUrlData ssoData = client.getActiveOaSsoUrl(params, resourceId);
@@ -421,8 +441,7 @@ public class EnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.ACTIVE_OA_SSO_URL_V200 + "?role=Active"));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(ssoData);
     }
@@ -434,7 +453,7 @@ public class EnclosureClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetActiveOaSsoUrlWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -444,11 +463,15 @@ public class EnclosureClientTest {
     @Test
     public void testUpdateCompliance() {
         String jsonCreateTaskCompleted = this.getJsonFromFile("EnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(
+                Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -462,8 +485,7 @@ public class EnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.COMPLIANCE));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertEquals("A success update compliance call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -475,7 +497,7 @@ public class EnclosureClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testUpdateComplianceWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -485,11 +507,15 @@ public class EnclosureClientTest {
     @Test
     public void testUpdateConfiguration() {
         String jsonCreateTaskCompleted = this.getJsonFromFile("EnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(
+                Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -503,8 +529,7 @@ public class EnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.CONFIGURATION));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertEquals("A success update configuration call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -516,7 +541,7 @@ public class EnclosureClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testUpdateConfigurationWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -526,12 +551,16 @@ public class EnclosureClientTest {
     @Test
     public void testUpdateEnclosureFwBaseline() {
         String jsonCreateTaskCompleted = this.getJsonFromFile("EnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(
+                Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -546,8 +575,7 @@ public class EnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.ENCLOSURE_FW_BASELINE));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params), Mockito.any(JSONObject.class));
 
         assertEquals("A success update firmware baseline call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -570,9 +598,13 @@ public class EnclosureClientTest {
     @Test
     public void testGetEnvironmentalConfiguration() {
         enclosureJson = this.getJsonFromFile("EnclosureGetEnvironmental.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureJson);
+
+        Mockito.when(adaptor.buildEnvironmentalConfigurationDto(
+                Mockito.any(String.class)))
+        .thenReturn(new EnvironmentalConfiguration());
 
         EnvironmentalConfiguration enclosureDto = client.getEnvironmentalConfiguration(params, resourceId);
 
@@ -581,8 +613,7 @@ public class EnclosureClientTest {
                 ResourceUris.ENVIRONMENT_CONFIGURATION_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(enclosureDto);
     }
@@ -594,7 +625,7 @@ public class EnclosureClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetEnvironmentalConfigurationWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -607,10 +638,16 @@ public class EnclosureClientTest {
         EnvironmentalConfigurationUpdate environmentalConfigurationUpdateDto = new EnvironmentalConfigurationUpdate();
         environmentalConfigurationUpdateDto.setCalibratedMaxPower(1660);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(configJson);
+
+        EnvironmentalConfiguration envConfigUpdated = new EnvironmentalConfiguration();
+        envConfigUpdated.setCalibratedMaxPower(environmentalConfigurationUpdateDto.getCalibratedMaxPower());
+        Mockito.when(adaptor.buildEnvironmentalConfigurationDto(
+                Mockito.anyString()))
+        .thenReturn(envConfigUpdated );
 
         EnvironmentalConfiguration config = client.updateEnvironmentalConfiguration(
                 params,
@@ -622,8 +659,7 @@ public class EnclosureClientTest {
                 ResourceUris.ENVIRONMENT_CONFIGURATION_URI));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params), Mockito.any(JSONObject.class));
 
         assertNotNull(config);
         assertTrue("Configuration is outdated", config.getCalibratedMaxPower() == 1660);
@@ -649,12 +685,16 @@ public class EnclosureClientTest {
     @Test
     public void testUpdateRefreshState() {
         String jsonCreateTaskCompleted = this.getJsonFromFile("EnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(
+                Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -672,8 +712,7 @@ public class EnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.REFRESH_STATE));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params), Mockito.any(JSONObject.class));
 
         assertEquals("A success update firmware baseline call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -702,7 +741,7 @@ public class EnclosureClientTest {
 
     @Test
     public void testGetScript() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureScript);
 
@@ -712,8 +751,7 @@ public class EnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.SCRIPT));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(script);
         assertEquals(enclosureScript, script);
@@ -726,7 +764,7 @@ public class EnclosureClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetScriptWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -736,12 +774,15 @@ public class EnclosureClientTest {
     @Test
     public void testUpdateScript() {
         String jsonCreateTaskCompleted = this.getJsonFromFile("EnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendStringRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(String.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.any(String.class)))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -755,8 +796,7 @@ public class EnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.SCRIPT));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendStringRequestToHPOV(Mockito.eq(rp), Mockito.any(String.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params), Mockito.eq(enclosureScript));
 
         assertEquals("A success update script call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -774,9 +814,12 @@ public class EnclosureClientTest {
     @Test
     public void testGetStandbyOaSsoUrl() {
         String jsonSsoData = new Gson().toJson(new SsoUrlData());
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonSsoData);
+
+        Mockito.when(adaptor.buildSsoUrlData(Mockito.anyString()))
+        .thenReturn(new SsoUrlData());
 
         SsoUrlData ssoData = client.getStandbyOaSsoUrl(params, resourceId);
 
@@ -784,8 +827,7 @@ public class EnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.STANDBY_OA_SSO_URL));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(ssoData);
     }
@@ -793,9 +835,12 @@ public class EnclosureClientTest {
     @Test
     public void testGetStandbyOaSsoUrlV200() {
         String jsonSsoData = new Gson().toJson(new SsoUrlData());
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonSsoData);
+
+        Mockito.when(adaptor.buildSsoUrlData(Mockito.anyString()))
+        .thenReturn(new SsoUrlData());
 
         params.setApiVersion(200);
         SsoUrlData ssoData = client.getStandbyOaSsoUrl(params, resourceId);
@@ -805,8 +850,7 @@ public class EnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.STANDBY_OA_SSO_URL_V200 + "?role=Standby"));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(ssoData);
     }
@@ -818,7 +862,7 @@ public class EnclosureClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetStandbyOaSsoUrlWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -829,9 +873,12 @@ public class EnclosureClientTest {
     public void testGetUtilization() {
         String utilizationJson = this.getJsonFromFile("EnclosureGetUtilization.json");
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(utilizationJson);
+
+        Mockito.when(adaptor.buildUtilizationData(Mockito.anyString()))
+        .thenReturn(new UtilizationData());
 
         UtilizationData utilizationDataDto = client.getUtilization(params, resourceId);
 
@@ -839,8 +886,7 @@ public class EnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.UTILIZATION));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(utilizationDataDto);
     }
@@ -852,7 +898,7 @@ public class EnclosureClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetUtilizationWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -862,21 +908,26 @@ public class EnclosureClientTest {
     @Test
     public void testGetId() {
         enclosureJson = this.getJsonFromFile("EnclosureGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
-                Mockito.any(RestParams.class)))
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class)))
         .thenReturn(enclosureJson);
+
+        Mockito.when(adaptor.buildCollectionDto(enclosureJson))
+        .thenReturn(new EnclosureAdaptor().buildCollectionDto(enclosureJson));
 
         String id = client.getId(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.ENCLOSURE_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.ENCLOSURE_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
         assertNotNull(id);
         assertEquals("Based on the JSON file, the return ID must be \"" + resourceId + "\"", resourceId, id);

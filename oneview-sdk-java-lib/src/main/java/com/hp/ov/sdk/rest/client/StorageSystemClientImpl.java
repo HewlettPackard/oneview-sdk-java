@@ -15,7 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -45,14 +47,17 @@ public class StorageSystemClientImpl implements StorageSystemClient {
 
     private final StorageSystemAdaptor adaptor;
 
+    private HttpRestClient httpClient;
+
     private JSONObject jsonObject;
 
-    protected StorageSystemClientImpl(StorageSystemAdaptor adaptor) {
+    protected StorageSystemClientImpl(HttpRestClient httpClient, StorageSystemAdaptor adaptor) {
+        this.httpClient = httpClient;
         this.adaptor = adaptor;
     }
 
     public static StorageSystemClient getClient() {
-        return new StorageSystemClientImpl(new StorageSystemAdaptor());
+        return new StorageSystemClientImpl(HttpRestClient.getClient(), new StorageSystemAdaptor());
     }
 
     @Override
@@ -67,7 +72,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("StorageSystemClientImpl : getStorageSystem : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_SYSTEM,
@@ -95,7 +100,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, arrayId,
                 ResourceUris.STORAGE_POOL_STORAGE_SYSTEM_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("StorageSystemClientImpl : getStoragePoolsForStorageSystem : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_SYSTEMS,
@@ -124,7 +129,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, resourceId,
                 ResourceUris.MANANGED_PORTS_STORAGE_SYSTEM_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("StorageSystemClientImpl : getAllManagedPortsForStorageSystem : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_SYSTEMS,
@@ -155,7 +160,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, resourceId,
                 ResourceUris.MANANGED_PORTS_STORAGE_SYSTEM_URI, targetPortId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("StorageSystemClientImpl : getManagedPortsForStorageSystem : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_SYSTEMS,
@@ -183,7 +188,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, ResourceUris.STORAGE_SYSTEM_HOST_TYPES_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("StorageSystemClientImpl : getStorageSystemHostTypes : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_SYSTEMS,
@@ -211,7 +216,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("StorageSystemClientImpl : getAllStorageSystems : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_SYSTEMS,
@@ -232,17 +237,20 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         StorageSystemV2 storageSystemDto = null;
         LOGGER.info("StorageSystemClientImpl : getStorageSystemByName : Start");
 
-        // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = UrlUtils.createFilterString(name);
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + name + "'");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("StorageSystemClientImpl : getStorageSystemByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_SYSTEMS,
@@ -296,7 +304,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
 
         // create JSON request from storageSystemDto
         jsonObject = adaptor.buildJsonObjectFromDto(addStorageSystemCredentialsDto, params.getApiVersion());
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
 
         if (!returnObj.isEmpty() || returnObj != null) {
@@ -337,7 +345,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(storageSystemDto, params.getApiVersion());
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         if (!returnObj.isEmpty() || returnObj != null) {
             returnObj = "Updated";
@@ -362,7 +370,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, resourceId));
 
-        String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        String returnObj = httpClient.sendRequest(params);
         if (returnObj != null && !returnObj.isEmpty()) {
             returnObj = "Deleted";
         }

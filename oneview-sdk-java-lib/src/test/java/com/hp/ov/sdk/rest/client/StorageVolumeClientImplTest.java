@@ -21,13 +21,16 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.doReturn;
-import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.spy;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.any;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.junit.Test;
@@ -187,9 +190,14 @@ public class StorageVolumeClientImplTest {
                 .willReturn(storageVolumeCollection);
 
         RestParams expectedRestParams = new RestParams();
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + anyStorageVolumeName + "'");
+        expectedRestParams.setQuery(query);
+
         expectedRestParams.setType(HttpMethodType.GET);
-        expectedRestParams.setUrl(UrlUtils.createRestQueryUrl(expectedRestParams.getHostname(),
-                ResourceUris.STORAGE_VOLUME_URI, UrlUtils.createFilterString(anyStorageVolumeName)));
+        expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(),
+                ResourceUris.STORAGE_VOLUME_URI));
 
         StorageVolumeV2 response = this.storageClient.getStorageVolumeByName(new RestParams(),
                 anyStorageVolumeName);
@@ -492,9 +500,14 @@ public class StorageVolumeClientImplTest {
                 .willReturn(new ExtraStorageVolumeCollection());
 
         RestParams expectedRestParams = new RestParams();
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("alertFixType", "ExtraManagedStorageVolumePaths");
+        expectedRestParams.setQuery(query);
+
         expectedRestParams.setType(HttpMethodType.GET);
-        expectedRestParams.setUrl(UrlUtils.createRestQueryUrl(expectedRestParams.getHostname(),
-                ResourceUris.STORAGE_VOLUME_REPAIR_URI, StorageVolumeClientImpl.REPAIR_FILTER));
+        expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(),
+                ResourceUris.STORAGE_VOLUME_REPAIR_URI));
 
         this.storageClient.getExtraManagedStorageVolumePaths(new RestParams());
 
