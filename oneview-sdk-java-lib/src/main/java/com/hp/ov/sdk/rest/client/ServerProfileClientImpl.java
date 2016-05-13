@@ -15,7 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
@@ -23,6 +25,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
 import com.hp.ov.sdk.adaptors.ServerProfileAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -59,18 +62,22 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
 
+    private HttpRestClient httpClient;
+
     private JSONObject jsonObject;
 
-    protected ServerProfileClientImpl(ServerProfileAdaptor adaptor, TaskAdaptor taskAdaptor,
+    protected ServerProfileClientImpl(HttpRestClient httpClient, ServerProfileAdaptor adaptor, TaskAdaptor taskAdaptor,
         TaskMonitorManager taskMonitor, ServerHardwareClient serverHardwareClientImpl) {
-
+        this.httpClient = httpClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
     }
 
     public static ServerProfileClient getClient() {
-        return new ServerProfileClientImpl(new ServerProfileAdaptor(),
+        return new ServerProfileClientImpl(
+                HttpRestClient.getClient(),
+                new ServerProfileAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance(),
                 ServerHardwareClientImpl.getClient());
@@ -88,7 +95,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : getServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -115,7 +122,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : getAllServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILES,
@@ -135,18 +142,21 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     public ServerProfile getServerProfileByName(final RestParams params, final String name) {
         ServerProfile serverProfileDto = null;
         LOGGER.info("ServerProfileClientImpl : getServerProfileByName : Start");
-        // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = UrlUtils.createFilterString(name);
 
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + name + "'");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : getServerProfileByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILES,
@@ -187,7 +197,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
                 resourceId,
                 SdkConstants.COMPLIANCE_PREVIEW));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : getServerProfileCompliancePreview : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -218,7 +228,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
                 resourceId,
                 SdkConstants.MESSAGES));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : getServerProfileMessages : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -253,7 +263,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
                 SdkConstants.TRANSFORMATION,
                 query));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : getServerProfileTransformation : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -273,20 +283,23 @@ public class ServerProfileClientImpl implements ServerProfileClient {
             final String enclosureGroupUri) {
         LOGGER.info("ServerProfileClientImpl : getAvailableNetworksForServerProfile : Start");
 
-        final String query = "serverHardwareTypeUri=" + serverHardwareTypeUri + "&enclosureGroupUri=" + enclosureGroupUri;
-
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("serverHardwareTypeUri", serverHardwareTypeUri);
+        query.put("enclosureGroupUri", enclosureGroupUri);
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(
+        params.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.AVAILABLE_NETWORKS_URI,
-                query));
+                ResourceUris.AVAILABLE_NETWORKS_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : getAvailableNetworksForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -318,7 +331,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
                 params.getHostname(),
                 ResourceUris.AVAILABLE_SERVERS_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -341,20 +354,23 @@ public class ServerProfileClientImpl implements ServerProfileClient {
             final String enclosureGroupUri) {
         LOGGER.info("ServerProfileClientImpl : getAvailableServersForServerProfile : Start");
 
-        final String query = "serverHardwareTypeUri=" + serverHardwareTypeUri + "&enclosureGroupUri=" + enclosureGroupUri;
-
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("serverHardwareTypeUri", serverHardwareTypeUri);
+        query.put("enclosureGroupUri", enclosureGroupUri);
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(
+        params.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.AVAILABLE_SERVERS_URI,
-                query));
+                ResourceUris.AVAILABLE_SERVERS_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -380,19 +396,21 @@ public class ServerProfileClientImpl implements ServerProfileClient {
     public List<AvailableServers> getAvailableServersForServerProfile(final RestParams params, final String profileUri) {
         LOGGER.info("ServerProfileClientImpl : getAvailableServersForServerProfile : Start");
 
-        final String query = "profileUri=" + profileUri;
-
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("profileUri", profileUri);
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(),
-                ResourceUris.AVAILABLE_SERVERS_URI,
-                query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(),
+                ResourceUris.AVAILABLE_SERVERS_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : getAvailableServersForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -418,24 +436,27 @@ public class ServerProfileClientImpl implements ServerProfileClient {
             String enclosureGroupUri, String serverHardwareTypeUri) {
         LOGGER.info("ServerProfileClientImpl : getAvailableStorageSystemsForServerProfile : Start");
 
-        if (StringUtils.isEmpty(enclosureGroupUri) || StringUtils.isEmpty(serverHardwareTypeUri)) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
-        }
-
-        final String query = "serverHardwareTypeUri=" + serverHardwareTypeUri + "&enclosureGroupUri=" + enclosureGroupUri;
-
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        if (StringUtils.isEmpty(enclosureGroupUri) || StringUtils.isEmpty(serverHardwareTypeUri)) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("serverHardwareTypeUri", serverHardwareTypeUri);
+        query.put("enclosureGroupUri", enclosureGroupUri);
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(
+        params.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.AVAILABLE_STORAGE_SYSTEMS,
-                query));
+                ResourceUris.AVAILABLE_STORAGE_SYSTEMS));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : getAvailableStorageSystemsForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -462,30 +483,30 @@ public class ServerProfileClientImpl implements ServerProfileClient {
             String serverHardwareTypeUri, String storageSystemId) {
         LOGGER.info("ServerProfileClientImpl : getAvailableStorageSystemForServerProfile : Start");
 
-        String query = "";
-        if (StringUtils.isEmpty(enclosureGroupUri)
-                || StringUtils.isEmpty(serverHardwareTypeUri)
-                || StringUtils.isEmpty(storageSystemId)) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
-
-        } else {
-            query = "serverHardwareTypeUri=" + serverHardwareTypeUri +
-                    "&enclosureGroupUri=" + enclosureGroupUri +
-                    "&storageSystemId=" + storageSystemId;
-        }
-
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        if (StringUtils.isEmpty(enclosureGroupUri)
+                || StringUtils.isEmpty(serverHardwareTypeUri)
+                || StringUtils.isEmpty(storageSystemId)) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        } else {
+            Map<String, String> query = new HashMap<String, String>();
+            query.put("serverHardwareTypeUri", serverHardwareTypeUri);
+            query.put("enclosureGroupUri", enclosureGroupUri);
+            query.put("storageSystemId", storageSystemId);
+            params.setQuery(query);
+        }
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(
+        params.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.AVAILABLE_STORAGE_SYSTEM,
-                query));
+                ResourceUris.AVAILABLE_STORAGE_SYSTEM));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : getAvailableStorageSystemForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -510,24 +531,30 @@ public class ServerProfileClientImpl implements ServerProfileClient {
             String serverHardwareTypeUri, String profileUri) {
         LOGGER.info("ServerProfileClientImpl : getAvailableTargetsForServerProfile : Start");
 
-        StringBuilder query = new StringBuilder();
-        query.append(StringUtils.isNotBlank(enclosureGroupUri) ? "enclosureGroupUri=" + enclosureGroupUri + "&" : "");
-        query.append(StringUtils.isNotBlank(serverHardwareTypeUri) ? "serverHardwareTypeUri=" + serverHardwareTypeUri + "&" : "");
-        query.append(StringUtils.isNotBlank(profileUri) ? "profileUri=" + profileUri : "");
-
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
 
+        Map<String, String> query = new HashMap<String, String>();
+        if (!Strings.isNullOrEmpty(serverHardwareTypeUri)) {
+            query.put("serverHardwareTypeUri", serverHardwareTypeUri);
+        }
+        if (!Strings.isNullOrEmpty(enclosureGroupUri)) {
+            query.put("enclosureGroupUri", enclosureGroupUri);
+        }
+        if (!Strings.isNullOrEmpty(profileUri)) {
+            query.put("profileUri", profileUri);
+        }
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(
+        params.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.AVAILABLE_TARGETS,
-                query.toString()));
+                ResourceUris.AVAILABLE_TARGETS));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : getAvailableTargetsForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -547,20 +574,23 @@ public class ServerProfileClientImpl implements ServerProfileClient {
             final String enclosureGroupUri) {
         LOGGER.info("ServerProfileClientImpl : getProfilePortsForServerProfile : Start");
 
-        final String query = "serverHardwareTypeUri=" + serverHardwareTypeUri + "&enclosureGroupUri=" + enclosureGroupUri;
-
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("serverHardwareTypeUri", serverHardwareTypeUri);
+        query.put("enclosureGroupUri", enclosureGroupUri);
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(
+        params.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.PROFILE_PORTS_URI,
-                query));
+                ResourceUris.PROFILE_PORTS_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : getProfilePortsForServerProfile : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SERVER_PROFILE,
@@ -608,7 +638,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(serverProfileDto, params.getApiVersion());
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -654,7 +684,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(serverProfileDto, params.getApiVersion());
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -698,7 +728,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
 
         // create JSON request from dto
         JSONArray jsonArray = adaptor.buildJsonArrayDto(patchDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonArray);
+        returnObj = httpClient.sendRequest(params, jsonArray);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -733,7 +763,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
                 ResourceUris.SERVER_PROFILE_URI,
                 resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : deleteServerProfile : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -764,29 +794,32 @@ public class ServerProfileClientImpl implements ServerProfileClient {
             final boolean aSync) {
         LOGGER.info("ServerProfileClientImpl : deleteServerProfileByFilter : Start");
 
-        String query = "";
+        // validate args
+        if (null == params) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        }
+
         if (StringUtils.isNotBlank(filter) && null != match) {
             if (match) {
-                query = "filter=\"name matches \'%25" + filter + "%25\'\"";
+                Map<String, String> query = new HashMap<String, String>();
+                query.put("filter", "name matches '%" + filter + "%'");
+                params.setQuery(query);
             } else {
-                query = UrlUtils.createFilterString(filter);
+                Map<String, String> query = new HashMap<String, String>();
+                query.put("filter", "name='" + filter + "'");
+                params.setQuery(query);
             }
         } else {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
 
-        // validate args
-        if (null == params) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
-        }
         // set the additional params
         params.setType(HttpMethodType.DELETE);
-        params.setUrl(UrlUtils.createRestQueryUrl(
+        params.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.SERVER_PROFILE_URI,
-                query));
+                ResourceUris.SERVER_PROFILE_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ServerProfileClientImpl : deleteServerProfileByFilter : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {

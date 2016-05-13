@@ -17,9 +17,13 @@ package com.hp.ov.sdk.rest.client;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -27,11 +31,10 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 import com.hp.ov.sdk.adaptors.ServerProfileAdaptor;
@@ -61,40 +64,39 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
 
-
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ HttpRestClient.class, TaskMonitorManager.class })
+@RunWith(MockitoJUnitRunner.class)
 public class ServerProfileClientTest {
 
     private RestParams params;
+
+    @Mock
     private ServerProfileAdaptor adaptor;
-    private ServerProfileClient client;
+    @Mock
+    private TaskAdaptor taskAdaptor;
+    @Mock
+    private TaskMonitorManager taskMonitorManager;
+    @Mock
+    private HttpRestClient restClient;
+
+    @InjectMocks
+    private ServerProfileClientImpl client;
 
     private static String resourceId = "random-UUID";
     private static String resourceName = "random-name";
     private String spJson = "";
 
-    @Mock
-    private TaskMonitorManager taskMonitorManager;
-    private TaskAdaptor taskAdaptor;
-
     @Before
     public void setUp() throws Exception {
         params = new RestParams();
-        taskAdaptor = TaskAdaptor.getInstance();
-        adaptor = new ServerProfileAdaptor();
-
-        PowerMockito.mockStatic(HttpRestClient.class);
-        PowerMockito.mockStatic(TaskMonitorManager.class);
-        PowerMockito.when(TaskMonitorManager.getInstance()).thenReturn(taskMonitorManager);
-
-        this.client = ServerProfileClientImpl.getClient();
     }
 
     @Test
     public void testGetServerProfile() {
         spJson = this.getJsonFromFile("ServerProfileGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(Mockito.any(RestParams.class))).thenReturn(spJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
+
+        Mockito.when(adaptor.buildDto(Mockito.eq(spJson), Mockito.anyDouble()))
+        .thenReturn(new ServerProfileAdaptor().buildDto(spJson, 200));
 
         ServerProfile serverProfileDto = client.getServerProfile(params, resourceId);
 
@@ -102,8 +104,7 @@ public class ServerProfileClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, resourceId));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(serverProfileDto);
     }
@@ -116,7 +117,7 @@ public class ServerProfileClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetServerProfileWithNullResponse() {
         spJson = this.getJsonFromFile("ServerProfileGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -126,9 +127,12 @@ public class ServerProfileClientTest {
     @Test
     public void testGetAllServerProfile() {
         spJson = this.getJsonFromFile("ServerProfileGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(spJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new ServerProfileAdaptor().buildCollectionDto(spJson));
 
         ServerProfileCollection serverProfileList = client.getAllServerProfile(params);
 
@@ -136,8 +140,7 @@ public class ServerProfileClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(serverProfileList);
         assertEquals("Based on the JSON file, the return object must have 1 element",
@@ -151,7 +154,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetAllServerProfileWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -161,21 +164,27 @@ public class ServerProfileClientTest {
     @Test
     public void testGetServerProfileByName() {
         spJson = this.getJsonFromFile("ServerProfileGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(spJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new ServerProfileAdaptor().buildCollectionDto(spJson, 200));
 
         ServerProfile serverProfileDto = client.getServerProfileByName(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.SERVER_PROFILE_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.SERVER_PROFILE_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(serverProfileDto);
     }
@@ -187,7 +196,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetServerProfileByNameWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -196,13 +205,16 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetServerProfileByNameWithNoMembers() {
-        ServerProfileCollection serverProfileList = adaptor.buildCollectionDto(this.getJsonFromFile("ServerProfileGetByName.json"));
+        ServerProfileCollection serverProfileList = new ServerProfileAdaptor().buildCollectionDto(this.getJsonFromFile("ServerProfileGetByName.json"));
         serverProfileList.setCount(0);
         spJson = new Gson().toJson(serverProfileList);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(spJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(serverProfileList);
 
         client.getServerProfileByName(params, resourceName);
     }
@@ -210,7 +222,10 @@ public class ServerProfileClientTest {
     @Test
     public void testGetServerProfileCompliancePreview() {
         spJson = this.getJsonFromFile("ServerProfileCompliancePreviewGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(Mockito.any(RestParams.class))).thenReturn(spJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
+
+        Mockito.when(adaptor.buildCompliancePreviewDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new ServerProfileAdaptor().buildCompliancePreviewDto(spJson, 200));
 
         ServerProfileCompliancePreview compliancePreviewDto = client.getServerProfileCompliancePreview(params, resourceId);
 
@@ -222,8 +237,7 @@ public class ServerProfileClientTest {
                 SdkConstants.COMPLIANCE_PREVIEW));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(compliancePreviewDto);
     }
@@ -235,7 +249,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetServerProfileCompliancePreviewWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -245,7 +259,10 @@ public class ServerProfileClientTest {
     @Test
     public void testGetServerProfileMessages() {
         spJson = this.getJsonFromFile("ServerProfileMessagesGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(Mockito.any(RestParams.class))).thenReturn(spJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
+
+        Mockito.when(adaptor.buildHealthDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new ServerProfileAdaptor().buildHealthDto(spJson, 200));
 
         ServerProfileHealth healthDto = client.getServerProfileMessages(params, resourceId);
 
@@ -257,8 +274,7 @@ public class ServerProfileClientTest {
                 SdkConstants.MESSAGES));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(healthDto);
     }
@@ -270,7 +286,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetServerProfileMessagesWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -280,7 +296,10 @@ public class ServerProfileClientTest {
     @Test
     public void testGetServerProfileTransformation() {
         spJson = this.getJsonFromFile("ServerProfileGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(Mockito.any(RestParams.class))).thenReturn(spJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
+
+        Mockito.when(adaptor.buildServerProfileDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new ServerProfileAdaptor().buildServerProfileDto(spJson, 200));
 
         ServerProfile serverProfileDto = client.getServerProfileTransformation(params, resourceId, "uri", "uri");
 
@@ -293,8 +312,7 @@ public class ServerProfileClientTest {
                 "?serverHardwareTypeUri=uri&enclosureGroupUri=uri"));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(serverProfileDto);
     }
@@ -306,7 +324,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetServerProfileTransformationWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -316,19 +334,26 @@ public class ServerProfileClientTest {
     @Test
     public void testGetAvailableNetworksForServerProfile() {
         spJson = this.getJsonFromFile("ServerProfileAvailableNetworksGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(Mockito.any(RestParams.class))).thenReturn(spJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
+
+        Mockito.when(adaptor.buildAvailableNetworkDto(Mockito.anyString()))
+        .thenReturn(new ServerProfileAdaptor().buildAvailableNetworkDto(spJson));
 
         AvailableNetworks networksDto = client.getAvailableNetworksForServerProfile(params, "uri", "uri");
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("serverHardwareTypeUri", "uri");
+        query.put("enclosureGroupUri", "uri");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.AVAILABLE_NETWORKS_URI,
-                "serverHardwareTypeUri=uri&enclosureGroupUri=uri"));
+                ResourceUris.AVAILABLE_NETWORKS_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(networksDto);
     }
@@ -340,7 +365,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetAvailableNetworksForServerProfileWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -350,7 +375,10 @@ public class ServerProfileClientTest {
     @Test
     public void testGetAvailableServersForServerProfileRestParams() {
         spJson = this.getJsonFromFile("ServerProfileAvailableServersGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(Mockito.any(RestParams.class))).thenReturn(spJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
+
+        Mockito.when(adaptor.buildAvailableServerDto(Mockito.eq(spJson)))
+        .thenReturn(new ServerProfileAdaptor().buildAvailableServerDto(spJson));
 
         List<AvailableServers> servers = client.getAvailableServersForServerProfile(params);
 
@@ -361,8 +389,7 @@ public class ServerProfileClientTest {
 
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(servers);
     }
@@ -374,7 +401,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetAvailableServersForServerProfileRestParamsWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -384,20 +411,24 @@ public class ServerProfileClientTest {
     @Test
     public void testGetAvailableServersForServerProfileRestParamsStringString() {
         spJson = this.getJsonFromFile("ServerProfileAvailableServersGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(Mockito.any(RestParams.class))).thenReturn(spJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
 
         List<AvailableServers> servers = client.getAvailableServersForServerProfile(params, "uri", "uri");
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("serverHardwareTypeUri", "uri");
+        query.put("enclosureGroupUri", "uri");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.AVAILABLE_SERVERS_URI,
-                "serverHardwareTypeUri=uri&enclosureGroupUri=uri"));
+                ResourceUris.AVAILABLE_SERVERS_URI));
 
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(servers);
     }
@@ -405,22 +436,26 @@ public class ServerProfileClientTest {
     @Test
     public void testGetAvailableServersForServerProfileRestParamsStringStringWithEmptyList() {
         Mockito.when(
-                HttpRestClient.sendRequestToHPOV(
+                restClient.sendRequest(
                         Mockito.any(RestParams.class)))
         .thenReturn("[]");
 
         List<AvailableServers> servers = client.getAvailableServersForServerProfile(params, "uri", "uri");
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("serverHardwareTypeUri", "uri");
+        query.put("enclosureGroupUri", "uri");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.AVAILABLE_SERVERS_URI,
-                "serverHardwareTypeUri=uri&enclosureGroupUri=uri"));
+                ResourceUris.AVAILABLE_SERVERS_URI));
 
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(servers);
         assertEquals("The servers list is expected to be empty", 0, servers.size());
@@ -433,7 +468,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetAvailableServersForServerProfileRestParamsStringStringWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -443,40 +478,46 @@ public class ServerProfileClientTest {
     @Test
     public void testGetAvailableServersForServerProfileRestParamsString() {
         spJson = this.getJsonFromFile("ServerProfileAvailableServersGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(Mockito.any(RestParams.class))).thenReturn(spJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
 
         List<AvailableServers> servers = client.getAvailableServersForServerProfile(params, "uri");
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(),
-                ResourceUris.AVAILABLE_SERVERS_URI,
-                "profileUri=uri"));
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("profileUri", "uri");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(params.getHostname(),
+                ResourceUris.AVAILABLE_SERVERS_URI));
 
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(servers);
     }
     @Test
     public void testGetAvailableServersForServerProfileRestParamsStringWithEmptyList() {
         Mockito.when(
-                HttpRestClient.sendRequestToHPOV(
+                restClient.sendRequest(
                         Mockito.any(RestParams.class)))
         .thenReturn("[]");
 
         List<AvailableServers> servers = client.getAvailableServersForServerProfile(params, "uri");
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(),
-                ResourceUris.AVAILABLE_SERVERS_URI,
-                "profileUri=uri"));
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("profileUri", "uri");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(params.getHostname(),
+                ResourceUris.AVAILABLE_SERVERS_URI));
 
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(servers);
         assertEquals("The servers list is expected to be empty", 0, servers.size());
@@ -488,7 +529,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetAvailableServersForServerProfileRestParamsStringWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -498,20 +539,28 @@ public class ServerProfileClientTest {
     @Test
     public void testGetAvailableStorageSystemForServerProfile() {
         spJson = this.getJsonFromFile("ServerProfileAvailableStorageSystemGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(Mockito.any(RestParams.class))).thenReturn(spJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
+
+        Mockito.when(adaptor.buildAvailableStorageSystemDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new ServerProfileAdaptor().buildAvailableStorageSystemDto(spJson, 200));
 
         AvailableStorageSystem storageSystemDto = client.getAvailableStorageSystemForServerProfile(params, "uri", "uri", "id");
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("serverHardwareTypeUri", "uri");
+        query.put("enclosureGroupUri", "uri");
+        query.put("storageSystemId", "id");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.AVAILABLE_STORAGE_SYSTEM,
-                "serverHardwareTypeUri=uri&enclosureGroupUri=uri&storageSystemId=id"));
+                ResourceUris.AVAILABLE_STORAGE_SYSTEM));
 
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(storageSystemDto);
     }
@@ -538,7 +587,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetAvailableStorageSystemForServerProfileWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -548,43 +597,58 @@ public class ServerProfileClientTest {
     @Test
     public void testGetAvailableStorageSystemsForServerProfile() {
         spJson = this.getJsonFromFile("ServerProfileAvailableStorageSystemsGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(Mockito.any(RestParams.class))).thenReturn(spJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
+
+        Mockito.when(adaptor.buildAvailableStorageSystemsDto(Mockito.eq(spJson), Mockito.anyDouble()))
+        .thenReturn(new ServerProfileAdaptor().buildAvailableStorageSystemsDto(spJson, 200));
 
         AvailableStorageSystems storageSystemsDto = client.getAvailableStorageSystemsForServerProfile(params, "uri", "uri");
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("serverHardwareTypeUri", "uri");
+        query.put("enclosureGroupUri", "uri");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.AVAILABLE_STORAGE_SYSTEMS,
-                "serverHardwareTypeUri=uri&enclosureGroupUri=uri"));
+                ResourceUris.AVAILABLE_STORAGE_SYSTEMS));
 
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(storageSystemsDto);
     }
 
     @Test
     public void testGetAvailableStorageSystemsForServerProfileWithEmptyList() {
+        spJson = "{\"type\":\"AvailableStorageSystemsV2\",\"members\":[],\"start\":0,\"total\":0,\"count\":0}";
         Mockito.when(
-                HttpRestClient.sendRequestToHPOV(
+                restClient.sendRequest(
                         Mockito.any(RestParams.class)))
-        .thenReturn("{\"type\":\"AvailableStorageSystemsV2\",\"members\":[],\"start\":0,\"total\":0,\"count\":0}");
+        .thenReturn(spJson);
+
+        Mockito.when(adaptor.buildAvailableStorageSystemsDto(Mockito.eq(spJson), Mockito.anyDouble()))
+        .thenReturn(new ServerProfileAdaptor().buildAvailableStorageSystemsDto(spJson, 200));
 
         AvailableStorageSystems storageSystemsDto = client.getAvailableStorageSystemsForServerProfile(params, "uri", "uri");
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("serverHardwareTypeUri", "uri");
+        query.put("enclosureGroupUri", "uri");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.AVAILABLE_STORAGE_SYSTEMS,
-                "serverHardwareTypeUri=uri&enclosureGroupUri=uri"));
+                ResourceUris.AVAILABLE_STORAGE_SYSTEMS));
 
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(storageSystemsDto);
         assertEquals("The storage system list must be empty", 0, storageSystemsDto.getCount());
@@ -607,7 +671,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetAvailableStorageSystemsForServerProfileWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -617,20 +681,22 @@ public class ServerProfileClientTest {
     @Test
     public void testGetAvailableTargetsForServerProfileRestParams() {
         spJson = this.getJsonFromFile("ServerProfileAvailableTargetsGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(Mockito.any(RestParams.class))).thenReturn(spJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
+
+        Mockito.when(adaptor.buildAvailableTargetsDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new ServerProfileAdaptor().buildAvailableTargetsDto(spJson, 200));
 
         AvailableTargets targetsDto = client.getAvailableTargetsForServerProfile(params);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.AVAILABLE_TARGETS,
-                ""));
+                ResourceUris.AVAILABLE_TARGETS));
 
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(targetsDto);
     }
@@ -642,7 +708,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetAvailableTargetsForServerProfileRestParamsWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -652,20 +718,28 @@ public class ServerProfileClientTest {
     @Test
     public void testGetAvailableTargetsForServerProfileRestParamsStringStringString() {
         spJson = this.getJsonFromFile("ServerProfileAvailableTargetsGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(Mockito.any(RestParams.class))).thenReturn(spJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
+
+        Mockito.when(adaptor.buildAvailableTargetsDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new ServerProfileAdaptor().buildAvailableTargetsDto(spJson, 200));
 
         AvailableTargets targetsDto = client.getAvailableTargetsForServerProfile(params, "uri", "uri", "uri");
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("serverHardwareTypeUri", "uri");
+        query.put("enclosureGroupUri", "uri");
+        query.put("profileUri", "uri");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.AVAILABLE_TARGETS,
-                "enclosureGroupUri=uri&serverHardwareTypeUri=uri&profileUri=uri"));
+                ResourceUris.AVAILABLE_TARGETS));
 
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(targetsDto);
     }
@@ -677,7 +751,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetAvailableTargetsForServerProfileRestParamsStringStringStringWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -687,43 +761,58 @@ public class ServerProfileClientTest {
     @Test
     public void testGetProfilePortsForServerProfile() {
         spJson = this.getJsonFromFile("ServerProfilePortsGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(Mockito.any(RestParams.class))).thenReturn(spJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
 
-        ProfilePorts portsDto = client.getProfilePortsForServerProfile(params, "id", "id");
+        Mockito.when(adaptor.buildProfilePortsDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new ServerProfileAdaptor().buildProfilePortsDto(spJson, 200));
+
+        ProfilePorts portsDto = client.getProfilePortsForServerProfile(params, "uri", "uri");
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("serverHardwareTypeUri", "uri");
+        query.put("enclosureGroupUri", "uri");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.PROFILE_PORTS_URI,
-                "serverHardwareTypeUri=id&enclosureGroupUri=id"));
+                ResourceUris.PROFILE_PORTS_URI));
 
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(portsDto);
     }
 
     @Test
     public void testGetProfilePortsForServerProfileWithEmptyList() {
+        spJson = "{\"type\":\"ServerProfilePortV3\",\"ports\":[],\"category\":\"profile-ports\"}";
         Mockito.when(
-                HttpRestClient.sendRequestToHPOV(
+                restClient.sendRequest(
                         Mockito.any(RestParams.class)))
-        .thenReturn("{\"type\":\"ServerProfilePortV3\",\"ports\":[],\"category\":\"profile-ports\"}");
+        .thenReturn(spJson);
 
-        ProfilePorts portsDto = client.getProfilePortsForServerProfile(params, "id", "id");
+        Mockito.when(adaptor.buildProfilePortsDto(Mockito.eq(spJson), Mockito.anyDouble()))
+        .thenReturn(new ServerProfileAdaptor().buildProfilePortsDto(spJson, 200));
+
+        ProfilePorts portsDto = client.getProfilePortsForServerProfile(params, "uri", "uri");
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("serverHardwareTypeUri", "uri");
+        query.put("enclosureGroupUri", "uri");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.PROFILE_PORTS_URI,
-                "serverHardwareTypeUri=id&enclosureGroupUri=id"));
+                ResourceUris.PROFILE_PORTS_URI));
 
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(portsDto);
         assertEquals("The ports list must be empty", 0, portsDto.getPorts().size());
@@ -736,7 +825,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetProfilePortsForServerProfileWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -746,15 +835,21 @@ public class ServerProfileClientTest {
     @Test
     public void testCreateServerProfile() {
         spJson = this.getJsonFromFile("ServerProfileGet.json");
-        ServerProfile serverProfileDto = adaptor.buildDto(spJson);
+        ServerProfile serverProfileDto = new ServerProfileAdaptor().buildDto(spJson);
 
         String jsonCreateTaskCompleted = this.getJsonFromFile("ServerProfileTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(adaptor.buildJsonObjectFromDto(Mockito.any(ServerProfile.class), Mockito.anyDouble()))
+        .thenReturn(new ServerProfileAdaptor().buildJsonObjectFromDto(serverProfileDto, 200));
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -772,8 +867,7 @@ public class ServerProfileClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI));
         rp.setType(HttpMethodType.POST);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONObject.class));
 
         assertEquals("A success create server profile call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -799,15 +893,21 @@ public class ServerProfileClientTest {
     @Test
     public void testUpdateServerProfile() {
         spJson = this.getJsonFromFile("ServerProfileGet.json");
-        ServerProfile serverProfileDto = adaptor.buildDto(spJson);
+        ServerProfile serverProfileDto = new ServerProfileAdaptor().buildDto(spJson);
 
         String jsonUpdateTaskCompleted = this.getJsonFromFile("ServerProfileTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonUpdateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonUpdateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonUpdateTaskCompleted);
+
+        Mockito.when(adaptor.buildJsonObjectFromDto(Mockito.any(ServerProfile.class), Mockito.anyDouble()))
+        .thenReturn(new ServerProfileAdaptor().buildJsonObjectFromDto(serverProfileDto, 200));
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -826,8 +926,7 @@ public class ServerProfileClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, resourceId));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONObject.class));
 
         assertEquals("A success update server profile call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -845,12 +944,23 @@ public class ServerProfileClientTest {
     @Test
     public void testPatchServerProfile() {
         String jsonPatchTaskCompleted = this.getJsonFromFile("ServerProfileTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonPatchTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonPatchTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Patch patchDto = new Patch();
+        patchDto.setOp(PatchOperation.replace);
+        patchDto.setPath("/templateCompliance");
+        patchDto.setValue("Compliant");
+
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONArray.class)))
         .thenReturn(jsonPatchTaskCompleted);
+
+        Mockito.when(adaptor.buildJsonArrayDto(Mockito.any(Patch.class)))
+        .thenReturn(new ServerProfileAdaptor().buildJsonArrayDto(patchDto));
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -858,19 +968,13 @@ public class ServerProfileClientTest {
                 Mockito.anyInt()))
         .thenReturn(taskResourceV2);
 
-        Patch patchDto = new Patch();
-        patchDto.setOp(PatchOperation.replace);
-        patchDto.setPath("/templateCompliance");
-        patchDto.setValue("Compliant");
-
         TaskResourceV2 result = client.patchServerProfile(params, resourceId, patchDto , false);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI, resourceId));
         rp.setType(HttpMethodType.PATCH);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONArray.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONArray.class));
 
         assertEquals("A success patch server profile call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -888,11 +992,14 @@ public class ServerProfileClientTest {
     @Test
     public void testDeleteServerProfile() {
         String jsonDeleteTaskCompleted = this.getJsonFromFile("ServerProfileTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonDeleteTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonDeleteTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonDeleteTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -909,8 +1016,7 @@ public class ServerProfileClientTest {
                 resourceId));
         rp.setType(HttpMethodType.DELETE);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertEquals("A success delete server profile call returns \"Completed\"", "Completed", taskResourceV2.getTaskState().toString());
     }
@@ -922,7 +1028,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testDeleteServerProfileWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -932,11 +1038,14 @@ public class ServerProfileClientTest {
     @Test
     public void testDeleteServerProfileByFilter() {
         String jsonDeleteTaskCompleted = this.getJsonFromFile("ServerProfileTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonDeleteTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonDeleteTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonDeleteTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -944,17 +1053,20 @@ public class ServerProfileClientTest {
                 Mockito.anyInt()))
         .thenReturn(taskResourceV2);
 
-        taskResourceV2 = client.deleteServerProfileByFilter(params, "filter", true, false);
+        taskResourceV2 = client.deleteServerProfileByFilter(params, resourceName, true, false);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name matches '%" + resourceName + "%'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.SERVER_PROFILE_URI,
-                "filter=\"name%20matches%20'%25filter%25'\""));
+                ResourceUris.SERVER_PROFILE_URI));
         rp.setType(HttpMethodType.DELETE);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertEquals("A success delete server profile call returns \"Completed\"", "Completed", taskResourceV2.getTaskState().toString());
     }
@@ -963,11 +1075,14 @@ public class ServerProfileClientTest {
     @Test
     public void testDeleteServerProfileByFilterWithNoMatch() {
         String jsonDeleteTaskCompleted = this.getJsonFromFile("ServerProfileTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonDeleteTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonDeleteTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonDeleteTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -978,14 +1093,17 @@ public class ServerProfileClientTest {
         taskResourceV2 = client.deleteServerProfileByFilter(params, "filter", false, false);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='filter'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.SERVER_PROFILE_URI,
-                UrlUtils.createFilterString("filter")));
+                ResourceUris.SERVER_PROFILE_URI));
         rp.setType(HttpMethodType.DELETE);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertEquals("A success delete server profile call returns \"Completed\"", "Completed", taskResourceV2.getTaskState().toString());
     }
@@ -1007,7 +1125,7 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testDeleteServerProfileByFilterWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -1017,21 +1135,27 @@ public class ServerProfileClientTest {
     @Test
     public void testGetId() {
         spJson = this.getJsonFromFile("ServerProfileGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(spJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.eq(spJson), Mockito.anyDouble()))
+        .thenReturn(new ServerProfileAdaptor().buildCollectionDto(spJson, 200));
 
         String id = client.getId(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.SERVER_PROFILE_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.SERVER_PROFILE_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(id);
         assertEquals("Based on the JSON file, the return ID must be \"" + resourceId + "\"", resourceId, id);

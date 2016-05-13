@@ -16,7 +16,9 @@
 package com.hp.ov.sdk.rest.client;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -211,9 +213,13 @@ public class StorageVolumeAttachmentsClientImpl implements StorageVolumeAttachme
                     SdkConstants.APPLIANCE, null);
         }
 
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("alertFixType", "ExtraUnmanagedStorageVolumes");
+        params.setQuery(query);
+
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(),
-                ResourceUris.STORAGE_VOLUME_ATTACHMENT_REPAIR_URI, StorageVolumeAttachmentsClient.REPAIR_FILTER));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(),
+                ResourceUris.STORAGE_VOLUME_ATTACHMENT_REPAIR_URI));
 
         String response = restClient.sendRequest(params);
 

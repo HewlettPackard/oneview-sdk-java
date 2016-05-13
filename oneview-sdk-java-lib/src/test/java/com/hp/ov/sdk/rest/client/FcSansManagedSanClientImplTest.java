@@ -22,16 +22,27 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.anyObject;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.doReturn;
-import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.spy;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.any;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
 import com.hp.ov.sdk.adaptors.ManagedSanAdaptor;
@@ -53,14 +64,6 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.apache.commons.io.IOUtils;
-import org.json.JSONObject;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FcSansManagedSanClientImplTest {
@@ -194,10 +197,14 @@ public class FcSansManagedSanClientImplTest {
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
-        expectedRestParams.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + anyName + "'");
+        expectedRestParams.setQuery(query);
+
+        expectedRestParams.setUrl(UrlUtils.createRestUrl(
                 expectedRestParams.getHostname(),
-                ResourceUris.FC_SANS_MANAGED_SAN_URI,
-                UrlUtils.createQueryString(anyName)));
+                ResourceUris.FC_SANS_MANAGED_SAN_URI));
 
         this.sanClient.getManagedSanByName(new RestParams(), anyName);
 

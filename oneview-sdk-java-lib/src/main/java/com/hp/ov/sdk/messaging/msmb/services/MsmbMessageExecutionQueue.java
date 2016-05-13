@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 public class MsmbMessageExecutionQueue extends Thread {
 
-    private static final Logger logger = LoggerFactory.getLogger(MsmbMessageExecutionQueue.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MsmbMessageExecutionQueue.class);
     private final BlockingQueue<String> messagesInQueue = new ArrayBlockingQueue<String>(200);
     private static final String SHUTDOWN_REQ = "SHUTDOWN";
     private volatile boolean shuttingDown;
@@ -40,12 +40,12 @@ public class MsmbMessageExecutionQueue extends Thread {
             String message;
             while ((message = messagesInQueue.take()) != SHUTDOWN_REQ) {
 
-                logger.debug("MsmbProcessor : run : Message Received: " + message);
+                LOGGER.debug("MsmbProcessor : run : Message Received: " + message);
                 handler.handleMessage(message);
 
             }
         } catch (final InterruptedException ex) {
-            logger.error(ex.getMessage());
+            LOGGER.error(ex.getMessage());
         } finally {
             messagingTerminated = true;
         }
@@ -59,7 +59,7 @@ public class MsmbMessageExecutionQueue extends Thread {
             messagesInQueue.put(message);
         } catch (final InterruptedException ex) {
             Thread.currentThread().interrupt();
-            // TODO - logging and handling
+            LOGGER.error(ex.getMessage());
             throw new RuntimeException("Unexpected Exception");
         }
     }

@@ -21,15 +21,24 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.doReturn;
-import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.spy;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.any;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONObject;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
 import com.hp.ov.sdk.adaptors.StoragePoolAdaptor;
@@ -44,12 +53,6 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.json.JSONObject;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -198,9 +201,14 @@ public class StoragePoolClientImplTest {
         given(adaptor.buildCollectionDto(anyString())).willReturn(storagePoolCollection);
 
         RestParams expectedRestParams = new RestParams();
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + anyStoragePoolName + "'");
+        expectedRestParams.setQuery(query);
+
         expectedRestParams.setType(HttpMethodType.GET);
-        expectedRestParams.setUrl(UrlUtils.createRestQueryUrl(expectedRestParams.getHostname(),
-                ResourceUris.STORAGE_POOL_URI, UrlUtils.createFilterString(anyStoragePoolName)));
+        expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(),
+                ResourceUris.STORAGE_POOL_URI));
 
         StoragePool response = this.storageClient.getStoragePoolByName(new RestParams(),
                 anyStoragePoolName, anyStorageSystemUri);

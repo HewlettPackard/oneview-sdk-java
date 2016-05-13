@@ -20,11 +20,14 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.any;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -132,9 +135,14 @@ public class SwitchTypeClientImplTest {
                 .willReturn(interconnectTypeCollection);
 
         RestParams expectedRestParams = new RestParams();
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + anySwitchTypeName + "'");
+        expectedRestParams.setQuery(query);
+
         expectedRestParams.setType(HttpMethodType.GET);
-        expectedRestParams.setUrl(UrlUtils.createRestQueryUrl(expectedRestParams.getHostname(),
-                ResourceUris.SWITCH_TYPE_URI, UrlUtils.createFilterString(anySwitchTypeName)));
+        expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(),
+                ResourceUris.SWITCH_TYPE_URI));
 
         InterconnectType type = this.switchClient.getSwitchTypeByName(new RestParams(), anySwitchTypeName);
 

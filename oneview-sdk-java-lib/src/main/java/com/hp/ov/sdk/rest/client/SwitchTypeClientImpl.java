@@ -16,6 +16,9 @@
 
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,9 +95,13 @@ public class SwitchTypeClientImpl implements SwitchTypeClient {
                     SdkConstants.APPLIANCE, null);
         }
 
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + name + "'");
+        params.setQuery(query);
+
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(),
-                ResourceUris.SWITCH_TYPE_URI, UrlUtils.createFilterString(name)));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(),
+                ResourceUris.SWITCH_TYPE_URI));
 
         String response = restClient.sendRequest(params);
 

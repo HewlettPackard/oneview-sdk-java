@@ -97,7 +97,7 @@ public class ServerProfileAdaptor extends BaseAdaptor<ServerProfile, Object> {
         return storageSystemDto;
     }
 
-    public ServerProfileCollection buildCollectionDto(String source, int version) {
+    public ServerProfileCollection buildCollectionDto(String source, final double version) {
         if (null == source || source.equals("")) {
             return null;
         }

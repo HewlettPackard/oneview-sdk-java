@@ -17,10 +17,14 @@ package com.hp.ov.sdk.rest.client;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -28,11 +32,10 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 import com.hp.ov.sdk.adaptors.InterconnectAdaptor;
@@ -59,42 +62,42 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({HttpRestClient.class, TaskMonitorManager.class})
+@RunWith(MockitoJUnitRunner.class)
 public class InterconnectsClientTest {
 
     private RestParams params;
+
+    @Mock
     private InterconnectAdaptor adaptor;
-    private InterconnectsClient client;
+    @Mock
+    private TaskAdaptor taskAdaptor;
+    @Mock
+    private TaskMonitorManager taskMonitorManager;
+    @Mock
+    private HttpRestClient restClient;
+
+    @InjectMocks
+    private InterconnectsClientImpl client;
 
     private final String resourceId = "random-UUID";
     private final String resourceName = "random-name";
 
     private String intJson = "";
 
-    @Mock
-    private TaskMonitorManager taskMonitorManager;
-    private TaskAdaptor taskAdaptor;
-
     @Before
     public void setUp() throws Exception {
         params = new RestParams();
-        taskAdaptor = TaskAdaptor.getInstance();
-        adaptor = new InterconnectAdaptor();
-
-        PowerMockito.mockStatic(HttpRestClient.class);
-        PowerMockito.mockStatic(TaskMonitorManager.class);
-        PowerMockito.when(TaskMonitorManager.getInstance()).thenReturn(taskMonitorManager);
-
-        this.client = InterconnectsClientImpl.getClient();
     }
 
     @Test
     public void testGetInterconnectById() {
         intJson = this.getJsonFromFile("InterconnectGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
+
+        Mockito.when(adaptor.buildDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new InterconnectAdaptor().buildDto(intJson));
 
         Interconnects interconnectDto = client.getInterconnectById(params, resourceId);
 
@@ -102,8 +105,7 @@ public class InterconnectsClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_URI, resourceId));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(interconnectDto);
     }
@@ -115,7 +117,7 @@ public class InterconnectsClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetInterconnectByIdWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -125,21 +127,27 @@ public class InterconnectsClientTest {
     @Test
     public void testGetInterconnectByName() {
         intJson = this.getJsonFromFile("InterconnectGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new InterconnectAdaptor().buildCollectionDto(intJson));
 
         Interconnects interconnectDto = client.getInterconnectByName(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.INTERCONNECT_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.INTERCONNECT_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(interconnectDto);
     }
@@ -151,7 +159,7 @@ public class InterconnectsClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetInterconnectByNameWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -160,13 +168,19 @@ public class InterconnectsClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetInterconnectByNameWithNoMembers() {
-        InterconnectsCollection interconnects = adaptor.buildCollectionDto(this.getJsonFromFile("InterconnectGetByName.json"));
+        InterconnectsCollection interconnects = new InterconnectAdaptor().buildCollectionDto(this.getJsonFromFile("InterconnectGetByName.json"));
         interconnects.setCount(0);
         intJson = new Gson().toJson(interconnects);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(interconnects);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new InterconnectAdaptor().buildCollectionDto(intJson));
 
         client.getInterconnectByName(params, resourceName);
     }
@@ -174,9 +188,12 @@ public class InterconnectsClientTest {
     @Test
     public void testGetAllInterconnects() {
         intJson = this.getJsonFromFile("InterconnectGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new InterconnectAdaptor().buildCollectionDto(intJson));
 
         InterconnectsCollection interconnects = client.getAllInterconnects(params);
 
@@ -184,8 +201,7 @@ public class InterconnectsClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(interconnects);
         assertEquals("Based on the JSON file, the return object must have 1 element",
@@ -199,7 +215,7 @@ public class InterconnectsClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetAllInterconnectsWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -209,13 +225,16 @@ public class InterconnectsClientTest {
     @Test
     public void testPatchInterconnect() {
         String jsonUpdateTaskCompleted = this.getJsonFromFile("InterconnectTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonUpdateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonUpdateTaskCompleted);
 
         // UPDATE
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONArray.class)))
         .thenReturn(jsonUpdateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         // TASK STATUS
         Mockito.when(taskMonitorManager.checkStatus(
@@ -238,8 +257,7 @@ public class InterconnectsClientTest {
                 resourceId));
         rp.setType(HttpMethodType.PATCH);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONArray.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONArray.class));
 
         assertNotNull(result);
         assertEquals("A success patch interconnect port call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
@@ -260,18 +278,21 @@ public class InterconnectsClientTest {
         intJson = this.getJsonFromFile("InterconnectGet.json");
 
         String jsonUpdateTaskCompleted = this.getJsonFromFile("InterconnectTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonUpdateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonUpdateTaskCompleted);
 
         // GET
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
 
         // UPDATE
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonUpdateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         // TASK STATUS
         Mockito.when(taskMonitorManager.checkStatus(
@@ -290,8 +311,7 @@ public class InterconnectsClientTest {
                 SdkConstants.PORTS));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONObject.class));
 
         assertEquals("A success update interconnect port call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -311,17 +331,20 @@ public class InterconnectsClientTest {
         intJson = this.getJsonFromFile("InterconnectGet.json");
 
         String jsonUpdateTaskCompleted = this.getJsonFromFile("InterconnectTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonUpdateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonUpdateTaskCompleted);
 
         // GET
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
 
         // UPDATE
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonUpdateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         // TASK STATUS
         Mockito.when(taskMonitorManager.checkStatus(
@@ -340,8 +363,7 @@ public class InterconnectsClientTest {
                 SdkConstants.RESET_PORT_PROTECTION));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertEquals("A success reset interconnect port call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -359,9 +381,12 @@ public class InterconnectsClientTest {
     @Test
     public void testGetInterconnectStatistics() {
         intJson = this.getJsonFromFile("InterconnectGetStatistics.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
+
+        Mockito.when(adaptor.buildInterconnectStatisticsDto(Mockito.anyString()))
+        .thenReturn(new InterconnectAdaptor().buildInterconnectStatisticsDto(intJson));
 
         InterconnectsStatistics statisticsDto = client.getInterconnectStatistics(params, resourceId);
 
@@ -373,8 +398,7 @@ public class InterconnectsClientTest {
                 SdkConstants.STATISTICS));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(statisticsDto);
     }
@@ -386,7 +410,7 @@ public class InterconnectsClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetInterconnectStatisticsWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -396,9 +420,12 @@ public class InterconnectsClientTest {
     @Test
     public void testGetInterconnectPortStatistics() {
         intJson = this.getJsonFromFile("InterconnectGetPortStatistics.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
+
+        Mockito.when(adaptor.buildInterconnectPortStatisticsDto(Mockito.anyString()))
+        .thenReturn(new InterconnectAdaptor().buildInterconnectPortStatisticsDto(intJson));
 
         PortStatistics statisticsDto = client.getInterconnectPortStatistics(params, resourceId, resourceName);
 
@@ -411,8 +438,7 @@ public class InterconnectsClientTest {
                 resourceName));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(statisticsDto);
     }
@@ -424,7 +450,7 @@ public class InterconnectsClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetInterconnectPortStatisticsWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -434,9 +460,12 @@ public class InterconnectsClientTest {
     @Test
     public void testGetInterconnectSubportStatistics() {
         intJson = this.getJsonFromFile("InterconnectGetSubportStatistics.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
+
+        Mockito.when(adaptor.buildInterconnectSubportStatisticsDto(Mockito.anyString()))
+        .thenReturn(new InterconnectAdaptor().buildInterconnectSubportStatisticsDto(intJson));
 
         SubportStatistics statisticsDto = client.getInterconnectSubportStatistics(params, resourceId, resourceName, 1);
 
@@ -451,8 +480,7 @@ public class InterconnectsClientTest {
                 1));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(statisticsDto);
     }
@@ -464,7 +492,7 @@ public class InterconnectsClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetInterconnectSubportStatisticsWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -476,18 +504,21 @@ public class InterconnectsClientTest {
         intJson = this.getJsonFromFile("InterconnectGet.json");
 
         String jsonUpdateTaskCompleted = this.getJsonFromFile("InterconnectTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonUpdateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonUpdateTaskCompleted);
 
         // GET
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
 
         // UPDATE
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONArray.class)))
         .thenReturn(jsonUpdateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         // TASK STATUS
         Mockito.when(taskMonitorManager.checkStatus(
@@ -506,8 +537,7 @@ public class InterconnectsClientTest {
                 SdkConstants.UPDATE_PORTS));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONArray.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONArray.class));
 
         assertEquals("A success update interconnect ports call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -525,7 +555,7 @@ public class InterconnectsClientTest {
     @Test
     public void testGetInterconnectNamedServers() {
         intJson = this.getJsonFromFile("InterconnectGetNamedServers.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
 
@@ -539,8 +569,7 @@ public class InterconnectsClientTest {
                 SdkConstants.NAME_SERVERS));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(nameServersDto);
     }
@@ -552,7 +581,7 @@ public class InterconnectsClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetInterconnectNamedServersWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -562,21 +591,27 @@ public class InterconnectsClientTest {
     @Test
     public void testGetId() {
         intJson = this.getJsonFromFile("InterconnectGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new InterconnectAdaptor().buildCollectionDto(intJson));
 
         String id = client.getId(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.INTERCONNECT_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.INTERCONNECT_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(id);
         assertEquals("Based on the JSON file, the return ID must be \"" + resourceId + "\"", resourceId, id);

@@ -72,7 +72,7 @@ public class SdkConstants {
     public static final String NETWORKS = NETWORK + "s";
     public static final String NETWORKSET = "network-set";
     public static final String NETWORKSETS = NETWORKSET + "s";
-    public static final int PERCENTAGE = 100;
+    public static final int PERCENTAGE_100 = 100;
     public static final String PORT_MONITOR = "port-monitor";
     public static final String PORTS = "ports";
     public static final String POWERSTATE = "powerState";

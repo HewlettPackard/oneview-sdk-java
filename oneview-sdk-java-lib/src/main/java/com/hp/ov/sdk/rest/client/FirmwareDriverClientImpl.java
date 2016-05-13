@@ -15,6 +15,11 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.ArrayList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.adaptors.FirmwareDriverAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -31,10 +36,6 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
 
 public class FirmwareDriverClientImpl implements FirmwareDriverClient {
 
@@ -44,17 +45,20 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
     private final FirmwareDriverAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
+    private HttpRestClient httpClient;
 
-    protected FirmwareDriverClientImpl(FirmwareDriverAdaptor adaptor,
+    protected FirmwareDriverClientImpl(HttpRestClient httpClient, FirmwareDriverAdaptor adaptor,
         TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
-
+        this.httpClient = httpClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
     }
 
     public static FirmwareDriverClient getClient() {
-        return new FirmwareDriverClientImpl(new FirmwareDriverAdaptor(),
+        return new FirmwareDriverClientImpl(
+                HttpRestClient.getClient(),
+                new FirmwareDriverAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
     }
@@ -71,7 +75,7 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("FirmwareDriverClientImpl : getFirmwareDriver : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.FIRMWARE_DRIVER,
@@ -99,7 +103,7 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("FirmwareDriverClientImpl : getAllFirmwareDrivers : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.FIRMWARE_DRIVER,
@@ -147,7 +151,7 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("FirmwareDriverClientImpl : deleteFirmwareDriver : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {

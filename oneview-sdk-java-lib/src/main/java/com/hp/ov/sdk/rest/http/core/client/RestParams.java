@@ -15,8 +15,8 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.http.core.client;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.TrustManager;
@@ -33,9 +33,9 @@ public class RestParams {
     private String hostname = null;
     private String userName = null;
     private String password = null;
-    private List<KeyValuePair> headers = new ArrayList<KeyValuePair>();
+    private Map<String, String> headers = new HashMap<String, String>();
     private String locale = null;
-    private List<KeyValuePair> query = new ArrayList<KeyValuePair>();
+    private Map<String, String> query = new HashMap<String, String>();
     private String domain = "LOCAL";
     private String url = null;
     private HttpMethodType type = HttpMethodType.GET;
@@ -46,6 +46,12 @@ public class RestParams {
 
     private TrustManager trustManager = null;
     private HostnameVerifier hostVerifier = null;
+
+    public RestParams() {
+        headers.put("Accept", "application/json");
+        headers.put("Content-Type", "application/json; charset=UTF-8");
+        headers.put("accept-language", "en_US");
+    }
 
     public String getRoutingKey() {
         return routingKey;
@@ -127,13 +133,12 @@ public class RestParams {
         this.password = password;
     }
 
-    public List<KeyValuePair> getHeaders() {
+    public Map<String, String> getHeaders() {
         return headers;
     }
 
-    public void setHeaders() {
-        // this.headers = headers;
-        this.headers = createHeaders();
+    public void setHeaders(Map<String, String> headers) {
+        this.headers = headers;
     }
 
     public String getLocale() {
@@ -144,11 +149,11 @@ public class RestParams {
         this.locale = locale;
     }
 
-    public List<KeyValuePair> getQuery() {
+    public Map<String, String> getQuery() {
         return query;
     }
 
-    public void setQuery(final List<KeyValuePair> query) {
+    public void setQuery(final Map<String, String> query) {
         this.query = query;
     }
 
@@ -182,15 +187,6 @@ public class RestParams {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
-    }
-
-    private List<KeyValuePair> createHeaders() {
-        final List<KeyValuePair> header = new ArrayList<KeyValuePair>();
-        header.add(new KeyValuePair("Accept", "application/json"));
-        header.add(new KeyValuePair("Content-Type", "application/json; charset=UTF-8"));
-        header.add(new KeyValuePair("accept-language", "en_US"));
-
-        return header;
     }
 
     /**

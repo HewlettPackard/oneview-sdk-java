@@ -15,7 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -50,12 +52,14 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
 
+    private HttpRestClient httpClient;
+
     private JSONObject jsonObject;
 
-    protected LogicalInterconnectGroupClientImpl(LogicalInterconnectGroupAdaptor adaptor,
+    protected LogicalInterconnectGroupClientImpl(HttpRestClient httpClient, LogicalInterconnectGroupAdaptor adaptor,
         TaskAdaptor taskAdaptor,
         TaskMonitorManager taskMonitor) {
-
+        this.httpClient = httpClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
@@ -63,6 +67,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
 
     public static LogicalInterconnectGroupClient getClient() {
         return new LogicalInterconnectGroupClientImpl(
+                HttpRestClient.getClient(),
                 new LogicalInterconnectGroupAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
@@ -88,7 +93,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectGroupClientImpl : getLogicalInterconnectGroup : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -116,7 +121,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectGroupClientImpl : getAllLogicalInterconnectGroups : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -136,19 +141,21 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
     @Override
     public LogicalInterconnectGroups getLogicalInterconnectGroupByName(final RestParams params, final String name) {
         LOGGER.info("LogicalInterconnectGroupClientImpl : getLogicalInterconnectGroupByName : Start");
-        // String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = UrlUtils.createFilterString(name);
-        LOGGER.debug("LogicalInterconnectGroupClientImpl : getLogicalInterconnectGroupByName : query = " + query);
 
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + name + "'");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectGroupClientImpl : getLogicalInterconnectGroupByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -201,7 +208,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(logicalInterconnectGroupDto, params.getApiVersion());
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -247,7 +254,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         // set the additional params
         params.setType(HttpMethodType.PUT);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId));
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -278,7 +285,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectGroupClient : deleteLogicalInterconnectGroup : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -317,7 +324,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI,
                 SdkConstants.DEFAULT_SETTINGS));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectGroupClientImpl : getDefaultInterconnectSettings : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -354,7 +361,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
                     SdkConstants.SETTINGS));
         }
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectGroupClientImpl : getInterconnectSettings : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,

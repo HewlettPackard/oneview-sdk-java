@@ -17,8 +17,12 @@ package com.hp.ov.sdk.rest.client;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -26,11 +30,10 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 import com.hp.ov.sdk.adaptors.LogicalEnclosureAdaptor;
@@ -56,40 +59,39 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ HttpRestClient.class, TaskMonitorManager.class })
+@RunWith(MockitoJUnitRunner.class)
 public class LogicalEnclosureClientTest {
 
     private RestParams params;
+
+    @Mock
     private LogicalEnclosureAdaptor adaptor;
-    private LogicalEnclosureClient client;
+    @Mock
+    private TaskAdaptor taskAdaptor;
+    @Mock
+    private TaskMonitorManager taskMonitorManager;
+    @Mock
+    private HttpRestClient restClient;
+
+    @InjectMocks
+    private LogicalEnclosureClientImpl client;
 
     private static String resourceId = "random-UUID";
     private static String resourceName = "random-name";
     private static String enclosureScript = "#script";
     private String logicalEnclosureJson = "";
 
-    @Mock
-    private TaskMonitorManager taskMonitorManager;
-    private TaskAdaptor taskAdaptor;
-
     @Before
     public void setUp() throws Exception {
         params = new RestParams();
-        taskAdaptor = TaskAdaptor.getInstance();
-        adaptor = new LogicalEnclosureAdaptor();
-
-        PowerMockito.mockStatic(HttpRestClient.class);
-        PowerMockito.mockStatic(TaskMonitorManager.class);
-        PowerMockito.when(TaskMonitorManager.getInstance()).thenReturn(taskMonitorManager);
-
-        this.client = LogicalEnclosureClientImpl.getClient();
     }
 
     @Test
     public void testGetLogicalEnclosure() {
         logicalEnclosureJson = this.getJsonFromFile("LogicalEnclosureGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(Mockito.any(RestParams.class))).thenReturn(logicalEnclosureJson);
+        Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(logicalEnclosureJson);
+
+        Mockito.when(adaptor.buildDto(Mockito.anyString())).thenReturn(new LogicalEnclosureAdaptor().buildDto(logicalEnclosureJson));
 
         LogicalEnclosure logicalEnclosureDto = client.getLogicalEnclosure(params, resourceId);
 
@@ -97,8 +99,7 @@ public class LogicalEnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(logicalEnclosureDto);
     }
@@ -111,7 +112,7 @@ public class LogicalEnclosureClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetLogicalEnclosureWithNullResponse() {
         logicalEnclosureJson = this.getJsonFromFile("LogicalEnclosureGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -121,9 +122,12 @@ public class LogicalEnclosureClientTest {
     @Test
     public void testGetAllLogicalEnclosures() {
         logicalEnclosureJson = this.getJsonFromFile("LogicalEnclosureGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(logicalEnclosureJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new LogicalEnclosureAdaptor().buildCollectionDto(logicalEnclosureJson));
 
         LogicalEnclosureList logicalEnclosureList = client.getAllLogicalEnclosures(params);
 
@@ -131,8 +135,7 @@ public class LogicalEnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(logicalEnclosureList);
         assertEquals("Based on the JSON file, the return object must have 1 element",
@@ -147,7 +150,7 @@ public class LogicalEnclosureClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetAllLogicalEnclosuresWithNullResponse() {
         logicalEnclosureJson = this.getJsonFromFile("LogicalEnclosureGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -157,21 +160,27 @@ public class LogicalEnclosureClientTest {
     @Test
     public void testGetLogicalEnclosureByName() {
         logicalEnclosureJson = this.getJsonFromFile("LogicalEnclosureGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(logicalEnclosureJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new LogicalEnclosureAdaptor().buildCollectionDto(logicalEnclosureJson));
 
         LogicalEnclosure logicalEnclosureDto = client.getLogicalEnclosureByName(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.LOGICAL_ENCLOSURE_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.LOGICAL_ENCLOSURE_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(logicalEnclosureDto);
     }
@@ -184,7 +193,7 @@ public class LogicalEnclosureClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetEnclosureByNameWithNullResponse() {
         logicalEnclosureJson = this.getJsonFromFile("LogicalEnclosureGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -193,13 +202,16 @@ public class LogicalEnclosureClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetLogicalEnclosureGroupByNameWithNoMembers() {
-        LogicalEnclosureList logicalEnclosureList = adaptor.buildCollectionDto(this.getJsonFromFile("LogicalEnclosureGetByName.json"));
+        LogicalEnclosureList logicalEnclosureList = new LogicalEnclosureAdaptor().buildCollectionDto(this.getJsonFromFile("LogicalEnclosureGetByName.json"));
         logicalEnclosureList.setCount(0);
         logicalEnclosureJson = new Gson().toJson(logicalEnclosureList);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(logicalEnclosureJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(logicalEnclosureList);
 
         client.getLogicalEnclosureByName(params, resourceName);
     }
@@ -207,15 +219,19 @@ public class LogicalEnclosureClientTest {
     @Test
     public void testCreateLogicalEnclosure() {
         logicalEnclosureJson = this.getJsonFromFile("LogicalEnclosureGet.json");
-        AddLogicalEnclosure logicalEnclosureDto = adaptor.buildAddEnclosureDto(logicalEnclosureJson);
+        AddLogicalEnclosure logicalEnclosureDto = new LogicalEnclosureAdaptor().buildAddEnclosureDto(logicalEnclosureJson);
 
         String jsonCreateTaskCompleted = this.getJsonFromFile("LogicalEnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(
+                Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -233,8 +249,7 @@ public class LogicalEnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI));
         rp.setType(HttpMethodType.POST);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONObject.class));
 
         assertEquals("A success create logical enclosure call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -254,15 +269,19 @@ public class LogicalEnclosureClientTest {
     @Test
     public void testUpdateLogicalEnclosure() {
         logicalEnclosureJson = this.getJsonFromFile("LogicalEnclosureGet.json");
-        LogicalEnclosure LogicalEnclosureDto = adaptor.buildDto(logicalEnclosureJson);
+        LogicalEnclosure LogicalEnclosureDto = new LogicalEnclosureAdaptor().buildDto(logicalEnclosureJson);
 
         String jsonUpdateTaskCompleted = this.getJsonFromFile("EnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonUpdateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonUpdateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonUpdateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(
+                Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -281,8 +300,7 @@ public class LogicalEnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONObject.class));
 
         assertEquals("A success update logical enclosure call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -302,12 +320,16 @@ public class LogicalEnclosureClientTest {
     @Test
     public void testPatchLogicalEnclosure() {
         String jsonPatchTaskCompleted = this.getJsonFromFile("LogicalEnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonPatchTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonPatchTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONArray.class)))
         .thenReturn(jsonPatchTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(
+                Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -329,8 +351,7 @@ public class LogicalEnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId));
         rp.setType(HttpMethodType.PATCH);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONArray.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONArray.class));
 
         assertEquals("A success patch logical enclosure call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -348,11 +369,15 @@ public class LogicalEnclosureClientTest {
     @Test
     public void testDeleteLogicalEnclosure() {
         String jsonDeleteTaskCompleted = this.getJsonFromFile("LogicalEnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonDeleteTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonDeleteTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonDeleteTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(
+                Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -366,8 +391,7 @@ public class LogicalEnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId));
         rp.setType(HttpMethodType.DELETE);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertEquals("A success delete enclosure call returns \"Completed\"", "Completed", taskResourceV2.getTaskState().toString());
     }
@@ -379,7 +403,7 @@ public class LogicalEnclosureClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testDeleteLogicalEnclosureWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -389,11 +413,15 @@ public class LogicalEnclosureClientTest {
     @Test
     public void testUpdateFromGroup() {
         String jsonCreateTaskCompleted = this.getJsonFromFile("LogicalEnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(
+                Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -411,8 +439,7 @@ public class LogicalEnclosureClientTest {
                 SdkConstants.UPDATE_FROM_GROUP));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertEquals("A success update from group call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -424,7 +451,7 @@ public class LogicalEnclosureClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testUpdateFromGroupWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -434,11 +461,14 @@ public class LogicalEnclosureClientTest {
     @Test
     public void testUpdateConfiguration() {
         String jsonCreateTaskCompleted = this.getJsonFromFile("LogicalEnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -452,8 +482,7 @@ public class LogicalEnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId, SdkConstants.CONFIGURATION));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertEquals("A success update configuration call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -465,7 +494,7 @@ public class LogicalEnclosureClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testUpdateConfigurationWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -474,7 +503,7 @@ public class LogicalEnclosureClientTest {
 
     @Test
     public void testGetScript() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureScript);
 
@@ -484,8 +513,7 @@ public class LogicalEnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId, SdkConstants.SCRIPT));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(script);
         assertEquals(enclosureScript, script);
@@ -498,7 +526,7 @@ public class LogicalEnclosureClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetScriptWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -508,12 +536,15 @@ public class LogicalEnclosureClientTest {
     @Test
     public void testUpdateScript() {
         String jsonCreateTaskCompleted = this.getJsonFromFile("LogicalEnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendStringRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(String.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -527,8 +558,7 @@ public class LogicalEnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId, SdkConstants.SCRIPT));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendStringRequestToHPOV(Mockito.eq(rp), Mockito.any(String.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(String.class));
 
         assertEquals("A success update script call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -546,12 +576,15 @@ public class LogicalEnclosureClientTest {
     @Test
     public void testCreateSupportDump() {
         String jsonCreateTaskCompleted = this.getJsonFromFile("LogicalEnclosureCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -566,8 +599,7 @@ public class LogicalEnclosureClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId, SdkConstants.SUPPORT_DUMP));
         rp.setType(HttpMethodType.POST);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONObject.class));
 
         assertEquals("A success create logical enclosure call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -586,21 +618,27 @@ public class LogicalEnclosureClientTest {
     @Test
     public void testGetId() {
         logicalEnclosureJson = this.getJsonFromFile("LogicalEnclosureGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(logicalEnclosureJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new LogicalEnclosureAdaptor().buildCollectionDto(logicalEnclosureJson));
 
         String id = client.getId(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.LOGICAL_ENCLOSURE_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.LOGICAL_ENCLOSURE_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(id);
         assertEquals("Based on the JSON file, the return ID must be \"" + resourceId + "\"", resourceId, id);

@@ -30,8 +30,6 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
  */
 public interface StorageVolumeAttachmentsClient {
 
-    String REPAIR_FILTER = "alertFixType=ExtraUnmanagedStorageVolumes";
-
     /**
      * Returns the storage volume attachment details for the specified
      * storage volume attachment resource identifier.

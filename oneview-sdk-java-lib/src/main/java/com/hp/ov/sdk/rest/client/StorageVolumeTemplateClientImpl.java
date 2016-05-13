@@ -15,9 +15,13 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Strings;
 import com.hp.ov.sdk.adaptors.StorageVolumeTemplateAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -114,16 +118,19 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
     @Override
     public StorageVolumeTemplate getStorageVolumeTemplateByName(final RestParams params, final String name) {
         LOGGER.trace("StorageVolumeTemplateClientImpl : getNetworkSetByName : Start");
-        // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = UrlUtils.createFilterString(name);
 
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + name + "'");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_TEMPLATE_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_TEMPLATE_URI));
 
         final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("StorageVolumeTemplateClientImpl : getStorageVolumeTemplateByName : response from OV :" + returnObj);

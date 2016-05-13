@@ -15,6 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.tasks;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
@@ -25,12 +28,11 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TaskServiceManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskServiceManager.class);
+    private HttpRestClient httpClient = HttpRestClient.getClient();
 
     public TaskResourceV2 getTaskResource(final RestParams params, final String taskUri) {
         LOGGER.trace("TaskServiceManager : getTaskResource : Start");
@@ -43,7 +45,7 @@ public class TaskServiceManager {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), taskUri));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("TaskServiceManager : getTaskResource : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKS, null);

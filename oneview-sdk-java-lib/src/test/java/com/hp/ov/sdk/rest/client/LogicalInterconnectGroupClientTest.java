@@ -17,21 +17,24 @@ package com.hp.ov.sdk.rest.client;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 import com.hp.ov.sdk.adaptors.LogicalInterconnectGroupAdaptor;
@@ -53,13 +56,22 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({HttpRestClient.class, TaskMonitorManager.class})
+@RunWith(MockitoJUnitRunner.class)
 public class LogicalInterconnectGroupClientTest {
 
     private RestParams params;
+
+    @Mock
     private LogicalInterconnectGroupAdaptor adaptor;
-    private LogicalInterconnectGroupClient client;
+    @Mock
+    private TaskAdaptor taskAdaptor;
+    @Mock
+    private TaskMonitorManager taskMonitorManager;
+    @Mock
+    private HttpRestClient restClient;
+
+    @InjectMocks
+    private LogicalInterconnectGroupClientImpl client;
 
     private final String resourceId = "random-UUID";
     private final String resourceName = "random-name";
@@ -67,29 +79,20 @@ public class LogicalInterconnectGroupClientTest {
 
     private String ligJson = "";
 
-    @Mock
-    private TaskMonitorManager taskMonitorManager;
-    private TaskAdaptor taskAdaptor;
-
     @Before
     public void setUp() throws Exception {
         params = new RestParams();
-        taskAdaptor = TaskAdaptor.getInstance();
-        adaptor = new LogicalInterconnectGroupAdaptor();
-
-        PowerMockito.mockStatic(HttpRestClient.class);
-        PowerMockito.mockStatic(TaskMonitorManager.class);
-        PowerMockito.when(TaskMonitorManager.getInstance()).thenReturn(taskMonitorManager);
-
-        this.client = LogicalInterconnectGroupClientImpl.getClient();
     }
 
     @Test
     public void testGetLogicalInterconnectGroup() {
         ligJson = this.getJsonFromFile("LogicalInterconnectGroupGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
+
+        Mockito.when(adaptor.buildDto(Mockito.anyString()))
+        .thenReturn(new LogicalInterconnectGroupAdaptor().buildDto(ligJson));
 
         LogicalInterconnectGroups ligDto = client.getLogicalInterconnectGroup(params, resourceId);
 
@@ -97,8 +100,7 @@ public class LogicalInterconnectGroupClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(ligDto);
     }
@@ -110,7 +112,7 @@ public class LogicalInterconnectGroupClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetLogicalInterconnectGroupWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -120,9 +122,12 @@ public class LogicalInterconnectGroupClientTest {
     @Test
     public void testGetAllLogicalInterconnectGroups() {
         ligJson = this.getJsonFromFile("LogicalInterconnectGroupGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new LogicalInterconnectGroupAdaptor().buildCollectionDto(ligJson));
 
         LogicalInterconnectGroupCollectionV2 ligList = client.getAllLogicalInterconnectGroups(params);
 
@@ -130,8 +135,7 @@ public class LogicalInterconnectGroupClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(ligList);
         assertEquals("Based on the JSON file, the return object must have 1 element",
@@ -145,7 +149,7 @@ public class LogicalInterconnectGroupClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetAllLogicalInterconnectGroupsWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -155,21 +159,27 @@ public class LogicalInterconnectGroupClientTest {
     @Test
     public void testGetLogicalInterconnectGroupByName() {
         ligJson = this.getJsonFromFile("LogicalInterconnectGroupGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new LogicalInterconnectGroupAdaptor().buildCollectionDto(ligJson));
 
         LogicalInterconnectGroups ligDto = client.getLogicalInterconnectGroupByName(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(ligDto);
     }
@@ -181,7 +191,7 @@ public class LogicalInterconnectGroupClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetLogicalInterconnectGroupByNameWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -190,13 +200,16 @@ public class LogicalInterconnectGroupClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetLogicalInterconnectGroupByNameWithNoMembers() {
-        LogicalInterconnectGroupCollectionV2 ligCollection = adaptor.buildCollectionDto(this.getJsonFromFile("LogicalInterconnectGroupGetByName.json"));
+        LogicalInterconnectGroupCollectionV2 ligCollection = new LogicalInterconnectGroupAdaptor().buildCollectionDto(this.getJsonFromFile("LogicalInterconnectGroupGetByName.json"));
         ligCollection.setCount(0);
         ligJson = new Gson().toJson(ligCollection);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(ligCollection);
 
         client.getLogicalInterconnectGroupByName(params, resourceName);
     }
@@ -204,15 +217,21 @@ public class LogicalInterconnectGroupClientTest {
     @Test
     public void testCreateLogicalInterconnectGroup() {
         ligJson = this.getJsonFromFile("LogicalInterconnectGroupGet.json");
-        LogicalInterconnectGroups ligDto = adaptor.buildDto(ligJson);
+        LogicalInterconnectGroups ligDto = new LogicalInterconnectGroupAdaptor().buildDto(ligJson);
 
         String jsonCreateTaskCompleted = this.getJsonFromFile("LogicalInterconnectGroupCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonCreateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonCreateTaskCompleted);
+
+        Mockito.when(adaptor.buildJsonObjectFromDto(Mockito.any(LogicalInterconnectGroups.class), Mockito.anyDouble()))
+        .thenReturn(new LogicalInterconnectGroupAdaptor().buildJsonObjectFromDto(ligDto, 200));
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -226,8 +245,7 @@ public class LogicalInterconnectGroupClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI));
         rp.setType(HttpMethodType.POST);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONObject.class));
 
         assertEquals("A success create logical interconnect group call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -248,18 +266,24 @@ public class LogicalInterconnectGroupClientTest {
         List<UplinkSet> uplinkSetDto = Arrays.asList(new UplinkSet());
 
         String jsonUpdateTaskCompleted = this.getJsonFromFile("LogicalInterconnectGroupCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonUpdateTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonUpdateTaskCompleted);
 
         // GET
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
 
+        Mockito.when(adaptor.buildDto(Mockito.anyString()))
+        .thenReturn(new LogicalInterconnectGroupAdaptor().buildDto(ligJson));
+
         // UPDATE
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonUpdateTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         // TASK STATUS
         Mockito.when(taskMonitorManager.checkStatus(
@@ -274,8 +298,7 @@ public class LogicalInterconnectGroupClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONObject.class));
 
         assertEquals("A success update logical interconnect group call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -294,11 +317,14 @@ public class LogicalInterconnectGroupClientTest {
     @Test
     public void testDeleteLogicalInterconnectGroup() {
         String jsonDeleteTaskCompleted = this.getJsonFromFile("LogicalInterconnectGroupCreateTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonDeleteTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonDeleteTaskCompleted);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonDeleteTaskCompleted);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(taskResourceV2);
 
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
@@ -312,8 +338,7 @@ public class LogicalInterconnectGroupClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId));
         rp.setType(HttpMethodType.DELETE);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertEquals("A success delete logical interconnect group call returns \"Completed\"", "Completed", taskResourceV2.getTaskState().toString());
     }
@@ -325,7 +350,7 @@ public class LogicalInterconnectGroupClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testDeleteLogicalInterconnectGroupWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -335,9 +360,12 @@ public class LogicalInterconnectGroupClientTest {
     @Test
     public void testGetDefaultInterconnectSettings() {
         ligJson = this.getJsonFromFile("LogicalInterconnectGroupGetDefaultInterconnectSettings.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
+
+        Mockito.when(adaptor.buildInterconnectSettingsDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new LogicalInterconnectGroupAdaptor().buildInterconnectSettingsDto(ligJson, 200));
 
         InterconnectSettingsV2 settingsDto = client.getDefaultInterconnectSettings(params);
 
@@ -345,8 +373,7 @@ public class LogicalInterconnectGroupClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, SdkConstants.DEFAULT_SETTINGS));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(settingsDto);
     }
@@ -358,7 +385,7 @@ public class LogicalInterconnectGroupClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetDefaultInterconnectSettingsWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -368,9 +395,12 @@ public class LogicalInterconnectGroupClientTest {
     @Test
     public void testGetInterconnectSettings() {
         ligJson = this.getJsonFromFile("LogicalInterconnectGroupGetDefaultInterconnectSettings.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
+
+        Mockito.when(adaptor.buildInterconnectSettingsDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new LogicalInterconnectGroupAdaptor().buildInterconnectSettingsDto(ligJson, 200));
 
         InterconnectSettingsV2 settingsDto = client.getInterconnectSettings(params, resourceId, settingsId);
 
@@ -383,8 +413,7 @@ public class LogicalInterconnectGroupClientTest {
                 settingsId));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(settingsDto);
     }
@@ -392,9 +421,12 @@ public class LogicalInterconnectGroupClientTest {
     @Test
     public void testGetInterconnectSettingsV200() {
         ligJson = this.getJsonFromFile("LogicalInterconnectGroupGetDefaultInterconnectSettings.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
+
+        Mockito.when(adaptor.buildInterconnectSettingsDto(Mockito.anyString(), Mockito.anyDouble()))
+        .thenReturn(new LogicalInterconnectGroupAdaptor().buildInterconnectSettingsDto(ligJson, 200));
 
         params.setApiVersion(200);
         InterconnectSettingsV2 settingsDto = client.getInterconnectSettings(params, resourceId);
@@ -408,8 +440,7 @@ public class LogicalInterconnectGroupClientTest {
                 SdkConstants.SETTINGS));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(settingsDto);
     }
@@ -431,7 +462,7 @@ public class LogicalInterconnectGroupClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetInterconnectSettingsWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -441,21 +472,27 @@ public class LogicalInterconnectGroupClientTest {
     @Test
     public void testGetId() {
         ligJson = this.getJsonFromFile("LogicalInterconnectGroupGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new LogicalInterconnectGroupAdaptor().buildCollectionDto(ligJson));
 
         String id = client.getId(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(id);
         assertEquals("Based on the JSON file, the return ID must be \"" + resourceId + "\"", resourceId, id);

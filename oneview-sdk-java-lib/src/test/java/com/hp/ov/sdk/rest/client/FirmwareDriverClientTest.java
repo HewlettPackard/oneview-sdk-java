@@ -2,6 +2,8 @@ package com.hp.ov.sdk.rest.client;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 
@@ -10,12 +12,12 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
+import com.hp.ov.sdk.adaptors.FirmwareDriverAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.FwBaselineCollection;
@@ -31,16 +33,22 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({HttpRestClient.class, TaskMonitorManager.class})
+@RunWith(MockitoJUnitRunner.class)
 public class FirmwareDriverClientTest {
 
     private RestParams params;
-    private FirmwareDriverClient client;
 
     @Mock
-    private TaskMonitorManager taskMonitorManager;
+    private FirmwareDriverAdaptor adaptor;
+    @Mock
     private TaskAdaptor taskAdaptor;
+    @Mock
+    private TaskMonitorManager taskMonitorManager;
+    @Mock
+    private HttpRestClient restClient;
+
+    @InjectMocks
+    private FirmwareDriverClientImpl client;
 
     private static String resourceId = "random-UUID";
     private static String resourceName = "random-name";
@@ -49,21 +57,17 @@ public class FirmwareDriverClientTest {
     @Before
     public void setUp() throws Exception {
         params = new RestParams();
-        taskAdaptor = TaskAdaptor.getInstance();
-        PowerMockito.mockStatic(HttpRestClient.class);
-
-        PowerMockito.mockStatic(TaskMonitorManager.class);
-        PowerMockito.when(TaskMonitorManager.getInstance()).thenReturn(taskMonitorManager);
-
-        this.client = FirmwareDriverClientImpl.getClient();
     }
 
     @Test
     public void testGetFirmwareDriver() {
         firmwareDriverJson = this.getJsonFromFile("FirmwareDriverGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
+
+        Mockito.when(adaptor.buildDto(Mockito.anyString()))
+        .thenReturn(new FirmwareDriverAdaptor().buildDto(firmwareDriverJson));
 
         FwBaseline firmwareDriverDto = client.getFirmwareDriver(params, resourceId);
 
@@ -71,8 +75,7 @@ public class FirmwareDriverClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI, resourceId));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(firmwareDriverDto);
     }
@@ -84,7 +87,7 @@ public class FirmwareDriverClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetFirmwareDriverWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(null);
@@ -95,9 +98,12 @@ public class FirmwareDriverClientTest {
     @Test
     public void testGetAllFirmwareDrivers() {
         firmwareDriverJson = this.getJsonFromFile("FirmwareDriverGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new FirmwareDriverAdaptor().buildCollectionDto(firmwareDriverJson));
 
         FwBaselineCollection firmwareDriverCollection = client.getAllFirmwareDrivers(params);
 
@@ -105,8 +111,7 @@ public class FirmwareDriverClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(firmwareDriverCollection);
         assertEquals("Based on the JSON file, the return object must have 1 elements",
@@ -120,7 +125,7 @@ public class FirmwareDriverClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetAllFirmwareDriversWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(null);
@@ -131,9 +136,12 @@ public class FirmwareDriverClientTest {
     @Test
     public void testGetFirmwareDriverByName() {
         firmwareDriverJson = this.getJsonFromFile("FirmwareDriverGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new FirmwareDriverAdaptor().buildCollectionDto(firmwareDriverJson));
 
         FwBaseline firmwareDriverDto = client.getFirmwareDriverByName(params, resourceName);
 
@@ -141,8 +149,7 @@ public class FirmwareDriverClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(firmwareDriverDto);
     }
@@ -155,9 +162,12 @@ public class FirmwareDriverClientTest {
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetFirmwareDriverByNameNotFound() {
         firmwareDriverJson = this.getJsonFromFile("FirmwareDriverGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new FirmwareDriverAdaptor().buildCollectionDto(firmwareDriverJson));
 
         client.getFirmwareDriverByName(params, "wrong name");
     }
@@ -165,17 +175,20 @@ public class FirmwareDriverClientTest {
     @Test
     public void testDeleteFirmwareDriver() {
         firmwareDriverJson = this.getJsonFromFile("FirmwareDriverDeleteTask.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
 
         String jsonDeleteTaskCompleted = this.getJsonFromFile("FirmwareDriverDeleteTaskCompleted.json");
-        TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(jsonDeleteTaskCompleted);
+        TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonDeleteTaskCompleted);
         Mockito.when(taskMonitorManager.checkStatus(
                 Mockito.any(RestParams.class),
                 Mockito.anyString(),
                 Mockito.anyInt()))
         .thenReturn(taskResourceV2);
+
+        Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
+        .thenReturn(TaskAdaptor.getInstance().buildDto(jsonDeleteTaskCompleted));
 
         TaskResourceV2 result = client.deleteFirmwareDriver(params, resourceId, false, false);
 
@@ -183,8 +196,7 @@ public class FirmwareDriverClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI, resourceId));
         rp.setType(HttpMethodType.DELETE);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertEquals("A success delete firmware call returns task state \"Completed\"", TaskState.Completed, result.getTaskState());
     }
@@ -196,7 +208,7 @@ public class FirmwareDriverClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testDeleteFirmwareDriverWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(null);
@@ -207,9 +219,12 @@ public class FirmwareDriverClientTest {
     @Test
     public void testGetId() {
         firmwareDriverJson = this.getJsonFromFile("FirmwareDriverGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new FirmwareDriverAdaptor().buildCollectionDto(firmwareDriverJson));
 
         String id = client.getId(params, resourceName);
 
@@ -217,8 +232,7 @@ public class FirmwareDriverClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(id);
         assertEquals("Based on the JSON file, the return ID must be \"" + resourceId + "\"", resourceId, id);

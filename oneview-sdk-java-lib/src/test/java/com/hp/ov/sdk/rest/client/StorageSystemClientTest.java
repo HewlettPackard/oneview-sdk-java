@@ -17,19 +17,23 @@ package com.hp.ov.sdk.rest.client;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 import com.hp.ov.sdk.adaptors.StorageSystemAdaptor;
@@ -48,13 +52,18 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({HttpRestClient.class})
+@RunWith(MockitoJUnitRunner.class)
 public class StorageSystemClientTest {
 
     private RestParams params;
+
+    @Mock
     private StorageSystemAdaptor adaptor;
-    private StorageSystemClient client;
+    @Mock
+    private HttpRestClient restClient;
+
+    @InjectMocks
+    private StorageSystemClientImpl client;
 
     private static String resourceId = "random-UUID";
     private static String resourceName = "random-name";
@@ -64,19 +73,17 @@ public class StorageSystemClientTest {
     @Before
     public void setUp() throws Exception {
         params = new RestParams();
-        adaptor = new StorageSystemAdaptor();
-
-        PowerMockito.mockStatic(HttpRestClient.class);
-
-        this.client = StorageSystemClientImpl.getClient();
     }
 
     @Test
     public void testGetStorageSystem() {
         storageSystemJson = this.getJsonFromFile("StorageSystemGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
+
+        Mockito.when(adaptor.buildDto(Mockito.anyString()))
+        .thenReturn(new StorageSystemAdaptor().buildDto(storageSystemJson));
 
         StorageSystemV2 storageSystemDto = client.getStorageSystem(params, resourceId);
 
@@ -84,8 +91,7 @@ public class StorageSystemClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, resourceId));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(storageSystemDto);
     }
@@ -98,7 +104,7 @@ public class StorageSystemClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetStorageSystemWithNullResponse() {
         storageSystemJson = this.getJsonFromFile("StorageSystemGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -108,9 +114,12 @@ public class StorageSystemClientTest {
     @Test
     public void testGetStoragePoolsForStorageSystem() {
         storageSystemJson = this.getJsonFromFile("StorageSystemPoolsGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
+
+        Mockito.when(adaptor.buildStoragePoolCollectionDto(Mockito.anyString()))
+        .thenReturn(new StorageSystemAdaptor().buildStoragePoolCollectionDto(storageSystemJson));
 
         StoragePoolCollection storagePoolsDto = client.getStoragePoolsForStorageSystem(params, resourceId);
 
@@ -118,8 +127,7 @@ public class StorageSystemClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, resourceId, ResourceUris.STORAGE_POOL_STORAGE_SYSTEM_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(storagePoolsDto);
         assertEquals("Based on the JSON file, the total number of storage pools must be \"" + 1 + "\"", 1, storagePoolsDto.getCount());
@@ -133,7 +141,7 @@ public class StorageSystemClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetStoragePoolsForStorageSystemWithNullResponse() {
         storageSystemJson = this.getJsonFromFile("StorageSystemPoolsGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -143,9 +151,12 @@ public class StorageSystemClientTest {
     @Test
     public void testGetAllManagedPortsForStorageSystem() {
         storageSystemJson = this.getJsonFromFile("StorageSystemManagedPortsGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
+
+        Mockito.when(adaptor.buildManagedPortsCollectionDto(Mockito.anyString()))
+        .thenReturn(new StorageSystemAdaptor().buildManagedPortsCollectionDto(storageSystemJson));
 
         StorageTargetPortCollection storageTargetPortCollectionDto = client.getAllManagedPortsForStorageSystem(params, resourceId);
 
@@ -153,8 +164,7 @@ public class StorageSystemClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, resourceId, ResourceUris.MANANGED_PORTS_STORAGE_SYSTEM_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(storageTargetPortCollectionDto);
         assertEquals("Based on the JSON file, the total number of managed ports must be \"" + 1 + "\"", 1, storageTargetPortCollectionDto.getCount());
@@ -167,7 +177,7 @@ public class StorageSystemClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetAllManagedPortsForStorageSystemWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -177,9 +187,12 @@ public class StorageSystemClientTest {
     @Test
     public void testGetManagedPortsForStorageSystem() {
         storageSystemJson = this.getJsonFromFile("StorageSystemManagedPortsGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
+
+        Mockito.when(adaptor.buildManagedPortsDto(Mockito.anyString()))
+        .thenReturn(new StorageSystemAdaptor().buildManagedPortsDto(storageSystemJson));
 
         StorageTargetPortV2 storageTargetPortDto = client.getManagedPortsForStorageSystem(params, resourceId, portId);
 
@@ -192,8 +205,7 @@ public class StorageSystemClientTest {
                 portId));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(storageTargetPortDto);
     }
@@ -205,7 +217,7 @@ public class StorageSystemClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetManagedPortsForStorageSystemWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -215,9 +227,12 @@ public class StorageSystemClientTest {
     @Test
     public void testGetStorageSystemHostTypes() {
         storageSystemJson = this.getJsonFromFile("StorageSystemHostTypesGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
+
+        Mockito.when(adaptor.buildHostTypesCollectionDto(Mockito.anyString()))
+        .thenReturn(new StorageSystemAdaptor().buildHostTypesCollectionDto(storageSystemJson));
 
         List<String> hostTypes = client.getStorageSystemHostTypes(params);
 
@@ -225,12 +240,11 @@ public class StorageSystemClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, ResourceUris.STORAGE_SYSTEM_HOST_TYPES_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(hostTypes);
         assertEquals("Based on the JSON file, the return object must have 22 elements",
-                hostTypes.size(), 22);
+                22, hostTypes.size());
     }
 
     @Test (expected = SDKInvalidArgumentException.class)
@@ -240,7 +254,7 @@ public class StorageSystemClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetStorageSystemHostTypesWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -250,9 +264,12 @@ public class StorageSystemClientTest {
     @Test
     public void testGetAllStorageSystems() {
         storageSystemJson = this.getJsonFromFile("StorageSystemGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new StorageSystemAdaptor().buildCollectionDto(storageSystemJson));
 
         StorageSystemCollection storageSystemCollectionDto = client.getAllStorageSystems(params);
 
@@ -260,8 +277,7 @@ public class StorageSystemClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(storageSystemCollectionDto);
         assertEquals("Based on the JSON file, the return object must have 2 elements",
@@ -275,7 +291,7 @@ public class StorageSystemClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetAllStorageSystemsWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -285,34 +301,43 @@ public class StorageSystemClientTest {
     @Test
     public void testGetStorageSystemByName() {
         storageSystemJson = this.getJsonFromFile("StorageSystemGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new StorageSystemAdaptor().buildCollectionDto(storageSystemJson));
 
         StorageSystemV2 storageSystemDto = client.getStorageSystemByName(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.STORAGE_SYSTEM_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.STORAGE_SYSTEM_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(storageSystemDto);
     }
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetStorageSystemByNameWithNoMembers() {
-        StorageSystemCollection storageSystemCollectionDto = adaptor.buildCollectionDto(this.getJsonFromFile("StorageSystemGetByName.json"));
+        StorageSystemCollection storageSystemCollectionDto = new StorageSystemAdaptor().buildCollectionDto(this.getJsonFromFile("StorageSystemGetByName.json"));
         storageSystemCollectionDto.setCount(0);
         storageSystemJson = new Gson().toJson(storageSystemCollectionDto);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new StorageSystemAdaptor().buildCollectionDto(storageSystemJson));
 
         client.getStorageSystemByName(params, resourceName);
     }
@@ -324,7 +349,7 @@ public class StorageSystemClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetStorageSystemByNameWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -333,7 +358,7 @@ public class StorageSystemClientTest {
 
     @Test
     public void testCreateStorageSystem() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn("{}");
@@ -347,8 +372,7 @@ public class StorageSystemClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI));
         rp.setType(HttpMethodType.POST);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONObject.class));
 
         assertEquals("A success create storage system call returns the string \"Created\"", "Created", result);
     }
@@ -366,9 +390,9 @@ public class StorageSystemClientTest {
     @Test
     public void testUpdateStorageSystem() {
         storageSystemJson = this.getJsonFromFile("StorageSystemGet.json");
-        StorageSystemV2 storageSystemDto = adaptor.buildDto(storageSystemJson);
+        StorageSystemV2 storageSystemDto = new StorageSystemAdaptor().buildDto(storageSystemJson);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn("{}");
@@ -383,8 +407,7 @@ public class StorageSystemClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, resourceId));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONObject.class));
 
         assertEquals("A success update storage system call returns \"Updated\"", "Updated", result);
     }
@@ -401,7 +424,7 @@ public class StorageSystemClientTest {
 
     @Test
     public void testDeleteStorageSystem() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn("{}");
 
@@ -411,8 +434,7 @@ public class StorageSystemClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, resourceId));
         rp.setType(HttpMethodType.DELETE);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertEquals("A success delete storage system call returns \"Deleted\"", "Deleted", result);
     }
@@ -424,7 +446,7 @@ public class StorageSystemClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testDeleteStorageSystemWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(null);
 
@@ -434,21 +456,27 @@ public class StorageSystemClientTest {
     @Test
     public void testGetId() {
         storageSystemJson = this.getJsonFromFile("StorageSystemGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new StorageSystemAdaptor().buildCollectionDto(storageSystemJson));
 
         String id = client.getId(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.STORAGE_SYSTEM_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.STORAGE_SYSTEM_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(id);
         assertEquals("Based on the JSON file, the return ID must be \"" + resourceId + "\"", resourceId, id);

@@ -15,6 +15,13 @@
  */
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.adaptors.ConnectionTemplateAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
@@ -28,9 +35,6 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
 
@@ -38,14 +42,17 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
 
     private final ConnectionTemplateAdaptor adaptor;
 
+    private HttpRestClient httpClient;
+
     private JSONObject jsonObject;
 
-    protected ConnectionTemplateClientImpl(ConnectionTemplateAdaptor adaptor) {
+    protected ConnectionTemplateClientImpl(HttpRestClient httpClient, ConnectionTemplateAdaptor adaptor) {
+        this.httpClient = httpClient;
         this.adaptor = adaptor;
     }
 
     public static ConnectionTemplateClient getClient() {
-        return new ConnectionTemplateClientImpl(new ConnectionTemplateAdaptor());
+        return new ConnectionTemplateClientImpl(HttpRestClient.getClient(), new ConnectionTemplateAdaptor());
     }
 
     @Override
@@ -61,7 +68,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ConnectionTemplateImpl : getConnectionTemplate : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -83,18 +90,21 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         ConnectionTemplateCollection connectionTemplateCollectionDto = null;
 
         LOGGER.info("ConnectionTemplateClientImpl : getConnectionTemplateByName : Start");
-        // final String query = "filter=\"name matches \'" + resourceName +
-        // "\'\"";
-        final String query = UrlUtils.createFilterString(resourceName);
+
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ConnectionTemplateClientImpl : getConnectionTemplateByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -139,7 +149,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI, resourceId));
         String returnObj = null;
 
-        // TODO-check for json request in the input dto. if it is present,
+        // TODO - check for json request in the input dto. if it is present,
         // then
         // convert that into jsonObject and pass it rest client
         // idea is : user can create json string and call the sdk api.
@@ -148,7 +158,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(connectionTemplateDto);
 
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         connectionTemplateDto = adaptor.buildDto(returnObj);
 
@@ -172,7 +182,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.CONNECTION_TEMPLATE_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ConnectionTemplateImpl : getAllConnectionTemplates : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -201,7 +211,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.DEFAULT_CONNECTION_TEMPLATE_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,

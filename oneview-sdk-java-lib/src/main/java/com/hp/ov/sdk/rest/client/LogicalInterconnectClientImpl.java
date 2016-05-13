@@ -55,25 +55,29 @@ import com.hp.ov.sdk.util.UrlUtils;
 
 public class LogicalInterconnectClientImpl implements LogicalInterconnectClient {
 
-    private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
+    private static final int TIMEOUT = 300000; // in milliseconds = 1 mins
     public static final Logger LOGGER = LoggerFactory.getLogger(LogicalInterconnectClientImpl.class);
 
     private final LogicalInterconnectAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
 
+    private HttpRestClient httpClient;
+
     private JSONObject jsonObject;
 
-    protected LogicalInterconnectClientImpl(LogicalInterconnectAdaptor adaptor,
+    protected LogicalInterconnectClientImpl(HttpRestClient httpClient, LogicalInterconnectAdaptor adaptor,
         TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
-
+        this.httpClient = httpClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
     }
 
     public static LogicalInterconnectClient getClient() {
-        return new LogicalInterconnectClientImpl(new LogicalInterconnectAdaptor(),
+        return new LogicalInterconnectClientImpl(
+                HttpRestClient.getClient(),
+                new LogicalInterconnectAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
     }
@@ -90,7 +94,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnect : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -118,7 +122,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectClientImpl : getAllLogicalInterconnects : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -144,7 +148,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         for (final LogicalInterconnects logicalInterconnectDto : new ArrayList<>(logicalInterconnectCollectionDto.getMembers())) {
             if (logicalInterconnectDto.getName().equalsIgnoreCase(logicalInterconnectName)) {
-                System.out.println(logicalInterconnectDto.getName());
+                LOGGER.debug("Found: " + logicalInterconnectDto.getName());
                 LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectByName : End");
                 return logicalInterconnectDto;
             }
@@ -167,7 +171,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId, SdkConstants.FIRMWARE));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectFirmwareById : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -214,7 +218,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(snmpConfigurationDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -254,9 +258,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
                 SdkConstants.COMPLIANCE));
         String returnObj = null;
 
-        // create JSON request from dto
-        jsonObject = null;
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -304,7 +306,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(lIFirmwareDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -340,7 +342,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
                 resourceId,
                 SdkConstants.FORWARDING_INFORMATION_BASE));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectForwardingInformationBase : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -371,7 +373,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
                 resourceId,
                 SdkConstants.FORWARDING_INFORMATION_BASE));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectClientImpl : createLogicalInterconnectForwardingInformationBase : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -402,7 +404,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
                 resourceId,
                 SdkConstants.SNMP_CONFIGURATION));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectSnmpConfigurationById : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -434,7 +436,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
                 resourceId,
                 SdkConstants.UNASSIGNED_UPLINK_PORTS_FOR_PORT_MONITOR));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectUnassignedUplinkPortsForPortMonitor : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -468,7 +470,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         String returnObj = null;
 
         // create JSON request from dto
-        returnObj = HttpRestClient.sendRequestToHPOV(params);
+        returnObj = httpClient.sendRequest(params);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -500,7 +502,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
                 resourceId,
                 SdkConstants.PORT_MONITOR));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectPortMonitorConfiguration : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -535,7 +537,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(portMonitorDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -569,7 +571,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
                 SdkConstants.TELEMETRY_CONFIGURATIONS,
                 telemetryConfigurationId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectTelemetryConfiguration : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -606,7 +608,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(telemetryConfigurationDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         LOGGER.debug("LogicalInterconnectClientImpl : updateLogicalInterconnectTelemetryConfiguration : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -643,7 +645,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(telemetryConfigurationDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -680,7 +682,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(ethernetInterconnectSettingsDto, params.getApiVersion());
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -721,7 +723,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(locationDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -758,7 +760,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
                 SdkConstants.INTERCONNECTS +
                 "?location=Enclosure:" + enclosureUri + ",Bay:" + bay));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectClientImpl : deleteLogicalInterconnect : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -802,7 +804,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         String returnObj = null;
 
         // create JSON request from dto
-        returnObj = HttpRestClient.sendRequestToHPOV(params, new JSONArray(networkUris));
+        returnObj = httpClient.sendRequest(params, new JSONArray(networkUris));
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -834,7 +836,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
                 resourceId,
                 SdkConstants.INTERNAL_VLANS));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectInternalVlans : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -865,7 +867,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
                 resourceId,
                 SdkConstants.QOS_AGGREGATED_CONFIGURATION));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnectQosAggregatedConfiguration : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
@@ -900,7 +902,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(qosAggregatedConfigurationDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -936,7 +938,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(interconnectSettings, params.getApiVersion());
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 

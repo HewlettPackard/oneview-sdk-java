@@ -1,23 +1,28 @@
 package com.hp.ov.sdk.rest.client;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 import com.hp.ov.sdk.adaptors.EnclosureGroupAdaptor;
+import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.EnclosureGroupCollectionV2;
@@ -30,33 +35,40 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(HttpRestClient.class)
+@RunWith(MockitoJUnitRunner.class)
 public class EnclosureGroupClientTest {
 
     private RestParams params;
+
+    @Mock
     private EnclosureGroupAdaptor adaptor;
-    private EnclosureGroupClient client;
+    @Mock
+    private TaskAdaptor taskAdaptor;
+    @Mock
+    private HttpRestClient restClient;
+
+    @InjectMocks
+    private EnclosureGroupClientImpl client;
 
     private static String resourceId = "random-UUID";
     private static String resourceName = "random-name";
     private static String resourceConfigScript = "#script";
     private String enclosureGroupJson = "";
-    
+
     @Before
     public void setUp() throws Exception {
         params = new RestParams();
-        adaptor = new EnclosureGroupAdaptor();
-        PowerMockito.mockStatic(HttpRestClient.class);
-        this.client = EnclosureGroupClientImpl.getClient();
     }
 
     @Test
     public void testGetEnclosureGroup() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureGroupJson);
+
+        Mockito.when(adaptor.buildDto(Mockito.anyString()))
+        .thenReturn(new EnclosureGroups());
 
         EnclosureGroups enclosureGroupDto = client.getEnclosureGroup(params, resourceId);
 
@@ -64,8 +76,7 @@ public class EnclosureGroupClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI, resourceId));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(enclosureGroupDto);
     }
@@ -78,7 +89,7 @@ public class EnclosureGroupClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetEnclosureGroupWithNullResponse() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGet.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(null);
@@ -89,9 +100,12 @@ public class EnclosureGroupClientTest {
     @Test
     public void testGetAllEnclosureGroups() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureGroupJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new EnclosureGroupAdaptor().buildCollectionDto(enclosureGroupJson));
 
         EnclosureGroupCollectionV2 enclosureGroupCollection = client.getAllEnclosureGroups(params);
 
@@ -99,8 +113,7 @@ public class EnclosureGroupClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(enclosureGroupCollection);
         assertEquals("Based on the JSON file, the return object must have 1 elements",
@@ -115,7 +128,7 @@ public class EnclosureGroupClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetAllEnclosureGroupsWithNullResponse() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGetAll.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(null);
@@ -126,21 +139,27 @@ public class EnclosureGroupClientTest {
     @Test
     public void testGetEnclosureGroupByName() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureGroupJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new EnclosureGroupAdaptor().buildCollectionDto(enclosureGroupJson));
 
         EnclosureGroups enclosureGroupDto = client.getEnclosureGroupByName(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.ENCLOSURE_GROUP_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.ENCLOSURE_GROUP_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(enclosureGroupDto);
     }
@@ -153,7 +172,7 @@ public class EnclosureGroupClientTest {
     @Test (expected = SDKNoResponseException.class)
     public void testGetEnclosureGroupByNameWithNullResponse() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(null);
@@ -163,13 +182,16 @@ public class EnclosureGroupClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetEnclosureGroupByNameWithNoMembers() {
-        EnclosureGroupCollectionV2 enclosureGroupCollectionDto = adaptor.buildCollectionDto(this.getJsonFromFile("EnclosureGroupGetByName.json"));
+        EnclosureGroupCollectionV2 enclosureGroupCollectionDto = new EnclosureGroupAdaptor().buildCollectionDto(this.getJsonFromFile("EnclosureGroupGetByName.json"));
         enclosureGroupCollectionDto.setCount(0);
         enclosureGroupJson = new Gson().toJson(enclosureGroupCollectionDto);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureGroupJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(enclosureGroupCollectionDto);
 
         client.getEnclosureGroupByName(params, resourceName);
     }
@@ -177,12 +199,17 @@ public class EnclosureGroupClientTest {
     @Test
     public void testCreateEnclosureGroup() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGet.json");
-        EnclosureGroups enclosureGroupDto = adaptor.buildDto(enclosureGroupJson);
+        EnclosureGroups enclosureGroupDto = new EnclosureGroupAdaptor().buildDto(enclosureGroupJson);
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(enclosureGroupJson);
+
+        Mockito.when(taskAdaptor.buildClassDto(
+                Mockito.anyString(),
+                Mockito.eq(EnclosureGroups.class)))
+        .thenReturn(enclosureGroupDto);
 
         enclosureGroupDto = client.createEnclosureGroup(
                 params,
@@ -193,8 +220,7 @@ public class EnclosureGroupClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI));
         rp.setType(HttpMethodType.POST);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONObject.class));
 
         assertNotNull(enclosureGroupDto);
     }
@@ -217,13 +243,18 @@ public class EnclosureGroupClientTest {
     @Test
     public void testUpdateEnclosureGroup() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGet.json");
-        EnclosureGroups enclosureGroupDto = adaptor.buildDto(enclosureGroupJson);
-        enclosureGroupDto.setDescription("outdated");
+        EnclosureGroups enclosureGroupDto = new EnclosureGroupAdaptor().buildDto(enclosureGroupJson);
+        enclosureGroupDto.setDescription("updated");
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
-        .thenReturn(enclosureGroupJson);
+        .thenReturn(new Gson().toJson(enclosureGroupDto));
+
+        Mockito.when(taskAdaptor.buildClassDto(
+                Mockito.anyString(),
+                Mockito.eq(EnclosureGroups.class)))
+        .thenReturn(enclosureGroupDto);
 
         enclosureGroupDto = client.updateEnclosureGroup(
                 params,
@@ -235,20 +266,19 @@ public class EnclosureGroupClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI, resourceId));
         rp.setType(HttpMethodType.PUT);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp), Mockito.any(JSONObject.class));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp), Mockito.any(JSONObject.class));
 
         assertNotNull(enclosureGroupDto);
-        assertFalse("Enclosure Group description is outdated", enclosureGroupDto.getDescription().contains("outdated"));
+        assertTrue("Enclosure Group description is outdated", enclosureGroupDto.getDescription().contains("updated"));
     }
 
     @Test (expected = SDKInvalidArgumentException.class)
     public void testUpdateEnclosureGroupWithNullParams() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGet.json");
-        EnclosureGroups enclosureGroupDto = adaptor.buildDto(enclosureGroupJson);
+        EnclosureGroups enclosureGroupDto = new EnclosureGroupAdaptor().buildDto(enclosureGroupJson);
         enclosureGroupDto.setDescription("outdated");
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(enclosureGroupJson);
@@ -263,10 +293,10 @@ public class EnclosureGroupClientTest {
     @Test (expected = SDKInvalidArgumentException.class)
     public void testUpdateEnclosureGroupWithNullDto() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGet.json");
-        EnclosureGroups enclosureGroupDto = adaptor.buildDto(enclosureGroupJson);
+        EnclosureGroups enclosureGroupDto = new EnclosureGroupAdaptor().buildDto(enclosureGroupJson);
         enclosureGroupDto.setDescription("outdated");
 
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(enclosureGroupJson);
@@ -280,7 +310,7 @@ public class EnclosureGroupClientTest {
 
     @Test
     public void testDeleteEnclosureGroup() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn("{}");
 
@@ -290,8 +320,7 @@ public class EnclosureGroupClientTest {
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI, resourceId));
         rp.setType(HttpMethodType.DELETE);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertEquals("A success delete enclosure group call returns \"Deleted\"", "Deleted", result);
     }
@@ -303,7 +332,7 @@ public class EnclosureGroupClientTest {
 
     @Test
     public void testGetConfigurationScript() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(resourceConfigScript);
 
@@ -316,8 +345,7 @@ public class EnclosureGroupClientTest {
                 SdkConstants.SCRIPT));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertEquals("The initial script value is set to \"" + resourceConfigScript + "\"", resourceConfigScript, configScript);
     }
@@ -329,7 +357,7 @@ public class EnclosureGroupClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testGetConfigurationScriptWithNullResponse() {
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(null);
@@ -339,7 +367,7 @@ public class EnclosureGroupClientTest {
 
     @Test
     public void testUpdateConfigurationScript() {
-        Mockito.when(HttpRestClient.sendStringRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.anyString()))
         .thenReturn(resourceConfigScript);
@@ -362,7 +390,7 @@ public class EnclosureGroupClientTest {
 
     @Test (expected = SDKNoResponseException.class)
     public void testUpdateConfigurationScriptWithNullResponse() {
-        Mockito.when(HttpRestClient.sendStringRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),
                 Mockito.anyString()))
         .thenReturn(null);
@@ -376,21 +404,27 @@ public class EnclosureGroupClientTest {
     @Test
     public void testGetId() {
         enclosureGroupJson = this.getJsonFromFile("EnclosureGroupGetByName.json");
-        Mockito.when(HttpRestClient.sendRequestToHPOV(
+        Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureGroupJson);
+
+        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
+        .thenReturn(new EnclosureGroupAdaptor().buildCollectionDto(enclosureGroupJson));
 
         String id = client.getId(params, resourceName);
 
         RestParams rp = new RestParams();
-        rp.setUrl(UrlUtils.createRestQueryUrl(
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + resourceName + "'");
+        rp.setQuery(query);
+
+        rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
-                ResourceUris.ENCLOSURE_GROUP_URI,
-                UrlUtils.createFilterString(resourceName)));
+                ResourceUris.ENCLOSURE_GROUP_URI));
         rp.setType(HttpMethodType.GET);
 
-        PowerMockito.verifyStatic();
-        HttpRestClient.sendRequestToHPOV(Mockito.eq(rp));
+        verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
         assertNotNull(id);
         assertEquals("Based on the JSON file, the return ID must be \"" + resourceId + "\"", resourceId, id);

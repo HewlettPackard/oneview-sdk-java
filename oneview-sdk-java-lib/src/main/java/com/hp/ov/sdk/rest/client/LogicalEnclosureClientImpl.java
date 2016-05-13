@@ -15,6 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -43,22 +46,27 @@ import com.hp.ov.sdk.util.UrlUtils;
 public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EnclosureClientImpl.class);
-    private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
+    private static final int TIMEOUT = 300000; // in milliseconds
 
     private final LogicalEnclosureAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
 
+    private HttpRestClient httpClient;
+
     private JSONObject jsonObject;
 
-    protected LogicalEnclosureClientImpl(LogicalEnclosureAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+    protected LogicalEnclosureClientImpl(HttpRestClient httpClient, LogicalEnclosureAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+        this.httpClient = httpClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
     }
 
     public static LogicalEnclosureClient getClient() {
-        return new LogicalEnclosureClientImpl(new LogicalEnclosureAdaptor(),
+        return new LogicalEnclosureClientImpl(
+                HttpRestClient.getClient(),
+                new LogicalEnclosureAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
     }
@@ -76,7 +84,7 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalEnclosureClientImpl : getLogicalEnclosure : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.LOGICAL_ENCLOSURE, null);
@@ -104,7 +112,7 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI));
 
         // call rest client
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalEnclosureClientImpl : getAllLogicalEnclosures : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -124,18 +132,21 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
     public LogicalEnclosure getLogicalEnclosureByName(RestParams params, String name) {
         LogicalEnclosure logicalEnclosureDto = null;
         LOGGER.info("LogicalEnclosureClientImpl : getLogicalEnclosureByName : Start");
-        // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = UrlUtils.createFilterString(name);
 
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + name + "'");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalEnclosureClientImpl : getLogicalEnclosureByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.LOGICAL_ENCLOSURE, null);
@@ -179,7 +190,7 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(addLogicalEnclosureDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -225,7 +236,7 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(logicalEnclosureDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -270,7 +281,7 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
 
         // create JSON request from dto
         JSONArray jsonArray = adaptor.buildJsonArrayDto(patchDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonArray);
+        returnObj = httpClient.sendRequest(params, jsonArray);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -303,7 +314,7 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalEnclosureClientImpl : deleteLogicalEnclosure : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {
@@ -340,7 +351,7 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
         params.setType(HttpMethodType.PUT);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId, SdkConstants.UPDATE_FROM_GROUP));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalEnclosureClientImpl : updateFromGroup : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.LOGICAL_ENCLOSURE, null);
@@ -378,7 +389,7 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId,
                 SdkConstants.CONFIGURATION));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("LogicalEnclosureClientImpl : updateConfiguration : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.CONFIGURATION,
@@ -416,7 +427,7 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId, SdkConstants.SCRIPT));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("EnclosureV2Client : getScript : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SCRIPT, null);
@@ -450,7 +461,7 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
         // idea is : user can create json string and call the sdk api.
         // user can save time in updating refreshStateConfigDto dto.
 
-        returnObj = HttpRestClient.sendStringRequestToHPOV(params, scriptData);
+        returnObj = httpClient.sendRequest(params, scriptData);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -492,7 +503,7 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(supportDumpDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 

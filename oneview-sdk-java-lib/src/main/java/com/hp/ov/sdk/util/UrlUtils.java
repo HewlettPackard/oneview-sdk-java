@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,9 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-// UrlUtils.java - (insert one line description here)
-// (C) Copyright 2015 Hewlett-Packard Development Company, L.P.
+ */
 
 package com.hp.ov.sdk.util;
 
@@ -24,14 +22,6 @@ public final class UrlUtils {
 
     public static String getResourceIdFromUri(final String uri) {
         return uri.substring(uri.lastIndexOf("/") + 1);
-    }
-
-    public static String createFilterString(final String name) {
-        return SdkConstants.FILTER_PREFIX + name + SdkConstants.FILTER_APPEND;
-    }
-
-    public static String createQueryString(final String name) {
-        return SdkConstants.QUERY_PREFIX + name + SdkConstants.QUERY_APPEND;
     }
 
     public static String createRestUrl(final String hostname, final String uri) {
@@ -66,7 +56,4 @@ public final class UrlUtils {
                 + targetId2;
     }
 
-    public static String createRestQueryUrl(final String hostname, final String uri, final String query) {
-        return SdkConstants.HTTPS + hostname + uri + "?" + query.replaceAll(" ", "%20");
-    }
 }

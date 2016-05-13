@@ -65,15 +65,12 @@ public class MsmbProcessor extends Thread {
                 } else {
                     final byte[] body = chResponse.getBody();
                     final String responseBody = new String(body);
-                    // check for power off/on alerts
-                    // TODO - Geoff feedback. Add separate queue for each
-                    // resources instead of putting in one queue
                     messageQueue.add(responseBody);
 
                 }
-                // TODO - get feedback, is it good idea to sleep in while loop?
+                Thread.sleep(5000);
             }
-        } catch (final IOException e) {
+        } catch (final IOException | InterruptedException e) {
             LOGGER.error("ScmbProcessor : run : error in scmb processor : thread might have been interrupted by Stop user");
         }
     }

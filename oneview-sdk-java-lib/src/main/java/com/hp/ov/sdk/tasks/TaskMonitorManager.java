@@ -15,11 +15,17 @@
  *******************************************************************************/
 package com.hp.ov.sdk.tasks;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.SdkConstants;
+import com.hp.ov.sdk.dto.ErrorMessage;
 import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskState;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
@@ -29,7 +35,7 @@ public class TaskMonitorManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskMonitorManager.class);
 
-    private static final int MILLI_SEC = 1000;
+    private static final int MILLI_SEC = 5000;
 
     private final TaskServiceManager taskServiceManager;
 
@@ -45,45 +51,64 @@ public class TaskMonitorManager {
         return TaskMonitorManagerHolder.INSTANCE;
     }
 
-    public TaskResourceV2 checkStatus(final RestParams params, final String taskUri, final int timeout) {
+    public TaskResourceV2 checkStatus(final RestParams params, final String taskUri, final int timeoutInMilliseconds) throws SDKTasksException {
         LOGGER.info("TaskMonitorManager : checkStatus : start");
+
+        Calendar dateToLive = Calendar.getInstance();
+        dateToLive.add(Calendar.MILLISECOND, timeoutInMilliseconds);
+
         // validate args
         if (null == taskUri) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.TASK_MONITOR, null);
         }
+
         // poll for task state
         while (true) {
-            final TaskResourceV2 taskResourceV2 = taskServiceManager.getTaskResource(params, taskUri);
-            // TODO - extend the condition
-            // stopwatch logic
-            /**
-             * Exit conditions : 1. Task should be completed with 100% 2.
-             * timeout
-             */
+            final TaskResourceV2 taskResourceV2 = this.getTask(params, taskUri);
 
-            LOGGER.debug("TaskMonitorManager : checkStatus : percentageComplete: "
-                    + taskResourceV2.getComputedPercentComplete());
+            LOGGER.debug("TaskMonitorManager : checkStatus : percentageComplete: " + taskResourceV2.getComputedPercentComplete());
             LOGGER.debug("TaskMonitorManager : checkStatus : taskState: " + taskResourceV2.getTaskState());
-            if (taskResourceV2.getTaskState().equals(ResourceStates.Completed)
-                    || taskResourceV2.getPercentComplete() == SdkConstants.PERCENTAGE
-                    || taskResourceV2.getTaskState().equals(ResourceStates.Terminated)) {
+            if (dateToLive.before(Calendar.getInstance())) {
+                LOGGER.error("Task time exceeded: " + dateToLive.getTime() + " < " + Calendar.getInstance().getTime());
+                throw new SDKTasksException(SDKErrorEnum.tasksError,
+                        new String[] {"Task check exceeded the timeout limit of " + timeoutInMilliseconds + " milliseconds."},
+                        null,
+                        new String[] {"Increase the timeout limit."},
+                        SdkConstants.TASK_MONITOR,
+                        null);
+            }
+
+            if (taskResourceV2.getPercentComplete() == SdkConstants.PERCENTAGE_100) {
+                if (taskResourceV2.getTaskState().equals(TaskState.Error)) { // check for errors
+                    List<String> errorMessages = new ArrayList<String>();
+                    List<String> errorRecomendations = new ArrayList<String>();
+
+                    for (ErrorMessage errorMessage : taskResourceV2.getTaskErrors()) {
+                        errorMessages.add(errorMessage.getMessage());
+                        errorRecomendations.addAll(errorMessage.getRecommendedActions());
+                    }
+
+                    throw new SDKTasksException(SDKErrorEnum.tasksError,
+                            errorMessages.toArray(),
+                            null,
+                            errorRecomendations.toArray(),
+                            SdkConstants.TASK_MONITOR,
+                            null);
+                }
+
                 return taskResourceV2;
-            } else if (!taskResourceV2.getTaskErrors().isEmpty()) { // check for
-                                                                    // errors
-                throw new SDKTasksException(SDKErrorEnum.tasksError, null, null, null, SdkConstants.TASK_MONITOR, null);
             }
 
             try {
                 Thread.sleep(MILLI_SEC);
             } catch (final InterruptedException e) {
-                LOGGER.error("interrupt execption in taskMonitor");
+                LOGGER.error("interrupt exception in taskMonitor");
             }
         }
     }
 
     public TaskResourceV2 getTask(final RestParams params, final String taskUri) {
-        // TODO Auto-generated method stub
-        return null;
+        return taskServiceManager.getTaskResource(params, taskUri);
     }
 
 }

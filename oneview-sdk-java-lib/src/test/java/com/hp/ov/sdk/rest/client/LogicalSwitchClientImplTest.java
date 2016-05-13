@@ -22,13 +22,16 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.doReturn;
-import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.spy;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.any;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.junit.Test;
@@ -126,9 +129,14 @@ public class LogicalSwitchClientImplTest {
                 .willReturn(new LogicalSwitchCollection());
 
         RestParams expectedRestParams = new RestParams();
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + anyLogicalSwitchName + "'");
+        expectedRestParams.setQuery(query);
+
         expectedRestParams.setType(HttpMethodType.GET);
-        expectedRestParams.setUrl(UrlUtils.createRestQueryUrl(expectedRestParams.getHostname(),
-                ResourceUris.LOGICAL_SWITCHES_URI, UrlUtils.createFilterString(anyLogicalSwitchName)));
+        expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(),
+                ResourceUris.LOGICAL_SWITCHES_URI));
 
         this.switchClient.getLogicalSwitchByName(new RestParams(), anyLogicalSwitchName);
     }
@@ -147,9 +155,14 @@ public class LogicalSwitchClientImplTest {
                 .willReturn(logicalSwitchCollection);
 
         RestParams expectedRestParams = new RestParams();
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + anyLogicalSwitchName + "'");
+        expectedRestParams.setQuery(query);
+
         expectedRestParams.setType(HttpMethodType.GET);
-        expectedRestParams.setUrl(UrlUtils.createRestQueryUrl(expectedRestParams.getHostname(),
-                ResourceUris.LOGICAL_SWITCHES_URI, UrlUtils.createFilterString(anyLogicalSwitchName)));
+        expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(),
+                ResourceUris.LOGICAL_SWITCHES_URI));
 
         LogicalSwitch logicalSwitch = this.switchClient.getLogicalSwitchByName(new RestParams(),
                 anyLogicalSwitchName);

@@ -15,6 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,16 +137,19 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
     public StorageVolumeV2 getStorageVolumeByName(final RestParams params, final String name) {
         LOGGER.trace("StorageVolumeClientImpl : getStorageVolumeByName : Start");
 
-        // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = UrlUtils.createFilterString(name);
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
                     SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + name + "'");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_VOLUME_URI));
 
         final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("StorageVolumeClientImpl : getStorageVolumeByName : response from OV : " + returnObj);
@@ -468,10 +474,15 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
                     SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("alertFixType", "ExtraManagedStorageVolumePaths");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(),
-                ResourceUris.STORAGE_VOLUME_REPAIR_URI, REPAIR_FILTER));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(),
+                ResourceUris.STORAGE_VOLUME_REPAIR_URI));
 
         final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("StorageVolumeClientImpl : getExtraManagedStorageVolumePaths : response from OV :" + returnObj);

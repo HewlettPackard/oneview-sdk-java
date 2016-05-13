@@ -15,6 +15,13 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.adaptors.FcNetworkAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -31,9 +38,6 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class FcNetworkClientImpl implements FcNetworkClient {
 
@@ -44,9 +48,12 @@ public class FcNetworkClientImpl implements FcNetworkClient {
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
 
+    private HttpRestClient httpClient;
+
     private JSONObject jsonObject;
 
-    protected FcNetworkClientImpl(FcNetworkAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+    protected FcNetworkClientImpl(HttpRestClient httpClient, FcNetworkAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+        this.httpClient = httpClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
@@ -54,6 +61,7 @@ public class FcNetworkClientImpl implements FcNetworkClient {
 
     public static FcNetworkClient getClient() {
         return new FcNetworkClientImpl(
+                HttpRestClient.getClient(),
                 new FcNetworkAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
@@ -71,7 +79,7 @@ public class FcNetworkClientImpl implements FcNetworkClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_NETWORK_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("FcNetworkClientImpl : getFcNetwork : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.FC_NETWORK, null);
@@ -90,17 +98,21 @@ public class FcNetworkClientImpl implements FcNetworkClient {
     public FcNetworkCollection getFcNetworkByFilter(final RestParams params, final Integer start, final Integer count) {
         LOGGER.info("FcNetworkClientImpl : getFcNetworkByFilter : Start");
 
-        final String query = "start=" + start + "&count=" + count;
-
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("start", start.toString());
+        query.put("count", count.toString());
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.FC_NETWORK_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_NETWORK_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("FcNetworkClientImpl : getFcNetworkByFilter : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.FC_NETWORKS, null);
@@ -127,7 +139,7 @@ public class FcNetworkClientImpl implements FcNetworkClient {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_NETWORK_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("FcNetworkClientImpl : getAllFcNetworks : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.FC_NETWORKS, null);
@@ -147,17 +159,20 @@ public class FcNetworkClientImpl implements FcNetworkClient {
 
         LOGGER.info("FcNetworkClientImpl : getFcNetworkByName : Start");
 
-        // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = UrlUtils.createFilterString(name);
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + name + "'");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.FC_NETWORK_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_NETWORK_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("FcNetworkClientImpl : getFcNetworkByName : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.FC_NETWORKS, null);
@@ -212,7 +227,7 @@ public class FcNetworkClientImpl implements FcNetworkClient {
             jsonObject = adaptor.buildJsonObjectFromDto(fcNetworkDto);
 
         }
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -258,7 +273,7 @@ public class FcNetworkClientImpl implements FcNetworkClient {
 
         // create JSON request from dto
         jsonObject = adaptor.buildJsonObjectFromDto(fcNetworkDto);
-        returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
 
@@ -290,7 +305,7 @@ public class FcNetworkClientImpl implements FcNetworkClient {
         params.setType(HttpMethodType.DELETE);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FC_NETWORK_URI, resourceId));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("FcNetworkClientImpl : deleteFcNetwork : response from OV :" + returnObj);
 
         if (null == returnObj || returnObj.equals("")) {

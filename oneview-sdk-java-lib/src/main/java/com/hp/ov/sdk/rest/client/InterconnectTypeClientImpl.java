@@ -15,13 +15,19 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Strings;
 import com.hp.ov.sdk.adaptors.InterconnectTypeAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.InterconnectTypeCollection;
 import com.hp.ov.sdk.dto.InterconnectType;
+import com.hp.ov.sdk.dto.InterconnectTypeCollection;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -29,8 +35,6 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class InterconnectTypeClientImpl implements InterconnectTypeClient {
 
@@ -113,16 +117,19 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
     public InterconnectType getInterconnectTypeByName(final RestParams params, final String name) {
         InterconnectType interconnectTypeDto = null;
         LOGGER.trace("InterconnectTypeClientImpl : getInterconnectTypeByName : Start");
-        // final String query = "filter=\"name=\'" + name + "\'\"";
-        final String query = UrlUtils.createFilterString(name);
 
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + name + "'");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(), ResourceUris.INTERCONNECT_TYPE_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_TYPE_URI));
 
         final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("InterconnectTypeClientImpl : getInterconnectTypeByName : response from OV :" + returnObj);

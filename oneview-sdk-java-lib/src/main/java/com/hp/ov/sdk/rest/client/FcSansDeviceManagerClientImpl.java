@@ -15,6 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -256,16 +259,21 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
     public DeviceManagerResponse getDeviceManagerByName(final RestParams params, final String name) {
         DeviceManagerResponse deviceManagerResponseDto = null;
         LOGGER.trace("DeviceManagerClientImpl : getDeviceManagerByName : Start");
-        final String query = UrlUtils.createQueryString(name);
 
         // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + name + "'");
+        params.setQuery(query);
+
         // set the additional params
         params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestQueryUrl(params.getHostname(),
-                ResourceUris.FC_SANS_DEVICE_MANAGER_URI, query));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(),
+                ResourceUris.FC_SANS_DEVICE_MANAGER_URI));
 
         final String returnObj = restClient.sendRequest(params);
         LOGGER.debug("DeviceManagerClientImpl : getDeviceManagerByName : response from OV :" + returnObj);

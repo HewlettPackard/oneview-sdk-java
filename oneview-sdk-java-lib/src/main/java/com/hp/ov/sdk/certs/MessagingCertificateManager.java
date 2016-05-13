@@ -15,7 +15,10 @@
  *******************************************************************************/
 package com.hp.ov.sdk.certs;
 
-import com.hp.ov.sdk.adaptors.CaCertificateAdaptor;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.adaptors.RabbitMqClientCertAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
@@ -28,27 +31,22 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class MessagingCertificateManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessagingCertificateManager.class);
 
     private final RabbitMqClientCertAdaptor rabbitMqAdaptor;
-    private final CaCertificateAdaptor caCertAdaptor;
+    private HttpRestClient httpClient = HttpRestClient.getClient();
 
     private static class MessagingCertificateManagerHolder {
         private static final MessagingCertificateManager INSTANCE = new MessagingCertificateManager(
-            new RabbitMqClientCertAdaptor(), new CaCertificateAdaptor());
+            new RabbitMqClientCertAdaptor());
     }
 
-    protected MessagingCertificateManager(RabbitMqClientCertAdaptor rabbitMqAdaptor,
-            CaCertificateAdaptor caCertAdaptor) {
+    protected MessagingCertificateManager(RabbitMqClientCertAdaptor rabbitMqAdaptor) {
 
         this.rabbitMqAdaptor = rabbitMqAdaptor;
-        this.caCertAdaptor = caCertAdaptor;
     }
 
     public static MessagingCertificateManager getInstance() {
@@ -62,7 +60,7 @@ public class MessagingCertificateManager {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.RABBIT_MQ_CLIENT_CERT_KEYPAIR));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
 
         LOGGER.debug("SCMBCertificatesImpl : getRabbitMqClientCertificate : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
@@ -94,7 +92,7 @@ public class MessagingCertificateManager {
         params.setType(HttpMethodType.GET);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.CA_CERT_URI));
 
-        final String returnObj = HttpRestClient.sendRequestToHPOV(params);
+        final String returnObj = httpClient.sendRequest(params);
 
         LOGGER.debug("SCMBCertificatesImpl : getCACertificate : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
@@ -128,7 +126,7 @@ public class MessagingCertificateManager {
         // user can save time in creating network rabbitMqClientCertDto.
 
         JSONObject jsonObject = rabbitMqAdaptor.buildJsonObjectFromDto(rabbitMqClientCertDto);
-        String returnObj = HttpRestClient.sendRequestToHPOV(params, jsonObject);
+        String returnObj = httpClient.sendRequest(params, jsonObject);
 
         if (returnObj.equals("")) {
             returnObj = "Created";
