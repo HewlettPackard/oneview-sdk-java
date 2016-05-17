@@ -28,40 +28,40 @@ public enum FirmwareInstallState {
      */
     Activated,
     /**
-     * Indicates HP Smart Update Tool is activating the installed smart components.
+     * Indicates HPE Smart Update Tool is activating the installed smart components.
      */
     Activating,
     /**
-     *  Indicates HP Smart Update Tool has failed installing one or more smart components.
+     *  Indicates HPE Smart Update Tool has failed installing one or more smart components.
      */
     InstallFailed,
     /**
-     * Indicates HP Smart Update Tool has completed installing the smart components,
+     * Indicates HPE Smart Update Tool has completed installing the smart components,
      * however the server needs to be rebooted for the updates to take effect.
      */
     InstalledPendingReboot,
     /**
-     * Indicates HP Smart Update Tool is installing the smart components from the staged location.
+     * Indicates HPE Smart Update Tool is installing the smart components from the staged location.
      */
     Installing,
     /**
      * Indicates the firmware and/or OS driver baseline settings have been applied
-     * to the server hardware and will take effect when HP Smart Update tool updates
+     * to the server hardware and will take effect when HPE Smart Update Tool updates
      * firmware and/or OS driver components based on these settings.
      */
     Pending,
     /**
-     * Indicates HP Smart Update Tool has failed to stage the smart components from
+     * Indicates HPE Smart Update Tool has failed to stage the smart components from
      * the SPP bundle specified in the firmware and/or OS driver baseline settings.
      */
     StageFailed,
     /**
-     * Indicates HP Smart Update Tool has completed staging the smart components
+     * Indicates HPE Smart Update Tool has completed staging the smart components
      * from the SPP bundle specified in the firmware and/or OS driver baseline settings.
      */
     Staged,
     /**
-     * Indicates HP Smart Update Tool is staging the firmware and/or OS driver smart
+     * Indicates HPE Smart Update Tool is staging the firmware and/or OS driver smart
      * components from the SPP bundle specified in the firmware and/or OS driver
      * baseline settings.
      */

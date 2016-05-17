@@ -45,7 +45,7 @@ import com.hp.ov.sdk.util.samples.ResourceDtoUtilsWrapper;
 /*
  * LogicalInterconnectGroupClientSample is a sample program, acts as a recipe for representing the available networks,
  * uplink sets, stacking links, and interconnect settings for a set of physical interconnects in a single enclosure
- * of HP OneView to a logical interconnect group. It invokes APIs of LogicalInterconnectGroupClient which is in sdk
+ * of HPE OneView to a logical interconnect group. It invokes APIs of LogicalInterconnectGroupClient which is in sdk
  * library to perform GET/PUT/POST/DELETE operations on logical interconnect group resource
  */
 public class LogicalInterconnectGroupClientSample {

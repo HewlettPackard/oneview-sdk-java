@@ -52,7 +52,7 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * EnclosureClientSample is a sample program to consume the REST API of c7000 enclosure managed
- * by HP OneView. It invokes APIs of EnclosureClient which is in sdk library to perform GET/PUT/POST/DELETE
+ * by HPE OneView. It invokes APIs of EnclosureClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on enclosure resource
  */
 public class EnclosureClientSample {

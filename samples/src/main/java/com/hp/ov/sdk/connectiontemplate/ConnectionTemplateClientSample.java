@@ -34,7 +34,7 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * ConnectionTemplateClientSample is a sample program to consume default connection configuration characteristics of
- * HP OneView. It invokes APIs of ConnectionTemplateClient which is in sdk library to perform GET/PUT
+ * HPE OneView. It invokes APIs of ConnectionTemplateClient which is in sdk library to perform GET/PUT
  * operations on connection template resource
  */
 public class ConnectionTemplateClientSample {

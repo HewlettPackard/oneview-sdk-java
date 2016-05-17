@@ -43,7 +43,7 @@ import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * StorageVolumeClientSample is a sample program consume the container that is defined over the storage pool in HP OneView.
+ * StorageVolumeClientSample is a sample program consume the container that is defined over the storage pool in HPE OneView.
  * It invokes APIs of StorageVolumeClient which is in sdk library to perform GET/PUT/POST/DELETE operations on storage
  *  volume resource
  */

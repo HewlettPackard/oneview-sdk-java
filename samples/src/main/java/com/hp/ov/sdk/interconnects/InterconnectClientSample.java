@@ -43,7 +43,7 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * InterconnectClientSample is a sample program to consume the characteristics model of an interconnect in
- * HP OneView.It invokes APIs of InterconnectsClient which is in sdk library to perform GET/PUT
+ * HPE OneView.It invokes APIs of InterconnectsClient which is in sdk library to perform GET/PUT
  * operations on interconnect resource
  */
 public class InterconnectClientSample {

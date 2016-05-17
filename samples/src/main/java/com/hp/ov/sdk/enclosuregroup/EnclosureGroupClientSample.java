@@ -40,7 +40,7 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * EnclosureGroupClientSample is a sample program enables/consume to set a common configuration across the enclosure
- * resources of HP OneView. It invokes APIs of EnclosureGroupClient which is in sdk library to perform GET/PUT/POST/DELETE
+ * resources of HPE OneView. It invokes APIs of EnclosureGroupClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on enclosure group resource
  */
 public class EnclosureGroupClientSample {

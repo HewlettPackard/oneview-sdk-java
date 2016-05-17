@@ -49,7 +49,7 @@ import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * UplinkSetClientSample is a sample program to assign/consume networks of HP OneView to uplink ports of interconnect.
+ * UplinkSetClientSample is a sample program to assign/consume networks of HPE OneView to uplink ports of interconnect.
  * It invokes APIs of UplinkSetClient which is in sdk library to perform GET/PUT/POST/DELETE operations
  * on uplink set resource
  */

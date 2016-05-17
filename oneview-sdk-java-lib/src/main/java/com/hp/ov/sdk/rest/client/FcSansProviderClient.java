@@ -24,13 +24,13 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
  * A provider is a software plugin for the SAN Resource Manager that enables the resource manager
  * to communicate with some kind of device that provides SAN network zoning. For example,
  * The SAN Resource Manager includes a provider that communicates with Brocade Network Advisor or
- * HP SAN Network Advisor systems, and another that communicates with HP 5900 series switches.
+ * HPE SAN Network Advisor systems, and another that communicates with HPE 5900 series switches.
  */
 public interface FcSansProviderClient {
 
     /**
      * The module aids in fetching all the SAN providers registered under the current HPE OneView.
-     * 
+     *
      * @param params The {@link RestParams} is a structure containing the connection details.
      *
      * @return {@link ResourceCollection}&lt;{@link SanProviderResponse}&gt; containing
@@ -41,10 +41,10 @@ public interface FcSansProviderClient {
     /**
      * The module aids in fetching the SAN provider for specific SAN provider
      * registered under current HPE OneView.
-     * 
+     *
      * @param params The {@link RestParams} is a structure containing the connection details.
      * @param displayName The name of the provider.
-     * 
+     *
      * @return {@link SanProviderResponse} containing the SAN provider details.
      */
     SanProviderResponse getProviderByName(final RestParams params, final String displayName);
@@ -52,7 +52,7 @@ public interface FcSansProviderClient {
     /**
      * The module aids in fetching the SAN provider resource identifier for the SAN provider
      * name as specified in HPE OneView.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param name

@@ -38,7 +38,7 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * ManagedSanClientSample is a sample program capture/consume the physical or logical fibre channel SAN or a Flat SAN
- * managed by HP OneView. It invokes APIs of ManagedSanClientSample which is in sdk library to perform GET/PUT
+ * managed by HPE OneView. It invokes APIs of ManagedSanClientSample which is in sdk library to perform GET/PUT
  * operations on san resource
  */
 public class FcSansManagedSanClientSample {

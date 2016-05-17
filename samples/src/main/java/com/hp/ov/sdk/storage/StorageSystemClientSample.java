@@ -40,7 +40,7 @@ import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * StorageSystemClientSample is a sample program consume the storage server managed by HP OneView.
+ * StorageSystemClientSample is a sample program consume the storage server managed by HPE OneView.
  * It invokes APIs of StorageSystemClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on storage system resource
  */

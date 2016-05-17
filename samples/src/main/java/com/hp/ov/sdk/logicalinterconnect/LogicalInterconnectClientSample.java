@@ -57,7 +57,7 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * LogicalInterconnectClientSample, sample program consumes the available networks through the interconnect uplinks and
- * downlink capabilities through a physical server’s interfaces of HP OneView. It invokes APIs of LogicalInterconnectClient
+ * downlink capabilities through a physical server’s interfaces of HPE OneView. It invokes APIs of LogicalInterconnectClient
  *  which is in sdk library to perform GET/PUT operations on logical interconnect resource
  */
 public class LogicalInterconnectClientSample {

@@ -83,7 +83,7 @@ public final class EnvironmentalConfiguration implements Serializable {
      * monitoring features of the resource. If the value is iLOAdvanced, then
      * the server hardware must have an iLOAdvanced license applied to
      * environmental monitoring features. If the value is OneView, then it
-     * indicates that there are insufficient HP OneView licenses available to
+     * indicates that there are insufficient HPE OneView licenses available to
      * the appliance to enable environmental management features on the
      * resource. (Required)
      */

@@ -34,7 +34,7 @@ import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * FcNetworkClientSample is a sample program to consume fiber channel networks resource of HP OneView
+ * FcNetworkClientSample is a sample program to consume fiber channel networks resource of HPE OneView
  * It invokes APIs of FcNetworkClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on fiber channel networks resource
  */
