@@ -15,9 +15,9 @@
  */
 package com.hp.ov.sdk.rest.client;
 
-import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplateCollection;
+import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplate;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeTemplate;
-import com.hp.ov.sdk.dto.StorageVolumeTemplateCollection;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface StorageVolumeTemplateClient {
@@ -40,10 +40,10 @@ public interface StorageVolumeTemplateClient {
      * 
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link StorageVolumeTemplateCollection} containing a collection of
-     *         storage volume template details.
+     * @return {@link ResourceCollection}&lt;{@link StorageVolumeTemplate}&gt; containing
+     * the details for all storage volume templates.
      */
-    StorageVolumeTemplateCollection getAllStorageVolumeTemplates(final RestParams params);
+    ResourceCollection<StorageVolumeTemplate> getAllStorageVolumeTemplates(final RestParams params);
 
     /**
      * The module aids in fetching the storage volume template details for the
@@ -122,11 +122,11 @@ public interface StorageVolumeTemplateClient {
      * 
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link ConnectableStorageVolumeTemplateCollection} storage volume templates
-     *         on the specified networks based on the storage system port.
-     * 
+     * @return {@link ResourceCollection}&lt;{@link ConnectableStorageVolumeTemplate}&gt; containing
+     * the details for all found connectable storage volume templates.
+     *
      */
-    ConnectableStorageVolumeTemplateCollection getConnectableVolumeTemplates(final RestParams params);
+    ResourceCollection<ConnectableStorageVolumeTemplate> getConnectableVolumeTemplates(final RestParams params);
 
     /**
      * The module aids in fetching the storage volume template resource identifier for the

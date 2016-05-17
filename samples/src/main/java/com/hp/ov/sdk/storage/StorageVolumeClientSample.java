@@ -17,13 +17,12 @@ package com.hp.ov.sdk.storage;
 
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.AddStorageVolumeV2;
-import com.hp.ov.sdk.dto.AttachableStorageVolumeCollection;
-import com.hp.ov.sdk.dto.ExtraStorageVolumeCollection;
+import com.hp.ov.sdk.dto.AttachableStorageVolume;
+import com.hp.ov.sdk.dto.ExtraStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
-import com.hp.ov.sdk.dto.StorageVolumeCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeProvisioningParameters;
 import com.hp.ov.sdk.dto.StorageVolumeSnapshot;
-import com.hp.ov.sdk.dto.StorageVolumeSnapshotCollection;
 import com.hp.ov.sdk.dto.StorageVolumeV2;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -104,7 +103,7 @@ public class StorageVolumeClientSample {
 
     private void getAllStorageVolume() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        StorageVolumeCollection storageVolumeCollectionDto = null;
+        ResourceCollection<StorageVolumeV2> storageVolumeCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -341,7 +340,7 @@ public class StorageVolumeClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
-            AttachableStorageVolumeCollection attachableVolumes = storageVolumeClient.getAttachableVolumes(params);
+            ResourceCollection<AttachableStorageVolume> attachableVolumes = storageVolumeClient.getAttachableVolumes(params);
 
             System.out.println("StorageVolumeClientTest : getAttachableVolumes : attachableVolumes object returned to client : "
                     + attachableVolumes.toString());
@@ -402,7 +401,7 @@ public class StorageVolumeClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
-            StorageVolumeSnapshotCollection storageVolumeSnapshots
+            ResourceCollection<StorageVolumeSnapshot> storageVolumeSnapshots
                     = storageVolumeClient.getAllStorageVolumeSnapshots(params, resourceId);
 
             System.out.println("StorageVolumeClientTest : getAllStorageVolumeSnapshots :" +
@@ -516,7 +515,7 @@ public class StorageVolumeClientSample {
              * indicates sync vs async useJsonRequest parameter indicates
              * whether json input request present or not
              */
-            ExtraStorageVolumeCollection extraAccessList = storageVolumeClient.getExtraManagedStorageVolumePaths(params);
+            ResourceCollection<ExtraStorageVolume> extraAccessList = storageVolumeClient.getExtraManagedStorageVolumePaths(params);
 
             System.out.println("StorageVolumeClientTest : getExtraManagedStorageVolumePaths : extra access list object returned to client : "
                     + extraAccessList);

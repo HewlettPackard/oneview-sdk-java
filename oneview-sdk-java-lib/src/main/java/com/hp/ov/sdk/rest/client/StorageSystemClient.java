@@ -18,11 +18,10 @@ package com.hp.ov.sdk.rest.client;
 import java.util.List;
 
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
-import com.hp.ov.sdk.dto.StoragePoolCollection;
-import com.hp.ov.sdk.dto.StorageSystemCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.StorageSystemV2;
-import com.hp.ov.sdk.dto.StorageTargetPortCollection;
-import com.hp.ov.sdk.dto.StorageTargetPortV2;
+import com.hp.ov.sdk.dto.StorageTargetPort;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface StorageSystemClient {
@@ -47,9 +46,10 @@ public interface StorageSystemClient {
      *            The {@link RestParams} is a structure containing the connection details.
      * @param arrayId
      *            The array identifier for a storage system as seen in HPE OneView.
-     * @return {@link StoragePoolCollection} containing a collection of storage system details.
+     * @return {@link ResourceCollection}&lt;{@link StoragePool}&gt; containing
+     * the details for all found storage pools.
      */
-    StoragePoolCollection getStoragePoolsForStorageSystem(final RestParams params, final String arrayId);
+    ResourceCollection<StoragePool> getStoragePoolsForStorageSystem(final RestParams params, final String arrayId);
 
     /**
      * This module aids in retrieving all managed target ports for the specified storage system.
@@ -58,9 +58,10 @@ public interface StorageSystemClient {
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
      *            The resource identifier for a storage system as seen in HPE OneView.
-     * @return {@link StorageTargetPortCollection} containing a collection of storage target port details.
+     * @return {@link ResourceCollection}&lt;{@link StorageTargetPort}&gt; containing
+     * the details for all found storage target ports.
      */
-    StorageTargetPortCollection getAllManagedPortsForStorageSystem(final RestParams params, final String resourceId);
+    ResourceCollection<StorageTargetPort> getAllManagedPortsForStorageSystem(final RestParams params, final String resourceId);
 
     /**
      * This module aids in retrieving a managed target ports for the specified storage system.
@@ -71,9 +72,9 @@ public interface StorageSystemClient {
      *            The resource identifier for storage system as seen in HPE OneView.
      * @param targetPortId
      *            The target port identifier where the managed port is defined.
-     * @return {2link StorageTargetPortV2} containing the storage target port details.
+     * @return {@link StorageTargetPort} containing the storage target port details.
      */
-    StorageTargetPortV2 getManagedPortsForStorageSystem(final RestParams params, final String resourceId,
+    StorageTargetPort getManagedPortsForStorageSystem(final RestParams params, final String resourceId,
             final String targetPortId);
 
     /**
@@ -91,9 +92,10 @@ public interface StorageSystemClient {
      *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link StorageSystemCollection} containing a collection storage system details.
+     * @return {@link ResourceCollection}&lt;{@link StorageSystemV2}&gt; containing
+     * the details for all found storage systems.
      */
-    StorageSystemCollection getAllStorageSystems(final RestParams params);
+    ResourceCollection<StorageSystemV2> getAllStorageSystems(final RestParams params);
 
     /**
      * The module aids in fetching the storage system details for the

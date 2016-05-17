@@ -22,11 +22,11 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.adaptors.ConnectionTemplateAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.ConnectionTemplateCollection;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.generated.ConnectionTemplate;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -40,19 +40,18 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionTemplateClientImpl.class);
 
-    private final ConnectionTemplateAdaptor adaptor;
-
-    private HttpRestClient httpClient;
+    private final HttpRestClient httpClient;
+    private final ResourceAdaptor adaptor;
 
     private JSONObject jsonObject;
 
-    protected ConnectionTemplateClientImpl(HttpRestClient httpClient, ConnectionTemplateAdaptor adaptor) {
+    protected ConnectionTemplateClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor) {
         this.httpClient = httpClient;
         this.adaptor = adaptor;
     }
 
     public static ConnectionTemplateClient getClient() {
-        return new ConnectionTemplateClientImpl(HttpRestClient.getClient(), new ConnectionTemplateAdaptor());
+        return new ConnectionTemplateClientImpl(HttpRestClient.getClient(), new ResourceAdaptor());
     }
 
     @Override
@@ -74,9 +73,8 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.CONNECTION_TEMPLATE, null);
         }
-        // Call adaptor to convert to DTO
 
-        connectionTemplateDto = adaptor.buildDto(returnObj);
+        connectionTemplateDto = adaptor.buildResourceObject(returnObj, ConnectionTemplate.class);
 
         LOGGER.debug("ConnectionTemplateImpl : getConnectionTemplate : name :" + connectionTemplateDto.getName());
         LOGGER.info("ConnectionTemplateImpl : getConnectionTemplate : End");
@@ -87,7 +85,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
     @Override
     public ConnectionTemplate getConnectionTemplateByName(final RestParams params, final String resourceName) {
         ConnectionTemplate connectionTemplateDto = null;
-        ConnectionTemplateCollection connectionTemplateCollectionDto = null;
+        ResourceCollection<ConnectionTemplate> connectionTemplateCollectionDto = null;
 
         LOGGER.info("ConnectionTemplateClientImpl : getConnectionTemplateByName : Start");
 
@@ -112,7 +110,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         }
         // Call adaptor to convert to DTO
 
-        connectionTemplateCollectionDto = adaptor.buildCollectionDto(returnObj);
+        connectionTemplateCollectionDto = adaptor.buildResourceCollection(returnObj, ConnectionTemplate.class);
         if (connectionTemplateCollectionDto.getCount() != 0) {
             connectionTemplateDto = connectionTemplateCollectionDto.getMembers().get(0);
         } else {
@@ -156,11 +154,11 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
         // user can save time in creating connectionTemplate dto.
 
         // create JSON request from dto
-        jsonObject = adaptor.buildJsonObjectFromDto(connectionTemplateDto);
+        jsonObject = adaptor.buildJsonRequest(connectionTemplateDto, params.getApiVersion());
 
         returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
-        connectionTemplateDto = adaptor.buildDto(returnObj);
+        connectionTemplateDto = adaptor.buildResourceObject(returnObj, ConnectionTemplate.class);
 
         LOGGER.debug("ConnectionTemplateClientImpl : updateConnectionTemplate : returnObj =" + returnObj);
 
@@ -170,8 +168,8 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
     }
 
     @Override
-    public ConnectionTemplateCollection getAllConnectionTemplates(final RestParams params) {
-        ConnectionTemplateCollection connectionTemplateCollectionDto = null;
+    public ResourceCollection<ConnectionTemplate> getAllConnectionTemplates(final RestParams params) {
+        ResourceCollection<ConnectionTemplate> connectionTemplateCollectionDto = null;
         LOGGER.info("ConnectionTemplateImpl : getAllConnectionTemplates : Start");
 
         // validate args
@@ -188,9 +186,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.CONNECTION_TEMPLATE, null);
         }
-        // Call adaptor to convert to DTO
-
-        connectionTemplateCollectionDto = adaptor.buildCollectionDto(returnObj);
+        connectionTemplateCollectionDto = adaptor.buildResourceCollection(returnObj, ConnectionTemplate.class);
 
         LOGGER.debug("ConnectionTemplateImpl : getAllConnectionTemplates : count :" + connectionTemplateCollectionDto.getCount());
         LOGGER.info("ConnectionTemplateImpl : getAllConnectionTemplates : End");
@@ -217,9 +213,8 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.CONNECTION_TEMPLATE, null);
         }
-        // Call adaptor to convert to DTO
 
-        connectionTemplateDto = adaptor.buildDto(returnObj);
+        connectionTemplateDto = adaptor.buildResourceObject(returnObj, ConnectionTemplate.class);
 
         LOGGER.debug("ConnectionTemplateImpl : getDefaultConnectionTemplateForConnectionTemplate : name :"
                 + connectionTemplateDto.getName());

@@ -20,12 +20,12 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.adaptors.FirmwareDriverAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.FwBaselineCollection;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.FwBaseline;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
@@ -42,12 +42,12 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(FirmwareDriverClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
 
-    private final FirmwareDriverAdaptor adaptor;
+    private final ResourceAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
-    private HttpRestClient httpClient;
+    private final HttpRestClient httpClient;
 
-    protected FirmwareDriverClientImpl(HttpRestClient httpClient, FirmwareDriverAdaptor adaptor,
+    protected FirmwareDriverClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor,
         TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
         this.httpClient = httpClient;
         this.adaptor = adaptor;
@@ -58,7 +58,7 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
     public static FirmwareDriverClient getClient() {
         return new FirmwareDriverClientImpl(
                 HttpRestClient.getClient(),
-                new FirmwareDriverAdaptor(),
+                new ResourceAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
     }
@@ -81,9 +81,8 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.FIRMWARE_DRIVER,
                     null);
         }
-        // Call adaptor to convert to DTO
 
-        final FwBaseline fwBaselineDto = adaptor.buildDto(returnObj);
+        FwBaseline fwBaselineDto = adaptor.buildResourceObject(returnObj, FwBaseline.class);
 
         LOGGER.debug("FirmwareDriverClientImpl : getFirmwareDriver : name :" + fwBaselineDto.getName());
         LOGGER.info("FirmwareDriverClientImpl : getFirmwareDriver : End");
@@ -92,7 +91,7 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
     }
 
     @Override
-    public FwBaselineCollection getAllFirmwareDrivers(final RestParams params) {
+    public ResourceCollection<FwBaseline> getAllFirmwareDrivers(final RestParams params) {
         LOGGER.info("FirmwareDriverClientImpl : getAllFirmwareDrivers : Start");
 
         // validate args
@@ -109,9 +108,9 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.FIRMWARE_DRIVER,
                     null);
         }
-        // Call adaptor to convert to DTO
 
-        final FwBaselineCollection fwBaselineCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<FwBaseline> fwBaselineCollectionDto
+                = adaptor.buildResourceCollection(returnObj, FwBaseline.class);
 
         LOGGER.debug("FirmwareDriverClientImpl : getAllFirmwareDrivers : count :" + fwBaselineCollectionDto.getCount());
         LOGGER.info("FirmwareDriverClientImpl : getAllFirmwareDrivers : End");
@@ -126,7 +125,8 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
-        final FwBaselineCollection fwBaselineCollectionDto = getAllFirmwareDrivers(params);
+        ResourceCollection<FwBaseline> fwBaselineCollectionDto = getAllFirmwareDrivers(params);
+
         for (final FwBaseline fwBaselineDto : new ArrayList<>(fwBaselineCollectionDto.getMembers())) {
             if ((fwBaselineDto.getName().replaceAll(" ", "")).equalsIgnoreCase((firmwareName.replaceAll(" ", "")))) {
                 System.out.println(fwBaselineDto.getName());

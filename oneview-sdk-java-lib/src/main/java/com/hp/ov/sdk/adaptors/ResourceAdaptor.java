@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
@@ -31,6 +32,14 @@ public class ResourceAdaptor {
         String sourceReplaced = this.applyReplacementsOnSource(source);
 
         return (List<T>) converter.convertJsonToListObject(sourceReplaced, listAndResourceType);
+    }
+
+    public <T> ResourceCollection<T> buildResourceCollection(String source, Class<T> resourceClass) {
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
+        String sourceReplaced = this.applyReplacementsOnSource(source);
+
+        return converter.convertJsonToResourceCollection(sourceReplaced, resourceClass);
     }
 
     public <T> T buildResourceObject(String source, Class<T> resourceClass) {

@@ -18,7 +18,7 @@ package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.AddLogicalSwitch;
 import com.hp.ov.sdk.dto.LogicalSwitch;
-import com.hp.ov.sdk.dto.LogicalSwitchCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
@@ -72,10 +72,10 @@ public interface LogicalSwitchClient {
      *
      * @param params structure containing the connection details.
      *
-     * @return {@link LogicalSwitchCollection} object containing the details
-     * for all the logical switches found in HPE OneView.
+     * @return {@link ResourceCollection}&lt;{@link LogicalSwitch}&gt; containing
+     * the details for all found logical switches.
      */
-    LogicalSwitchCollection getAllLogicalSwitches(RestParams params);
+    ResourceCollection<LogicalSwitch> getAllLogicalSwitches(RestParams params);
 
     /**
      * Creates a logical switch according to the provided {@link LogicalSwitch}

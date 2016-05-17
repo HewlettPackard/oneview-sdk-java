@@ -17,7 +17,7 @@
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
-import com.hp.ov.sdk.dto.DeviceManagerResponseCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
@@ -48,9 +48,10 @@ public interface FcSansDeviceManagerClient {
      * current HPE OneView.
      *
      * @param params The {@link RestParams} is a structure containing the connection details.
-     * @return {@link DeviceManagerResponseCollection} containing the device managers details.
+     * @return {@link ResourceCollection}&lt;{@link DeviceManagerResponse}&gt; containing
+     * the details for all found device managers.
      */
-    DeviceManagerResponseCollection getAllDeviceManager(final RestParams params);
+    ResourceCollection<DeviceManagerResponse> getAllDeviceManager(final RestParams params);
 
     /**
      * The module aids in fetching the device manager registered under current HPE OneView.

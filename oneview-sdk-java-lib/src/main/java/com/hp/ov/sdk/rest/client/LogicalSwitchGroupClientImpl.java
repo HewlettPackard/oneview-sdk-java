@@ -29,7 +29,7 @@ import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.LogicalSwitchGroup;
-import com.hp.ov.sdk.dto.LogicalSwitchGroupCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -124,10 +124,10 @@ public class LogicalSwitchGroupClientImpl implements LogicalSwitchGroupClient {
         }
 
         LogicalSwitchGroup logicalSwitchGroup = null;
-        LogicalSwitchGroupCollection groupCollection = adaptor.buildResourceObject(response,
-                LogicalSwitchGroupCollection.class);
+        ResourceCollection<LogicalSwitchGroup> groupCollection = adaptor.buildResourceCollection(response,
+                LogicalSwitchGroup.class);
 
-        if (groupCollection.getCount() > 0) {
+        if (!groupCollection.isEmpty()) {
             logicalSwitchGroup = groupCollection.getMembers().get(0);
         }
 
@@ -144,7 +144,7 @@ public class LogicalSwitchGroupClientImpl implements LogicalSwitchGroupClient {
     }
 
     @Override
-    public LogicalSwitchGroupCollection getAllLogicalSwitchGroups(RestParams params) {
+    public ResourceCollection<LogicalSwitchGroup> getAllLogicalSwitchGroups(RestParams params) {
         LOGGER.trace("LogicalSwitchGroupClientImpl : getAllLogicalSwitchGroups : Start");
 
         if (params == null) {
@@ -164,8 +164,8 @@ public class LogicalSwitchGroupClientImpl implements LogicalSwitchGroupClient {
                     SdkConstants.LOGICAL_SWITCH_GROUPS, null);
         }
 
-        LogicalSwitchGroupCollection collection = adaptor.buildResourceObject(response,
-                LogicalSwitchGroupCollection.class);
+        ResourceCollection<LogicalSwitchGroup> collection = adaptor.buildResourceCollection(response,
+                LogicalSwitchGroup.class);
 
         LOGGER.trace("LogicalSwitchGroupClientImpl : getAllLogicalSwitchGroups : End");
 

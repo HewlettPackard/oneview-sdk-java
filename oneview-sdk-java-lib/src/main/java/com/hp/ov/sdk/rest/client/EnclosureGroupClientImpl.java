@@ -22,12 +22,12 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.adaptors.EnclosureGroupAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.EnclosureGroupCollectionV2;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.generated.EnclosureGroups;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -42,21 +42,20 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(EnclosureGroupClientImpl.class);
 
-    private final EnclosureGroupAdaptor adaptor;
+    private final ResourceAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
-
-    private HttpRestClient httpClient;
+    private final HttpRestClient httpClient;
 
     private JSONObject jsonObject;
 
-    protected EnclosureGroupClientImpl(HttpRestClient httpClient, EnclosureGroupAdaptor adaptor, TaskAdaptor taskAdaptor) {
+    protected EnclosureGroupClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor, TaskAdaptor taskAdaptor) {
         this.httpClient = httpClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
     }
 
     public static EnclosureGroupClient getClient() {
-        return new EnclosureGroupClientImpl(HttpRestClient.getClient(), new EnclosureGroupAdaptor(), TaskAdaptor.getInstance());
+        return new EnclosureGroupClientImpl(HttpRestClient.getClient(), new ResourceAdaptor(), TaskAdaptor.getInstance());
     }
 
     @Override
@@ -77,8 +76,8 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE_GROUP,
                     null);
         }
-        // Call adaptor to convert to DTO
-        final EnclosureGroups enclosureGroupDto = adaptor.buildDto(returnObj);
+
+        final EnclosureGroups enclosureGroupDto = adaptor.buildResourceObject(returnObj, EnclosureGroups.class);
 
         LOGGER.debug("EnclosureGroupClientImpl : getEnclosureGroup : Name :" + enclosureGroupDto.getName());
         LOGGER.info("EnclosureGroupClientImpl : getEnclosureGroup : End");
@@ -87,7 +86,7 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
     }
 
     @Override
-    public EnclosureGroupCollectionV2 getAllEnclosureGroups(final RestParams params) {
+    public ResourceCollection<EnclosureGroups> getAllEnclosureGroups(final RestParams params) {
         LOGGER.info("EnclosureGroupClientImpl : getAllEnclosureGroups : Start");
         // validate args
         if (null == params) {
@@ -105,9 +104,9 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE_GROUPS,
                     null);
         }
-        // Call adaptor to convert to DTO
 
-        final EnclosureGroupCollectionV2 enclosureGroupCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<EnclosureGroups> enclosureGroupCollectionDto
+                = adaptor.buildResourceCollection(returnObj, EnclosureGroups.class);
 
         LOGGER.debug("EnclosureGroupClientImpl : getAllEnclosureGroups : members count :" + enclosureGroupCollectionDto.getCount());
         LOGGER.info("EnclosureGroupClientImpl : getAllEnclosureGroups : End");
@@ -139,10 +138,11 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE_GROUPS,
                     null);
         }
-        // Call adaptor to convert to DTO
 
-        final EnclosureGroupCollectionV2 enclosureGroupCollectionDto = adaptor.buildCollectionDto(returnObj);
-        if (enclosureGroupCollectionDto.getCount() != 0) {
+        ResourceCollection<EnclosureGroups> enclosureGroupCollectionDto
+                = adaptor.buildResourceCollection(returnObj, EnclosureGroups.class);
+
+        if (!enclosureGroupCollectionDto.isEmpty()) {
             enclosureGroupDto = enclosureGroupCollectionDto.getMembers().get(0);
         } else {
             enclosureGroupDto = null;
@@ -180,7 +180,7 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
 
         // create JSON request from dto
 
-        jsonObject = adaptor.buildJsonObjectFromDto(dto, params.getApiVersion());
+        jsonObject = adaptor.buildJsonRequest(dto, params.getApiVersion());
         returnObj = httpClient.sendRequest(params, jsonObject);
 
         // convert returnObj to enclosureresourceV2
@@ -220,7 +220,7 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
         // user can save time in creating network dto.
 
         // create JSON request from dto
-        jsonObject = adaptor.buildJsonObjectFromDto(enclosureGroupDto, params.getApiVersion());
+        jsonObject = adaptor.buildJsonRequest(enclosureGroupDto, params.getApiVersion());
         returnObj = httpClient.sendRequest(params, jsonObject);
 
         // convert returnObj to taskResource

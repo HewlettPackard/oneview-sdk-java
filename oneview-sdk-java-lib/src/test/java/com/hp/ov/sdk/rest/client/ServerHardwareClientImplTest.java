@@ -51,8 +51,8 @@ import com.hp.ov.sdk.dto.IloSsoUrlResult;
 import com.hp.ov.sdk.dto.JavaRemoteConsoleUrlResult;
 import com.hp.ov.sdk.dto.RefreshStateRequest;
 import com.hp.ov.sdk.dto.RemoteConsoleUrlResult;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.ServerHardware;
-import com.hp.ov.sdk.dto.ServerHardwareCollection;
 import com.hp.ov.sdk.dto.ServerPowerControlRequest;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.UtilizationData;
@@ -137,8 +137,8 @@ public class ServerHardwareClientImplTest {
                 "\"members\":[]}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(serverHardwareCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(ServerHardwareCollection.class)))
-                .willReturn(new ServerHardwareCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(ServerHardware.class)))
+                .willReturn(new ResourceCollection<ServerHardware>());
 
         this.serverClient.getServerHardwareByName(new RestParams(), anyServerHardwareName);
     }
@@ -148,13 +148,13 @@ public class ServerHardwareClientImplTest {
         String anyServerHardwareName = "random-NAME";
         String serverHardwareCollectionValue = "{\"type\":\"server-hardware-list-4\"," +
                 "\"members\":[{\"type\":\"server-hardware-4\"}]}";
-        ServerHardwareCollection serverHardwareCollection = new ServerHardwareCollection();
+        ResourceCollection<ServerHardware> serverHardwareCollection = new ResourceCollection<>();
 
         ServerHardware serverHardware = new ServerHardware();
         serverHardwareCollection.setMembers(Lists.newArrayList(serverHardware));
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(serverHardwareCollectionValue);
-        given(adaptor.buildResourceObject(serverHardwareCollectionValue, ServerHardwareCollection.class))
+        given(adaptor.buildResourceCollection(serverHardwareCollectionValue, ServerHardware.class))
                 .willReturn(serverHardwareCollection);
 
         RestParams expectedRestParams = new RestParams();
@@ -170,8 +170,8 @@ public class ServerHardwareClientImplTest {
         ServerHardware response = this.serverClient.getServerHardwareByName(new RestParams(), anyServerHardwareName);
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildResourceObject(eq(serverHardwareCollectionValue),
-                eq(ServerHardwareCollection.class));
+        then(adaptor).should().buildResourceCollection(eq(serverHardwareCollectionValue),
+                eq(ServerHardware.class));
 
         assertThat(response, sameInstance(serverHardware));
     }
@@ -194,8 +194,8 @@ public class ServerHardwareClientImplTest {
                 "\"members\":[{\"type\":\"server-hardware-4\"}]}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(serverHardwareCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(ServerHardwareCollection.class)))
-                .willReturn(new ServerHardwareCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(ServerHardware.class)))
+                .willReturn(new ResourceCollection<ServerHardware>());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -205,8 +205,8 @@ public class ServerHardwareClientImplTest {
         this.serverClient.getAllServerHardware(new RestParams());
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildResourceObject(eq(serverHardwareCollectionValue),
-                eq(ServerHardwareCollection.class));
+        then(adaptor).should().buildResourceCollection(eq(serverHardwareCollectionValue),
+                eq(ServerHardware.class));
     }
 
     @Test(expected = SDKInvalidArgumentException.class)

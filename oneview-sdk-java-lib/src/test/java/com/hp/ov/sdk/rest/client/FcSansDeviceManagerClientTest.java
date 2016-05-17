@@ -43,11 +43,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
 import com.hp.ov.sdk.adaptors.DeviceManagerAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
-import com.hp.ov.sdk.dto.DeviceManagerResponseCollection;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -76,6 +77,8 @@ public class FcSansDeviceManagerClientTest {
 
     @Mock
     private DeviceManagerAdaptor adaptor;
+    @Mock
+    private ResourceAdaptor resourceAdaptor;
     @Mock
     private TaskAdaptor taskAdaptor;
     @Mock
@@ -133,7 +136,8 @@ public class FcSansDeviceManagerClientTest {
         String deviceManagerResponseList = this.getJsonFromFile("DeviceManagerResponseList.json");
 
         given(client.sendRequest(any(RestParams.class))).willReturn(deviceManagerResponseList);
-        given(adaptor.buildCollectionDto(anyObject())).willReturn(new DeviceManagerResponseCollection());
+        given(resourceAdaptor.buildResourceCollection(anyString(), eq(DeviceManagerResponse.class)))
+                .willReturn(new ResourceCollection<DeviceManagerResponse>());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -143,7 +147,7 @@ public class FcSansDeviceManagerClientTest {
         this.deviceManagerClient.getAllDeviceManager(new RestParams());
 
         then(client).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildCollectionDto(deviceManagerResponseList);
+        then(resourceAdaptor).should().buildResourceCollection(deviceManagerResponseList, DeviceManagerResponse.class);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -239,11 +243,11 @@ public class FcSansDeviceManagerClientTest {
         String anyName = "random-NAME";
         String deviceManagerResponseList = this.getJsonFromFile("DeviceManagerResponseList.json");
 
-        DeviceManagerResponseCollection deviceManagerResponse = new DeviceManagerResponseCollection();
-        deviceManagerResponse.setCount(0);
+        ResourceCollection<DeviceManagerResponse> deviceManagerResponse = new ResourceCollection<>();
 
         given(client.sendRequest(any(RestParams.class))).willReturn(deviceManagerResponseList);
-        given(adaptor.buildCollectionDto(anyObject())).willReturn(deviceManagerResponse);
+        given(resourceAdaptor.buildResourceCollection(anyString(), eq(DeviceManagerResponse.class)))
+                .willReturn(deviceManagerResponse);
 
         this.deviceManagerClient.getDeviceManagerByName(new RestParams(), anyName);
     }
@@ -253,13 +257,13 @@ public class FcSansDeviceManagerClientTest {
         String anyName = "random-NAME";
         String deviceManagerResponseList = this.getJsonFromFile("DeviceManagerResponseList.json");
 
-        DeviceManagerResponseCollection deviceManagerResponse = new DeviceManagerResponseCollection();
+        ResourceCollection<DeviceManagerResponse> deviceManagerResponse = new ResourceCollection<>();
 
-        deviceManagerResponse.setCount(1);
         deviceManagerResponse.setMembers(Lists.newArrayList(new DeviceManagerResponse()));
 
         given(client.sendRequest(any(RestParams.class))).willReturn(deviceManagerResponseList);
-        given(adaptor.buildCollectionDto(anyObject())).willReturn(deviceManagerResponse);
+        given(resourceAdaptor.buildResourceCollection(anyString(), eq(DeviceManagerResponse.class)))
+                .willReturn(deviceManagerResponse);
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -274,7 +278,7 @@ public class FcSansDeviceManagerClientTest {
         this.deviceManagerClient.getDeviceManagerByName(new RestParams(), anyName);
 
         then(client).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildCollectionDto(deviceManagerResponseList);
+        then(resourceAdaptor).should().buildResourceCollection(deviceManagerResponseList, DeviceManagerResponse.class);
     }
 
     @Test

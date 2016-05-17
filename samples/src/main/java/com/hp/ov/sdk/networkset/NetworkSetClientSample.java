@@ -18,7 +18,7 @@ package com.hp.ov.sdk.networkset;
 import java.util.Arrays;
 import java.util.List;
 
-import com.hp.ov.sdk.dto.NetworkSetCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.NetworkSets;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -93,7 +93,7 @@ public class NetworkSetClientSample {
     }
 
     private void getAllNetworkSet() throws InstantiationException, IllegalAccessException {
-        NetworkSetCollection networkSetCollectionDto = null;
+        ResourceCollection<NetworkSets> networkSetCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();

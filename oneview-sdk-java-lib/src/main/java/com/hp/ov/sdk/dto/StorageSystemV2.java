@@ -38,7 +38,7 @@ public class StorageSystemV2 extends BaseModelResource {
     private String freeCapacity;
     private String managedDomain;
     private List<StoragePool> managedPools = new ArrayList<StoragePool>();
-    private List<StorageTargetPortV2> managedPorts = new ArrayList<StorageTargetPortV2>();
+    private List<StorageTargetPort> managedPorts = new ArrayList<>();
     private String model;
     private RefreshState refreshState;
     private String serialNumber;
@@ -154,7 +154,7 @@ public class StorageSystemV2 extends BaseModelResource {
      * 
      * @return The managedPorts
      */
-    public List<StorageTargetPortV2> getManagedPorts() {
+    public List<StorageTargetPort> getManagedPorts() {
         return managedPorts;
     }
 
@@ -163,7 +163,7 @@ public class StorageSystemV2 extends BaseModelResource {
      * @param managedPorts
      *            The managedPorts
      */
-    public void setManagedPorts(final List<StorageTargetPortV2> managedPorts) {
+    public void setManagedPorts(final List<StorageTargetPort> managedPorts) {
         this.managedPorts = managedPorts;
     }
 

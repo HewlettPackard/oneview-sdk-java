@@ -27,8 +27,8 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.FcoeNetwork;
-import com.hp.ov.sdk.dto.FcoeNetworkCollection;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -93,7 +93,7 @@ public class FcoeNetworkClientImpl implements FcoeNetworkClient {
     }
 
     @Override
-    public FcoeNetworkCollection getAllFcoeNetworks(RestParams params) {
+    public ResourceCollection<FcoeNetwork> getAllFcoeNetworks(RestParams params) {
         LOGGER.trace("FcoeNetworkClientImpl : getAllFcoeNetworks : Start");
 
         if (params == null) {
@@ -113,7 +113,7 @@ public class FcoeNetworkClientImpl implements FcoeNetworkClient {
                     SdkConstants.FCOE_NETWORKS, null);
         }
 
-        FcoeNetworkCollection fcoeNetworks = adaptor.buildResourceObject(response, FcoeNetworkCollection.class);
+        ResourceCollection<FcoeNetwork> fcoeNetworks = adaptor.buildResourceCollection(response, FcoeNetwork.class);
 
         LOGGER.trace("FcoeNetworkClientImpl : getAllFcoeNetworks : End");
 
@@ -147,10 +147,10 @@ public class FcoeNetworkClientImpl implements FcoeNetworkClient {
         }
 
         FcoeNetwork fcoeNetwork = null;
-        FcoeNetworkCollection fcoeNetworkCollection = adaptor.buildResourceObject(returnObj,
-                FcoeNetworkCollection.class);
+        ResourceCollection<FcoeNetwork> fcoeNetworkCollection = adaptor.buildResourceCollection(returnObj,
+                FcoeNetwork.class);
 
-        if (fcoeNetworkCollection.getCount() != 0) {
+        if (!fcoeNetworkCollection.isEmpty()) {
             fcoeNetwork = fcoeNetworkCollection.getMembers().get(0);
         }
 

@@ -17,11 +17,11 @@ package com.hp.ov.sdk.rest.client;
 
 import java.util.List;
 
-import com.hp.ov.sdk.dto.InterconnectsCollection;
 import com.hp.ov.sdk.dto.InterconnectsStatistics;
 import com.hp.ov.sdk.dto.NameServer;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.PortStatistics;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SubportStatistics;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.Interconnects;
@@ -60,9 +60,10 @@ public interface InterconnectsClient {
      *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link InterconnectsCollection} containing a collection of interconnects details.
+     * @return {@link ResourceCollection}&lt;{@link Interconnects}&gt; containing
+     * the details for all found interconnects.
      */
-    InterconnectsCollection getAllInterconnects(final RestParams params);
+    ResourceCollection<Interconnects> getAllInterconnects(final RestParams params);
 
     /**
      * Performs a specific patch operation for the given interconnect. There are a limited

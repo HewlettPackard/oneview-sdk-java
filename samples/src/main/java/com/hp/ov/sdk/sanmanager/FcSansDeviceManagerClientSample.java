@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
-import com.hp.ov.sdk.dto.DeviceManagerResponseCollection;
 import com.hp.ov.sdk.dto.Property;
 import com.hp.ov.sdk.dto.RefreshState;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SanProviderResponse;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -149,7 +149,7 @@ public class FcSansDeviceManagerClientSample {
 
     private void getAllDeviceManager() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        DeviceManagerResponseCollection deviceManagerResponseCollectionDto = null;
+        ResourceCollection<DeviceManagerResponse> deviceManagerResponseCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();

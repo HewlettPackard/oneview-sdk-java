@@ -23,7 +23,6 @@ import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
@@ -45,11 +44,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
 import com.hp.ov.sdk.adaptors.NetworkAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.JsonRequest;
-import com.hp.ov.sdk.dto.NetworkCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.Bandwidth;
 import com.hp.ov.sdk.dto.generated.BulkEthernetNetwork;
@@ -75,7 +75,7 @@ public class NetworkClientImplTest {
     @Mock
     private HttpRestClient restClient;
     @Mock
-    private ConnectionTemplateClient connectionTemplateClient;
+    private ResourceAdaptor resourceAdaptor;
     @Mock
     private NetworkAdaptor adaptor;
     @Mock
@@ -137,7 +137,8 @@ public class NetworkClientImplTest {
     @Test
     public void shouldGetAllEthernetNetworks() {
         given(restClient.sendRequest(any(RestParams.class))).willReturn(ethernetNetworkCollection);
-        given(adaptor.buildCollectionDto(anyString())).willReturn(new NetworkCollection());
+        given(resourceAdaptor.buildResourceCollection(anyString(), eq(Network.class)))
+                .willReturn(new ResourceCollection<Network>());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -146,7 +147,7 @@ public class NetworkClientImplTest {
         this.networkClient.getAllNetworks(new RestParams());
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildCollectionDto(ethernetNetworkCollection);
+        then(resourceAdaptor).should().buildResourceCollection(ethernetNetworkCollection, Network.class);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -165,11 +166,11 @@ public class NetworkClientImplTest {
     public void shouldThrowExceptionWhenNoEthernetNetworkIsFoundForTheGivenName() {
         String anyName = "random-NAME";
 
-        NetworkCollection networkCollection = new NetworkCollection();
-        networkCollection.setCount(0);
+        ResourceCollection<Network> networkCollection = new ResourceCollection<>();
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(ethernetNetworkCollection);
-        given(adaptor.buildCollectionDto(anyObject())).willReturn(networkCollection);
+        given(resourceAdaptor.buildResourceCollection(anyString(), eq(Network.class)))
+                .willReturn(networkCollection);
 
         this.networkClient.getNetworkByName(new RestParams(), anyName);
     }
@@ -177,13 +178,13 @@ public class NetworkClientImplTest {
     @Test
     public void shouldGetEthernetNetworkByName() {
         String anyName = "random-NAME";
-        NetworkCollection networkCollection = new NetworkCollection();
+        ResourceCollection<Network> networkCollection = new ResourceCollection();
         networkCollection.setCount(1);
 
         networkCollection.setMembers(Lists.newArrayList(new Network()));
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(ethernetNetworkCollection);
-        given(adaptor.buildCollectionDto(anyString())).willReturn(networkCollection);
+        given(resourceAdaptor.buildResourceCollection(anyString(), eq(Network.class))).willReturn(networkCollection);
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -197,7 +198,7 @@ public class NetworkClientImplTest {
         this.networkClient.getNetworkByName(new RestParams(), anyName);
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildCollectionDto(ethernetNetworkCollection);
+        then(resourceAdaptor).should().buildResourceCollection(ethernetNetworkCollection, Network.class);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -266,8 +267,6 @@ public class NetworkClientImplTest {
         network.setConnectionTemplateUri("/rest/connection-templates/" + connectionTemplateId);
         network.setName(networkName);
 
-        ConnectionTemplate updateConnectionTemplate = new ConnectionTemplate();
-
         NetworkClient spyNetworkClient = spy(this.networkClient);
 
         doReturn(network).when(spyNetworkClient).getNetworkByName(any(RestParams.class), eq(networkName));
@@ -277,10 +276,6 @@ public class NetworkClientImplTest {
         given(taskAdaptor.buildDto(any(String.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), any(String.class), any(Integer.class)))
                 .willReturn(new TaskResourceV2());
-        given(connectionTemplateClient.getConnectionTemplate(any(RestParams.class), any(String.class)))
-                .willReturn(updateConnectionTemplate);
-        given(connectionTemplateClient.updateConnectionTemplate(any(RestParams.class), any(String.class),
-                any(ConnectionTemplate.class), eq(false))).willReturn(new ConnectionTemplate());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.POST);

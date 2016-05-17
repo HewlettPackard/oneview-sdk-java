@@ -18,10 +18,9 @@ package com.hp.ov.sdk.rest.client;
 import java.util.List;
 
 import com.hp.ov.sdk.dto.AvailableStorageSystem;
-import com.hp.ov.sdk.dto.AvailableStorageSystems;
 import com.hp.ov.sdk.dto.AvailableTargets;
 import com.hp.ov.sdk.dto.Patch;
-import com.hp.ov.sdk.dto.ServerProfileCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.ServerProfileCompliancePreview;
 import com.hp.ov.sdk.dto.ServerProfileHealth;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -51,9 +50,10 @@ public interface ServerProfileClient {
      *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link ServerProfileCollection} containing a collection of server profile details.
+     * @return {@link ResourceCollection}&lt;{@link ServerProfile}&gt; containing
+     * the details for all found server profiles.
      */
-     ServerProfileCollection getAllServerProfile(final RestParams params);
+     ResourceCollection<ServerProfile> getAllServerProfile(final RestParams params);
 
     /**
      * The module aids in fetching the server profile details for the
@@ -204,9 +204,10 @@ public interface ServerProfileClient {
      *            String, specifying the enclosure group URI.
      * @param serverHardwareTypeUri
      *            String, specifying the server hardware type URI.
-     * @return {@link AvailableStorageSystems} containing a collection of storage system details.
+     * @return {@link ResourceCollection}&lt;{@link AvailableStorageSystem}&gt; containing
+     * the details for all found available storage systems.
      */
-    AvailableStorageSystems getAvailableStorageSystemsForServerProfile(final RestParams params, final String enclosureGroupUri,
+    ResourceCollection<AvailableStorageSystem> getAvailableStorageSystemsForServerProfile(final RestParams params, final String enclosureGroupUri,
             final String serverHardwareTypeUri);
 
     /**

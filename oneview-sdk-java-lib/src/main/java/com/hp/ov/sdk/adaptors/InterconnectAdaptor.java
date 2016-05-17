@@ -24,7 +24,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.common.reflect.TypeToken;
-import com.hp.ov.sdk.dto.InterconnectsCollection;
 import com.hp.ov.sdk.dto.InterconnectsStatistics;
 import com.hp.ov.sdk.dto.NameServer;
 import com.hp.ov.sdk.dto.Patch;
@@ -52,18 +51,6 @@ public class InterconnectAdaptor extends BaseAdaptor<Interconnects, Object> {
         final Interconnects interconnectDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version)), Interconnects.class);
         return interconnectDto;
-    }
-
-    public InterconnectsCollection buildCollectionDto(Object source) {
-        if (null == source || source.equals("")) {
-            return null;
-        }
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        // convert json object to DTO, replace quotes and back slash in the file
-        final InterconnectsCollection interconnectsCollectionDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
-                        .convertObjectToJsonString(source))), InterconnectsCollection.class);
-        return interconnectsCollectionDto;
     }
 
     public JSONArray buildJsonArrayDto(Patch source) {

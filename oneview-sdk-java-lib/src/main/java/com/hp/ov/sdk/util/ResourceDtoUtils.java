@@ -27,7 +27,8 @@ import com.hp.ov.sdk.dto.ConnectionBoot.BootControl;
 import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.dto.PortInfo;
 import com.hp.ov.sdk.dto.ProfileConnectionV3;
-import com.hp.ov.sdk.dto.StorageTargetPortCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.StorageTargetPort;
 import com.hp.ov.sdk.dto.generated.Bandwidth;
 import com.hp.ov.sdk.dto.generated.Bios;
 import com.hp.ov.sdk.dto.generated.Boot;
@@ -271,7 +272,7 @@ public class ResourceDtoUtils {
             volumeAttachment.setVolumeStoragePoolUri(SdkUtils.getInstance().getStoragePoolFromVolume(params, volumeName));
             volumeAttachment.setVolumeStorageSystemUri(SdkUtils.getInstance().getStorageSystemFromVolume(params, volumeName));
 
-            final StorageTargetPortCollection storageTargetPortCollectionDto = storageSystemClient
+            final ResourceCollection<StorageTargetPort> storageTargetPortCollectionDto = storageSystemClient
                     .getAllManagedPortsForStorageSystem(
                             params,
                             volumeAttachment.getVolumeStorageSystemUri().substring(

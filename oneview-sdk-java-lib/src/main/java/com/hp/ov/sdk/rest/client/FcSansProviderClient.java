@@ -16,8 +16,8 @@
 
 package com.hp.ov.sdk.rest.client;
 
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SanProviderResponse;
-import com.hp.ov.sdk.dto.SanProviderResponseCollection;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 /**
@@ -32,10 +32,11 @@ public interface FcSansProviderClient {
      * The module aids in fetching all the SAN providers registered under the current HPE OneView.
      * 
      * @param params The {@link RestParams} is a structure containing the connection details.
-     * 
-     * @return {@link SanProviderResponseCollection} containing the SAN providers details.
+     *
+     * @return {@link ResourceCollection}&lt;{@link SanProviderResponse}&gt; containing
+     * the details for all found SAN providers.
      */
-    SanProviderResponseCollection getAllProviders(final RestParams params);
+    ResourceCollection<SanProviderResponse> getAllProviders(final RestParams params);
 
     /**
      * The module aids in fetching the SAN provider for specific SAN provider

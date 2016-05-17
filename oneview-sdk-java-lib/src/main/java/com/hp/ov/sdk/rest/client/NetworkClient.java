@@ -17,7 +17,7 @@ package com.hp.ov.sdk.rest.client;
 
 import java.util.List;
 
-import com.hp.ov.sdk.dto.NetworkCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.generated.Network;
@@ -43,9 +43,10 @@ public interface NetworkClient {
      * 
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link NetworkCollection} containing the collection of ethernet network details.
+     * @return {@link ResourceCollection}&lt;{@link Network}&gt; containing the
+     * collection of ethernet network details.
      */
-    NetworkCollection getAllNetworks(final RestParams params);
+    ResourceCollection<Network> getAllNetworks(final RestParams params);
 
     /**
      * The module aids in fetching the ethernet network details for the ethernet network name as

@@ -15,7 +15,7 @@
  */
 package com.hp.ov.sdk.rest.client;
 
-import com.hp.ov.sdk.dto.EnclosureGroupCollectionV2;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.generated.EnclosureGroups;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
@@ -39,9 +39,10 @@ public interface EnclosureGroupClient {
      * 
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link EnclosureGroupCollectionV2} containing a collection of enclosure group details.
+     * @return {@link ResourceCollection}&lt;{@link EnclosureGroups}&gt; containing
+     * the details for all found enclosure groups.
      */
-    EnclosureGroupCollectionV2 getAllEnclosureGroups(final RestParams params);
+    ResourceCollection<EnclosureGroups> getAllEnclosureGroups(final RestParams params);
 
     /**
      * The module aids in fetching the enclosure group details for the specified

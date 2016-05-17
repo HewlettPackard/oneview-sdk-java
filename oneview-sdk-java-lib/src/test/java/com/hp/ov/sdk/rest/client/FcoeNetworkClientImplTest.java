@@ -43,8 +43,8 @@ import com.google.common.collect.Lists;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.FcoeNetwork;
-import com.hp.ov.sdk.dto.FcoeNetworkCollection;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -121,8 +121,8 @@ public class FcoeNetworkClientImplTest {
                 "\"members\":[{\"type\":\"fcoe-network\"}]}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(fcoeNetworkCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(FcoeNetworkCollection.class)))
-                .willReturn(new FcoeNetworkCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(FcoeNetwork.class)))
+                .willReturn(new ResourceCollection<FcoeNetwork>());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -132,7 +132,7 @@ public class FcoeNetworkClientImplTest {
         this.fcoeClient.getAllFcoeNetworks(new RestParams());
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildResourceObject(eq(fcoeNetworkCollectionValue), eq(FcoeNetworkCollection.class));
+        then(adaptor).should().buildResourceCollection(eq(fcoeNetworkCollectionValue), eq(FcoeNetwork.class));
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -158,25 +158,25 @@ public class FcoeNetworkClientImplTest {
                 "\"members\": []}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(fcoeNetworkCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(FcoeNetworkCollection.class)))
-                .willReturn(new FcoeNetworkCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(FcoeNetwork.class)))
+                .willReturn(new ResourceCollection<FcoeNetwork>());
 
         this.fcoeClient.getFcoeNetworkByName(new RestParams(), anyFcoeNetworkName);
     }
 
     @Test
-    public void shouldGetStorageVolumeByName() {
+    public void shouldGetFcoeNetworkByName() {
         String anyFcoeNetworkName = "random-NAME";
         String fcoeNetworkCollectionValue = "{\"type\":\"FcoeNetworkCollection\"," +
                 "\"members\": [{\"type\":\"fcoe-network\"}]}";
 
-        FcoeNetworkCollection fcoeNetworkCollection = new FcoeNetworkCollection();
+        ResourceCollection<FcoeNetwork> fcoeNetworkCollection = new ResourceCollection<>();
         FcoeNetwork fcoeNetwork = new FcoeNetwork();
 
         fcoeNetworkCollection.setMembers(Lists.newArrayList(fcoeNetwork));
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(fcoeNetworkCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(FcoeNetworkCollection.class)))
+        given(adaptor.buildResourceCollection(anyString(), eq(FcoeNetwork.class)))
                 .willReturn(fcoeNetworkCollection);
 
         RestParams expectedRestParams = new RestParams();
@@ -192,7 +192,7 @@ public class FcoeNetworkClientImplTest {
         FcoeNetwork response = this.fcoeClient.getFcoeNetworkByName(new RestParams(), anyFcoeNetworkName);
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildResourceObject(fcoeNetworkCollectionValue, FcoeNetworkCollection.class);
+        then(adaptor).should().buildResourceCollection(fcoeNetworkCollectionValue, FcoeNetwork.class);
 
         assertThat(response, is(sameInstance(fcoeNetwork)));
     }

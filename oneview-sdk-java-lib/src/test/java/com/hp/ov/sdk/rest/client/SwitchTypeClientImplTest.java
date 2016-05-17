@@ -40,7 +40,7 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.InterconnectType;
-import com.hp.ov.sdk.dto.InterconnectTypeCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
@@ -114,8 +114,8 @@ public class SwitchTypeClientImplTest {
         String switchTypeCollectionValue = "{\"type\":\"InterconnectTypeCollectionV2\"}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(switchTypeCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(InterconnectTypeCollection.class)))
-                .willReturn(new InterconnectTypeCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(InterconnectType.class)))
+                .willReturn(new ResourceCollection<InterconnectType>());
 
         this.switchClient.getSwitchTypeByName(new RestParams(), anySwitchTypeName);
     }
@@ -125,13 +125,13 @@ public class SwitchTypeClientImplTest {
         String anySwitchTypeName = "random-NAME";
         String switchTypeCollectionValue = "{\"type\":\"InterconnectTypeCollectionV2\"," +
                 "\"members\":[{\"type\":\"interconnect-typeV2\"}]}";
-        InterconnectTypeCollection interconnectTypeCollection = new InterconnectTypeCollection();
+        ResourceCollection<InterconnectType> interconnectTypeCollection = new ResourceCollection<>();
 
         InterconnectType interconnectType = new InterconnectType();
         interconnectTypeCollection.setMembers(Lists.newArrayList(interconnectType));
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(switchTypeCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(InterconnectTypeCollection.class)))
+        given(adaptor.buildResourceCollection(anyString(), eq(InterconnectType.class)))
                 .willReturn(interconnectTypeCollection);
 
         RestParams expectedRestParams = new RestParams();
@@ -147,8 +147,8 @@ public class SwitchTypeClientImplTest {
         InterconnectType type = this.switchClient.getSwitchTypeByName(new RestParams(), anySwitchTypeName);
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildResourceObject(eq(switchTypeCollectionValue),
-                eq(InterconnectTypeCollection.class));
+        then(adaptor).should().buildResourceCollection(eq(switchTypeCollectionValue),
+                eq(InterconnectType.class));
 
         assertThat(type, sameInstance(interconnectType));
     }
@@ -171,8 +171,8 @@ public class SwitchTypeClientImplTest {
                 "\"members\":[{\"type\":\"interconnect-typeV2\"}]}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(switchTypeCollectionValue);
-        given(adaptor.buildResourceObject(anyString(), eq(InterconnectTypeCollection.class)))
-                .willReturn(new InterconnectTypeCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(InterconnectType.class)))
+                .willReturn(new ResourceCollection<InterconnectType>());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -182,8 +182,8 @@ public class SwitchTypeClientImplTest {
         this.switchClient.getAllSwitchTypes(new RestParams());
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildResourceObject(eq(switchTypeCollectionValue),
-                eq(InterconnectTypeCollection.class));
+        then(adaptor).should().buildResourceCollection(eq(switchTypeCollectionValue),
+                eq(InterconnectType.class));
     }
 
 }

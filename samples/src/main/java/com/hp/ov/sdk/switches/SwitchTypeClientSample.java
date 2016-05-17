@@ -17,7 +17,7 @@
 package com.hp.ov.sdk.switches;
 
 import com.hp.ov.sdk.dto.InterconnectType;
-import com.hp.ov.sdk.dto.InterconnectTypeCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -95,7 +95,7 @@ public class SwitchTypeClientSample {
         try {
             params = HPOneViewCredential.createCredentials();
 
-            InterconnectTypeCollection collection = this.switchClient.getAllSwitchTypes(params);
+            ResourceCollection<InterconnectType> collection = this.switchClient.getAllSwitchTypes(params);
 
             System.out.println("SwitchTypeClient : getAllSwitchTypes : " +
                     "InterconnectTypeCollection object returned to client (count) : " + collection.getCount());

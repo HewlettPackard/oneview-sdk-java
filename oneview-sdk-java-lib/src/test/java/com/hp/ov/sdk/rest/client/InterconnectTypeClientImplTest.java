@@ -7,7 +7,6 @@ import static org.hamcrest.Matchers.isEmptyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
@@ -25,11 +24,11 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
-import com.hp.ov.sdk.adaptors.InterconnectTypeAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.InterconnectType;
-import com.hp.ov.sdk.dto.InterconnectTypeCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
@@ -45,7 +44,7 @@ public class InterconnectTypeClientImplTest {
     @Mock
     private HttpRestClient client;
     @Mock
-    private InterconnectTypeAdaptor adaptor;
+    private ResourceAdaptor adaptor;
     @InjectMocks
     private InterconnectTypeClientImpl interconnectTypeClient;
 
@@ -66,7 +65,8 @@ public class InterconnectTypeClientImplTest {
         String interconnectTypeValue = "{\"type\":\"interconnect-type\"}";
 
         given(client.sendRequest(any(RestParams.class))).willReturn(interconnectTypeValue);
-        given(adaptor.buildDto(anyString())).willReturn(new InterconnectType());
+        given(adaptor.buildResourceObject(anyString(), eq(InterconnectType.class)))
+                .willReturn(new InterconnectType());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -76,7 +76,7 @@ public class InterconnectTypeClientImplTest {
         this.interconnectTypeClient.getInterconnectType(new RestParams(), ANY_RESOURCE_ID);
 
         then(client).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildDto(interconnectTypeValue);
+        then(adaptor).should().buildResourceObject(interconnectTypeValue, InterconnectType.class);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -97,7 +97,8 @@ public class InterconnectTypeClientImplTest {
                 "\"members\": [{\"type\":\"interconnect-type\"}]}";
 
         given(client.sendRequest(any(RestParams.class))).willReturn(interconnectCollectionValue);
-        given(adaptor.buildCollectionDto(anyString())).willReturn(new InterconnectTypeCollection());
+        given(adaptor.buildResourceCollection(anyString(), eq(InterconnectType.class)))
+                .willReturn(new ResourceCollection<InterconnectType>());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -107,7 +108,7 @@ public class InterconnectTypeClientImplTest {
         this.interconnectTypeClient.getAllInterconnectType(new RestParams());
 
         then(client).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildCollectionDto(interconnectCollectionValue);
+        then(adaptor).should().buildResourceCollection(interconnectCollectionValue, InterconnectType.class);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -128,12 +129,11 @@ public class InterconnectTypeClientImplTest {
         String interconnectCollectionValue = "{\"type\":\"InterconnectTypeCollection\"," +
                 "\"members\": [{\"type\":\"interconnect-type\"}]}";
 
-        InterconnectTypeCollection interconnectTypeCollection = new InterconnectTypeCollection();
-
-        interconnectTypeCollection.setCount(0);
+        ResourceCollection<InterconnectType> interconnectTypeCollection = new ResourceCollection<>();
 
         given(client.sendRequest(any(RestParams.class))).willReturn(interconnectCollectionValue);
-        given(adaptor.buildCollectionDto(anyObject())).willReturn(interconnectTypeCollection);
+        given(adaptor.buildResourceCollection(anyString(), eq(InterconnectType.class)))
+                .willReturn(interconnectTypeCollection);
 
         this.interconnectTypeClient.getInterconnectTypeByName(new RestParams(), anyName);
     }
@@ -143,13 +143,13 @@ public class InterconnectTypeClientImplTest {
         String anyName = "random-NAME";
         String interconnectCollectionValue = "{\"type\":\"InterconnectTypeCollection\"," +
                 "\"members\": [{\"type\":\"interconnect-type\"}]}";
-        InterconnectTypeCollection interconnectTypeCollection = new InterconnectTypeCollection();
+        ResourceCollection<InterconnectType> interconnectTypeCollection = new ResourceCollection<>();
 
-        interconnectTypeCollection.setCount(1);
         interconnectTypeCollection.setMembers(Lists.newArrayList(new InterconnectType()));
 
         given(client.sendRequest(any(RestParams.class))).willReturn(interconnectCollectionValue);
-        given(adaptor.buildCollectionDto(anyObject())).willReturn(interconnectTypeCollection);
+        given(adaptor.buildResourceCollection(anyString(), eq(InterconnectType.class)))
+                .willReturn(interconnectTypeCollection);
 
         RestParams expectedRestParams = new RestParams();
 
@@ -164,7 +164,7 @@ public class InterconnectTypeClientImplTest {
         this.interconnectTypeClient.getInterconnectTypeByName(new RestParams(), anyName);
 
         then(client).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildCollectionDto(interconnectCollectionValue);
+        then(adaptor).should().buildResourceCollection(interconnectCollectionValue, InterconnectType.class);
     }
 
     @Test

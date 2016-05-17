@@ -15,13 +15,14 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.adaptors.FirmwareDriverAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.FwBaselineCollection;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.TaskState;
 import com.hp.ov.sdk.dto.generated.FwBaseline;
@@ -38,8 +39,8 @@ public class FirmwareDriverClientTest {
 
     private RestParams params;
 
-    @Mock
-    private FirmwareDriverAdaptor adaptor;
+    @Spy
+    private ResourceAdaptor adaptor;
     @Mock
     private TaskAdaptor taskAdaptor;
     @Mock
@@ -65,9 +66,6 @@ public class FirmwareDriverClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
-
-        Mockito.when(adaptor.buildDto(Mockito.anyString()))
-        .thenReturn(new FirmwareDriverAdaptor().buildDto(firmwareDriverJson));
 
         FwBaseline firmwareDriverDto = client.getFirmwareDriver(params, resourceId);
 
@@ -102,10 +100,7 @@ public class FirmwareDriverClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
 
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new FirmwareDriverAdaptor().buildCollectionDto(firmwareDriverJson));
-
-        FwBaselineCollection firmwareDriverCollection = client.getAllFirmwareDrivers(params);
+        ResourceCollection<FwBaseline> firmwareDriverCollection = client.getAllFirmwareDrivers(params);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.FIRMWARE_DRIVER_URI));
@@ -140,9 +135,6 @@ public class FirmwareDriverClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
 
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new FirmwareDriverAdaptor().buildCollectionDto(firmwareDriverJson));
-
         FwBaseline firmwareDriverDto = client.getFirmwareDriverByName(params, resourceName);
 
         RestParams rp = new RestParams();
@@ -165,9 +157,6 @@ public class FirmwareDriverClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new FirmwareDriverAdaptor().buildCollectionDto(firmwareDriverJson));
 
         client.getFirmwareDriverByName(params, "wrong name");
     }
@@ -222,9 +211,6 @@ public class FirmwareDriverClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(firmwareDriverJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new FirmwareDriverAdaptor().buildCollectionDto(firmwareDriverJson));
 
         String id = client.getId(params, resourceName);
 

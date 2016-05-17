@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hp.ov.sdk.constants.ResourceCategory;
-import com.hp.ov.sdk.dto.EnclosureGroupCollectionV2;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.generated.EnclosureGroups;
 import com.hp.ov.sdk.dto.generated.InterconnectBayMapping;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -96,7 +96,7 @@ public class EnclosureGroupClientSample {
 
     private void getAllEnclosureGroup() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        EnclosureGroupCollectionV2 enclosureGroupCollectionDto = null;
+        ResourceCollection<EnclosureGroups> enclosureGroupCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();

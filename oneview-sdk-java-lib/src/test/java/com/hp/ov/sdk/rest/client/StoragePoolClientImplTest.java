@@ -41,12 +41,13 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.StoragePoolAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.AddStoragePool;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
-import com.hp.ov.sdk.dto.StoragePoolCollection;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
@@ -64,6 +65,8 @@ public class StoragePoolClientImplTest {
     private HttpRestClient restClient;
     @Mock
     private StoragePoolAdaptor adaptor;
+    @Mock
+    private ResourceAdaptor resourceAdaptor;
     @InjectMocks
     private StoragePoolClientImpl storageClient;
 
@@ -120,7 +123,8 @@ public class StoragePoolClientImplTest {
                 "\"members\": [{\"type\":\"StoragePoolV2\"}]}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(storagePoolCollectionValue);
-        given(adaptor.buildCollectionDto(anyString())).willReturn(new StoragePoolCollection());
+        given(resourceAdaptor.buildResourceCollection(anyString(), eq(StoragePool.class)))
+                .willReturn(new ResourceCollection<StoragePool>());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -130,7 +134,7 @@ public class StoragePoolClientImplTest {
         this.storageClient.getAllStoragePools(new RestParams());
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildCollectionDto(storagePoolCollectionValue);
+        then(resourceAdaptor).should().buildResourceCollection(storagePoolCollectionValue, StoragePool.class);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -159,7 +163,8 @@ public class StoragePoolClientImplTest {
                 "\"members\": [{\"type\":\"StoragePoolV2\"}]}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(storagePoolCollectionValue);
-        given(adaptor.buildCollectionDto(anyString())).willReturn(new StoragePoolCollection());
+        given(resourceAdaptor.buildResourceCollection(anyString(), eq(StoragePool.class)))
+                .willReturn(new ResourceCollection<StoragePool>());
 
         this.storageClient.getStoragePoolByName(new RestParams(), anyStoragePoolName, anyStorageSystemUri);
     }
@@ -171,14 +176,15 @@ public class StoragePoolClientImplTest {
         String storagePoolCollectionValue = "{\"type\":\"StoragePoolList\"," +
                 "\"members\": [{\"type\":\"StoragePoolV2\"}]}";
 
-        StoragePoolCollection storagePoolCollection = new StoragePoolCollection();
+        ResourceCollection<StoragePool> storagePoolCollection = new ResourceCollection<>();
         StoragePool storagePool = new StoragePool();
 
         storagePoolCollection.setMembers(Lists.newArrayList(storagePool));
         storagePoolCollection.setCount(1);
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(storagePoolCollectionValue);
-        given(adaptor.buildCollectionDto(anyString())).willReturn(storagePoolCollection);
+        given(resourceAdaptor.buildResourceCollection(anyString(), eq(StoragePool.class)))
+                .willReturn(storagePoolCollection);
 
         this.storageClient.getStoragePoolByName(new RestParams(), anyStoragePoolName, anyStorageSystemUri);
     }
@@ -190,7 +196,7 @@ public class StoragePoolClientImplTest {
         String storagePoolCollectionValue = "{\"type\":\"StoragePoolList\"," +
                 "\"members\": [{\"type\":\"StoragePoolV2\"}]}";
 
-        StoragePoolCollection storagePoolCollection = new StoragePoolCollection();
+        ResourceCollection<StoragePool> storagePoolCollection = new ResourceCollection<>();
         StoragePool storagePool = new StoragePool();
 
         storagePool.setStorageSystemUri(anyStorageSystemUri);
@@ -198,7 +204,8 @@ public class StoragePoolClientImplTest {
         storagePoolCollection.setCount(1);
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(storagePoolCollectionValue);
-        given(adaptor.buildCollectionDto(anyString())).willReturn(storagePoolCollection);
+        given(resourceAdaptor.buildResourceCollection(anyString(), eq(StoragePool.class)))
+                .willReturn(storagePoolCollection);
 
         RestParams expectedRestParams = new RestParams();
 
@@ -214,7 +221,7 @@ public class StoragePoolClientImplTest {
                 anyStoragePoolName, anyStorageSystemUri);
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildCollectionDto(eq(storagePoolCollectionValue));
+        then(resourceAdaptor).should().buildResourceCollection(storagePoolCollectionValue, StoragePool.class);
 
         assertThat(response, is(sameInstance(storagePool)));
     }

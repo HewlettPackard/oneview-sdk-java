@@ -18,10 +18,10 @@ package com.hp.ov.sdk.storage;
 import java.util.List;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.ExtraStorageVolumeCollection;
+import com.hp.ov.sdk.dto.ExtraStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeAttachment;
-import com.hp.ov.sdk.dto.StorageVolumeAttachmentCollection;
 import com.hp.ov.sdk.dto.StorageVolumeAttachmentPath;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -84,7 +84,7 @@ public class StorageVolumeAttachmentClientSample {
         try {
             params = HPOneViewCredential.createCredentials();
 
-            StorageVolumeAttachmentCollection collection
+            ResourceCollection<StorageVolumeAttachment> collection
                     = this.storageVolumeAttachmentsClient.getAllStorageVolumeAttachments(params);
 
             System.out.println("StorageVolumeAttachmentClientSample : getAllStorageVolumeAttachments : " +
@@ -144,7 +144,7 @@ public class StorageVolumeAttachmentClientSample {
                     = this.storageVolumeAttachmentsClient.getAllStorageVolumeAttachmentPaths(params, ATTACHMENT_ID);
 
             System.out.println("StorageVolumeAttachmentClientSample : getAllStorageVolumeAttachmentPaths : " +
-                    "StorageVolumeAttachmentPathCollection object returned to client : " + collection);
+                    "List of StorageVolumeAttachmentPath object returned to client : " + collection);
         } catch (final SDKResourceNotFoundException ex) {
             System.out.println("StorageVolumeAttachmentClientSample : getAllStorageVolumeAttachmentPaths : " +
                     "the resource you are looking is not found ");
@@ -168,7 +168,7 @@ public class StorageVolumeAttachmentClientSample {
         try {
             params = HPOneViewCredential.createCredentials();
 
-            ExtraStorageVolumeCollection collection
+            ResourceCollection<ExtraStorageVolume> collection
                     = this.storageVolumeAttachmentsClient.getExtraUnmanagedStorageVolumeAttachments(params);
 
             System.out.println("StorageVolumeAttachmentClientSample : getExtraUnmanagedStorageVolumeAttachments : " +

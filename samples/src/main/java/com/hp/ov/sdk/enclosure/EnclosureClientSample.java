@@ -18,7 +18,6 @@ package com.hp.ov.sdk.enclosure;
 import java.util.Arrays;
 
 import com.hp.ov.sdk.dto.AddEnclosureV2;
-import com.hp.ov.sdk.dto.EnclosureCollectionV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
 import com.hp.ov.sdk.dto.FwBaselineOptions;
@@ -28,6 +27,7 @@ import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
 import com.hp.ov.sdk.dto.RefreshStateConfig.RefreshForceOptions;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.UtilizationData;
@@ -116,7 +116,7 @@ public class EnclosureClientSample {
 
     private void getAllEnclosure() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        EnclosureCollectionV2 enclosureCollectionDto = null;
+        ResourceCollection<Enclosures> enclosureCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();

@@ -18,12 +18,12 @@ package com.hp.ov.sdk.interconnects;
 import java.util.Arrays;
 import java.util.List;
 
-import com.hp.ov.sdk.dto.InterconnectsCollection;
 import com.hp.ov.sdk.dto.InterconnectsStatistics;
 import com.hp.ov.sdk.dto.NameServer;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.PortStatistics;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SubportStatistics;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.Interconnects;
@@ -96,7 +96,7 @@ public class InterconnectClientSample {
 
     private void getAllInterconnects() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        InterconnectsCollection interconnectsCollectionDto = null;
+        ResourceCollection<Interconnects> interconnectsCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();

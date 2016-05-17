@@ -15,7 +15,7 @@
  */
 package com.hp.ov.sdk.rest.client;
 
-import com.hp.ov.sdk.dto.FcNetworkCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.FcNetwork;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -44,9 +44,10 @@ public interface FcNetworkClient {
      *            Integer value specifying the start count.
      * @param count
      *            Integer value specifying the number of FC network fetched at once.
-     * @return {@link FcNetworkCollection} containing a collection of FC network details.
+     * @return {@link ResourceCollection}&lt;{@link FcNetwork}&gt; containing
+     * the details for all found FC networks.
      */
-    FcNetworkCollection getFcNetworkByFilter(final RestParams params, final Integer start, final Integer count);
+    ResourceCollection<FcNetwork> getFcNetworkByFilter(final RestParams params, final Integer start, final Integer count);
 
     /**
      * The module aids in fetching the FC network details for all FC network
@@ -54,9 +55,10 @@ public interface FcNetworkClient {
      * 
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link FcNetworkCollection} containing a collection of FC network details.
+     * @return {@link ResourceCollection}&lt;{@link FcNetwork}&gt; containing
+     * the details for all found FC networks.
      */
-    FcNetworkCollection getAllFcNetworks(final RestParams params);
+    ResourceCollection<FcNetwork> getAllFcNetworks(final RestParams params);
 
     /**
      * The module aids in fetching the FC network details for the specified

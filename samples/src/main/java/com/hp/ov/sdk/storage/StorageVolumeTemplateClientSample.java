@@ -16,9 +16,9 @@
 package com.hp.ov.sdk.storage;
 
 import com.hp.ov.sdk.constants.ResourceCategory;
-import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplateCollection;
+import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplate;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeTemplate;
-import com.hp.ov.sdk.dto.StorageVolumeTemplateCollection;
 import com.hp.ov.sdk.dto.TemplateProvisioningData;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
@@ -101,7 +101,7 @@ public class StorageVolumeTemplateClientSample {
 
     private void getAllStorageVolumeTemplate() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        StorageVolumeTemplateCollection storageVolumeTemplateCollectionDto = null;
+        ResourceCollection<StorageVolumeTemplate> storageVolumeTemplateCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -302,7 +302,8 @@ public class StorageVolumeTemplateClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
-            ConnectableStorageVolumeTemplateCollection collection = storageVolumeTemplateClient.getConnectableVolumeTemplates(params);
+            ResourceCollection<ConnectableStorageVolumeTemplate> collection
+                    = storageVolumeTemplateClient.getConnectableVolumeTemplates(params);
 
             System.out.println("StorageVolumeTemplateClientTest : getConnectableVolumeTemplates : " +
                     "connectable collection object returned to client : " + collection);

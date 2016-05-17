@@ -18,7 +18,7 @@ package com.hp.ov.sdk.rest.client;
 import java.util.List;
 
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
-import com.hp.ov.sdk.dto.LogicalInterconnectGroupCollectionV2;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
 import com.hp.ov.sdk.dto.generated.UplinkSet;
@@ -44,10 +44,10 @@ public interface LogicalInterconnectGroupClient {
      * 
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link LogicalInterconnectGroupCollectionV2} containing a collection of
-     *         logical interconnect group details.
+     * @return {@link ResourceCollection}&lt;{@link LogicalInterconnectGroups}&gt; containing
+     * the details for all found logical interconnect groups.
      */
-    LogicalInterconnectGroupCollectionV2 getAllLogicalInterconnectGroups(final RestParams params);
+    ResourceCollection<LogicalInterconnectGroups> getAllLogicalInterconnectGroups(final RestParams params);
 
     /**
      * The module aids in fetching the logical interconnect group details for the

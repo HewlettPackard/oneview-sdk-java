@@ -18,7 +18,7 @@ package com.hp.ov.sdk.fcnetwork;
 
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.FcoeNetwork;
-import com.hp.ov.sdk.dto.FcoeNetworkCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -79,10 +79,10 @@ public class FcoeNetworkClientSample {
         try {
             params = HPOneViewCredential.createCredentials();
 
-            FcoeNetworkCollection fcoeNetworks = this.fcoeNetworkClient.getAllFcoeNetworks(params);
+            ResourceCollection<FcoeNetwork> fcoeNetworks = this.fcoeNetworkClient.getAllFcoeNetworks(params);
 
             System.out.println("FcoeNetworkClientSample : getAllFcoeNetworks : " +
-                    "FcoeNetworkCollection object returned to client : " + fcoeNetworks);
+                    "FcoeNetworkCollection object returned to client (count) : " + fcoeNetworks.getCount());
         } catch (final SDKResourceNotFoundException ex) {
             System.out.println("FcoeNetworkClientSample : getAllFcoeNetworks : " +
                     "the resource you are looking is not found ");

@@ -23,16 +23,16 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.StorageSystemAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.StoragePoolCollection;
-import com.hp.ov.sdk.dto.StorageSystemCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.StorageSystemV2;
-import com.hp.ov.sdk.dto.StorageTargetPortCollection;
-import com.hp.ov.sdk.dto.StorageTargetPortV2;
+import com.hp.ov.sdk.dto.StorageTargetPort;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -45,19 +45,23 @@ public class StorageSystemClientImpl implements StorageSystemClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StorageSystemClientImpl.class);
 
+    private final ResourceAdaptor resourceAdaptor;
     private final StorageSystemAdaptor adaptor;
-
-    private HttpRestClient httpClient;
+    private final HttpRestClient httpClient;
 
     private JSONObject jsonObject;
 
-    protected StorageSystemClientImpl(HttpRestClient httpClient, StorageSystemAdaptor adaptor) {
+    protected StorageSystemClientImpl(HttpRestClient httpClient,
+            ResourceAdaptor resourceAdaptor, StorageSystemAdaptor adaptor) {
+
         this.httpClient = httpClient;
+        this.resourceAdaptor = resourceAdaptor;
         this.adaptor = adaptor;
     }
 
     public static StorageSystemClient getClient() {
-        return new StorageSystemClientImpl(HttpRestClient.getClient(), new StorageSystemAdaptor());
+        return new StorageSystemClientImpl(HttpRestClient.getClient(),
+            new ResourceAdaptor(), new StorageSystemAdaptor());
     }
 
     @Override
@@ -88,7 +92,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
     }
 
     @Override
-    public StoragePoolCollection getStoragePoolsForStorageSystem(final RestParams params, final String arrayId) {
+    public ResourceCollection<StoragePool> getStoragePoolsForStorageSystem(final RestParams params, final String arrayId) {
         LOGGER.info("StorageSystemClientImpl : getStoragePoolsForStorageSystem : Start");
 
         // validate args
@@ -106,9 +110,9 @@ public class StorageSystemClientImpl implements StorageSystemClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_SYSTEMS,
                     null);
         }
-        // Call adaptor to convert to DTO
 
-        final StoragePoolCollection storagePoolCollectionDto = adaptor.buildStoragePoolCollectionDto(returnObj);
+        ResourceCollection<StoragePool> storagePoolCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, StoragePool.class);
 
         LOGGER.debug("StorageSystemClientImpl : getStoragePoolsForStorageSystem : count :" + storagePoolCollectionDto.getCount());
         LOGGER.info("StorageSystemClientImpl : getStoragePoolsForStorageSystem : End");
@@ -117,7 +121,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
     }
 
     @Override
-    public StorageTargetPortCollection getAllManagedPortsForStorageSystem(final RestParams params, final String resourceId) {
+    public ResourceCollection<StorageTargetPort> getAllManagedPortsForStorageSystem(final RestParams params, final String resourceId) {
         LOGGER.info("StorageSystemClientImpl : getAllManagedPortsForStorageSystem : Start");
 
         // validate args
@@ -135,9 +139,9 @@ public class StorageSystemClientImpl implements StorageSystemClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_SYSTEMS,
                     null);
         }
-        // Call adaptor to convert to DTO
 
-        final StorageTargetPortCollection storageTargetPortCollectionDto = adaptor.buildManagedPortsCollectionDto(returnObj);
+        ResourceCollection<StorageTargetPort> storageTargetPortCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, StorageTargetPort.class);
 
         LOGGER.debug("StorageSystemClientImpl : getAllManagedPortsForStorageSystem : count :"
                 + storageTargetPortCollectionDto.getCount());
@@ -147,7 +151,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
     }
 
     @Override
-    public StorageTargetPortV2 getManagedPortsForStorageSystem(final RestParams params, final String resourceId,
+    public StorageTargetPort getManagedPortsForStorageSystem(final RestParams params, final String resourceId,
             final String targetPortId) {
         LOGGER.info("StorageSystemClientImpl : getManagedPortsForStorageSystem : Start");
 
@@ -166,9 +170,8 @@ public class StorageSystemClientImpl implements StorageSystemClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_SYSTEMS,
                     null);
         }
-        // Call adaptor to convert to DTO
 
-        final StorageTargetPortV2 storageTargetPortDto = adaptor.buildManagedPortsDto(returnObj);
+        StorageTargetPort storageTargetPortDto = adaptor.buildManagedPortsDto(returnObj);
 
         LOGGER.debug("StorageSystemClientImpl : getManagedPortsForStorageSystem : name :" + storageTargetPortDto.getName());
         LOGGER.info("StorageSystemClientImpl : getManagedPortsForStorageSystem : End");
@@ -205,7 +208,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
     }
 
     @Override
-    public StorageSystemCollection getAllStorageSystems(final RestParams params) {
+    public ResourceCollection<StorageSystemV2> getAllStorageSystems(final RestParams params) {
         LOGGER.info("StorageSystemClientImpl : getAllStorageSystems : Start");
 
         // validate args
@@ -222,9 +225,9 @@ public class StorageSystemClientImpl implements StorageSystemClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_SYSTEMS,
                     null);
         }
-        // Call adaptor to convert to DTO
 
-        final StorageSystemCollection storageSystemCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<StorageSystemV2> storageSystemCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, StorageSystemV2.class);
 
         LOGGER.debug("StorageSystemClientImpl : getAllStorageSystems : count :" + storageSystemCollectionDto.getCount());
         LOGGER.info("StorageSystemClientImpl : getAllStorageSystems : End");
@@ -256,11 +259,11 @@ public class StorageSystemClientImpl implements StorageSystemClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.STORAGE_SYSTEMS,
                     null);
         }
-        // Call adaptor to convert to DTO
 
-        final StorageSystemCollection storageSystemCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<StorageSystemV2> storageSystemCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, StorageSystemV2.class);
 
-        if (storageSystemCollectionDto.getCount() != 0) {
+        if (!storageSystemCollectionDto.isEmpty()) {
             storageSystemDto = storageSystemCollectionDto.getMembers().get(0);
         } else {
             storageSystemDto = null;

@@ -17,8 +17,10 @@ package com.hp.ov.sdk.rest.client;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,18 +35,19 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.StorageSystemAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.StoragePoolCollection;
-import com.hp.ov.sdk.dto.StorageSystemCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.StorageSystemV2;
-import com.hp.ov.sdk.dto.StorageTargetPortCollection;
-import com.hp.ov.sdk.dto.StorageTargetPortV2;
+import com.hp.ov.sdk.dto.StorageTargetPort;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
@@ -57,7 +60,9 @@ public class StorageSystemClientTest {
 
     private RestParams params;
 
-    @Mock
+    @Spy
+    private ResourceAdaptor resourceAdaptor;
+    @Spy
     private StorageSystemAdaptor adaptor;
     @Mock
     private HttpRestClient restClient;
@@ -78,12 +83,7 @@ public class StorageSystemClientTest {
     @Test
     public void testGetStorageSystem() {
         storageSystemJson = this.getJsonFromFile("StorageSystemGet.json");
-        Mockito.when(restClient.sendRequest(
-                Mockito.any(RestParams.class)))
-        .thenReturn(storageSystemJson);
-
-        Mockito.when(adaptor.buildDto(Mockito.anyString()))
-        .thenReturn(new StorageSystemAdaptor().buildDto(storageSystemJson));
+        when(restClient.sendRequest(any(RestParams.class))).thenReturn(storageSystemJson);
 
         StorageSystemV2 storageSystemDto = client.getStorageSystem(params, resourceId);
 
@@ -118,10 +118,7 @@ public class StorageSystemClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
 
-        Mockito.when(adaptor.buildStoragePoolCollectionDto(Mockito.anyString()))
-        .thenReturn(new StorageSystemAdaptor().buildStoragePoolCollectionDto(storageSystemJson));
-
-        StoragePoolCollection storagePoolsDto = client.getStoragePoolsForStorageSystem(params, resourceId);
+        ResourceCollection<StoragePool> storagePoolsDto = client.getStoragePoolsForStorageSystem(params, resourceId);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, resourceId, ResourceUris.STORAGE_POOL_STORAGE_SYSTEM_URI));
@@ -155,10 +152,7 @@ public class StorageSystemClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
 
-        Mockito.when(adaptor.buildManagedPortsCollectionDto(Mockito.anyString()))
-        .thenReturn(new StorageSystemAdaptor().buildManagedPortsCollectionDto(storageSystemJson));
-
-        StorageTargetPortCollection storageTargetPortCollectionDto = client.getAllManagedPortsForStorageSystem(params, resourceId);
+        ResourceCollection<StorageTargetPort> storageTargetPortCollectionDto = client.getAllManagedPortsForStorageSystem(params, resourceId);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI, resourceId, ResourceUris.MANANGED_PORTS_STORAGE_SYSTEM_URI));
@@ -191,10 +185,7 @@ public class StorageSystemClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
 
-        Mockito.when(adaptor.buildManagedPortsDto(Mockito.anyString()))
-        .thenReturn(new StorageSystemAdaptor().buildManagedPortsDto(storageSystemJson));
-
-        StorageTargetPortV2 storageTargetPortDto = client.getManagedPortsForStorageSystem(params, resourceId, portId);
+        StorageTargetPort storageTargetPortDto = client.getManagedPortsForStorageSystem(params, resourceId, portId);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(
@@ -231,9 +222,6 @@ public class StorageSystemClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
 
-        Mockito.when(adaptor.buildHostTypesCollectionDto(Mockito.anyString()))
-        .thenReturn(new StorageSystemAdaptor().buildHostTypesCollectionDto(storageSystemJson));
-
         List<String> hostTypes = client.getStorageSystemHostTypes(params);
 
         RestParams rp = new RestParams();
@@ -268,10 +256,7 @@ public class StorageSystemClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
 
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new StorageSystemAdaptor().buildCollectionDto(storageSystemJson));
-
-        StorageSystemCollection storageSystemCollectionDto = client.getAllStorageSystems(params);
+        ResourceCollection<StorageSystemV2> storageSystemCollectionDto = client.getAllStorageSystems(params);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.STORAGE_SYSTEM_URI));
@@ -305,9 +290,6 @@ public class StorageSystemClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
 
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new StorageSystemAdaptor().buildCollectionDto(storageSystemJson));
-
         StorageSystemV2 storageSystemDto = client.getStorageSystemByName(params, resourceName);
 
         RestParams rp = new RestParams();
@@ -328,16 +310,13 @@ public class StorageSystemClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetStorageSystemByNameWithNoMembers() {
-        StorageSystemCollection storageSystemCollectionDto = new StorageSystemAdaptor().buildCollectionDto(this.getJsonFromFile("StorageSystemGetByName.json"));
-        storageSystemCollectionDto.setCount(0);
+        ResourceCollection<StorageSystemV2> storageSystemCollectionDto = new ResourceCollection<>();
+
         storageSystemJson = new Gson().toJson(storageSystemCollectionDto);
 
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new StorageSystemAdaptor().buildCollectionDto(storageSystemJson));
 
         client.getStorageSystemByName(params, resourceName);
     }
@@ -459,9 +438,6 @@ public class StorageSystemClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(storageSystemJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new StorageSystemAdaptor().buildCollectionDto(storageSystemJson));
 
         String id = client.getId(params, resourceName);
 

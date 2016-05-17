@@ -19,10 +19,10 @@ import java.util.Arrays;
 
 import com.hp.ov.sdk.dto.AddLogicalEnclosure;
 import com.hp.ov.sdk.dto.FirmwareUpdateOn;
-import com.hp.ov.sdk.dto.LogicalEnclosureList;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.PatchFirmwareValue;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SupportDump;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.EnclosureGroups;
@@ -108,7 +108,7 @@ public class LogicalEnclosureClientSample {
 
     private void getAllLogicalEnclosures() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        LogicalEnclosureList enclosureCollectionDto = null;
+        ResourceCollection<LogicalEnclosure> enclosureCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();

@@ -33,24 +33,26 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
 import com.hp.ov.sdk.adaptors.LogicalInterconnectAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.InterconnectFibData;
+import com.hp.ov.sdk.dto.InterconnectFibDataEntry;
 import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
-import com.hp.ov.sdk.dto.InternalVlanAssociationCollection;
+import com.hp.ov.sdk.dto.InternalVlanAssociation;
 import com.hp.ov.sdk.dto.LiFirmware;
-import com.hp.ov.sdk.dto.LogicalInterconnectCollectionV2;
 import com.hp.ov.sdk.dto.PortMonitor;
-import com.hp.ov.sdk.dto.PortMonitorUplinkPortCollection;
+import com.hp.ov.sdk.dto.PortMonitorUplinkPort;
 import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.TaskState;
 import com.hp.ov.sdk.dto.generated.Location;
@@ -71,7 +73,9 @@ public class LogicalInterconnectClientTest {
 
     private RestParams params;
 
-    @Mock
+    @Spy
+    private ResourceAdaptor resourceAdaptor;
+    @Spy
     private LogicalInterconnectAdaptor adaptor;
     @Mock
     private TaskAdaptor taskAdaptor;
@@ -99,9 +103,6 @@ public class LogicalInterconnectClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
-
-        Mockito.when(adaptor.buildDto(Mockito.anyString(), Mockito.anyDouble()))
-        .thenReturn(new LogicalInterconnectAdaptor().buildDto(liJson));
 
         LogicalInterconnects liDto = client.getLogicalInterconnect(params, resourceId);
 
@@ -135,10 +136,7 @@ public class LogicalInterconnectClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
 
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectAdaptor().buildCollectionDto(liJson));
-
-        LogicalInterconnectCollectionV2 liCollectionDto = client.getAllLogicalInterconnects(params);
+        ResourceCollection<LogicalInterconnects> liCollectionDto = client.getAllLogicalInterconnects(params);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI));
@@ -444,9 +442,6 @@ public class LogicalInterconnectClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
 
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectAdaptor().buildCollectionDto(liJson));
-
         LogicalInterconnects liDto = client.getLogicalInterconnectByName(params, resourceName);
 
         RestParams rp = new RestParams();
@@ -474,16 +469,11 @@ public class LogicalInterconnectClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetLogicalInterconnectByNameWithNoMembers() {
-        LogicalInterconnectCollectionV2 liCollection = new LogicalInterconnectAdaptor().buildCollectionDto(this.getJsonFromFile("LogicalInterconnectGetAll.json"));
-        liCollection.setCount(0);
-        liCollection.setMembers(Collections.<LogicalInterconnects>emptyList());
-        liJson= new Gson().toJson(liCollection);
+        liJson= new Gson().toJson(new ResourceCollection<LogicalInterconnects>());
+
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(liCollection);
 
         client.getLogicalInterconnectByName(params, resourceName);
     }
@@ -494,9 +484,6 @@ public class LogicalInterconnectClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
-
-        Mockito.when(adaptor.buildFirmwareDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectAdaptor().buildFirmwareDto(liJson));
 
         LiFirmware firmwareDto = client.getLogicalInterconnectFirmwareById(params, resourceId);
 
@@ -534,10 +521,8 @@ public class LogicalInterconnectClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
 
-        Mockito.when(adaptor.buildInterconnectFibDataDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectAdaptor().buildInterconnectFibDataDto(liJson));
-
-        InterconnectFibData fibDto = client.getLogicalInterconnectForwardingInformationBase(params, resourceId);
+        ResourceCollection<InterconnectFibDataEntry> fibDto
+                = client.getLogicalInterconnectForwardingInformationBase(params, resourceId);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(
@@ -572,9 +557,6 @@ public class LogicalInterconnectClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
-
-        Mockito.when(adaptor.buildInterconnectFibDataInfoDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectAdaptor().buildInterconnectFibDataInfoDto(liJson));
 
         InterconnectFibDataInfo result = client.createLogicalInterconnectForwardingInformationBase(params, resourceId);
 
@@ -651,10 +633,8 @@ public class LogicalInterconnectClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
 
-        Mockito.when(adaptor.buildInternalVlanCollectionDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectAdaptor().buildInternalVlanCollectionDto(liJson));
-
-        InternalVlanAssociationCollection vlanCollectionDto = client.getLogicalInterconnectInternalVlans(params, resourceId);
+        ResourceCollection<InternalVlanAssociation> vlanCollectionDto
+                = client.getLogicalInterconnectInternalVlans(params, resourceId);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(
@@ -691,9 +671,6 @@ public class LogicalInterconnectClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
-
-        Mockito.when(adaptor.buildQosConfigurationDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectAdaptor().buildQosConfigurationDto(liJson));
 
         QosAggregatedConfiguration qosConfig = client.getLogicalInterconnectQosAggregatedConfiguration(params, resourceId);
 
@@ -809,9 +786,6 @@ public class LogicalInterconnectClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
 
-        Mockito.when(adaptor.buildSnmpConfigurationDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectAdaptor().buildSnmpConfigurationDto(liJson));
-
         SnmpConfiguration snmpConfig = client.getLogicalInterconnectSnmpConfigurationById(params, resourceId);
 
         RestParams rp = new RestParams();
@@ -848,10 +822,7 @@ public class LogicalInterconnectClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
 
-        Mockito.when(adaptor.buildPortMonitorUplinkPortCollectioDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectAdaptor().buildPortMonitorUplinkPortCollectioDto(liJson));
-
-        PortMonitorUplinkPortCollection uplinkPortCollection = client.getLogicalInterconnectUnassignedUplinkPortsForPortMonitor(params, resourceId);
+        ResourceCollection<PortMonitorUplinkPort> uplinkPortCollection = client.getLogicalInterconnectUnassignedUplinkPortsForPortMonitor(params, resourceId);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(
@@ -926,9 +897,6 @@ public class LogicalInterconnectClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
-
-        Mockito.when(adaptor.buildPortMonitorDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectAdaptor().buildPortMonitorDto(liJson));
 
         PortMonitor portMonitor = client.getLogicalInterconnectPortMonitorConfiguration(params, resourceId);
 
@@ -1005,9 +973,6 @@ public class LogicalInterconnectClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
 
-        Mockito.when(adaptor.buildTelemetryConfigurationsDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectAdaptor().buildTelemetryConfigurationsDto(liJson));
-
         TelemetryConfiguration telemetryConfig = client.getLogicalInterconnectTelemetryConfiguration(params, resourceId, telemetryId);
 
         RestParams rp = new RestParams();
@@ -1056,9 +1021,6 @@ public class LogicalInterconnectClientTest {
                 Mockito.anyString(),
                 Mockito.anyInt()))
         .thenReturn(taskResourceV2);
-
-        Mockito.when(adaptor.buildTelemetryConfigurationsDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectAdaptor().buildTelemetryConfigurationsDto(jsonCreateTaskCompleted));
 
         TelemetryConfiguration result = client.updateLogicalInterconnectTelemetryConfiguration(params, resourceId, telemetryId, new TelemetryConfiguration());
 
@@ -1138,9 +1100,6 @@ public class LogicalInterconnectClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new LogicalInterconnectAdaptor().buildCollectionDto(liJson));
 
         String id = client.getId(params, resourceName);
 

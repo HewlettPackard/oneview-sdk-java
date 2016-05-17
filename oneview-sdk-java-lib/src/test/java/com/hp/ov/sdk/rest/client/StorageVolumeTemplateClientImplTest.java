@@ -40,12 +40,13 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.StorageVolumeTemplateAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplateCollection;
+import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplate;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeTemplate;
-import com.hp.ov.sdk.dto.StorageVolumeTemplateCollection;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
@@ -60,6 +61,8 @@ public class StorageVolumeTemplateClientImplTest {
 
     @Mock
     private HttpRestClient restClient;
+    @Mock
+    private ResourceAdaptor resourceAdaptor;
     @Mock
     private StorageVolumeTemplateAdaptor adaptor;
     @InjectMocks
@@ -117,8 +120,8 @@ public class StorageVolumeTemplateClientImplTest {
         String storageVolumeTemplateListValue = "{\"type\":\"StorageVolumeTemplateList\"}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(storageVolumeTemplateListValue);
-        given(adaptor.buildStorageVolumeTemplateCollection(anyString()))
-                .willReturn(new StorageVolumeTemplateCollection());
+        given(resourceAdaptor.buildResourceCollection(anyString(), eq(StorageVolumeTemplate.class)))
+                .willReturn(new ResourceCollection<StorageVolumeTemplate>());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -128,7 +131,8 @@ public class StorageVolumeTemplateClientImplTest {
         this.storageClient.getAllStorageVolumeTemplates(new RestParams());
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildStorageVolumeTemplateCollection(storageVolumeTemplateListValue);
+        then(resourceAdaptor).should().buildResourceCollection(storageVolumeTemplateListValue,
+                StorageVolumeTemplate.class);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -154,8 +158,8 @@ public class StorageVolumeTemplateClientImplTest {
                 "\"members\": []}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(storageVolumeTemplateCollectionValue);
-        given(adaptor.buildStorageVolumeTemplateCollection(anyString()))
-                .willReturn(new StorageVolumeTemplateCollection());
+        given(resourceAdaptor.buildResourceCollection(anyString(), eq(StorageVolumeTemplate.class)))
+                .willReturn(new ResourceCollection<StorageVolumeTemplate>());
 
         this.storageClient.getStorageVolumeTemplateByName(new RestParams(), anyStorageVolumeTemplateName);
     }
@@ -166,14 +170,15 @@ public class StorageVolumeTemplateClientImplTest {
         String storageVolumeTemplateCollectionValue = "{\"type\":\"StorageVolumeTemplateList\"," +
                 "\"members\": [{\"type\":\"StorageVolumeTemplateV3\"}]}";
 
-        StorageVolumeTemplateCollection storageVolumeTemplateCollection = new StorageVolumeTemplateCollection();
+        ResourceCollection<StorageVolumeTemplate> storageVolumeTemplateCollection = new ResourceCollection<>();
         StorageVolumeTemplate storageVolumeTemplate = new StorageVolumeTemplate();
 
         storageVolumeTemplateCollection.setMembers(Lists.newArrayList(storageVolumeTemplate));
         storageVolumeTemplateCollection.setCount(1);
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(storageVolumeTemplateCollectionValue);
-        given(adaptor.buildStorageVolumeTemplateCollection(anyString())).willReturn(storageVolumeTemplateCollection);
+        given(resourceAdaptor.buildResourceCollection(anyString(), eq(StorageVolumeTemplate.class))).willReturn(
+                storageVolumeTemplateCollection);
 
         RestParams expectedRestParams = new RestParams();
 
@@ -189,7 +194,8 @@ public class StorageVolumeTemplateClientImplTest {
                 new RestParams(), anyStorageVolumeTemplateName);
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildStorageVolumeTemplateCollection(eq(storageVolumeTemplateCollectionValue));
+        then(resourceAdaptor).should().buildResourceCollection(eq(storageVolumeTemplateCollectionValue),
+                eq(StorageVolumeTemplate.class));
 
         assertThat(response, is(sameInstance(storageVolumeTemplate)));
     }
@@ -303,8 +309,8 @@ public class StorageVolumeTemplateClientImplTest {
         String connectableCollectionValue = "{\"type\":\"ConnectableStorageVolumeTemplateList\"}";
 
         given(restClient.sendRequest(any(RestParams.class))).willReturn(connectableCollectionValue);
-        given(adaptor.buildConnectableStorageVolumeTemplateCollection(anyString()))
-                .willReturn(new ConnectableStorageVolumeTemplateCollection());
+        given(resourceAdaptor.buildResourceCollection(anyString(), eq(ConnectableStorageVolumeTemplate.class)))
+                .willReturn(new ResourceCollection<ConnectableStorageVolumeTemplate>());
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.GET);
@@ -315,7 +321,8 @@ public class StorageVolumeTemplateClientImplTest {
         this.storageClient.getConnectableVolumeTemplates(new RestParams());
 
         then(restClient).should().sendRequest(eq(expectedRestParams));
-        then(adaptor).should().buildConnectableStorageVolumeTemplateCollection(connectableCollectionValue);
+        then(resourceAdaptor).should().buildResourceCollection(connectableCollectionValue,
+                ConnectableStorageVolumeTemplate.class);
     }
 
     @Test

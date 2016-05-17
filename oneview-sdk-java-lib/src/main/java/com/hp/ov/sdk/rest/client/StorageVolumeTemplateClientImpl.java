@@ -23,13 +23,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.StorageVolumeTemplateAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplateCollection;
+import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplate;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeTemplate;
-import com.hp.ov.sdk.dto.StorageVolumeTemplateCollection;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -44,19 +45,23 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
     private static final Logger LOGGER = LoggerFactory.getLogger(StorageVolumeTemplateClientImpl.class);
 
     private final HttpRestClient restClient;
+    private final ResourceAdaptor resourceAdaptor;
     private final StorageVolumeTemplateAdaptor adaptor;
 
     protected StorageVolumeTemplateClientImpl(
             HttpRestClient restClient,
+            ResourceAdaptor resourceAdaptor,
             StorageVolumeTemplateAdaptor adaptor) {
 
         this.restClient = restClient;
+        this.resourceAdaptor = resourceAdaptor;
         this.adaptor = adaptor;
     }
 
     public static StorageVolumeTemplateClient getClient() {
         return new StorageVolumeTemplateClientImpl(
                 HttpRestClient.getClient(),
+                new ResourceAdaptor(),
                 new StorageVolumeTemplateAdaptor());
     }
 
@@ -88,7 +93,7 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
     }
 
     @Override
-    public StorageVolumeTemplateCollection getAllStorageVolumeTemplates(final RestParams params) {
+    public ResourceCollection<StorageVolumeTemplate> getAllStorageVolumeTemplates(final RestParams params) {
         LOGGER.trace("StorageVolumeTemplateClientImpl : getAllStorageVolumeTemplates : Start");
         // validate args
         if (null == params) {
@@ -105,8 +110,8 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.STORAGE_VOLUME_TEMPLATES, null);
         }
-        final StorageVolumeTemplateCollection storageVolumeTemplateCollectionDto
-                = adaptor.buildStorageVolumeTemplateCollection(returnObj);
+        ResourceCollection<StorageVolumeTemplate> storageVolumeTemplateCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, StorageVolumeTemplate.class);
 
         LOGGER.debug("StorageVolumeTemplateClientImpl : getAllStorageVolumeTemplates : members count :"
                 + storageVolumeTemplateCollectionDto.getCount());
@@ -141,10 +146,10 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
         }
 
         StorageVolumeTemplate storageVolumeTemplateDto = null;
-        StorageVolumeTemplateCollection storageVolumeTemplateCollectionDto
-                = adaptor.buildStorageVolumeTemplateCollection(returnObj);
+        ResourceCollection<StorageVolumeTemplate> storageVolumeTemplateCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, StorageVolumeTemplate.class);
 
-        if (storageVolumeTemplateCollectionDto.getCount() != 0) {
+        if (!storageVolumeTemplateCollectionDto.isEmpty()) {
             storageVolumeTemplateDto = storageVolumeTemplateCollectionDto.getMembers().get(0);
         }
 
@@ -266,7 +271,7 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
     }
 
     @Override
-    public ConnectableStorageVolumeTemplateCollection getConnectableVolumeTemplates(final RestParams params) {
+    public ResourceCollection<ConnectableStorageVolumeTemplate> getConnectableVolumeTemplates(final RestParams params) {
         LOGGER.trace("StorageVolumeTemplateClientImpl : getConnectableVolumeTemplates : Start");
         // validate args
         if (null == params) {
@@ -286,8 +291,8 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.STORAGE_VOLUME_TEMPLATES, null);
         }
-        ConnectableStorageVolumeTemplateCollection connectableCollection
-                = adaptor.buildConnectableStorageVolumeTemplateCollection(returnObj);
+        ResourceCollection<ConnectableStorageVolumeTemplate> connectableCollection
+                = resourceAdaptor.buildResourceCollection(returnObj, ConnectableStorageVolumeTemplate.class);
 
         LOGGER.debug("StorageVolumeTemplateClientImpl : getConnectableVolumeTemplates : members count :"
                 + connectableCollection.getCount());

@@ -30,11 +30,11 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.ExtraStorageVolumeCollection;
+import com.hp.ov.sdk.dto.ExtraStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeAttachment;
-import com.hp.ov.sdk.dto.StorageVolumeAttachmentCollection;
 import com.hp.ov.sdk.dto.StorageVolumeAttachmentPath;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
@@ -106,7 +106,7 @@ public class StorageVolumeAttachmentsClientImpl implements StorageVolumeAttachme
     }
 
     @Override
-    public StorageVolumeAttachmentCollection getAllStorageVolumeAttachments(RestParams params) {
+    public ResourceCollection<StorageVolumeAttachment> getAllStorageVolumeAttachments(RestParams params) {
         LOGGER.trace("StorageVolumeAttachmentsClientImpl : getAllStorageVolumeAttachments : Start");
 
         if (params == null) {
@@ -128,8 +128,8 @@ public class StorageVolumeAttachmentsClientImpl implements StorageVolumeAttachme
                     SdkConstants.STORAGE_VOLUME_ATTACHMENTS, null);
         }
 
-        StorageVolumeAttachmentCollection storageVolumeAttachmentCollection = adaptor.buildResourceObject(
-                response, StorageVolumeAttachmentCollection.class);
+        ResourceCollection<StorageVolumeAttachment> storageVolumeAttachmentCollection
+                = adaptor.buildResourceCollection(response, StorageVolumeAttachment.class);
 
         LOGGER.trace("StorageVolumeAttachmentsClientImpl : getAllStorageVolumeAttachments : End");
 
@@ -205,7 +205,7 @@ public class StorageVolumeAttachmentsClientImpl implements StorageVolumeAttachme
     }
 
     @Override
-    public ExtraStorageVolumeCollection getExtraUnmanagedStorageVolumeAttachments(RestParams params) {
+    public ResourceCollection<ExtraStorageVolume> getExtraUnmanagedStorageVolumeAttachments(RestParams params) {
         LOGGER.trace("StorageVolumeAttachmentsClientImpl : getExtraUnmanagedStorageVolumeAttachments : Start");
 
         if (params == null) {
@@ -231,8 +231,8 @@ public class StorageVolumeAttachmentsClientImpl implements StorageVolumeAttachme
                     SdkConstants.STORAGE_VOLUME_ATTACHMENTS, null);
         }
 
-        ExtraStorageVolumeCollection extraStorageVolumeCollection = adaptor.buildResourceObject(response,
-                ExtraStorageVolumeCollection.class);
+        ResourceCollection<ExtraStorageVolume> extraStorageVolumeCollection
+                = adaptor.buildResourceCollection(response, ExtraStorageVolume.class);
 
         LOGGER.trace("StorageVolumeAttachmentsClientImpl : getExtraUnmanagedStorageVolumeAttachments : End");
 

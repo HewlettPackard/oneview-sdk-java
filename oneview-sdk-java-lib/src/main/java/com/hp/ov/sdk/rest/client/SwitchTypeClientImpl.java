@@ -28,7 +28,7 @@ import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.InterconnectType;
-import com.hp.ov.sdk.dto.InterconnectTypeCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -113,8 +113,9 @@ public class SwitchTypeClientImpl implements SwitchTypeClient {
         }
 
         InterconnectType interconnectType = null;
-        InterconnectTypeCollection typeCollection = adaptor.buildResourceObject(response,
-                InterconnectTypeCollection.class);
+
+        ResourceCollection<InterconnectType> typeCollection
+                = adaptor.buildResourceCollection(response, InterconnectType.class);
 
         if (typeCollection.getCount() > 0) {
             interconnectType = typeCollection.getMembers().get(0);
@@ -133,7 +134,7 @@ public class SwitchTypeClientImpl implements SwitchTypeClient {
     }
 
     @Override
-    public InterconnectTypeCollection getAllSwitchTypes(RestParams params) {
+    public ResourceCollection<InterconnectType> getAllSwitchTypes(RestParams params) {
         LOGGER.trace("SwitchTypeClientImpl : getAllSwitchTypes : Start");
 
         if (params == null) {
@@ -153,8 +154,8 @@ public class SwitchTypeClientImpl implements SwitchTypeClient {
                     SdkConstants.SWITCH_TYPES, null);
         }
 
-        InterconnectTypeCollection interconnectTypes = adaptor.buildResourceObject(response,
-                InterconnectTypeCollection.class);
+        ResourceCollection<InterconnectType> interconnectTypes
+                = adaptor.buildResourceCollection(response, InterconnectType.class);
 
         LOGGER.trace("SwitchTypeClientImpl : getAllSwitchTypes : End");
 

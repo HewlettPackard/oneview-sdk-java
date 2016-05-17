@@ -19,7 +19,7 @@ import java.util.List;
 
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.JsonRequest;
-import com.hp.ov.sdk.dto.NetworkCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.Bandwidth;
 import com.hp.ov.sdk.dto.generated.BulkEthernetNetwork;
@@ -95,7 +95,7 @@ public class NetworkClientSample {
 
     private void getAllNetwork() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        NetworkCollection networkCollectionDto = null;
+        ResourceCollection<Network> networkCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -103,8 +103,8 @@ public class NetworkClientSample {
             // then make sdk service call to get resource
             networkCollectionDto = networkClient.getAllNetworks(params);
 
-            System.out.println("NetworkClientTest : getAllNetwork : network object returned to client : "
-                    + networkCollectionDto.toString());
+            System.out.println("NetworkClientTest : getAllNetwork : network object returned to client (count) : "
+                    + networkCollectionDto.getCount());
         } catch (final SDKResourceNotFoundException ex) {
             System.out.println("NetworkClientTest : getAllNetwork : resource you are looking is not found");
             return;

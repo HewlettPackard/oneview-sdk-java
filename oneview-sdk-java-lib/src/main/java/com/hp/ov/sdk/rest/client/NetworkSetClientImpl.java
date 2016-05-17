@@ -22,12 +22,12 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.adaptors.NetworkSetAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.NetworkSetCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.NetworkSets;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
@@ -44,15 +44,14 @@ public class NetworkSetClientImpl implements NetworkSetClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(NetworkSetClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
 
-    private final NetworkSetAdaptor adaptor;
+    private final ResourceAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
-
-    private HttpRestClient httpClient;
+    private final HttpRestClient httpClient;
 
     private JSONObject jsonObject;
 
-    protected NetworkSetClientImpl(HttpRestClient httpClient, NetworkSetAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+    protected NetworkSetClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
         this.httpClient = httpClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
@@ -62,7 +61,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
     public static NetworkSetClient getClient() {
         return new NetworkSetClientImpl(
                 HttpRestClient.getClient(),
-                new NetworkSetAdaptor(),
+                new ResourceAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
     }
@@ -86,7 +85,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
         }
         // Call adaptor to convert to DTO
 
-        final NetworkSets networkSetDto = adaptor.buildDto(returnObj);
+        final NetworkSets networkSetDto = adaptor.buildResourceObject(returnObj, NetworkSets.class);
 
         LOGGER.debug("NetworkSetClientImpl : getNetworkSet : Name :" + networkSetDto.getName());
         LOGGER.info("NetworkSetClientImpl : getNetworkSet : End");
@@ -95,7 +94,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
     }
 
     @Override
-    public NetworkSetCollection getAllNetworkSets(final RestParams params) {
+    public ResourceCollection<NetworkSets> getAllNetworkSets(final RestParams params) {
         LOGGER.info("NetworkSetClientImpl : getAllNetworkSets : Start");
         // validate args
         if (null == params) {
@@ -112,9 +111,8 @@ public class NetworkSetClientImpl implements NetworkSetClient {
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKSETS, null);
         }
-        // Call adaptor to convert to DTO
-
-        final NetworkSetCollection networkSetCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<NetworkSets> networkSetCollectionDto
+                = adaptor.buildResourceCollection(returnObj, NetworkSets.class);
 
         LOGGER.debug("NetworkSetClientImpl : getAllNetworkSets : members count :" + networkSetCollectionDto.getCount());
         LOGGER.info("NetworkSetClientImpl : getAllNetworkSets : End");
@@ -147,8 +145,10 @@ public class NetworkSetClientImpl implements NetworkSetClient {
         }
         // Call adaptor to convert to DTO
         NetworkSets networkSetDto;
-        final NetworkSetCollection networkSetCollectionDto = adaptor.buildCollectionDto(returnObj);
-        if (networkSetCollectionDto.getCount() != 0) {
+        ResourceCollection<NetworkSets> networkSetCollectionDto = adaptor.buildResourceCollection(returnObj,
+                NetworkSets.class);
+
+        if (!networkSetCollectionDto.isEmpty()) {
             networkSetDto = networkSetCollectionDto.getMembers().get(0);
         } else {
             networkSetDto = null;
@@ -183,7 +183,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
         // user can save time in creating network dto.
 
         // create JSON request from dto
-        jsonObject = adaptor.buildJsonObjectFromDto(networkSetDto);
+        jsonObject = adaptor.buildJsonRequest(networkSetDto, params.getApiVersion());
         returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
@@ -229,7 +229,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
         // user can save time in creating network dto.
 
         // create JSON request from dto
-        jsonObject = adaptor.buildJsonObjectFromDto(networkSetDto);
+        jsonObject = adaptor.buildJsonRequest(networkSetDto, params.getApiVersion());
         returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
         TaskResourceV2 taskResourceV2 = taskAdaptor.buildDto(returnObj);
@@ -248,7 +248,6 @@ public class NetworkSetClientImpl implements NetworkSetClient {
         LOGGER.info("NetworkSetClientImpl : updateNetworkSet : End");
 
         return taskResourceV2;
-
     }
 
     @Override

@@ -23,11 +23,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.adaptors.FcNetworkAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.FcNetworkCollection;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.FcNetwork;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
@@ -44,16 +45,19 @@ public class FcNetworkClientImpl implements FcNetworkClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(FcNetworkClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
 
+    private final ResourceAdaptor resourceAdaptor;
     private final FcNetworkAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
-
-    private HttpRestClient httpClient;
+    private final HttpRestClient httpClient;
 
     private JSONObject jsonObject;
 
-    protected FcNetworkClientImpl(HttpRestClient httpClient, FcNetworkAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+    protected FcNetworkClientImpl(HttpRestClient httpClient, ResourceAdaptor resourceAdaptor,
+            FcNetworkAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+
         this.httpClient = httpClient;
+        this.resourceAdaptor = resourceAdaptor;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;
         this.taskMonitor = taskMonitor;
@@ -62,6 +66,7 @@ public class FcNetworkClientImpl implements FcNetworkClient {
     public static FcNetworkClient getClient() {
         return new FcNetworkClientImpl(
                 HttpRestClient.getClient(),
+                new ResourceAdaptor(),
                 new FcNetworkAdaptor(),
                 TaskAdaptor.getInstance(),
                 TaskMonitorManager.getInstance());
@@ -95,7 +100,7 @@ public class FcNetworkClientImpl implements FcNetworkClient {
     }
 
     @Override
-    public FcNetworkCollection getFcNetworkByFilter(final RestParams params, final Integer start, final Integer count) {
+    public ResourceCollection<FcNetwork> getFcNetworkByFilter(final RestParams params, final Integer start, final Integer count) {
         LOGGER.info("FcNetworkClientImpl : getFcNetworkByFilter : Start");
 
         // validate args
@@ -117,9 +122,9 @@ public class FcNetworkClientImpl implements FcNetworkClient {
         if (null == returnObj || returnObj.equals("")) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.FC_NETWORKS, null);
         }
-        // Call adaptor to convert to DTO
 
-        final FcNetworkCollection fcNetworkCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<FcNetwork> fcNetworkCollectionDto = resourceAdaptor.buildResourceCollection(returnObj,
+                FcNetwork.class);
 
         LOGGER.debug("FcNetworkClientImpl : getFcNetworkByFilter : count :" + fcNetworkCollectionDto.getCount());
         LOGGER.info("FcNetworkClientImpl : getFcNetworkByFilter : End");
@@ -128,7 +133,7 @@ public class FcNetworkClientImpl implements FcNetworkClient {
     }
 
     @Override
-    public FcNetworkCollection getAllFcNetworks(final RestParams params) {
+    public ResourceCollection<FcNetwork> getAllFcNetworks(final RestParams params) {
         LOGGER.info("FcNetworkClientImpl : getAllFcNetworks : Start");
 
         // validate args
@@ -146,7 +151,8 @@ public class FcNetworkClientImpl implements FcNetworkClient {
         }
         // Call adaptor to convert to DTO
 
-        final FcNetworkCollection fcNetworkCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<FcNetwork> fcNetworkCollectionDto = resourceAdaptor.buildResourceCollection(returnObj,
+                FcNetwork.class);
 
         LOGGER.debug("FcNetworkClientImpl : getAllFcNetworks : count :" + fcNetworkCollectionDto.getCount());
         LOGGER.info("FcNetworkClientImpl : getAllFcNetworks : End");
@@ -179,9 +185,11 @@ public class FcNetworkClientImpl implements FcNetworkClient {
         }
         // Call adaptor to convert to DTO
 
-        final FcNetworkCollection fcNetworkCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<FcNetwork> fcNetworkCollectionDto = resourceAdaptor.buildResourceCollection(returnObj,
+                FcNetwork.class);
+
         FcNetwork fcNetworkDto;
-        if (fcNetworkCollectionDto.getCount() != 0) {
+        if (!fcNetworkCollectionDto.isEmpty()) {
             fcNetworkDto = fcNetworkCollectionDto.getMembers().get(0);
         } else {
             fcNetworkDto = null;

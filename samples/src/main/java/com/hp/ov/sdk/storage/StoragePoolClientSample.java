@@ -17,8 +17,8 @@ package com.hp.ov.sdk.storage;
 
 import com.hp.ov.sdk.dto.AddStoragePool;
 import com.hp.ov.sdk.dto.RefreshState;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
-import com.hp.ov.sdk.dto.StoragePoolCollection;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -89,7 +89,7 @@ public class StoragePoolClientSample {
 
     private void getAllStoragePool() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        StoragePoolCollection storagePoolCollectionDto = null;
+        ResourceCollection<StoragePool> storagePoolCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();

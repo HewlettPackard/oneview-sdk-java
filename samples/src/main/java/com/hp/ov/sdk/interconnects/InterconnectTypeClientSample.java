@@ -15,8 +15,8 @@
  *******************************************************************************/
 package com.hp.ov.sdk.interconnects;
 
-import com.hp.ov.sdk.dto.InterconnectTypeCollection;
 import com.hp.ov.sdk.dto.InterconnectType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -82,7 +82,7 @@ public class InterconnectTypeClientSample {
 
     private void getAllInterconnectType() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        InterconnectTypeCollection interconnectTypeCollectionDto = null;
+        ResourceCollection<InterconnectType> interconnectTypeCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();

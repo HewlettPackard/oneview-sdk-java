@@ -15,12 +15,12 @@
  */
 package com.hp.ov.sdk.rest.client;
 
-import com.hp.ov.sdk.dto.EndpointResponseCollection;
+import com.hp.ov.sdk.dto.EndpointResponse;
 import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.dto.FcSansManagedSanTask;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SanRequest;
 import com.hp.ov.sdk.dto.SanResponse;
-import com.hp.ov.sdk.dto.SanResponseCollection;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 /**
@@ -46,9 +46,10 @@ public interface FcSansManagedSanClient {
      *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link SanResponseCollection} containing the collection of managed SAN details.
+     * @return {@link ResourceCollection}&lt;{@link SanResponse}&gt; containing
+     * the details for all found managed SANs.
      */
-    SanResponseCollection getAllManagedSan(final RestParams params);
+    ResourceCollection<SanResponse> getAllManagedSan(final RestParams params);
 
     /**
      * The module aids in fetching the managed SAN details for the managed SAN
@@ -92,10 +93,10 @@ public interface FcSansManagedSanClient {
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
      *            The resource identifier for managed SAN as seen in HPE OneView.
-     * @return {@link EndpointResponseCollection} which contains data of all endpoints
-     *          os the specified SAN.
+     * @return {@link ResourceCollection}&lt;{@link EndpointResponse}&gt; containing
+     * the details for all found endpoints of a given managed SAN.
      */
-    EndpointResponseCollection getEndpointsOfManagedSan(final RestParams params, final String resourceId);
+    ResourceCollection<EndpointResponse> getEndpointsOfManagedSan(final RestParams params, final String resourceId);
 
     /**
      * Creates a new SAN issues report indicating any connectivity issues in the specified SAN.

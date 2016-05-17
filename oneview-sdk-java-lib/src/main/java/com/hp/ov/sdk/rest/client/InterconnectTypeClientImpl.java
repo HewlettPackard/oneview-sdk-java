@@ -22,12 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
-import com.hp.ov.sdk.adaptors.InterconnectTypeAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.InterconnectType;
-import com.hp.ov.sdk.dto.InterconnectTypeCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -41,10 +41,10 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(InterconnectTypeClientImpl.class);
 
     private final HttpRestClient restClient;
-    private final InterconnectTypeAdaptor adaptor;
+    private final ResourceAdaptor adaptor;
 
     private InterconnectTypeClientImpl(HttpRestClient restClient,
-            InterconnectTypeAdaptor adaptor) {
+            ResourceAdaptor adaptor) {
         this.restClient = restClient;
         this.adaptor = adaptor;
     }
@@ -52,7 +52,7 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
     public static InterconnectTypeClient getClient() {
         return new InterconnectTypeClientImpl(
                 HttpRestClient.getClient(),
-                new InterconnectTypeAdaptor());
+                new ResourceAdaptor());
     }
 
     @Override
@@ -74,8 +74,8 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.INTERCONNECT_TYPE, null);
         }
-        // Call adaptor to convert to DTO
-        final InterconnectType interconnectTypeDto = adaptor.buildDto(returnObj);
+
+        final InterconnectType interconnectTypeDto = adaptor.buildResourceObject(returnObj, InterconnectType.class);
 
         LOGGER.debug("InterconnectTypeClientImpl : getInterconnectType : name :" + interconnectTypeDto.getName());
         LOGGER.trace("InterconnectTypeClientImpl : getInterconnectType : End");
@@ -84,7 +84,7 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
     }
 
     @Override
-    public InterconnectTypeCollection getAllInterconnectType(final RestParams params) {
+    public ResourceCollection<InterconnectType> getAllInterconnectType(final RestParams params) {
         LOGGER.trace("InterconnectTypeClientImpl : getAllInterconnectTypeV2s : Start");
         // validate args
         if (null == params) {
@@ -103,8 +103,8 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
                     SdkConstants.INTERCONNECT_TYPES, null);
         }
 
-        // Call adaptor to convert to DTO
-        final InterconnectTypeCollection interconnectTypeCollectionDto = adaptor.buildCollectionDto(returnObj);
+        ResourceCollection<InterconnectType> interconnectTypeCollectionDto
+                = adaptor.buildResourceCollection(returnObj, InterconnectType.class);
 
         LOGGER.debug("InterconnectTypeClientImpl : getAllInterconnectTypes : members count :"
                 + interconnectTypeCollectionDto.getCount());
@@ -137,8 +137,9 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null,
                     SdkConstants.INTERCONNECT_TYPE, null);
         }
-        // Call adaptor to convert to DTO
-        final InterconnectTypeCollection interconnectTypeCollectionDto = adaptor.buildCollectionDto(returnObj);
+
+        ResourceCollection<InterconnectType> interconnectTypeCollectionDto
+                = adaptor.buildResourceCollection(returnObj, InterconnectType.class);
 
         if (interconnectTypeCollectionDto.getCount() != 0) {
             interconnectTypeDto = interconnectTypeCollectionDto.getMembers().get(0);

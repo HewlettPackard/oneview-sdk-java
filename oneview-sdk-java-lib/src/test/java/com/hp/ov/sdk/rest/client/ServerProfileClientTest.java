@@ -34,20 +34,21 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.gson.Gson;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.ServerProfileAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.AvailableStorageSystem;
-import com.hp.ov.sdk.dto.AvailableStorageSystems;
 import com.hp.ov.sdk.dto.AvailableTargets;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.Patch.PatchOperation;
-import com.hp.ov.sdk.dto.ServerProfileCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.ServerProfileCompliancePreview;
 import com.hp.ov.sdk.dto.ServerProfileHealth;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -69,7 +70,9 @@ public class ServerProfileClientTest {
 
     private RestParams params;
 
-    @Mock
+    @Spy
+    private ResourceAdaptor resourceAdaptor;
+    @Spy
     private ServerProfileAdaptor adaptor;
     @Mock
     private TaskAdaptor taskAdaptor;
@@ -94,9 +97,6 @@ public class ServerProfileClientTest {
     public void testGetServerProfile() {
         spJson = this.getJsonFromFile("ServerProfileGet.json");
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
-
-        Mockito.when(adaptor.buildDto(Mockito.eq(spJson), Mockito.anyDouble()))
-        .thenReturn(new ServerProfileAdaptor().buildDto(spJson, 200));
 
         ServerProfile serverProfileDto = client.getServerProfile(params, resourceId);
 
@@ -131,10 +131,7 @@ public class ServerProfileClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(spJson);
 
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString()))
-        .thenReturn(new ServerProfileAdaptor().buildCollectionDto(spJson));
-
-        ServerProfileCollection serverProfileList = client.getAllServerProfile(params);
+        ResourceCollection<ServerProfile> serverProfileList = client.getAllServerProfile(params);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.SERVER_PROFILE_URI));
@@ -167,9 +164,6 @@ public class ServerProfileClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(spJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString(), Mockito.anyDouble()))
-        .thenReturn(new ServerProfileAdaptor().buildCollectionDto(spJson, 200));
 
         ServerProfile serverProfileDto = client.getServerProfileByName(params, resourceName);
 
@@ -205,16 +199,11 @@ public class ServerProfileClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetServerProfileByNameWithNoMembers() {
-        ServerProfileCollection serverProfileList = new ServerProfileAdaptor().buildCollectionDto(this.getJsonFromFile("ServerProfileGetByName.json"));
-        serverProfileList.setCount(0);
-        spJson = new Gson().toJson(serverProfileList);
+        spJson = new Gson().toJson(new ResourceCollection<ServerProfile>());
 
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(spJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.anyString(), Mockito.anyDouble()))
-        .thenReturn(serverProfileList);
 
         client.getServerProfileByName(params, resourceName);
     }
@@ -223,9 +212,6 @@ public class ServerProfileClientTest {
     public void testGetServerProfileCompliancePreview() {
         spJson = this.getJsonFromFile("ServerProfileCompliancePreviewGet.json");
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
-
-        Mockito.when(adaptor.buildCompliancePreviewDto(Mockito.anyString(), Mockito.anyDouble()))
-        .thenReturn(new ServerProfileAdaptor().buildCompliancePreviewDto(spJson, 200));
 
         ServerProfileCompliancePreview compliancePreviewDto = client.getServerProfileCompliancePreview(params, resourceId);
 
@@ -261,9 +247,6 @@ public class ServerProfileClientTest {
         spJson = this.getJsonFromFile("ServerProfileMessagesGet.json");
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
 
-        Mockito.when(adaptor.buildHealthDto(Mockito.anyString(), Mockito.anyDouble()))
-        .thenReturn(new ServerProfileAdaptor().buildHealthDto(spJson, 200));
-
         ServerProfileHealth healthDto = client.getServerProfileMessages(params, resourceId);
 
         RestParams rp = new RestParams();
@@ -297,9 +280,6 @@ public class ServerProfileClientTest {
     public void testGetServerProfileTransformation() {
         spJson = this.getJsonFromFile("ServerProfileGet.json");
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
-
-        Mockito.when(adaptor.buildServerProfileDto(Mockito.anyString(), Mockito.anyDouble()))
-        .thenReturn(new ServerProfileAdaptor().buildServerProfileDto(spJson, 200));
 
         ServerProfile serverProfileDto = client.getServerProfileTransformation(params, resourceId, "uri", "uri");
 
@@ -335,9 +315,6 @@ public class ServerProfileClientTest {
     public void testGetAvailableNetworksForServerProfile() {
         spJson = this.getJsonFromFile("ServerProfileAvailableNetworksGet.json");
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
-
-        Mockito.when(adaptor.buildAvailableNetworkDto(Mockito.anyString()))
-        .thenReturn(new ServerProfileAdaptor().buildAvailableNetworkDto(spJson));
 
         AvailableNetworks networksDto = client.getAvailableNetworksForServerProfile(params, "uri", "uri");
 
@@ -376,9 +353,6 @@ public class ServerProfileClientTest {
     public void testGetAvailableServersForServerProfileRestParams() {
         spJson = this.getJsonFromFile("ServerProfileAvailableServersGet.json");
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
-
-        Mockito.when(adaptor.buildAvailableServerDto(Mockito.eq(spJson)))
-        .thenReturn(new ServerProfileAdaptor().buildAvailableServerDto(spJson));
 
         List<AvailableServers> servers = client.getAvailableServersForServerProfile(params);
 
@@ -541,9 +515,6 @@ public class ServerProfileClientTest {
         spJson = this.getJsonFromFile("ServerProfileAvailableStorageSystemGet.json");
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
 
-        Mockito.when(adaptor.buildAvailableStorageSystemDto(Mockito.anyString(), Mockito.anyDouble()))
-        .thenReturn(new ServerProfileAdaptor().buildAvailableStorageSystemDto(spJson, 200));
-
         AvailableStorageSystem storageSystemDto = client.getAvailableStorageSystemForServerProfile(params, "uri", "uri", "id");
 
         RestParams rp = new RestParams();
@@ -599,10 +570,7 @@ public class ServerProfileClientTest {
         spJson = this.getJsonFromFile("ServerProfileAvailableStorageSystemsGet.json");
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
 
-        Mockito.when(adaptor.buildAvailableStorageSystemsDto(Mockito.eq(spJson), Mockito.anyDouble()))
-        .thenReturn(new ServerProfileAdaptor().buildAvailableStorageSystemsDto(spJson, 200));
-
-        AvailableStorageSystems storageSystemsDto = client.getAvailableStorageSystemsForServerProfile(params, "uri", "uri");
+        ResourceCollection<AvailableStorageSystem> storageSystemsDto = client.getAvailableStorageSystemsForServerProfile(params, "uri", "uri");
 
         RestParams rp = new RestParams();
 
@@ -630,10 +598,7 @@ public class ServerProfileClientTest {
                         Mockito.any(RestParams.class)))
         .thenReturn(spJson);
 
-        Mockito.when(adaptor.buildAvailableStorageSystemsDto(Mockito.eq(spJson), Mockito.anyDouble()))
-        .thenReturn(new ServerProfileAdaptor().buildAvailableStorageSystemsDto(spJson, 200));
-
-        AvailableStorageSystems storageSystemsDto = client.getAvailableStorageSystemsForServerProfile(params, "uri", "uri");
+        ResourceCollection<AvailableStorageSystem> storageSystemsDto = client.getAvailableStorageSystemsForServerProfile(params, "uri", "uri");
 
         RestParams rp = new RestParams();
 
@@ -683,9 +648,6 @@ public class ServerProfileClientTest {
         spJson = this.getJsonFromFile("ServerProfileAvailableTargetsGet.json");
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
 
-        Mockito.when(adaptor.buildAvailableTargetsDto(Mockito.anyString(), Mockito.anyDouble()))
-        .thenReturn(new ServerProfileAdaptor().buildAvailableTargetsDto(spJson, 200));
-
         AvailableTargets targetsDto = client.getAvailableTargetsForServerProfile(params);
 
         RestParams rp = new RestParams();
@@ -719,9 +681,6 @@ public class ServerProfileClientTest {
     public void testGetAvailableTargetsForServerProfileRestParamsStringStringString() {
         spJson = this.getJsonFromFile("ServerProfileAvailableTargetsGet.json");
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
-
-        Mockito.when(adaptor.buildAvailableTargetsDto(Mockito.anyString(), Mockito.anyDouble()))
-        .thenReturn(new ServerProfileAdaptor().buildAvailableTargetsDto(spJson, 200));
 
         AvailableTargets targetsDto = client.getAvailableTargetsForServerProfile(params, "uri", "uri", "uri");
 
@@ -763,9 +722,6 @@ public class ServerProfileClientTest {
         spJson = this.getJsonFromFile("ServerProfilePortsGet.json");
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(spJson);
 
-        Mockito.when(adaptor.buildProfilePortsDto(Mockito.anyString(), Mockito.anyDouble()))
-        .thenReturn(new ServerProfileAdaptor().buildProfilePortsDto(spJson, 200));
-
         ProfilePorts portsDto = client.getProfilePortsForServerProfile(params, "uri", "uri");
 
         RestParams rp = new RestParams();
@@ -793,9 +749,6 @@ public class ServerProfileClientTest {
                 restClient.sendRequest(
                         Mockito.any(RestParams.class)))
         .thenReturn(spJson);
-
-        Mockito.when(adaptor.buildProfilePortsDto(Mockito.eq(spJson), Mockito.anyDouble()))
-        .thenReturn(new ServerProfileAdaptor().buildProfilePortsDto(spJson, 200));
 
         ProfilePorts portsDto = client.getProfilePortsForServerProfile(params, "uri", "uri");
 
@@ -844,9 +797,6 @@ public class ServerProfileClientTest {
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonCreateTaskCompleted);
-
-        Mockito.when(adaptor.buildJsonObjectFromDto(Mockito.any(ServerProfile.class), Mockito.anyDouble()))
-        .thenReturn(new ServerProfileAdaptor().buildJsonObjectFromDto(serverProfileDto, 200));
 
         Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
         .thenReturn(taskResourceV2);
@@ -903,9 +853,6 @@ public class ServerProfileClientTest {
                 Mockito.any(JSONObject.class)))
         .thenReturn(jsonUpdateTaskCompleted);
 
-        Mockito.when(adaptor.buildJsonObjectFromDto(Mockito.any(ServerProfile.class), Mockito.anyDouble()))
-        .thenReturn(new ServerProfileAdaptor().buildJsonObjectFromDto(serverProfileDto, 200));
-
         Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
         .thenReturn(taskResourceV2);
 
@@ -955,9 +902,6 @@ public class ServerProfileClientTest {
                 Mockito.any(RestParams.class),
                 Mockito.any(JSONArray.class)))
         .thenReturn(jsonPatchTaskCompleted);
-
-        Mockito.when(adaptor.buildJsonArrayDto(Mockito.any(Patch.class)))
-        .thenReturn(new ServerProfileAdaptor().buildJsonArrayDto(patchDto));
 
         Mockito.when(taskAdaptor.buildDto(Mockito.anyString()))
         .thenReturn(taskResourceV2);
@@ -1138,9 +1082,6 @@ public class ServerProfileClientTest {
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
         .thenReturn(spJson);
-
-        Mockito.when(adaptor.buildCollectionDto(Mockito.eq(spJson), Mockito.anyDouble()))
-        .thenReturn(new ServerProfileAdaptor().buildCollectionDto(spJson, 200));
 
         String id = client.getId(params, resourceName);
 

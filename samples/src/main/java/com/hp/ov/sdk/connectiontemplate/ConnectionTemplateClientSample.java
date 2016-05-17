@@ -15,7 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.connectiontemplate;
 
-import com.hp.ov.sdk.dto.ConnectionTemplateCollection;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.generated.Bandwidth;
 import com.hp.ov.sdk.dto.generated.ConnectionTemplate;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -138,7 +138,7 @@ public class ConnectionTemplateClientSample {
     }
 
     public void getAllConnectionTemplates() throws InstantiationException, IllegalAccessException {
-        ConnectionTemplateCollection connectionTemplateCollectionDto = null;
+        ResourceCollection<ConnectionTemplate> connectionTemplateCollectionDto = null;
         // first get the session Id
         try {
 

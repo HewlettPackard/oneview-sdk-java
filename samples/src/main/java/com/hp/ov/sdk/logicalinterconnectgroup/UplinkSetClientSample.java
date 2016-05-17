@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.UplinkSetCollectionV2;
 import com.hp.ov.sdk.dto.generated.Enclosures;
 import com.hp.ov.sdk.dto.generated.Interconnects;
 import com.hp.ov.sdk.dto.generated.Location;
@@ -117,7 +117,7 @@ public class UplinkSetClientSample {
     }
 
     private void getAllUplinkSet() throws InstantiationException, IllegalAccessException {
-        UplinkSetCollectionV2 uplinkSetCollectionDto = null;
+        ResourceCollection<UplinkSets> uplinkSetCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();

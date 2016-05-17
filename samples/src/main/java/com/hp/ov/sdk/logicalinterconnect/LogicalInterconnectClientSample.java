@@ -21,17 +21,17 @@ import java.util.List;
 
 import com.hp.ov.sdk.dto.Command;
 import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
-import com.hp.ov.sdk.dto.InterconnectFibData;
+import com.hp.ov.sdk.dto.InterconnectFibDataEntry;
 import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
-import com.hp.ov.sdk.dto.InternalVlanAssociationCollection;
+import com.hp.ov.sdk.dto.InternalVlanAssociation;
 import com.hp.ov.sdk.dto.LiFirmware;
-import com.hp.ov.sdk.dto.LogicalInterconnectCollectionV2;
 import com.hp.ov.sdk.dto.PhysicalInterconnectFirmware;
 import com.hp.ov.sdk.dto.PortMonitor;
-import com.hp.ov.sdk.dto.PortMonitorUplinkPortCollection;
+import com.hp.ov.sdk.dto.PortMonitorUplinkPort;
 import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
 import com.hp.ov.sdk.dto.QosConfiguration.QosConfigType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.Location;
 import com.hp.ov.sdk.dto.generated.LocationEntry;
@@ -151,7 +151,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getAllLogicalInterconnects() throws InstantiationException, IllegalAccessException {
-        LogicalInterconnectCollectionV2 logicalInterconnectCollectionDto = null;
+        ResourceCollection<LogicalInterconnects> logicalInterconnectCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -452,7 +452,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getLogicalInterconnectForwardingInformationBase() {
-        InterconnectFibData fibDataDto = null;
+        ResourceCollection<InterconnectFibDataEntry> fibDataDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -539,7 +539,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getLogicalInterconnectUnassignedUplinkPortsForPortMonitor() {
-        PortMonitorUplinkPortCollection uplinkPortCollectionDto = null;
+        ResourceCollection<PortMonitorUplinkPort> uplinkPortCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -935,7 +935,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getLogicalInterconnectInternalVlans() {
-        InternalVlanAssociationCollection vlanCollectionDto = null;
+        ResourceCollection<InternalVlanAssociation> vlanCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
