@@ -47,7 +47,7 @@ public class StoragePoolClientImpl implements StoragePoolClient {
     private final ResourceAdaptor resourceAdaptor;
     private final StoragePoolAdaptor adaptor;
 
-    protected StoragePoolClientImpl(HttpRestClient restClient, ResourceAdaptor resourceAdaptor, StoragePoolAdaptor adaptor) {
+    private StoragePoolClientImpl(HttpRestClient restClient, ResourceAdaptor resourceAdaptor, StoragePoolAdaptor adaptor) {
         this.restClient = restClient;
         this.resourceAdaptor = resourceAdaptor;
         this.adaptor = adaptor;

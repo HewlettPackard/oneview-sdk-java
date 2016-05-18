@@ -50,7 +50,7 @@ public class LogicalSwitchGroupClientImpl implements LogicalSwitchGroupClient {
     private final ResourceAdaptor adaptor;
     private final TaskMonitorManager taskMonitor;
 
-    public LogicalSwitchGroupClientImpl(
+    private LogicalSwitchGroupClientImpl(
             HttpRestClient restClient,
             ResourceAdaptor adaptor,
             TaskMonitorManager taskMonitor) {

@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.StackingMode;
 import com.hp.ov.sdk.dto.generated.EnclosureGroups;
 import com.hp.ov.sdk.dto.generated.InterconnectBayMapping;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -370,7 +371,7 @@ public class EnclosureGroupClientSample {
         dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP); //OneView 1.2
         dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP_V200); //OneView 2.0
         dto.setName(resourceName);
-        dto.setStackingMode(EnclosureGroups.StackingMode.Enclosure);
+        dto.setStackingMode(StackingMode.Enclosure);
         final List<InterconnectBayMapping> interconnectBayMappings = new ArrayList<InterconnectBayMapping>();
 
         for (int i = 0; i < 8; i++) {

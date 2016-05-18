@@ -66,7 +66,7 @@ public class EnclosureClientImpl implements EnclosureClient {
 
     private JSONObject jsonObject;
 
-    protected EnclosureClientImpl(HttpRestClient httpClient,
+    private EnclosureClientImpl(HttpRestClient httpClient,
             ResourceAdaptor resourceAdaptor, EnclosureAdaptor adaptor,
             TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
 

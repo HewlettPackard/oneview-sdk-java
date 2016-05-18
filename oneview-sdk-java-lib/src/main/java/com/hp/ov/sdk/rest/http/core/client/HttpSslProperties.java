@@ -21,9 +21,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class HttpSslProperties {
 
-    public static final String DEFAULT_PASSWORD = "changeit";
-    public static final String DEFAULT_TYPE = "jks";
-
     private String keyStore = null;
     private String trustStore = null;
     private String keyStorePassword = null;

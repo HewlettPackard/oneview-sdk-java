@@ -45,7 +45,7 @@ import com.hp.ov.sdk.util.UrlUtils;
 
 public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGroupClient {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(LogicalInterconnectGroupClientImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogicalInterconnectGroupClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
     private static final int API_200 = 200;
 
@@ -57,7 +57,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
 
     private JSONObject jsonObject;
 
-    protected LogicalInterconnectGroupClientImpl(HttpRestClient httpClient,
+    private LogicalInterconnectGroupClientImpl(HttpRestClient httpClient,
         ResourceAdaptor resourceAdaptor,
         LogicalInterconnectGroupAdaptor adaptor,
         TaskAdaptor taskAdaptor,

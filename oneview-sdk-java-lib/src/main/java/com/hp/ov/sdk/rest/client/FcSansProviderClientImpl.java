@@ -42,7 +42,7 @@ public class FcSansProviderClientImpl implements FcSansProviderClient {
     private final ResourceAdaptor adaptor;
     private final HttpRestClient httpClient;
 
-    protected FcSansProviderClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor) {
+    private FcSansProviderClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor) {
         this.httpClient = httpClient;
         this.adaptor = adaptor;
     }

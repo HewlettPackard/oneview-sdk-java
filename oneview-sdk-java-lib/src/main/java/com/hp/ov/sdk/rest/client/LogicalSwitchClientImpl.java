@@ -51,7 +51,7 @@ public class LogicalSwitchClientImpl implements LogicalSwitchClient {
     private final ResourceAdaptor adaptor;
     private final TaskMonitorManager taskMonitor;
 
-    public LogicalSwitchClientImpl(
+    private LogicalSwitchClientImpl(
             HttpRestClient restClient,
             ResourceAdaptor adaptor,
             TaskMonitorManager taskMonitor) {

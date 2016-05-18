@@ -19,10 +19,10 @@ public class FexCommonStatistics extends BaseModelResource {
 
     private final static long serialVersionUID = 1L;
 
-    protected String received_errors;
-    protected String transmitted_errors;
-    protected Bit_Transfer_Rate bit_Transfer_Rate;
-    protected Packet_Transfer_Rate packet_Transfer_Rate;
+    private String received_errors;
+    private String transmitted_errors;
+    private Bit_Transfer_Rate bit_Transfer_Rate;
+    private Packet_Transfer_Rate packet_Transfer_Rate;
 
     /**
      * @return the received_errors
@@ -77,10 +77,10 @@ public class FexCommonStatistics extends BaseModelResource {
 
         private static final long serialVersionUID = 1L;
 
-        protected String _30_seconds_input;
-        protected String _30_seconds_output;
-        protected String received;
-        protected String transmitted;
+        private String _30_seconds_input;
+        private String _30_seconds_output;
+        private String received;
+        private String transmitted;
 
         /**
          * @return the _30_seconds_input

@@ -26,6 +26,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.ReconfigurationState;
 
 /**
  * The Enclosures data transfer object (DTO) contains the information used to
@@ -118,7 +119,7 @@ public class Enclosures implements Serializable {
      *(Required)
      *
      */
-    private Enclosures.ReconfigurationState reconfigurationState;
+    private ReconfigurationState reconfigurationState;
 
     /**
      *
@@ -890,7 +891,7 @@ public class Enclosures implements Serializable {
      *
      *@return The reconfigurationState
      */
-    public Enclosures.ReconfigurationState getReconfigurationState() {
+    public ReconfigurationState getReconfigurationState() {
         return reconfigurationState;
     }
 
@@ -901,7 +902,7 @@ public class Enclosures implements Serializable {
      *@param reconfigurationState
      *           The reconfigurationState
      */
-    public void setReconfigurationState(final Enclosures.ReconfigurationState reconfigurationState) {
+    public void setReconfigurationState(final ReconfigurationState reconfigurationState) {
         this.reconfigurationState = reconfigurationState;
     }
 
@@ -1063,38 +1064,6 @@ public class Enclosures implements Serializable {
 
         public static Enclosures.LicensingIntent fromValue(final String value) {
             final Enclosures.LicensingIntent constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-    }
-
-    public static enum ReconfigurationState {
-
-        NotReapplyingConfiguration("NotReapplyingConfiguration"), ReapplyingConfiguration("ReapplyingConfiguration"), ReapplyingConfigurationFailed(
-                "ReapplyingConfigurationFailed"), PENDING("Pending");
-        private final String value;
-        private static Map<String, Enclosures.ReconfigurationState> constants = new HashMap<String, Enclosures.ReconfigurationState>();
-
-        static {
-            for (final Enclosures.ReconfigurationState c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private ReconfigurationState(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static Enclosures.ReconfigurationState fromValue(final String value) {
-            final Enclosures.ReconfigurationState constant = constants.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
             } else {

@@ -45,9 +45,9 @@ public class MsmbConnectionManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MsmbConnectionManager.class);
 
-    public final ConcurrentMap<String, MsmbConnection> map = new ConcurrentHashMap<String, MsmbConnection>();
-    public final ConcurrentMap<String, ExecutorService> executorMap = new ConcurrentHashMap<String, ExecutorService>();
-    public final ConcurrentMap<String, Thread> msmbProcessThreadQueue = new ConcurrentHashMap<String, Thread>();
+    private final ConcurrentMap<String, MsmbConnection> map = new ConcurrentHashMap<String, MsmbConnection>();
+    private final ConcurrentMap<String, ExecutorService> executorMap = new ConcurrentHashMap<String, ExecutorService>();
+    private final ConcurrentMap<String, Thread> msmbProcessThreadQueue = new ConcurrentHashMap<String, Thread>();
 
     private final MessagingCertificateManager messagingCertificate;
 

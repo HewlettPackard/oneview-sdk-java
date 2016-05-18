@@ -45,7 +45,7 @@ public class ConnectionTemplateClientImpl implements ConnectionTemplateClient {
 
     private JSONObject jsonObject;
 
-    protected ConnectionTemplateClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor) {
+    private ConnectionTemplateClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor) {
         this.httpClient = httpClient;
         this.adaptor = adaptor;
     }

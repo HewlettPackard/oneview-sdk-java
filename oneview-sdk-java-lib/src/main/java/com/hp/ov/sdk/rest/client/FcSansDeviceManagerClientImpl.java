@@ -57,7 +57,7 @@ public class FcSansDeviceManagerClientImpl implements FcSansDeviceManagerClient 
 
     private JSONObject jsonObject;
 
-    protected FcSansDeviceManagerClientImpl(DeviceManagerAdaptor adaptor, ResourceAdaptor resourceAdaptor,
+    private FcSansDeviceManagerClientImpl(DeviceManagerAdaptor adaptor, ResourceAdaptor resourceAdaptor,
             TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor, HttpRestClient restClient) {
 
         this.adaptor = adaptor;

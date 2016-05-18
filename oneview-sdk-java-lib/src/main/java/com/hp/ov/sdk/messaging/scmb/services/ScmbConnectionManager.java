@@ -44,9 +44,9 @@ public class ScmbConnectionManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScmbConnectionManager.class);
 
-    public final ConcurrentMap<String, ScmbConnection> map = new ConcurrentHashMap<String, ScmbConnection>();
-    public final ConcurrentMap<String, ExecutorService> executorMap = new ConcurrentHashMap<String, ExecutorService>();
-    public final ConcurrentMap<String, Thread> scmbProcessThreadQueue = new ConcurrentHashMap<String, Thread>();
+    private final ConcurrentMap<String, ScmbConnection> map = new ConcurrentHashMap<String, ScmbConnection>();
+    private final ConcurrentMap<String, ExecutorService> executorMap = new ConcurrentHashMap<String, ExecutorService>();
+    private final ConcurrentMap<String, Thread> scmbProcessThreadQueue = new ConcurrentHashMap<String, Thread>();
 
     private final MessagingCertificateManager messagingCertificate;
 

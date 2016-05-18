@@ -18,23 +18,33 @@ package com.hp.ov.sdk.dto;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum StackingMode {
+public enum DesiredSpeed {
 
-    Enclosure("Enclosure"),
-    MultiEnclosure("MultiEnclosure"),
-    None("None"),
-    SwitchPairs("SwitchPairs"), ;
+    Speed0M("Speed0M"),
+    Speed1M("Speed1M"),
+    Speed10M("Speed10M"),
+    Speed100M("Speed100M"),
+    Speed1G("Speed1G"),
+    Speed2G("Speed2G"),
+    Speed2_5G("Speed2_5G"),
+    Speed4G("Speed4G"),
+    Speed8G("Speed8G"),
+    Speed10G("Speed10G"),
+    Auto("Auto"),
+    Speed20G("Speed20G"),
+    Speed40G("Speed40G"),
+    Unknown("Unknown");
 
     private final String value;
-    private final static Map<String, StackingMode> CONSTANTS = new HashMap<String, StackingMode>();
+    private static Map<String, DesiredSpeed> constants = new HashMap<String, DesiredSpeed>();
 
     static {
-        for (StackingMode c: values()) {
-            CONSTANTS.put(c.value, c);
+        for (final DesiredSpeed c : values()) {
+            constants.put(c.value, c);
         }
     }
 
-    private StackingMode(String value) {
+    private DesiredSpeed(final String value) {
         this.value = value;
     }
 
@@ -43,8 +53,8 @@ public enum StackingMode {
         return this.value;
     }
 
-    public static StackingMode fromValue(String value) {
-        StackingMode constant = CONSTANTS.get(value);
+    public static DesiredSpeed fromValue(final String value) {
+        final DesiredSpeed constant = constants.get(value);
         if (constant == null) {
             throw new IllegalArgumentException(value);
         } else {

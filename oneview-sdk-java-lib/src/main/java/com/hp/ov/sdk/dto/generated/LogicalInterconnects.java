@@ -413,39 +413,6 @@ public class LogicalInterconnects extends BaseModelResource {
                 return constant;
             }
         }
-
-    }
-
-    public static enum StackingMode {
-
-        None("None"), Enclosure("Enclosure"), SwitchPairs("SwitchPairs"), MultiEnclosure("MultiEnclosure");
-        private final String value;
-        private static Map<String, LogicalInterconnects.StackingMode> constants = new HashMap<String, LogicalInterconnects.StackingMode>();
-
-        static {
-            for (final LogicalInterconnects.StackingMode c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private StackingMode(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static LogicalInterconnects.StackingMode fromValue(final String value) {
-            final LogicalInterconnects.StackingMode constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
     }
 
 }

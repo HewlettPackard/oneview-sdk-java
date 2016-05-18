@@ -55,7 +55,7 @@ public class StorageVolumeAttachmentsClientImpl implements StorageVolumeAttachme
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
 
-    protected StorageVolumeAttachmentsClientImpl(
+    private StorageVolumeAttachmentsClientImpl(
             HttpRestClient restClient,
             ResourceAdaptor adaptor,
             TaskAdaptor taskAdaptor,

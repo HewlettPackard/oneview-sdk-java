@@ -23,9 +23,9 @@ public class InterconnectsStatistics extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
-    protected String switchId;
-    protected ModuleStatistics moduleStatistics;
-    protected List<PortStatistics> portStatistics;
+    private String switchId;
+    private ModuleStatistics moduleStatistics;
+    private List<PortStatistics> portStatistics;
     @Since(200)
     private String resetEpoch;
 

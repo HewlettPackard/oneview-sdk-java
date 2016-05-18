@@ -26,6 +26,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.StackingMode;
 
 /**
  * The EnclosureGroups data transfer object (DTO) contains the information used
@@ -65,7 +66,7 @@ public class EnclosureGroups implements Serializable {
      * (Required)
      *
      */
-    private EnclosureGroups.StackingMode stackingMode;
+    private StackingMode stackingMode;
     private Integer portMappingCount;
     private List<PortMapping> portMappings = new ArrayList<PortMapping>();
     /**
@@ -328,7 +329,7 @@ public class EnclosureGroups implements Serializable {
      *
      * @return The stackingMode
      */
-    public EnclosureGroups.StackingMode getStackingMode() {
+    public StackingMode getStackingMode() {
         return stackingMode;
     }
 
@@ -339,7 +340,7 @@ public class EnclosureGroups implements Serializable {
      * @param stackingMode
      *            The stackingMode
      */
-    public void setStackingMode(final EnclosureGroups.StackingMode stackingMode) {
+    public void setStackingMode(final StackingMode stackingMode) {
         this.stackingMode = stackingMode;
     }
 
@@ -523,38 +524,6 @@ public class EnclosureGroups implements Serializable {
 
         public static EnclosureGroups.PowerMode fromValue(final String value) {
             final EnclosureGroups.PowerMode constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
-    }
-
-    public static enum StackingMode {
-
-        None("None"), Enclosure("Enclosure"), SwitchPairs("SwitchPairs"), MultiEnclosure("MultiEnclosure");
-        private final String value;
-        private static Map<String, EnclosureGroups.StackingMode> constants = new HashMap<String, EnclosureGroups.StackingMode>();
-
-        static {
-            for (final EnclosureGroups.StackingMode c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private StackingMode(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static EnclosureGroups.StackingMode fromValue(final String value) {
-            final EnclosureGroups.StackingMode constant = constants.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
             } else {

@@ -24,11 +24,11 @@ public class SubportStatistics extends BaseModelResource {
 
     private final static long serialVersionUID = 1L;
 
-    protected BigInteger subportNumber;
-    protected SubportCommonStatistics subportCommonStatistics;
-    protected SubportAdvancedStatistics subportAdvancedStatistics;
+    private BigInteger subportNumber;
+    private SubportCommonStatistics subportCommonStatistics;
+    private SubportAdvancedStatistics subportAdvancedStatistics;
     @Since(200)
-    protected List<FipSnoopingInfo> fipSnoopingInfo;
+    private List<FipSnoopingInfo> fipSnoopingInfo;
 
     public BigInteger getSubportNumber() {
         return subportNumber;

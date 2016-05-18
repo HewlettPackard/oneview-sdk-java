@@ -27,6 +27,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
+import com.hp.ov.sdk.dto.StackingMode;
 
 /**
  * The LogicalInterconnectGroups data transfer object (DTO) contains the
@@ -66,7 +67,7 @@ public class LogicalInterconnectGroups extends BaseModelResource {
      * (Required)
      *
      */
-    private LogicalInterconnectGroups.StackingMode stackingMode;
+    private StackingMode stackingMode;
     private FcoeSettings fcoeSettings;
     private EthernetInterconnectSettingsV2 ethernetSettings;
     @Since(200)
@@ -224,7 +225,7 @@ public class LogicalInterconnectGroups extends BaseModelResource {
      * @return
      *     The stackingMode
      */
-    public LogicalInterconnectGroups.StackingMode getStackingMode() {
+    public StackingMode getStackingMode() {
         return stackingMode;
     }
 
@@ -235,7 +236,7 @@ public class LogicalInterconnectGroups extends BaseModelResource {
      * @param stackingMode
      *     The stackingMode
      */
-    public void setStackingMode(LogicalInterconnectGroups.StackingMode stackingMode) {
+    public void setStackingMode(StackingMode stackingMode) {
         this.stackingMode = stackingMode;
     }
 
@@ -523,41 +524,6 @@ public class LogicalInterconnectGroups extends BaseModelResource {
 
         public static LogicalInterconnectGroups.StackingHealth fromValue(String value) {
             LogicalInterconnectGroups.StackingHealth constant = CONSTANTS.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
-    }
-
-    public static enum StackingMode {
-
-        None("None"),
-        Enclosure("Enclosure"),
-        SwitchPairs("SwitchPairs"),
-        MultiEnclosure("MultiEnclosure");
-        private final String value;
-        private final static Map<String, LogicalInterconnectGroups.StackingMode> CONSTANTS = new HashMap<String, LogicalInterconnectGroups.StackingMode>();
-
-        static {
-            for (LogicalInterconnectGroups.StackingMode c: values()) {
-                CONSTANTS.put(c.value, c);
-            }
-        }
-
-        private StackingMode(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static LogicalInterconnectGroups.StackingMode fromValue(String value) {
-            LogicalInterconnectGroups.StackingMode constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
             } else {

@@ -20,17 +20,17 @@ import java.math.BigInteger;
 public class SubportCommonStatistics extends BaseModelResource {
 
     private final static long serialVersionUID = 1L;
-    protected BigInteger portNumber;
-    protected BigInteger subportNumber;
-    protected BigInteger resetTimeEpoch;
-    protected BigInteger rfc1213IfInOctets;
-    protected BigInteger rfc1213IfInUcastPkts;
-    protected BigInteger rfc1213IfInNUcastPkts;
-    protected BigInteger rfc1213IfOutOctets;
-    protected BigInteger rfc1213IfOutUcastPkts;
-    protected BigInteger rfc1213IfOutNUcastPkts;
-    protected BigInteger rfc1757StatsOctets;
-    protected BigInteger rfc1757StatsPkts;
+    private BigInteger portNumber;
+    private BigInteger subportNumber;
+    private BigInteger resetTimeEpoch;
+    private BigInteger rfc1213IfInOctets;
+    private BigInteger rfc1213IfInUcastPkts;
+    private BigInteger rfc1213IfInNUcastPkts;
+    private BigInteger rfc1213IfOutOctets;
+    private BigInteger rfc1213IfOutUcastPkts;
+    private BigInteger rfc1213IfOutNUcastPkts;
+    private BigInteger rfc1757StatsOctets;
+    private BigInteger rfc1757StatsPkts;
 
     /**
      * @return the portNumber
