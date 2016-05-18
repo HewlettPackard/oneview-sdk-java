@@ -73,7 +73,8 @@ public class FcNetwork implements Serializable {
     private String category;
     private String uri;
     private String type;
-    private JsonRequest jsonRequest;
+
+    private transient JsonRequest jsonRequest;
 
     /**
      *

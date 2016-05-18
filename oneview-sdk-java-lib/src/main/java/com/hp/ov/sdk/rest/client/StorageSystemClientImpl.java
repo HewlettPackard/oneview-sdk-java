@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.StorageSystemAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
@@ -310,7 +311,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
 
-        if (!returnObj.isEmpty() || returnObj != null) {
+        if (!Strings.isNullOrEmpty(returnObj)) {
             returnObj = "Created";
         }
         LOGGER.debug("StorageSystemClientImpl : createStorageSystem : returnObj =" + returnObj);
@@ -350,7 +351,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
         jsonObject = adaptor.buildJsonObjectFromDto(storageSystemDto, params.getApiVersion());
         returnObj = httpClient.sendRequest(params, jsonObject);
         // convert returnObj to taskResource
-        if (!returnObj.isEmpty() || returnObj != null) {
+        if (!Strings.isNullOrEmpty(returnObj)) {
             returnObj = "Updated";
         }
 

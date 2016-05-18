@@ -58,7 +58,7 @@ public class LogicalSwitchGroupClientSample {
     }
 
     private void getLogicalSwitchGroup() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -85,7 +85,7 @@ public class LogicalSwitchGroupClientSample {
     }
 
     private void getLogicalSwitchGroupByName() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -113,7 +113,7 @@ public class LogicalSwitchGroupClientSample {
     }
 
     private void getAllLogicalSwitchGroups() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -140,7 +140,7 @@ public class LogicalSwitchGroupClientSample {
     }
 
     private void createLogicalSwitchGroup() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -172,7 +172,7 @@ public class LogicalSwitchGroupClientSample {
     }
 
     private void updateLogicalSwitchGroup() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -207,7 +207,7 @@ public class LogicalSwitchGroupClientSample {
     }
 
     private void deleteLogicalSwitchGroup() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 

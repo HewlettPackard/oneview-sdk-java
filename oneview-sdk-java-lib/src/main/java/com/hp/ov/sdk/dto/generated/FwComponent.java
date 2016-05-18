@@ -15,16 +15,18 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 
-public class FwComponent {
+public class FwComponent implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String componentVersion;
     private List<String> swKeyNameList = new ArrayList<String>();
@@ -32,7 +34,7 @@ public class FwComponent {
     private String fileName;
 
     /**
-     * 
+     *
      * @return The componentVersion
      */
     public String getComponentVersion() {
@@ -40,7 +42,7 @@ public class FwComponent {
     }
 
     /**
-     * 
+     *
      * @param componentVersion
      *            The componentVersion
      */
@@ -49,7 +51,7 @@ public class FwComponent {
     }
 
     /**
-     * 
+     *
      * @return The swKeyNameList
      */
     public List<String> getSwKeyNameList() {
@@ -57,7 +59,7 @@ public class FwComponent {
     }
 
     /**
-     * 
+     *
      * @param swKeyNameList
      *            The swKeyNameList
      */
@@ -66,7 +68,7 @@ public class FwComponent {
     }
 
     /**
-     * 
+     *
      * @return The name
      */
     public String getName() {
@@ -74,7 +76,7 @@ public class FwComponent {
     }
 
     /**
-     * 
+     *
      * @param name
      *            The name
      */
@@ -83,7 +85,7 @@ public class FwComponent {
     }
 
     /**
-     * 
+     *
      * @return The fileName
      */
     public String getFileName() {
@@ -91,7 +93,7 @@ public class FwComponent {
     }
 
     /**
-     * 
+     *
      * @param fileName
      *            The fileName
      */

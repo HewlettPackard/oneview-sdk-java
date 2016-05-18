@@ -57,7 +57,7 @@ public class SwitchClientSample {
     }
 
     private void getSwitch() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -80,7 +80,7 @@ public class SwitchClientSample {
     }
 
     private void getAllSwitches() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -103,7 +103,7 @@ public class SwitchClientSample {
     }
 
     private void getSwitchEnvironmentalConfiguration() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -131,7 +131,7 @@ public class SwitchClientSample {
     }
 
     private void getSwitchStatistics() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -158,7 +158,7 @@ public class SwitchClientSample {
     }
 
     private void getSwitchPortStatistics() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -186,7 +186,7 @@ public class SwitchClientSample {
     }
 
     private void deleteSwitch() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -216,7 +216,7 @@ public class SwitchClientSample {
     }
 
     private void refreshSwitch() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -260,7 +260,7 @@ public class SwitchClientSample {
     }
 
     private void createSwitch() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -287,7 +287,7 @@ public class SwitchClientSample {
     }
 
     private void updateSwitch() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -318,7 +318,7 @@ public class SwitchClientSample {
     }
 
     private void getSwitchByName() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();

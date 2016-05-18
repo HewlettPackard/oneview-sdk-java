@@ -48,7 +48,7 @@ public class FcoeNetworkClientSample {
     }
 
     private void getFcoeNetwork() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -75,7 +75,7 @@ public class FcoeNetworkClientSample {
     }
 
     private void getAllFcoeNetworks() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -102,7 +102,7 @@ public class FcoeNetworkClientSample {
     }
 
     private void getFcoeNetworkByName() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -129,7 +129,7 @@ public class FcoeNetworkClientSample {
     }
 
     private void createFcoeNetwork() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -165,7 +165,7 @@ public class FcoeNetworkClientSample {
     }
 
     private void updateFcoeNetwork() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -200,7 +200,7 @@ public class FcoeNetworkClientSample {
     }
 
     private void deleteFcoeNetwork() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 

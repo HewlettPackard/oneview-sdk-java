@@ -84,9 +84,7 @@ public class ScmbConnectionManager {
             }
 
             // put into map
-            synchronized (map) {
-                map.putIfAbsent(params.getHostname(), new ScmbConnection(conn, channel, ScmbState.START));
-            }
+            map.putIfAbsent(params.getHostname(), new ScmbConnection(conn, channel, ScmbState.START));
         }
 
     }
@@ -104,18 +102,11 @@ public class ScmbConnectionManager {
     public Thread createScmbProcessThread(final RestParams params, final Connection conn, final Channel channel,
             final String routingKey, final ScmbMessageExecutionQueue messageQueue) {
         final String key = params.getHostname();
-        if (!scmbProcessThreadQueue.containsKey(key)) {
-            synchronized (scmbProcessThreadQueue) {
-                scmbProcessThreadQueue.put(key, new ScmbProcessor(params, conn, channel, routingKey, messageQueue));
-            }
+
+        ScmbProcessor scmbProcessorThread = (ScmbProcessor) scmbProcessThreadQueue.putIfAbsent(key, new ScmbProcessor(params, conn, channel, routingKey, messageQueue));
+        if (scmbProcessorThread == null) {
+            scmbProcessorThread = (ScmbProcessor) scmbProcessThreadQueue.get(key);
         }
-        final ScmbProcessor scmbProcessorThread = getScmbProcessorThread(key);
-
-        return scmbProcessorThread;
-    }
-
-    private ScmbProcessor getScmbProcessorThread(final String key) {
-        final ScmbProcessor scmbProcessorThread = (ScmbProcessor) scmbProcessThreadQueue.get(key);
 
         return scmbProcessorThread;
     }
@@ -153,9 +144,7 @@ public class ScmbConnectionManager {
                  * reply-text=OK, class-id=0, method-id=0)
                  */
                 // scmbConnection.getChannel().close();
-                synchronized (map) {
-                    map.remove(params.getHostname());
-                }
+                map.remove(params.getHostname());
             } catch (final IOException e) {
                 LOGGER.error("ScmbConnectionManager : removeScmbConnection : error in closing connection");
             }

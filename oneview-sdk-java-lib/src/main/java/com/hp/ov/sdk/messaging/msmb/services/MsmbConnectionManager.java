@@ -82,9 +82,7 @@ public class MsmbConnectionManager {
                         null);
             }
             // put into map
-            synchronized (map) {
-                map.putIfAbsent(params.getHostname(), new MsmbConnection(conn, channel, MsmbState.START));
-            }
+            map.putIfAbsent(params.getHostname(), new MsmbConnection(conn, channel, MsmbState.START));
         }
 
     }
@@ -102,18 +100,11 @@ public class MsmbConnectionManager {
     public Thread createMsmbProcessThread(final RestParams params, final Connection conn, final Channel channel,
             final String routingKey, final MsmbMessageExecutionQueue messageQueue) {
         final String key = params.getHostname();
-        if (!msmbProcessThreadQueue.containsKey(key)) {
-            synchronized (msmbProcessThreadQueue) {
-                msmbProcessThreadQueue.put(key, new MsmbProcessor(params, conn, channel, routingKey, messageQueue));
-            }
+
+        MsmbProcessor msmbProcessorThread = (MsmbProcessor) msmbProcessThreadQueue.putIfAbsent(key, new MsmbProcessor(params, conn, channel, routingKey, messageQueue));
+        if (msmbProcessorThread == null) {
+            msmbProcessorThread = (MsmbProcessor) msmbProcessThreadQueue.get(key);
         }
-        final MsmbProcessor msmbProcessorThread = getMsmbProcessorThread(key);
-
-        return msmbProcessorThread;
-    }
-
-    private MsmbProcessor getMsmbProcessorThread(final String key) {
-        final MsmbProcessor msmbProcessorThread = (MsmbProcessor) msmbProcessThreadQueue.get(key);
 
         return msmbProcessorThread;
     }
@@ -152,9 +143,8 @@ public class MsmbConnectionManager {
                  * reply-text=OK, class-id=0, method-id=0)
                  */
                 // scmbConnection.getChannel().close();
-                synchronized (map) {
-                    map.remove(params.getHostname());
-                }
+
+                map.remove(params.getHostname());
             } catch (final IOException e) {
                 LOGGER.error("MsmbConnectionManager : removeMsmbConnection : error in closing connection");
             }
