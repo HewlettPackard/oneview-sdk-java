@@ -106,7 +106,7 @@ public class SdkUtils {
         // Get version
         final ApplianceDetailsDto applianceDetailsDto = applianceDetails.getVersion(params);
         // validate the API version
-        validateApiVersion(params.getApiVersion(), applianceDetailsDto.getMinimumVersion(), applianceDetailsDto.getCurrentVersion());
+        validateApiVersion(params.getApiVersion().getValue(), applianceDetailsDto.getMinimumVersion(), applianceDetailsDto.getCurrentVersion());
 
         // Get login session
         final String sessionId = loginSessions.getLoginSessionId(params);
@@ -116,7 +116,7 @@ public class SdkUtils {
         return params;
     }
 
-    private void validateApiVersion(final int requestedVersion, final int applianceMinimumVersion, final int applianceCurrentVersion) {
+    private void validateApiVersion(final double requestedVersion, final int applianceMinimumVersion, final int applianceCurrentVersion) {
         LOGGER.info("########### Checking API Version Start ####################");
 
         if (requestedVersion >= applianceMinimumVersion && requestedVersion  <= applianceCurrentVersion) {

@@ -25,6 +25,7 @@ import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
 import com.hp.ov.sdk.dto.StorageSystemV2;
 import com.hp.ov.sdk.dto.StorageTargetPort;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
@@ -39,6 +40,7 @@ public class StorageSystemAdaptor extends BaseAdaptor<StorageSystemV2, Object> {
         return storageSystemDto;
     }
 
+    @SuppressWarnings("unchecked")
     public List<String> buildHostTypesCollectionDto(final String source) {
         if (null == source || source.equals("")) {
             return Collections.emptyList();
@@ -61,14 +63,14 @@ public class StorageSystemAdaptor extends BaseAdaptor<StorageSystemV2, Object> {
         return storageTargetPortDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final AddStorageSystemCredentials source, final double version) {
+    public JSONObject buildJsonObjectFromDto(final AddStorageSystemCredentials source, final ApiVersion version) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        return new JSONObject(converter.convertObjectToJsonString(source, version));
+        return new JSONObject(converter.convertObjectToJsonString(source, version.getValue()));
     }
 
-    public JSONObject buildJsonObjectFromDto(final StorageSystemV2 source, final double version) {
+    public JSONObject buildJsonObjectFromDto(final StorageSystemV2 source, final ApiVersion version) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        return new JSONObject(converter.convertObjectToJsonString(source, version));
+        return new JSONObject(converter.convertObjectToJsonString(source, version.getValue()));
     }
 
 }

@@ -22,7 +22,6 @@ import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;

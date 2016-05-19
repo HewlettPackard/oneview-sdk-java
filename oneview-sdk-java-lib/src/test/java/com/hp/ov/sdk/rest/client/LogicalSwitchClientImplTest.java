@@ -51,6 +51,7 @@ import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
@@ -228,7 +229,7 @@ public class LogicalSwitchClientImplTest {
         JSONObject jsonObject = new JSONObject();
         TaskResourceV2 taskResource = new TaskResourceV2();
 
-        given(adaptor.buildJsonRequest(eq(addLogicalSwitch), any(Double.class))).willReturn(jsonObject);
+        given(adaptor.buildJsonRequest(eq(addLogicalSwitch), any(ApiVersion.class))).willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), eq(jsonObject))).willReturn(taskResourceValue);
         given(adaptor.buildResourceObject(taskResourceValue, TaskResourceV2.class))
                 .willReturn(taskResource);
@@ -272,7 +273,7 @@ public class LogicalSwitchClientImplTest {
         JSONObject jsonObject = new JSONObject();
         TaskResourceV2 taskResource = new TaskResourceV2();
 
-        given(adaptor.buildJsonRequest(eq(addLogicalSwitch), any(Double.class))).willReturn(jsonObject);
+        given(adaptor.buildJsonRequest(eq(addLogicalSwitch), any(ApiVersion.class))).willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), eq(jsonObject))).willReturn(taskResourceValue);
         given(adaptor.buildResourceObject(taskResourceValue, TaskResourceV2.class))
                 .willReturn(taskResource);

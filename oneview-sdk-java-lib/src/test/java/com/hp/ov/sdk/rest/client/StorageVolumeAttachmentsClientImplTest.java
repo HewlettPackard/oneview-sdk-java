@@ -48,6 +48,7 @@ import com.hp.ov.sdk.dto.StorageVolumeAttachmentPath;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
@@ -260,7 +261,7 @@ public class StorageVolumeAttachmentsClientImplTest {
         String taskAsJson = "{\"type\" : \"taskResource\"}";
         JSONObject jsonObject = new JSONObject();
 
-        given(adaptor.buildJsonRequest(any(ExtraStorageVolume.class), any(Double.class))).willReturn(jsonObject);
+        given(adaptor.buildJsonRequest(any(ExtraStorageVolume.class), any(ApiVersion.class))).willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(taskAsJson);
         given(taskAdaptor.buildDto(any(String.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), any(String.class), any(Integer.class)))

@@ -51,6 +51,7 @@ import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -292,7 +293,7 @@ public class StoragePoolClientImplTest {
         JSONObject jsonObject = new JSONObject();
 
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(nonEmptyResponse);
-        given(adaptor.buildJsonObjectFromDto(any(StoragePool.class), any(Integer.class))).willReturn(jsonObject);
+        given(adaptor.buildJsonObjectFromDto(any(StoragePool.class), any(ApiVersion.class))).willReturn(jsonObject);
 
         RestParams expectedRestParams = new RestParams();
         expectedRestParams.setType(HttpMethodType.PUT);

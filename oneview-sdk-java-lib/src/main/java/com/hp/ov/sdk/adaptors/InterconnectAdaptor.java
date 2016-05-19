@@ -31,6 +31,7 @@ import com.hp.ov.sdk.dto.PortStatistics;
 import com.hp.ov.sdk.dto.SubportStatistics;
 import com.hp.ov.sdk.dto.generated.Interconnects;
 import com.hp.ov.sdk.dto.generated.Port;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
@@ -45,11 +46,11 @@ public class InterconnectAdaptor extends BaseAdaptor<Interconnects, Object> {
         return interconnectDto;
     }
 
-    public Interconnects buildDto(Object source, final double version) {
+    public Interconnects buildDto(Object source, final ApiVersion version) {
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final Interconnects interconnectDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version)), Interconnects.class);
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version.getValue())), Interconnects.class);
         return interconnectDto;
     }
 
@@ -58,14 +59,14 @@ public class InterconnectAdaptor extends BaseAdaptor<Interconnects, Object> {
         return new JSONArray(converter.convertObjectToJsonString(Arrays.asList(source)));
     }
 
-    public JSONArray buildJsonArrayDto(List<Port> source, final double version) {
+    public JSONArray buildJsonArrayDto(List<Port> source, final ApiVersion version) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        return new JSONArray(converter.convertObjectToJsonString(source, version));
+        return new JSONArray(converter.convertObjectToJsonString(source, version.getValue()));
     }
 
-    public JSONObject buildJsonObjectFromDto(Port source, final double version) {
+    public JSONObject buildJsonObjectFromDto(Port source, final ApiVersion version) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        return new JSONObject(converter.convertObjectToJsonString(source, version));
+        return new JSONObject(converter.convertObjectToJsonString(source, version.getValue()));
     }
 
     public InterconnectsStatistics buildInterconnectStatisticsDto(String source) {
@@ -95,6 +96,7 @@ public class InterconnectAdaptor extends BaseAdaptor<Interconnects, Object> {
         return interconnectsSubportStatisticsDto;
     }
 
+    @SuppressWarnings("unchecked")
     public List<NameServer> buildInterconnectNameServersCollection(String source) {
         if (null == source || source.equals("")) {
             return Collections.emptyList();

@@ -55,6 +55,7 @@ import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
@@ -223,7 +224,7 @@ public class StorageVolumeClientImplTest {
         String taskAsJson = "{\"type\" : \"taskResource\"}";
         JSONObject jsonObject = new JSONObject();
 
-        given(resourceAdaptor.buildJsonRequest(any(AddStorageVolumeV2.class), any(Double.class)))
+        given(resourceAdaptor.buildJsonRequest(any(AddStorageVolumeV2.class), any(ApiVersion.class)))
                 .willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(taskAsJson);
         given(taskAdaptor.buildDto(any(String.class))).willReturn(new TaskResourceV2());
@@ -256,7 +257,7 @@ public class StorageVolumeClientImplTest {
         JSONObject jsonObject = new JSONObject();
         String nonEmptyResponse = "random-RESPONSE";
 
-        given(resourceAdaptor.buildJsonRequest(any(StorageVolumeV2.class), any(Double.class)))
+        given(resourceAdaptor.buildJsonRequest(any(StorageVolumeV2.class), any(ApiVersion.class)))
                 .willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(nonEmptyResponse);
 
@@ -430,7 +431,7 @@ public class StorageVolumeClientImplTest {
         JSONObject jsonObject = new JSONObject();
 
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(taskAsJson);
-        given(resourceAdaptor.buildJsonRequest(any(StorageVolumeSnapshot.class), any(Double.class)))
+        given(resourceAdaptor.buildJsonRequest(any(StorageVolumeSnapshot.class), any(ApiVersion.class)))
                 .willReturn(jsonObject);
         given(taskAdaptor.buildDto(any(String.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), any(String.class), any(Integer.class)))
@@ -531,7 +532,7 @@ public class StorageVolumeClientImplTest {
         String taskAsJson = "{\"type\" : \"taskResource\"}";
         JSONObject jsonObject = new JSONObject();
 
-        given(resourceAdaptor.buildJsonRequest(any(ExtraStorageVolumeRepair.class), any(Double.class)))
+        given(resourceAdaptor.buildJsonRequest(any(ExtraStorageVolumeRepair.class), any(ApiVersion.class)))
                 .willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(taskAsJson);
         given(taskAdaptor.buildDto(any(String.class))).willReturn(new TaskResourceV2());

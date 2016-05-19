@@ -26,6 +26,8 @@ import com.hp.ov.sdk.dto.JsonRequest;
  */
 public class Network extends BaseModelResource {
 
+    private static final long serialVersionUID = 1L;
+
     public enum EthernetNetworkType {
         Tagged, Untagged, Tunnel, Unknown, NotApplicable
     }

@@ -47,6 +47,7 @@ import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
@@ -416,11 +417,11 @@ public class EnclosureClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonSsoData);
 
-        params.setApiVersion(200);
+        params.setApiVersion(ApiVersion.V_200);
         SsoUrlData ssoData = client.getActiveOaSsoUrl(params, resourceId);
 
         RestParams rp = new RestParams();
-        rp.setApiVersion(200);
+        rp.setApiVersion(ApiVersion.V_200);
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.ACTIVE_OA_SSO_URL_V200 + "?role=Active"));
         rp.setType(HttpMethodType.GET);
 
@@ -812,11 +813,11 @@ public class EnclosureClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(jsonSsoData);
 
-        params.setApiVersion(200);
+        params.setApiVersion(ApiVersion.V_200);
         SsoUrlData ssoData = client.getStandbyOaSsoUrl(params, resourceId);
 
         RestParams rp = new RestParams();
-        rp.setApiVersion(200);
+        rp.setApiVersion(ApiVersion.V_200);
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId, SdkConstants.STANDBY_OA_SSO_URL_V200 + "?role=Standby"));
         rp.setType(HttpMethodType.GET);
 

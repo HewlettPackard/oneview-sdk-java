@@ -21,6 +21,8 @@ import java.util.List;
 
 public class ResourceCollection<T> extends BaseModelResource {
 
+    private static final long serialVersionUID = 1L;
+
     private int start;
     private int count;
     private int total;

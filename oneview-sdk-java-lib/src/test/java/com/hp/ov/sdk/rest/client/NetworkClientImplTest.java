@@ -58,6 +58,7 @@ import com.hp.ov.sdk.dto.generated.Network;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
@@ -178,7 +179,7 @@ public class NetworkClientImplTest {
     @Test
     public void shouldGetEthernetNetworkByName() {
         String anyName = "random-NAME";
-        ResourceCollection<Network> networkCollection = new ResourceCollection();
+        ResourceCollection<Network> networkCollection = new ResourceCollection<Network>();
         networkCollection.setCount(1);
 
         networkCollection.setMembers(Lists.newArrayList(new Network()));
@@ -217,7 +218,7 @@ public class NetworkClientImplTest {
         JSONObject jsonObject = new JSONObject();
 
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(taskAsJson);
-        given(adaptor.buildJsonObjectFromDto(any(Network.class), any(Integer.class))).willReturn(jsonObject);
+        given(adaptor.buildJsonObjectFromDto(any(Network.class), any(ApiVersion.class))).willReturn(jsonObject);
         given(taskAdaptor.buildDto(any(String.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), any(String.class), any(Integer.class)))
                 .willReturn(new TaskResourceV2());
@@ -238,7 +239,7 @@ public class NetworkClientImplTest {
         JSONObject jsonObject = new JSONObject();
 
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(taskAsJson);
-        given(adaptor.buildJsonObjectFromDto(any(Network.class), any(Integer.class))).willReturn(jsonObject);
+        given(adaptor.buildJsonObjectFromDto(any(Network.class), any(ApiVersion.class))).willReturn(jsonObject);
         given(taskAdaptor.buildDto(any(String.class))).willReturn(new TaskResourceV2());
 
         RestParams expectedRestParams = new RestParams();
@@ -272,7 +273,7 @@ public class NetworkClientImplTest {
         doReturn(network).when(spyNetworkClient).getNetworkByName(any(RestParams.class), eq(networkName));
 
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(taskAsJson);
-        given(adaptor.buildJsonObjectFromDto(any(Network.class), any(Integer.class))).willReturn(jsonObject);
+        given(adaptor.buildJsonObjectFromDto(any(Network.class), any(ApiVersion.class))).willReturn(jsonObject);
         given(taskAdaptor.buildDto(any(String.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), any(String.class), any(Integer.class)))
                 .willReturn(new TaskResourceV2());
@@ -302,7 +303,7 @@ public class NetworkClientImplTest {
 
         given(adaptor.buildDto(any(String.class))).willReturn(network);
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(taskAsJson);
-        given(adaptor.buildJsonObjectFromDto(any(Network.class), any(Integer.class))).willReturn(jsonObject);
+        given(adaptor.buildJsonObjectFromDto(any(Network.class), any(ApiVersion.class))).willReturn(jsonObject);
         given(taskAdaptor.buildDto(any(String.class))).willReturn(expectedTask);
 
         RestParams expectedRestParams = new RestParams();
@@ -333,7 +334,7 @@ public class NetworkClientImplTest {
         JSONObject jsonObject = new JSONObject();
 
         given(restClient.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(taskAsJson);
-        given(adaptor.buildJsonObjectFromDto(any(Network.class), any(Integer.class))).willReturn(jsonObject);
+        given(adaptor.buildJsonObjectFromDto(any(Network.class), any(ApiVersion.class))).willReturn(jsonObject);
         given(taskAdaptor.buildDto(any(String.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), any(String.class), any(Integer.class)))
                 .willReturn(new TaskResourceV2());

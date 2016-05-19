@@ -22,6 +22,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class LogicalSwitchGroup extends BaseModelResource {
 
+    private static final long serialVersionUID = 1L;
+
     private String fabricUri;
     private SwitchMapTemplate switchMapTemplate;
 

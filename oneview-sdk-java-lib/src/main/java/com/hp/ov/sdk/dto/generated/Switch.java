@@ -33,6 +33,8 @@ import com.hp.ov.sdk.dto.Location;
  */
 public final class Switch extends BaseModelResource {
 
+    private static final long serialVersionUID = 1L;
+
     private String chassisId;
     private EnvironmentalConfiguration environmentalConfiguration;
     private String firmwareVersion;
