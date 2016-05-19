@@ -39,7 +39,7 @@ import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * NetworkClientSample is a sample program to consume ethernet networks resource of HP OneView
+ * NetworkClientSample is a sample program to consume ethernet networks resource of HPE OneView
  * It invokes APIs of NetworkClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on ethernet networks resource
  */

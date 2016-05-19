@@ -36,7 +36,7 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * StoragePoolClientSample is a sample program consumes the set of disk from the storage system managed
- * by HP OneView. It invokes APIs of StoragePoolClient which is in sdk library to perform GET/PUT/POST/DELETE
+ * by HPE OneView. It invokes APIs of StoragePoolClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on storage pool resource
  */
 public class StoragePoolClientSample {

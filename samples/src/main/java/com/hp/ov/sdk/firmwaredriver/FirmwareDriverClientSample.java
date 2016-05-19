@@ -29,7 +29,7 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * FirmwareDriverClientSample is a sample program to consume the firmware driver software resource of HP OneView
+ * FirmwareDriverClientSample is a sample program to consume the firmware driver software resource of HPE OneView
  * It invokes APIs of FirmwareDriverClient which is in sdk library to perform GET/DELETE
  * operations on firmware driver resource
  */

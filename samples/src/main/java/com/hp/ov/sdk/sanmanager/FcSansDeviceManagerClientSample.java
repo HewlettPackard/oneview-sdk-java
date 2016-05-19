@@ -41,7 +41,7 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * DeviceManagerClientSample is a sample program to consume the network advisor by managing the
- * san manager  of HP OneView. It invokes APIs of DeviceManagerClient which is in sdk library to
+ * san manager  of HPE OneView. It invokes APIs of DeviceManagerClient which is in sdk library to
  * perform GET/PUT/POST/DELETE operations on san manager resource
  */
 

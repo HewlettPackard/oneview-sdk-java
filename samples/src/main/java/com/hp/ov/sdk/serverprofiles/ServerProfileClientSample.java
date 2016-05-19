@@ -63,7 +63,7 @@ import com.hp.ov.sdk.util.samples.ResourceDtoUtilsWrapper;
 
 /*
  * ServerProfileClientSample is a sample program capture/consume the entire server configuration managed
- * by HP OneView. It invokes APIs of ServerProfileClient which is in sdk library to perform GET/PUT/POST/DELETE/COPY
+ * by HPE OneView. It invokes APIs of ServerProfileClient which is in sdk library to perform GET/PUT/POST/DELETE/COPY
  * operations on server profile resource
  */
 public class ServerProfileClientSample {

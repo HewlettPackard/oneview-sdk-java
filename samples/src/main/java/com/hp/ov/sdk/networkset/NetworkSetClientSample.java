@@ -37,7 +37,7 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * NetworkSetClientSample is a sample program to consume a consolidated set of ethernet network 
- * resource of HP OneView. It invokes APIs of NetworkSetClient which is in sdk library to perform GET/PUT/POST/DELETE
+ * resource of HPE OneView. It invokes APIs of NetworkSetClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations network set resource
  */
 public class NetworkSetClientSample {

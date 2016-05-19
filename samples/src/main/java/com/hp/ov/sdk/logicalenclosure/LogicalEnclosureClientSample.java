@@ -46,7 +46,7 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * LogicalEnclosureClientSample is a sample program to consume the REST API of c7000 enclosure managed
- * by HP OneView. It invokes APIs of LogicalEnclosureClient which is in sdk library to perform GET/PUT/POST/DELETE
+ * by HPE OneView. It invokes APIs of LogicalEnclosureClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on logical enclosure resource
  */
 public class LogicalEnclosureClientSample {

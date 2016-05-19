@@ -39,7 +39,7 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * StorageVolumeTemplateClientSample is a sample program consumes the template that is defined over the storage pool
- * in HP OneView. It invokes APIs of StorageVolumeTemplateClient which is in sdk library to perform GET/PUT/POST/DELETE
+ * in HPE OneView. It invokes APIs of StorageVolumeTemplateClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations on storage volume template resource
  */
 public class StorageVolumeTemplateClientSample {
