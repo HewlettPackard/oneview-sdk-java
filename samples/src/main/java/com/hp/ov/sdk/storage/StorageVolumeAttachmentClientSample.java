@@ -52,7 +52,7 @@ public class StorageVolumeAttachmentClientSample {
     }
 
     private void getStorageVolumeAttachment() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -80,7 +80,7 @@ public class StorageVolumeAttachmentClientSample {
     }
 
     private void getAllStorageVolumeAttachments() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -108,7 +108,7 @@ public class StorageVolumeAttachmentClientSample {
     }
 
     private void getStorageVolumeAttachmentPath() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -136,7 +136,7 @@ public class StorageVolumeAttachmentClientSample {
     }
 
     private void getAllStorageVolumeAttachmentPaths() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -164,7 +164,7 @@ public class StorageVolumeAttachmentClientSample {
     }
 
     private void getExtraUnmanagedStorageVolumeAttachaments() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -192,7 +192,7 @@ public class StorageVolumeAttachmentClientSample {
     }
 
     private void repairExtraUnmanagedStorageVolumeAttachment() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 

@@ -19,14 +19,13 @@ import java.io.Serializable;
 
 public class RefreshStateConfig implements Serializable {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
+
     private RefreshForceOptions refreshForceOptions;
     private RefreshState refreshState;
 
-    public class RefreshForceOptions {
+    public class RefreshForceOptions implements Serializable {
+        private static final long serialVersionUID = 1L;
         private String address;
         private String password;
         private String username;

@@ -187,7 +187,7 @@ public class SdkUtils {
         for (InterconnectMapEntryTemplate mapTemplate : logicalInterconnectGroupsDto.getInterconnectMapTemplate()
                 .getInterconnectMapEntryTemplates()) {
             for (LocationEntry locationEntry : mapTemplate.getLogicalLocation().getLocationEntries()) {
-                if (locationEntry.getType().equals(LocationEntry.Type.Bay) && locationEntry.getRelativeValue() == bay) {
+                if (locationEntry.getType().equals(LocationEntry.Type.Bay) && locationEntry.getRelativeValue().equals(bay)) {
                     return mapTemplate.getPermittedInterconnectTypeUri();
                 }
             }

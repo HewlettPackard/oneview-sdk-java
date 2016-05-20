@@ -68,7 +68,7 @@ public class ServerHardwareClientSample {
     }
 
     private void getServerHardware() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -98,7 +98,7 @@ public class ServerHardwareClientSample {
     }
 
     private void getServerHardwareByName() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -132,7 +132,7 @@ public class ServerHardwareClientSample {
     }
 
     private void getAllServerHardware() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -162,7 +162,7 @@ public class ServerHardwareClientSample {
     }
 
     private void updateServerHardwarePowerState() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -199,7 +199,7 @@ public class ServerHardwareClientSample {
     }
 
     private void createServerHardware() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -233,9 +233,9 @@ public class ServerHardwareClientSample {
             return;
         }
     }
-    
+
     private void deleteServerHardware() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -269,7 +269,7 @@ public class ServerHardwareClientSample {
     }
 
     private void getServerHardwareBios() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -299,7 +299,7 @@ public class ServerHardwareClientSample {
     }
 
     private void getServerHardwareIloSsoUrl() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -329,7 +329,7 @@ public class ServerHardwareClientSample {
     }
 
     private void getServerHardwareJavaRemoteConsoleUrl() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -360,7 +360,7 @@ public class ServerHardwareClientSample {
     }
 
     private void updateServerHardwareMpFirmwareVersion() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -396,7 +396,7 @@ public class ServerHardwareClientSample {
     }
 
     private void getServerHardwareRemoteConsoleUrl() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -427,7 +427,7 @@ public class ServerHardwareClientSample {
     }
 
     private void getServerHardwareUtilization() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -457,7 +457,7 @@ public class ServerHardwareClientSample {
     }
 
     private void updateServerHardwareEnvironmentConfiguration() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -497,7 +497,7 @@ public class ServerHardwareClientSample {
     }
 
     private void getServerHardwareEnvironmentConfiguration() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -528,7 +528,7 @@ public class ServerHardwareClientSample {
     }
 
     private void updateServerHardwareRefreshState() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -587,7 +587,7 @@ public class ServerHardwareClientSample {
         dto.setForce(false);
         return dto;
     }
-    
+
     public static void main(final String[] args) throws Exception {
         ServerHardwareClientSample client = new ServerHardwareClientSample();
 

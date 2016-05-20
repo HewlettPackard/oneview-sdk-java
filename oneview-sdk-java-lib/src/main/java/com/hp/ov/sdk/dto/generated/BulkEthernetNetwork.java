@@ -32,7 +32,7 @@ public class BulkEthernetNetwork implements Serializable {
     private Network.Purpose purpose;
     private String type;
 
-    private JsonRequest jsonRequest;
+    private transient JsonRequest jsonRequest;
 
     public Bandwidth getBandwidth() {
         return bandwidth;

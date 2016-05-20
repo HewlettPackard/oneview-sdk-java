@@ -44,7 +44,7 @@ public class SwitchTypeClientSample {
     }
 
     private void getSwitchType() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -67,7 +67,7 @@ public class SwitchTypeClientSample {
     }
 
     private void getSwitchTypeByName() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();
@@ -90,7 +90,7 @@ public class SwitchTypeClientSample {
     }
 
     private void getAllSwitchTypes() {
-        RestParams params = null;
+        RestParams params = new RestParams();
 
         try {
             params = HPOneViewCredential.createCredentials();

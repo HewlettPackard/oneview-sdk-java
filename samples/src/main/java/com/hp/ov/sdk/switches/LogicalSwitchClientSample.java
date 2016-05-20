@@ -58,7 +58,7 @@ public class LogicalSwitchClientSample {
     }
 
     private void getLogicalSwitch() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -85,7 +85,7 @@ public class LogicalSwitchClientSample {
     }
 
     private void getLogicalSwitchByName() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -112,7 +112,7 @@ public class LogicalSwitchClientSample {
     }
 
     private void getAllLogicalSwitches() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -139,7 +139,7 @@ public class LogicalSwitchClientSample {
     }
 
     private void createLogicalSwitch() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -208,7 +208,7 @@ public class LogicalSwitchClientSample {
     }
 
     private void updateLogicalSwitch() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -261,7 +261,7 @@ public class LogicalSwitchClientSample {
     }
 
     private void deleteLogicalSwitch() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
@@ -293,7 +293,7 @@ public class LogicalSwitchClientSample {
     }
 
     private void refreshLogicalSwitch() {
-        RestParams params = null;
+        RestParams params = new RestParams();
         try {
             params = HPOneViewCredential.createCredentials();
 
