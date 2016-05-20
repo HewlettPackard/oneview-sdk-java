@@ -38,6 +38,7 @@ import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
@@ -47,7 +48,6 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogicalInterconnectGroupClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
-    private static final int API_200 = 200;
 
     private final ResourceAdaptor resourceAdaptor;
     private final LogicalInterconnectGroupAdaptor adaptor;
@@ -362,7 +362,7 @@ public class LogicalInterconnectGroupClientImpl implements LogicalInterconnectGr
         }
         // set the additional params
         params.setType(HttpMethodType.GET);
-        if (params.getApiVersion() < API_200) {
+        if (params.getApiVersion().getValue() < ApiVersion.V_200.getValue()) {
             params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId,
                     SdkConstants.SETTINGS, settingId));
         } else {

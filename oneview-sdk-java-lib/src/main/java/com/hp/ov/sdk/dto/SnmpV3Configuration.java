@@ -24,6 +24,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class SnmpV3Configuration implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     public enum SnmpV3AuthorizationProtocol {
         MD5, NA, SHA, Unknown
     }

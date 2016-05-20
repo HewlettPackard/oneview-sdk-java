@@ -402,7 +402,7 @@ public class HttpRestClient {
         if (params.getSessionId() != null) {
             request.setHeader("auth", params.getSessionId());
         }
-        request.setHeader("X-API-Version", String.valueOf(params.getApiVersion()));
+        request.setHeader("X-API-Version", String.valueOf(params.getApiVersion().getValue()));
         request.setHeader("Content-Type", params.getHeaders().get("Content-Type"));
         request.setHeader("Accept", params.getHeaders().get("Accept"));
         request.setHeader("accept-language", params.getHeaders().get("accept-language"));

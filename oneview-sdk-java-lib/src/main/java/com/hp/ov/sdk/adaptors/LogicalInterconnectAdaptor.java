@@ -27,6 +27,7 @@ import com.hp.ov.sdk.dto.generated.Location;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
 import com.hp.ov.sdk.dto.generated.SnmpConfiguration;
 import com.hp.ov.sdk.dto.generated.TelemetryConfiguration;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
@@ -41,11 +42,11 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
         return logicalInterconnectsDto;
     }
 
-    public LogicalInterconnects buildDto(final Object source, final double version) {
+    public LogicalInterconnects buildDto(final Object source, final ApiVersion version) {
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final LogicalInterconnects logicalInterconnectsDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version)), LogicalInterconnects.class);
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version.getValue())), LogicalInterconnects.class);
         return logicalInterconnectsDto;
     }
 
@@ -81,10 +82,10 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
-    public JSONObject buildJsonObjectFromDto(EthernetInterconnectSettingsV2 source, final double version) {
+    public JSONObject buildJsonObjectFromDto(EthernetInterconnectSettingsV2 source, final ApiVersion version) {
         // return the JSON object.
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        return new JSONObject(converter.convertObjectToJsonString(source, version));
+        return new JSONObject(converter.convertObjectToJsonString(source, version.getValue()));
     }
 
     public JSONObject buildJsonObjectFromDto(Location source) {
@@ -99,10 +100,10 @@ public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
-    public JSONObject buildJsonObjectFromDto(InterconnectSettingsV2 source, final double version) {
+    public JSONObject buildJsonObjectFromDto(InterconnectSettingsV2 source, final ApiVersion version) {
         // return the JSON object.
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        return new JSONObject(converter.convertObjectToJsonString(source, version));
+        return new JSONObject(converter.convertObjectToJsonString(source, version.getValue()));
     }
 
     public InterconnectFibDataInfo buildInterconnectFibDataInfoDto(String source) {

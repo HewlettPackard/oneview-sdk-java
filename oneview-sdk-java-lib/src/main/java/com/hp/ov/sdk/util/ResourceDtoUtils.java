@@ -55,13 +55,12 @@ import com.hp.ov.sdk.rest.client.InterconnectTypeClient;
 import com.hp.ov.sdk.rest.client.InterconnectTypeClientImpl;
 import com.hp.ov.sdk.rest.client.StorageSystemClient;
 import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public class ResourceDtoUtils {
 
     private static final String ACTIVE = "Active";
-
-    private static final int API_200 = 200;
 
     private final StorageSystemClient storageSystemClient;
 
@@ -140,7 +139,7 @@ public class ResourceDtoUtils {
         dto.setInterconnectMapTemplate(interconnectMapTemplateDto);
 
         dto.setUri(null);
-        if (params.getApiVersion() < API_200) {
+        if (params.getApiVersion().getValue() < ApiVersion.V_200.getValue()) {
             dto.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP);
         } else {
             dto.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200);
@@ -307,7 +306,7 @@ public class ResourceDtoUtils {
         final ServerProfile serverProfileDto = new ServerProfile();
         serverProfileDto.setDescription("profile");
 
-        if (params.getApiVersion() < API_200) {
+        if (params.getApiVersion().getValue() < ApiVersion.V_200.getValue()) {
             serverProfileDto.setType(ResourceCategory.RC_SERVER_PROFILE);
         } else {
             serverProfileDto.setType(ResourceCategory.RC_SERVER_PROFILE_V200);

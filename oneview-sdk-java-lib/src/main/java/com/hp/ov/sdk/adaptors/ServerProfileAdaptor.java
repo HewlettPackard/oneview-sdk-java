@@ -31,6 +31,7 @@ import com.hp.ov.sdk.dto.generated.AvailableNetworks;
 import com.hp.ov.sdk.dto.generated.AvailableServers;
 import com.hp.ov.sdk.dto.generated.ProfilePorts;
 import com.hp.ov.sdk.dto.generated.ServerProfile;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
@@ -46,56 +47,56 @@ public class ServerProfileAdaptor extends BaseAdaptor<ServerProfile, Object> {
         return serverProfileDto;
     }
 
-    public ServerProfile buildDto(final Object source, final double version) {
+    public ServerProfile buildDto(final Object source, final ApiVersion version) {
         // convert json object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
         final ServerProfile serverProfileDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version)), ServerProfile.class);
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version.getValue())), ServerProfile.class);
         return serverProfileDto;
     }
 
-    public ServerProfileCompliancePreview buildCompliancePreviewDto(final Object source, final double version) {
+    public ServerProfileCompliancePreview buildCompliancePreviewDto(final Object source, final ApiVersion version) {
         // convert json object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
         final ServerProfileCompliancePreview compliancePreviewDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version)),
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version.getValue())),
                 ServerProfileCompliancePreview.class);
         return compliancePreviewDto;
     }
 
-    public ServerProfileHealth buildHealthDto(final String source, final double version) {
+    public ServerProfileHealth buildHealthDto(final String source, final ApiVersion version) {
         // convert json object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
         final ServerProfileHealth compliancePreviewDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version)),
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version.getValue())),
                 ServerProfileHealth.class);
         return compliancePreviewDto;
     }
 
-    public ServerProfile buildServerProfileDto(final String source, final double version) {
+    public ServerProfile buildServerProfileDto(final String source, final ApiVersion version) {
         // convert json object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
         final ServerProfile serverProfileDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version)),
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version.getValue())),
                 ServerProfile.class);
         return serverProfileDto;
     }
 
-    public AvailableStorageSystem buildAvailableStorageSystemDto(final String source, final double version) {
+    public AvailableStorageSystem buildAvailableStorageSystemDto(final String source, final ApiVersion version) {
         // convert json object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
         final AvailableStorageSystem storageSystemDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version)),
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version.getValue())),
                 AvailableStorageSystem.class);
         return storageSystemDto;
     }
 
-    public AvailableTargets buildAvailableTargetsDto(final String source, final double version) {
+    public AvailableTargets buildAvailableTargetsDto(final String source, final ApiVersion version) {
         if (null == source || source.equals("")) {
             return null;
         }
@@ -103,7 +104,7 @@ public class ServerProfileAdaptor extends BaseAdaptor<ServerProfile, Object> {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final AvailableTargets storageSystemsDto = converter.convertJsonToObject(
                 StringUtil.replaceQuotesBackSlashWithQuote(StringUtil.replaceQuotesAndBackSlash(converter
-                        .convertObjectToJsonString(source, version))), AvailableTargets.class);
+                        .convertObjectToJsonString(source, version.getValue()))), AvailableTargets.class);
         return storageSystemsDto;
     }
 
@@ -115,6 +116,7 @@ public class ServerProfileAdaptor extends BaseAdaptor<ServerProfile, Object> {
         return availableNetworksDto;
     }
 
+    @SuppressWarnings("unchecked")
     public List<AvailableServers> buildAvailableServerDto(final Object source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         converter.convertObjectToJsonString(source);
@@ -131,17 +133,17 @@ public class ServerProfileAdaptor extends BaseAdaptor<ServerProfile, Object> {
         return availableServersCollectionDto;
     }
 
-    public ProfilePorts buildProfilePortsDto(final Object source, final double version) {
+    public ProfilePorts buildProfilePortsDto(final Object source, final ApiVersion version) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         // convert json object to DTO, replace quotes and back slash in the file
         final ProfilePorts profilePortsDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version)), ProfilePorts.class);
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version.getValue())), ProfilePorts.class);
         return profilePortsDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final ServerProfile source, final double version) {
+    public JSONObject buildJsonObjectFromDto(final ServerProfile source, final ApiVersion version) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        return new JSONObject(converter.convertObjectToJsonString(source, version));
+        return new JSONObject(converter.convertObjectToJsonString(source, version.getValue()));
     }
 
     public JSONArray buildJsonArrayDto(Patch source) {

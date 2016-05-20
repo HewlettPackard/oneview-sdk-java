@@ -26,6 +26,8 @@ import com.hp.ov.sdk.dto.generated.LogicalLocation;
 
 public class SwitchMapEntryTemplate implements Serializable{
 
+    private static final long serialVersionUID = 1L;
+
     private LogicalLocation logicalLocation;
     private String permittedSwitchTypeUri;
 

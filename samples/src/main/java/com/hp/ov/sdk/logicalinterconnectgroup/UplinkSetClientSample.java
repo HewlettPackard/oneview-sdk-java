@@ -45,6 +45,7 @@ import com.hp.ov.sdk.rest.client.InterconnectsClient;
 import com.hp.ov.sdk.rest.client.InterconnectsClientImpl;
 import com.hp.ov.sdk.rest.client.UplinkSetClient;
 import com.hp.ov.sdk.rest.client.UplinkSetClientImpl;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
@@ -76,7 +77,6 @@ public class UplinkSetClientSample {
     private static final String portValue = "X3";
     private static final String bayValue = "2";
     // ================================
-    private static final int API_200 = 200;
 
     private UplinkSetClientSample() {
         uplinkSetClient = UplinkSetClientImpl.getClient();
@@ -268,7 +268,7 @@ public class UplinkSetClientSample {
 
             // create network request body
             UplinkSets uplinkSetsDto = buildTestUplinkSetDto();
-            if (params.getApiVersion() >= API_200) {
+            if (params.getApiVersion().getValue() >= ApiVersion.V_200.getValue()) {
                 uplinkSetsDto.setType(typeV200);
             }
             /**

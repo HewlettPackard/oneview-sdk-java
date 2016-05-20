@@ -24,12 +24,16 @@ import javax.net.ssl.TrustManager;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.dto.HttpMethodType;
 
 public class RestParams {
 
-    private int apiVersion = 100;// default value
+    public static final Logger LOGGER = LoggerFactory.getLogger(RestParams.class);
+
+    private ApiVersion apiVersion = ApiVersion.V_200;// default value
     private String hostname = null;
     private String userName = null;
     private String password = null;
@@ -109,11 +113,24 @@ public class RestParams {
         this.url = url;
     }
 
-    public int getApiVersion() {
+    public ApiVersion getApiVersion() {
         return apiVersion;
     }
 
-    public void setApiVersion(final int apiVersion) {
+    /**
+     * @deprecated
+     * Use {@link #setApiVersion(ApiVersion)} instead
+     */
+    @Deprecated
+    public void setApiVersion(final String apiVersion) {
+        try {
+            this.apiVersion = ApiVersion.valueOf(ApiVersion.class, apiVersion);
+        } catch (IllegalArgumentException | NullPointerException e) {
+            LOGGER.error("Error settings API version. Using version " + this.apiVersion, e);
+        }
+    }
+
+    public void setApiVersion(final ApiVersion apiVersion) {
         this.apiVersion = apiVersion;
     }
 

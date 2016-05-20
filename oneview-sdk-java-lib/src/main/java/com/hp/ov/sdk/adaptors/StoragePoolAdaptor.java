@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import com.hp.ov.sdk.dto.AddStoragePool;
 import com.hp.ov.sdk.dto.StoragePool;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
@@ -36,10 +37,10 @@ public class StoragePoolAdaptor extends BaseAdaptor<StoragePool, Object> {
         return storagePoolDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final StoragePool source, int apiVersion) {
+    public JSONObject buildJsonObjectFromDto(final StoragePool source, final ApiVersion apiVersion) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
-        return new JSONObject(converter.convertObjectToJsonString(source, apiVersion));
+        return new JSONObject(converter.convertObjectToJsonString(source, apiVersion.getValue()));
     }
 
     public JSONObject buildJsonObjectFromDto(final AddStoragePool source) {

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.rest.http.core.client;
 
-import java.io.Serializable;
+public enum ApiVersion {
+    V_120 (120),
+    V_200 (200),
+    V_201 (201);
 
-public class JavaRemoteConsoleUrlResult implements Serializable {
+    private final int value;
 
-    private static final long serialVersionUID = 1L;
-
-    private String javaRemoteConsoleUrl;
-
-    public String getJavaRemoteConsoleUrl() {
-        return javaRemoteConsoleUrl;
+    private ApiVersion(final int value) {
+        this.value = value;
     }
 
-    public void setJavaRemoteConsoleUrl(String javaRemoteConsoleUrl) {
-        this.javaRemoteConsoleUrl = javaRemoteConsoleUrl;
+    public int getValue() {
+        return value;
     }
 }

@@ -60,6 +60,7 @@ import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
@@ -233,7 +234,7 @@ public class ServerHardwareClientImplTest {
         JSONObject jsonObject = new JSONObject();
         TaskResourceV2 taskResource = new TaskResourceV2();
 
-        given(adaptor.buildJsonRequest(eq(addServer), any(Double.class))).willReturn(jsonObject);
+        given(adaptor.buildJsonRequest(eq(addServer), any(ApiVersion.class))).willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), eq(jsonObject))).willReturn(taskResourceValue);
         given(adaptor.buildResourceObject(taskResourceValue, TaskResourceV2.class))
                 .willReturn(taskResource);
@@ -374,7 +375,7 @@ public class ServerHardwareClientImplTest {
         EnvironmentalConfiguration result = new EnvironmentalConfiguration();
         JSONObject jsonObject = new JSONObject();
 
-        given(adaptor.buildJsonRequest(eq(update), any(Double.class))).willReturn(jsonObject);
+        given(adaptor.buildJsonRequest(eq(update), any(ApiVersion.class))).willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), eq(jsonObject)))
                 .willReturn(serverHardwareEnvironmentalConfigurationValue);
         given(adaptor.buildResourceObject(serverHardwareEnvironmentalConfigurationValue,
@@ -520,7 +521,7 @@ public class ServerHardwareClientImplTest {
         JSONObject jsonObject = new JSONObject();
         TaskResourceV2 taskResource = new TaskResourceV2();
 
-        given(adaptor.buildJsonRequest(eq(request), any(Double.class))).willReturn(jsonObject);
+        given(adaptor.buildJsonRequest(eq(request), any(ApiVersion.class))).willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), eq(jsonObject))).willReturn(taskResourceValue);
         given(adaptor.buildResourceObject(taskResourceValue, TaskResourceV2.class))
                 .willReturn(taskResource);
@@ -564,7 +565,7 @@ public class ServerHardwareClientImplTest {
         JSONObject jsonObject = new JSONObject();
         TaskResourceV2 taskResource = new TaskResourceV2();
 
-        given(adaptor.buildJsonRequest(eq(request), any(Double.class))).willReturn(jsonObject);
+        given(adaptor.buildJsonRequest(eq(request), any(ApiVersion.class))).willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), eq(jsonObject))).willReturn(taskResourceValue);
         given(adaptor.buildResourceObject(taskResourceValue, TaskResourceV2.class))
                 .willReturn(taskResource);

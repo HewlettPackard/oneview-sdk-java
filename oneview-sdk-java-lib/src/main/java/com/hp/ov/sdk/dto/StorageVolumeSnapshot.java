@@ -18,6 +18,8 @@ package com.hp.ov.sdk.dto;
 
 public class StorageVolumeSnapshot extends BaseModelResource {
 
+    private static final long serialVersionUID = 1L;
+
     private String capacity;
     private String deviceSnapshotName;
     private Boolean readOnly;

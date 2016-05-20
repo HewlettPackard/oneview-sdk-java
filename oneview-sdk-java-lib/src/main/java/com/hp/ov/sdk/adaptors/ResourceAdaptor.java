@@ -21,11 +21,13 @@ import java.util.List;
 import org.json.JSONObject;
 
 import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
 public class ResourceAdaptor {
 
+    @SuppressWarnings("unchecked")
     public <T> List<T> buildListOfResourceObject(String source, Type listAndResourceType) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
@@ -50,10 +52,10 @@ public class ResourceAdaptor {
         return converter.convertJsonToObject(sourceReplaced, resourceClass);
     }
 
-    public JSONObject buildJsonRequest(Object resourceObject, double apiVersion) {
+    public JSONObject buildJsonRequest(Object resourceObject, final ApiVersion apiVersion) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
-        return new JSONObject(converter.convertObjectToJsonString(resourceObject, apiVersion));
+        return new JSONObject(converter.convertObjectToJsonString(resourceObject, apiVersion.getValue()));
     }
 
     private String applyReplacementsOnSource(String source) {

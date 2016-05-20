@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
@@ -34,19 +35,19 @@ public class LogicalInterconnectGroupAdaptor extends BaseAdaptor<LogicalIntercon
         return logicalInterconnectGroupDto;
     }
 
-    public InterconnectSettingsV2 buildInterconnectSettingsDto(final Object source, final double version) {
+    public InterconnectSettingsV2 buildInterconnectSettingsDto(final Object source, final ApiVersion version) {
         // write json object to a file
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         final InterconnectSettingsV2 interconnectSettingsDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version)), InterconnectSettingsV2.class);
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version.getValue())), InterconnectSettingsV2.class);
         return interconnectSettingsDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final LogicalInterconnectGroups source, final double version) {
+    public JSONObject buildJsonObjectFromDto(final LogicalInterconnectGroups source, final ApiVersion version) {
         // return the JSON object.
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        return new JSONObject(converter.convertObjectToJsonString(source, version));
+        return new JSONObject(converter.convertObjectToJsonString(source, version.getValue()));
     }
 
 }

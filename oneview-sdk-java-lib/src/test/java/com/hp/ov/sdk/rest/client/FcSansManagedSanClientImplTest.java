@@ -22,12 +22,12 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.doReturn;
-import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 import java.io.IOException;
@@ -58,6 +58,7 @@ import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
@@ -217,7 +218,7 @@ public class FcSansManagedSanClientImplTest {
     public void shouldUpdateManagedSan() {
         JSONObject jsonObject = new JSONObject();
 
-        given(adaptor.buildJsonRequest(any(SanRequest.class), any(Integer.class))).willReturn(jsonObject);
+        given(adaptor.buildJsonRequest(any(SanRequest.class), any(ApiVersion.class))).willReturn(jsonObject);
         given(adaptor.buildResourceObject(any(String.class), eq(SanResponse.class))).willReturn(new SanResponse());
         given(client.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn(managedSan);
 

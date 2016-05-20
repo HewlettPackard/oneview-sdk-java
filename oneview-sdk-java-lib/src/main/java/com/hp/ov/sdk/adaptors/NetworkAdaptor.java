@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.generated.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.generated.Network;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
@@ -48,10 +49,10 @@ public class NetworkAdaptor extends BaseAdaptor<Network, Object> {
         return bulkEthernetNetworkDto;
     }
 
-    public JSONObject buildJsonObjectFromDto(final Network source, int apiVersion) {
+    public JSONObject buildJsonObjectFromDto(final Network source, final ApiVersion apiVersion) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
-        return new JSONObject(converter.convertObjectToJsonString(source, apiVersion));
+        return new JSONObject(converter.convertObjectToJsonString(source, apiVersion.getValue()));
     }
 
     public JSONObject buildJsonObjectFromBulkEthernetDto(final BulkEthernetNetwork source) {
@@ -60,6 +61,7 @@ public class NetworkAdaptor extends BaseAdaptor<Network, Object> {
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
+    @SuppressWarnings("unchecked")
     public List<String> buildCollectionOfUris(String source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 

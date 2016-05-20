@@ -53,6 +53,7 @@ import com.hp.ov.sdk.dto.generated.UplinkSet;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
@@ -382,6 +383,7 @@ public class LogicalInterconnectGroupClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
 
+        params.setApiVersion(ApiVersion.V_120);
         InterconnectSettingsV2 settingsDto = client.getInterconnectSettings(params, resourceId, settingsId);
 
         RestParams rp = new RestParams();
@@ -392,6 +394,7 @@ public class LogicalInterconnectGroupClientTest {
                 SdkConstants.SETTINGS,
                 settingsId));
         rp.setType(HttpMethodType.GET);
+        rp.setApiVersion(ApiVersion.V_120);
 
         verify(restClient, times(1)).sendRequest(Mockito.eq(rp));
 
@@ -405,11 +408,11 @@ public class LogicalInterconnectGroupClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(ligJson);
 
-        params.setApiVersion(200);
+        params.setApiVersion(ApiVersion.V_200);
         InterconnectSettingsV2 settingsDto = client.getInterconnectSettings(params, resourceId);
 
         RestParams rp = new RestParams();
-        rp.setApiVersion(200);
+        rp.setApiVersion(ApiVersion.V_200);
         rp.setUrl(UrlUtils.createRestUrl(
                 params.getHostname(),
                 ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI,

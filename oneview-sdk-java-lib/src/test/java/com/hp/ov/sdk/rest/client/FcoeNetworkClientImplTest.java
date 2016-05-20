@@ -49,6 +49,7 @@ import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitorManager;
@@ -214,7 +215,7 @@ public class FcoeNetworkClientImplTest {
         JSONObject jsonObject = new JSONObject();
         TaskResourceV2 taskResource = new TaskResourceV2();
 
-        given(adaptor.buildJsonRequest(eq(fcoeNetwork), any(Double.class)))
+        given(adaptor.buildJsonRequest(eq(fcoeNetwork), any(ApiVersion.class)))
                 .willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), eq(jsonObject)))
                 .willReturn(taskResourceValue);
@@ -253,7 +254,7 @@ public class FcoeNetworkClientImplTest {
         JSONObject jsonObject = new JSONObject();
         TaskResourceV2 taskResource = new TaskResourceV2();
 
-        given(adaptor.buildJsonRequest(eq(fcoeNetwork), any(Double.class)))
+        given(adaptor.buildJsonRequest(eq(fcoeNetwork), any(ApiVersion.class)))
                 .willReturn(jsonObject);
         given(restClient.sendRequest(any(RestParams.class), eq(jsonObject)))
                 .willReturn(taskResourceValue);

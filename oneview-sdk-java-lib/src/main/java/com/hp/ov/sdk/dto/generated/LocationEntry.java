@@ -24,6 +24,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class LocationEntry implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     public enum Type {
         Port, Bay, Enclosure, Ip, Password, UserId, StackingDomainId, StackingMemberId
     }

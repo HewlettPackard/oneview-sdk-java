@@ -25,6 +25,8 @@ import com.google.gson.annotations.Since;
  */
 public class StorageVolumeV2 extends BaseModelResource {
 
+    private static final long serialVersionUID = 1L;
+
     private String allocatedCapacity;
     private String deviceType;
     private String deviceVolumeName;
