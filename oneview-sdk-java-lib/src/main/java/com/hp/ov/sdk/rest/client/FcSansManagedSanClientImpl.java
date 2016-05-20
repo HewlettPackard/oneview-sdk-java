@@ -58,7 +58,7 @@ public class FcSansManagedSanClientImpl implements FcSansManagedSanClient {
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
 
-    protected FcSansManagedSanClientImpl(HttpRestClient restClient,
+    private FcSansManagedSanClientImpl(HttpRestClient restClient,
             ResourceAdaptor adaptor,
             TaskAdaptor taskAdaptor,
             TaskMonitorManager taskMonitor) {

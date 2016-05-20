@@ -52,7 +52,7 @@ public class SwitchClientImpl implements SwitchClient {
     private final ResourceAdaptor adaptor;
     private final TaskMonitorManager taskMonitor;
 
-    protected SwitchClientImpl(
+    private SwitchClientImpl(
             HttpRestClient restClient,
             ResourceAdaptor adaptor,
             TaskMonitorManager taskMonitor) {

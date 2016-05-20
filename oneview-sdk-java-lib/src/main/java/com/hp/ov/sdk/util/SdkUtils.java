@@ -15,6 +15,12 @@
  *******************************************************************************/
 package com.hp.ov.sdk.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.adaptors.ApplianceDetailsAdaptor;
 import com.hp.ov.sdk.adaptors.LoginSessionAdaptor;
 import com.hp.ov.sdk.constants.SdkConstants;
@@ -43,11 +49,6 @@ import com.hp.ov.sdk.rest.client.StorageVolumeClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.rest.login.ApplianceDetails;
 import com.hp.ov.sdk.rest.login.LoginSessions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SdkUtils {
 
@@ -77,7 +78,7 @@ public class SdkUtils {
         );
     }
 
-    protected SdkUtils(LoginSessions loginSessions, ApplianceDetails applianceDetails,
+    private SdkUtils(LoginSessions loginSessions, ApplianceDetails applianceDetails,
         FcNetworkClient fcNetworkClient,
         NetworkClient networkClient,
         InterconnectTypeClient interconnectTypeClient,

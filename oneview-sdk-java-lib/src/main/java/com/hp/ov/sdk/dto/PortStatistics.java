@@ -24,18 +24,18 @@ public class PortStatistics extends BaseModelResource {
 
     private final static long serialVersionUID = 1L;
 
-    protected String portName;
-    protected BigInteger portNumber;
-    protected CommonStatistics commonStatistics;
-    protected AdvancedStatistics advancedStatistics;
-    protected List<SubportStatistics> subportStatistics;
-    protected FcStatistics fcStatistics;
+    private String portName;
+    private BigInteger portNumber;
+    private CommonStatistics commonStatistics;
+    private AdvancedStatistics advancedStatistics;
+    private List<SubportStatistics> subportStatistics;
+    private FcStatistics fcStatistics;
     @Since(200)
-    protected List<FipSnoopingInfo> fipSnoopingInfo;
+    private List<FipSnoopingInfo> fipSnoopingInfo;
     @Since(200)
-    protected FexPortStatistics fexStatistics;
+    private FexPortStatistics fexStatistics;
     @Since(200)
-    protected QosPortStatistics qosPortStatistics;
+    private QosPortStatistics qosPortStatistics;
 
     public String getPortName() {
         return portName;

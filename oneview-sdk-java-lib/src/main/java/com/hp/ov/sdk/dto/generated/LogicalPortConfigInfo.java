@@ -16,26 +16,25 @@
 package com.hp.ov.sdk.dto.generated;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import com.hp.ov.sdk.dto.DesiredSpeed;
+
 
 public class LogicalPortConfigInfo implements Serializable {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
     private LogicalLocation logicalLocation;
-    private LogicalPortConfigInfo.DesiredSpeed desiredSpeed;
+    private DesiredSpeed desiredSpeed;
 
     /**
-     * 
+     *
      * @return The logicalLocation
      */
     public LogicalLocation getLogicalLocation() {
@@ -43,7 +42,7 @@ public class LogicalPortConfigInfo implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param logicalLocation
      *            The logicalLocation
      */
@@ -52,19 +51,19 @@ public class LogicalPortConfigInfo implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The desiredSpeed
      */
-    public LogicalPortConfigInfo.DesiredSpeed getDesiredSpeed() {
+    public DesiredSpeed getDesiredSpeed() {
         return desiredSpeed;
     }
 
     /**
-     * 
+     *
      * @param desiredSpeed
      *            The desiredSpeed
      */
-    public void setDesiredSpeed(final LogicalPortConfigInfo.DesiredSpeed desiredSpeed) {
+    public void setDesiredSpeed(final DesiredSpeed desiredSpeed) {
         this.desiredSpeed = desiredSpeed;
     }
 
@@ -88,40 +87,6 @@ public class LogicalPortConfigInfo implements Serializable {
         }
         final LogicalPortConfigInfo rhs = ((LogicalPortConfigInfo) other);
         return new EqualsBuilder().append(logicalLocation, rhs.logicalLocation).append(desiredSpeed, rhs.desiredSpeed).isEquals();
-    }
-
-    public static enum DesiredSpeed {
-
-        Speed0M("Speed0M"), Speed1M("Speed1M"), Speed10M("Speed10M"), Speed100M("Speed100M"), Speed1G("Speed1G"), Speed2G("Speed2G"), Speed2_5G(
-                "Speed2_5G"), Speed4G("Speed4G"), Speed8G("Speed8G"), Speed10G("Speed10G"), Auto("Auto"), Speed20G("Speed20G"), Speed40G(
-                "Speed40G"), Unknown("Unknown");
-        private final String value;
-        private static Map<String, LogicalPortConfigInfo.DesiredSpeed> constants = new HashMap<String, LogicalPortConfigInfo.DesiredSpeed>();
-
-        static {
-            for (final LogicalPortConfigInfo.DesiredSpeed c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private DesiredSpeed(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static LogicalPortConfigInfo.DesiredSpeed fromValue(final String value) {
-            final LogicalPortConfigInfo.DesiredSpeed constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
     }
 
 }

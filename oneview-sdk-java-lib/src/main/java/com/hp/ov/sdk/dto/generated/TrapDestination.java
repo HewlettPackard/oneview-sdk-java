@@ -23,28 +23,17 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.hp.ov.sdk.dto.EnetTrapCategory;
+import com.hp.ov.sdk.dto.FcTrapCategory;
+import com.hp.ov.sdk.dto.TrapSeverity;
+import com.hp.ov.sdk.dto.VcmTrapCategory;
+
 public class TrapDestination implements Serializable {
 
     private static final long serialVersionUID = 892678631593032566L;
 
     public enum TrapFormat {
         SNMPv1, SNMPv2, SNMPv3
-    }
-
-    public enum TrapSeverity {
-        Critical, Info, Major, Minor, Normal, Unknown, Warning
-    }
-
-    public enum EnetTrapCategory {
-        Other, PortStatus, PortThresholds
-    }
-
-    public enum FcTrapCategory {
-        Other, PortStatus
-    }
-
-    public enum VcmTrapCategory {
-        Legacy
     }
 
     private List<TrapSeverity> trapSeverities = new ArrayList<>();

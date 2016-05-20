@@ -42,7 +42,7 @@ import com.hp.ov.sdk.util.UrlUtils;
 
 public class UplinkSetClientImpl implements UplinkSetClient {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(UplinkSetClientImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UplinkSetClientImpl.class);
     private static final int TIMEOUT = 60000; // in milliseconds = 1 mins
 
     private final ResourceAdaptor adaptor;
@@ -53,7 +53,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
 
     private JSONObject jsonObject;
 
-    protected UplinkSetClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+    private UplinkSetClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
         this.httpClient = httpClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;

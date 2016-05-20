@@ -66,7 +66,7 @@ public class ServerProfileClientImpl implements ServerProfileClient {
 
     private JSONObject jsonObject;
 
-    protected ServerProfileClientImpl(HttpRestClient httpClient, ResourceAdaptor resourceAdaptor,
+    private ServerProfileClientImpl(HttpRestClient httpClient, ResourceAdaptor resourceAdaptor,
             ServerProfileAdaptor adaptor, TaskAdaptor taskAdaptor,
             TaskMonitorManager taskMonitor) {
 

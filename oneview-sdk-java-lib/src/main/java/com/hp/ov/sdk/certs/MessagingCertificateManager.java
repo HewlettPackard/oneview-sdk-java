@@ -44,7 +44,7 @@ public class MessagingCertificateManager {
             new RabbitMqClientCertAdaptor());
     }
 
-    protected MessagingCertificateManager(RabbitMqClientCertAdaptor rabbitMqAdaptor) {
+    private MessagingCertificateManager(RabbitMqClientCertAdaptor rabbitMqAdaptor) {
 
         this.rabbitMqAdaptor = rabbitMqAdaptor;
     }

@@ -51,7 +51,7 @@ public class NetworkSetClientImpl implements NetworkSetClient {
 
     private JSONObject jsonObject;
 
-    protected NetworkSetClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
+    private NetworkSetClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
         this.httpClient = httpClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;

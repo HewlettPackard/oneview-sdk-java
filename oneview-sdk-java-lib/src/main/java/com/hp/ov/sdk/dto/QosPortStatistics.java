@@ -21,39 +21,39 @@ public class QosPortStatistics extends BaseModelResource {
 
     private final static long serialVersionUID = 1L;
 
-    protected BigInteger portNumber;
+    private BigInteger portNumber;
 
-    protected BigInteger cosq0_ucast_DroppedPkts;
-    protected BigInteger cosq0_ucast_OutBytes;
-    protected BigInteger cosq0_ucast_OutPkts;
+    private BigInteger cosq0_ucast_DroppedPkts;
+    private BigInteger cosq0_ucast_OutBytes;
+    private BigInteger cosq0_ucast_OutPkts;
 
-    protected BigInteger cosq1_ucast_DroppedPkts;
-    protected BigInteger cosq1_ucast_OutBytes;
-    protected BigInteger cosq1_ucast_OutPkts;
+    private BigInteger cosq1_ucast_DroppedPkts;
+    private BigInteger cosq1_ucast_OutBytes;
+    private BigInteger cosq1_ucast_OutPkts;
 
-    protected BigInteger cosq2_ucast_DroppedPkts;
-    protected BigInteger cosq2_ucast_OutBytes;
-    protected BigInteger cosq2_ucast_OutPkts;
+    private BigInteger cosq2_ucast_DroppedPkts;
+    private BigInteger cosq2_ucast_OutBytes;
+    private BigInteger cosq2_ucast_OutPkts;
 
-    protected BigInteger cosq3_ucast_DroppedPkts;
-    protected BigInteger cosq3_ucast_OutBytes;
-    protected BigInteger cosq3_ucast_OutPkts;
+    private BigInteger cosq3_ucast_DroppedPkts;
+    private BigInteger cosq3_ucast_OutBytes;
+    private BigInteger cosq3_ucast_OutPkts;
 
-    protected BigInteger cosq4_ucast_DroppedPkts;
-    protected BigInteger cosq4_ucast_OutBytes;
-    protected BigInteger cosq4_ucast_OutPkts;
+    private BigInteger cosq4_ucast_DroppedPkts;
+    private BigInteger cosq4_ucast_OutBytes;
+    private BigInteger cosq4_ucast_OutPkts;
 
-    protected BigInteger cosq5_ucast_DroppedPkts;
-    protected BigInteger cosq5_ucast_OutBytes;
-    protected BigInteger cosq5_ucast_OutPkts;
+    private BigInteger cosq5_ucast_DroppedPkts;
+    private BigInteger cosq5_ucast_OutBytes;
+    private BigInteger cosq5_ucast_OutPkts;
 
-    protected BigInteger cosq6_ucast_DroppedPkts;
-    protected BigInteger cosq6_ucast_OutBytes;
-    protected BigInteger cosq6_ucast_OutPkts;
+    private BigInteger cosq6_ucast_DroppedPkts;
+    private BigInteger cosq6_ucast_OutBytes;
+    private BigInteger cosq6_ucast_OutPkts;
 
-    protected BigInteger cosq7_ucast_DroppedPkts;
-    protected BigInteger cosq7_ucast_OutBytes;
-    protected BigInteger cosq7_ucast_OutPkts;
+    private BigInteger cosq7_ucast_DroppedPkts;
+    private BigInteger cosq7_ucast_OutBytes;
+    private BigInteger cosq7_ucast_OutPkts;
 
     /**
      * @return the portNumber

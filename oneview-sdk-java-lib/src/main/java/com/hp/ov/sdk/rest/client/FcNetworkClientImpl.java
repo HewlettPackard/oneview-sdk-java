@@ -53,7 +53,7 @@ public class FcNetworkClientImpl implements FcNetworkClient {
 
     private JSONObject jsonObject;
 
-    protected FcNetworkClientImpl(HttpRestClient httpClient, ResourceAdaptor resourceAdaptor,
+    private FcNetworkClientImpl(HttpRestClient httpClient, ResourceAdaptor resourceAdaptor,
             FcNetworkAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
 
         this.httpClient = httpClient;

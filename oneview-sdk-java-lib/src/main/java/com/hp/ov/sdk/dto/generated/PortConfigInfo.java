@@ -16,44 +16,43 @@
 package com.hp.ov.sdk.dto.generated;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import com.hp.ov.sdk.dto.DesiredSpeed;
+
 
 public class PortConfigInfo implements Serializable {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
-    private PortConfigInfo.DesiredSpeed desiredSpeed;
+    private DesiredSpeed desiredSpeed;
     private String portUri;
     private Location location;
 
     /**
-     * 
+     *
      * @return The desiredSpeed
      */
-    public PortConfigInfo.DesiredSpeed getDesiredSpeed() {
+    public DesiredSpeed getDesiredSpeed() {
         return desiredSpeed;
     }
 
     /**
-     * 
+     *
      * @param desiredSpeed
      *            The desiredSpeed
      */
-    public void setDesiredSpeed(final PortConfigInfo.DesiredSpeed desiredSpeed) {
+    public void setDesiredSpeed(final DesiredSpeed desiredSpeed) {
         this.desiredSpeed = desiredSpeed;
     }
 
     /**
-     * 
+     *
      * @return The portUri
      */
     public String getPortUri() {
@@ -61,7 +60,7 @@ public class PortConfigInfo implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param portUri
      *            The portUri
      */
@@ -70,7 +69,7 @@ public class PortConfigInfo implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return The location
      */
     public Location getLocation() {
@@ -78,7 +77,7 @@ public class PortConfigInfo implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param location
      *            The location
      */
@@ -107,40 +106,6 @@ public class PortConfigInfo implements Serializable {
         final PortConfigInfo rhs = ((PortConfigInfo) other);
         return new EqualsBuilder().append(desiredSpeed, rhs.desiredSpeed).append(portUri, rhs.portUri)
                 .append(location, rhs.location).isEquals();
-    }
-
-    public static enum DesiredSpeed {
-
-        Speed0M("Speed0M"), Speed1M("Speed1M"), Speed10M("Speed10M"), Speed100M("Speed100M"), Speed1G("Speed1G"), Speed2G("Speed2G"), Speed2_5G(
-                "Speed2_5G"), Speed4G("Speed4G"), Speed8G("Speed8G"), Speed10G("Speed10G"), Auto("Auto"), Speed20G("Speed20G"), Speed40G(
-                "Speed40G"), Unknown("Unknown");
-        private final String value;
-        private static Map<String, PortConfigInfo.DesiredSpeed> constants = new HashMap<String, PortConfigInfo.DesiredSpeed>();
-
-        static {
-            for (final PortConfigInfo.DesiredSpeed c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private DesiredSpeed(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static PortConfigInfo.DesiredSpeed fromValue(final String value) {
-            final PortConfigInfo.DesiredSpeed constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
     }
 
 }

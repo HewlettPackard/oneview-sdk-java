@@ -57,7 +57,7 @@ public class LogicalEnclosureClientImpl implements LogicalEnclosureClient {
 
     private JSONObject jsonObject;
 
-    protected LogicalEnclosureClientImpl(HttpRestClient httpClient, LogicalEnclosureAdaptor adaptor, ResourceAdaptor resourceAdaptor,
+    private LogicalEnclosureClientImpl(HttpRestClient httpClient, LogicalEnclosureAdaptor adaptor, ResourceAdaptor resourceAdaptor,
             TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
         this.httpClient = httpClient;
         this.adaptor = adaptor;

@@ -62,7 +62,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
 
     private JSONObject jsonObject;
 
-    protected InterconnectsClientImpl(HttpRestClient httpClient, ResourceAdaptor resourceAdaptor,
+    private InterconnectsClientImpl(HttpRestClient httpClient, ResourceAdaptor resourceAdaptor,
             InterconnectAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
 
         this.httpClient = httpClient;

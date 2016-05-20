@@ -48,7 +48,7 @@ public class StorageVolumeTemplateClientImpl implements StorageVolumeTemplateCli
     private final ResourceAdaptor resourceAdaptor;
     private final StorageVolumeTemplateAdaptor adaptor;
 
-    protected StorageVolumeTemplateClientImpl(
+    private StorageVolumeTemplateClientImpl(
             HttpRestClient restClient,
             ResourceAdaptor resourceAdaptor,
             StorageVolumeTemplateAdaptor adaptor) {

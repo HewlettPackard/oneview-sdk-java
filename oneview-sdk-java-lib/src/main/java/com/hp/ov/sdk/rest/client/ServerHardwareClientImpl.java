@@ -59,7 +59,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
     private final ResourceAdaptor adaptor;
     private final TaskMonitorManager taskMonitor;
 
-    protected ServerHardwareClientImpl(HttpRestClient restClient,
+    private ServerHardwareClientImpl(HttpRestClient restClient,
             ResourceAdaptor adaptor,
             TaskMonitorManager taskMonitor) {
 

@@ -51,21 +51,21 @@ public class FexAdvancedStatistics extends BaseModelResource {
 
         private static final long serialVersionUID = 1L;
 
-        protected String unicast_packets;
-        protected String multicast_packets;
-        protected String broadcast_packets;
-        protected String input_packets;
-        protected String jumbo_packets;
-        protected String storm_suppression_bytes;
-        protected String giants;
-        protected String short_frame;
-        protected String overrun;
-        protected String underrun;
-        protected String watchdog;
-        protected String if_down_drop;
-        protected String input_with_dribble;
-        protected String input_discard;
-        protected String Rx_pause;
+        private String unicast_packets;
+        private String multicast_packets;
+        private String broadcast_packets;
+        private String input_packets;
+        private String jumbo_packets;
+        private String storm_suppression_bytes;
+        private String giants;
+        private String short_frame;
+        private String overrun;
+        private String underrun;
+        private String watchdog;
+        private String if_down_drop;
+        private String input_with_dribble;
+        private String input_discard;
+        private String Rx_pause;
 
         /**
          * @return the unicast_packets
@@ -253,19 +253,19 @@ public class FexAdvancedStatistics extends BaseModelResource {
 
         private static final long serialVersionUID = 1L;
 
-        protected String unicast_packets;
-        protected String multicast_packets;
-        protected String broadcast_packets;
-        protected String output_packets;
-        protected String jumbo_packets;
-        protected String collision;
-        protected String deferred;
-        protected String late_collision;
-        protected String lost_carrier;
-        protected String no_carrier;
-        protected String babble;
-        protected String Tx_pause;
-        protected String interface_resets;
+        private String unicast_packets;
+        private String multicast_packets;
+        private String broadcast_packets;
+        private String output_packets;
+        private String jumbo_packets;
+        private String collision;
+        private String deferred;
+        private String late_collision;
+        private String lost_carrier;
+        private String no_carrier;
+        private String babble;
+        private String Tx_pause;
+        private String interface_resets;
 
         /**
          * @return the unicast_packets

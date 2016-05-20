@@ -21,20 +21,20 @@ public class FipSnoopingInfo extends BaseModelResource {
 
     private final static long serialVersionUID = 1L;
 
-     protected String externalVlan;
-     protected List<String> fcfMacAddress;
-     protected String fabricName;
-     protected String fcfName;
-     protected String fcMap;
-     protected String lagId;
-     protected String port;
-     protected String downLinks;
-     protected List<String> fcoeMacAddress;
-     protected String fcoeLoginCount;
-     protected String flexNic;
-     protected List<String> fcID;
-     protected String macAddress;
-     protected String network;
+    private String externalVlan;
+    private List<String> fcfMacAddress;
+    private String fabricName;
+    private String fcfName;
+    private String fcMap;
+    private String lagId;
+    private String port;
+    private String downLinks;
+    private List<String> fcoeMacAddress;
+    private String fcoeLoginCount;
+    private String flexNic;
+    private List<String> fcID;
+    private String macAddress;
+    private String network;
 
     /**
      * @return the externalVlan

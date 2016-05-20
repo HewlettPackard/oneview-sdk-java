@@ -24,6 +24,7 @@ import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ConnectionBoot;
 import com.hp.ov.sdk.dto.ConnectionBoot.BootControl;
+import com.hp.ov.sdk.dto.DesiredSpeed;
 import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.dto.PortInfo;
 import com.hp.ov.sdk.dto.ProfileConnectionV3;
@@ -190,7 +191,7 @@ public class ResourceDtoUtils {
                 }
 
                 final LogicalPortConfigInfo logicalPortConfigInfo = new LogicalPortConfigInfo();
-                logicalPortConfigInfo.setDesiredSpeed(LogicalPortConfigInfo.DesiredSpeed.Auto);
+                logicalPortConfigInfo.setDesiredSpeed(DesiredSpeed.Auto);
 
                 final LogicalLocation logicalLocation = new LogicalLocation();
                 final List<LocationEntry> locationEntriesList = new ArrayList<LocationEntry>();

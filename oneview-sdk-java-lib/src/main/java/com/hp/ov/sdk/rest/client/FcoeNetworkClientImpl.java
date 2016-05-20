@@ -48,7 +48,7 @@ public class FcoeNetworkClientImpl implements FcoeNetworkClient {
     private final ResourceAdaptor adaptor;
     private final TaskMonitorManager taskMonitor;
 
-    protected FcoeNetworkClientImpl(
+    private FcoeNetworkClientImpl(
             HttpRestClient restClient,
             ResourceAdaptor adaptor,
             TaskMonitorManager taskMonitor) {

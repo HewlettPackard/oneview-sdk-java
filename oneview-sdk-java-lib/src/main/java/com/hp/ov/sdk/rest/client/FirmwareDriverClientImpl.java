@@ -47,7 +47,7 @@ public class FirmwareDriverClientImpl implements FirmwareDriverClient {
     private final TaskMonitorManager taskMonitor;
     private final HttpRestClient httpClient;
 
-    protected FirmwareDriverClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor,
+    private FirmwareDriverClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor,
         TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
         this.httpClient = httpClient;
         this.adaptor = adaptor;

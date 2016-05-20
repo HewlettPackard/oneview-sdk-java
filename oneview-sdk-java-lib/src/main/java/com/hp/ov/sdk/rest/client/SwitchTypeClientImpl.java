@@ -44,7 +44,7 @@ public class SwitchTypeClientImpl implements SwitchTypeClient {
     private final HttpRestClient restClient;
     private final ResourceAdaptor adaptor;
 
-    public SwitchTypeClientImpl(HttpRestClient restClient,
+    private SwitchTypeClientImpl(HttpRestClient restClient,
             ResourceAdaptor adaptor) {
 
         this.restClient = restClient;

@@ -122,25 +122,7 @@ public class SdkConstants {
     public static final String UPLINKSETS = UPLINKSET + "s";
     public static final String UTILIZATION = "utilization";
 
-    public static final int BAD_REQUEST = 400;
-    public static final int UNAUTHORIZED = 401;
-    public static final int FORBIDDEN_REQUEST = 403;
-    public static final int URL_NOT_FOUND = 404;
-    public static final int METHOD_NOT_ALLOWED = 405;
-    public static final int CONFLICT_DUE_TO_STATE = 409;
-    public static final int PRECONDITION_FAILED = 412;
-    public static final int UNSUPPORTED_MEDIA_TYPE = 415;
-    public static final int INTERNAL_SERVER_ERROR = 500;
-    public static final int SERVICE_UNAVAILABLE = 503;
-
     public static final String JSON_TO_OBJECT_CONVERSION = "Json-to-object";
-    public static final String OBJECT_TO_JOSON_CONVERSION = "Object-to-json";
     public static final String TASK_MONITOR = "task-monitor";
-
-    public static final String FILTER_PREFIX = "filter=\"name=\'";
-    public static final String FILTER_APPEND = "\'\"";
-
-    public static final String QUERY_PREFIX = "query=name eq \"";
-    public static final String QUERY_APPEND = "\"";
 
 }

@@ -21,18 +21,18 @@ public class SubportAdvancedStatistics extends BaseModelResource {
 
     private final static long serialVersionUID = 1L;
 
-    protected BigInteger portNumber;
-    protected BigInteger subportNumber;
-    protected BigInteger resetTimeEpoch;
-    protected BigInteger linkChanges;
-    protected String receiveKilobitsPerSec;
-    protected String transmitKilobitsPerSec;
-    protected String receiveKilobytesPerSec;
-    protected String transmitKilobytesPerSec;
-    protected String receivePacketsPerSec;
-    protected String transmitPacketsPerSec;
-    protected String receiveNonunicastPacketsPerSec;
-    protected String transmitNonunicastPacketsPerSec;
+    private BigInteger portNumber;
+    private BigInteger subportNumber;
+    private BigInteger resetTimeEpoch;
+    private BigInteger linkChanges;
+    private String receiveKilobitsPerSec;
+    private String transmitKilobitsPerSec;
+    private String receiveKilobytesPerSec;
+    private String transmitKilobytesPerSec;
+    private String receivePacketsPerSec;
+    private String transmitPacketsPerSec;
+    private String receiveNonunicastPacketsPerSec;
+    private String transmitNonunicastPacketsPerSec;
 
     /**
      * @return the portNumber

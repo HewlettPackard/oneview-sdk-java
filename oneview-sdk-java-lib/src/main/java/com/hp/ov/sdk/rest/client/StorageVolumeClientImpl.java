@@ -55,7 +55,7 @@ public class StorageVolumeClientImpl implements StorageVolumeClient {
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
 
-    protected StorageVolumeClientImpl(HttpRestClient restClient,
+    private StorageVolumeClientImpl(HttpRestClient restClient,
             ResourceAdaptor resourceAdaptor,
             TaskAdaptor taskAdaptor,
             TaskMonitorManager taskMonitor) {

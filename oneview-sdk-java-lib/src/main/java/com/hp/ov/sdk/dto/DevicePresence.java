@@ -15,6 +15,40 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum DevicePresence {
-    Absent, PresenceNoOp, PresenceUnknown, Present, Subsumed
+    PresenceNoOp("PresenceNoOp"),
+    PresenceUnknown("PresenceUnknown"),
+    Absent("Absent"),
+    Present("Present"),
+    Subsumed("Subsumed");
+
+    private final String value;
+    private static Map<String, DevicePresence> constants = new HashMap<String, DevicePresence>();
+
+    static {
+        for (final DevicePresence c : values()) {
+            constants.put(c.value, c);
+        }
+    }
+
+    private DevicePresence(final String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return this.value;
+    }
+
+    public static DevicePresence fromValue(final String value) {
+        final DevicePresence constant = constants.get(value);
+        if (constant == null) {
+            throw new IllegalArgumentException(value);
+        } else {
+            return constant;
+        }
+    }
 }

@@ -54,7 +54,7 @@ public class NetworkClientImpl implements NetworkClient {
     private final TaskAdaptor taskAdaptor;
     private final TaskMonitorManager taskMonitor;
 
-    protected NetworkClientImpl(HttpRestClient restClient,
+    private NetworkClientImpl(HttpRestClient restClient,
             NetworkAdaptor adaptor,
             ResourceAdaptor resourceAdaptor,
             TaskAdaptor taskAdaptor,

@@ -57,7 +57,7 @@ import com.hp.ov.sdk.util.UrlUtils;
 public class LogicalInterconnectClientImpl implements LogicalInterconnectClient {
 
     private static final int TIMEOUT = 300000; // in milliseconds = 1 mins
-    public static final Logger LOGGER = LoggerFactory.getLogger(LogicalInterconnectClientImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogicalInterconnectClientImpl.class);
 
     private final ResourceAdaptor resourceAdaptor;
     private final LogicalInterconnectAdaptor adaptor;
@@ -67,7 +67,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
 
     private JSONObject jsonObject;
 
-    protected LogicalInterconnectClientImpl(HttpRestClient httpClient, ResourceAdaptor resourceAdaptor,
+    private LogicalInterconnectClientImpl(HttpRestClient httpClient, ResourceAdaptor resourceAdaptor,
             LogicalInterconnectAdaptor adaptor, TaskAdaptor taskAdaptor, TaskMonitorManager taskMonitor) {
         this.httpClient = httpClient;
         this.resourceAdaptor = resourceAdaptor;

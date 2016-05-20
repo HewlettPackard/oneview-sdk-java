@@ -24,6 +24,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.DevicePresence;
 
 public class FanBay implements Serializable {
 
@@ -34,7 +35,7 @@ public class FanBay implements Serializable {
     private Integer bayNumber;
     @Since(200)
     private String changeState;
-    private FanBay.DevicePresence devicePresence;
+    private DevicePresence devicePresence;
     private Boolean deviceRequired;
     private Boolean forceInstallFirmware;
     private FanBay.Status status;
@@ -81,7 +82,7 @@ public class FanBay implements Serializable {
      *
      *@return The devicePresence
      */
-    public FanBay.DevicePresence getDevicePresence() {
+    public DevicePresence getDevicePresence() {
         return devicePresence;
     }
 
@@ -90,7 +91,7 @@ public class FanBay implements Serializable {
      *@param devicePresence
      *           The devicePresence
      */
-    public void setDevicePresence(final FanBay.DevicePresence devicePresence) {
+    public void setDevicePresence(final DevicePresence devicePresence) {
         this.devicePresence = devicePresence;
     }
 
@@ -255,38 +256,6 @@ public class FanBay implements Serializable {
                 .append(partNumber, rhs.partNumber)
                 .append(sparePartNumber, rhs.sparePartNumber)
                 .isEquals();
-    }
-
-    public static enum DevicePresence {
-
-        PresenceNoOp("PresenceNoOp"), PresenceUnknown("PresenceUnknown"), Absent("Absent"), Present("Present"), Subsumed("Subsumed");
-        private final String value;
-        private static Map<String, FanBay.DevicePresence> constants = new HashMap<String, FanBay.DevicePresence>();
-
-        static {
-            for (final FanBay.DevicePresence c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private DevicePresence(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static FanBay.DevicePresence fromValue(final String value) {
-            final FanBay.DevicePresence constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
     }
 
     public static enum State {

@@ -40,7 +40,7 @@ import com.hp.ov.sdk.util.UrlUtils;
 
 public class EnclosureGroupClientImpl implements EnclosureGroupClient {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(EnclosureGroupClientImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EnclosureGroupClientImpl.class);
 
     private final ResourceAdaptor adaptor;
     private final TaskAdaptor taskAdaptor;
@@ -48,7 +48,7 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
 
     private JSONObject jsonObject;
 
-    protected EnclosureGroupClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor, TaskAdaptor taskAdaptor) {
+    private EnclosureGroupClientImpl(HttpRestClient httpClient, ResourceAdaptor adaptor, TaskAdaptor taskAdaptor) {
         this.httpClient = httpClient;
         this.adaptor = adaptor;
         this.taskAdaptor = taskAdaptor;

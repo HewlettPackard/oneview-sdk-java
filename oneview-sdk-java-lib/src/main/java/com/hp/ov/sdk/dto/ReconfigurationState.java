@@ -15,6 +15,40 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum ReconfigurationState {
-    NotReapplyingConfiguration, Pending, ReapplyingConfiguration, ReapplyingConfigurationFailed
+
+    NotReapplyingConfiguration("NotReapplyingConfiguration"),
+    ReapplyingConfiguration("ReapplyingConfiguration"),
+    ReapplyingConfigurationFailed("ReapplyingConfigurationFailed"),
+    PENDING("Pending");
+
+    private final String value;
+    private static Map<String, ReconfigurationState> constants = new HashMap<String, ReconfigurationState>();
+
+    static {
+        for (final ReconfigurationState c : values()) {
+            constants.put(c.value, c);
+        }
+    }
+
+    private ReconfigurationState(final String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return this.value;
+    }
+
+    public static ReconfigurationState fromValue(final String value) {
+        final ReconfigurationState constant = constants.get(value);
+        if (constant == null) {
+            throw new IllegalArgumentException(value);
+        } else {
+            return constant;
+        }
+    }
 }

@@ -51,7 +51,7 @@ public class StorageSystemClientImpl implements StorageSystemClient {
 
     private JSONObject jsonObject;
 
-    protected StorageSystemClientImpl(HttpRestClient httpClient,
+    private StorageSystemClientImpl(HttpRestClient httpClient,
             ResourceAdaptor resourceAdaptor, StorageSystemAdaptor adaptor) {
 
         this.httpClient = httpClient;
