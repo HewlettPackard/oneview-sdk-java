@@ -17,7 +17,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.hpe.oneview</groupId>
-  <artifactId>oneview-java-sdk-pom</artifactId>
+  <artifactId>oneview-sdk-java-pom</artifactId>
   <version>3.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>OneView SDK for Java Project</name>
@@ -52,6 +52,10 @@
 
     <version.org.slf4j>1.7.21</version.org.slf4j>
     <version.org.apache.httpcomponents>4.5.1</version.org.apache.httpcomponents>
+
+    <!-- proprietary tools properties -->
+    <sign.hpe.client>${env.SIGNHPE_HOME}</sign.hpe.client>
+    <sign.hpe.keytab>${env.SIGNHPE_HOME}/oneviewsdk001.keytab</sign.hpe.keytab>
   </properties>
 
   <distributionManagement>
@@ -84,12 +88,48 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
           </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <inherited>false</inherited>
+            <executions>
+              <execution>
+                <id>attach-signature</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <property name="target_dir" value="${project.build.directory}"/>
+                    <property name="artifact_name" value="${project.artifactId}-${project.version}"/>
+                    <property name="pom_signature_file" value="${target_dir}/${artifact_name}.pom.asc"/>
+
+                    <echo message="${pom_signature_file}"/>
+
+                    <attachartifact file="${pom_signature_file}" type="pom.asc"/>
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
       </build>
     </profile>
   </profiles>
 
   <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+    </plugins>
+
     <pluginManagement>
       <plugins>
         <plugin>
@@ -117,8 +157,41 @@
               <goals>
                 <goal>jar</goal>
               </goals>
+              <configuration>
+                <quiet>true</quiet>
+              </configuration>
             </execution>
           </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.5.0</version>
+          <executions>
+            <execution>
+              <id>sign-artifacts</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>exec</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <executable>sign.sh</executable>
+            <arguments>
+              <argument>${sign.hpe.client}</argument>
+              <argument>${sign.hpe.keytab}</argument>
+              <argument>${project.artifactId}</argument>
+              <argument>${project.version}</argument>
+              <!-- uncomment the argument to enable script debug mode -->
+              <!-- <argument>debug</argument> -->
+            </arguments>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>1.8</version>
         </plugin>
       </plugins>
     </pluginManagement>

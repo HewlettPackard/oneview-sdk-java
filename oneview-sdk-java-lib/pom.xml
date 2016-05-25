@@ -18,20 +18,64 @@
 
   <parent>
     <groupId>com.hpe.oneview</groupId>
-    <artifactId>oneview-java-sdk-pom</artifactId>
+    <artifactId>oneview-sdk-java-pom</artifactId>
     <version>3.0.0-SNAPSHOT</version>
   </parent>
 
   <groupId>com.hpe.oneview</groupId>
-  <artifactId>oneview-sdk-java-lib</artifactId>
+  <artifactId>oneview-sdk-java</artifactId>
   <packaging>jar</packaging>
-  <name>Oneview SDK Java</name>
+  <name>Oneview SDK for Java</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-signatures</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <property name="target_dir" value="${project.build.directory}"/>
+                    <property name="artifact_name" value="${project.artifactId}-${project.version}"/>
+
+                    <property name="pom_signature_file" value="${target_dir}/${artifact_name}.pom.asc"/>
+                    <property name="jar_signature_file" value="${target_dir}/${artifact_name}.jar.asc"/>
+                    <property name="javadoc_signature_file" value="${target_dir}/${artifact_name}-javadoc.jar.asc"/>
+                    <property name="sources_signature_file" value="${target_dir}/${artifact_name}-sources.jar.asc"/>
+
+                    <echo message="${pom_signature_file}"/>
+                    <echo message="${jar_signature_file}"/>
+                    <echo message="${javadoc_signature_file}"/>
+                    <echo message="${sources_signature_file}"/>
+
+                    <attachartifact file="${pom_signature_file}" type="pom.asc"/>
+                    <attachartifact file="${jar_signature_file}" type="jar.asc"/>
+                    <attachartifact file="${javadoc_signature_file}" classifier="javadoc" type="jar.asc"/>
+                    <attachartifact file="${sources_signature_file}" classifier="sources" type="jar.asc"/>
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
   <dependencies>
     <dependency>
