@@ -39,6 +39,7 @@ public class SdkConstants {
     public static final String ENCLOSURE_GROUPS = ENCLOSURE_GROUP + "s";
     public static final String ETHERNET = "Ethernet";
     public static final String ETHERNET_SETTINGS = "ethernetSettings";
+    public static final String FABRIC = "fabric";
     public static final String FIBRE_CHANNEL = "FibreChannel";
     public static final String FIRMWARE_DRIVER = "firmware-drivers";
     public static final String FC_NETWORK = "FC_NETWORK";

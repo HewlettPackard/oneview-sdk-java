@@ -92,7 +92,7 @@ public class MsmbConnectionManager {
 
         if (null == executor) {
             executor = Executors.newFixedThreadPool(5);
-            executorMap.putIfAbsent(key, executor);
+            executorMap.put(key, executor);
         }
         return executor;
     }
