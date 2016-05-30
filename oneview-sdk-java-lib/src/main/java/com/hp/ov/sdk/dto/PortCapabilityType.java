@@ -16,15 +16,15 @@
 package com.hp.ov.sdk.dto;
 
 public enum PortCapabilityType {
-    Ethernet,
-    FibreChannel,
-    EnetFcoe,
-    Unknown,
-    Extension,
-    Dcc,
-    PortExtender,
-    Stacking,
-    Qbg,
+    ConnectionDeployment,
     ConnectionReservation,
-    ConnectionDeployment
+    Dcc,
+    EnetFcoe,
+    Ethernet,
+    Extension,
+    FibreChannel,
+    PortExtender,
+    Qbg,
+    Stacking,
+    Unknown,
 }

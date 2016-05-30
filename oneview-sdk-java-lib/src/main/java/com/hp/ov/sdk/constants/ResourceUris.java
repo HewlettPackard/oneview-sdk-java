@@ -53,6 +53,7 @@ public class ResourceUris {
     public static final String ETHERNET_URI = "/rest/ethernet-networks";
     public static final String INTERCONNECT_TYPE_URI = "/rest/interconnect-types";
     public static final String INTERCONNECT_URI = "/rest/interconnects";
+    public static final String LOGICAL_DOWNLINK_URI = "/rest/logical-downlinks";
     public static final String LOGICAL_ENCLOSURE_URI = "/rest/logical-enclosures";
     public static final String LOGICAL_INTERCONNECT_GROUPS_URI = "/rest/logical-interconnect-groups";
     public static final String LOGICAL_INTERCONNECT_URI = "/rest/logical-interconnects";
@@ -90,5 +91,6 @@ public class ResourceUris {
     public static final String SWITCHES_URI = "/rest/switches";
     public static final String TASK_URI = "/rest/tasks";
     public static final String UPLINK_SETS_URI = "/rest/uplink-sets";
+    public static final String WITHOUT_ETHERNET = "withoutEthernet";
 
 }

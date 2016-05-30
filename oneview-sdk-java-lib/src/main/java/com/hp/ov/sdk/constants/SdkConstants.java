@@ -56,6 +56,7 @@ public class SdkConstants {
     public static final String INTERNAL_NETWORKS = "internalNetworks";
     public static final String INTERNAL_VLANS = "internalVlans";
     public static final String LOCATIONS = "locations";
+    public static final String LOGICAL_DOWNLINK = "logical-downlinks";
     public static final String LOGICAL_ENCLOSURE = "logical-enclosures";
     public static final String LOGICAL_INTERCONNECT = "logical-interconnects";
     public static final String LOGICAL_INTERCONNECTS = LOGICAL_INTERCONNECT + "s";
