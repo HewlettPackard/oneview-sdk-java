@@ -21,7 +21,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.hp.ov.sdk.dto.DesiredSpeed;
+import com.hp.ov.sdk.dto.OpSpeed;
 
 
 public class PortConfigInfo implements Serializable {
@@ -30,7 +30,7 @@ public class PortConfigInfo implements Serializable {
 	 *
 	 */
     private static final long serialVersionUID = 1L;
-    private DesiredSpeed desiredSpeed;
+    private OpSpeed desiredSpeed;
     private String portUri;
     private Location location;
 
@@ -38,7 +38,7 @@ public class PortConfigInfo implements Serializable {
      *
      * @return The desiredSpeed
      */
-    public DesiredSpeed getDesiredSpeed() {
+    public OpSpeed getDesiredSpeed() {
         return desiredSpeed;
     }
 
@@ -47,7 +47,7 @@ public class PortConfigInfo implements Serializable {
      * @param desiredSpeed
      *            The desiredSpeed
      */
-    public void setDesiredSpeed(final DesiredSpeed desiredSpeed) {
+    public void setDesiredSpeed(final OpSpeed desiredSpeed) {
         this.desiredSpeed = desiredSpeed;
     }
 

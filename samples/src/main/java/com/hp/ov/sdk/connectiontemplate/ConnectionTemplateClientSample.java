@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ public class ConnectionTemplateClientSample {
             System.out.println("ConnectionTemplateClientTest : getConnectionTemplate : No response from appliance : "
                     + params.getHostname());
         } catch (SDKInvalidArgumentException ex) {
-            System.out.println("LoginSessionsImplTest : getConnectionTemplate : arguments are null ");
+            System.out.println("ConnectionTemplateClientTest : getConnectionTemplate : arguments are null ");
         }
 
     }
@@ -131,7 +131,7 @@ public class ConnectionTemplateClientSample {
         } catch (SDKInvalidArgumentException ex) {
             System.out.println("LoginSessionsImplTest : updateConnectionTemplate : " + "arguments are null ");
         } catch (SDKTasksException e) {
-            System.out.println("LoginSessionsImplTest : updateConnectionTemplate : " + "errors in task, please check task "
+            System.out.println("ConnectionTemplateClientTest : updateConnectionTemplate : " + "errors in task, please check task "
                     + "resource for more details ");
         }
 

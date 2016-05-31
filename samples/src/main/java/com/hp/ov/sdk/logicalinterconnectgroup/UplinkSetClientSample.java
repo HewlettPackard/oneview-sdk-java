@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.hp.ov.sdk.dto.DesiredSpeed;
+import com.hp.ov.sdk.dto.OpSpeed;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.Enclosures;
@@ -329,7 +329,7 @@ public class UplinkSetClientSample {
 
         List<PortConfigInfo> portConfigInfos = new ArrayList<PortConfigInfo>();
         PortConfigInfo portConfigInfo = new PortConfigInfo();
-        portConfigInfo.setDesiredSpeed(DesiredSpeed.Auto);
+        portConfigInfo.setDesiredSpeed(OpSpeed.Auto);
 
         for (int i = 0; i < enclosuresDto.getInterconnectBayCount(); i++) {
             if (Integer.parseInt(bayValue) == enclosuresDto.getInterconnectBays().get(i).getBayNumber()) {

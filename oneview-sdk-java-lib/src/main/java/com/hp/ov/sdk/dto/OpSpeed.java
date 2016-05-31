@@ -18,7 +18,7 @@ package com.hp.ov.sdk.dto;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum DesiredSpeed {
+public enum OpSpeed {
 
     Speed0M("Speed0M"),
     Speed1M("Speed1M"),
@@ -36,15 +36,15 @@ public enum DesiredSpeed {
     Unknown("Unknown");
 
     private final String value;
-    private static Map<String, DesiredSpeed> constants = new HashMap<String, DesiredSpeed>();
+    private static Map<String, OpSpeed> constants = new HashMap<String, OpSpeed>();
 
     static {
-        for (final DesiredSpeed c : values()) {
+        for (final OpSpeed c : values()) {
             constants.put(c.value, c);
         }
     }
 
-    private DesiredSpeed(final String value) {
+    private OpSpeed(final String value) {
         this.value = value;
     }
 
@@ -53,8 +53,8 @@ public enum DesiredSpeed {
         return this.value;
     }
 
-    public static DesiredSpeed fromValue(final String value) {
-        final DesiredSpeed constant = constants.get(value);
+    public static OpSpeed fromValue(final String value) {
+        final OpSpeed constant = constants.get(value);
         if (constant == null) {
             throw new IllegalArgumentException(value);
         } else {
