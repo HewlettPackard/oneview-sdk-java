@@ -16,6 +16,7 @@
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.InterconnectType;
+import com.hp.ov.sdk.dto.InterconnectTypeName;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
@@ -53,8 +54,24 @@ public interface InterconnectTypeClient {
      * @param name
      *            The name is the interconnect type name as seen in HPE OneView.
      * @return {@link InterconnectType} containing the interconnect type details.
+     *
+     * @deprecated use the {@link InterconnectTypeClient#getInterconnectTypeByName} which receives
+     * an instance of {@link InterconnectTypeName}
      */
+    @Deprecated
     InterconnectType getInterconnectTypeByName(final RestParams params, final String name);
+
+    /**
+     * The module aids in fetching the interconnect type details for the
+     * specified interconnect type name as specified in HPE OneView.
+     *
+     * @param params
+     *            The {@link RestParams} is a structure containing the connection details.
+     * @param name
+     *            The name is the interconnect type name as seen in HPE OneView.
+     * @return {@link InterconnectType} containing the interconnect type details.
+     */
+    InterconnectType getInterconnectTypeByName(final RestParams params, final InterconnectTypeName name);
 
     /**
      * The module aids in fetching the interconnect type resource identifier for the

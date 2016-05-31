@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.InterconnectType;
+import com.hp.ov.sdk.dto.InterconnectTypeName;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -155,6 +156,11 @@ public class InterconnectTypeClientImpl implements InterconnectTypeClient {
         LOGGER.trace("InterconnectTypeClientImpl : getInterconnectTypeByName : End");
 
         return interconnectTypeDto;
+    }
+
+    @Override
+    public InterconnectType getInterconnectTypeByName(final RestParams params, final InterconnectTypeName name) {
+        return this.getInterconnectTypeByName(params, name.toString());
     }
 
     @Override
