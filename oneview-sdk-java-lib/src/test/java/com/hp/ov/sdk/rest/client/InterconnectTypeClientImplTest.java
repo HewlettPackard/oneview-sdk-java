@@ -1,3 +1,18 @@
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.hp.ov.sdk.rest.client;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,6 +43,7 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.InterconnectType;
+import com.hp.ov.sdk.dto.InterconnectTypeName;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -113,14 +129,14 @@ public class InterconnectTypeClientImplTest {
 
     @Test(expected = SDKInvalidArgumentException.class)
     public void shouldThrowExceptionWhenTryingToGetInterconnectTypeByNameWithoutParams() {
-        this.interconnectTypeClient.getInterconnectTypeByName(null, null);
+        this.interconnectTypeClient.getInterconnectTypeByName(null, "");
     }
 
     @Test(expected = SDKNoResponseException.class)
     public void shouldThrowExceptionWhenServerReturnsNoAnswerForGetInterconnectTypeByName() throws IOException {
         given(client.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn("");
 
-        this.interconnectTypeClient.getInterconnectTypeByName(new RestParams(), null);
+        this.interconnectTypeClient.getInterconnectTypeByName(new RestParams(), "");
     }
 
     @Test(expected = SDKResourceNotFoundException.class)
@@ -162,6 +178,60 @@ public class InterconnectTypeClientImplTest {
                 ResourceUris.INTERCONNECT_TYPE_URI));
 
         this.interconnectTypeClient.getInterconnectTypeByName(new RestParams(), anyName);
+
+        then(client).should().sendRequest(eq(expectedRestParams));
+        then(adaptor).should().buildResourceCollection(interconnectCollectionValue, InterconnectType.class);
+    }
+
+    @Test(expected = SDKInvalidArgumentException.class)
+    public void shouldThrowExceptionWhenTryingToGetInterconnectTypeByEnumNameWithoutParams() {
+        this.interconnectTypeClient.getInterconnectTypeByName(null, InterconnectTypeName.HP_VC_FlexFabric_20_40_F8_Module);
+    }
+
+    @Test(expected = SDKNoResponseException.class)
+    public void shouldThrowExceptionWhenServerReturnsNoAnswerForGetInterconnectTypeByEnumName() throws IOException {
+        given(client.sendRequest(any(RestParams.class), any(JSONObject.class))).willReturn("");
+
+        this.interconnectTypeClient.getInterconnectTypeByName(new RestParams(), InterconnectTypeName.HP_VC_FlexFabric_20_40_F8_Module);
+    }
+
+    @Test(expected = SDKResourceNotFoundException.class)
+    public void shouldThrowExceptionWhenNoDeviceManagerIsFoundForTheGivenEnumName() throws IOException {
+        String interconnectCollectionValue = "{\"type\":\"InterconnectTypeCollection\"," +
+                "\"members\": [{\"type\":\"interconnect-type\"}]}";
+
+        ResourceCollection<InterconnectType> interconnectTypeCollection = new ResourceCollection<>();
+
+        given(client.sendRequest(any(RestParams.class))).willReturn(interconnectCollectionValue);
+        given(adaptor.buildResourceCollection(anyString(), eq(InterconnectType.class)))
+                .willReturn(interconnectTypeCollection);
+
+        this.interconnectTypeClient.getInterconnectTypeByName(new RestParams(), InterconnectTypeName.HP_VC_FlexFabric_20_40_F8_Module);
+    }
+
+    @Test
+    public void shouldGetInterconnectTypeByEnumName() throws IOException {
+        String interconnectCollectionValue = "{\"type\":\"InterconnectTypeCollection\"," +
+                "\"members\": [{\"type\":\"interconnect-type\"}]}";
+        ResourceCollection<InterconnectType> interconnectTypeCollection = new ResourceCollection<>();
+
+        interconnectTypeCollection.setMembers(Lists.newArrayList(new InterconnectType()));
+
+        given(client.sendRequest(any(RestParams.class))).willReturn(interconnectCollectionValue);
+        given(adaptor.buildResourceCollection(anyString(), eq(InterconnectType.class)))
+                .willReturn(interconnectTypeCollection);
+
+        RestParams expectedRestParams = new RestParams();
+
+        Map<String, String> query = new HashMap<String, String>();
+        query.put("filter", "name='" + InterconnectTypeName.HP_VC_FlexFabric_20_40_F8_Module + "'");
+        expectedRestParams.setQuery(query);
+
+        expectedRestParams.setType(HttpMethodType.GET);
+        expectedRestParams.setUrl(UrlUtils.createRestUrl(expectedRestParams.getHostname(),
+                ResourceUris.INTERCONNECT_TYPE_URI));
+
+        this.interconnectTypeClient.getInterconnectTypeByName(new RestParams(), InterconnectTypeName.HP_VC_FlexFabric_20_40_F8_Module);
 
         then(client).should().sendRequest(eq(expectedRestParams));
         then(adaptor).should().buildResourceCollection(interconnectCollectionValue, InterconnectType.class);

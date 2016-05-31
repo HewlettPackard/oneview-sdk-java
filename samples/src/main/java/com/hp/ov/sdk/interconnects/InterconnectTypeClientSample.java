@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package com.hp.ov.sdk.interconnects;
 
 import com.hp.ov.sdk.dto.InterconnectType;
+import com.hp.ov.sdk.dto.InterconnectTypeName;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -143,11 +144,43 @@ public class InterconnectTypeClientSample {
         }
     }
 
+    private void getInterconnectTypeByEnumName() throws InstantiationException, IllegalAccessException {
+        InterconnectType interconnectTypeDto = null;
+        try {
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
+
+            // then make sdk service call to get resource
+            interconnectTypeDto = interconnectTypeClient.getInterconnectTypeByName(params, InterconnectTypeName.HP_VC_FlexFabric_20_40_F8_Module);
+
+            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByEnumName :"
+                    + " interconnect type object returned to client : " + interconnectTypeDto.toString());
+        } catch (final SDKResourceNotFoundException ex) {
+            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByEnumName :" + " resource not found : ");
+            return;
+        } catch (final SDKNoSuchUrlException ex) {
+            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByEnumName :" + " no such url : " + params.getUrl());
+            return;
+        } catch (final SDKApplianceNotReachableException e) {
+            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByEnumName :" + " Applicance Not reachabe at : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKNoResponseException ex) {
+            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByEnumName :" + " No response from appliance : "
+                    + params.getHostname());
+            return;
+        } catch (final SDKInvalidArgumentException ex) {
+            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByEnumName :" + " arguments are null ");
+            return;
+        }
+    }
+
     public static void main(final String[] args) throws Exception {
         InterconnectTypeClientSample client = new InterconnectTypeClientSample();
 
         client.getAllInterconnectType();
         client.getInterconnectTypeByName();
+        client.getInterconnectTypeByEnumName();
         client.getInterconnectTypeById();
     }
 
