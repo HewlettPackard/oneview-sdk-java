@@ -75,6 +75,7 @@ public class ResourceUris {
     public static final String SERVER_HARDWARE_REMOTE_CONSOLE_URI = "remoteConsoleUrl";
     public static final String SERVER_HARDWARE_URI = "/rest/server-hardware";
     public static final String SERVER_HARDWARE_UTILIZATION_URI = "utilization";
+    public static final String SERVER_PROFILE_TEMPLATE_URI = "/rest/server-profile-templates";
     public static final String STORAGE_POOL_STORAGE_SYSTEM_URI = "storage-pools";
     public static final String STORAGE_POOL_URI = "/rest/storage-pools";
     public static final String STORAGE_SYSTEM_URI = "/rest/storage-systems";
