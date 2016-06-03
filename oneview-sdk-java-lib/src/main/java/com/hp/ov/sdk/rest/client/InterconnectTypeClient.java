@@ -55,8 +55,7 @@ public interface InterconnectTypeClient {
      *            The name is the interconnect type name as seen in HPE OneView.
      * @return {@link InterconnectType} containing the interconnect type details.
      *
-     * @deprecated use the {@link InterconnectTypeClient#getInterconnectTypeByName} which receives
-     * an instance of {@link InterconnectTypeName}
+     * @deprecated use the {@link InterconnectTypeClient#getInterconnectTypeByName(RestParams, InterconnectTypeName)}
      */
     @Deprecated
     InterconnectType getInterconnectTypeByName(final RestParams params, final String name);
