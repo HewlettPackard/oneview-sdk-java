@@ -92,6 +92,9 @@ public class SdkConstants {
     public static final String SERVER_HARDWARE = "server-hardware";
     public static final String SERVER_HARDWARES = SERVER_HARDWARE + "s";
     public static final String SERVER_PROFILE = "server-profile";
+    public static final String SERVER_PROFILE_TEMPLATE = "server-profile-template";
+    public static final String SERVER_PROFILE_TEMPLATE_NEW_PROFILE = "new-profile";
+    public static final String SERVER_PROFILE_TEMPLATES = SERVER_PROFILE_TEMPLATE + "s";
     public static final String SERVER_PROFILES = SERVER_PROFILE + "s";
     public static final String SETTINGS = "settings";
     public static final String SNMP_CONFIGURATION = "snmp-configuration";
