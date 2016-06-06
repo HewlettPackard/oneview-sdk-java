@@ -61,11 +61,11 @@ public interface ServerHardwareClient {
      * 
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @param destinationBay
-     *            The destinationBay is the server hardware name as seen in HPE OneView.
+     * @param name
+     *            The name is the server hardware name as seen in HPE OneView.
      * @return {@link ServerHardware} containing the server hardware details.
      */
-    ServerHardware getServerHardwareByName(final RestParams params, final String destinationBay);
+    ServerHardware getServerHardwareByName(final RestParams params, final String name);
 
     /**
      * Requests a power operation to change the power state of the physical server.
