@@ -24,11 +24,13 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hp.ov.sdk.adaptors.PortTelemetrySerializationAdapter;
+import com.hp.ov.sdk.adaptors.StorageCapabilitiesDeserializer;
 import com.hp.ov.sdk.adaptors.StoragePoolSerializationAdapter;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.PortTelemetry;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
+import com.hp.ov.sdk.dto.serverhardwaretype.StorageCapabilities;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInternalException;
 
@@ -51,13 +53,13 @@ public class ObjectToJsonConverter {
     public String convertObjectToJsonString(final Object inObj) {
         Gson gson = this.getGson();
 
-        return (gson.toJson(inObj).toString());
+        return (gson.toJson(inObj));
     }
 
     public String convertObjectToJsonString(final Object inObj, double version) {
         Gson gson = this.getGson(version);
 
-        return (gson.toJson(inObj).toString());
+        return (gson.toJson(inObj));
     }
 
     public <T> T convertJsonToObject(final String inStr, final Class<T> target) {
@@ -107,18 +109,14 @@ public class ObjectToJsonConverter {
     }
 
     private Gson getGson() {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(StoragePool.class, new StoragePoolSerializationAdapter())
-                .registerTypeAdapter(PortTelemetry.class, new PortTelemetrySerializationAdapter())
-                .create();
-
-        return gson;
+        return this.getGson(Double.MAX_VALUE);
     }
 
     private Gson getGson(double apiVersion) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(StoragePool.class, new StoragePoolSerializationAdapter())
                 .registerTypeAdapter(PortTelemetry.class, new PortTelemetrySerializationAdapter())
+                .registerTypeAdapter(StorageCapabilities.class, new StorageCapabilitiesDeserializer())
                 .setVersion(apiVersion)
                 .create();
 

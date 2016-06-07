@@ -73,6 +73,7 @@ public class ResourceUris {
     public static final String SERVER_HARDWARE_MP_FIRMWARE_URI = "mpFirmwareVersion";
     public static final String SERVER_HARDWARE_REFRESH_STATE_URI = "refreshState";
     public static final String SERVER_HARDWARE_REMOTE_CONSOLE_URI = "remoteConsoleUrl";
+    public static final String SERVER_HARDWARE_TYPE_URI = "/rest/server-hardware-types";
     public static final String SERVER_HARDWARE_URI = "/rest/server-hardware";
     public static final String SERVER_HARDWARE_UTILIZATION_URI = "utilization";
     public static final String SERVER_PROFILE_TEMPLATE_URI = "/rest/server-profile-templates";
