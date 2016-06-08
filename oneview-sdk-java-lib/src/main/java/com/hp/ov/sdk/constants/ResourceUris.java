@@ -36,6 +36,8 @@ public class ResourceUris {
     public static final String CA_CERT_URI = "/rest/certificates/ca";
     public static final String CONNECTION_TEMPLATES = "/rest/connection-templates";
     public static final String CONNECTION_TEMPLATE_URI = "/rest/connection-templates";
+    public static final String DATA_CENTER_URI = "/rest/datacenters";
+    public static final String DATA_CENTER_VISUAL_CONTENT_URI = "/visualContent";
     public static final String DEFAULT_CONNECTION_TEMPLATE_URI = "/rest/connection-templates/defaultConnectionTemplate";
     public static final String ENCLOSURE_URI = "/rest/enclosures";
     public static final String ENCLOSURE_GROUP_URI = "/rest/enclosure-groups";
