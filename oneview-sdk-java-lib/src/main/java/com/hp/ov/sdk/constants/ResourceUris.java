@@ -70,6 +70,8 @@ public class ResourceUris {
     public static final String PROFILE_PORTS_URI = SERVER_PROFILE_URI + "/profile-ports";
     public static final String RABBIT_MQ_CLIENT_CERT = "/rest/certificates/client/rabbitmq";
     public static final String RABBIT_MQ_CLIENT_CERT_KEYPAIR = "/rest/certificates/client/rabbitmq/keypair/default";
+    public static final String RACK_DEVICE_TOPOLOGY = "deviceTopology";
+    public static final String RACK_URI = "/rest/racks";
     public static final String SERVER_HARDWARE_BIOS_URI = "bios";
     public static final String SERVER_HARDWARE_ILO_SSO_URI = "iloSsoUrl";
     public static final String SERVER_HARDWARE_JAVA_REMOTE_CONSOLE_URI = "javaRemoteConsoleUrl";
