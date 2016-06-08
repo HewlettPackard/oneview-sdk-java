@@ -103,7 +103,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
     }
 
     @Override
-    public ServerHardware getServerHardwareByName(final RestParams params, final String destinationBay) {
+    public ServerHardware getServerHardwareByName(final RestParams params, final String name) {
         LOGGER.trace("ServerHardwareClientImpl : getServerHardwareByName : Start");
 
         if (params == null) {
@@ -112,7 +112,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
         }
 
         Map<String, String> query = new HashMap<String, String>();
-        query.put("filter", "name='" + destinationBay + "'");
+        query.put("filter", "name='" + name + "'");
         params.setQuery(query);
 
         params.setType(HttpMethodType.GET);
@@ -138,7 +138,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
 
         if (serverHardware == null) {
             LOGGER.error("ServerHardwareClientImpl : getServerHardwareByName : no server hardware " +
-                    "found for name : " + destinationBay);
+                    "found for name : " + name);
             throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null,
                     SdkConstants.SERVER_HARDWARE, null);
         }
