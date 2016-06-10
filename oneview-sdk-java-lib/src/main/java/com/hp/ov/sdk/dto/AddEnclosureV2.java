@@ -18,6 +18,7 @@ package com.hp.ov.sdk.dto;
 import java.io.Serializable;
 
 import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.unmanageddevice.UnmanagedDevice;
 
 public class AddEnclosureV2 implements Serializable {
 
