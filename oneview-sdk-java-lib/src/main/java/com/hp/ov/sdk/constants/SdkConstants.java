@@ -29,6 +29,8 @@ public class SdkConstants {
     public static final String COMPLIANCE_PREVIEW = "compliance-preview";
     public static final String CONFIGURATION = "configuration";
     public static final String CONNECTION_TEMPLATE = "connection-template";
+    public static final String DATA_CENTER = "datacenter";
+    public static final String DATA_CENTERS = DATA_CENTER + "s";
     public static final String DEFAULT_SETTINGS = "defaultSettings";
     public static final String DEVICE_MANAGER = "device-managers";
     public static final String DEVICE_MANAGERS = DEVICE_MANAGER + "s";
