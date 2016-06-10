@@ -125,6 +125,8 @@ public class SdkConstants {
     public static final String TELEMETRY_CONFIGURATIONS = "telemetry-configurations";
     public static final String TRANSFORMATION = "transformation";
     public static final String UNASSIGNED_UPLINK_PORTS_FOR_PORT_MONITOR = "unassignedUplinkPortsForPortMonitor";
+    public static final String UNMANAGED_DEVICE = "unmanaged-device";
+    public static final String UNMANAGED_DEVICES = UNMANAGED_DEVICE + "s";
     public static final String UPDATE_FROM_GROUP = "updateFromGroup";
     public static final String UPDATE_PORTS = "update-ports";
     public static final String UPLINKSET = "uplink-set";

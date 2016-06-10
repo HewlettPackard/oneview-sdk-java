@@ -94,6 +94,7 @@ public class ResourceUris {
     public static final String SWITCHES_STATISTICS_URI = "statistics";
     public static final String SWITCHES_URI = "/rest/switches";
     public static final String TASK_URI = "/rest/tasks";
+    public static final String UNMANAGED_DEVICE_URI = "/rest/unmanaged-devices";
     public static final String UPLINK_SETS_URI = "/rest/uplink-sets";
     public static final String WITHOUT_ETHERNET = "withoutEthernet";
 
