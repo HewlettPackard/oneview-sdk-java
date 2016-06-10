@@ -91,6 +91,8 @@ public class SdkConstants {
     public static final String SCRIPT = "script";
     public static final String SERVER_HARDWARE = "server-hardware";
     public static final String SERVER_HARDWARES = SERVER_HARDWARE + "s";
+    public static final String SERVER_HARDWARE_TYPE = "server-hardware-type";
+    public static final String SERVER_HARDWARE_TYPES = SERVER_HARDWARE_TYPE + "s";
     public static final String SERVER_PROFILE = "server-profile";
     public static final String SERVER_PROFILE_TEMPLATE = "server-profile-template";
     public static final String SERVER_PROFILE_TEMPLATE_NEW_PROFILE = "new-profile";
