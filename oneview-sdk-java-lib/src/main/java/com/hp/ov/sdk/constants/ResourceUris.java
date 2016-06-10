@@ -65,6 +65,7 @@ public class ResourceUris {
     public static final String LOGIN_SESSIONS = "/rest/login-sessions";
     public static final String MANANGED_PORTS_STORAGE_SYSTEM_URI = "managedPorts";
     public static final String NETWORK_SETS_URI = "/rest/network-sets";
+    public static final String POWER_DEVICE_URI = "/rest/power-devices";
     public static final String POWER_STATE_URI = "powerState";
     public static final String PROFILE_PORTS_URI = SERVER_PROFILE_URI + "/profile-ports";
     public static final String RABBIT_MQ_CLIENT_CERT = "/rest/certificates/client/rabbitmq";

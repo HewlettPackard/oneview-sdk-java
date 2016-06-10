@@ -24,31 +24,65 @@ public class MetricData implements Serializable {
 
     private static final long serialVersionUID = -5444319954535665091L;
 
+    private Integer metricAllocation;
     private Integer metricCapacity;
     private String metricName;
     private List<Object> metricSamples = new ArrayList<>();
 
+    /**
+     * @return the metricAllocation
+     */
+    public Integer getMetricAllocation() {
+        return metricAllocation;
+    }
+
+    /**
+     * @param metricAllocation the metricAllocation to set
+     */
+    public void setMetricAllocation(Integer metricAllocation) {
+        this.metricAllocation = metricAllocation;
+    }
+
+    /**
+     * @return the metricCapacity
+     */
     public Integer getMetricCapacity() {
         return metricCapacity;
     }
 
+    /**
+     * @param metricCapacity the metricCapacity to set
+     */
     public void setMetricCapacity(Integer metricCapacity) {
         this.metricCapacity = metricCapacity;
     }
 
+    /**
+     * @return the metricName
+     */
     public String getMetricName() {
         return metricName;
     }
 
+    /**
+     * @param metricName the metricName to set
+     */
     public void setMetricName(String metricName) {
         this.metricName = metricName;
     }
 
+    /**
+     * @return the metricSamples
+     */
     public List<Object> getMetricSamples() {
         return metricSamples;
     }
 
+    /**
+     * @param metricSamples the metricSamples to set
+     */
     public void setMetricSamples(List<Object> metricSamples) {
         this.metricSamples = metricSamples;
     }
+
 }

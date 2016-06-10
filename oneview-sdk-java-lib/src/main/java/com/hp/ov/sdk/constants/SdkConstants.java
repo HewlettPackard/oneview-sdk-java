@@ -34,6 +34,7 @@ public class SdkConstants {
     public static final String DEFAULT_SETTINGS = "defaultSettings";
     public static final String DEVICE_MANAGER = "device-managers";
     public static final String DEVICE_MANAGERS = DEVICE_MANAGER + "s";
+    public static final String DISCOVER = "discover";
     public static final String ENCLOSURE = "enclosures";
     public static final String ENCLOSURES = ENCLOSURE + "s";
     public static final String ENCLOSURE_FW_BASELINE = "enclosureFwBaseline";
@@ -79,7 +80,9 @@ public class SdkConstants {
     public static final int PERCENTAGE_100 = 100;
     public static final String PORT_MONITOR = "port-monitor";
     public static final String PORTS = "ports";
-    public static final String POWERSTATE = "powerState";
+    public static final String POWER_DEVICE = "power-device";
+    public static final String POWER_DEVICES = POWER_DEVICE + "s";
+    public static final String POWER_STATE = "powerState";
     public static final String PROVIDERS = "providers";
     public static final String QOS_AGGREGATED_CONFIGURATION = "qos-aggregated-configuration";
     public static final String RABBITMQ = "certificates-client-rabbitmq";
@@ -122,8 +125,10 @@ public class SdkConstants {
     public static final String SUPPORT_DUMP = "support-dumps";
     public static final String SWITCH_TYPES = "switch-types";
     public static final String SWITCHES = "switches";
+    public static final String SYNCHRONOUS = "synchronous";
     public static final String TELEMETRY_CONFIGURATIONS = "telemetry-configurations";
     public static final String TRANSFORMATION = "transformation";
+    public static final String UID_STATE = "uidState";
     public static final String UNASSIGNED_UPLINK_PORTS_FOR_PORT_MONITOR = "unassignedUplinkPortsForPortMonitor";
     public static final String UNMANAGED_DEVICE = "unmanaged-device";
     public static final String UNMANAGED_DEVICES = UNMANAGED_DEVICE + "s";
