@@ -448,7 +448,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
                     SdkConstants.APPLIANCE, null);
         } else if (serverPowerControlRequestDto == null) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
-                    SdkConstants.POWERSTATE, null);
+                    SdkConstants.POWER_STATE, null);
         }
 
         params.setType(HttpMethodType.PUT);
@@ -488,7 +488,7 @@ public class ServerHardwareClientImpl implements ServerHardwareClient {
                     SdkConstants.APPLIANCE, null);
         } else if (refreshStateRequest == null) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null,
-                    SdkConstants.POWERSTATE, null);
+                    SdkConstants.POWER_STATE, null);
         }
 
         params.setType(HttpMethodType.PUT);
