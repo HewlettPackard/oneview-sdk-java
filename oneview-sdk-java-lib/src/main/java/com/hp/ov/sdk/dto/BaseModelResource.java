@@ -21,6 +21,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.hp.ov.sdk.util.UrlUtils;
+
 public class BaseModelResource implements Serializable {
 
     private static final long serialVersionUID = 5688679045442246487L;
@@ -114,6 +116,10 @@ public class BaseModelResource implements Serializable {
 
     public void setStatus(final String status) {
         this.status = status;
+    }
+
+    public String getResourceId() {
+        return UrlUtils.getResourceIdFromUri(this.getUri());
     }
 
     public boolean canEqual(Object obj) {

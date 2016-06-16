@@ -16,10 +16,13 @@
 package com.hp.ov.sdk.adaptors;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
@@ -52,10 +55,16 @@ public class ResourceAdaptor {
         return converter.convertJsonToObject(sourceReplaced, resourceClass);
     }
 
-    public JSONObject buildJsonRequest(Object resourceObject, final ApiVersion apiVersion) {
+    public JSONObject buildJsonRequest(Object resourceObject, ApiVersion apiVersion) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
         return new JSONObject(converter.convertObjectToJsonString(resourceObject, apiVersion.getValue()));
+    }
+
+    public JSONArray buildJsonArray(Patch source, ApiVersion apiVersion) {
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
+        return new JSONArray(converter.convertObjectToJsonString(Arrays.asList(source), apiVersion.getValue()));
     }
 
     private String applyReplacementsOnSource(String source) {

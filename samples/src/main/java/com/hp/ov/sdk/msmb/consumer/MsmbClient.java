@@ -15,8 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.msmb.consumer;
 
+import com.hp.ov.sdk.SamplesConstants;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.certs.MessagingCertificateManager;
-import com.hp.ov.sdk.constants.samples.SamplesConstants;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKMsmbConnectionNotFoundException;
@@ -26,9 +27,15 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKScmbConnectionNotFoundException;
 import com.hp.ov.sdk.messaging.msmb.services.MsmbConnectionManager;
 import com.hp.ov.sdk.messaging.msmb.services.MsmbMessageExecutionQueue;
+import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
+import com.hp.ov.sdk.rest.client.settings.VersionClient;
+import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
+import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.SdkUtils;
-import com.hp.ov.sdk.util.samples.SampleRestParams;
+import com.hp.ov.sdk.tasks.TaskMonitorManager;
+import com.hp.ov.sdk.util.OneViewConnector;
+import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 public class MsmbClient {
 
@@ -42,12 +49,15 @@ public class MsmbClient {
 
     public void msmbProcessor() {
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = SampleRestParams.getInstance().getBasicRestParams();
+            RestParams params = HPOneViewCredential.createRestParams();
+            HttpSslProperties httpSslProperties = HPOneViewCredential.createHttpSslProperties();
+            BaseClient baseClient = new BaseClient(params, new ResourceAdaptor(),
+                    HttpRestClient.getClient(), TaskMonitorManager.getInstance());
 
-            // update the parameters with version and sessionId
-            params = SdkUtils.getInstance().createRestParams(params);
+            OneViewConnector connector = new OneViewConnector(params, httpSslProperties,
+                    new VersionClient(baseClient), new LoginSessionClient(baseClient));
+
+            connector.connect();
 
             // create MessageExecutionQueue object
 
@@ -84,12 +94,7 @@ public class MsmbClient {
 
     public void stopMsmb() {
         try {
-            // Get the basic REST parameters like hostname, username and
-            // password
-            params = SampleRestParams.getInstance().getBasicRestParams();
-
-            // update the parameters with version and sessionId
-            params = SdkUtils.getInstance().createRestParams(params);
+            RestParams params = HPOneViewCredential.createRestParams();
 
             // then stop scmb
             objectUnderTest.stopMsmb(params);

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.AvailableStorageSystem;
 import com.hp.ov.sdk.dto.AvailableTargets;
 import com.hp.ov.sdk.dto.ConnectionBoot.BootControl;
@@ -51,6 +52,7 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClientImpl;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.ServerHardwareClientImpl;
 import com.hp.ov.sdk.rest.client.ServerProfileClient;
@@ -71,6 +73,7 @@ public class ServerProfileClientSample {
     private final ServerProfileClient serverProfileClient;
     private final ServerHardwareClient serverHardwareClient;
     private final EnclosureGroupClient enclosureGroupClient;
+    private final OneViewClient oneViewClient;
 
     private RestParams params;
     private TaskResourceV2 taskResourceV2;
@@ -91,6 +94,7 @@ public class ServerProfileClientSample {
         serverProfileClient = ServerProfileClientImpl.getClient();
         serverHardwareClient = ServerHardwareClientImpl.getClient();
         enclosureGroupClient = EnclosureGroupClientImpl.getClient();
+        oneViewClient = OneViewClientSample.getOneViewClient();
     }
 
     private void getServerProfileById() throws InstantiationException, IllegalAccessException {
@@ -937,7 +941,7 @@ public class ServerProfileClientSample {
         serverProfileValue.setUseBayNameForServerHardwareUri(useBayNameForServerHardwareUri);
         serverProfileValue.setWwnType(ServerProfile.AssignmentType.Virtual);
 
-        ResourceDtoUtilsWrapper resourceDtoUtilsWrapper = new ResourceDtoUtilsWrapper(new ResourceDtoUtils());
+        ResourceDtoUtilsWrapper resourceDtoUtilsWrapper = new ResourceDtoUtilsWrapper(new ResourceDtoUtils(oneViewClient));
         return resourceDtoUtilsWrapper.buildServerProfile(params, serverProfileValue);
     }
 

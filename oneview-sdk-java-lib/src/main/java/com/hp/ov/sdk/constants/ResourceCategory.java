@@ -41,7 +41,6 @@ public class ResourceCategory {
     public static final String RC_SERVER_PROFILE = "ServerProfileV4";
     public static final String RC_SERVER_PROFILE_V200 = "ServerProfileV5";
     public static final String RC_SERVER_PROFILE_TEMPLATE = "ServerProfileTemplateV1";
-
     public static final String RC_STORAGE_POOL = "StoragePool";
     public static final String RC_STORAGE_POOL_V200 = "StoragePoolV2";
 

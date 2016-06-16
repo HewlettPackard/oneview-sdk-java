@@ -15,49 +15,31 @@
  *******************************************************************************/
 package com.hp.ov.sdk.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.adaptors.ApplianceDetailsAdaptor;
-import com.hp.ov.sdk.adaptors.LoginSessionAdaptor;
-import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.ApplianceDetailsDto;
-import com.hp.ov.sdk.dto.generated.FcNetwork;
 import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.generated.LocationEntry;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
-import com.hp.ov.sdk.dto.generated.Network;
-import com.hp.ov.sdk.exceptions.SDKApiVersionMismatchException;
-import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClientImpl;
-import com.hp.ov.sdk.rest.client.FcNetworkClient;
-import com.hp.ov.sdk.rest.client.FcNetworkClientImpl;
 import com.hp.ov.sdk.rest.client.InterconnectTypeClient;
 import com.hp.ov.sdk.rest.client.InterconnectTypeClientImpl;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClientImpl;
-import com.hp.ov.sdk.rest.client.NetworkClient;
-import com.hp.ov.sdk.rest.client.NetworkClientImpl;
 import com.hp.ov.sdk.rest.client.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.ServerHardwareClientImpl;
 import com.hp.ov.sdk.rest.client.StorageVolumeClient;
 import com.hp.ov.sdk.rest.client.StorageVolumeClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.rest.login.ApplianceDetails;
-import com.hp.ov.sdk.rest.login.LoginSessions;
 
+/**
+ * DO NOT USE this class under any circumstances!
+ * Soon this class will be deleted and if you are using it, it means you should also be deleted!
+ */
+@Deprecated
 public class SdkUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SdkUtils.class);
-
-    private final FcNetworkClient fcNetworkClient;
-    private final LoginSessions loginSessions;
-    private final ApplianceDetails applianceDetails;
-    private final NetworkClient networkClient;
     private final InterconnectTypeClient interconnectTypeClient;
     private final LogicalInterconnectGroupClient logicalInterconnectGroupClient;
     private final ServerHardwareClient serverHardwareClient;
@@ -65,32 +47,22 @@ public class SdkUtils {
     private final StorageVolumeClient storageVolumeClient;
 
     private static final class SdkUtilsHolder {
+
         private static final SdkUtils INSTANCE = new SdkUtils(
-                new LoginSessions(new LoginSessionAdaptor()),
-                new ApplianceDetails(new ApplianceDetailsAdaptor()),
-                FcNetworkClientImpl.getClient(),
-                NetworkClientImpl.getClient(),
                 InterconnectTypeClientImpl.getClient(),
                 LogicalInterconnectGroupClientImpl.getClient(),
                 ServerHardwareClientImpl.getClient(),
                 EnclosureGroupClientImpl.getClient(),
-                StorageVolumeClientImpl.getClient()
-        );
+                StorageVolumeClientImpl.getClient());
+
     }
 
-    private SdkUtils(LoginSessions loginSessions, ApplianceDetails applianceDetails,
-        FcNetworkClient fcNetworkClient,
-        NetworkClient networkClient,
-        InterconnectTypeClient interconnectTypeClient,
+    private SdkUtils(InterconnectTypeClient interconnectTypeClient,
         LogicalInterconnectGroupClient logicalInterconnectGroupClient,
         ServerHardwareClient serverHardwareClient,
         EnclosureGroupClient enclosureGroupClient,
         StorageVolumeClient storageVolumeClient) {
 
-        this.loginSessions = loginSessions;
-        this.applianceDetails = applianceDetails;
-        this.fcNetworkClient = fcNetworkClient;
-        this.networkClient = networkClient;
         this.interconnectTypeClient = interconnectTypeClient;
         this.logicalInterconnectGroupClient = logicalInterconnectGroupClient;
         this.serverHardwareClient = serverHardwareClient;
@@ -100,74 +72,6 @@ public class SdkUtils {
 
     public static SdkUtils getInstance() {
         return SdkUtilsHolder.INSTANCE;
-    }
-
-    public RestParams createRestParams(final RestParams params) {
-        // Get version
-        final ApplianceDetailsDto applianceDetailsDto = applianceDetails.getVersion(params);
-        // validate the API version
-        validateApiVersion(params.getApiVersion().getValue(), applianceDetailsDto.getMinimumVersion(), applianceDetailsDto.getCurrentVersion());
-
-        // Get login session
-        final String sessionId = loginSessions.getLoginSessionId(params);
-
-        params.setSessionId(sessionId);
-
-        return params;
-    }
-
-    private void validateApiVersion(final double requestedVersion, final int applianceMinimumVersion, final int applianceCurrentVersion) {
-        LOGGER.info("########### Checking API Version Start ####################");
-
-        if (requestedVersion >= applianceMinimumVersion && requestedVersion  <= applianceCurrentVersion) {
-            LOGGER.info("API version : You are trying to connect to appliance verion: "
-                    + requestedVersion  + " and it is matching with the minimum and current version ("
-                    + applianceMinimumVersion + " to " + applianceCurrentVersion + ")");
-
-            LOGGER.info("########### Checking API Version End ####################");
-            return;
-        }
-        throw new SDKApiVersionMismatchException(SDKErrorEnum.apiMismatchError, null, null, null, SdkConstants.APPLIANCE, null);
-    }
-
-    public List<String> getNetworkUris(RestParams params, List<String> networkNames) {
-        List<String> networkUris = new ArrayList<String>();
-
-        for (String networkName : networkNames) {
-            Network dto = networkClient.getNetworkByName(params, networkName);
-
-            if (dto.getUri() != null) {
-                String networkUri = dto.getUri();
-
-                networkUris.add(networkUri);
-            }
-        }
-        return networkUris;
-    }
-
-    public String getNetworkUri(final RestParams params, final String networkName) {
-        return networkClient.getNetworkByName(params, networkName).getUri();
-    }
-
-    public String getFcNetworkUri(final RestParams params, final String networkName) {
-        return fcNetworkClient.getFcNetworkByName(params, networkName).getUri();
-    }
-
-    public List<String> getFcNetworkUris(final RestParams params, final List<String> networkNames) {
-        List<String> networkUris = new ArrayList<String>();
-        FcNetwork dto = null;
-        String fcNetworkUri = null;
-
-        for (String networkName : networkNames) {
-            dto = fcNetworkClient.getFcNetworkByName(params, networkName);
-
-            if (null != dto.getUri()) {
-                fcNetworkUri = dto.getUri();
-                networkUris.add(fcNetworkUri);
-            }
-
-        }
-        return networkUris;
     }
 
     public String getPermittedInterconnectTypeUri(final RestParams params, final String permittedInterconnectType) {

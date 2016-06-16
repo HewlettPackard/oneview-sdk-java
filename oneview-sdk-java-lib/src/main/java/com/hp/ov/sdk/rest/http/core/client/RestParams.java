@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
 public class RestParams {
 
@@ -39,11 +40,15 @@ public class RestParams {
     private String password = null;
     private Map<String, String> headers = new HashMap<String, String>();
     private String locale = null;
-    private Map<String, String> query = new HashMap<String, String>();
     private String domain = "LOCAL";
+
+    private Map<String, String> query = new HashMap<String, String>();
     private String url = null;
     private HttpMethodType type = HttpMethodType.GET;
+
     private String sessionId = null;
+
+    /* parameters for RabbitMQ connection */
     private int amqpPort = 5671; // default port
     private String routingKey = "scmb.alerts.#"; // default value
     private String exchange = "scmb";// default value
@@ -89,10 +94,20 @@ public class RestParams {
         this.sessionId = sessionId;
     }
 
+    /**
+     *
+     * @deprecated use {@link Request#Request(HttpMethodType, String)}
+     */
+    @Deprecated
     public HttpMethodType getType() {
         return type;
     }
 
+    /**
+     *
+     * @deprecated use {@link Request#Request(HttpMethodType, String)}
+     */
+    @Deprecated
     public void setType(final HttpMethodType type) {
         this.type = type;
     }
@@ -105,10 +120,20 @@ public class RestParams {
         this.domain = domain;
     }
 
+    /**
+     *
+     * @deprecated use {@link Request#Request(HttpMethodType, String)}
+     */
+    @Deprecated
     public String getUrl() {
         return url;
     }
 
+    /**
+     *
+     * @deprecated use {@link Request#Request(HttpMethodType, String)}
+     */
+    @Deprecated
     public void setUrl(final String url) {
         this.url = url;
     }
@@ -118,8 +143,7 @@ public class RestParams {
     }
 
     /**
-     * @deprecated
-     * Use {@link #setApiVersion(ApiVersion)} instead
+     * @deprecated use {@link #setApiVersion(ApiVersion)} instead
      */
     @Deprecated
     public void setApiVersion(final String apiVersion) {
@@ -166,10 +190,20 @@ public class RestParams {
         this.locale = locale;
     }
 
+    /**
+     *
+     * @deprecated use {@link Request#addQuery(UrlParameter)} instead
+     */
+    @Deprecated
     public Map<String, String> getQuery() {
         return query;
     }
 
+    /**
+     *
+     * @deprecated use {@link Request#addQuery(UrlParameter)} instead
+     */
+    @Deprecated
     public void setQuery(final Map<String, String> query) {
         this.query = query;
     }

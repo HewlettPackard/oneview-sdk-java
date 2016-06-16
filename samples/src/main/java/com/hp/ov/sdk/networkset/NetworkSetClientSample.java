@@ -18,6 +18,7 @@ package com.hp.ov.sdk.networkset;
 import java.util.Arrays;
 import java.util.List;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.NetworkSets;
@@ -30,6 +31,7 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.NetworkSetClient;
 import com.hp.ov.sdk.rest.client.NetworkSetClientImpl;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -55,8 +57,10 @@ public class NetworkSetClientSample {
     // ================================
 
     private NetworkSetClientSample() {
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
+        this.resourceDtoUtils = new ResourceDtoUtils(oneViewClient);
         this.networkSetClient = NetworkSetClientImpl.getClient();
-        this.resourceDtoUtils = new ResourceDtoUtils();
     }
 
     private void getNetworkSetById() throws InstantiationException, IllegalAccessException {
@@ -162,7 +166,7 @@ public class NetworkSetClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // create network set request body
-            final NetworkSets networkSetDto = resourceDtoUtils.buildNetworkSetDto(params, resourceName, networkNames);
+            final NetworkSets networkSetDto = resourceDtoUtils.buildNetworkSetDto(resourceName, networkNames);
             /**
              * then make sdk service call to get resource aSync parameter
              * indicates sync vs async useJsonRequest parameter indicates

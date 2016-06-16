@@ -32,13 +32,16 @@ import javax.net.ssl.TrustManager;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -50,6 +53,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
@@ -58,6 +62,7 @@ import com.hp.ov.sdk.exceptions.SDKInternalServerErrorException;
 import com.hp.ov.sdk.exceptions.SDKMethodNotAllowed;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKUnauthorizedException;
+import com.hp.ov.sdk.util.JsonSerializer;
 import com.hp.ov.sdk.util.UrlUtils;
 
 public class HttpRestClient {
@@ -68,8 +73,19 @@ public class HttpRestClient {
     private static final String LOCATION_HEADER = "Location";
     private static final int TIMEOUT = 10000; // milliseconds
 
+    /*
+    TODO this could be replaced by a one way converter (Object to JSON).
+    We can also consider to have a Map containing several converters and
+    choose the appropriate converter according to the Content-Type.
+     */
+    private final JsonSerializer serializer;
+
+    public HttpRestClient(JsonSerializer serializer) {
+        this.serializer = serializer;
+    }
+
     private static final class HttpRestClientHolder {
-        private static final HttpRestClient INSTANCE = new HttpRestClient();
+        private static final HttpRestClient INSTANCE = new HttpRestClient(new JsonSerializer());
     }
 
     /**
@@ -85,13 +101,31 @@ public class HttpRestClient {
     /**
      * Send the request to OV and read the response.
      *
-     * @param restParams connection parameters.
+     * @param restParams unmodifiable connection parameters (hostname, sessionId, etc)
+     * @param request contains the details specific to the current request.
      *
      * @return
      *  A string representing the response data.
      * @throws
      *  SDKBadRequestException on unsupported method (PUT, GET..)
      **/
+    public String sendRequest(RestParams restParams, Request request) throws SDKBadRequestException {
+        return processRequestType(restParams, request);
+    }
+
+    /**
+     * Send the request to OV and read the response.
+     *
+     * @param restParams connection parameters.
+     *
+     * @return
+     *  A string representing the response data.
+     * @throws
+     *  SDKBadRequestException on unsupported method (PUT, GET..)
+     *
+     *  @deprecated use {@link HttpRestClient#sendRequest(RestParams, Request)} instead
+     **/
+    @Deprecated
     public String sendRequest(RestParams restParams) throws SDKBadRequestException {
         return processRequestType(restParams, null, false);
     }
@@ -106,7 +140,10 @@ public class HttpRestClient {
      *  A string representing the response data.
      * @throws
      *  SDKBadRequestException on unsupported method (PUT, GET..)
+     *
+     *  @deprecated use {@link HttpRestClient#sendRequest(RestParams, Request)} instead
      **/
+    @Deprecated
     public String sendRequest(RestParams restParams, JSONObject jsonObject) throws SDKBadRequestException {
          return processRequestType(restParams, jsonObject.toString(), false);
     }
@@ -115,14 +152,16 @@ public class HttpRestClient {
      * Send the request to OV and read the response.
      *
      * @param restParams connection parameters.
-     * @param
-     *  jsonObject request body.
+     * @param jsonObject request body.
      *
      * @return
      *  A string representing the response data.
      * @throws
      *  SDKBadRequestException on unsupported method (PUT, GET..)
+     *
+     *  @deprecated use {@link HttpRestClient#sendRequest(RestParams, Request)} instead
      **/
+    @Deprecated
     public String sendRequest(RestParams restParams, JSONArray jsonObject) throws SDKBadRequestException {
          return processRequestType(restParams, jsonObject.toString(), false);
     }
@@ -140,7 +179,10 @@ public class HttpRestClient {
      *  A string representing the response data.
      * @throws
      *  SDKBadRequestException on unsupported method (PUT, GET..)
+     *
+     *  @deprecated use {@link HttpRestClient#sendRequest(RestParams, Request)} instead
      **/
+    @Deprecated
     public String sendRequest(RestParams restParams, JSONObject jsonObject, boolean forceReturnTask)
             throws SDKBadRequestException {
         return processRequestType(restParams, jsonObject.toString(), forceReturnTask);
@@ -157,9 +199,11 @@ public class HttpRestClient {
      *  A string representing the response data.
      * @throws
      *  SDKBadRequestException on unsupported method (PUT, GET..)
+     *
+     *  @deprecated use {@link HttpRestClient#sendRequest(RestParams, Request)} instead
      **/
-    public String sendRequest(RestParams restParams, String requestBody)
-            throws SDKBadRequestException {
+    @Deprecated
+    public String sendRequest(RestParams restParams, String requestBody) throws SDKBadRequestException {
         return processRequestType(restParams, requestBody, false);
     }
 
@@ -213,11 +257,81 @@ public class HttpRestClient {
             // Since request type is an ENUM, there is no way this will be executed
             LOGGER.error("Request type not supported.");
             throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
-                    null, null, null,
+                    null, null, null, SdkConstants.APPLIANCE, null);
+        }
+        return response;
+    }
+
+    private String processRequestType(RestParams params, Request request) throws SDKBadRequestException {
+        URI uri = buildURI(params, request);
+
+        LOGGER.debug("Using URL: " + uri.toString());
+        LOGGER.debug("Rest params passed, params = " + params + " object = " + request.getEntity());
+
+        if (request.getType() == null) {
+            throw new SDKBadRequestException(SDKErrorEnum.badRequestError, null, null, null,
                     SdkConstants.APPLIANCE, null);
         }
 
-        return response;
+        HttpRequestBase requestBase = null;
+
+        switch (request.getType()) {
+            case POST:
+                HttpPost post = new HttpPost(uri);
+                fillRequestEntity(post, params, request.getEntity());
+                requestBase = post;
+                break;
+            case GET:
+                HttpGet get = new HttpGet(uri);
+                requestBase = get;
+                break;
+            case PATCH:
+                HttpPatch patch = new HttpPatch(uri);
+
+                StringEntity stringEntity = new StringEntity(
+                        serializer.toJsonArray((Patch) request.getEntity(), params.getApiVersion()),
+                        ContentType.APPLICATION_JSON);
+
+                patch.setEntity(stringEntity);
+
+                fillRequestEntity(patch, params, request.getEntity());
+                requestBase = patch;
+                break;
+            case PUT:
+                HttpPut put = new HttpPut(uri);
+                fillRequestEntity(put, params, request.getEntity());
+                requestBase = put;
+                break;
+            case DELETE:
+                HttpDelete delete = new HttpDelete(uri);
+                requestBase = delete;
+                break;
+            default:
+                // Since request type is an ENUM, there is no way this will be executed
+                LOGGER.error("Request type not supported.");
+                throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
+                        null, null, null, SdkConstants.APPLIANCE, null);
+        }
+
+        if (requestBase != null) {
+            requestBase.setConfig(createRequestTimeoutConfiguration());
+            setRequestHeaders(params, requestBase);
+
+            return getResponse(requestBase, params, request.isForceTaskReturn());
+        }
+        LOGGER.error("could not create a valid request.");
+        throw new SDKBadRequestException(SDKErrorEnum.badRequestError, null, null, null,
+                SdkConstants.APPLIANCE, null);
+    }
+
+    private void fillRequestEntity(HttpEntityEnclosingRequestBase base, RestParams params, Object entity) {
+        if (entity != null) {
+            StringEntity stringEntity = new StringEntity(
+                    serializer.toJson(entity, params.getApiVersion()),
+                    ContentType.APPLICATION_JSON);
+
+            base.setEntity(stringEntity);
+        }
     }
 
     /**
@@ -376,17 +490,40 @@ public class HttpRestClient {
      *  The request URI
      * @throws SDKBadRequestException
      */
+    private URI buildURI(RestParams params, Request request) throws SDKBadRequestException {
+        try {
+            URIBuilder uri = new URIBuilder(UrlUtils.createRestUrl(params.getHostname(), request.getUri()));
+
+            for (Entry<String, String> entry : request.getQuery().entrySet()) {
+                uri.addParameter(entry.getKey(), entry.getValue());
+            }
+            return uri.build();
+        } catch (URISyntaxException e) {
+            throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
+                    null, null, null, SdkConstants.APPLIANCE, e);
+        }
+    }
+
+    /**
+     * Builds the URI used in the request.
+     *
+     * @param params
+     *  connection parameters.
+     * @return
+     *  The request URI
+     * @throws SDKBadRequestException
+     */
     private URI buildURI(RestParams params) throws SDKBadRequestException {
         try {
             URIBuilder uri = new URIBuilder(params.getUrl());
+
             for (Entry<String, String> entry : params.getQuery().entrySet()) {
                 uri.addParameter(entry.getKey(), entry.getValue());
             }
             return uri.build();
         } catch (URISyntaxException e) {
             throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
-                    null, null, null,
-                    SdkConstants.APPLIANCE, e);
+                    null, null, null, SdkConstants.APPLIANCE, e);
         }
     }
 
@@ -446,10 +583,10 @@ public class HttpRestClient {
                 // Response contains a task
                 String restUri = response.getFirstHeader(LOCATION_HEADER).getValue();
                 restUri = restUri.substring(restUri.indexOf("/rest"));
-                params.setUrl(UrlUtils.createRestUrl(params.getHostname(), restUri));
-                params.setType(HttpMethodType.GET);
 
-                return this.sendGetRequest(params, null, false);
+                Request taskRequest = new Request(HttpMethodType.GET, restUri);
+
+                return this.processRequestType(params, taskRequest);
             }
 
         } catch (IOException e) {

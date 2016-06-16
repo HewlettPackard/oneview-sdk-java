@@ -24,8 +24,8 @@ import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ConnectionBoot;
 import com.hp.ov.sdk.dto.ConnectionBoot.BootControl;
-import com.hp.ov.sdk.dto.OpSpeed;
 import com.hp.ov.sdk.dto.InterconnectType;
+import com.hp.ov.sdk.dto.OpSpeed;
 import com.hp.ov.sdk.dto.PortInfo;
 import com.hp.ov.sdk.dto.ProfileConnectionV3;
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -34,6 +34,7 @@ import com.hp.ov.sdk.dto.generated.Bandwidth;
 import com.hp.ov.sdk.dto.generated.Bios;
 import com.hp.ov.sdk.dto.generated.Boot;
 import com.hp.ov.sdk.dto.generated.BootMode;
+import com.hp.ov.sdk.dto.generated.FcNetwork;
 import com.hp.ov.sdk.dto.generated.Firmware;
 import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.generated.InterconnectMapTemplate;
@@ -42,6 +43,7 @@ import com.hp.ov.sdk.dto.generated.LocationEntry;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
 import com.hp.ov.sdk.dto.generated.LogicalLocation;
 import com.hp.ov.sdk.dto.generated.LogicalPortConfigInfo;
+import com.hp.ov.sdk.dto.generated.Network;
 import com.hp.ov.sdk.dto.generated.NetworkSets;
 import com.hp.ov.sdk.dto.generated.SanStorage;
 import com.hp.ov.sdk.dto.generated.ServerProfile;
@@ -53,6 +55,7 @@ import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.rest.client.InterconnectTypeClient;
 import com.hp.ov.sdk.rest.client.InterconnectTypeClientImpl;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.StorageSystemClient;
 import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
@@ -62,22 +65,57 @@ public class ResourceDtoUtils {
 
     private static final String ACTIVE = "Active";
 
+    private final OneViewClient oneViewClient;
     private final StorageSystemClient storageSystemClient;
 
-    public ResourceDtoUtils() {
+    public ResourceDtoUtils(OneViewClient oneViewClient) {
+        this.oneViewClient = oneViewClient;
+
         this.storageSystemClient = StorageSystemClientImpl.getClient();
     }
 
-    public NetworkSets buildNetworkSetDto(final RestParams params, final String networkSetName, final List<String> networkNames) {
+    public NetworkSets buildNetworkSetDto(String networkSetName, List<String> networkNames) {
         NetworkSets dto = new NetworkSets();
 
         dto.setName(networkSetName);
         dto.setNativeNetworkUri(null);
-        dto.setNetworkUris(SdkUtils.getInstance().getNetworkUris(params, networkNames));
+        dto.setNetworkUris(this.getNetworkUris(networkNames));
         dto.setConnectionTemplateUri(null);
         dto.setType(ResourceCategory.RC_NETWORKSET);
 
         return dto;
+    }
+
+    public List<String> getNetworkUris(List<String> networkNames) {
+        List<String> networkUris = new ArrayList<String>();
+
+        for (String networkName : networkNames) {
+            Network dto = oneViewClient.ethernetNetwork().getByName(networkName);
+
+            if (dto.getUri() != null) {
+                String networkUri = dto.getUri();
+
+                networkUris.add(networkUri);
+            }
+        }
+        return networkUris;
+    }
+
+    public List<String> getFcNetworkUris(final RestParams params, final List<String> networkNames) {
+        List<String> networkUris = new ArrayList<String>();
+        FcNetwork dto = null;
+        String fcNetworkUri = null;
+
+        for (String networkName : networkNames) {
+            dto = oneViewClient.fcNetwork().getByName(networkName);
+
+            if (null != dto.getUri()) {
+                fcNetworkUri = dto.getUri();
+                networkUris.add(fcNetworkUri);
+            }
+
+        }
+        return networkUris;
     }
 
     public Bandwidth buildBandwidth(final Double maxBandwidth, final Double minBandwidth) {
@@ -217,10 +255,10 @@ public class ResourceDtoUtils {
         uplinkSetDto.setMode(UplinkSet.Mode.Auto);
         if (uplinkSetType.equalsIgnoreCase(SdkConstants.ETHERNET)) {
             uplinkSetDto.setNetworkType(UplinkSet.NetworkType.Ethernet);
-            uplinkSetDto.setNetworkUris(SdkUtils.getInstance().getNetworkUris(params, networkNames));
+            uplinkSetDto.setNetworkUris(this.getNetworkUris(networkNames));
         } else if (uplinkSetType.equalsIgnoreCase(SdkConstants.FIBRE_CHANNEL)) {
             uplinkSetDto.setNetworkType(UplinkSet.NetworkType.FibreChannel);
-            uplinkSetDto.setNetworkUris(SdkUtils.getInstance().getFcNetworkUris(params, networkNames));
+            uplinkSetDto.setNetworkUris(this.getFcNetworkUris(params, networkNames));
         }
         uplinkSetDto.setPrimaryPort(null);
 
@@ -237,9 +275,9 @@ public class ResourceDtoUtils {
         connection.setName(networkName);
         connection.setFunctionType(functionType);
         if (functionType.toString().equalsIgnoreCase("Ethernet")) {
-            connection.setNetworkUri(SdkUtils.getInstance().getNetworkUri(params, networkName));
+            connection.setNetworkUri(oneViewClient.ethernetNetwork().getByName(networkName).getUri());
         } else if (functionType.toString().equalsIgnoreCase("FibreChannel")) {
-            connection.setNetworkUri(SdkUtils.getInstance().getFcNetworkUri(params, networkName));
+            connection.setNetworkUri(oneViewClient.fcNetwork().getByName(networkName).getUri());
         }
         connection.setRequestedMbps(requestedMbps);
         connection.setAllocatedMbps(allocatedMbps);

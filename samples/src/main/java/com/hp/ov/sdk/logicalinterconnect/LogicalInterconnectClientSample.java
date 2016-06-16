@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.Command;
 import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.InterconnectFibDataEntry;
@@ -49,8 +50,7 @@ import com.hp.ov.sdk.rest.client.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.client.FirmwareDriverClientImpl;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectClient;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectClientImpl;
-import com.hp.ov.sdk.rest.client.NetworkClient;
-import com.hp.ov.sdk.rest.client.NetworkClientImpl;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
@@ -64,7 +64,7 @@ public class LogicalInterconnectClientSample {
 
     private final LogicalInterconnectClient logicalInterconnectClient;
     private final FirmwareDriverClient firmwareDriverClient;
-    private final NetworkClient networkClient;
+    private final OneViewClient oneViewClient;
 
     private RestParams params;
     private TaskResourceV2 taskResourceV2;
@@ -84,9 +84,9 @@ public class LogicalInterconnectClientSample {
     // ================================
 
     private LogicalInterconnectClientSample() {
+        this.oneViewClient = OneViewClientSample.getOneViewClient();
         this.logicalInterconnectClient = LogicalInterconnectClientImpl.getClient();
         this.firmwareDriverClient = FirmwareDriverClientImpl.getClient();
-        this.networkClient = NetworkClientImpl.getClient();
     }
 
     private void getLogicalInterconnectById() throws InstantiationException, IllegalAccessException {
@@ -903,7 +903,8 @@ public class LogicalInterconnectClientSample {
 
             // get resource ID
             String resourceId = logicalInterconnectClient.getId(params, resourceName);
-            String networkUri = networkClient.getNetworkByName(params, networkName).getUri();
+
+            String networkUri = oneViewClient.ethernetNetwork().getByName(networkName).getUri();
 
             taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectInternalNetworks(params,
                     resourceId, Arrays.asList(networkUri));
