@@ -50,6 +50,7 @@ public class EthernetNetworkClientSample {
         network.setName(ETHERNET_NETWORK_NAME);
         network.setType(ResourceCategory.RC_NETWORK); //120
         network.setType(ResourceCategory.RC_NETWORK_V200); //200
+        network.setType(ResourceCategory.RC_NETWORK_V300); //300
         network.setVlanId(Integer.valueOf(400));
         network.setSmartLink(true);
         network.setPrivateNetwork(false);
