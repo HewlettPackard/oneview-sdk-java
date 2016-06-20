@@ -18,7 +18,8 @@ package com.hp.ov.sdk.rest.http.core.client;
 public enum ApiVersion {
     V_120 (120),
     V_200 (200),
-    V_201 (201);
+    V_201 (201),
+    V_300 (300);
 
     private final int value;
 
