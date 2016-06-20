@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.OpSpeed;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -39,10 +40,9 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.EnclosureClient;
 import com.hp.ov.sdk.rest.client.EnclosureClientImpl;
-import com.hp.ov.sdk.rest.client.FcNetworkClient;
-import com.hp.ov.sdk.rest.client.FcNetworkClientImpl;
 import com.hp.ov.sdk.rest.client.InterconnectsClient;
 import com.hp.ov.sdk.rest.client.InterconnectsClientImpl;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.UplinkSetClient;
 import com.hp.ov.sdk.rest.client.UplinkSetClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
@@ -58,9 +58,9 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 public class UplinkSetClientSample {
 
     private final UplinkSetClient uplinkSetClient;
-    private final FcNetworkClient fcNetworkClient;
     private final EnclosureClient enclosureClient;
     private final InterconnectsClient interconnectClient;
+    private final OneViewClient oneViewClient;
 
     private RestParams params;
     private TaskResourceV2 taskResourceV2;
@@ -80,9 +80,10 @@ public class UplinkSetClientSample {
 
     private UplinkSetClientSample() {
         uplinkSetClient = UplinkSetClientImpl.getClient();
-        fcNetworkClient = FcNetworkClientImpl.getClient();
         enclosureClient = EnclosureClientImpl.getClient();
         interconnectClient = InterconnectsClientImpl.getClient();
+
+        this.oneViewClient = OneViewClientSample.getOneViewClient();
     }
 
     private void getUplinkSetById() throws InstantiationException, IllegalAccessException {
@@ -323,7 +324,7 @@ public class UplinkSetClientSample {
         uplinkSetsDto.setManualLoginRedistributionState(ManualLoginRedistributionState.Supported);
         List<String> networkUris = new ArrayList<String>();
         for (int i = 0; i < fcNetworkName_A.size(); i++) {
-            networkUris.add(fcNetworkClient.getFcNetworkByName(params, fcNetworkName_A.get(i)).getUri());
+            networkUris.add(oneViewClient.fcNetwork().getByName(fcNetworkName_A.get(i)).getUri());
         }
         uplinkSetsDto.setFcNetworkUris(networkUris);
 

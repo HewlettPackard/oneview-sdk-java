@@ -15,6 +15,7 @@
  */
 package com.hp.ov.sdk.fabric;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.Fabric;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -24,6 +25,7 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.FabricClient;
 import com.hp.ov.sdk.rest.client.FabricClientImpl;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
@@ -42,7 +44,9 @@ public class FabricClientSample {
     // ================================
 
     public FabricClientSample() {
-        this.resourceDtoUtils = new ResourceDtoUtils();
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
+        this.resourceDtoUtils = new ResourceDtoUtils(oneViewClient);
         this.fabricClient = FabricClientImpl.getClient();
     }
 

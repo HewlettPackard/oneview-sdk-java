@@ -25,7 +25,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.hp.ov.sdk.dto.generated.SnmpConfiguration;
 
-public class LogicalSwitch extends BaseModelResource {
+public final class LogicalSwitch extends BaseModelResource {
 
     private static final long serialVersionUID = -7639145707975657832L;
 
@@ -130,31 +130,37 @@ public class LogicalSwitch extends BaseModelResource {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        LogicalSwitch that = (LogicalSwitch) obj;
-
-        return new EqualsBuilder()
-                .appendSuper(super.equals(obj))
-                .append(consistencyStatus, that.consistencyStatus)
-                .append(fabricUri, that.fabricUri)
-                .append(logicalSwitchDomainInfo, that.logicalSwitchDomainInfo)
-                .append(logicalSwitchGroupUri, that.logicalSwitchGroupUri)
-                .append(snmpConfiguration, that.snmpConfiguration)
-                .append(stackingHealth, that.stackingHealth)
-                .append(switchCredentialConfiguration, that.switchCredentialConfiguration)
-                .append(switchCredentialCount, that.switchCredentialCount)
-                .append(switchMap, that.switchMap)
-                .append(switchStackingInfo, that.switchStackingInfo)
-                .append(switchUris, that.switchUris)
-                .isEquals();
+    public boolean canEqual(Object obj) {
+        return (obj instanceof LogicalSwitch);
     }
 
     @Override
-    public int hashCode() {
+    public final boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof LogicalSwitch) {
+            LogicalSwitch that = (LogicalSwitch) obj;
+
+            return new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(consistencyStatus, that.consistencyStatus)
+                    .append(fabricUri, that.fabricUri)
+                    .append(logicalSwitchDomainInfo, that.logicalSwitchDomainInfo)
+                    .append(logicalSwitchGroupUri, that.logicalSwitchGroupUri)
+                    .append(snmpConfiguration, that.snmpConfiguration)
+                    .append(stackingHealth, that.stackingHealth)
+                    .append(switchCredentialConfiguration, that.switchCredentialConfiguration)
+                    .append(switchCredentialCount, that.switchCredentialCount)
+                    .append(switchMap, that.switchMap)
+                    .append(switchStackingInfo, that.switchStackingInfo)
+                    .append(switchUris, that.switchUris)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public final int hashCode() {
         return new HashCodeBuilder()
                 .appendSuper(super.hashCode())
                 .append(consistencyStatus)

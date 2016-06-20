@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
@@ -31,10 +32,10 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.FcNetworkClient;
-import com.hp.ov.sdk.rest.client.FcNetworkClientImpl;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.StorageSystemClient;
 import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
+import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
@@ -47,7 +48,7 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 public class StorageSystemClientSample {
 
     private final StorageSystemClient storageSystemClient;
-    private final FcNetworkClient fcNetworkClient;
+    private final OneViewClient oneViewClient;
 
     private RestParams params;
 
@@ -69,7 +70,7 @@ public class StorageSystemClientSample {
 
     private StorageSystemClientSample() {
         this.storageSystemClient = StorageSystemClientImpl.getClient();
-        this.fcNetworkClient = FcNetworkClientImpl.getClient();
+        this.oneViewClient = OneViewClientSample.getOneViewClient();
     }
 
     private void getStorageSystemById() throws InstantiationException, IllegalAccessException {
@@ -465,6 +466,7 @@ public class StorageSystemClientSample {
 
     private StorageSystemV2 buildUpdateStorageSystemDto(final StorageSystemV2 storageSystemDto) {
 
+
         final List<StorageTargetPort> tempStorageTargetPort = new ArrayList<>();
         final List<StorageTargetPort> unMangedStorageTargetPort = new ArrayList<StorageTargetPort>();
         for (int i = 0; i < storageSystemDto.getUnmanagedPorts().size(); i++) {
@@ -475,7 +477,7 @@ public class StorageSystemClientSample {
                 managed_one.setGroupName(storageSystemDto.getUnmanagedPorts().get(i).getGroupName());
                 String fc_network_one = null;
                 for (int j = 0; j < fcNetworkName_A.size(); j++) {
-                    fc_network_one = fcNetworkClient.getFcNetworkByName(params, fcNetworkName_A.get(j)).getUri();
+                    fc_network_one = oneViewClient.fcNetwork().getByName(fcNetworkName_A.get(j)).getUri();
                 }
                 managed_one.setExpectedNetworkUri(fc_network_one);
                 managed_one.setPortName(storageSystemDto.getUnmanagedPorts().get(i).getPortName());
@@ -495,7 +497,7 @@ public class StorageSystemClientSample {
                 managed_two.setGroupName(storageSystemDto.getUnmanagedPorts().get(i).getGroupName());
                 String fc_network_two = null;
                 for (int j = 0; j < fcNetworkName_B.size(); j++) {
-                    fc_network_two = fcNetworkClient.getFcNetworkByName(params, fcNetworkName_B.get(j)).getUri();
+                    fc_network_two = oneViewClient.fcNetwork().getByName(fcNetworkName_B.get(j)).getUri();
                 }
                 managed_two.setExpectedNetworkUri(fc_network_two);
                 managed_two.setPortName(storageSystemDto.getUnmanagedPorts().get(i).getPortName());

@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.logicaldownlink;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.LogicalDownlink;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -24,6 +25,7 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.LogicalDownlinkClient;
 import com.hp.ov.sdk.rest.client.LogicalDownlinkClientImpl;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
@@ -47,7 +49,9 @@ public class LogicalDownlinkClientSample {
     // ================================
 
     private LogicalDownlinkClientSample() {
-        this.resourceDtoUtils = new ResourceDtoUtils();
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
+        this.resourceDtoUtils = new ResourceDtoUtils(oneViewClient);
         this.logicalDownlinkClient = LogicalDownlinkClientImpl.getClient();
     }
 

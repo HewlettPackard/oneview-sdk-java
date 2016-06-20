@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -36,6 +37,7 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClientImpl;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -77,8 +79,10 @@ public class LogicalInterconnectGroupClientSample {
     // ================================
 
     private LogicalInterconnectGroupClientSample() {
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
+        this.resourceDtoUtils = new ResourceDtoUtils(oneViewClient);
         this.logicalInterconnectGroupClient = LogicalInterconnectGroupClientImpl.getClient();
-        this.resourceDtoUtils = new ResourceDtoUtils();
     }
 
     private void getLogicalInterconnectGroupById() throws InstantiationException, IllegalAccessException {

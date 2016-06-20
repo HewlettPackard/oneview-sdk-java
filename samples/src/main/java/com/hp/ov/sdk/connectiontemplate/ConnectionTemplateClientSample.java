@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.connectiontemplate;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.generated.Bandwidth;
 import com.hp.ov.sdk.dto.generated.ConnectionTemplate;
@@ -27,6 +28,7 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.ConnectionTemplateClient;
 import com.hp.ov.sdk.rest.client.ConnectionTemplateClientImpl;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -53,7 +55,9 @@ public class ConnectionTemplateClientSample {
     // ================================
 
     private ConnectionTemplateClientSample() {
-        this.resourceDtoUtils = new ResourceDtoUtils();
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
+        this.resourceDtoUtils = new ResourceDtoUtils(oneViewClient);
         this.connectionTemplateClient = ConnectionTemplateClientImpl.getClient();
     }
 
