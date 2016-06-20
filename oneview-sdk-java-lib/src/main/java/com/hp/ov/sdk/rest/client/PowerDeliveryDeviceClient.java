@@ -180,8 +180,7 @@ public interface PowerDeliveryDeviceClient {
      * @param resourceId
      *            The resource identifier for power delivery device as seen in
      *            HPE OneView.
-     * @return {@link TaskResourceV2} containing the task status for the
-     *         process.
+     * @return {@link String} containing an empty JSON object.
      */
     String removePowerDeliveryDeviceSynchronously(final RestParams params, final String resourceId);
 
