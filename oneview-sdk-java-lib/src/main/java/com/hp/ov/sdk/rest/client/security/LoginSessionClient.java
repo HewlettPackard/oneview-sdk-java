@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.login.LoginInformation;
-import com.hp.ov.sdk.dto.login.LoginSession;
+import com.hp.ov.sdk.dto.security.login.LoginInformation;
+import com.hp.ov.sdk.dto.security.login.LoginSession;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 

@@ -18,7 +18,7 @@ package com.hp.ov.sdk.rest.client;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
-import com.hp.ov.sdk.dto.unmanageddevice.UnmanagedDevice;
+import com.hp.ov.sdk.dto.uncategorized.unmanageddevice.UnmanagedDevice;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface UnmanagedDeviceClient {
