@@ -32,7 +32,7 @@ import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
-import com.hp.ov.sdk.dto.unmanageddevice.UnmanagedDevice;
+import com.hp.ov.sdk.dto.uncategorized.unmanageddevice.UnmanagedDevice;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;

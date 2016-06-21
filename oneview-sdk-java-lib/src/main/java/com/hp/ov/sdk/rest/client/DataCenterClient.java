@@ -19,8 +19,8 @@ import java.util.List;
 
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.datacenter.DataCenter;
-import com.hp.ov.sdk.dto.datacenter.VisualContent;
+import com.hp.ov.sdk.dto.facilities.datacenter.DataCenter;
+import com.hp.ov.sdk.dto.facilities.datacenter.VisualContent;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface DataCenterClient {

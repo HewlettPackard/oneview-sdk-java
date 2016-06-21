@@ -17,8 +17,8 @@ package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.serverhardwaretype.ServerHardwareType;
-import com.hp.ov.sdk.dto.serverhardwaretype.ServerHardwareTypeUpdate;
+import com.hp.ov.sdk.dto.servers.serverhardwaretype.ServerHardwareType;
+import com.hp.ov.sdk.dto.servers.serverhardwaretype.ServerHardwareTypeUpdate;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface ServerHardwareTypeClient {

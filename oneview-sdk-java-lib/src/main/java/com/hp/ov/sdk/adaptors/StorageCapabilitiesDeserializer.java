@@ -28,10 +28,10 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.hp.ov.sdk.dto.serverhardwaretype.ControllerMode;
-import com.hp.ov.sdk.dto.serverhardwaretype.DriveTechnology;
-import com.hp.ov.sdk.dto.serverhardwaretype.RaidLevel;
-import com.hp.ov.sdk.dto.serverhardwaretype.StorageCapabilities;
+import com.hp.ov.sdk.dto.servers.serverhardwaretype.ControllerMode;
+import com.hp.ov.sdk.dto.servers.serverhardwaretype.DriveTechnology;
+import com.hp.ov.sdk.dto.servers.serverhardwaretype.RaidLevel;
+import com.hp.ov.sdk.dto.servers.serverhardwaretype.StorageCapabilities;
 
 public class StorageCapabilitiesDeserializer implements JsonDeserializer<StorageCapabilities> {
 

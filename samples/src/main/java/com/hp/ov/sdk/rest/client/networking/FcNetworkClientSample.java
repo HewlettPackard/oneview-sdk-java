@@ -20,15 +20,15 @@ import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.FcNetwork;
+import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class FcNetworkClientSample {
 
     // These are variables to be defined by the user
     // ================================
-    private static final String FC_NETWORK_RESOURCE_ID = "9f56570e-bc5a-42b7-ae22-9d09d52461c4";
-    private static final String FC_NETWORK_NAME = "FC-Network_SAMPLE";
+    private static final String FC_NETWORK_RESOURCE_ID = "37a92c8f-a2ef-4817-85f4-80d27abb09e2";
+    private static final String FC_NETWORK_NAME = "FC_Network_A";
     private static final String FC_NETWORK_NAME_UPDATED = FC_NETWORK_NAME + "_Updated";
     // ================================
 
@@ -97,10 +97,10 @@ public class FcNetworkClientSample {
     public static void main(String[] args) {
         FcNetworkClientSample sample = new FcNetworkClientSample();
 
-        sample.createFcNetwork();
-        sample.getFcNetwork();
-        sample.getFcNetworkByName();
         sample.getAllFcNetworks();
+        sample.getFcNetwork();
+        sample.createFcNetwork();
+        sample.getFcNetworkByName();
         sample.updateFcNetwork();
         sample.deleteFcNetwork();
     }
