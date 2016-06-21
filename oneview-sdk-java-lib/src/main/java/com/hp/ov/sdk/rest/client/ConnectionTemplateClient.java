@@ -16,7 +16,7 @@
 package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.generated.ConnectionTemplate;
+import com.hp.ov.sdk.dto.networking.ethernet.ConnectionTemplate;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface ConnectionTemplateClient {
@@ -24,7 +24,7 @@ public interface ConnectionTemplateClient {
     /**
      * The module aids in fetching the connection template when provided with
      * the ConnectionTemplate resource identifier.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param id
@@ -36,7 +36,7 @@ public interface ConnectionTemplateClient {
     /**
      * The module aids in fetching the connection template when provided with
      * the connection template name.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceName
@@ -71,7 +71,7 @@ public interface ConnectionTemplateClient {
     /**
      * The module aids in fetching the connection template details for all
      * networks found under the current HPE OneView.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @return {@link ResourceCollection}&lt;{@link ConnectionTemplate}&gt; containing
@@ -82,7 +82,7 @@ public interface ConnectionTemplateClient {
     /**
      * The module aids in fetching the default connection template details for
      * the network found under the current HPE OneView.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @return {@link ConnectionTemplate} containing the connection template details.
@@ -92,7 +92,7 @@ public interface ConnectionTemplateClient {
     /**
      * The module aids in fetching the connection template resource identifier for the
      * connection template name as specified in HPE OneView.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param name

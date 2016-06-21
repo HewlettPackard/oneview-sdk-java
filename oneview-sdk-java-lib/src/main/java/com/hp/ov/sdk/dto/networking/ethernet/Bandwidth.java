@@ -13,38 +13,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking.ethernet;
 
-import com.hp.ov.sdk.dto.BaseModelResource;
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 
-public class ConnectionTemplate extends BaseModelResource {
+public class Bandwidth implements Serializable {
 
-    private static final long serialVersionUID = 9033278171943320889L;
+    private static final long serialVersionUID = 8074702168200387351L;
 
-    private Bandwidth bandwidth;
+    private Double maximumBandwidth;
+    private Double typicalBandwidth;
 
-    public Bandwidth getBandwidth() {
-        return bandwidth;
+    public Double getMaximumBandwidth() {
+        return maximumBandwidth;
     }
 
-    public void setBandwidth(final Bandwidth bandwidth) {
-        this.bandwidth = bandwidth;
+    public void setMaximumBandwidth(final Double maximumBandwidth) {
+        this.maximumBandwidth = maximumBandwidth;
+    }
+
+    public Double getTypicalBandwidth() {
+        return typicalBandwidth;
+    }
+
+    public void setTypicalBandwidth(final Double typicalBandwidth) {
+        this.typicalBandwidth = typicalBandwidth;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
 
-        if (obj instanceof ConnectionTemplate) {
-            ConnectionTemplate that = (ConnectionTemplate) obj;
+        if (obj instanceof Bandwidth) {
+            Bandwidth bandwidth = (Bandwidth) obj;
 
             return new EqualsBuilder()
-                    .appendSuper(super.equals(obj))
-                    .append(bandwidth, that.bandwidth)
+                    .append(maximumBandwidth, bandwidth.maximumBandwidth)
+                    .append(typicalBandwidth, bandwidth.typicalBandwidth)
                     .isEquals();
         }
         return false;
@@ -53,16 +63,16 @@ public class ConnectionTemplate extends BaseModelResource {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .appendSuper(super.hashCode())
-                .append(bandwidth)
+                .append(maximumBandwidth)
+                .append(typicalBandwidth)
                 .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .appendSuper(super.toString())
-                .append("bandwidth", bandwidth)
+                .append("maximumBandwidth", maximumBandwidth)
+                .append("typicalBandwidth", typicalBandwidth)
                 .toString();
     }
 }

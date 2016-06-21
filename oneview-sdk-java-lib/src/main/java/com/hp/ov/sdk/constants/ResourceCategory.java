@@ -24,6 +24,7 @@ public class ResourceCategory {
     public static final String RC_FCNETWORK = "fc-networkV2";
     public static final String RC_FCNETWORK_V300 = "FcNetworkCollectionV300";
     public static final String RC_FCOE_NETWORK = "fcoe-network";
+    public static final String RC_FCOE_NETWORK_V300 = "fcoe-networkV300";
     public static final String RC_SERVERHARDWARE = "server-hardware";
     public static final String RC_NETWORKSET = "network-set";
     public static final String RC_LOGICAL_SWITCH_GROUP = "logical-switch-group";

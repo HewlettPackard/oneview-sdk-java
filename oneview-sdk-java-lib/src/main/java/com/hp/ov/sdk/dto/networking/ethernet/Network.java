@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking.ethernet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +23,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
+import com.google.gson.annotations.Until;
 import com.hp.ov.sdk.dto.BaseModelResource;
 
 /**
@@ -44,6 +45,8 @@ public class Network extends BaseModelResource {
 
     private String connectionTemplateUri;
     private EthernetNetworkType ethernetNetworkType = EthernetNetworkType.Tagged;
+
+    @Until(199)
     private Integer internalVlanId;
 
     @Since(200)
