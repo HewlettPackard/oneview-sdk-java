@@ -22,6 +22,7 @@ import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchGroupClient;
+import com.hp.ov.sdk.rest.client.networking.NetworkSetClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
@@ -40,6 +41,7 @@ public class OneViewClient {
     private EthernetNetworkClient ethernetNetworkClient;
     private LogicalSwitchClient logicalSwitchClient;
     private LogicalSwitchGroupClient logicalSwitchGroupClient;
+    private NetworkSetClient networkSetClient;
     private SwitchTypeClient switchTypeClient;
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
@@ -89,6 +91,13 @@ public class OneViewClient {
             this.logicalSwitchGroupClient = new LogicalSwitchGroupClient(this.baseClient);
         }
         return this.logicalSwitchGroupClient;
+    }
+
+    public synchronized NetworkSetClient networkSet() {
+        if (this.networkSetClient == null) {
+            this.networkSetClient = new NetworkSetClient(this.baseClient);
+        }
+        return this.networkSetClient;
     }
 
     public synchronized SwitchTypeClient switchType() {
