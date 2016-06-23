@@ -18,6 +18,8 @@ package com.hp.ov.sdk.dto.generated;
 import java.io.Serializable;
 
 import com.hp.ov.sdk.dto.JsonRequest;
+import com.hp.ov.sdk.dto.networking.ethernet.Bandwidth;
+import com.hp.ov.sdk.dto.networking.ethernet.Network;
 
 
 public class BulkEthernetNetwork implements Serializable {

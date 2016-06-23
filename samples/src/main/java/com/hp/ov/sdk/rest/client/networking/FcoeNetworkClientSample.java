@@ -18,16 +18,16 @@ package com.hp.ov.sdk.rest.client.networking;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
-import com.hp.ov.sdk.dto.FcoeNetwork;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.networking.fcoenetworks.FcoeNetwork;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class FcoeNetworkClientSample {
 
     // These are variables to be defined by the user
     // ================================
-    private static final String FCOE_NETWORK_RESOURCE_ID = "060af776-fb29-4d6c-a1f1-7e513ab4e677";
+    private static final String FCOE_NETWORK_RESOURCE_ID = "24e0a30a-bf7b-47db-ae3f-738844323db5";
     private static final String FCOE_NETWORK_NAME = "FCoE-Network_SAMPLE";
     private static final String FCOE_NETWORK_NAME_UPDATED = FCOE_NETWORK_NAME + "_Updated";
     // ================================

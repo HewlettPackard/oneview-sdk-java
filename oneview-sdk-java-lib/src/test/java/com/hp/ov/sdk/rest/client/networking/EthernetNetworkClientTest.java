@@ -19,10 +19,10 @@ package com.hp.ov.sdk.rest.client.networking;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.any;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.generated.BulkEthernetNetwork;
-import com.hp.ov.sdk.dto.generated.Network;
+import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;

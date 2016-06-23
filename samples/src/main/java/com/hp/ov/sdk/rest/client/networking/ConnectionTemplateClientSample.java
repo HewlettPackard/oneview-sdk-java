@@ -17,8 +17,8 @@ package com.hp.ov.sdk.rest.client.networking;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.generated.Bandwidth;
-import com.hp.ov.sdk.dto.generated.ConnectionTemplate;
+import com.hp.ov.sdk.dto.networking.ethernet.Bandwidth;
+import com.hp.ov.sdk.dto.networking.ethernet.ConnectionTemplate;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;

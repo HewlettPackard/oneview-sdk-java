@@ -13,48 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
-
-import java.io.Serializable;
+package com.hp.ov.sdk.dto.networking.ethernet;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.hp.ov.sdk.dto.BaseModelResource;
 
-public class Bandwidth implements Serializable {
 
-    private static final long serialVersionUID = 8074702168200387351L;
+public class ConnectionTemplate extends BaseModelResource {
 
-    private Double maximumBandwidth;
-    private Double typicalBandwidth;
+    private static final long serialVersionUID = 9033278171943320889L;
 
-    public Double getMaximumBandwidth() {
-        return maximumBandwidth;
+    private Bandwidth bandwidth;
+
+    public Bandwidth getBandwidth() {
+        return bandwidth;
     }
 
-    public void setMaximumBandwidth(final Double maximumBandwidth) {
-        this.maximumBandwidth = maximumBandwidth;
-    }
-
-    public Double getTypicalBandwidth() {
-        return typicalBandwidth;
-    }
-
-    public void setTypicalBandwidth(final Double typicalBandwidth) {
-        this.typicalBandwidth = typicalBandwidth;
+    public void setBandwidth(final Bandwidth bandwidth) {
+        this.bandwidth = bandwidth;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
 
-        if (obj instanceof Bandwidth) {
-            Bandwidth bandwidth = (Bandwidth) obj;
+        if (obj instanceof ConnectionTemplate) {
+            ConnectionTemplate that = (ConnectionTemplate) obj;
 
             return new EqualsBuilder()
-                    .append(maximumBandwidth, bandwidth.maximumBandwidth)
-                    .append(typicalBandwidth, bandwidth.typicalBandwidth)
+                    .appendSuper(super.equals(obj))
+                    .append(bandwidth, that.bandwidth)
                     .isEquals();
         }
         return false;
@@ -63,16 +54,16 @@ public class Bandwidth implements Serializable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(maximumBandwidth)
-                .append(typicalBandwidth)
+                .appendSuper(super.hashCode())
+                .append(bandwidth)
                 .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("maximumBandwidth", maximumBandwidth)
-                .append("typicalBandwidth", typicalBandwidth)
+                .appendSuper(super.toString())
+                .append("bandwidth", bandwidth)
                 .toString();
     }
 }

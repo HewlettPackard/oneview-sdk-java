@@ -22,9 +22,9 @@ import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.Bandwidth;
 import com.hp.ov.sdk.dto.generated.BulkEthernetNetwork;
-import com.hp.ov.sdk.dto.generated.Network;
+import com.hp.ov.sdk.dto.networking.ethernet.Bandwidth;
+import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class EthernetNetworkClientSample {
