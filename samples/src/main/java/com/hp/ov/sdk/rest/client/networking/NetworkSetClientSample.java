@@ -19,287 +19,101 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.hp.ov.sdk.OneViewClientSample;
+import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.NetworkSets;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKBadRequestException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.NetworkSetClient;
-import com.hp.ov.sdk.rest.client.NetworkSetClientImpl;
+import com.hp.ov.sdk.dto.networking.networkset.NetworkSet;
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
- * NetworkSetClientSample is a sample program to consume a consolidated set of ethernet network 
+ * NetworkSetClientSample is a sample program to consume a consolidated set of ethernet network
  * resource of HPE OneView. It invokes APIs of NetworkSetClient which is in sdk library to perform GET/PUT/POST/DELETE
  * operations network set resource
  */
 public class NetworkSetClientSample {
 
-    private TaskResourceV2 taskResourceV2;
     private ResourceDtoUtils resourceDtoUtils;
-    private RestParams params;
-    private NetworkSetClient networkSetClient;
+    private NetworkSetClient client;
 
     // test values - user input
     // ================================
-    private static final String resourceId = "3e52e8f3-f740-429e-b2b6-d253f7a1f285";
+    private static final String resourceId = "58e65c0f-45e0-4003-bb8f-91922bf7cbf9";
     private static final String resourceName = "NetworkSet_Prod";
     private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402", "Prod_403", "Prod_404");
     // ================================
 
     private NetworkSetClientSample() {
         OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        this.client = oneViewClient.networkSet();
 
         this.resourceDtoUtils = new ResourceDtoUtils(oneViewClient);
-        this.networkSetClient = NetworkSetClientImpl.getClient();
     }
 
     private void getNetworkSetById() throws InstantiationException, IllegalAccessException {
-        NetworkSets networkSetDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        NetworkSet networkSet = client.getById(resourceId);
 
-            // then make sdk service call to get resource
-            networkSetDto = networkSetClient.getNetworkSets(params, resourceId);
-
-            System.out.println("NetworkSetClientTest : getNetworkSetById : " + "network set object returned to client : "
-                    + networkSetDto.toString());
-
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("NetworkSetClientTest : getNetworkSetById : " + "resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("NetworkSetClientTest : getNetworkSetById : " + "no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("NetworkSetClientTest : getNetworkSetById : " + "Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("NetworkSetClientTest : getNetworkSetById : " + "No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("NetworkSetClientTest : getNetworkSetById : " + "arguments are null ");
-            return;
-        }
+        System.out.println("NetworkSetClientSample : getNetworkSet : " +
+                "NetworkSet object returned to client : " + networkSet);
     }
 
     private void getAllNetworkSet() throws InstantiationException, IllegalAccessException {
-        ResourceCollection<NetworkSets> networkSetCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
 
-            // then make sdk service call to get resource
-            networkSetCollectionDto = networkSetClient.getAllNetworkSets(params);
+        ResourceCollection<NetworkSet> networkSets = client.getAll();
 
-            System.out.println("NetworkSetClientTest : getAllNetworkSet : " + "network set object returned to client : "
-                    + networkSetCollectionDto.getCount());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("NetworkSetClientTest : getAllNetworkSet : " + "resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("NetworkSetClientTest : getAllNetworkSet : " + "no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("NetworkSetClientTest : getAllNetworkSet : " + "Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("NetworkSetClientTest : getAllNetworkSet : " + "No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("NetworkSetClientTest : getAllNetworkSet : " + "arguments are null ");
-            return;
-        }
+        System.out.println("networkSetClientSample : getAllNetworkSets : " +
+                "NetworkSets returned to client (count) : " + networkSets.getCount());
     }
 
     private void getNetworkSetByName() throws InstantiationException, IllegalAccessException {
-        NetworkSets networkSetDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        NetworkSet networkSet = client.getByName(resourceName);
 
-            // then make sdk service call to get resource
-            networkSetDto = networkSetClient.getNetworkSetsByName(params, resourceName);
-
-            System.out.println("NetworkSetClientTest : getNetworkSetByName : " + "network set object returned to client : "
-                    + networkSetDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("NetworkSetClientTest : getNetworkSetByName : " + "resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("NetworkSetClientTest : getNetworkSetByName : " + "no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("NetworkSetClientTest : getNetworkSetByName : " + "Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("NetworkSetClientTest : getNetworkSetByName : " + "No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("NetworkSetClientTest : getNetworkSetByName : " + "arguments are null ");
-            return;
-        }
-
+        System.out.println("NetworkSetClientSample : getNetworkSetByName : " +
+                "NetworkSet object returned to client : " + networkSet);
     }
 
     private void createNetworkSet() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        NetworkSet networkSet = resourceDtoUtils.buildNetworkSetDto(resourceName, networkNames);
 
-            // create network set request body
-            final NetworkSets networkSetDto = resourceDtoUtils.buildNetworkSetDto(resourceName, networkNames);
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = networkSetClient.createNetworkSet(params, networkSetDto, false, false);
+        networkSet.setName(resourceName);
+        networkSet.setType(ResourceCategory.RC_NETWORKSET_V300);
 
-            System.out.println("NetworkSetClientTest : createNetworkSet : " + "network object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("NetworkSetClientTest : createNetworkSet :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("NetworkSetClientTest : createNetworkSet :"
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again : ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("NetworkSetClientTest : createNetworkSet : " + "no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("NetworkSetClientTest : createNetworkSet : " + "Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("NetworkSetClientTest : createNetworkSet : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("NetworkSetClientTest : createNetworkSet : "
-                    + "errors in task, please check task resource for more details ");
-            return;
-        }
+        TaskResourceV2 task = this.client.create(networkSet, false);
 
+        System.out.println("NetworkSetClientSample : createNetworkSet : " +
+                "Task object returned to client : " + task);
     }
 
     private void updateNetworkSet() throws InstantiationException, IllegalAccessException {
-        NetworkSets networkSetDto = null;
-        String resourceId = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        NetworkSet networkSet = client.getByName(resourceName);
 
-            // fetch resource Id using resource name
-            networkSetDto = networkSetClient.getNetworkSetsByName(params, resourceName);
+        networkSet.setName(resourceName + "_Updated");
 
-            if (null != networkSetDto.getUri()) {
-                resourceId = UrlUtils.getResourceIdFromUri(networkSetDto.getUri());
-            }
-            // Test name
-            networkSetDto.setName(resourceName + "_updated");
+        TaskResourceV2 task = this.client.update(UrlUtils.getResourceIdFromUri(networkSet.getUri()),
+                networkSet, false);
 
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = networkSetClient.updateNetworkSet(params, resourceId, networkSetDto, false, false);
-
-            System.out.println("NetworkSetClientTest : updateNetworkSet : " + "network object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("NetworkSetClientTest : updateNetworkSet :" + " resource you are looking is not found for update");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("NetworkSetClientTest : updateNetworkSet :"
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again : ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("NetworkSetClientTest : updateNetworkSet :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("NetworkSetClientTest : updateNetworkSet :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("NetworkSetClientTest : updateNetworkSet :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("NetworkSetClientTest : updateNetworkSet : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("NetworkSetClientTest : updateNetworkSet : " + "errors in task, please check task "
-                    + "resource for more details ");
-            return;
-        }
+        System.out.println("NetworkSetClientSample : updateNetworkSet : " +
+                "Task object returned to client : " + task);
     }
 
     private void deleteNetworkSet() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        NetworkSet networkSet = client.getByName(resourceName);
 
-            // get resource ID
-            resourceId = networkSetClient.getId(params, resourceName);
+        TaskResourceV2 task = this.client.delete(UrlUtils.getResourceIdFromUri(networkSet.getUri()), false);
 
-            // then make sdk service call to get resource
-            taskResourceV2 = networkSetClient.deleteNetworkSet(params, resourceId, false);
-
-            System.out.println("NetworkSetClientTest : deleteNetworkSet : " + "network object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("NetworkSetClientTest : deleteNetworkSetSet :" + " resource not found for deleting ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("NetworkSetClientTest : deleteNetworkSetSet :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("NetworkSetClientTest : deleteNetworkSet :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("NetworkSetClientTest : deleteNetworkSet : " + "No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("NetworkSetClientTest : deleteNetworkSet :" + " arguments are null ");
-            return;
-        }
+        System.out.println("NetworkSetClientSample : deleteNetworkSet : " +
+                "Task object returned to client : " + task);
     }
 
     public static void main(final String[] args) throws Exception {
         NetworkSetClientSample client = new NetworkSetClientSample();
-        
+
         client.getAllNetworkSet();
         client.createNetworkSet();
         client.getNetworkSetById();
         client.getNetworkSetByName();
         client.updateNetworkSet();
-        client.createNetworkSet();
-        client.getAllNetworkSet();
         client.deleteNetworkSet();
     }
 }

@@ -41,7 +41,6 @@ import com.hp.ov.sdk.dto.generated.LocationEntry;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
 import com.hp.ov.sdk.dto.generated.LogicalLocation;
 import com.hp.ov.sdk.dto.generated.LogicalPortConfigInfo;
-import com.hp.ov.sdk.dto.generated.NetworkSets;
 import com.hp.ov.sdk.dto.generated.SanStorage;
 import com.hp.ov.sdk.dto.generated.ServerProfile;
 import com.hp.ov.sdk.dto.generated.StoragePath;
@@ -51,6 +50,7 @@ import com.hp.ov.sdk.dto.generated.VolumeAttachment;
 import com.hp.ov.sdk.dto.networking.ethernet.Bandwidth;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
+import com.hp.ov.sdk.dto.networking.networkset.NetworkSet;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.rest.client.InterconnectTypeClient;
@@ -74,8 +74,8 @@ public class ResourceDtoUtils {
         this.storageSystemClient = StorageSystemClientImpl.getClient();
     }
 
-    public NetworkSets buildNetworkSetDto(String networkSetName, List<String> networkNames) {
-        NetworkSets dto = new NetworkSets();
+    public NetworkSet buildNetworkSetDto(String networkSetName, List<String> networkNames) {
+        NetworkSet dto = new NetworkSet();
 
         dto.setName(networkSetName);
         dto.setNativeNetworkUri(null);
