@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
@@ -21,6 +21,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.google.gson.GsonBuilder;
 import com.hp.ov.sdk.util.UrlUtils;
 
 public class BaseModelResource implements Serializable {
@@ -167,17 +168,14 @@ public class BaseModelResource implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("name", name)
-                .append("description", description)
-                .append("state", state)
-                .append("status", status)
-                .append("uri", uri)
-                .append("category", category)
-                .append("type", type)
-                .append("eTag", eTag)
-                .append("created", created)
-                .append("modified", modified)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    public String toJsonString() {
+        return System.getProperty("line.separator")
+            + new GsonBuilder()
+                .setPrettyPrinting()
+                .disableHtmlEscaping()
+                .create().toJson(this);
     }
 }

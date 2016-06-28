@@ -19,6 +19,8 @@ package com.hp.ov.sdk.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 public class ResourceCollection<T> extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
@@ -71,7 +73,11 @@ public class ResourceCollection<T> extends BaseModelResource {
     }
 
     public List<T> getMembers() {
-        return new ArrayList<>(this.members);
+        return ImmutableList.copyOf(this.members);
+    }
+
+    public T get(int index) {
+        return this.members.get(index);
     }
 
     public boolean isEmpty() {
@@ -86,4 +92,10 @@ public class ResourceCollection<T> extends BaseModelResource {
         }
         this.setCount(this.members.size());
     }
+
+    @Override
+    public String getResourceId() {
+        throw new UnsupportedOperationException();
+    }
+
 }

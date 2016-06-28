@@ -21,11 +21,21 @@ import com.hp.ov.sdk.constants.SdkConstants;
 public final class UrlUtils {
 
     public static String createUrl(String resourceUri, String resourceId) {
-        return new StringBuilder(resourceUri).append("/").append(resourceId).toString();
+        return new StringBuilder(resourceUri)
+                .append("/").append(resourceId).toString();
     }
 
-    public static String createUrl(String resourceUri, String resourceId, String subElement) {
-        return new StringBuilder(resourceUri).append("/").append(resourceId).append("/").append(subElement).toString();
+    public static String createUrl(String resourceUri, String resourceId, String subElementUri) {
+        return new StringBuilder(resourceUri)
+                .append("/").append(resourceId)
+                .append("/").append(subElementUri).toString();
+    }
+
+    public static String createUrl(String resourceUri, String resourceId, String subElementUri, String subElementId) {
+        return new StringBuilder(resourceUri)
+                .append("/").append(resourceId)
+                .append("/").append(subElementUri)
+                .append("/").append(subElementId).toString();
     }
 
     public static String getResourceIdFromUri(final String uri) {
