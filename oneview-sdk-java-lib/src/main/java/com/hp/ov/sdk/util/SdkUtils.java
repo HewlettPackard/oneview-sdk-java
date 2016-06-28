@@ -15,16 +15,11 @@
  *******************************************************************************/
 package com.hp.ov.sdk.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.generated.LocationEntry;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClientImpl;
-import com.hp.ov.sdk.rest.client.InterconnectTypeClient;
-import com.hp.ov.sdk.rest.client.InterconnectTypeClientImpl;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClientImpl;
 import com.hp.ov.sdk.rest.client.ServerHardwareClient;
@@ -40,7 +35,6 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 @Deprecated
 public class SdkUtils {
 
-    private final InterconnectTypeClient interconnectTypeClient;
     private final LogicalInterconnectGroupClient logicalInterconnectGroupClient;
     private final ServerHardwareClient serverHardwareClient;
     private final EnclosureGroupClient enclosureGroupClient;
@@ -49,21 +43,17 @@ public class SdkUtils {
     private static final class SdkUtilsHolder {
 
         private static final SdkUtils INSTANCE = new SdkUtils(
-                InterconnectTypeClientImpl.getClient(),
                 LogicalInterconnectGroupClientImpl.getClient(),
                 ServerHardwareClientImpl.getClient(),
                 EnclosureGroupClientImpl.getClient(),
                 StorageVolumeClientImpl.getClient());
-
     }
 
-    private SdkUtils(InterconnectTypeClient interconnectTypeClient,
-        LogicalInterconnectGroupClient logicalInterconnectGroupClient,
+    private SdkUtils(LogicalInterconnectGroupClient logicalInterconnectGroupClient,
         ServerHardwareClient serverHardwareClient,
         EnclosureGroupClient enclosureGroupClient,
         StorageVolumeClient storageVolumeClient) {
 
-        this.interconnectTypeClient = interconnectTypeClient;
         this.logicalInterconnectGroupClient = logicalInterconnectGroupClient;
         this.serverHardwareClient = serverHardwareClient;
         this.enclosureGroupClient = enclosureGroupClient;
@@ -72,10 +62,6 @@ public class SdkUtils {
 
     public static SdkUtils getInstance() {
         return SdkUtilsHolder.INSTANCE;
-    }
-
-    public String getPermittedInterconnectTypeUri(final RestParams params, final String permittedInterconnectType) {
-        return interconnectTypeClient.getInterconnectTypeByName(params, permittedInterconnectType).getUri();
     }
 
     public String getPermittedInterconnectTypeUriForLigBasedOnBay(final RestParams params, final String ligName, final Integer bay) {

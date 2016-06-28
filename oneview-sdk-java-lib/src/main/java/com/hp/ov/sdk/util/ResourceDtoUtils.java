@@ -52,9 +52,8 @@ import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
 import com.hp.ov.sdk.dto.networking.networkset.NetworkSet;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.rest.client.InterconnectTypeClient;
-import com.hp.ov.sdk.rest.client.InterconnectTypeClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.networking.InterconnectTypeClient;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
@@ -150,8 +149,10 @@ public class ResourceDtoUtils {
             interconnectMapEntryTemplateDto.setLogicalLocation(logicalLocationDto);
 
             if (bayPermittedInterconnectMaps.get((i + 1)) != null) {
-                interconnectMapEntryTemplateDto.setPermittedInterconnectTypeUri(SdkUtils.getInstance().getPermittedInterconnectTypeUri(params,
-                        bayPermittedInterconnectMaps.get((i + 1))));
+                String bayPermittedInterconnect = bayPermittedInterconnectMaps.get(i + 1);
+                String interconnectTypeUri = oneViewClient.interconnectType().getById(bayPermittedInterconnect).getUri();
+
+                interconnectMapEntryTemplateDto.setPermittedInterconnectTypeUri(interconnectTypeUri);
             } else {
                 interconnectMapEntryTemplateDto.setPermittedInterconnectTypeUri(null);
             }
@@ -190,7 +191,7 @@ public class ResourceDtoUtils {
         final List<LogicalPortConfigInfo> logicalPortConfigInfos = new ArrayList<LogicalPortConfigInfo>();
         final UplinkSet uplinkSetDto = new UplinkSet();
 
-        InterconnectTypeClient interconnectTypeClient = InterconnectTypeClientImpl.getClient();
+        InterconnectTypeClient interconnectTypeClient = oneViewClient.interconnectType();
 
         for (final Entry<Integer, List<String>> entry : bayPortMap.entrySet()) {
             final Integer bayRelativeValue = entry.getKey();
@@ -198,7 +199,7 @@ public class ResourceDtoUtils {
 
             final String permittedInterconnectTypeUri = SdkUtils.getInstance().getPermittedInterconnectTypeUriForLigBasedOnBay(params, ligName,
                     bayRelativeValue);
-            final InterconnectType interconnectTypeDto = interconnectTypeClient.getInterconnectType(params,
+            final InterconnectType interconnectTypeDto = interconnectTypeClient.getById(
                     (permittedInterconnectTypeUri.substring(permittedInterconnectTypeUri.lastIndexOf("/") + 1)));
 
             for (int i = 0; i < portNames.size(); i++) {

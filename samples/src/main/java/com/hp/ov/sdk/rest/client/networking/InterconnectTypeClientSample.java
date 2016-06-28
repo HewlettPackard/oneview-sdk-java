@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client.networking;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.dto.InterconnectTypeName;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.rest.client.InterconnectTypeClient;
-import com.hp.ov.sdk.rest.client.InterconnectTypeClientImpl;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 
 /*
  * InterconnectTypeClientSample is a sample program to consume the characteristics model of an interconnect in
@@ -37,151 +30,44 @@ public class InterconnectTypeClientSample {
 
     private final InterconnectTypeClient interconnectTypeClient;
 
-    private RestParams params;
-
     // These are variables to be defined by user
     // ================================
-    private static final String resourceName = "HP VC FlexFabric-20/40 F8 Module";
-    private static final String resourceId = "15943359-6e16-4b42-9900-4b98118914ad";
+    private static final String INTERCONNECT_TYPE_RESOURCE_ID = "15943359-6e16-4b42-9900-4b98118914ad";
     // ================================
 
-    private InterconnectTypeClientSample() {
-        this.interconnectTypeClient = InterconnectTypeClientImpl.getClient();
+    public InterconnectTypeClientSample() {
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
+        this.interconnectTypeClient = oneViewClient.interconnectType();
     }
 
-    private void getInterconnectTypeById() throws InstantiationException, IllegalAccessException {
-        InterconnectType interconnectTypeDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getInterconnectType() {
+        InterconnectType interconnectType = this.interconnectTypeClient.getById(INTERCONNECT_TYPE_RESOURCE_ID);
 
-            // then make sdk service call to get resource
-            interconnectTypeDto = interconnectTypeClient.getInterconnectType(params, resourceId);
-
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeById :"
-                    + " interconnect type object returned to client : " + interconnectTypeDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out
-                    .println("InterconnectTypeClientTest : getInterconnectTypeById :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeById :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeById :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeById :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeById :" + " arguments are null ");
-            return;
-        }
+        System.out.println("InterconnectTypeClientSample : getInterconnectType : " +
+                "InterconnectType object returned to client : " + interconnectType.toJsonString());
     }
 
-    private void getAllInterconnectType() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
-            SDKNoSuchUrlException {
-        ResourceCollection<InterconnectType> interconnectTypeCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getAllInterconnectTypes() {
+        ResourceCollection<InterconnectType> interconnectTypes = this.interconnectTypeClient.getAll();
 
-            // then make sdk service call to get resource
-            interconnectTypeCollectionDto = interconnectTypeClient.getAllInterconnectType(params);
-
-            System.out.println("InterconnectTypeClientTest : getAllInterconnectType :"
-                    + " interconnect type object returned to client : " + interconnectTypeCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("InterconnectTypeClientTest : getAllInterconnectType " + ": resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("InterconnectTypeClientTest : getAllInterconnectType :" + " no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("InterconnectTypeClientTest : getAllInterconnectType :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("InterconnectTypeClientTest : getAllInterconnectType :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("InterconnectTypeClientTest : getAllInterconnectType :" + " arguments are null ");
-            return;
-        }
+        System.out.println("InterconnectTypeClientSample : getAllInterconnectTypes : " +
+                "InterconnectTypes returned to client : " + interconnectTypes.toJsonString());
     }
 
-    private void getInterconnectTypeByName() throws InstantiationException, IllegalAccessException {
-        InterconnectType interconnectTypeDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getInterconnectTypeByName() {
+        InterconnectType interconnectType = this.interconnectTypeClient.getByName(
+                InterconnectTypeName.HP_VC_FlexFabric_20_40_F8_Module).get(0);
 
-            // then make sdk service call to get resource
-            interconnectTypeDto = interconnectTypeClient.getInterconnectTypeByName(params, resourceName);
-
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByName :"
-                    + " interconnect type object returned to client : " + interconnectTypeDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByName :" + " resource not found : ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByName :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByName :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByName :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByName :" + " arguments are null ");
-            return;
-        }
-    }
-
-    private void getInterconnectTypeByEnumName() throws InstantiationException, IllegalAccessException {
-        InterconnectType interconnectTypeDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
-
-            // then make sdk service call to get resource
-            interconnectTypeDto = interconnectTypeClient.getInterconnectTypeByName(params, InterconnectTypeName.HP_VC_FlexFabric_20_40_F8_Module);
-
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByEnumName :"
-                    + " interconnect type object returned to client : " + interconnectTypeDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByEnumName :" + " resource not found : ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByEnumName :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByEnumName :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByEnumName :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("InterconnectTypeClientTest : getInterconnectTypeByEnumName :" + " arguments are null ");
-            return;
-        }
+        System.out.println("InterconnectTypeClientSample : getInterconnectTypeByName : " +
+                "InterconnectType object returned to client : " + interconnectType.toJsonString());
     }
 
     public static void main(final String[] args) throws Exception {
         InterconnectTypeClientSample client = new InterconnectTypeClientSample();
 
-        client.getAllInterconnectType();
+        client.getInterconnectType();
+        client.getAllInterconnectTypes();
         client.getInterconnectTypeByName();
-        client.getInterconnectTypeByEnumName();
-        client.getInterconnectTypeById();
     }
-
 }
