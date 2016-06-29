@@ -18,11 +18,13 @@ package com.hp.ov.sdk.rest.client.servers;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StackingMode;
 import com.hp.ov.sdk.dto.generated.EnclosureGroups;
 import com.hp.ov.sdk.dto.generated.InterconnectBayMapping;
+import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -32,8 +34,8 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClientImpl;
-import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClient;
-import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClientImpl;
+import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClientSample;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -46,21 +48,23 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
  */
 public class EnclosureGroupClientSample {
 
-    private final LogicalInterconnectGroupClient logicalInterconnectGroupClient;
     private final EnclosureGroupClient enclosureGroupClient;
+    private final LogicalInterconnectGroupClient interconnectGroupClient;
 
     private RestParams params;
 
     // test values - user input
     // ================================
-    private static final String resourceName = "Enclosure_Test";
-    private static final String logicalInterconnectName = "LIG_PROD";
-    private static final String resourceId = "7383eb8d-52ad-4c44-aea3-dc138cc9adbc";
-    private static final String scriptData = "name=Enclosure_test";
+    private static final String RESOURCE_NAME = "Enclosure_Test";
+    private static final String LOGICAL_INTERCONNECT_GROUP_NAME = "LIG_PROD";
+    private static final String RESOURCE_ID = "7383eb8d-52ad-4c44-aea3-dc138cc9adbc";
+    private static final String SCRIPT_DATA = "name=Enclosure_test";
     // ================================
 
     public EnclosureGroupClientSample() {
-        this.logicalInterconnectGroupClient = LogicalInterconnectGroupClientImpl.getClient();
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
+        this.interconnectGroupClient = oneViewClient.logicalInterconnectGroup();
         this.enclosureGroupClient = EnclosureGroupClientImpl.getClient();
     }
 
@@ -71,7 +75,7 @@ public class EnclosureGroupClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
-            enclosureGroupDto = enclosureGroupClient.getEnclosureGroup(params, resourceId);
+            enclosureGroupDto = enclosureGroupClient.getEnclosureGroup(params, RESOURCE_ID);
 
             System.out.println("EnclosureGroupClientTest : getEnclosureGroupById :"
                     + " enclosure group object returned to client : " + enclosureGroupDto.toString());
@@ -134,7 +138,7 @@ public class EnclosureGroupClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
-            enclosureGroupDto = enclosureGroupClient.getEnclosureGroupByName(params, resourceName);
+            enclosureGroupDto = enclosureGroupClient.getEnclosureGroupByName(params, RESOURCE_NAME);
 
             System.out.println("EnclosureGroupClientTest : getEnclosureGroupByName :"
                     + " enclosure group object returned to client : " + enclosureGroupDto.toString());
@@ -208,9 +212,9 @@ public class EnclosureGroupClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // fetch resource Id using resource name
-            enclosureGroupDto = enclosureGroupClient.getEnclosureGroupByName(params, resourceName);
+            enclosureGroupDto = enclosureGroupClient.getEnclosureGroupByName(params, RESOURCE_NAME);
 
-            enclosureGroupDto.setName(resourceName + "_updated");
+            enclosureGroupDto.setName(RESOURCE_NAME + "_updated");
 
             if (null != enclosureGroupDto.getUri()) {
                 resourceId = UrlUtils.getResourceIdFromUri(enclosureGroupDto.getUri());
@@ -262,7 +266,7 @@ public class EnclosureGroupClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // get resource ID
-            resourceId = enclosureGroupClient.getId(params, resourceName);
+            resourceId = enclosureGroupClient.getId(params, RESOURCE_NAME);
 
             // then make sdk service call to get resource
             deleteMsg = enclosureGroupClient.deleteEnclosureGroup(params, resourceId);
@@ -297,7 +301,7 @@ public class EnclosureGroupClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
-            enclosureScript = enclosureGroupClient.getConfigurationScript(params, resourceId);
+            enclosureScript = enclosureGroupClient.getConfigurationScript(params, RESOURCE_ID);
 
             System.out.println("EnclosureGroupClientTest : getConfigurationScript :" + " enclosure script returned to client : "
                     + enclosureScript);
@@ -330,14 +334,14 @@ public class EnclosureGroupClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // fetch resource Id using resource name
-            enclosureGroupDto = enclosureGroupClient.getEnclosureGroupByName(params, resourceName);
+            enclosureGroupDto = enclosureGroupClient.getEnclosureGroupByName(params, RESOURCE_NAME);
 
             if (null != enclosureGroupDto.getUri()) {
                 resourceId = UrlUtils.getResourceIdFromUri(enclosureGroupDto.getUri());
             }
 
             // then make sdk service call to get resource
-            enclosureScript = enclosureGroupClient.updateConfigurationScript(params, resourceId, scriptData);
+            enclosureScript = enclosureGroupClient.updateConfigurationScript(params, resourceId, SCRIPT_DATA);
 
             System.out.println("EnclosureGroupClientTest : updateConfigurationScript :" + " enclosure script returned to client : "
                     + enclosureScript);
@@ -363,16 +367,14 @@ public class EnclosureGroupClientSample {
     }
 
     private EnclosureGroups buildTestEnclosureGroupDto() {
-        // fetch resource Id using resource name
-        final String logicalInterconnectGroupUri = logicalInterconnectGroupClient.getLogicalInterconnectGroupByName(params,
-                logicalInterconnectName).getUri();
-
-        final EnclosureGroups dto = new EnclosureGroups();
+        EnclosureGroups dto = new EnclosureGroups();
         dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP); //OneView 1.2
         dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP_V200); //OneView 2.0
-        dto.setName(resourceName);
+        dto.setName(RESOURCE_NAME);
         dto.setStackingMode(StackingMode.Enclosure);
-        final List<InterconnectBayMapping> interconnectBayMappings = new ArrayList<InterconnectBayMapping>();
+
+        List<InterconnectBayMapping> interconnectBayMappings = new ArrayList<InterconnectBayMapping>();
+        LogicalInterconnectGroup lig = this.interconnectGroupClient.getByName(LOGICAL_INTERCONNECT_GROUP_NAME).get(0);
 
         for (int i = 0; i < 8; i++) {
             InterconnectBayMapping interconnectBayMapping = new InterconnectBayMapping();
@@ -381,7 +383,7 @@ public class EnclosureGroupClientSample {
             interconnectBayMapping.setInterconnectBay(interconnectBay);
 
             if (LogicalInterconnectGroupClientSample.interconnectEntries.contains(Integer.valueOf(interconnectBay))) {
-                interconnectBayMapping.setLogicalInterconnectGroupUri(logicalInterconnectGroupUri);
+                interconnectBayMapping.setLogicalInterconnectGroupUri(lig.getUri());
             }
             interconnectBayMappings.add(interconnectBayMapping);
         }

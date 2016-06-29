@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking;
 
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -108,11 +108,6 @@ public class TelemetryConfiguration extends BaseModelResource {
     }
 
     @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(sampleInterval)
@@ -120,6 +115,11 @@ public class TelemetryConfiguration extends BaseModelResource {
                 .append(sampleCount)
                 .appendSuper(super.hashCode())
                 .toHashCode();
+    }
+
+    @Override
+    public boolean canEqual(Object obj) {
+        return (obj instanceof TelemetryConfiguration);
     }
 
     @Override

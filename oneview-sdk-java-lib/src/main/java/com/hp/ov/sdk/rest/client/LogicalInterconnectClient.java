@@ -30,8 +30,8 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.Location;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
-import com.hp.ov.sdk.dto.generated.SnmpConfiguration;
-import com.hp.ov.sdk.dto.generated.TelemetryConfiguration;
+import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
+import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface LogicalInterconnectClient {

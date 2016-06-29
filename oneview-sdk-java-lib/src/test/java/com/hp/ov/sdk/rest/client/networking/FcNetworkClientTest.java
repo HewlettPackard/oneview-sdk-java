@@ -41,27 +41,27 @@ import com.hp.ov.sdk.rest.http.core.UrlParameter;
 @RunWith(MockitoJUnitRunner.class)
 public class FcNetworkClientTest {
 
-    private static final String ANY_FC_RESOURCE_ID = "random-UUID";
-    private static final String ANY_FC_RESOURCE_NAME = "random-Name";
+    private static final String ANY_RESOURCE_ID = "random-UUID";
+    private static final String ANY_RESOURCE_NAME = "random-Name";
 
     @Mock
     private BaseClient baseClient;
 
     @InjectMocks
-    private FcNetworkClient fcClient;
+    private FcNetworkClient client;
 
     @Test
     public void shouldGetFcNetwork() {
-        fcClient.getById(ANY_FC_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.FC_NETWORK_URI + "/" + ANY_FC_RESOURCE_ID;
+        String expectedUri = ResourceUris.FC_NETWORK_URI + "/" + ANY_RESOURCE_ID;
 
         then(baseClient).should().getResource(expectedUri, FcNetwork.class);
     }
 
     @Test
     public void shouldGetAllFcNetwork() {
-        fcClient.getAll();
+        client.getAll();
 
         then(baseClient).should().getResourceCollection(ResourceUris.FC_NETWORK_URI, FcNetwork.class);
     }
@@ -71,10 +71,10 @@ public class FcNetworkClientTest {
         given(baseClient.getResourceCollection(anyString(), any(Class.class), any(UrlParameter.class)))
                 .willReturn(new ResourceCollection());
 
-        fcClient.getByName(ANY_FC_RESOURCE_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
         then(baseClient).should().getResourceCollection(ResourceUris.FC_NETWORK_URI,
-                FcNetwork.class, UrlParameter.getFilterByNameParameter(ANY_FC_RESOURCE_NAME));
+                FcNetwork.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
     }
 
     @Test
@@ -86,10 +86,10 @@ public class FcNetworkClientTest {
         given(baseClient.getResourceCollection(anyString(), any(Class.class), any(UrlParameter.class)))
                 .willReturn(fcNetworks);
 
-        FcNetwork fcNetwork = fcClient.getByName(ANY_FC_RESOURCE_NAME);
+        FcNetwork fcNetwork = client.getByName(ANY_RESOURCE_NAME);
 
         then(baseClient).should().getResourceCollection(ResourceUris.FC_NETWORK_URI,
-                FcNetwork.class, UrlParameter.getFilterByNameParameter(ANY_FC_RESOURCE_NAME));
+                FcNetwork.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
 
         assertThat(fcNetwork, is(notNullValue()));
     }
@@ -98,7 +98,7 @@ public class FcNetworkClientTest {
     public void shouldCreateFcNetwork() {
         FcNetwork fcNetwork = new FcNetwork();
 
-        fcClient.create(fcNetwork, false);
+        client.create(fcNetwork, false);
 
         then(baseClient).should().createResource(ResourceUris.FC_NETWORK_URI, fcNetwork, false);
     }
@@ -107,18 +107,18 @@ public class FcNetworkClientTest {
     public void shouldUpdateFcNetwork() {
         FcNetwork fcNetwork = new FcNetwork();
 
-        fcClient.update(ANY_FC_RESOURCE_ID, fcNetwork, false);
+        client.update(ANY_RESOURCE_ID, fcNetwork, false);
 
-        String expectedUri = ResourceUris.FC_NETWORK_URI + "/" + ANY_FC_RESOURCE_ID;
+        String expectedUri = ResourceUris.FC_NETWORK_URI + "/" + ANY_RESOURCE_ID;
 
         then(baseClient).should().updateResource(expectedUri, fcNetwork, false);
     }
 
     @Test
     public void shouldDeleteFcNetwork() {
-        fcClient.delete(ANY_FC_RESOURCE_ID, false);
+        client.delete(ANY_RESOURCE_ID, false);
 
-        String expectedUri = ResourceUris.FC_NETWORK_URI + "/" + ANY_FC_RESOURCE_ID;
+        String expectedUri = ResourceUris.FC_NETWORK_URI + "/" + ANY_RESOURCE_ID;
 
         then(baseClient).should().deleteResource(expectedUri, false);
     }

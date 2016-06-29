@@ -90,11 +90,6 @@ public class QosConfiguration extends BaseModelResource {
     }
 
     @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(configType)
@@ -103,6 +98,11 @@ public class QosConfiguration extends BaseModelResource {
                 .append(qosTrafficClassifiers)
                 .appendSuper(super.hashCode())
                 .toHashCode();
+    }
+
+    @Override
+    public boolean canEqual(Object obj) {
+        return (obj instanceof QosConfiguration);
     }
 
     @Override

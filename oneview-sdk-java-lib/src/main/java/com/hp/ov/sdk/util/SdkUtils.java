@@ -15,13 +15,8 @@
  *******************************************************************************/
 package com.hp.ov.sdk.util;
 
-import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
-import com.hp.ov.sdk.dto.generated.LocationEntry;
-import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClientImpl;
-import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClient;
-import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClientImpl;
 import com.hp.ov.sdk.rest.client.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.ServerHardwareClientImpl;
 import com.hp.ov.sdk.rest.client.StorageVolumeClient;
@@ -34,27 +29,22 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
  */
 @Deprecated
 public class SdkUtils {
-
-    private final LogicalInterconnectGroupClient logicalInterconnectGroupClient;
     private final ServerHardwareClient serverHardwareClient;
     private final EnclosureGroupClient enclosureGroupClient;
     private final StorageVolumeClient storageVolumeClient;
 
     private static final class SdkUtilsHolder {
-
         private static final SdkUtils INSTANCE = new SdkUtils(
-                LogicalInterconnectGroupClientImpl.getClient(),
                 ServerHardwareClientImpl.getClient(),
                 EnclosureGroupClientImpl.getClient(),
                 StorageVolumeClientImpl.getClient());
     }
 
-    private SdkUtils(LogicalInterconnectGroupClient logicalInterconnectGroupClient,
+    private SdkUtils(
         ServerHardwareClient serverHardwareClient,
         EnclosureGroupClient enclosureGroupClient,
         StorageVolumeClient storageVolumeClient) {
 
-        this.logicalInterconnectGroupClient = logicalInterconnectGroupClient;
         this.serverHardwareClient = serverHardwareClient;
         this.enclosureGroupClient = enclosureGroupClient;
         this.storageVolumeClient = storageVolumeClient;
@@ -62,27 +52,6 @@ public class SdkUtils {
 
     public static SdkUtils getInstance() {
         return SdkUtilsHolder.INSTANCE;
-    }
-
-    public String getPermittedInterconnectTypeUriForLigBasedOnBay(final RestParams params, final String ligName, final Integer bay) {
-        LogicalInterconnectGroups logicalInterconnectGroupsDto = logicalInterconnectGroupClient.getLogicalInterconnectGroupByName(params, ligName);
-        if (logicalInterconnectGroupsDto == null) {
-            return null;
-        }
-
-        if (logicalInterconnectGroupsDto.getInterconnectMapTemplate() == null) {
-            return null;
-        }
-
-        for (InterconnectMapEntryTemplate mapTemplate : logicalInterconnectGroupsDto.getInterconnectMapTemplate()
-                .getInterconnectMapEntryTemplates()) {
-            for (LocationEntry locationEntry : mapTemplate.getLogicalLocation().getLocationEntries()) {
-                if (locationEntry.getType().equals(LocationEntry.Type.Bay) && locationEntry.getRelativeValue().equals(bay)) {
-                    return mapTemplate.getPermittedInterconnectTypeUri();
-                }
-            }
-        }
-        return null;
     }
 
     public String getServerHardwareUri(final RestParams params, final String serverHardwareName) {
