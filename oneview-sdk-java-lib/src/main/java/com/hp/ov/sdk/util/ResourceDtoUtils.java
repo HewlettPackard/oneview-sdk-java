@@ -47,7 +47,6 @@ import com.hp.ov.sdk.dto.generated.StoragePath;
 import com.hp.ov.sdk.dto.generated.StoragePath.StorageTargetType;
 import com.hp.ov.sdk.dto.generated.UplinkSet;
 import com.hp.ov.sdk.dto.generated.VolumeAttachment;
-import com.hp.ov.sdk.dto.networking.ethernet.Bandwidth;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
 import com.hp.ov.sdk.dto.networking.networkset.NetworkSet;
@@ -116,14 +115,6 @@ public class ResourceDtoUtils {
 
         }
         return networkUris;
-    }
-
-    public Bandwidth buildBandwidth(final Double maxBandwidth, final Double minBandwidth) {
-
-        final Bandwidth bandwidth = new Bandwidth();
-        bandwidth.setMaximumBandwidth(maxBandwidth);
-        bandwidth.setTypicalBandwidth(minBandwidth);
-        return bandwidth;
     }
 
     public LogicalInterconnectGroups buildLogicalInterconnectGroupDto(final RestParams params,
