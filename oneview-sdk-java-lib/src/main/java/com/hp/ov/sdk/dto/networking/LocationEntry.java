@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking;
 
 import java.io.Serializable;
 
@@ -49,14 +49,15 @@ public class LocationEntry implements Serializable {
     public boolean equals(Object obj) {
         if (this == obj) return true;
 
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj instanceof LocationEntry) {
+            LocationEntry that = (LocationEntry) obj;
 
-        LocationEntry that = (LocationEntry) obj;
-
-        return new EqualsBuilder()
-                .append(type, that.type)
-                .append(value, that.value)
-                .isEquals();
+            return new EqualsBuilder()
+                    .append(type, that.type)
+                    .append(value, that.value)
+                    .isEquals();
+        }
+        return false;
     }
 
     @Override

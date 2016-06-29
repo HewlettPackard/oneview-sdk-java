@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hp.ov.sdk.dto.generated.SwitchManagementConnection;
+import com.hp.ov.sdk.dto.networking.switches.SwitchManagementConnection;
 
 public class AddLogicalSwitch implements Serializable {
 

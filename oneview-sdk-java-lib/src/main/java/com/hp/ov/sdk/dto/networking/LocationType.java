@@ -13,15 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking;
 
+public enum LocationType {
 
-public enum SwitchRole {
-
-    Access,
-    Aggregation,
-    Core,
-    Interconnect,
-    Unknown
+    Bay, Enclosure, Ip, Password, Port, UserId, StackingDomainId, StackingMemberId
 
 }
