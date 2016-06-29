@@ -16,7 +16,14 @@
 package com.hp.ov.sdk.dto;
 
 
-public class AllocatedCapacity {
+import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+public class AllocatedCapacity implements Serializable {
+
+    private static final long serialVersionUID = 6489451066416592780L;
 
     private String snapshotAllocatedCapacity;
     private String totalAllocatedCapacity;
@@ -46,4 +53,28 @@ public class AllocatedCapacity {
         this.volumeAllocatedCapacity = volumeAllocatedCapacity;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof AllocatedCapacity) {
+            AllocatedCapacity that = (AllocatedCapacity) obj;
+
+            return new EqualsBuilder()
+                    .append(snapshotAllocatedCapacity, that.snapshotAllocatedCapacity)
+                    .append(totalAllocatedCapacity, that.totalAllocatedCapacity)
+                    .append(volumeAllocatedCapacity, that.volumeAllocatedCapacity)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(snapshotAllocatedCapacity)
+                .append(totalAllocatedCapacity)
+                .append(volumeAllocatedCapacity)
+                .toHashCode();
+    }
 }

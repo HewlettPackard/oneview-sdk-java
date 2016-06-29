@@ -55,8 +55,6 @@ import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.rest.client.InterconnectTypeClient;
 import com.hp.ov.sdk.rest.client.InterconnectTypeClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.rest.client.StorageSystemClient;
-import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
@@ -65,12 +63,9 @@ public class ResourceDtoUtils {
     private static final String ACTIVE = "Active";
 
     private final OneViewClient oneViewClient;
-    private final StorageSystemClient storageSystemClient;
 
     public ResourceDtoUtils(OneViewClient oneViewClient) {
         this.oneViewClient = oneViewClient;
-
-        this.storageSystemClient = StorageSystemClientImpl.getClient();
     }
 
     public NetworkSet buildNetworkSetDto(String networkSetName, List<String> networkNames) {
@@ -301,11 +296,9 @@ public class ResourceDtoUtils {
             volumeAttachment.setVolumeStoragePoolUri(SdkUtils.getInstance().getStoragePoolFromVolume(params, volumeName));
             volumeAttachment.setVolumeStorageSystemUri(SdkUtils.getInstance().getStorageSystemFromVolume(params, volumeName));
 
-            final ResourceCollection<StorageTargetPort> storageTargetPortCollectionDto = storageSystemClient
-                    .getAllManagedPortsForStorageSystem(
-                            params,
-                            volumeAttachment.getVolumeStorageSystemUri().substring(
-                                    volumeAttachment.getVolumeStorageSystemUri().lastIndexOf("/") + 1));
+            ResourceCollection<StorageTargetPort> storageTargetPortCollectionDto = oneViewClient.storageSystem().getAllManagedPorts(
+                    volumeAttachment.getVolumeStorageSystemUri().substring(
+                            volumeAttachment.getVolumeStorageSystemUri().lastIndexOf("/") + 1));
 
             final List<StoragePath> storagePaths = new ArrayList<StoragePath>();
             for (int k = 0; k < storageTargetPortCollectionDto.getCount(); k++) {
