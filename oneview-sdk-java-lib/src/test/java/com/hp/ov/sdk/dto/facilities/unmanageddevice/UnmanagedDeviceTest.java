@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.uncategorized.unmanageddevice;
+package com.hp.ov.sdk.dto.facilities.unmanageddevice;
 
 import org.junit.Test;
 
