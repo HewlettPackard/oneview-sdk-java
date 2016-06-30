@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,24 +12,25 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
+
 package com.hp.ov.sdk.dto;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
- * The StorageSystemV2 data transfer object (DTO) contains the information used
+ * The StorageSystem data transfer object (DTO) contains the information used
  * to represent a storage system in the system. It is passed in to the
  * add/update storage system REST api, as well as the add/update storage system
  * through java client api.
  */
 
-public class StorageSystemV2 extends BaseModelResource {
+public class StorageSystem extends BaseModelResource {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     private String allocatedCapacity;
@@ -303,4 +304,59 @@ public class StorageSystemV2 extends BaseModelResource {
         this.unmanagedPorts = unmanagedPorts;
     }
 
+    @Override
+    public boolean canEqual(Object obj) {
+        return (obj instanceof StorageSystem);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof StorageSystem) {
+            StorageSystem that = (StorageSystem) obj;
+
+            return new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(allocatedCapacity, that.allocatedCapacity)
+                    .append(credentials, that.credentials)
+                    .append(firmware, that.firmware)
+                    .append(freeCapacity, that.freeCapacity)
+                    .append(managedDomain, that.managedDomain)
+                    .append(managedPools, that.managedPools)
+                    .append(managedPorts, that.managedPorts)
+                    .append(model, that.model)
+                    .append(refreshState, that.refreshState)
+                    .append(serialNumber, that.serialNumber)
+                    .append(stateReason, that.stateReason)
+                    .append(totalCapacity, that.totalCapacity)
+                    .append(unmanagedDomains, that.unmanagedDomains)
+                    .append(unmanagedPools, that.unmanagedPools)
+                    .append(unmanagedPorts, that.unmanagedPorts)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                .append(allocatedCapacity)
+                .append(credentials)
+                .append(firmware)
+                .append(freeCapacity)
+                .append(managedDomain)
+                .append(managedPools)
+                .append(managedPorts)
+                .append(model)
+                .append(refreshState)
+                .append(serialNumber)
+                .append(stateReason)
+                .append(totalCapacity)
+                .append(unmanagedDomains)
+                .append(unmanagedPools)
+                .append(unmanagedPorts)
+                .toHashCode();
+    }
 }

@@ -35,6 +35,7 @@ import com.hp.ov.sdk.rest.client.networking.SwitchClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
+import com.hp.ov.sdk.rest.client.storage.StorageSystemClient;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -57,6 +58,7 @@ public class OneViewClient {
     private ConnectionTemplateClient connectionTemplateClient;
     private FabricClient fabricClient;
     private SwitchClient switchClient;
+    private StorageSystemClient storageSystemClient;
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
         this.baseClient = new BaseClient(params,
@@ -118,6 +120,10 @@ public class OneViewClient {
 
     public synchronized SwitchClient switches() {
         return this.getClient(this.switchClient, SwitchClient.class);
+    }
+
+    public synchronized StorageSystemClient storageSystem() {
+        return this.getClient(this.storageSystemClient, StorageSystemClient.class);
     }
 
     private <T> T getClient(T client, Class<T> clientClass) {

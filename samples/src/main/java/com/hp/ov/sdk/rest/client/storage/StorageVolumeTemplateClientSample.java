@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.storage;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplate;
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -27,10 +28,9 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.StoragePoolClient;
 import com.hp.ov.sdk.rest.client.StoragePoolClientImpl;
-import com.hp.ov.sdk.rest.client.StorageSystemClient;
-import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
 import com.hp.ov.sdk.rest.client.StorageVolumeTemplateClient;
 import com.hp.ov.sdk.rest.client.StorageVolumeTemplateClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -61,9 +61,11 @@ public class StorageVolumeTemplateClientSample {
     private RestParams params;
 
     public StorageVolumeTemplateClientSample() {
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
         this.storageVolumeTemplateClient = StorageVolumeTemplateClientImpl.getClient();
         this.storagePoolClient = StoragePoolClientImpl.getClient();
-        this.storageSystemClient = StorageSystemClientImpl.getClient();
+        this.storageSystemClient = oneViewClient.storageSystem();
     }
 
     private void getStorageVolumeTemplateById() throws InstantiationException, IllegalAccessException {
@@ -330,7 +332,7 @@ public class StorageVolumeTemplateClientSample {
     }
 
     private StorageVolumeTemplate buildTestStorageVolumeTemplateDto() {
-        String storageSystemUri = storageSystemClient.getStorageSystemByName(params, storageSystemName).getUri();
+        String storageSystemUri = storageSystemClient.getByName(storageSystemName).getUri();
         String storagePoolUri = storagePoolClient.getStoragePoolByName(params,
                 storagePoolName, storageSystemUri).getUri();
 
