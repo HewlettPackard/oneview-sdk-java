@@ -16,7 +16,11 @@
 
 package com.hp.ov.sdk.rest.client;
 
+import java.lang.reflect.Constructor;
+
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
+import com.hp.ov.sdk.exceptions.SDKErrorEnum;
+import com.hp.ov.sdk.exceptions.SDKException;
 import com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
@@ -59,52 +63,44 @@ public class OneViewClient {
     }
 
     public synchronized FcoeNetworkClient fcoeNetwork() {
-        if (this.fcoeNetworkClient == null) {
-            this.fcoeNetworkClient = new FcoeNetworkClient(this.baseClient);
-        }
-        return this.fcoeNetworkClient;
+        return this.getClient(this.fcoeNetworkClient, FcoeNetworkClient.class);
     }
 
     public synchronized FcNetworkClient fcNetwork() {
-        if (this.fcNetworkClient == null) {
-            this.fcNetworkClient = new FcNetworkClient(this.baseClient);
-        }
-        return this.fcNetworkClient;
+        return this.getClient(this.fcNetworkClient, FcNetworkClient.class);
     }
 
     public synchronized EthernetNetworkClient ethernetNetwork() {
-        if (this.ethernetNetworkClient == null) {
-            this.ethernetNetworkClient = new EthernetNetworkClient(this.baseClient);
-        }
-        return this.ethernetNetworkClient;
+        return this.getClient(this.ethernetNetworkClient, EthernetNetworkClient.class);
     }
 
     public synchronized LogicalSwitchClient logicalSwitch() {
-        if (this.logicalSwitchClient == null) {
-            this.logicalSwitchClient = new LogicalSwitchClient(this.baseClient);
-        }
-        return this.logicalSwitchClient;
+        return this.getClient(this.logicalSwitchClient, LogicalSwitchClient.class);
     }
 
     public synchronized LogicalSwitchGroupClient logicalSwitchGroup() {
-        if (this.logicalSwitchGroupClient == null) {
-            this.logicalSwitchGroupClient = new LogicalSwitchGroupClient(this.baseClient);
-        }
-        return this.logicalSwitchGroupClient;
+        return this.getClient(this.logicalSwitchGroupClient, LogicalSwitchGroupClient.class);
     }
 
     public synchronized NetworkSetClient networkSet() {
-        if (this.networkSetClient == null) {
-            this.networkSetClient = new NetworkSetClient(this.baseClient);
-        }
-        return this.networkSetClient;
+        return this.getClient(this.networkSetClient, NetworkSetClient.class);
     }
 
     public synchronized SwitchTypeClient switchType() {
-        if (this.switchTypeClient == null) {
-            this.switchTypeClient = new SwitchTypeClient(this.baseClient);
+        return this.getClient(this.switchTypeClient, SwitchTypeClient.class);
+    }
+
+    private <T> T getClient(T client, Class<T> clientClass) {
+        if (client == null) {
+            try {
+                Constructor<T> constructor = clientClass.getConstructor(BaseClient.class);
+
+                client = constructor.newInstance(this.baseClient);
+            } catch (ReflectiveOperationException e) {
+                throw new SDKException(SDKErrorEnum.internalServerError, null, null, null, null, e);
+            }
         }
-        return this.switchTypeClient;
+        return client;
     }
 
 }

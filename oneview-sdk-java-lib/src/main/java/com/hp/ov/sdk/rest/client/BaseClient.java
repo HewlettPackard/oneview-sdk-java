@@ -116,11 +116,14 @@ public class BaseClient {
         return this.executeMonitorableRequest(request, aSync);
     }
 
-    public TaskResourceV2 deleteResource(String uri, boolean aSync) {
+    public TaskResourceV2 deleteResource(String uri, boolean aSync, UrlParameter... queries) {
         this.validateNotNullArguments(uri);
 
         Request request = new Request(HttpMethodType.DELETE, uri);
 
+        for (UrlParameter query : queries) {
+            request.addQuery(query);
+        }
         return this.executeMonitorableRequest(request, aSync);
     }
 
@@ -129,6 +132,9 @@ public class BaseClient {
 
         String response = this.executeRequest(request);
 
+        if (String.class.equals(returnType)) {
+            return (T) response;
+        }
         return adaptor.buildResourceObject(response, returnType);
     }
 
