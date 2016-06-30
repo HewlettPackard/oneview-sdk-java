@@ -21,6 +21,7 @@ import java.lang.reflect.Constructor;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKException;
+import com.hp.ov.sdk.rest.client.facilities.DataCenterClient;
 import com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
@@ -47,6 +48,7 @@ public class OneViewClient {
     private LogicalSwitchGroupClient logicalSwitchGroupClient;
     private NetworkSetClient networkSetClient;
     private SwitchTypeClient switchTypeClient;
+    private DataCenterClient dataCenterClient;
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
         this.baseClient = new BaseClient(params,
@@ -88,6 +90,10 @@ public class OneViewClient {
 
     public synchronized SwitchTypeClient switchType() {
         return this.getClient(this.switchTypeClient, SwitchTypeClient.class);
+    }
+
+    public synchronized DataCenterClient dataCenter() {
+        return this.getClient(this.dataCenterClient, DataCenterClient.class);
     }
 
     private <T> T getClient(T client, Class<T> clientClass) {

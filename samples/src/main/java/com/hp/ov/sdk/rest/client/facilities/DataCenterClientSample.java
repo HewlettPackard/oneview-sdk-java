@@ -18,22 +18,13 @@ package com.hp.ov.sdk.rest.client.facilities;
 
 import java.util.List;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.facilities.datacenter.DataCenter;
 import com.hp.ov.sdk.dto.facilities.datacenter.DeratingType;
 import com.hp.ov.sdk.dto.facilities.datacenter.VisualContent;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.DataCenterClient;
-import com.hp.ov.sdk.rest.client.DataCenterClientImpl;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class DataCenterClientSample {
 
@@ -46,247 +37,86 @@ public class DataCenterClientSample {
     private final DataCenterClient dataCenterClient;
 
     public DataCenterClientSample() {
-        this.dataCenterClient = DataCenterClientImpl.getClient();
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
+        this.dataCenterClient = oneViewClient.dataCenter();
     }
 
     private void getDataCenter() {
-        RestParams params = new RestParams();
-        try {
-            params = HPOneViewCredential.createCredentials();
+        DataCenter dataCenter = this.dataCenterClient.getById(DATA_CENTER_RESOURCE_ID);
 
-            DataCenter dataCenter = this.dataCenterClient.getDataCenter(params, DATA_CENTER_RESOURCE_ID);
-
-            System.out.println("DataCenterClientSample : getDataCenter : " +
-                    "DataCenter object returned to client : " + dataCenter);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("DataCenterClientSample : getDataCenter : " +
-                    "the resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("DataCenterClientSample : getDataCenter : " +
-                    "no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("DataCenterClientSample : getDataCenter : " +
-                    "appliance not reachable at : " + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("DataCenterClientSample : getDataCenter : " +
-                    "No response from appliance : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("DataCenterClientSample : getDataCenter : " +
-                    "arguments are null ");
-        }
+        System.out.println("DataCenterClientSample : getDataCenter : " +
+                "DataCenter object returned to client : " + dataCenter.toJsonString());
     }
 
     private void getAllDataCenters() {
-        RestParams params = new RestParams();
-        try {
-            params = HPOneViewCredential.createCredentials();
+        ResourceCollection<DataCenter> dataCenters = this.dataCenterClient.getAll();
 
-            ResourceCollection<DataCenter> dataCenters = this.dataCenterClient.getAllDataCenters(params);
-
-            System.out.println("DataCenterClientSample : getAllDataCenters : " +
-                    "DataCenterCollection object returned to client (count) : " + dataCenters.getCount());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("DataCenterClientSample : getAllDataCenters : " +
-                    "the resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("DataCenterClientSample : getAllDataCenters : " +
-                    "no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("DataCenterClientSample : getAllDataCenters : " +
-                    "appliance not reachable at : " + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("DataCenterClientSample : getAllDataCenters : " +
-                    "No response from appliance : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("DataCenterClientSample : getAllDataCenters : " +
-                    "arguments are null ");
-        }
+        System.out.println("DataCenterClientSample : getAllDataCenters : " +
+                "DataCenters returned to client : " + dataCenters.toJsonString());
     }
 
     private void getDataCenterByName() {
-        RestParams params = new RestParams();
-        try {
-            params = HPOneViewCredential.createCredentials();
+        DataCenter dataCenter = this.dataCenterClient.getByName(DATA_CENTER_NAME).get(0);
 
-            DataCenter dataCenter = this.dataCenterClient.getDataCenterByName(params, DATA_CENTER_NAME);
-
-            System.out.println("DataCenterClientSample : getDataCenterByName : " +
-                    "DataCenter object returned to client : " + dataCenter);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("DataCenterClientSample : getDataCenterByName : " +
-                    "the resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("DataCenterClientSample : getDataCenterByName : " +
-                    "no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("DataCenterClientSample : getDataCenterByName : " +
-                    "appliance not reachable at : " + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("DataCenterClientSample : getDataCenterByName : " +
-                    "No response from appliance : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("DataCenterClientSample : getDataCenterByName : " +
-                    "arguments are null ");
-        }
+        System.out.println("DataCenterClientSample : getDataCenterByName : " +
+                "DataCenter object returned to client : " + dataCenter.toJsonString());
     }
 
     private void addDataCenter() {
-        RestParams params = new RestParams();
-        try {
-            params = HPOneViewCredential.createCredentials();
+        DataCenter dataCenter = new DataCenter();
 
-            DataCenter dataCenter = new DataCenter();
+        dataCenter.setName(DATA_CENTER_NAME);
+        dataCenter.setCoolingCapacity(Integer.valueOf(5));
+        dataCenter.setCostPerKilowattHour(Double.valueOf(0.10));
+        dataCenter.setCurrency("USD");
+        dataCenter.setDeratingType(DeratingType.NaJp);
+        dataCenter.setDeratingPercentage(Double.valueOf(20.0));
+        dataCenter.setDefaultPowerLineVoltage(Integer.valueOf(220));
+        dataCenter.setCoolingMultiplier(Double.valueOf(1.5));
+        dataCenter.setWidth(Integer.valueOf(4000));
+        dataCenter.setDepth(Integer.valueOf(5000));
 
-            dataCenter.setName(DATA_CENTER_NAME);
-            dataCenter.setCoolingCapacity(Integer.valueOf(5));
-            dataCenter.setCostPerKilowattHour(Double.valueOf(0.10));
-            dataCenter.setCurrency("USD");
-            dataCenter.setDeratingType(DeratingType.NaJp);
-            dataCenter.setDeratingPercentage(Double.valueOf(20.0));
-            dataCenter.setDefaultPowerLineVoltage(Integer.valueOf(220));
-            dataCenter.setCoolingMultiplier(Double.valueOf(1.5));
-            dataCenter.setWidth(Integer.valueOf(4000));
-            dataCenter.setDepth(Integer.valueOf(5000));
+        DataCenter addedDataCenter = this.dataCenterClient.add(dataCenter);
 
-            DataCenter addedDataCenter = this.dataCenterClient.addDataCenter(params, dataCenter);
-
-            System.out.println("DataCenterClientSample : addDataCenter : " +
-                    "DataCenter object returned to client : " + addedDataCenter);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("DataCenterClientSample : addDataCenter : " +
-                    "the resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("DataCenterClientSample : addDataCenter : " +
-                    "no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("DataCenterClientSample : addDataCenter : " +
-                    "appliance not reachable at : " + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("DataCenterClientSample : addDataCenter : " +
-                    "No response from appliance : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("DataCenterClientSample : addDataCenter : " +
-                    "arguments are null ");
-        }
+        System.out.println("DataCenterClientSample : addDataCenter : " +
+                "DataCenter object returned to client : " + addedDataCenter.toJsonString());
     }
 
     private void updateDataCenter() {
-        RestParams params = new RestParams();
-        try {
-            params = HPOneViewCredential.createCredentials();
+        DataCenter dataCenter = this.dataCenterClient.getByName(DATA_CENTER_NAME).get(0);
+        String resourceId = dataCenter.getResourceId();
 
-            DataCenter dataCenter = this.dataCenterClient.getDataCenterByName(params, DATA_CENTER_NAME);
-            String resourceId = UrlUtils.getResourceIdFromUri(dataCenter.getUri());
+        dataCenter.setCurrency("BRL");
 
-            dataCenter.setCurrency("BRL");
+        DataCenter updatedDataCenter = this.dataCenterClient.update(resourceId, dataCenter);
 
-            DataCenter updatedDataCenter = this.dataCenterClient.updateDataCenter(params, resourceId, dataCenter);
-
-            System.out.println("DataCenterClientSample : updateDataCenter : " +
-                    "DataCenter object returned to client : " + updatedDataCenter);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("DataCenterClientSample : updateDataCenter : " +
-                    "the resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("DataCenterClientSample : updateDataCenter : " +
-                    "no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("DataCenterClientSample : updateDataCenter : " +
-                    "appliance not reachable at : " + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("DataCenterClientSample : updateDataCenter : " +
-                    "No response from appliance : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("DataCenterClientSample : updateDataCenter : " +
-                    "arguments are null ");
-        }
+        System.out.println("DataCenterClientSample : updateDataCenter : " +
+                "DataCenter object returned to client : " + updatedDataCenter.toJsonString());
     }
 
     private void getVisualContent() {
-        RestParams params = new RestParams();
-        try {
-            params = HPOneViewCredential.createCredentials();
+        DataCenter dataCenter = this.dataCenterClient.getByName(DATA_CENTER_NAME).get(0);
+        List<VisualContent> visualContent = this.dataCenterClient.getVisualContent(dataCenter.getResourceId());
 
-            String resourceId = this.dataCenterClient.getId(params, DATA_CENTER_NAME);
-            List<VisualContent> visualContent = this.dataCenterClient.getVisualContent(params, resourceId);
-
-            System.out.println("DataCenterClientSample : getVisualContent : " +
-                    "VisualContent list returned to client  (count) : " + visualContent.size());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("DataCenterClientSample : getVisualContent : " +
-                    "the resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("DataCenterClientSample : getVisualContent : " +
-                    "no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("DataCenterClientSample : getVisualContent : " +
-                    "appliance not reachable at : " + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("DataCenterClientSample : getVisualContent : " +
-                    "No response from appliance : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("DataCenterClientSample : getVisualContent : " +
-                    "arguments are null ");
-        }
+        System.out.println("DataCenterClientSample : getVisualContent : " +
+                "VisualContent list returned to client  (count) : " + visualContent.size());
     }
 
     private void removeDataCenter() {
-        RestParams params = new RestParams();
-        try {
-            params = HPOneViewCredential.createCredentials();
+        DataCenter dataCenter = this.dataCenterClient.getByName(DATA_CENTER_NAME).get(0);
+        String response = this.dataCenterClient.remove(dataCenter.getResourceId());
 
-            String resourceId = this.dataCenterClient.getId(params, DATA_CENTER_NAME);
-            String response = this.dataCenterClient.removeDataCenter(params, resourceId);
-
-            System.out.println("DataCenterClientSample : removeDataCenter : " +
-                    "response returned to client : " + response);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("DataCenterClientSample : removeDataCenter : " +
-                    "the resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("DataCenterClientSample : removeDataCenter : " +
-                    "no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("DataCenterClientSample : removeDataCenter : " +
-                    "appliance not reachable at : " + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("DataCenterClientSample : removeDataCenter : " +
-                    "No response from appliance : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("DataCenterClientSample : removeDataCenter : " +
-                    "arguments are null ");
-        }
+        System.out.println("DataCenterClientSample : removeDataCenter : " +
+                "Response returned to client : " + response);
     }
 
     private void removeDataCenterByFilter() {
-        RestParams params = new RestParams();
-        try {
-            params = HPOneViewCredential.createCredentials();
+        String filter = "name='" + DATA_CENTER_NAME +"'";
+        TaskResourceV2 task = this.dataCenterClient.removeByFilter(filter, false);
 
-            String filter = "name='" + DATA_CENTER_NAME +"'";
-            TaskResourceV2 task = this.dataCenterClient.removeDataCenterByFilter(params, filter, false);
-
-            System.out.println("DataCenterClientSample : removeDataCenterByFilter : " +
-                    "task object returned to client : " + task);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("DataCenterClientSample : removeDataCenterByFilter : " +
-                    "the resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("DataCenterClientSample : removeDataCenterByFilter : " +
-                    "no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("DataCenterClientSample : removeDataCenterByFilter : " +
-                    "appliance not reachable at : " + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("DataCenterClientSample : removeDataCenterByFilter : " +
-                    "No response from appliance : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("DataCenterClientSample : removeDataCenterByFilter : " +
-                    "arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("DataCenterClientSample : removeDataCenterByFilter : "
-                    + "errors in task, please check task resource for more details");
-        }
+        System.out.println("DataCenterClientSample : removeDataCenterByFilter : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
     public static void main(String[] args) {
@@ -298,10 +128,9 @@ public class DataCenterClientSample {
         sample.updateDataCenter();
         sample.getDataCenterByName();
         sample.getVisualContent();
-
         sample.removeDataCenter();
 
-        /* sample.addDataCenter(); */
+        sample.addDataCenter();
         sample.removeDataCenterByFilter();
     }
 
