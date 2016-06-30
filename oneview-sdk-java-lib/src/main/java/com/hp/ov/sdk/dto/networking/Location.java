@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.generated;
+
+package com.hp.ov.sdk.dto.networking;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,44 +24,46 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class SwitchManagementConnection implements Serializable {
 
-    private static final long serialVersionUID = 1877808539542026858L;
+public class Location implements Serializable {
 
-    private List<ConnectionProperty> connectionProperties = new ArrayList<>();
+    private static final long serialVersionUID = 229124690819104043L;
 
-    public List<ConnectionProperty> getConnectionProperties() {
-        return connectionProperties;
+    private List<LocationEntry> locationEntries = new ArrayList<>();
+
+    public List<LocationEntry> getLocationEntries() {
+        return locationEntries;
     }
 
-    public void setConnectionProperties(List<ConnectionProperty> connectionProperties) {
-        this.connectionProperties = connectionProperties;
+    public void setLocationEntries(List<LocationEntry> locationEntries) {
+        this.locationEntries = locationEntries;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
 
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj instanceof Location) {
+            Location location = (Location) obj;
 
-        SwitchManagementConnection that = (SwitchManagementConnection) obj;
-
-        return new EqualsBuilder()
-                .append(connectionProperties, that.connectionProperties)
-                .isEquals();
+            return new EqualsBuilder()
+                    .append(locationEntries, location.locationEntries)
+                    .isEquals();
+        }
+        return false;
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(connectionProperties)
+                .append(locationEntries)
                 .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("connectionProperties", connectionProperties)
+                .append("locationEntries", locationEntries)
                 .toString();
     }
 }

@@ -31,6 +31,7 @@ import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchGroupClient;
 import com.hp.ov.sdk.rest.client.networking.NetworkSetClient;
+import com.hp.ov.sdk.rest.client.networking.SwitchClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
@@ -55,6 +56,7 @@ public class OneViewClient {
     private UnmanagedDeviceClient unmanagedDeviceClient;
     private ConnectionTemplateClient connectionTemplateClient;
     private FabricClient fabricClient;
+    private SwitchClient switchClient;
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
         this.baseClient = new BaseClient(params,
@@ -112,6 +114,10 @@ public class OneViewClient {
 
     public synchronized FabricClient fabric() {
         return this.getClient(this.fabricClient, FabricClient.class);
+    }
+
+    public synchronized SwitchClient switches() {
+        return this.getClient(this.switchClient, SwitchClient.class);
     }
 
     private <T> T getClient(T client, Class<T> clientClass) {

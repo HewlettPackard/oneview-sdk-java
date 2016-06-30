@@ -29,7 +29,7 @@ import com.hp.ov.sdk.dto.SnmpVersion;
 import com.hp.ov.sdk.dto.SwitchCredentialConfiguration;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.ConnectionProperty;
-import com.hp.ov.sdk.dto.generated.SwitchManagementConnection;
+import com.hp.ov.sdk.dto.networking.switches.SwitchManagementConnection;
 import com.hp.ov.sdk.dto.generated.ValueFormat;
 import com.hp.ov.sdk.dto.generated.ValueType;
 import com.hp.ov.sdk.rest.client.OneViewClient;

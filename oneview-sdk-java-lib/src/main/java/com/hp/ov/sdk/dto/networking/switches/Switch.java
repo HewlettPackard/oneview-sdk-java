@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking.switches;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
-import com.hp.ov.sdk.dto.Location;
+import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
+import com.hp.ov.sdk.dto.generated.LogicalSwitchVpc;
+import com.hp.ov.sdk.dto.generated.Port;
+import com.hp.ov.sdk.dto.networking.Location;
 
 /**
  * The Switch data transfer object (DTO) contains the information used to
@@ -140,27 +142,33 @@ public final class Switch extends BaseModelResource {
     }
 
     @Override
+    public boolean canEqual(Object obj) {
+        return (obj instanceof Switch);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
 
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj instanceof Switch) {
+            Switch that = (Switch) obj;
 
-        Switch aSwitch = (Switch) obj;
-
-        return new EqualsBuilder()
-                .appendSuper(super.equals(obj))
-                .append(chassisId, aSwitch.chassisId)
-                .append(environmentalConfiguration, aSwitch.environmentalConfiguration)
-                .append(firmwareVersion, aSwitch.firmwareVersion)
-                .append(logicalSwitchUri, aSwitch.logicalSwitchUri)
-                .append(logicalSwitchVPC, aSwitch.logicalSwitchVPC)
-                .append(modelName, aSwitch.modelName)
-                .append(ports, aSwitch.ports)
-                .append(roles, aSwitch.roles)
-                .append(serialNumber, aSwitch.serialNumber)
-                .append(switchLocation, aSwitch.switchLocation)
-                .append(switchManagementConnection, aSwitch.switchManagementConnection)
-                .isEquals();
+            return new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(chassisId, that.chassisId)
+                    .append(environmentalConfiguration, that.environmentalConfiguration)
+                    .append(firmwareVersion, that.firmwareVersion)
+                    .append(logicalSwitchUri, that.logicalSwitchUri)
+                    .append(logicalSwitchVPC, that.logicalSwitchVPC)
+                    .append(modelName, that.modelName)
+                    .append(ports, that.ports)
+                    .append(roles, that.roles)
+                    .append(serialNumber, that.serialNumber)
+                    .append(switchLocation, that.switchLocation)
+                    .append(switchManagementConnection, that.switchManagementConnection)
+                    .isEquals();
+        }
+        return false;
     }
 
     @Override
@@ -181,21 +189,4 @@ public final class Switch extends BaseModelResource {
                 .toHashCode();
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .appendSuper(super.toString())
-                .append("chassisId", chassisId)
-                .append("environmentalConfiguration", environmentalConfiguration)
-                .append("firmwareVersion", firmwareVersion)
-                .append("logicalSwitchUri", logicalSwitchUri)
-                .append("logicalSwitchVPC", logicalSwitchVPC)
-                .append("modelName", modelName)
-                .append("ports", ports)
-                .append("roles", roles)
-                .append("serialNumber", serialNumber)
-                .append("switchLocation", switchLocation)
-                .append("switchManagementConnection", switchManagementConnection)
-                .toString();
-    }
 }
