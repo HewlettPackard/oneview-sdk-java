@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hp.ov.sdk.dto;
+ */
+package com.hp.ov.sdk.dto.networking.fabric;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import com.hp.ov.sdk.dto.BaseModelResource;
 
 public class Fabric extends BaseModelResource {
 
@@ -34,5 +39,33 @@ public class Fabric extends BaseModelResource {
      */
     public void setDomainUri(String domainUri) {
         this.domainUri = domainUri;
+    }
+
+    @Override
+    public boolean canEqual(Object obj) {
+        return (obj instanceof Fabric);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof Fabric) {
+            Fabric fabric = (Fabric) obj;
+
+            return new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(domainUri, fabric.domainUri)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                .append(domainUri)
+                .toHashCode();
     }
 }

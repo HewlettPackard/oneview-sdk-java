@@ -25,6 +25,7 @@ import com.hp.ov.sdk.rest.client.facilities.DataCenterClient;
 import com.hp.ov.sdk.rest.client.facilities.UnmanagedDeviceClient;
 import com.hp.ov.sdk.rest.client.networking.ConnectionTemplateClient;
 import com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient;
+import com.hp.ov.sdk.rest.client.networking.FabricClient;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchClient;
@@ -53,6 +54,7 @@ public class OneViewClient {
     private DataCenterClient dataCenterClient;
     private UnmanagedDeviceClient unmanagedDeviceClient;
     private ConnectionTemplateClient connectionTemplateClient;
+    private FabricClient fabricClient;
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
         this.baseClient = new BaseClient(params,
@@ -106,6 +108,10 @@ public class OneViewClient {
 
     public synchronized ConnectionTemplateClient connectionTemplate() {
         return this.getClient(this.connectionTemplateClient, ConnectionTemplateClient.class);
+    }
+
+    public synchronized FabricClient fabric() {
+        return this.getClient(this.fabricClient, FabricClient.class);
     }
 
     private <T> T getClient(T client, Class<T> clientClass) {
