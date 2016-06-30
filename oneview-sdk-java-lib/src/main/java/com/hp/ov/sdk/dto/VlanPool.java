@@ -13,57 +13,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.hp.ov.sdk.dto;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class Fabric extends BaseModelResource {
+public class VlanPool extends BaseModelResource {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -9199586230195072499L;
 
-    private String domainUri;
-    private VlanPool reservedVlanRange;
+    private int start;
+    private int length;
 
-    /**
-     * @return the domain URI
-     */
-    public String getDomainUri() {
-        return domainUri;
+    public int getStart() {
+        return start;
     }
 
-    /**
-     * @param domainUri
-     *  The domain URI
-     */
-    public void setDomainUri(String domainUri) {
-        this.domainUri = domainUri;
+    public void setStart(int start) {
+        this.start = start;
     }
 
-    public VlanPool getReservedVlanRange() {
-        return reservedVlanRange;
+    public int getLength() {
+        return length;
     }
 
-    public void setReservedVlanRange(VlanPool reservedVlanRange) {
-        this.reservedVlanRange = reservedVlanRange;
+    public void setLength(int length) {
+        this.length = length;
     }
 
     @Override
     public boolean canEqual(Object obj) {
-        return (obj instanceof Fabric);
+        return (obj instanceof VlanPool);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
 
-        if (obj instanceof Fabric) {
-            Fabric fabric = (Fabric) obj;
+        if (obj instanceof VlanPool) {
+            VlanPool vlanPool = (VlanPool) obj;
 
             return new EqualsBuilder()
                     .appendSuper(super.equals(obj))
-                    .append(domainUri, fabric.domainUri)
-                    .append(reservedVlanRange, fabric.reservedVlanRange)
+                    .append(start, vlanPool.start)
+                    .append(length, vlanPool.length)
                     .isEquals();
         }
         return false;
@@ -73,8 +67,8 @@ public class Fabric extends BaseModelResource {
     public int hashCode() {
         return new HashCodeBuilder()
                 .appendSuper(super.hashCode())
-                .append(domainUri)
-                .append(reservedVlanRange)
+                .append(start)
+                .append(length)
                 .toHashCode();
     }
 }
