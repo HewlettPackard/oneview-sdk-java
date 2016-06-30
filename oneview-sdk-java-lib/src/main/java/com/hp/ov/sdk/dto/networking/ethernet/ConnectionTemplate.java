@@ -17,7 +17,6 @@ package com.hp.ov.sdk.dto.networking.ethernet;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.hp.ov.sdk.dto.BaseModelResource;
 
@@ -34,6 +33,11 @@ public class ConnectionTemplate extends BaseModelResource {
 
     public void setBandwidth(final Bandwidth bandwidth) {
         this.bandwidth = bandwidth;
+    }
+
+    @Override
+    public boolean canEqual(Object obj) {
+        return (obj instanceof ConnectionTemplate);
     }
 
     @Override
@@ -59,11 +63,4 @@ public class ConnectionTemplate extends BaseModelResource {
                 .toHashCode();
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .appendSuper(super.toString())
-                .append("bandwidth", bandwidth)
-                .toString();
-    }
 }

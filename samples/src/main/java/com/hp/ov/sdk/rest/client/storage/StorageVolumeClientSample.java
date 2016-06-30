@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.storage;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.AddStorageVolumeV2;
 import com.hp.ov.sdk.dto.AttachableStorageVolume;
@@ -32,10 +33,9 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.StoragePoolClient;
 import com.hp.ov.sdk.rest.client.StoragePoolClientImpl;
-import com.hp.ov.sdk.rest.client.StorageSystemClient;
-import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
 import com.hp.ov.sdk.rest.client.StorageVolumeClient;
 import com.hp.ov.sdk.rest.client.StorageVolumeClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -69,9 +69,11 @@ public class StorageVolumeClientSample {
     // ================================
 
     private StorageVolumeClientSample() {
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
         this.storageVolumeClient = StorageVolumeClientImpl.getClient();
         this.storagePoolClient = StoragePoolClientImpl.getClient();
-        this.storageSystemClient = StorageSystemClientImpl.getClient();
+        this.storageSystemClient = oneViewClient.storageSystem();
     }
 
     private void getStorageVolumeById() throws InstantiationException, IllegalAccessException {
@@ -598,7 +600,7 @@ public class StorageVolumeClientSample {
     }
 
     private AddStorageVolumeV2 buildTestStorageVolumeDto() {
-        String storageSystemUri = storageSystemClient.getStorageSystemByName(params, storageSystemName).getUri();
+        String storageSystemUri = storageSystemClient.getByName(storageSystemName).getUri();
         String storagePoolUri = storagePoolClient.getStoragePoolByName(params, storagePoolName, storageSystemUri).getUri();
 
         AddStorageVolumeV2 dto = new AddStorageVolumeV2();
@@ -622,7 +624,7 @@ public class StorageVolumeClientSample {
     }
 
     private AddStorageVolumeV2 buildTestPrivateStorageVolumeDto() {
-        String storageSystemUri = storageSystemClient.getStorageSystemByName(params, storageSystemName).getUri();
+        String storageSystemUri = storageSystemClient.getByName(storageSystemName).getUri();
         String storagePoolUri = storagePoolClient.getStoragePoolByName(params, storagePoolName, storageSystemUri).getUri();
 
         final AddStorageVolumeV2 dto = new AddStorageVolumeV2();

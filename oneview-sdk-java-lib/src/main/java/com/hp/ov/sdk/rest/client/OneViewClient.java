@@ -21,15 +21,23 @@ import java.lang.reflect.Constructor;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKException;
+import com.hp.ov.sdk.rest.client.facilities.DataCenterClient;
+import com.hp.ov.sdk.rest.client.facilities.UnmanagedDeviceClient;
+import com.hp.ov.sdk.rest.client.networking.ConnectionTemplateClient;
 import com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient;
+import com.hp.ov.sdk.rest.client.networking.FabricClient;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
+import com.hp.ov.sdk.rest.client.networking.InterconnectTypeClient;
+import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchGroupClient;
 import com.hp.ov.sdk.rest.client.networking.NetworkSetClient;
+import com.hp.ov.sdk.rest.client.networking.SwitchClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
+import com.hp.ov.sdk.rest.client.storage.StorageSystemClient;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -47,6 +55,14 @@ public class OneViewClient {
     private LogicalSwitchGroupClient logicalSwitchGroupClient;
     private NetworkSetClient networkSetClient;
     private SwitchTypeClient switchTypeClient;
+    private DataCenterClient dataCenterClient;
+    private UnmanagedDeviceClient unmanagedDeviceClient;
+    private ConnectionTemplateClient connectionTemplateClient;
+    private FabricClient fabricClient;
+    private SwitchClient switchClient;
+    private StorageSystemClient storageSystemClient;
+    private InterconnectTypeClient interconnectTypeClient;
+    private LogicalInterconnectGroupClient logicalInterconnectGroupClient;
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
         this.baseClient = new BaseClient(params,
@@ -88,6 +104,38 @@ public class OneViewClient {
 
     public synchronized SwitchTypeClient switchType() {
         return this.getClient(this.switchTypeClient, SwitchTypeClient.class);
+    }
+
+    public synchronized DataCenterClient dataCenter() {
+        return this.getClient(this.dataCenterClient, DataCenterClient.class);
+    }
+
+    public synchronized UnmanagedDeviceClient unmanagedDevice() {
+        return this.getClient(this.unmanagedDeviceClient, UnmanagedDeviceClient.class);
+    }
+
+    public synchronized ConnectionTemplateClient connectionTemplate() {
+        return this.getClient(this.connectionTemplateClient, ConnectionTemplateClient.class);
+    }
+
+    public synchronized FabricClient fabric() {
+        return this.getClient(this.fabricClient, FabricClient.class);
+    }
+
+    public synchronized SwitchClient switches() {
+        return this.getClient(this.switchClient, SwitchClient.class);
+    }
+
+    public synchronized StorageSystemClient storageSystem() {
+        return this.getClient(this.storageSystemClient, StorageSystemClient.class);
+    }
+
+    public synchronized InterconnectTypeClient interconnectType() {
+        return this.getClient(this.interconnectTypeClient, InterconnectTypeClient.class);
+    }
+
+    public synchronized LogicalInterconnectGroupClient logicalInterconnectGroup() {
+        return this.getClient(this.logicalInterconnectGroupClient, LogicalInterconnectGroupClient.class);
     }
 
     private <T> T getClient(T client, Class<T> clientClass) {

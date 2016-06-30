@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.storage;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.AddStoragePool;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -26,10 +27,9 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.StoragePoolClient;
 import com.hp.ov.sdk.rest.client.StoragePoolClientImpl;
-import com.hp.ov.sdk.rest.client.StorageSystemClient;
-import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
@@ -54,8 +54,10 @@ public class StoragePoolClientSample {
     // ================================
 
     private StoragePoolClientSample() {
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
         this.storagePoolClient = StoragePoolClientImpl.getClient();
-        this.storageSystemClient = StorageSystemClientImpl.getClient();
+        this.storageSystemClient = oneViewClient.storageSystem();
     }
 
     private void getStoragePoolById() throws InstantiationException, IllegalAccessException {
@@ -290,7 +292,7 @@ public class StoragePoolClientSample {
     }
 
     private String getStorageSystemUri() {
-        return storageSystemClient.getStorageSystemByName(params, storageSystemName).getUri();
+        return storageSystemClient.getByName(storageSystemName).getUri();
     }
 
     public static void main(final String[] args) throws Exception {

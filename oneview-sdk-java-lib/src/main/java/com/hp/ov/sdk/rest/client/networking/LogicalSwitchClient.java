@@ -31,7 +31,6 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 
 public class LogicalSwitchClient {

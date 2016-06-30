@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.dto;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class StorageTargetPort extends BaseModelResource {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
 
     private String actualNetworkUri;
@@ -167,4 +167,45 @@ public class StorageTargetPort extends BaseModelResource {
         this.stateReason = stateReason;
     }
 
+    @Override
+    public boolean canEqual(Object obj) {
+        return (obj instanceof StorageTargetPort);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof StorageTargetPort) {
+            StorageTargetPort that = (StorageTargetPort) obj;
+
+            return new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(actualNetworkUri, that.actualNetworkUri)
+                    .append(expectedNetworkName, that.expectedNetworkName)
+                    .append(expectedNetworkUri, that.expectedNetworkUri)
+                    .append(groupName, that.groupName)
+                    .append(portName, that.portName)
+                    .append(portWwn, that.portWwn)
+                    .append(refreshState, that.refreshState)
+                    .append(stateReason, that.stateReason)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                .append(actualNetworkUri)
+                .append(expectedNetworkName)
+                .append(expectedNetworkUri)
+                .append(groupName)
+                .append(portName)
+                .append(portWwn)
+                .append(refreshState)
+                .append(stateReason)
+                .toHashCode();
+    }
 }

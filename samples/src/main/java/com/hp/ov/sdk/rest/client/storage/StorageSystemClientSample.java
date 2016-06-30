@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client.storage;
 
 import java.util.ArrayList;
@@ -23,22 +23,10 @@ import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
-import com.hp.ov.sdk.dto.StorageSystemV2;
+import com.hp.ov.sdk.dto.StorageSystem;
 import com.hp.ov.sdk.dto.StorageTargetPort;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKBadRequestException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.exceptions.SDKTasksException;
+import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.rest.client.StorageSystemClient;
-import com.hp.ov.sdk.rest.client.StorageSystemClientImpl;
-import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * StorageSystemClientSample is a sample program consume the storage server managed by HPE OneView.
@@ -47,437 +35,137 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
  */
 public class StorageSystemClientSample {
 
-    private final StorageSystemClient storageSystemClient;
     private final OneViewClient oneViewClient;
-
-    private RestParams params;
+    private final StorageSystemClient storageSystemClient;
 
     // These are variables to be defined by user
     // ================================
-    private static final String targetPortId = "2788DF7C-23BE-4E42-B4EB-61C59246AEE7";
-    private static final String resourceName = "ThreePAR7200-4555";
-    private static final String username = "dcs";
-    private static final String password = "dcs";
-    private static final String ipAddress = "172.18.11.12";
-    private static final List<String> fcNetworkName_A = Arrays.asList("FC_Network_A");
-    private static final List<String> fcNetworkName_B = Arrays.asList("FC_Network_B");
-    private static final String resourceId = "TXQ1010307";
-    private static final String unManagedPort_A = "0:1:1";
-    private static final String unManagedPort_B = "0:1:2";
-    private static final String managedDomain = "TestDomain";
-    private static final String unManagedDomain = "TestDomain";
+    private static final String STORAGE_SYSTEM_RESOURCE_ID = "TXQ1010307";
+    private static final String STORAGE_SYSTEM_NAME = "ThreePAR7200-4555";
+    private static final String TARGET_PORT_ID = "2788DF7C-23BE-4E42-B4EB-61C59246AEE7";
+    private static final String USERNAME = "dcs";
+    private static final String PASSWORD = "dcs";
+    private static final String IP_ADDRESS = "172.18.11.12";
+    private static final List<String> FC_NETWORK_A = Arrays.asList("FC_Network_A");
+    private static final List<String> FC_NETWORK_B = Arrays.asList("FC_Network_B");
+    private static final String UNMANAGED_PORT_A = "0:1:1";
+    private static final String UNMANAGED_PORT_B = "0:1:2";
+    private static final String MANAGED_DOMAIN = "TestDomain";
+    private static final String UNMANAGED_DOMAIN = "TestDomain";
     // ================================
 
     private StorageSystemClientSample() {
-        this.storageSystemClient = StorageSystemClientImpl.getClient();
         this.oneViewClient = OneViewClientSample.getOneViewClient();
+        this.storageSystemClient = oneViewClient.storageSystem();
     }
 
-    private void getStorageSystemById() throws InstantiationException, IllegalAccessException {
-        StorageSystemV2 storageSystemDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getStorageSystem() {
+        StorageSystem storageSystem = this.storageSystemClient.getById(STORAGE_SYSTEM_RESOURCE_ID);
 
-            // then make sdk service call to get resource
-            storageSystemDto = storageSystemClient.getStorageSystem(params, resourceId);
-
-            System.out.println("StorageSystemClientTest : getStorageSystemById : storageSystem object returned to client : "
-                    + storageSystemDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageSystemClientTest : getStorageSystemById : resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageSystemClientTest : getStorageSystemById : no such url : " + params.getUrl());
-            return;
-
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageSystemClientTest : getStorageSystemById : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageSystemClientTest : getStorageSystemById : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageSystemClientTest : getStorageSystemById : arguments are null ");
-            return;
-        }
-
+        System.out.println("StorageSystemClientSample : getStorageSystem : " +
+                "StorageSystem object returned to client : " + storageSystem.toJsonString());
     }
 
-    private void getStoragePoolsForStorageSystem() throws InstantiationException, IllegalAccessException,
-            SDKResourceNotFoundException, SDKNoSuchUrlException {
-        String resourceId = null;
-        ResourceCollection<StoragePool> storagePoolCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getAllStorageSystems() {
+        ResourceCollection<StorageSystem> storageSystems = this.storageSystemClient.getAll();
 
-            // get resource ID
-            resourceId = storageSystemClient.getId(params, resourceName);
-
-            // then make sdk service call to get resource
-            storagePoolCollectionDto = storageSystemClient.getStoragePoolsForStorageSystem(params, resourceId);
-
-            System.out
-                    .println("StorageSystemClientTest : getStoragePoolsForStorageSystem : storageSystem object returned to client : "
-                            + storagePoolCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageSystemClientTest : getStoragePoolsForStorageSystem : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageSystemClientTest : getStoragePoolsForStorageSystem : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageSystemClientTest : getStoragePoolsForStorageSystem : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageSystemClientTest : getStoragePoolsForStorageSystem : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageSystemClientTest : getStoragePoolsForStorageSystem : arguments are null ");
-            return;
-        }
+        System.out.println("StorageSystemClientSample : getAllStorageSystems : " +
+                "StorageSystems returned to client : " + storageSystems.toJsonString());
     }
 
-    private void getAllManagedPortsForStorageSystem() throws InstantiationException, IllegalAccessException,
-            SDKResourceNotFoundException, SDKNoSuchUrlException {
-        String resourceId = null;
-        ResourceCollection<StorageTargetPort> storageTargetPortCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getStorageSystemByName() {
+        StorageSystem storageSystem = this.storageSystemClient.getByName(STORAGE_SYSTEM_NAME).get(0);
 
-            // get resource ID
-            resourceId = storageSystemClient.getId(params, resourceName);
-
-            // then make sdk service call to get resource
-            storageTargetPortCollectionDto = storageSystemClient.getAllManagedPortsForStorageSystem(params, resourceId);
-
-            System.out
-                    .println("StorageSystemClientTest : getAllManagedPortsForStorageSystem : storageSystem object returned to client : "
-                            + storageTargetPortCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out
-                    .println("StorageSystemClientTest : getAllManagedPortsForStorageSystem : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageSystemClientTest : getAllManagedPortsForStorageSystem : no such url : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageSystemClientTest : getAllManagedPortsForStorageSystem : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageSystemClientTest : getAllManagedPortsForStorageSystem : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageSystemClientTest : getAllManagedPortsForStorageSystem : arguments are null ");
-            return;
-        }
+        System.out.println("StorageSystemClientSample : getStorageSystemByName : " +
+                "StorageSystem object returned to client : " + storageSystem.toJsonString());
     }
 
-    private void getManagedPortsForStorageSystem() throws InstantiationException, IllegalAccessException,
-            SDKResourceNotFoundException, SDKNoSuchUrlException {
-        String resourceId = null;
-        StorageTargetPort storageTargetPortDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void addStorageSystem() {
+        AddStorageSystemCredentials addStorageSystemCredentials = buildStorageSystem();
 
-            // get resource ID
-            resourceId = storageSystemClient.getId(params, resourceName);
+        TaskResourceV2 taskResource = storageSystemClient.add(addStorageSystemCredentials, false);
 
-            // then make sdk service call to get resource
-            storageTargetPortDto = storageSystemClient.getManagedPortsForStorageSystem(params, resourceId, targetPortId);
-
-            System.out
-                    .println("StorageSystemClientTest : getManagedPortsForStorageSystem : storageSystem object returned to client : "
-                            + storageTargetPortDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageSystemClientTest : getManagedPortsForStorageSystem : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageSystemClientTest : getManagedPortsForStorageSystem : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageSystemClientTest : getManagedPortsForStorageSystem : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageSystemClientTest : getManagedPortsForStorageSystem : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageSystemClientTest : getManagedPortsForStorageSystem : arguments are null ");
-            return;
-        }
+        System.out.println("StorageSystemClientSample : addStorageSystem : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void getStorageSystemHostTypes()
-            throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException, SDKNoSuchUrlException {
-        List<String> hostTypes = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateStorageSystem() {
+        StorageSystem storageSystem = this.storageSystemClient.getByName(STORAGE_SYSTEM_NAME).get(0);
+        StorageSystem updatedStorageSystem = buildUpdateStorageSystem(storageSystem);
 
-            // then make sdk service call to get resource
-            hostTypes = storageSystemClient.getStorageSystemHostTypes(params);
+        TaskResourceV2 taskResource = storageSystemClient.update(storageSystem.getResourceId(),
+                updatedStorageSystem, false);
 
-            System.out.println(
-                    "StorageSystemClientTest : getStorageSystemHostTypes : list object returned to client : "
-                            + Arrays.toString(hostTypes.toArray()));
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println(
-                    "StorageSystemClientTest : getStorageSystemHostTypes : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageSystemClientTest : getStorageSystemHostTypes : no such url : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out
-                    .println("StorageSystemClientTest : getStorageSystemHostTypes : Applicance Not reachabe at : "
-                            + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out
-                    .println("StorageSystemClientTest : getStorageSystemHostTypes : No response from appliance : "
-                            + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageSystemClientTest : getStorageSystemHostTypes : arguments are null ");
-            return;
-        }
+        System.out.println("StorageSystemClientSample : updateStorageSystem : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void getAllStorageSystem() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
-            SDKNoSuchUrlException {
-        ResourceCollection<StorageSystemV2> storageSystemCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void removeStorageSystem() {
+        StorageSystem storageSystem = this.storageSystemClient.getByName(STORAGE_SYSTEM_NAME).get(0);
+        TaskResourceV2 taskResource = this.storageSystemClient.remove(storageSystem.getResourceId(), false);
 
-            // then make sdk service call to get resource
-            storageSystemCollectionDto = storageSystemClient.getAllStorageSystems(params);
-
-            System.out.println("StorageSystemClientTest : getAllStorageSystem : storageSystem object returned to client : "
-                    + storageSystemCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageSystemClientTest : getAllStorageSystem : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageSystemClientTest : getAllStorageSystem : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageSystemClientTest : getAllStorageSystem : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageSystemClientTest : getAllStorageSystem : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageSystemClientTest : getAllStorageSystem : arguments are null ");
-            return;
-        }
+        System.out.println("StorageSystemClientSample : removeStorageSystem : " +
+                "Task object returned to client : " + taskResource);
     }
 
-    private void getStorageSystemByName() throws InstantiationException, IllegalAccessException {
-        StorageSystemV2 storageSystemDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getStorageSystemStoragePools() {
+        StorageSystem storageSystem = this.storageSystemClient.getByName(STORAGE_SYSTEM_NAME).get(0);
+        ResourceCollection<StoragePool> storagePools = this.storageSystemClient.getStoragePools(
+                storageSystem.getResourceId());
 
-            // then make sdk service call to get resource
-            storageSystemDto = storageSystemClient.getStorageSystemByName(params, resourceName);
-
-            System.out.println("StorageSystemClientTest : getStorageSystemByName : storageSystem object returned to client : "
-                    + storageSystemDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageSystemClientTest : getStorageSystemByName : resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageSystemClientTest : getStorageSystemByName : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageSystemClientTest : getStorageSystemByName : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageSystemClientTest : getStorageSystemByName : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageSystemClientTest : getStorageSystemByName : arguments are null ");
-            return;
-        }
+        System.out.println("StorageSystemClientSample : getStorageSystemStoragePools : " +
+                "StoragePools returned to client : " + storagePools.toJsonString());
     }
 
-    private void createStorageSystem() throws InstantiationException, IllegalAccessException {
-        String createStorage = null;
-        AddStorageSystemCredentials addStorageSystemCredentialsDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getStorageSystemManagedPorts() {
+        StorageSystem storageSystem = this.storageSystemClient.getByName(STORAGE_SYSTEM_NAME).get(0);
+        ResourceCollection<StorageTargetPort> storageTargetPorts
+                = this.storageSystemClient.getAllManagedPorts(storageSystem.getResourceId());
 
-            // create storageSystem request body
-            addStorageSystemCredentialsDto = buildTestStorageSystemDto();
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            createStorage = storageSystemClient.createStorageSystem(params, addStorageSystemCredentialsDto, false);
-
-            System.out.println("StorageSystemClientTest : createStorageSystem : storageSystem object returned to client : "
-                    + createStorage);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageSystemClientTest : createStorageSystem : resource you are looking is not found "
-                    + params.getHostname());
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("StorageSystemClientTest : createStorageSystem : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageSystemClientTest : createStorageSystem : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageSystemClientTest : createStorageSystem : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageSystemClientTest : createStorageSystem : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out
-                    .println("StorageSystemClientTest : createStorageSystem : errors in task, please check task resource for more details ");
-            return;
-        }
-
+        System.out.println("StorageSystemClientSample : getStorageSystemManagedPorts : " +
+                "StoragePools returned to client : " + storageTargetPorts.toJsonString());
     }
 
-    private void updateStorageSystem() throws InstantiationException, IllegalAccessException {
-        // first get the session Id
-        String updateStorage = null;
-        String resourceId = null;
-        StorageSystemV2 storageSystemDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getStorageSystemManagedPort() {
+        StorageSystem storageSystem = this.storageSystemClient.getByName(STORAGE_SYSTEM_NAME).get(0);
 
-            // fetch resource Id using resource name
-            storageSystemDto = storageSystemClient.getStorageSystemByName(params, resourceName);
+        StorageTargetPort storageTargetPort = storageSystemClient.getManagedPort(storageSystem.getResourceId(),
+                TARGET_PORT_ID);
 
-            if (null != storageSystemDto.getUri()) {
-                resourceId = UrlUtils.getResourceIdFromUri(storageSystemDto.getUri());
-            }
-
-            final StorageSystemV2 updateStorageSystemDto = buildUpdateStorageSystemDto(storageSystemDto);
-
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            updateStorage = storageSystemClient.updateStorageSystem(params, resourceId, updateStorageSystemDto, false);
-
-            System.out.println("StorageSystemClientTest : updateStorageSystem : " + "storageSystem object returned to client : "
-                    + updateStorage);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageSystemClientTest : updateStorageSystem :"
-                    + " resource you are looking is not found for update ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("StorageSystemClientTest : updateStorageSystem :" + " bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageSystemClientTest : updateStorageSystem :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageSystemClientTest : updateStorageSystem :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageSystemClientTest : updateStorageSystem :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageSystemClientTest : updateStorageSystem : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("StorageSystemClientTest : updateStorageSystem : " + "errors in task, please check task "
-                    + "resource for more details ");
-            return;
-        }
+        System.out.println("StorageSystemClientSample : getStorageSystemManagedPort : " +
+                "StorageTargetPort object returned to client : " + storageTargetPort.toJsonString());
     }
 
-    private void deleteStorageSystem() throws InstantiationException, IllegalAccessException {
-        // first get the session Id
-        String deleteStorage = null;
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getStorageSystemHostTypes() {
+        List<String> hostTypes = storageSystemClient.getHostTypes();
 
-            // get resource ID
-            resourceId = storageSystemClient.getId(params, resourceName);
-
-            // then make sdk service call to get resource
-            deleteStorage = storageSystemClient.deleteStorageSystem(params, resourceId);
-
-            System.out.println("StorageSystemClientTest : deleteStorageSystem : storageSystem object returned to client : "
-                    + deleteStorage);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageSystemClientTest : deleteStorageSystem : resource you are looking is not found for delete ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageSystemClientTest : deleteStorageSystem : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageSystemClientTest : deleteStorageSystem : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageSystemClientTest : deleteStorageSystem : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageSystemClientTest : deleteStorageSystem : arguments are null ");
-            return;
-        }
-
+        System.out.println("StorageSystemClientSample : getStorageSystemHostTypes : " +
+                "Host types returned to client : " + Arrays.toString(hostTypes.toArray()));
     }
 
-    private AddStorageSystemCredentials buildTestStorageSystemDto() {
-        final AddStorageSystemCredentials dto = new AddStorageSystemCredentials();
-        dto.setIp_hostname(ipAddress);
-        dto.setUsername(username);
-        dto.setPassword(password);
-        return dto;
+    private AddStorageSystemCredentials buildStorageSystem() {
+        AddStorageSystemCredentials credentials = new AddStorageSystemCredentials();
+
+        credentials.setIp_hostname(IP_ADDRESS);
+        credentials.setUsername(USERNAME);
+        credentials.setPassword(PASSWORD);
+
+        return credentials;
     }
 
-    private StorageSystemV2 buildUpdateStorageSystemDto(final StorageSystemV2 storageSystemDto) {
+    private StorageSystem buildUpdateStorageSystem(StorageSystem storageSystemDto) {
+        List<StorageTargetPort> tempStorageTargetPort = new ArrayList<>();
+        List<StorageTargetPort> unMangedStorageTargetPort = new ArrayList<>();
 
-
-        final List<StorageTargetPort> tempStorageTargetPort = new ArrayList<>();
-        final List<StorageTargetPort> unMangedStorageTargetPort = new ArrayList<StorageTargetPort>();
         for (int i = 0; i < storageSystemDto.getUnmanagedPorts().size(); i++) {
-            if (storageSystemDto.getUnmanagedPorts().get(i).getName().equalsIgnoreCase(unManagedPort_A)) {
-                final StorageTargetPort managed_one = new StorageTargetPort();
+            if (storageSystemDto.getUnmanagedPorts().get(i).getName().equalsIgnoreCase(UNMANAGED_PORT_A)) {
+                StorageTargetPort managed_one = new StorageTargetPort();
                 managed_one.setActualNetworkUri(storageSystemDto.getUnmanagedPorts().get(i).getActualNetworkUri());
                 managed_one.setExpectedNetworkName(storageSystemDto.getUnmanagedPorts().get(i).getExpectedNetworkName());
                 managed_one.setGroupName(storageSystemDto.getUnmanagedPorts().get(i).getGroupName());
                 String fc_network_one = null;
-                for (int j = 0; j < fcNetworkName_A.size(); j++) {
-                    fc_network_one = oneViewClient.fcNetwork().getByName(fcNetworkName_A.get(j)).getUri();
+                for (int j = 0; j < FC_NETWORK_A.size(); j++) {
+                    fc_network_one = oneViewClient.fcNetwork().getByName(FC_NETWORK_A.get(j)).getUri();
                 }
                 managed_one.setExpectedNetworkUri(fc_network_one);
                 managed_one.setPortName(storageSystemDto.getUnmanagedPorts().get(i).getPortName());
@@ -490,14 +178,14 @@ public class StorageSystemClientSample {
                 tempStorageTargetPort.add(managed_one);
                 unMangedStorageTargetPort.add(storageSystemDto.getUnmanagedPorts().get(i));
 
-            } else if (storageSystemDto.getUnmanagedPorts().get(i).getName().equalsIgnoreCase(unManagedPort_B)) {
-                final StorageTargetPort managed_two = new StorageTargetPort();
+            } else if (storageSystemDto.getUnmanagedPorts().get(i).getName().equalsIgnoreCase(UNMANAGED_PORT_B)) {
+                StorageTargetPort managed_two = new StorageTargetPort();
                 managed_two.setActualNetworkUri(storageSystemDto.getUnmanagedPorts().get(i).getActualNetworkUri());
                 managed_two.setExpectedNetworkName(storageSystemDto.getUnmanagedPorts().get(i).getExpectedNetworkName());
                 managed_two.setGroupName(storageSystemDto.getUnmanagedPorts().get(i).getGroupName());
                 String fc_network_two = null;
-                for (int j = 0; j < fcNetworkName_B.size(); j++) {
-                    fc_network_two = oneViewClient.fcNetwork().getByName(fcNetworkName_B.get(j)).getUri();
+                for (int j = 0; j < FC_NETWORK_B.size(); j++) {
+                    fc_network_two = oneViewClient.fcNetwork().getByName(FC_NETWORK_B.get(j)).getUri();
                 }
                 managed_two.setExpectedNetworkUri(fc_network_two);
                 managed_two.setPortName(storageSystemDto.getUnmanagedPorts().get(i).getPortName());
@@ -513,30 +201,30 @@ public class StorageSystemClientSample {
         }
 
         storageSystemDto.setManagedPorts(tempStorageTargetPort);
-        for (final StorageTargetPort storageTargetPort : unMangedStorageTargetPort) {
+        for (StorageTargetPort storageTargetPort : unMangedStorageTargetPort) {
             storageSystemDto.getUnmanagedPorts().remove(storageTargetPort);
         }
-        storageSystemDto.setManagedDomain(managedDomain);
-        final List<String> unmanagedDomains = storageSystemDto.getUnmanagedDomains();
-        unmanagedDomains.remove(unManagedDomain);
+        storageSystemDto.setManagedDomain(MANAGED_DOMAIN);
+        List<String> unmanagedDomains = storageSystemDto.getUnmanagedDomains();
+        unmanagedDomains.remove(UNMANAGED_DOMAIN);
         storageSystemDto.setUnmanagedDomains(unmanagedDomains);
 
         return storageSystemDto;
     }
 
     public static void main(final String[] args) throws Exception {
-        StorageSystemClientSample client = new StorageSystemClientSample();
+        StorageSystemClientSample sample = new StorageSystemClientSample();
 
-        client.createStorageSystem();
-        client.getStorageSystemById();
-        client.updateStorageSystem();
-        client.getAllManagedPortsForStorageSystem();
-        client.getAllStorageSystem();
-        client.getManagedPortsForStorageSystem();
-        client.getStoragePoolsForStorageSystem();
-        client.getStorageSystemHostTypes();
-        client.getStorageSystemByName();
-        client.deleteStorageSystem();
+        sample.getStorageSystem();
+        sample.addStorageSystem();
+        sample.getAllStorageSystems();
+        sample.getStorageSystemByName();
+        sample.getStorageSystemManagedPorts();
+        sample.getStorageSystemManagedPort();
+        sample.getStorageSystemStoragePools();
+        sample.getStorageSystemHostTypes();
+        sample.updateStorageSystem();
+        sample.removeStorageSystem();
     }
 
 }

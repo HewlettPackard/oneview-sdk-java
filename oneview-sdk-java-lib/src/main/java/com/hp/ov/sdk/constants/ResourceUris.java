@@ -37,7 +37,7 @@ public class ResourceUris {
     public static final String CONNECTION_TEMPLATES = "/rest/connection-templates";
     public static final String CONNECTION_TEMPLATE_URI = "/rest/connection-templates";
     public static final String DATA_CENTER_URI = "/rest/datacenters";
-    public static final String DATA_CENTER_VISUAL_CONTENT_URI = "/visualContent";
+    public static final String DATA_CENTER_VISUAL_CONTENT_URI = "visualContent";
     public static final String DEFAULT_CONNECTION_TEMPLATE_URI = "/rest/connection-templates/defaultConnectionTemplate";
     public static final String ENCLOSURE_URI = "/rest/enclosures";
     public static final String ENCLOSURE_GROUP_URI = "/rest/enclosure-groups";
@@ -63,7 +63,7 @@ public class ResourceUris {
     public static final String LOGICAL_SWITCHES_REFRESH_URI = "refresh";
     public static final String LOGICAL_SWITCHES_URI = "/rest/logical-switches";
     public static final String LOGIN_SESSIONS = "/rest/login-sessions";
-    public static final String MANANGED_PORTS_STORAGE_SYSTEM_URI = "managedPorts";
+    public static final String MANAGED_PORTS_STORAGE_SYSTEM_URI = "managedPorts";
     public static final String NETWORK_SETS_URI = "/rest/network-sets";
     public static final String POWER_DEVICE_URI = "/rest/power-devices";
     public static final String POWER_STATE_URI = "powerState";
@@ -83,7 +83,7 @@ public class ResourceUris {
     public static final String STORAGE_POOL_STORAGE_SYSTEM_URI = "storage-pools";
     public static final String STORAGE_POOL_URI = "/rest/storage-pools";
     public static final String STORAGE_SYSTEM_URI = "/rest/storage-systems";
-    public static final String STORAGE_SYSTEM_HOST_TYPES_URI = "/host-types";
+    public static final String STORAGE_SYSTEM_HOST_TYPES_URI = STORAGE_SYSTEM_URI + "/host-types";
     public static final String STORAGE_VOLUME_ATTACHMENT_PATH_URI = "paths";
     public static final String STORAGE_VOLUME_ATTACHMENT_REPAIR_URI = STORAGE_VOLUME_ATTACHMENT_URI + "/repair";
     public static final String STORAGE_VOLUME_ATTACHABLE_URI = STORAGE_VOLUME_URI + "/attachable-volumes";

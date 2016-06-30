@@ -15,6 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * The StoragePool data transfer object (DTO) contains the information used to
  * represent a storage pool in the system. It is passed in to the add/update
@@ -152,4 +155,53 @@ public class StoragePool extends BaseModelResource {
         this.totalCapacity = totalCapacity;
     }
 
+    @Override
+    public boolean canEqual(Object obj) {
+        return (obj instanceof StoragePool);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof StoragePool) {
+            StoragePool that = (StoragePool) obj;
+
+            return new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(allocatedCapacity, that.allocatedCapacity)
+                    .append(capacityLimit, that.capacityLimit)
+                    .append(capacityWarningLimit, that.capacityWarningLimit)
+                    .append(deviceSpeed, that.deviceSpeed)
+                    .append(deviceType, that.deviceType)
+                    .append(domain, that.domain)
+                    .append(freeCapacity, that.freeCapacity)
+                    .append(refreshState, that.refreshState)
+                    .append(stateReason, that.stateReason)
+                    .append(storageSystemUri, that.storageSystemUri)
+                    .append(supportedRAIDLevel, that.supportedRAIDLevel)
+                    .append(totalCapacity, that.totalCapacity)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                .append(allocatedCapacity)
+                .append(capacityLimit)
+                .append(capacityWarningLimit)
+                .append(deviceSpeed)
+                .append(deviceType)
+                .append(domain)
+                .append(freeCapacity)
+                .append(refreshState)
+                .append(stateReason)
+                .append(storageSystemUri)
+                .append(supportedRAIDLevel)
+                .append(totalCapacity)
+                .toHashCode();
+    }
 }

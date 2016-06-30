@@ -25,9 +25,9 @@ import com.hp.ov.sdk.dto.generated.ServerProfile;
 import com.hp.ov.sdk.dto.generated.UplinkSet;
 import com.hp.ov.sdk.dto.generated.VolumeAttachment;
 import com.hp.ov.sdk.dto.samples.NetworkForServerProfile;
+import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile.StorageVolume;
 import com.hp.ov.sdk.dto.samples.ServerProfileValue;
 import com.hp.ov.sdk.dto.samples.UplinkSetValue;
-import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile.StorageVolume;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 
@@ -39,11 +39,11 @@ public class ResourceDtoUtilsWrapper {
         this.resourceDtoUtils = resourceDtoUtils;
     }
 
-    public List<UplinkSet> buildUplinkSetGroupDto(final RestParams params, final List<UplinkSetValue> uplinkSetValues) {
+    public List<UplinkSet> buildUplinkSetGroupDto(final List<UplinkSetValue> uplinkSetValues) {
         final List<UplinkSet> uplinkSetGroupDto = new ArrayList<UplinkSet>();
 
         for (UplinkSetValue uplinkSetValue : uplinkSetValues) {
-            uplinkSetGroupDto.add(resourceDtoUtils.buildUplinkSetDto(params, uplinkSetValue.getLigName(),
+            uplinkSetGroupDto.add(resourceDtoUtils.buildUplinkSetDto(uplinkSetValue.getLigName(),
                     uplinkSetValue.getUplinkSetName(), uplinkSetValue.getUplinkSetType(), uplinkSetValue.getBayPortMap(),
                     uplinkSetValue.getNetworkNames()));
         }

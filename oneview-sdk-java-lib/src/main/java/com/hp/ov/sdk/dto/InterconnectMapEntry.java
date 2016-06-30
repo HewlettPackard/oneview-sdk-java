@@ -17,12 +17,16 @@ package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import com.hp.ov.sdk.dto.networking.Location;
+
 public class InterconnectMapEntry implements Serializable {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
+
     private String interconnectUri;
     private Location location;
     private String logicalDownlinkUri;
@@ -88,4 +92,35 @@ public class InterconnectMapEntry implements Serializable {
         this.permittedInterconnectTypeUri = permittedInterconnectTypeUri;
     }
 
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof InterconnectMapEntry) {
+            InterconnectMapEntry that = (InterconnectMapEntry) obj;
+
+            return new EqualsBuilder()
+                    .append(interconnectUri, that.interconnectUri)
+                    .append(location, that.location)
+                    .append(logicalDownlinkUri, that.logicalDownlinkUri)
+                    .append(permittedInterconnectTypeUri, that.permittedInterconnectTypeUri)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(interconnectUri)
+                .append(location)
+                .append(logicalDownlinkUri)
+                .append(permittedInterconnectTypeUri)
+                .toHashCode();
+    }
 }
