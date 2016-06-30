@@ -22,6 +22,7 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKException;
 import com.hp.ov.sdk.rest.client.facilities.DataCenterClient;
+import com.hp.ov.sdk.rest.client.facilities.UnmanagedDeviceClient;
 import com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
@@ -49,6 +50,7 @@ public class OneViewClient {
     private NetworkSetClient networkSetClient;
     private SwitchTypeClient switchTypeClient;
     private DataCenterClient dataCenterClient;
+    private UnmanagedDeviceClient unmanagedDeviceClient;
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
         this.baseClient = new BaseClient(params,
@@ -94,6 +96,10 @@ public class OneViewClient {
 
     public synchronized DataCenterClient dataCenter() {
         return this.getClient(this.dataCenterClient, DataCenterClient.class);
+    }
+
+    public synchronized UnmanagedDeviceClient unmanagedDevice() {
+        return this.getClient(this.unmanagedDeviceClient, UnmanagedDeviceClient.class);
     }
 
     private <T> T getClient(T client, Class<T> clientClass) {
