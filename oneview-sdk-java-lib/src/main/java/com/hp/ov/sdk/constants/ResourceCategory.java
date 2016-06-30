@@ -32,6 +32,7 @@ public class ResourceCategory {
     public static final String RC_LOGICAL_SWITCHES = "logical-switch";
     public static final String RC_LOGICALINTERCONNECTGROUP = "logical-interconnect-groupV2";
     public static final String RC_LOGICALINTERCONNECTGROUP_V200 = "logical-interconnect-groupV3";
+    public static final String RC_LOGICALINTERCONNECTGROUP_V300 = "logical-interconnect-groupV300";
     public static final String RC_UPLINKSET = "uplink-sets";
     public static final String RC_ENCLOSURE_GROUP = "EnclosureGroupV2";
     public static final String RC_ENCLOSURE_GROUP_V200 = "EnclosureGroupV200";

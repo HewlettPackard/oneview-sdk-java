@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
-
-import java.io.Serializable;
+package com.hp.ov.sdk.dto.networking.logicalinterconnectgroup;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -23,7 +21,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.hp.ov.sdk.dto.BaseModelResource;
 
-public class QosConfiguration extends BaseModelResource implements Serializable {
+public class QosConfiguration extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
@@ -86,11 +84,6 @@ public class QosConfiguration extends BaseModelResource implements Serializable 
     }
 
     @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(activeQosConfig)
@@ -98,6 +91,11 @@ public class QosConfiguration extends BaseModelResource implements Serializable 
                 .append(inactiveFCoEQosConfig)
                 .appendSuper(super.hashCode())
                 .toHashCode();
+    }
+
+    @Override
+    public boolean canEqual(Object obj) {
+        return (obj instanceof QosConfiguration);
     }
 
     @Override

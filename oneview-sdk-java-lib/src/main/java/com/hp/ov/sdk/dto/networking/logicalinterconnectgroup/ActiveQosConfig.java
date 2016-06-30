@@ -13,22 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking.logicalinterconnectgroup;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.hp.ov.sdk.dto.BaseModelResource;
 
-public class ActiveQosConfig extends BaseModelResource implements Serializable{
+public class ActiveQosConfig extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
@@ -110,8 +107,27 @@ public class ActiveQosConfig extends BaseModelResource implements Serializable{
     }
 
     @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+    public boolean canEqual(Object obj) {
+        return (obj instanceof ActiveQosConfig);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (other instanceof ActiveQosConfig) {
+            ActiveQosConfig rhs = ((ActiveQosConfig) other);
+
+            return new EqualsBuilder()
+                    .append(configType, rhs.configType)
+                    .append(uplinkClassificationType, rhs.uplinkClassificationType)
+                    .append(downlinkClassificationType, rhs.downlinkClassificationType)
+                    .append(qosTrafficClassifiers, rhs.qosTrafficClassifiers)
+                    .appendSuper(super.equals(other))
+                    .isEquals();
+        }
+        return false;
     }
 
     @Override
@@ -123,24 +139,6 @@ public class ActiveQosConfig extends BaseModelResource implements Serializable{
                 .append(qosTrafficClassifiers)
                 .appendSuper(super.hashCode())
                 .toHashCode();
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof ActiveQosConfig) == false) {
-            return false;
-        }
-        ActiveQosConfig rhs = ((ActiveQosConfig) other);
-        return new EqualsBuilder()
-                .append(configType, rhs.configType)
-                .append(uplinkClassificationType, rhs.uplinkClassificationType)
-                .append(downlinkClassificationType, rhs.downlinkClassificationType)
-                .append(qosTrafficClassifiers, rhs.qosTrafficClassifiers)
-                .appendSuper(super.equals(other))
-                .isEquals();
     }
 
     public static enum ConfigType {

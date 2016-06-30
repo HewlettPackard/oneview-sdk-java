@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking.logicalinterconnectgroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,19 +108,8 @@ public class InactiveNonFCoEQosConfig extends BaseModelResource {
     }
 
     @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .append(configType)
-                .append(uplinkClassificationType)
-                .append(downlinkClassificationType)
-                .append(qosTrafficClassifiers)
-                .appendSuper(super.hashCode())
-                .toHashCode();
+    public boolean canEqual(Object obj) {
+        return (obj instanceof InactiveNonFCoEQosConfig);
     }
 
     @Override
@@ -139,6 +128,17 @@ public class InactiveNonFCoEQosConfig extends BaseModelResource {
                 .append(qosTrafficClassifiers, rhs.qosTrafficClassifiers)
                 .appendSuper(super.equals(other))
                 .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(configType)
+                .append(uplinkClassificationType)
+                .append(downlinkClassificationType)
+                .append(qosTrafficClassifiers)
+                .appendSuper(super.hashCode())
+                .toHashCode();
     }
 
     public static enum ConfigType {

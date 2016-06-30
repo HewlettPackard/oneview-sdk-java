@@ -25,6 +25,7 @@ import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ConnectionBoot;
 import com.hp.ov.sdk.dto.ConnectionBoot.BootControl;
 import com.hp.ov.sdk.dto.InterconnectType;
+import com.hp.ov.sdk.dto.InterconnectTypeName;
 import com.hp.ov.sdk.dto.OpSpeed;
 import com.hp.ov.sdk.dto.PortInfo;
 import com.hp.ov.sdk.dto.ProfileConnectionV3;
@@ -38,7 +39,6 @@ import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.generated.InterconnectMapTemplate;
 import com.hp.ov.sdk.dto.generated.LocalStorage;
 import com.hp.ov.sdk.dto.generated.LocationEntry;
-import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
 import com.hp.ov.sdk.dto.generated.LogicalLocation;
 import com.hp.ov.sdk.dto.generated.LogicalPortConfigInfo;
 import com.hp.ov.sdk.dto.generated.SanStorage;
@@ -49,12 +49,12 @@ import com.hp.ov.sdk.dto.generated.UplinkSet;
 import com.hp.ov.sdk.dto.generated.VolumeAttachment;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
+import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
 import com.hp.ov.sdk.dto.networking.networkset.NetworkSet;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.rest.client.InterconnectTypeClient;
-import com.hp.ov.sdk.rest.client.InterconnectTypeClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.networking.InterconnectTypeClient;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
@@ -95,7 +95,7 @@ public class ResourceDtoUtils {
         return networkUris;
     }
 
-    public List<String> getFcNetworkUris(final RestParams params, final List<String> networkNames) {
+    public List<String> getFcNetworkUris(final List<String> networkNames) {
         List<String> networkUris = new ArrayList<String>();
         FcNetwork dto = null;
         String fcNetworkUri = null;
@@ -112,11 +112,11 @@ public class ResourceDtoUtils {
         return networkUris;
     }
 
-    public LogicalInterconnectGroups buildLogicalInterconnectGroupDto(final RestParams params,
-            final String logicalInterconnectGroupName, final HashMap<Integer, String> bayPermittedInterconnectMaps) {
+    public LogicalInterconnectGroup buildLogicalInterconnectGroupDto(final String logicalInterconnectGroupName,
+            final HashMap<Integer, InterconnectTypeName> bayPermittedInterconnectMaps) {
         // local variable declaration.
         int i, j;
-        final LogicalInterconnectGroups dto = new LogicalInterconnectGroups();
+        final LogicalInterconnectGroup dto = new LogicalInterconnectGroup();
         dto.setCategory(null);
         dto.setCreated(null);
         dto.setDescription(null);
@@ -150,8 +150,10 @@ public class ResourceDtoUtils {
             interconnectMapEntryTemplateDto.setLogicalLocation(logicalLocationDto);
 
             if (bayPermittedInterconnectMaps.get((i + 1)) != null) {
-                interconnectMapEntryTemplateDto.setPermittedInterconnectTypeUri(SdkUtils.getInstance().getPermittedInterconnectTypeUri(params,
-                        bayPermittedInterconnectMaps.get((i + 1))));
+                InterconnectTypeName bayPermittedInterconnect = bayPermittedInterconnectMaps.get(i + 1);
+                String interconnectTypeUri = oneViewClient.interconnectType().getByName(bayPermittedInterconnect).get(0).getUri();
+
+                interconnectMapEntryTemplateDto.setPermittedInterconnectTypeUri(interconnectTypeUri);
             } else {
                 interconnectMapEntryTemplateDto.setPermittedInterconnectTypeUri(null);
             }
@@ -163,11 +165,7 @@ public class ResourceDtoUtils {
         dto.setInterconnectMapTemplate(interconnectMapTemplateDto);
 
         dto.setUri(null);
-        if (params.getApiVersion().getValue() < ApiVersion.V_200.getValue()) {
-            dto.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP);
-        } else {
-            dto.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200);
-        }
+
         return dto;
     }
 
@@ -179,27 +177,25 @@ public class ResourceDtoUtils {
      *
      * }
      */
-    public UplinkSet buildUplinkSetDto(final RestParams params, final String ligName, final String uplinkSetName,
+    public UplinkSet buildUplinkSetDto(final String ligName, final String uplinkSetName,
             final String uplinkSetType, final List<String> networkNames, final HashMap<Integer, List<String>> bayPortMap,
             final String lacpTimer, final String fcUplinkSpeed) {
-        return buildUplinkSetDto(params, ligName, uplinkSetName, uplinkSetType, bayPortMap, networkNames);
+        return buildUplinkSetDto(ligName, uplinkSetName, uplinkSetType, bayPortMap, networkNames);
     }
 
-    public UplinkSet buildUplinkSetDto(final RestParams params, final String ligName, final String uplinkSetName,
+    public UplinkSet buildUplinkSetDto(final String ligName, final String uplinkSetName,
             final String uplinkSetType, final HashMap<Integer, List<String>> bayPortMap, final List<String> networkNames) {
         final List<LogicalPortConfigInfo> logicalPortConfigInfos = new ArrayList<LogicalPortConfigInfo>();
         final UplinkSet uplinkSetDto = new UplinkSet();
 
-        InterconnectTypeClient interconnectTypeClient = InterconnectTypeClientImpl.getClient();
+        InterconnectTypeClient interconnectTypeClient = oneViewClient.interconnectType();
 
         for (final Entry<Integer, List<String>> entry : bayPortMap.entrySet()) {
             final Integer bayRelativeValue = entry.getKey();
             final List<String> portNames = entry.getValue();
 
-            final String permittedInterconnectTypeUri = SdkUtils.getInstance().getPermittedInterconnectTypeUriForLigBasedOnBay(params, ligName,
-                    bayRelativeValue);
-            final InterconnectType interconnectTypeDto = interconnectTypeClient.getInterconnectType(params,
-                    (permittedInterconnectTypeUri.substring(permittedInterconnectTypeUri.lastIndexOf("/") + 1)));
+            final String permittedInterconnectTypeUri = this.getPermittedInterconnectTypeUriForLigBasedOnBay(ligName, bayRelativeValue);
+            final InterconnectType interconnectTypeDto = interconnectTypeClient.getById((permittedInterconnectTypeUri.substring(permittedInterconnectTypeUri.lastIndexOf("/") + 1)));
 
             for (int i = 0; i < portNames.size(); i++) {
                 Integer portNumber = -1;
@@ -244,13 +240,36 @@ public class ResourceDtoUtils {
             uplinkSetDto.setNetworkUris(this.getNetworkUris(networkNames));
         } else if (uplinkSetType.equalsIgnoreCase(SdkConstants.FIBRE_CHANNEL)) {
             uplinkSetDto.setNetworkType(UplinkSet.NetworkType.FibreChannel);
-            uplinkSetDto.setNetworkUris(this.getFcNetworkUris(params, networkNames));
+            uplinkSetDto.setNetworkUris(this.getFcNetworkUris(networkNames));
         }
         uplinkSetDto.setPrimaryPort(null);
 
         uplinkSetDto.setLogicalPortConfigInfos(logicalPortConfigInfos);
 
         return uplinkSetDto;
+    }
+
+    private String getPermittedInterconnectTypeUriForLigBasedOnBay(final String ligName, final Integer bay) {
+        ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = oneViewClient.logicalInterconnectGroup().getByName(ligName);
+        if (logicalInterconnectGroups == null || logicalInterconnectGroups.getCount() < 1) {
+            return null;
+        }
+
+
+        LogicalInterconnectGroup logicalInterconnectGroupsDto = logicalInterconnectGroups.getMembers().get(0);
+        if (logicalInterconnectGroupsDto.getInterconnectMapTemplate() == null) {
+            return null;
+        }
+
+        for (InterconnectMapEntryTemplate mapTemplate : logicalInterconnectGroupsDto.getInterconnectMapTemplate()
+                .getInterconnectMapEntryTemplates()) {
+            for (LocationEntry locationEntry : mapTemplate.getLogicalLocation().getLocationEntries()) {
+                if (locationEntry.getType().equals(LocationEntry.Type.Bay) && locationEntry.getRelativeValue().equals(bay)) {
+                    return mapTemplate.getPermittedInterconnectTypeUri();
+                }
+            }
+        }
+        return null;
     }
 
     public ProfileConnectionV3 buildProfileConnection(final RestParams params, final Integer j, final String networkName,

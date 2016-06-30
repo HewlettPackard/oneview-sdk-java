@@ -13,55 +13,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking.logicalinterconnectgroup;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-public class QosClassificationMapping implements Serializable {
+public class QosTrafficClassifier implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private List<Integer> dot1pClassMapping = new ArrayList<Integer>();
-    private List<String> dscpClassMapping = new ArrayList<String>();
+    private QosTrafficClass qosTrafficClass;
+    private QosClassificationMapping qosClassificationMapping;
 
     /**
      *
-     * @return The dot1pClassMapping
+     * @return
+     *     The qosTrafficClass
      */
-    public List<Integer> getDot1pClassMapping() {
-        return dot1pClassMapping;
+    public QosTrafficClass getQosTrafficClass() {
+        return qosTrafficClass;
     }
 
     /**
      *
-     * @param dot1pClassMapping
-     *            The dot1pClassMapping
+     * @param qosTrafficClass
+     *     The qosTrafficClass
      */
-    public void setDot1pClassMapping(List<Integer> dot1pClassMapping) {
-        this.dot1pClassMapping = dot1pClassMapping;
+    public void setQosTrafficClass(QosTrafficClass qosTrafficClass) {
+        this.qosTrafficClass = qosTrafficClass;
     }
 
     /**
      *
-     * @return The dscpClassMapping
+     * @return
+     *     The qosClassificationMapping
      */
-    public List<String> getDscpClassMapping() {
-        return dscpClassMapping;
+    public QosClassificationMapping getQosClassificationMapping() {
+        return qosClassificationMapping;
     }
 
     /**
      *
-     * @param dscpClassMapping
-     *            The dscpClassMapping
+     * @param qosClassificationMapping
+     *     The qosClassificationMapping
      */
-    public void setDscpClassMapping(List<String> dscpClassMapping) {
-        this.dscpClassMapping = dscpClassMapping;
+    public void setQosClassificationMapping(QosClassificationMapping qosClassificationMapping) {
+        this.qosClassificationMapping = qosClassificationMapping;
     }
 
     @Override
@@ -72,8 +72,8 @@ public class QosClassificationMapping implements Serializable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(dot1pClassMapping)
-                .append(dscpClassMapping)
+                .append(qosTrafficClass)
+                .append(qosClassificationMapping)
                 .toHashCode();
     }
 
@@ -82,13 +82,13 @@ public class QosClassificationMapping implements Serializable {
         if (other == this) {
             return true;
         }
-        if ((other instanceof QosClassificationMapping) == false) {
+        if ((other instanceof QosTrafficClassifier) == false) {
             return false;
         }
-        QosClassificationMapping rhs = ((QosClassificationMapping) other);
+        QosTrafficClassifier rhs = ((QosTrafficClassifier) other);
         return new EqualsBuilder()
-                .append(dot1pClassMapping, rhs.dot1pClassMapping)
-                .append(dscpClassMapping, rhs.dscpClassMapping)
+                .append(qosTrafficClass, rhs.qosTrafficClass)
+                .append(qosClassificationMapping, rhs.qosClassificationMapping)
                 .isEquals();
     }
 

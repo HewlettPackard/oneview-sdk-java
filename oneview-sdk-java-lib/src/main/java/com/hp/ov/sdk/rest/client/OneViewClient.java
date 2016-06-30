@@ -28,6 +28,8 @@ import com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FabricClient;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
+import com.hp.ov.sdk.rest.client.networking.InterconnectTypeClient;
+import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchGroupClient;
 import com.hp.ov.sdk.rest.client.networking.NetworkSetClient;
@@ -59,6 +61,8 @@ public class OneViewClient {
     private FabricClient fabricClient;
     private SwitchClient switchClient;
     private StorageSystemClient storageSystemClient;
+    private InterconnectTypeClient interconnectTypeClient;
+    private LogicalInterconnectGroupClient logicalInterconnectGroupClient;
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
         this.baseClient = new BaseClient(params,
@@ -124,6 +128,14 @@ public class OneViewClient {
 
     public synchronized StorageSystemClient storageSystem() {
         return this.getClient(this.storageSystemClient, StorageSystemClient.class);
+    }
+
+    public synchronized InterconnectTypeClient interconnectType() {
+        return this.getClient(this.interconnectTypeClient, InterconnectTypeClient.class);
+    }
+
+    public synchronized LogicalInterconnectGroupClient logicalInterconnectGroup() {
+        return this.getClient(this.logicalInterconnectGroupClient, LogicalInterconnectGroupClient.class);
     }
 
     private <T> T getClient(T client, Class<T> clientClass) {

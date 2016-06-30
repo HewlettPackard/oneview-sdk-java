@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking.logicalinterconnectgroup;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-public class FcoeSettings implements Serializable{
+public class FcoeSettings implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

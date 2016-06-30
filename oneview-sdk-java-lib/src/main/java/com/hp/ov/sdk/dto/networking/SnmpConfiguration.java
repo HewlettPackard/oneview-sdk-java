@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +75,11 @@ public class SnmpConfiguration extends BaseModelResource {
     }
 
     @Override
+    public boolean canEqual(Object obj) {
+        return (obj instanceof SnmpConfiguration);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
 
@@ -104,15 +109,4 @@ public class SnmpConfiguration extends BaseModelResource {
                 .toHashCode();
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .appendSuper(super.toString())
-                .append("readCommunity", readCommunity)
-                .append("systemContact", systemContact)
-                .append("trapDestinations", trapDestinations)
-                .append("snmpAccess", snmpAccess)
-                .append("enabled", enabled)
-                .toString();
-    }
 }

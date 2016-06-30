@@ -21,27 +21,17 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.hp.ov.sdk.OneViewClientSample;
+import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
+import com.hp.ov.sdk.dto.InterconnectTypeName;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
-import com.hp.ov.sdk.dto.generated.LogicalInterconnectGroups;
 import com.hp.ov.sdk.dto.generated.UplinkSet;
+import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
 import com.hp.ov.sdk.dto.samples.UplinkSetValue;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKBadRequestException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClient;
-import com.hp.ov.sdk.rest.client.LogicalInterconnectGroupClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
-import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 import com.hp.ov.sdk.util.samples.ResourceDtoUtilsWrapper;
 
 /*
@@ -52,21 +42,15 @@ import com.hp.ov.sdk.util.samples.ResourceDtoUtilsWrapper;
  */
 public class LogicalInterconnectGroupClientSample {
 
-    private final LogicalInterconnectGroupClient logicalInterconnectGroupClient;
-    private final ResourceDtoUtils resourceDtoUtils;
-
-    private RestParams params;
-    private TaskResourceV2 taskResourceV2;
-
     // test values - user input
     // ================================
     public static final List<Integer> interconnectEntries = Arrays.asList(Integer.valueOf(1), Integer.valueOf(2));
 
     private static final String resourceName = "LIG_PROD";
-    private static final String permittedInterconnectType = "HP VC FlexFabric-20/40 F8 Module";
+    private static final InterconnectTypeName permittedInterconnectType = InterconnectTypeName.HP_VC_FlexFabric_20_40_F8_Module;
     private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402", "Prod_403");
-    private static final List<String> fcNetworkName_A = Arrays.asList("FC_Network_A");
-    private static final List<String> fcNetworkName_B = Arrays.asList("FC_Network_B");
+    private static final List<String> logicalInterconnectGroupName_A = Arrays.asList("FC_Network_A");
+    private static final List<String> logicalInterconnectGroupName_B = Arrays.asList("FC_Network_B");
     private static final List<String> ethPort = Arrays.asList("X5", "X6");
     private static final List<String> fcPort = Arrays.asList("X2");
     private static final String ethUplinkSetType = "Ethernet";
@@ -74,336 +58,101 @@ public class LogicalInterconnectGroupClientSample {
     private static final String ethUplinkSetName = "EthernetUplinkSet";
     private static final String fcAUplinkSetName = "FCUplinkSetA";
     private static final String fcBUplinkSetName = "FCUplinkSetB";
-    private static final String resourceId = "6cc44430-c1d4-45d8-860c-fa5689e37edb";
-    private static final String settingId = "d969f74b-afb5-494d-91d8-b1a9b1ef5aa9";
+    private static final String resourceId = "710a4017-4523-4522-a61b-cde6aec37de8";
+    private static final String settingId = "dcd89c40-57b6-4551-9486-acc9090785fa";
     // ================================
+
+    private final LogicalInterconnectGroupClient client;
+
+    private ResourceDtoUtils resourceDtoUtils;
 
     private LogicalInterconnectGroupClientSample() {
         OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        this.client = oneViewClient.logicalInterconnectGroup();
 
-        this.resourceDtoUtils = new ResourceDtoUtils(oneViewClient);
-        this.logicalInterconnectGroupClient = LogicalInterconnectGroupClientImpl.getClient();
+        resourceDtoUtils = new ResourceDtoUtils(oneViewClient);
     }
 
-    private void getLogicalInterconnectGroupById() throws InstantiationException, IllegalAccessException {
-        LogicalInterconnectGroups logicalInterconnectGroupDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getLogicalInterconnectGroup() {
+        LogicalInterconnectGroup logicalInterconnectGroup = client.getById(resourceId);
 
-            // then make sdk service call to get resource
-            logicalInterconnectGroupDto = logicalInterconnectGroupClient.getLogicalInterconnectGroup(params, resourceId);
-
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getLogicalInterconnectGroupById : logical interconnect"
-                    + " group object returned to client : " + logicalInterconnectGroupDto.toString());
-
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "getLogicalInterconnectGroupById : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getLogicalInterconnectGroupById : no such url : "
-                    + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "getLogicalInterconnectGroupById : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "getLogicalInterconnectGroupById : No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getLogicalInterconnectGroupById : arguments are null ");
-            return;
-        }
+        System.out.println("LogicalInterconnectGroupClientSample : getLogicalInterconnectGroup : " +
+                "LogicalInterconnectGroup object returned to client : " + logicalInterconnectGroup);
     }
 
-    private void getAllLogicalInterconnectGroups() throws InstantiationException, IllegalAccessException {
-        ResourceCollection<LogicalInterconnectGroups> logicalInterconnectGroupCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getAllLogicalInterconnectGroups() {
+        ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getAll();
 
-            // then make sdk service call to get resource
-            logicalInterconnectGroupCollectionDto = logicalInterconnectGroupClient.getAllLogicalInterconnectGroups(params);
-
-            System.out.println("LogicalInterconnectGroupClientTest : getAllLogicalInterconnectGroups "
-                    + ": logical interconnect group object returned to client : "
-                    + logicalInterconnectGroupCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "getAllLogicalInterconnectGroups : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getAllLogicalInterconnectGroups : no such url : "
-                    + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "getAllLogicalInterconnectGroups : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "getAllLogicalInterconnectGroups : No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getAllLogicalInterconnectGroups : arguments are null ");
-            return;
-        }
-
+        System.out.println("LogicalInterconnectGroupClientSample : getAllLogicalInterconnectGroups : " +
+                "LogicalInterconnectGroups returned to client (count) : " + logicalInterconnectGroups.getCount());
     }
 
-    private void getLogicalInterconnectGroupByName() throws InstantiationException, IllegalAccessException {
-        LogicalInterconnectGroups logicalInterconnectGroupDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getLogicalInterconnectGroupByName() {
+        ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getByName(resourceName);
 
-            // then make sdk service call to get resource
-            logicalInterconnectGroupDto = logicalInterconnectGroupClient.getLogicalInterconnectGroupByName(params, resourceName);
-
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getLogicalInterconnectGroupByName : logical interconnect"
-                    + " group object returned to client : " + logicalInterconnectGroupDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "getLogicalInterconnectGroupByName : resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getLogicalInterconnectGroupByName : no such url : "
-                    + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "getLogicalInterconnectGroupByName : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "getLogicalInterconnectGroupByName : No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getLogicalInterconnectGroupByName : arguments are null ");
-            return;
-        }
+        System.out.println("LogicalInterconnectGroupClientSample : getLogicalInterconnectGroupByName : " +
+                "LogicalInterconnectGroup object returned to client : " + logicalInterconnectGroups.getMembers().get(0));
     }
 
-    private void createLogicalInterconnectGroup() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void createLogicalInterconnectGroup() {
+        LogicalInterconnectGroup logicalInterconnectGroup = this.buildTestLogicalInterconnectGroup();
+        logicalInterconnectGroup.setName(resourceName);
+        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300);
 
-            // create logicalInterconnectGroup request body
-            final LogicalInterconnectGroups logicalInterconnectGroupDto = buildTestLogicalInterconnectGroup();
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = logicalInterconnectGroupClient.createLogicalInterconnectGroup(params, logicalInterconnectGroupDto,
-                    false, false);
+        TaskResourceV2 task = this.client.create(logicalInterconnectGroup, false);
 
-            System.out.println("LogicalInterconnectGroupClientTest : " + "createLogicalInterconnectGroup : status of "
-                    + "logicalInterconnectGroup object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "createLogicalInterconnectGroup : resource you are looking is not found ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "createLogicalInterconnectGroup : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "createLogicalInterconnectGroup : no such url : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "createLogicalInterconnectGroup : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "createLogicalInterconnectGroup : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "createLogicalInterconnectGroup : errors in task, "
-                    + "please check task resource for more details ");
-            return;
-        }
+        System.out.println("LogicalInterconnectGroupClientSample : createLogicalInterconnectGroup : " +
+                "Task object returned to client : " + task);
     }
 
-    private void updateLogicalInterconnectGroup() throws InstantiationException, IllegalAccessException {
-        LogicalInterconnectGroups logicalInterconnectGroups = null;
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateLogicalInterconnectGroup() {
+        ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getByName(resourceName);
+        LogicalInterconnectGroup lig = logicalInterconnectGroups.getMembers().get(0);
+        lig.setName(resourceName + "_Update");
 
-            // get resource Id using resource name
-            logicalInterconnectGroups = logicalInterconnectGroupClient.getLogicalInterconnectGroupByName(params, resourceName);
+        final List<UplinkSet> uplinkSetDto = buildUplinkSetGroupDto();
 
-            if (null != logicalInterconnectGroups.getUri()) {
-                resourceId = UrlUtils.getResourceIdFromUri(logicalInterconnectGroups.getUri());
-            }
+        TaskResourceV2 task = this.client.update(lig.getResourceId(), uplinkSetDto, false);
 
-            // create uplinksetDto request body
-            final List<UplinkSet> uplinkSetDto = buildUplinkSetGroupDto();
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = logicalInterconnectGroupClient.updateLogicalInterconnectGroup(params, resourceId, uplinkSetDto, false,
-                    false);
-
-            System.out.println("LogicalInterconnectGroupClientTest : " + "updateLogicalInterconnectGroup : status of "
-                    + "logicalInterconnectGroup object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "updateLogicalInterconnectGroup : resource you are looking is not found for update ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "updateLogicalInterconnectGroup : bad request, try again : ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "updateLogicalInterconnectGroup : no such url : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "updateLogicalInterconnectGroup : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "updateLogicalInterconnectGroup : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "updateLogicalInterconnectGroup : errors in task, "
-                    + "please check task resource for more details ");
-            return;
-        }
+        System.out.println("LogicalInterconnectGroupClientSample : updateLogicalInterconnectGroup : " +
+                "Task object returned to client : " + task);
     }
 
-    private void deleteLogicalInterconnectGroup() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void deleteLogicalInterconnectGroup() {
+        ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getByName(resourceName);
+        LogicalInterconnectGroup lig = logicalInterconnectGroups.getMembers().get(0);
+        TaskResourceV2 task = this.client.delete(lig.getResourceId(), false);
 
-            // get resource ID
-            resourceId = logicalInterconnectGroupClient.getId(params, resourceName);
-
-            // then make sdk service call to get resource
-            taskResourceV2 = logicalInterconnectGroupClient.deleteLogicalInterconnectGroup(params, resourceId, false);
-
-            System.out
-                    .println("LogicalInterconnectGroupClientTest : deleteLogicalInterconnectGroup : logical Interconnect group deleted status : "
-                            + taskResourceV2.toString());
-
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out
-                    .println("LogicalInterconnectGroupClientTest : deleteLogicalInterconnectGroup : resource not found to delete : ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : deleteLogicalInterconnectGroup : no such url : "
-                    + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out
-                    .println("LogicalInterconnectGroupClientTest : deleteLogicalInterconnectGroup : Applicance Not reachabe at : "
-                            + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out
-                    .println("LogicalInterconnectGroupClientTest : deleteLogicalInterconnectGroup : No response from appliance : "
-                            + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : deleteLogicalInterconnectGroup : arguments are null ");
-            return;
-        }
+        System.out.println("LogicalInterconnectGroupClientSample : deleteLogicalInterconnectGroup : " +
+                "Task object returned to client : " + task);
     }
 
     private void getDefaultInterconnectSettings() {
-        InterconnectSettingsV2 interconnectSettingsDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        InterconnectSettingsV2 interconnectSettingsDto = client.getDefaultInterconnectSettings();
 
-            // then make sdk service call to get resource
-            interconnectSettingsDto = logicalInterconnectGroupClient.getDefaultInterconnectSettings(params);
-
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getDefaultInterconnectSettings : logical interconnect"
-                    + " setting returned to client : " + interconnectSettingsDto.toString());
-
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "getDefaultInterconnectSettings : resource setting you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getDefaultInterconnectSettings : no such url : "
-                    + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "getDefaultInterconnectSettings : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "getDefaultInterconnectSettings : No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getDefaultInterconnectSettings : arguments are null ");
-            return;
-        }
-
+        System.out.println("LogicalInterconnectGroupClientSample : getDefaultInterconnectSettings : " +
+                "InterconnectSettingsV2 object returned to client : " + interconnectSettingsDto);
     }
 
     private void getInterconnectSettings() {
-        InterconnectSettingsV2 interconnectSettingsDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        // To run getInterconnectSettings on OneView 1.2, you need settingID and resourceID of LIG
+        // for OV 2.0 & 3.0, you just need the resourceID
+        //InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(resourceId, settingId);
+        InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(resourceId);
 
-            // then make sdk service call to get resource
-            interconnectSettingsDto = logicalInterconnectGroupClient.getInterconnectSettings(params, resourceId, settingId);
-
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getInterconnectSettings : logical interconnect"
-                    + " setting returned to client : " + interconnectSettingsDto.toString());
-
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : "
-                    + "getInterconnectSettings : resource setting you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getInterconnectSettings : no such url : "
-                    + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getInterconnectSettings : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getInterconnectSettings : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectGroupClientTest : " + "getInterconnectSettings : arguments are null ");
-            return;
-        }
+        System.out.println("LogicalInterconnectGroupClientSample : getInterconnectSettings : " +
+                "InterconnectSettingsV2 object returned to client : " + interconnectSettingsDto);
     }
 
-    private LogicalInterconnectGroups buildTestLogicalInterconnectGroup() {
-        HashMap<Integer, String> bayPermittedInterconnectMaps = new HashMap<>(interconnectEntries.size());
+    private LogicalInterconnectGroup buildTestLogicalInterconnectGroup() {
+        HashMap<Integer, InterconnectTypeName> bayPermittedInterconnectMaps = new HashMap<>(interconnectEntries.size());
 
         bayPermittedInterconnectMaps.put(interconnectEntries.get(0), permittedInterconnectType);
         bayPermittedInterconnectMaps.put(interconnectEntries.get(1), permittedInterconnectType);
 
-        LogicalInterconnectGroups dto = resourceDtoUtils.buildLogicalInterconnectGroupDto(params, resourceName, bayPermittedInterconnectMaps);
+        LogicalInterconnectGroup dto = resourceDtoUtils.buildLogicalInterconnectGroupDto(resourceName, bayPermittedInterconnectMaps);
         dto.setEnclosureIndexes(Arrays.asList(1));
+        dto.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300);
 
         for (InterconnectMapEntryTemplate entry : dto.getInterconnectMapTemplate().getInterconnectMapEntryTemplates()) {
             entry.setEnclosureIndex(1);
@@ -434,14 +183,14 @@ public class LogicalInterconnectGroupClientSample {
         final UplinkSetValue fcAUplinkSetValue = new UplinkSetValue();
         fcAUplinkSetValue.setBayPortMap(fcBayPortMapA);
         fcAUplinkSetValue.setLigName(resourceName);
-        fcAUplinkSetValue.setNetworkNames(fcNetworkName_A);
+        fcAUplinkSetValue.setNetworkNames(logicalInterconnectGroupName_A);
         fcAUplinkSetValue.setUplinkSetName(fcAUplinkSetName);
         fcAUplinkSetValue.setUplinkSetType(fcUplinkSetType);
 
         final UplinkSetValue fcBUplinkSetValue = new UplinkSetValue();
         fcBUplinkSetValue.setBayPortMap(fcBayPortMapB);
         fcBUplinkSetValue.setLigName(resourceName);
-        fcBUplinkSetValue.setNetworkNames(fcNetworkName_B);
+        fcBUplinkSetValue.setNetworkNames(logicalInterconnectGroupName_B);
         fcBUplinkSetValue.setUplinkSetName(fcBUplinkSetName);
         fcBUplinkSetValue.setUplinkSetType(fcUplinkSetType);
 
@@ -450,7 +199,7 @@ public class LogicalInterconnectGroupClientSample {
         uplinkSetValues.add(fcBUplinkSetValue);
 
         ResourceDtoUtilsWrapper resourceDtoUtilsWrapper = new ResourceDtoUtilsWrapper(resourceDtoUtils);
-        uplinkSetGroupDto = resourceDtoUtilsWrapper.buildUplinkSetGroupDto(params, uplinkSetValues);
+        uplinkSetGroupDto = resourceDtoUtilsWrapper.buildUplinkSetGroupDto(uplinkSetValues);
 
         return uplinkSetGroupDto;
     }
@@ -458,14 +207,12 @@ public class LogicalInterconnectGroupClientSample {
     public static void main(final String[] args) throws Exception {
         LogicalInterconnectGroupClientSample client = new LogicalInterconnectGroupClientSample();
 
-        client.createLogicalInterconnectGroup();
         client.getAllLogicalInterconnectGroups();
-        client.getLogicalInterconnectGroupById();
+        client.createLogicalInterconnectGroup();
+        client.getLogicalInterconnectGroup();
         client.getLogicalInterconnectGroupByName();
         client.getDefaultInterconnectSettings();
 
-        // To run getInterconnectSettings on OneView 1.2, you need settingID and resourceID of LIG
-        // for OV 2.0, you just need the resourceID
         client.getInterconnectSettings();
         client.updateLogicalInterconnectGroup();
         client.deleteLogicalInterconnectGroup();

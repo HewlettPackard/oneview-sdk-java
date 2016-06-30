@@ -30,6 +30,8 @@ import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.FcoeInterconnectSettings;
 import com.hp.ov.sdk.dto.InterconnectMap;
 import com.hp.ov.sdk.dto.PortMonitor;
+import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
+import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
 
 /**
  * The LogicalInterconnects data transfer object (DTO) contains the information

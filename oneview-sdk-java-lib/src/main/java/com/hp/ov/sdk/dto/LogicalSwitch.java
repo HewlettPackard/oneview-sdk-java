@@ -21,9 +21,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.hp.ov.sdk.dto.generated.SnmpConfiguration;
+import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 
 public final class LogicalSwitch extends BaseModelResource {
 
@@ -175,24 +174,6 @@ public final class LogicalSwitch extends BaseModelResource {
                 .append(switchStackingInfo)
                 .append(switchUris)
                 .toHashCode();
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .appendSuper(super.toString())
-                .append("consistencyStatus", consistencyStatus)
-                .append("fabricUri", fabricUri)
-                .append("logicalSwitchDomainInfo", logicalSwitchDomainInfo)
-                .append("logicalSwitchGroupUri", logicalSwitchGroupUri)
-                .append("snmpConfiguration", snmpConfiguration)
-                .append("stackingHealth", stackingHealth)
-                .append("switchCredentialConfiguration", switchCredentialConfiguration)
-                .append("switchCredentialCount", switchCredentialCount)
-                .append("switchMap", switchMap)
-                .append("switchStackingInfo", switchStackingInfo)
-                .append("switchUris", switchUris)
-                .toString();
     }
 
 }
