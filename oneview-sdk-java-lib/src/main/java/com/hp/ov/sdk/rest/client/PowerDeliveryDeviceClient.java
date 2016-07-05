@@ -276,6 +276,8 @@ public interface PowerDeliveryDeviceClient {
      * @param outletStateDto
      *            Object containing the identification (UID) light state of the
      *            power delivery device.
+     * @param aSync
+     *            Flag input to process request asynchronously or synchronously.
      * @return {@link TaskResourceV2} containing the task status for the
      *         process.
      */
@@ -292,9 +294,6 @@ public interface PowerDeliveryDeviceClient {
      * @param resourceId
      *            The resource identifier for power delivery device as seen in
      *            HPE OneView.
-     * @param outletStateDto
-     *            Object containing the identification (UID) light state of the
-     *            power delivery device.
      * @return {@link UtilizationData} containing the utilization information.
      */
     UtilizationData getPowerDeliveryDeviceUtilization(final RestParams params, final String resourceId);
