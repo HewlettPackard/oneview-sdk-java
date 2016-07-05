@@ -104,7 +104,7 @@ public interface DataCenterClient {
     TaskResourceV2 removeDataCenterByFilter(RestParams params, String filter, boolean aSync);
 
     /**
-     * Retrieves a {@link List}&lt{@link VisualContent}&gt describing each rack
+     * Retrieves a {@link List}&lt;{@link VisualContent}&gt; describing each rack
      * within the data center.
      *
      * @param params structure containing the connection details.

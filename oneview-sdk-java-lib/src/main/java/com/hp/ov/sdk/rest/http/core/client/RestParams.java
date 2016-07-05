@@ -118,6 +118,10 @@ public class RestParams {
     }
 
     /**
+     * Controls which API version will be used for the connection.
+     *
+     * @param apiVersion the API version.
+     *
      * @deprecated
      * Use {@link #setApiVersion(ApiVersion)} instead
      */
