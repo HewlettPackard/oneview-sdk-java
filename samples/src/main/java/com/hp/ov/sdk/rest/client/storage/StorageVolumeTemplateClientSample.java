@@ -29,8 +29,6 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.rest.client.StoragePoolClient;
-import com.hp.ov.sdk.rest.client.StoragePoolClientImpl;
 import com.hp.ov.sdk.rest.client.StorageVolumeTemplateClient;
 import com.hp.ov.sdk.rest.client.StorageVolumeTemplateClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -64,7 +62,7 @@ public class StorageVolumeTemplateClientSample {
         OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
 
         this.storageVolumeTemplateClient = StorageVolumeTemplateClientImpl.getClient();
-        this.storagePoolClient = StoragePoolClientImpl.getClient();
+        this.storagePoolClient = oneViewClient.storagePool();
         this.storageSystemClient = oneViewClient.storageSystem();
     }
 
@@ -333,8 +331,7 @@ public class StorageVolumeTemplateClientSample {
 
     private StorageVolumeTemplate buildTestStorageVolumeTemplateDto() {
         String storageSystemUri = storageSystemClient.getByName(storageSystemName).getUri();
-        String storagePoolUri = storagePoolClient.getStoragePoolByName(params,
-                storagePoolName, storageSystemUri).getUri();
+        String storagePoolUri = storagePoolClient.getByName(storagePoolName, storageSystemUri).get(0).getUri();
 
         StorageVolumeTemplate dto = new StorageVolumeTemplate();
 

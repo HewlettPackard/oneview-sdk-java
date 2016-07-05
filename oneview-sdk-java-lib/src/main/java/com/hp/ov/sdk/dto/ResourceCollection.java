@@ -19,7 +19,10 @@ package com.hp.ov.sdk.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 public class ResourceCollection<T> extends BaseModelResource {
 
@@ -74,6 +77,10 @@ public class ResourceCollection<T> extends BaseModelResource {
 
     public List<T> getMembers() {
         return ImmutableList.copyOf(this.members);
+    }
+
+    public List<T> getMembers(Predicate<T> predicate) {
+        return ImmutableList.copyOf(Collections2.filter(Lists.newArrayList(this.members), predicate));
     }
 
     public T get(int index) {

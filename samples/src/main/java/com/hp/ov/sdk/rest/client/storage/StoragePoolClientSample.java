@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client.storage;
 
 import com.hp.ov.sdk.OneViewClientSample;
@@ -20,19 +20,9 @@ import com.hp.ov.sdk.dto.AddStoragePool;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKBadRequestException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.exceptions.SDKTasksException;
+import com.hp.ov.sdk.dto.StorageSystem;
+import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.rest.client.StoragePoolClient;
-import com.hp.ov.sdk.rest.client.StoragePoolClientImpl;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * StoragePoolClientSample is a sample program consumes the set of disk from the storage system managed
@@ -44,266 +34,90 @@ public class StoragePoolClientSample {
     private final StoragePoolClient storagePoolClient;
     private final StorageSystemClient storageSystemClient;
 
-    private RestParams params;
-
     // These are variables to be defined by user
     // ================================
-    private static final String resourceName = "FST_CPG1";
-    private static final String storageSystemName = "ThreePAR7200-4310";
-    private static final String resourceId = "20FCB7C5-3719-4AEC-AB06-8B51C0615743";
+    private static final String STORAGE_POOL_NAME = "FST_CPG1";
+    private static final String STORAGE_POOL_RESOURCE_ID = "7345EE57-7544-4092-9311-102E6AE30CDF";
     // ================================
 
     private StoragePoolClientSample() {
         OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
 
-        this.storagePoolClient = StoragePoolClientImpl.getClient();
+        this.storagePoolClient = oneViewClient.storagePool();
         this.storageSystemClient = oneViewClient.storageSystem();
     }
 
-    private void getStoragePoolById() throws InstantiationException, IllegalAccessException {
-        StoragePool storagePoolDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getStoragePoolById() {
+        StoragePool storagePool = this.storagePoolClient.getById(STORAGE_POOL_RESOURCE_ID);
 
-            // then make sdk service call to get resource
-            storagePoolDto = storagePoolClient.getStoragePool(params, resourceId);
-
-            System.out.println("StoragePoolClientTest : getStoragePoolById : storagePool object returned to client : "
-                    + storagePoolDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StoragePoolClientTest : getStoragePoolById : resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StoragePoolClientTest : getStoragePoolById : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StoragePoolClientTest : getStoragePoolById : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StoragePoolClientTest : getStoragePoolById : No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StoragePoolClientTest : getStoragePoolById : arguments are null ");
-            return;
-        }
+        System.out.println("StoragePoolClientSample : getStoragePool : " +
+                "StoragePool object returned to client : " + storagePool.toJsonString());
     }
 
-    private void getAllStoragePool() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
-            SDKNoSuchUrlException {
-        ResourceCollection<StoragePool> storagePoolCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getAllStoragePools() {
+        ResourceCollection<StoragePool> storagePools = this.storagePoolClient.getAll();
 
-            // then make sdk service call to get resource
-            storagePoolCollectionDto = storagePoolClient.getAllStoragePools(params);
-
-            System.out.println("StoragePoolClientTest : getAllStoragePool : storagePool object returned to client : "
-                    + storagePoolCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StoragePoolClientTest : getAllStoragePool : resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StoragePoolClientTest : getAllStoragePool : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StoragePoolClientTest : getAllStoragePool : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StoragePoolClientTest : getAllStoragePool : No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StoragePoolClientTest : getAllStoragePool : arguments are null ");
-            return;
-        }
+        System.out.println("StoragePoolClientSample : getAllStoragePools : " +
+                "StoragePools returned to client : " + storagePools.toJsonString());
     }
 
-    private void getStoragePoolByName() throws InstantiationException, IllegalAccessException {
-        StoragePool storagePoolDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getStoragePoolByName() {
+        StoragePool storagePool = this.storagePoolClient.getByName(STORAGE_POOL_NAME, getStorageSystem().getUri()).get(0);
 
-            // then make sdk service call to get resource
-            storagePoolDto = storagePoolClient.getStoragePoolByName(params, resourceName, getStorageSystemUri());
-
-            System.out.println("StoragePoolClientTest : getStoragePoolByName : storagePool object returned to client : "
-                    + storagePoolDto.toString());
-            System.out.println("StoragePoolClientTest : getStoragePoolByName : storagePool Name: " + storagePoolDto.getName()
-                    + ", Storage system " + storagePoolDto.getStorageSystemUri());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StoragePoolClientTest : getStoragePoolByName : resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StoragePoolClientTest : getStoragePoolByName : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StoragePoolClientTest : getStoragePoolByName : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StoragePoolClientTest : getStoragePoolByName : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StoragePoolClientTest : getStoragePoolByName : arguments are null ");
-            return;
-        }
+        System.out.println("StoragePoolClientSample : getStoragePoolByName : " +
+                "StoragePool object returned to client : " + storagePool.toJsonString());
     }
 
-    private void createStoragePool() throws InstantiationException, IllegalAccessException {
-        String createStoragePool = null;
-        AddStoragePool addStoragePoolDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void addStoragePool() {
+        AddStoragePool addStoragePool = buildAddStoragePool();
 
-            // create storagePool request body
-            addStoragePoolDto = buildTestStoragePoolDto();
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            createStoragePool = storagePoolClient.createStoragePool(params, addStoragePoolDto, false);
+        TaskResourceV2 taskResource = storagePoolClient.add(addStoragePool, false);
 
-            System.out.println("StoragePoolClientTest : createStoragePool : storagePool object returned to client : "
-                    + createStoragePool);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StoragePoolClientTest : createStoragePool : resource you are looking is not found");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("StoragePoolClientTest : createStoragePool : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StoragePoolClientTest : createStoragePool : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StoragePoolClientTest : createStoragePool : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StoragePoolClientTest : createStoragePool : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("StoragePoolClientTest : createStoragePool : errors in task, please check task resource for more details ");
-            return;
-        }
+        System.out.println("StoragePoolClientSample : addStoragePool : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void updateStoragePool() throws InstantiationException, IllegalAccessException {
-        // first get the session Id
-        String updateStoragePool = null;
-        String resourceId = null;
-        StoragePool storagePoolDto = null;
+    private void updateStoragePool() {
+        StoragePool storagePool = this.storagePoolClient.getByName(STORAGE_POOL_NAME, getStorageSystem().getUri()).get(0);
 
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        storagePool.setRefreshState(RefreshState.RefreshPending);
 
-            // fetch resource Id using resource name
-            storagePoolDto = storagePoolClient.getStoragePoolByName(params, resourceName, getStorageSystemUri());
+        TaskResourceV2 taskResource = storagePoolClient.update(storagePool.getResourceId(), storagePool, false);
 
-            if (null != storagePoolDto.getUri()) {
-                resourceId = UrlUtils.getResourceIdFromUri(storagePoolDto.getUri());
-            }
-
-            storagePoolDto.setRefreshState(RefreshState.RefreshPending);
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            updateStoragePool = storagePoolClient.updateStoragePool(params, resourceId, storagePoolDto, false);
-
-            System.out.println("StoragePoolClientTest : updateStoragePool : " + "storagePool object returned to client : "
-                    + updateStoragePool);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out
-                    .println("StoragePoolClientTest : updateStoragePool :" + " resource you are looking is not found for update ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("StoragePoolClientTest : updateStoragePool :" + " bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StoragePoolClientTest : updateStoragePool :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StoragePoolClientTest : updateStoragePool :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StoragePoolClientTest : updateStoragePool :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StoragePoolClientTest : updateStoragePool : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("StoragePoolClientTest : updateStoragePool : " + "errors in task, please check task "
-                    + "resource for more details ");
-            return;
-        }
+        System.out.println("StoragePoolClientSample : updateStoragePool : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void deleteStoragePool() throws InstantiationException, IllegalAccessException {
-        // first get the session Id
-        String deleteStoragePool = null;
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void removeStoragePool() {
+        StoragePool storagePool = this.storagePoolClient.getByName(STORAGE_POOL_NAME, getStorageSystem().getUri()).get(0);
+        TaskResourceV2 taskResource = this.storagePoolClient.remove(storagePool.getResourceId(), false);
 
-            // get resource ID
-            resourceId = storagePoolClient.getId(params, resourceName, getStorageSystemUri());
-
-            // then make sdk service call to get resource
-            deleteStoragePool = storagePoolClient.deleteStoragePool(params, resourceId);
-
-            System.out.println("StoragePoolClientTest : deleteStoragePool : storagePool object returned to client : "
-                    + deleteStoragePool);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StoragePoolClientTest : deleteStoragePool : resource you are looking is not found for delete ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StoragePoolClientTest : deleteStoragePool : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StoragePoolClientTest : deleteStoragePool : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StoragePoolClientTest : deleteStoragePool : No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StoragePoolClientTest : deleteStoragePool : arguments are null ");
-            return;
-        }
+        System.out.println("StoragePoolClientSample : removeStoragePool : " +
+                "Task object returned to client : " + taskResource);
     }
 
-    private AddStoragePool buildTestStoragePoolDto() {
-        final AddStoragePool dto = new AddStoragePool();
+    private AddStoragePool buildAddStoragePool() {
+        AddStoragePool addStoragePool = new AddStoragePool();
 
-        dto.setPoolName(resourceName);
-        dto.setStorageSystemUri(getStorageSystemUri());
+        addStoragePool.setPoolName(STORAGE_POOL_NAME);
+        addStoragePool.setStorageSystemUri(getStorageSystem().getUri());
 
-        return dto;
+        return addStoragePool;
     }
 
-    private String getStorageSystemUri() {
-        return storageSystemClient.getByName(storageSystemName).getUri();
+    private StorageSystem getStorageSystem() {
+        return storageSystemClient.getByName(StorageSystemClientSample.STORAGE_SYSTEM_NAME).get(0);
     }
 
     public static void main(final String[] args) throws Exception {
-        StoragePoolClientSample client = new StoragePoolClientSample();
+        StoragePoolClientSample sample = new StoragePoolClientSample();
 
-        client.createStoragePool();
-        client.getAllStoragePool();
-        client.getStoragePoolById();
-        client.getStoragePoolByName();
-        client.updateStoragePool();
-        client.deleteStoragePool();
+        sample.getStoragePoolById();
+        sample.getAllStoragePools();
+        sample.addStoragePool();
+        sample.getStoragePoolByName();
+        sample.updateStoragePool();
+        sample.removeStoragePool();
     }
 
 }

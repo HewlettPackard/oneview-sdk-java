@@ -34,8 +34,6 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.rest.client.StoragePoolClient;
-import com.hp.ov.sdk.rest.client.StoragePoolClientImpl;
 import com.hp.ov.sdk.rest.client.StorageVolumeClient;
 import com.hp.ov.sdk.rest.client.StorageVolumeClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -72,7 +70,7 @@ public class StorageVolumeClientSample {
         OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
 
         this.storageVolumeClient = StorageVolumeClientImpl.getClient();
-        this.storagePoolClient = StoragePoolClientImpl.getClient();
+        this.storagePoolClient = oneViewClient.storagePool();
         this.storageSystemClient = oneViewClient.storageSystem();
     }
 
@@ -601,7 +599,7 @@ public class StorageVolumeClientSample {
 
     private AddStorageVolumeV2 buildTestStorageVolumeDto() {
         String storageSystemUri = storageSystemClient.getByName(storageSystemName).getUri();
-        String storagePoolUri = storagePoolClient.getStoragePoolByName(params, storagePoolName, storageSystemUri).getUri();
+        String storagePoolUri = storagePoolClient.getByName(storagePoolName, storageSystemUri).get(0).getUri();
 
         AddStorageVolumeV2 dto = new AddStorageVolumeV2();
 
@@ -625,7 +623,7 @@ public class StorageVolumeClientSample {
 
     private AddStorageVolumeV2 buildTestPrivateStorageVolumeDto() {
         String storageSystemUri = storageSystemClient.getByName(storageSystemName).getUri();
-        String storagePoolUri = storagePoolClient.getStoragePoolByName(params, storagePoolName, storageSystemUri).getUri();
+        String storagePoolUri = storagePoolClient.getByName(storagePoolName, storageSystemUri).get(0).getUri();
 
         final AddStorageVolumeV2 dto = new AddStorageVolumeV2();
 
