@@ -17,14 +17,35 @@
 package com.hp.ov.sdk.util.samples;
 
 import com.hp.ov.sdk.SamplesConstants;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
+import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
+import com.hp.ov.sdk.rest.client.settings.VersionClient;
+import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
+import com.hp.ov.sdk.tasks.TaskMonitorManager;
+import com.hp.ov.sdk.util.OneViewConnector;
 
 public class HPOneViewCredential {
 
     @Deprecated
     public static RestParams createCredentials() {
-        return createRestParams();
+        RestParams params = createRestParams();
+
+        BaseClient baseClient = new BaseClient(params,
+                new ResourceAdaptor(),
+                HttpRestClient.getClient(),
+                TaskMonitorManager.getInstance());
+
+        OneViewConnector connector = new OneViewConnector(
+                params, createHttpSslProperties(),
+                new VersionClient(baseClient),
+                new LoginSessionClient(baseClient));
+
+        connector.connect();
+
+        return params;
     }
 
     public static RestParams createRestParams() {
