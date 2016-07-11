@@ -36,7 +36,8 @@ public class StoragePoolClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String STORAGE_POOL_NAME = "FST_CPG1";
+    public static final String STORAGE_POOL_NAME = "FST_CPG1";
+
     private static final String STORAGE_POOL_RESOURCE_ID = "7345EE57-7544-4092-9311-102E6AE30CDF";
     // ================================
 

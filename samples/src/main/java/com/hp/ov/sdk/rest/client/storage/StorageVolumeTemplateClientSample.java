@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client.storage;
 
 import com.hp.ov.sdk.OneViewClientSample;
@@ -21,19 +21,7 @@ import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplate;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeTemplate;
 import com.hp.ov.sdk.dto.TemplateProvisioningData;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKBadRequestException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.rest.client.StorageVolumeTemplateClient;
-import com.hp.ov.sdk.rest.client.StorageVolumeTemplateClientImpl;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * StorageVolumeTemplateClientSample is a sample program consumes the template that is defined over the storage pool
@@ -44,328 +32,127 @@ public class StorageVolumeTemplateClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String resourceName = "FusionTemplateExample";
-    private static final String storageSystemName = "ThreePAR7200-4310";
-    private static final String storagePoolName = "FST_CPG1";
-    private static final String capacity = "235834383322";
-    private static final String resourceId = "727bda83-bdd2-4801-a813-169781b3581f";
-    private static final String provisionType = "Thin";
+    private static final String STORAGE_VOLUME_TEMPLATE_RESOURCE_ID = "b8f7fc3a-9ba1-4747-9352-58835addc28b";
+    private static final String STORAGE_VOLUME_TEMPLATE_NAME = "Storage_Volume_Template_Sample";
+    private static final String STORAGE_VOLUME_TEMPLATE_NAME_UPDATED = STORAGE_VOLUME_TEMPLATE_NAME + "_Updated";
+    private static final String STORAGE_VOLUME_TEMPLATE_CAPACITY = "235834383322";
+    private static final String STORAGE_VOLUME_TEMPLATE_PROVISION_TYPE = "Thin";
     // ================================
 
     private final StorageVolumeTemplateClient storageVolumeTemplateClient;
     private final StoragePoolClient storagePoolClient;
     private final StorageSystemClient storageSystemClient;
 
-    private RestParams params;
-
     public StorageVolumeTemplateClientSample() {
         OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
 
-        this.storageVolumeTemplateClient = StorageVolumeTemplateClientImpl.getClient();
+        this.storageVolumeTemplateClient = oneViewClient.storageVolumeTemplate();
         this.storagePoolClient = oneViewClient.storagePool();
         this.storageSystemClient = oneViewClient.storageSystem();
     }
 
-    private void getStorageVolumeTemplateById() throws InstantiationException, IllegalAccessException {
-        StorageVolumeTemplate storageVolumeTemplateDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getStorageVolumeTemplateById() {
+        StorageVolumeTemplate storageVolumeTemplate = this.storageVolumeTemplateClient.getById(
+                STORAGE_VOLUME_TEMPLATE_RESOURCE_ID);
 
-            // fetch resource Id using resource name
-            // then make sdk service call to get resource
-            storageVolumeTemplateDto = storageVolumeTemplateClient.getStorageVolumeTemplate(params, resourceId);
-
-            System.out.println("StorageVolumeTemplateClientTest : getStorageVolumeTemplateById :" +
-                    "storageVolumeTemplate object returned to client : " + storageVolumeTemplateDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getStorageVolumeTemplateById :" +
-                    "resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getStorageVolumeTemplateById : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeTemplateClientTest : getStorageVolumeTemplateById : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getStorageVolumeTemplateById : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getStorageVolumeTemplateById : arguments are null ");
-            return;
-        }
+        System.out.println("StorageVolumeTemplateClientSample : getStorageVolumeTemplate : " +
+                "StorageVolumeTemplate object returned to client : " + storageVolumeTemplate.toJsonString());
     }
 
-    private void getAllStorageVolumeTemplate() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
-            SDKNoSuchUrlException {
-        ResourceCollection<StorageVolumeTemplate> storageVolumeTemplateCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getAllStorageVolumeTemplates() {
+        ResourceCollection<StorageVolumeTemplate> storageVolumeTemplates = this.storageVolumeTemplateClient.getAll();
 
-            // then make sdk service call to get resource
-            storageVolumeTemplateCollectionDto = storageVolumeTemplateClient.getAllStorageVolumeTemplates(params);
-
-            System.out.println("StorageVolumeTemplateClientTest : getAllStorageVolumeTemplate : " +
-                    "storageVolumeTemplate object returned to client : " + storageVolumeTemplateCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getAllStorageVolumeTemplate : " +
-                    "resource you are looking is not found " + params.getHostname());
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getAllStorageVolumeTemplate : no such url : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeTemplateClientTest : getAllStorageVolumeTemplate : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getAllStorageVolumeTemplate : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getAllStorageVolumeTemplate : arguments are null ");
-            return;
-        }
+        System.out.println("StorageVolumeTemplateClientSample : getAllStorageVolumeTemplates : " +
+                "StorageVolumeTemplates returned to client : " + storageVolumeTemplates.toJsonString());
     }
 
-    private void getStorageVolumeTemplateByName() throws InstantiationException, IllegalAccessException {
-        StorageVolumeTemplate storageVolumeTemplateDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getStorageVolumeTemplateByName() {
+        StorageVolumeTemplate storageVolumeTemplate = this.storageVolumeTemplateClient.getByName(
+                STORAGE_VOLUME_TEMPLATE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            storageVolumeTemplateDto = storageVolumeTemplateClient.getStorageVolumeTemplateByName(params, resourceName);
-
-            System.out.println("StorageVolumeTemplateClientTest : getStorageVolumeTemplateByName : " +
-                    "storageVolumeTemplate object returned to client : " + storageVolumeTemplateDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getStorageVolumeTemplateByName : " +
-                    "resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getStorageVolumeTemplateByName : no such url : "
-                    + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeTemplateClientTest : getStorageVolumeTemplateByName : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getStorageVolumeTemplateByName : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getStorageVolumeTemplateByName : arguments are null ");
-            return;
-        }
+        System.out.println("StorageVolumeTemplateClientSample : getStorageVolumeTemplateByName : " +
+                "StorageVolumeTemplate object returned to client : " + storageVolumeTemplate.toJsonString());
     }
 
-    private void createStorageVolumeTemplate() throws InstantiationException, IllegalAccessException {
-        StorageVolumeTemplate storageVolumeTemplateDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void createStorageVolumeTemplate() {
+        StorageVolumeTemplate storageVolumeTemplate = buildStorageVolumeTemplate();
 
-            // create storageVolumeTemplate request body
-            storageVolumeTemplateDto = buildTestStorageVolumeTemplateDto();
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            storageVolumeTemplateDto = storageVolumeTemplateClient.createStorageVolumeTemplate(params,
-                    storageVolumeTemplateDto, false, false);
+        StorageVolumeTemplate created = storageVolumeTemplateClient.create(storageVolumeTemplate);
 
-            System.out.println("StorageVolumeTemplateClientTest : createStorageVolumeTemplate : " +
-                    "storageVolumeTemplate object returned to client : " + storageVolumeTemplateDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : createStorageVolumeTemplate : " +
-                    "resource you are looking is not found " + params.getHostname());
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : createStorageVolumeTemplate : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : createStorageVolumeTemplate : no such url : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeTemplateClientTest : createStorageVolumeTemplate : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : createStorageVolumeTemplate : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("StorageVolumeTemplateClientTest : createStorageVolumeTemplate : " +
-                    "errors in task, please check task resource for more details ");
-            return;
-        }
+        System.out.println("StorageVolumeTemplateClientSample : createStorageVolumeTemplate : " +
+                "StorageVolumeTemplate object returned to client : " + created.toJsonString());
     }
 
-    private void updateStorageVolumeTemplate() throws InstantiationException, IllegalAccessException {
-        StorageVolumeTemplate storageVolumeTemplateDto = null;
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateStorageVolumeTemplate() {
+        StorageVolumeTemplate storageVolumeTemplate = this.storageVolumeTemplateClient.getByName(
+                STORAGE_VOLUME_TEMPLATE_NAME).get(0);
 
-            // fetch resource Id using resource name
-            storageVolumeTemplateDto = storageVolumeTemplateClient.getStorageVolumeTemplateByName(params, resourceName);
+        storageVolumeTemplate.setType(ResourceCategory.RC_STORAGE_VOLUME_TEMPLATE_V200); //QXCR1001472124
+        storageVolumeTemplate.setName(STORAGE_VOLUME_TEMPLATE_NAME_UPDATED);
 
-            if (null != storageVolumeTemplateDto.getUri()) {
-                resourceId = UrlUtils.getResourceIdFromUri(storageVolumeTemplateDto.getUri());
-            }
-            storageVolumeTemplateDto.setType(ResourceCategory.RC_STORAGE_VOLUME_TEMPLATE_V200); //QXCR1001472124
-            storageVolumeTemplateDto.setName(resourceName + "_Updated");
+        StorageVolumeTemplate updated = storageVolumeTemplateClient.update(storageVolumeTemplate.getResourceId(),
+                storageVolumeTemplate);
 
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            storageVolumeTemplateDto = storageVolumeTemplateClient.updateStorageVolumeTemplate(params, resourceId,
-                    storageVolumeTemplateDto, false);
-
-            System.out.println("StorageVolumeTemplateClientTest : updateStorageVolumeTemplate : "
-                    + "storageVolumeTemplate object returned to client : " + storageVolumeTemplateDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : updateStorageVolumeTemplate :"
-                    + " resource you are looking is not found for update ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : updateStorageVolumeTemplate :" + " bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : updateStorageVolumeTemplate :" + " no such url : "
-                    + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeTemplateClientTest : updateStorageVolumeTemplate :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : updateStorageVolumeTemplate :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : updateStorageVolumeTemplate : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("StorageVolumeTemplateClientTest : updateStorageVolumeTemplate : "
-                    + "errors in task, please check task " + "resource for more details ");
-            return;
-        }
+        System.out.println("StorageVolumeTemplateClientSample : updateStorageVolumeTemplate : " +
+                "StorageVolumeTemplate object returned to client : " + updated.toJsonString());
     }
 
-    private void deleteStorageVolumeTemplate() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void deleteStorageVolumeTemplate() {
+        StorageVolumeTemplate storageVolumeTemplate = this.storageVolumeTemplateClient.getByName(
+                STORAGE_VOLUME_TEMPLATE_NAME_UPDATED).get(0);
 
-            // then make sdk service call to get resource
-            String deletedString = storageVolumeTemplateClient.deleteStorageVolumeTemplate(params, resourceId);
+        String response = this.storageVolumeTemplateClient.delete(storageVolumeTemplate.getResourceId());
 
-            System.out.println("StorageVolumeTemplateClientTest : deleteStorageVolumeTemplate : " +
-                    "storageVolumeTemplate object returned to client : " + deletedString);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : deleteStorageVolumeTemplate : resource you are looking is not found for delete ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : deleteStorageVolumeTemplate : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeTemplateClientTest : deleteStorageVolumeTemplate : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : deleteStorageVolumeTemplate : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : deleteStorageVolumeTemplate : arguments are null ");
-            return;
-        }
+        System.out.println("StorageVolumeTemplateClientSample : deleteStorageVolumeTemplate : " +
+                "Response returned to client : " + response);
     }
 
-    private void getConnectableVolumeTemplates() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getConnectableStorageVolumeTemplates() {
+        ResourceCollection<ConnectableStorageVolumeTemplate> connectableVolumeTemplates
+                = this.storageVolumeTemplateClient.getConnectableVolumeTemplates();
 
-            // then make sdk service call to get resource
-            ResourceCollection<ConnectableStorageVolumeTemplate> collection
-                    = storageVolumeTemplateClient.getConnectableVolumeTemplates(params);
-
-            System.out.println("StorageVolumeTemplateClientTest : getConnectableVolumeTemplates : " +
-                    "connectable collection object returned to client : " + collection);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getConnectableVolumeTemplates : " +
-                    "resource you are looking is not found for delete ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getConnectableVolumeTemplates : " +
-                    "no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeTemplateClientTest : getConnectableVolumeTemplates : " +
-                    "Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getConnectableVolumeTemplates : " +
-                    "No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeTemplateClientTest : getConnectableVolumeTemplates : arguments are null ");
-            return;
-        }
+        System.out.println("StorageVolumeTemplateClientSample : getConnectableStorageVolumeTemplates : " +
+                "ConnectableStorageVolumeTemplate returned to client : " + connectableVolumeTemplates.toJsonString());
     }
 
-    private StorageVolumeTemplate buildTestStorageVolumeTemplateDto() {
-        String storageSystemUri = storageSystemClient.getByName(storageSystemName).getUri();
-        String storagePoolUri = storagePoolClient.getByName(storagePoolName, storageSystemUri).get(0).getUri();
+    private StorageVolumeTemplate buildStorageVolumeTemplate() {
+        String storageSystemUri = storageSystemClient.getByName(StorageSystemClientSample.STORAGE_SYSTEM_NAME).get(0).getUri();
+        String storagePoolUri = storagePoolClient.getByName(StoragePoolClientSample.STORAGE_POOL_NAME,
+                storageSystemUri).get(0).getUri();
 
-        StorageVolumeTemplate dto = new StorageVolumeTemplate();
+        StorageVolumeTemplate storageVolumeTemplate = new StorageVolumeTemplate();
 
-        dto.setName(resourceName);
-        dto.setState("Normal");
-        dto.setDescription("Example Template");
-        dto.setStateReason("None");
-        dto.setStorageSystemUri(storageSystemUri);
-        dto.setSnapshotPoolUri(storagePoolUri); //v200
+        storageVolumeTemplate.setName(STORAGE_VOLUME_TEMPLATE_NAME);
+        storageVolumeTemplate.setState("Normal");
+        storageVolumeTemplate.setDescription("Example Template");
+        storageVolumeTemplate.setStateReason("None");
+        storageVolumeTemplate.setStorageSystemUri(storageSystemUri);
+        storageVolumeTemplate.setSnapshotPoolUri(storagePoolUri); //v200
 
         TemplateProvisioningData provisioning = new TemplateProvisioningData();
 
-        provisioning.setProvisionType(provisionType);
+        provisioning.setProvisionType(STORAGE_VOLUME_TEMPLATE_PROVISION_TYPE);
         provisioning.setShareable(true);
-        provisioning.setCapacity(capacity);
+        provisioning.setCapacity(STORAGE_VOLUME_TEMPLATE_CAPACITY);
         provisioning.setStoragePoolUri(storagePoolUri);
-        dto.setProvisioning(provisioning);
+        storageVolumeTemplate.setProvisioning(provisioning);
 
-        dto.setType(ResourceCategory.RC_STORAGE_VOLUME_TEMPLATE); //v120
-        dto.setType(ResourceCategory.RC_STORAGE_VOLUME_TEMPLATE_V200); //v200
+        storageVolumeTemplate.setType(ResourceCategory.RC_STORAGE_VOLUME_TEMPLATE); //v120
+        storageVolumeTemplate.setType(ResourceCategory.RC_STORAGE_VOLUME_TEMPLATE_V200); //v200
 
-        return dto;
+        return storageVolumeTemplate;
     }
 
     public static void main(final String[] args) throws Exception {
         StorageVolumeTemplateClientSample client = new StorageVolumeTemplateClientSample();
 
-        client.createStorageVolumeTemplate();
-
         client.getStorageVolumeTemplateById();
-        client.getAllStorageVolumeTemplate();
+        client.createStorageVolumeTemplate();
+        client.getAllStorageVolumeTemplates();
         client.getStorageVolumeTemplateByName();
+        client.getConnectableStorageVolumeTemplates();
         client.updateStorageVolumeTemplate();
-        client.getConnectableVolumeTemplates();
         client.deleteStorageVolumeTemplate();
     }
+
 }
