@@ -39,6 +39,7 @@ import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
 import com.hp.ov.sdk.rest.client.storage.StoragePoolClient;
 import com.hp.ov.sdk.rest.client.storage.StorageSystemClient;
+import com.hp.ov.sdk.rest.client.storage.StorageVolumeAttachmentClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeTemplateClient;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
@@ -66,6 +67,7 @@ public class OneViewClient {
     private StorageSystemClient storageSystemClient;
     private StoragePoolClient storagePoolClient;
     private StorageVolumeClient storageVolumeClient;
+    private StorageVolumeAttachmentClient storageVolumeAttachmentClient;
     private StorageVolumeTemplateClient storageVolumeTemplateClient;
     private InterconnectTypeClient interconnectTypeClient;
     private LogicalInterconnectGroupClient logicalInterconnectGroupClient;
@@ -142,6 +144,10 @@ public class OneViewClient {
 
     public synchronized StorageVolumeClient storageVolume() {
         return this.getClient(this.storageVolumeClient, StorageVolumeClient.class);
+    }
+
+    public synchronized StorageVolumeAttachmentClient storageVolumeAttachment() {
+        return this.getClient(this.storageVolumeAttachmentClient, StorageVolumeAttachmentClient.class);
     }
 
     public synchronized StorageVolumeTemplateClient storageVolumeTemplate() {
