@@ -74,7 +74,7 @@ public class ResourceDtoUtilsWrapper {
         if (serverProfileValue.getStorageVolumeForServerProfile().getStorageVolume().size() > 0) {
             final List<VolumeAttachment> volumeAttachments = new ArrayList<VolumeAttachment>();
             for (final StorageVolume storageVolume : serverProfileValue.getStorageVolumeForServerProfile().getStorageVolume()) {
-                volumeAttachments.add(resourceDtoUtils.buildVolumeAttachment(params, storageVolume.getVolumeName(),
+                volumeAttachments.add(resourceDtoUtils.buildVolumeAttachment(storageVolume.getVolumeName(),
                         serverProfileValue.getUseBayNameForServerHardwareUri(), j, storageVolume.getIsEnabled(),
                         storageVolume.getStorageTargets(), storageVolume.getStorageTargetType(), storageVolume.getLunType(), fcId));
                 j++;

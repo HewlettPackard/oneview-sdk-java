@@ -19,8 +19,6 @@ import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.EnclosureGroupClientImpl;
 import com.hp.ov.sdk.rest.client.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.ServerHardwareClientImpl;
-import com.hp.ov.sdk.rest.client.StorageVolumeClient;
-import com.hp.ov.sdk.rest.client.StorageVolumeClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 /**
@@ -29,25 +27,22 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
  */
 @Deprecated
 public class SdkUtils {
+
     private final ServerHardwareClient serverHardwareClient;
     private final EnclosureGroupClient enclosureGroupClient;
-    private final StorageVolumeClient storageVolumeClient;
 
     private static final class SdkUtilsHolder {
         private static final SdkUtils INSTANCE = new SdkUtils(
                 ServerHardwareClientImpl.getClient(),
-                EnclosureGroupClientImpl.getClient(),
-                StorageVolumeClientImpl.getClient());
+                EnclosureGroupClientImpl.getClient());
     }
 
     private SdkUtils(
         ServerHardwareClient serverHardwareClient,
-        EnclosureGroupClient enclosureGroupClient,
-        StorageVolumeClient storageVolumeClient) {
+        EnclosureGroupClient enclosureGroupClient) {
 
         this.serverHardwareClient = serverHardwareClient;
         this.enclosureGroupClient = enclosureGroupClient;
-        this.storageVolumeClient = storageVolumeClient;
     }
 
     public static SdkUtils getInstance() {
@@ -66,19 +61,4 @@ public class SdkUtils {
         return enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();
     }
 
-    public Boolean isVolumeSharable(final RestParams params, final String volumeName) {
-        return storageVolumeClient.getStorageVolumeByName(params, volumeName).getShareable();
-    }
-
-    public String getVolumeUri(final RestParams params, final String volumeName) {
-        return storageVolumeClient.getStorageVolumeByName(params, volumeName).getUri();
-    }
-
-    public String getStoragePoolFromVolume(final RestParams params, final String volumeName) {
-        return storageVolumeClient.getStorageVolumeByName(params, volumeName).getStoragePoolUri();
-    }
-
-    public String getStorageSystemFromVolume(final RestParams params, final String volumeName) {
-        return storageVolumeClient.getStorageVolumeByName(params, volumeName).getStorageSystemUri();
-    }
 }

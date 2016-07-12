@@ -18,7 +18,7 @@ package com.hp.ov.sdk.dto;
 import java.io.Serializable;
 import com.google.gson.annotations.Since;
 
-public class AddStorageVolumeV2 implements Serializable {
+public class AddStorageVolume implements Serializable {
 
     private static final long serialVersionUID = -2745402537486462067L;
 

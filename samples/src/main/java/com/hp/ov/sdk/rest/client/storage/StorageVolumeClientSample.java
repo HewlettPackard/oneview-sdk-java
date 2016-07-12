@@ -17,28 +17,16 @@ package com.hp.ov.sdk.rest.client.storage;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
-import com.hp.ov.sdk.dto.AddStorageVolumeV2;
+import com.hp.ov.sdk.dto.AddStorageVolume;
 import com.hp.ov.sdk.dto.AttachableStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
 import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.StorageVolume;
 import com.hp.ov.sdk.dto.StorageVolumeProvisioningParameters;
 import com.hp.ov.sdk.dto.StorageVolumeSnapshot;
-import com.hp.ov.sdk.dto.StorageVolumeV2;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKBadRequestException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.rest.client.StorageVolumeClient;
-import com.hp.ov.sdk.rest.client.StorageVolumeClientImpl;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * StorageVolumeClientSample is a sample program consume the container that is defined over the storage pool in HPE OneView.
@@ -51,543 +39,152 @@ public class StorageVolumeClientSample {
     private final StoragePoolClient storagePoolClient;
     private final StorageSystemClient storageSystemClient;
 
-    private RestParams params;
-    private TaskResourceV2 taskResourceV2;
-
     // These are variables to be defined by user
     // ================================
-    private static final String resourceName = "Volume101";
-    private static final String resourceNameUpdate = "Volume101_Updated";
-    private static final String storageSystemName = "ThreePAR7200-4310";
-    private static final String storagePoolName = "FST_CPG1";
-    private static final String resourceNameForPrivateStorage = "Volume103";
-    private static final String resourceId = "907A557A-8EA4-4AB8-961E-13235A882F33";
-    private static final String storageVolumeSnapshotId = "0863B609-DE0A-4E31-B7D2-3D2207F673E4";
-    private static final String capacity = "1234567898";
+    private static final String STORAGE_VOLUME_RESOURCE_ID = "C470D4AA-B933-4D8B-999C-2F44F95233D8";
+    private static final String STORAGE_VOLUME_NAME = "Volume_Sample";
+    private static final String STORAGE_VOLUME_NAME_UPDATED = STORAGE_VOLUME_NAME + "_Updated";
+    private static final String PRIVATE_STORAGE_VOLUME_NAME = "Private_Volume_Sample";
+    private static final String STORAGE_VOLUME_SNAPSHOT_ID = "9324AE01-B655-4C2F-B703-0C71610F94E9";
+    private static final String STORAGE_VOLUME_CAPACITY = "1234567898";
     // ================================
 
     private StorageVolumeClientSample() {
         OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
 
-        this.storageVolumeClient = StorageVolumeClientImpl.getClient();
+        this.storageVolumeClient = oneViewClient.storageVolume();
         this.storagePoolClient = oneViewClient.storagePool();
         this.storageSystemClient = oneViewClient.storageSystem();
     }
 
-    private void getStorageVolumeById() throws InstantiationException, IllegalAccessException {
-        StorageVolumeV2 storageVolumeDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getStorageVolume() {
+        StorageVolume storageVolume = this.storageVolumeClient.getById(STORAGE_VOLUME_RESOURCE_ID);
 
-            // then make sdk service call to get resource
-            storageVolumeDto = storageVolumeClient.getStorageVolume(params, resourceId);
-
-            System.out.println("StorageVolumeClientTest : getStorageVolumeById : " +
-                    "storageVolume object returned to client : " + storageVolumeDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeClientTest : getStorageVolumeById : " +
-                    "resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeClientTest : getStorageVolumeById : no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeClientTest : getStorageVolumeById : appliance not reachable at : "
-                    + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeClientTest : getStorageVolumeById : No response from appliance : "
-                    + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeClientTest : getStorageVolumeById : arguments are null ");
-        }
+        System.out.println("StorageVolumeClientSample : getStorageVolume : " +
+                "StorageVolume object returned to client : " + storageVolume.toJsonString());
     }
 
-    private void getAllStorageVolume() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
-            SDKNoSuchUrlException {
-        ResourceCollection<StorageVolumeV2> storageVolumeCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getAllStorageVolumes() {
+        ResourceCollection<StorageVolume> storageVolumes = this.storageVolumeClient.getAll();
 
-            // then make sdk service call to get resource
-            storageVolumeCollectionDto = storageVolumeClient.getAllStorageVolumes(params);
-
-            System.out.println("StorageVolumeClientTest : getAllStorageVolume : storageVolume object returned to client : "
-                    + storageVolumeCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeClientTest : getAllStorageVolume : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeClientTest : getAllStorageVolume : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeClientTest : getAllStorageVolume : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeClientTest : getAllStorageVolume : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeClientTest : getAllStorageVolume : arguments are null ");
-            return;
-        }
+        System.out.println("StorageVolumeClientSample : getAllStorageVolumes : " +
+                "StorageVolumes returned to client : " + storageVolumes.toJsonString());
     }
 
-    private void getStorageVolumeByName() throws InstantiationException, IllegalAccessException {
-        StorageVolumeV2 storageVolumeDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getStorageVolumeByName() {
+        StorageVolume storageVolume = this.storageVolumeClient.getByName(STORAGE_VOLUME_NAME).get(0);
 
-            // then make sdk service call to get resource
-            storageVolumeDto = storageVolumeClient.getStorageVolumeByName(params, resourceName);
-
-            System.out.println("StorageVolumeClientTest : getStorageVolumeByName : storageVolume object returned to client : "
-                    + storageVolumeDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeClientTest : getStorageVolumeByName : resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeClientTest : getStorageVolumeByName : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeClientTest : getStorageVolumeByName : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeClientTest : getStorageVolumeByName : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeClientTest : getStorageVolumeByName : arguments are null ");
-            return;
-        }
+        System.out.println("StorageVolumeClientSample : getStorageVolumeByName : " +
+                "StorageVolume object returned to client : " + storageVolume.toJsonString());
     }
 
-    private void createStorageVolume() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void createStorageVolume() {
+        AddStorageVolume addStorageVolume = buildStorageVolume();
 
-            // create storageVolume request body
-            final AddStorageVolumeV2 addStorageVolumeDto = buildTestStorageVolumeDto();
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = storageVolumeClient.createStorageVolume(params, addStorageVolumeDto, false, false);
+        TaskResourceV2 taskResource = storageVolumeClient.create(addStorageVolume, false);
 
-            System.out.println("StorageVolumeClientTest : createStorageVolume : task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeClientTest : createStorageVolume : resource you are looking is not found");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("StorageVolumeClientTest : createStorageVolume : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeClientTest : createStorageVolume : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeClientTest : createStorageVolume : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeClientTest : createStorageVolume : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("StorageVolumeClientTest : createStorageVolume :" +
-                    " errors in task, please check task resource for more details ");
-            return;
-        }
+        System.out.println("StorageVolumeClientSample : createStorageVolume : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void createPrivateStorageVolume() throws InstantiationException, IllegalAccessException {
+    private void updateStorageVolume() {
+        StorageVolume storageVolume = this.storageVolumeClient.getByName(STORAGE_VOLUME_NAME).get(0);
 
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        storageVolume.setName(STORAGE_VOLUME_NAME_UPDATED);
 
-            // create storageVolume request body
-            final AddStorageVolumeV2 addStorageVolumeDto = buildTestPrivateStorageVolumeDto();
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = storageVolumeClient.createStorageVolume(params, addStorageVolumeDto, false, false);
+        String response = storageVolumeClient.update(storageVolume.getResourceId(), storageVolume);
 
-            System.out.println("StorageVolumeClientTest : createPrivateStorageVolume : storageVolume object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeClientTest : createPrivateStorageVolume : resource you are looking is not found");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("StorageVolumeClientTest : createPrivateStorageVolume : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeClientTest : createPrivateStorageVolume : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeClientTest : createPrivateStorageVolume : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeClientTest : createPrivateStorageVolume : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("StorageVolumeClientTest : createPrivateStorageVolume :" +
-                    " errors in task, please check task resource for more details ");
-            return;
-        }
+        System.out.println("StorageVolumeClientSample : updateStorageVolume : " +
+                "Response returned to client : " + response);
     }
 
-    private void updateStorageVolume() throws InstantiationException, IllegalAccessException {
-        StorageVolumeV2 storageVolumeDto = null;
-        String updateStorage = null;
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void deleteStorageVolume() {
+        StorageVolume storageVolume = this.storageVolumeClient.getByName(STORAGE_VOLUME_NAME_UPDATED).get(0);
+        TaskResourceV2 taskResource = this.storageVolumeClient.delete(storageVolume.getResourceId(), false);
 
-            // fetch resource Id using resource name
-            storageVolumeDto = storageVolumeClient.getStorageVolumeByName(params, resourceName);
-
-            if (null != storageVolumeDto.getUri()) {
-                resourceId = UrlUtils.getResourceIdFromUri(storageVolumeDto.getUri());
-            }
-            storageVolumeDto.setName(resourceName + "_Updated");
-
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            updateStorage = storageVolumeClient.updateStorageVolume(params, resourceId, storageVolumeDto, false);
-
-            System.out.println("StorageVolumeClientTest : updateStorageVolume : " + "storageVolume object returned to client : "
-                    + updateStorage);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeClientTest : updateStorageVolume :"
-                    + " resource you are looking is not found for update ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("StorageVolumeClientTest : updateStorageVolume :" + " bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeClientTest : updateStorageVolume :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeClientTest : updateStorageVolume :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeClientTest : updateStorageVolume :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeClientTest : updateStorageVolume : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("StorageVolumeClientTest : updateStorageVolume : " + "errors in task, please check task "
-                    + "resource for more details ");
-            return;
-        }
+        System.out.println("StorageVolumeClientSample : deleteStorageVolume : " +
+                "Task object returned to client : " + taskResource);
     }
 
-    private void deleteStorageVolume() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void createPrivateStorageVolume() {
+        AddStorageVolume addStorageVolume = buildPrivateStorageVolume();
 
-            // get resource ID
-            resourceId = storageVolumeClient.getId(params, resourceNameUpdate);
+        TaskResourceV2 taskResource = storageVolumeClient.create(addStorageVolume, false);
 
-            // then make sdk service call to get resource
-            taskResourceV2 = storageVolumeClient.deleteStorageVolume(params, resourceId, false);
-
-            System.out.println("StorageVolumeClientTest : deleteStorageVolume : storageVolume object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeClientTest : deleteStorageVolume : resource you are looking is not found for delete ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeClientTest : deleteStorageVolume : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeClientTest : deleteStorageVolume : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeClientTest : deleteStorageVolume : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeClientTest : deleteStorageVolume : arguments are null ");
-            return;
-        }
+        System.out.println("StorageVolumeClientSample : createPrivateStorageVolume : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void getAttachableVolumes() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
-            SDKNoSuchUrlException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getAttachableVolumes() {
+        ResourceCollection<AttachableStorageVolume> attachableVolumes = this.storageVolumeClient.getAttachableVolumes();
 
-            // then make sdk service call to get resource
-            ResourceCollection<AttachableStorageVolume> attachableVolumes = storageVolumeClient.getAttachableVolumes(params);
-
-            System.out.println("StorageVolumeClientTest : getAttachableVolumes : attachableVolumes object returned to client : "
-                    + attachableVolumes.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeClientTest : getAttachableVolumes : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeClientTest : getAttachableVolumes : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeClientTest : getAttachableVolumes : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeClientTest : getAttachableVolumes : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeClientTest : getAttachableVolumes : arguments are null ");
-            return;
-        }
+        System.out.println("StorageVolumeClientSample : getAttachableVolumes : " +
+                "AttachableStorageVolumes returned to client : " + attachableVolumes.toJsonString());
     }
 
-    private void getStorageVolumeSnapshot() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getStorageVolumeSnapshot() {
+        StorageVolumeSnapshot storageVolumeSnapshot = this.storageVolumeClient.getSnapshot(
+                STORAGE_VOLUME_RESOURCE_ID, STORAGE_VOLUME_SNAPSHOT_ID);
 
-            // then make sdk service call to get resource
-            StorageVolumeSnapshot storageVolumeSnapshot = storageVolumeClient.getStorageVolumeSnapshot(params,
-                    resourceId, storageVolumeSnapshotId);
-
-            System.out.println("StorageVolumeClientTest : getStorageVolumeSnapshot :" +
-                    " storageVolumeSnapshot object returned to client : " + storageVolumeSnapshot.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeClientTest : getStorageVolumeSnapshot : resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeClientTest : getStorageVolumeSnapshot : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeClientTest : getStorageVolumeSnapshot : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeClientTest : getStorageVolumeSnapshot : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeClientTest : getStorageVolumeSnapshot : arguments are null ");
-            return;
-        }
+        System.out.println("StorageVolumeClientSample : getStorageVolumeSnapshot : " +
+                "StorageVolumeSnapshot object returned to client : " + storageVolumeSnapshot.toJsonString());
     }
 
-    private void getAllStorageVolumeSnapshots() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getAllStorageVolumeSnapshots() {
+        StorageVolume storageVolume = this.storageVolumeClient.getByName(STORAGE_VOLUME_NAME).get(0);
+        ResourceCollection<StorageVolumeSnapshot> storageVolumeSnapshots = this.storageVolumeClient.getAllSnapshots(
+                storageVolume.getResourceId());
 
-            // then make sdk service call to get resource
-            ResourceCollection<StorageVolumeSnapshot> storageVolumeSnapshots
-                    = storageVolumeClient.getAllStorageVolumeSnapshots(params, resourceId);
-
-            System.out.println("StorageVolumeClientTest : getAllStorageVolumeSnapshots :" +
-                    " getAllStorageVolumeSnapshots object returned to client : " + storageVolumeSnapshots);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeClientTest : getAllStorageVolumeSnapshots : resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeClientTest : getAllStorageVolumeSnapshots : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeClientTest : getAllStorageVolumeSnapshots : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeClientTest : getAllStorageVolumeSnapshots : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeClientTest : getAllStorageVolumeSnapshots : arguments are null ");
-            return;
-        }
+        System.out.println("StorageVolumeClientSample : getAllStorageVolumeSnapshots : " +
+                "StorageVolumeSnapshots returned to client : " + storageVolumeSnapshots.toJsonString());
     }
 
     private void createStorageVolumeSnapshot() {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        StorageVolume storageVolume = this.storageVolumeClient.getByName(STORAGE_VOLUME_NAME).get(0);
+        StorageVolumeSnapshot snapshot = buildStorageVolumeSnapshot();
 
-            StorageVolumeSnapshot snapshot = buildTestStorageVolumeSnapshot();
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            TaskResourceV2 taskResource = storageVolumeClient.createStorageVolumeSnapshot(params,
-                    resourceId, snapshot, false);
+        TaskResourceV2 taskResource = storageVolumeClient.createSnapshot(
+                storageVolume.getResourceId(), snapshot, false);
 
-            System.out.println("StorageVolumeClientTest : createStorageVolumeSnapshot : task object returned to client : "
-                    + taskResource);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeClientTest : createStorageVolumeSnapshot : resource you are looking is not found");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("StorageVolumeClientTest : createStorageVolumeSnapshot : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeClientTest : createStorageVolumeSnapshot : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeClientTest : createStorageVolumeSnapshot : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeClientTest : createStorageVolumeSnapshot : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("StorageVolumeClientTest : createStorageVolumeSnapshot : " +
-                    "errors in task, please check task resource for more details ");
-            return;
-        }
+        System.out.println("StorageVolumeClientSample : createStorageVolumeSnapshot : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void deleteStorageVolumeSnapshot() {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        StorageVolume storageVolume = this.storageVolumeClient.getByName(STORAGE_VOLUME_NAME).get(0);
+        StorageVolumeSnapshot storageVolumeSnapshot = this.storageVolumeClient.getAllSnapshots(
+                storageVolume.getResourceId()).get(0);
 
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            TaskResourceV2 taskResource = storageVolumeClient.deleteStorageVolumeSnapshot(params, resourceId,
-                    storageVolumeSnapshotId, false);
+        TaskResourceV2 taskResource = this.storageVolumeClient.deleteSnapshot(
+                storageVolume.getResourceId(), storageVolumeSnapshot.getResourceId(), false);
 
-            System.out.println("StorageVolumeClientTest : deleteStorageVolumeSnapshot : task object returned to client : "
-                    + taskResource);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeClientTest : deleteStorageVolumeSnapshot : resource you are looking is not found");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("StorageVolumeClientTest : deleteStorageVolumeSnapshot : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeClientTest : deleteStorageVolumeSnapshot : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeClientTest : deleteStorageVolumeSnapshot : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeClientTest : deleteStorageVolumeSnapshot : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("StorageVolumeClientTest : deleteStorageVolumeSnapshot : " +
-                    "errors in task, please check task resource for more details ");
-            return;
-        }
+        System.out.println("StorageVolumeClientSample : deleteStorageVolumeSnapshot : " +
+                "Task object returned to client : " + taskResource);
     }
 
     private void getExtraManagedStorageVolumePaths() {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        ResourceCollection<ExtraStorageVolume> extraManagedPaths = this.storageVolumeClient.getExtraManagedPaths();
 
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            ResourceCollection<ExtraStorageVolume> extraAccessList = storageVolumeClient.getExtraManagedStorageVolumePaths(params);
-
-            System.out.println("StorageVolumeClientTest : getExtraManagedStorageVolumePaths : extra access list object returned to client : "
-                    + extraAccessList);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeClientTest : getExtraManagedStorageVolumePaths : resource you are looking is not found");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("StorageVolumeClientTest : getExtraManagedStorageVolumePaths : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeClientTest : getExtraManagedStorageVolumePaths : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeClientTest : getExtraManagedStorageVolumePaths : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeClientTest : getExtraManagedStorageVolumePaths : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("StorageVolumeClientTest : getExtraManagedStorageVolumePaths : " +
-                    "errors in task, please check task resource for more details ");
-            return;
-        }
+        System.out.println("StorageVolumeClientSample : getExtraManagedStorageVolumePaths : " +
+                "ExtraStorageVolumes returned to client : " + extraManagedPaths.toJsonString());
     }
 
     private void repairExtraManagedStorageVolumePath() {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        StorageVolume storageVolume = this.storageVolumeClient.getByName(STORAGE_VOLUME_NAME).get(0);
 
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            ExtraStorageVolumeRepair deleteExtraManagedStorageVolume = new ExtraStorageVolumeRepair();
+        ExtraStorageVolumeRepair deleteExtraManagedStorageVolume = new ExtraStorageVolumeRepair();
 
-            deleteExtraManagedStorageVolume.setType("ExtraManagedStorageVolumePaths");
-            deleteExtraManagedStorageVolume.setResourceUri("/rest/storage-volumes/" + resourceId);
+        deleteExtraManagedStorageVolume.setType("ExtraManagedStorageVolumePaths");
+        deleteExtraManagedStorageVolume.setResourceUri(storageVolume.getUri());
 
-            TaskResourceV2  taskResource = storageVolumeClient.repairExtraManagedStorageVolumePath(
-                    params, deleteExtraManagedStorageVolume, false);
+        TaskResourceV2 taskResource = this.storageVolumeClient.repairExtraManagedPath(
+                deleteExtraManagedStorageVolume, false);
 
-            System.out.println("StorageVolumeClientTest : repairExtraManagedStorageVolumePath : task object returned to client : "
-                    + taskResource);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeClientTest : repairExtraManagedStorageVolumePath : resource you are looking is not found");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("StorageVolumeClientTest : repairExtraManagedStorageVolumePath : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeClientTest : repairExtraManagedStorageVolumePath : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeClientTest : repairExtraManagedStorageVolumePath : Appliance not reachable at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeClientTest : repairExtraManagedStorageVolumePath : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("StorageVolumeClientTest : repairExtraManagedStorageVolumePath : " +
-                    "errors in task, please check task resource for more details ");
-            return;
-        }
+        System.out.println("StorageVolumeClientSample : repairExtraManagedStorageVolumePath : " +
+                "Task object returned to client : " + taskResource);
     }
 
-    private StorageVolumeSnapshot buildTestStorageVolumeSnapshot() {
+    private StorageVolumeSnapshot buildStorageVolumeSnapshot() {
         StorageVolumeSnapshot snapshot = new StorageVolumeSnapshot();
 
         snapshot.setType("Snapshot");
@@ -597,13 +194,15 @@ public class StorageVolumeClientSample {
         return snapshot;
     }
 
-    private AddStorageVolumeV2 buildTestStorageVolumeDto() {
-        String storageSystemUri = storageSystemClient.getByName(storageSystemName).getUri();
-        String storagePoolUri = storagePoolClient.getByName(storagePoolName, storageSystemUri).get(0).getUri();
+    private AddStorageVolume buildStorageVolume() {
+        String storageSystemUri = storageSystemClient.getByName(
+                StorageSystemClientSample.STORAGE_SYSTEM_NAME).get(0).getUri();
+        String storagePoolUri = storagePoolClient.getByName(
+                StoragePoolClientSample.STORAGE_POOL_NAME, storageSystemUri).get(0).getUri();
 
-        AddStorageVolumeV2 dto = new AddStorageVolumeV2();
+        AddStorageVolume dto = new AddStorageVolume();
 
-        dto.setName(resourceName);
+        dto.setName(STORAGE_VOLUME_NAME);
         dto.setDescription("Volume description");
         dto.setStorageSystemUri(storageSystemUri);
         dto.setSnapshotPoolUri(storagePoolUri); //v200
@@ -614,30 +213,32 @@ public class StorageVolumeClientSample {
 
         provisioningParameters.setProvisionType("Full");
         provisioningParameters.setShareable(true);
-        provisioningParameters.setRequestedCapacity(capacity);
+        provisioningParameters.setRequestedCapacity(STORAGE_VOLUME_CAPACITY);
         provisioningParameters.setStoragePoolUri(storagePoolUri);
         dto.setProvisioningParameters(provisioningParameters);
 
         return dto;
     }
 
-    private AddStorageVolumeV2 buildTestPrivateStorageVolumeDto() {
-        String storageSystemUri = storageSystemClient.getByName(storageSystemName).getUri();
-        String storagePoolUri = storagePoolClient.getByName(storagePoolName, storageSystemUri).get(0).getUri();
+    private AddStorageVolume buildPrivateStorageVolume() {
+        String storageSystemUri = storageSystemClient.getByName(
+                StorageSystemClientSample.STORAGE_SYSTEM_NAME).get(0).getUri();
+        String storagePoolUri = storagePoolClient.getByName(
+                StoragePoolClientSample.STORAGE_POOL_NAME, storageSystemUri).get(0).getUri();
 
-        final AddStorageVolumeV2 dto = new AddStorageVolumeV2();
+        AddStorageVolume dto = new AddStorageVolume();
 
-        dto.setName(resourceNameForPrivateStorage);
+        dto.setName(PRIVATE_STORAGE_VOLUME_NAME);
         dto.setDescription("Volume description");
         dto.setStorageSystemUri(storageSystemUri);
         dto.setSnapshotPoolUri(storagePoolUri); //v200
         dto.setType(ResourceCategory.RC_ADD_STORAGE_VOLUME);
         dto.setType(ResourceCategory.RC_ADD_STORAGE_VOLUME_200); //v200
 
-        final StorageVolumeProvisioningParameters provisioningParameters = new StorageVolumeProvisioningParameters();
+        StorageVolumeProvisioningParameters provisioningParameters = new StorageVolumeProvisioningParameters();
         provisioningParameters.setProvisionType("Full");
         provisioningParameters.setShareable(false);
-        provisioningParameters.setRequestedCapacity("1234567898");
+        provisioningParameters.setRequestedCapacity(STORAGE_VOLUME_CAPACITY);
         provisioningParameters.setStoragePoolUri(storagePoolUri);
         dto.setProvisioningParameters(provisioningParameters);
 
@@ -649,21 +250,18 @@ public class StorageVolumeClientSample {
 
         client.createStorageVolume();
         client.createPrivateStorageVolume();
-
-        client.getStorageVolumeById();
-        client.getAllStorageVolume();
+        client.getStorageVolume();
+        client.getAllStorageVolumes();
         client.getStorageVolumeByName();
-        client.updateStorageVolume();
-        client.deleteStorageVolume();
         client.getAttachableVolumes();
-
         client.createStorageVolumeSnapshot();
-
         client.getStorageVolumeSnapshot();
         client.getAllStorageVolumeSnapshots();
         client.deleteStorageVolumeSnapshot();
-
         client.getExtraManagedStorageVolumePaths();
         client.repairExtraManagedStorageVolumePath();
+
+        client.updateStorageVolume();
+        client.deleteStorageVolume();
     }
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,18 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.dto;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.google.gson.annotations.Since;
 
 /**
- * The StorageVolumeV2 data transfer object (DTO) contains the information used
+ * The StorageVolume data transfer object (DTO) contains the information used
  * to represent a storage volume in the system. It is passed in to the
  * add/update storage volume REST api, as well as the add/update storage volume
  * through java client api.
  */
-public class StorageVolumeV2 extends BaseModelResource {
+public class StorageVolume extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
@@ -177,4 +180,56 @@ public class StorageVolumeV2 extends BaseModelResource {
         this.wwn = wwn;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof StorageVolume) {
+            StorageVolume that = (StorageVolume) obj;
+
+            return new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(allocatedCapacity, that.allocatedCapacity)
+                    .append(deviceType, that.deviceType)
+                    .append(deviceVolumeName, that.deviceVolumeName)
+                    .append(isPermanent, that.isPermanent)
+                    .append(provisionType, that.provisionType)
+                    .append(provisionedCapacity, that.provisionedCapacity)
+                    .append(raidLevel, that.raidLevel)
+                    .append(refreshState, that.refreshState)
+                    .append(revertToSnapshotUri, that.revertToSnapshotUri)
+                    .append(snapshotPoolUri, that.snapshotPoolUri)
+                    .append(snapshots, that.snapshots)
+                    .append(shareable, that.shareable)
+                    .append(stateReason, that.stateReason)
+                    .append(storagePoolUri, that.storagePoolUri)
+                    .append(storageSystemUri, that.storageSystemUri)
+                    .append(wwn, that.wwn)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                .append(allocatedCapacity)
+                .append(deviceType)
+                .append(deviceVolumeName)
+                .append(isPermanent)
+                .append(provisionType)
+                .append(provisionedCapacity)
+                .append(raidLevel)
+                .append(refreshState)
+                .append(revertToSnapshotUri)
+                .append(snapshotPoolUri)
+                .append(snapshots)
+                .append(shareable)
+                .append(stateReason)
+                .append(storagePoolUri)
+                .append(storageSystemUri)
+                .append(wwn)
+                .toHashCode();
+    }
 }
