@@ -358,7 +358,7 @@ public class ResourceDtoUtils {
 
         serverProfileDto.setName(profileName);
         if (serverHardwareName != null && serverHardwareName.length() != 0) {
-            final String serverHardwareTypeUri = SdkUtils.getInstance().getServerHardwareTypeUri(params, serverHardwareName);
+            final String serverHardwareTypeUri = getServerHardwareTypeUri(serverHardwareName);
             serverProfileDto
                     .setServerHardwareTypeUri((serverHardwareTypeUri != null && serverHardwareTypeUri.length() != 0) ? serverHardwareTypeUri
                             : null);
@@ -371,7 +371,7 @@ public class ResourceDtoUtils {
                     null);
         }
         if (useBayNameForServerHardwareUri) {
-            final String serverHardwareUri = SdkUtils.getInstance().getServerHardwareUri(params, serverHardwareName);
+            final String serverHardwareUri = getServerHardwareUri(serverHardwareName);
             serverProfileDto
                     .setServerHardwareUri((serverHardwareUri != null && serverHardwareUri.length() != 0) ? serverHardwareUri : null);
         }
@@ -400,6 +400,14 @@ public class ResourceDtoUtils {
         serverProfileDto.setSanStorage(sanStorage);
 
         return serverProfileDto;
+    }
+
+    public String getServerHardwareUri(String serverHardwareName) {
+        return oneViewClient.serverHardware().getByName(serverHardwareName).get(0).getUri();
+    }
+
+    public String getServerHardwareTypeUri(String serverHardwareName) {
+        return oneViewClient.serverHardware().getByName(serverHardwareName).get(0).getServerHardwareTypeUri();
     }
 
 }

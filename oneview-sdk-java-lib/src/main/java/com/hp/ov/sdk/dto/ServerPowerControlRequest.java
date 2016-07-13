@@ -17,6 +17,9 @@ package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 public class ServerPowerControlRequest implements Serializable {
 
     private static final long serialVersionUID = 7954518736138061854L;
@@ -49,4 +52,28 @@ public class ServerPowerControlRequest implements Serializable {
         this.powerState = powerState;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof ServerPowerControlRequest) {
+            ServerPowerControlRequest that = (ServerPowerControlRequest) obj;
+
+            return new EqualsBuilder()
+                    .append(powerControl, that.powerControl)
+                    .append(powerRequestIssued, that.powerRequestIssued)
+                    .append(powerState, that.powerState)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(powerControl)
+                .append(powerRequestIssued)
+                .append(powerState)
+                .toHashCode();
+    }
 }

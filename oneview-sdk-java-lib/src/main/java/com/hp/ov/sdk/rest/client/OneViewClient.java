@@ -37,6 +37,7 @@ import com.hp.ov.sdk.rest.client.networking.SwitchClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
+import com.hp.ov.sdk.rest.client.server.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
 import com.hp.ov.sdk.rest.client.storage.StoragePoolClient;
 import com.hp.ov.sdk.rest.client.storage.StorageSystemClient;
@@ -73,6 +74,8 @@ public class OneViewClient {
     private StorageVolumeTemplateClient storageVolumeTemplateClient;
     private InterconnectTypeClient interconnectTypeClient;
     private LogicalInterconnectGroupClient logicalInterconnectGroupClient;
+
+    private ServerHardwareClient serverHardwareClient;
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
         this.baseClient = new BaseClient(params,
@@ -166,6 +169,10 @@ public class OneViewClient {
 
     public synchronized LogicalInterconnectGroupClient logicalInterconnectGroup() {
         return this.getClient(this.logicalInterconnectGroupClient, LogicalInterconnectGroupClient.class);
+    }
+
+    public synchronized ServerHardwareClient serverHardware() {
+        return this.getClient(this.serverHardwareClient, ServerHardwareClient.class);
     }
 
     private <T> T getClient(T client, Class<T> clientClass) {
