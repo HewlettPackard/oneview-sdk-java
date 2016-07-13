@@ -96,7 +96,7 @@ public class EnclosureGroupClient {
     /**
      * Creates a enclosure group according to the provided {@link EnclosureGroup} object.
      *
-     * @param enclosureGroup object containing the logical switch details.
+     * @param enclosureGroup object containing the enclosure group details.
      *
      * @return {@link EnclosureGroup} containing the created enclosure group.
      */
@@ -117,7 +117,7 @@ public class EnclosureGroupClient {
      * Updates a {@link EnclosureGroup} identified by the given resource identifier.
      *
      * @param resourceId enclosure group resource identifier as seen in HPE OneView.
-     * @param enclosureGroup object containing the logical switch details.
+     * @param enclosureGroup object containing the enclosure group details.
      *
      * @return {@link EnclosureGroup} containing the updated enclosure group.
      */
@@ -153,7 +153,6 @@ public class EnclosureGroupClient {
 
         return response;
     }
-
 
     /**
      * Retrieves the configuration script for the specified enclosure group resource identifier.

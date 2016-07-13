@@ -16,196 +16,74 @@
 
 package com.hp.ov.sdk.rest.client.servers;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.servers.serverhardwaretype.ServerHardwareType;
 import com.hp.ov.sdk.dto.servers.serverhardwaretype.ServerHardwareTypeUpdate;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKBadRequestException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.ServerHardwareTypeClient;
-import com.hp.ov.sdk.rest.client.ServerHardwareTypeClientImpl;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
+import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.server.ServerHardwareTypeClient;
 
 public class ServerHardwareTypeClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String resourceName = "BL460c Gen8 1";
-    private static final String resourceId = "53E2C267-CEDC-4A0B-961E-10034F5B7098";
+    private static final String SERVER_HARDWARE_TYPE_RESOURCE_NAME = "BL460c Gen8 1";
+    private static final String SERVER_HARDWARE_TYPE_RESOURCE_ID = "53E2C267-CEDC-4A0B-961E-10034F5B7098";
     // ================================
 
-    private final ServerHardwareTypeClient client;
+    private final ServerHardwareTypeClient serverHardwareTypeClient;
 
     private ServerHardwareTypeClientSample() {
-        this.client = ServerHardwareTypeClientImpl.getClient();
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
+        this.serverHardwareTypeClient = oneViewClient.serverHardwareType();
     }
 
     private void getServerHardwareType() {
-        RestParams params = new RestParams();
+        ServerHardwareType serverHardwareType = serverHardwareTypeClient.getById(SERVER_HARDWARE_TYPE_RESOURCE_ID);
 
-        try {
-            params = HPOneViewCredential.createCredentials();
-
-            ServerHardwareType serverHardwareType = client.getServerHardwareType(params, resourceId);
-
-            System.out.println("ServerHardwareTypeClientSample : getServerHardwareType : "
-                    + "ServerHardwareType object returned to client : " + serverHardwareType.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ServerHardwareTypeClientSample : getServerHardwareType : " + "resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ServerHardwareTypeClientSample : getServerHardwareType : " + "no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ServerHardwareTypeClientSample : getServerHardwareType : " + "Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("ServerHardwareTypeClientSample : getServerHardwareType : " + "No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ServerHardwareTypeClientSample : getServerHardwareType : " + "arguments are null ");
-            return;
-        }
+        System.out.println("ServerHardwareTypeClient : getServerHardwareType : " +
+                "ServerHardwareType object returned to client : " + serverHardwareType.toJsonString());
     }
 
     private void getAllServerHardwareTypes() {
-        RestParams params = new RestParams();
+        ResourceCollection<ServerHardwareType> serverHardwareTypes = serverHardwareTypeClient.getAll();
 
-        try {
-            params = HPOneViewCredential.createCredentials();
-
-            ResourceCollection<ServerHardwareType> collection = client.getAllServerHardwareTypes(params);
-
-            System.out.println("ServerHardwareTypeClientSample : getAllServerHardwareTypes : "
-                    + "server hardware collection returned to client (count) : " + collection.getCount());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ServerHardwareTypeClientSample : getAllServerHardwareTypes : resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ServerHardwareTypeClientSample : getAllServerHardwareTypes : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ServerHardwareTypeClientSample : getAllServerHardwareTypes : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("ServerHardwareTypeClientSample : getAllServerHardwareTypes : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ServerHardwareTypeClientSample : getAllServerHardwareTypes : arguments are null ");
-            return;
-        }
+        System.out.println("ServerHardwareTypeClient : getAllServerHardwareTypes : " +
+                "ServerHardwareTypes returned to client : " + serverHardwareTypes.toJsonString());
     }
 
     private void getServerHardwareTypeByName() {
-        RestParams params = new RestParams();
+        ServerHardwareType serverHardwareType
+                = serverHardwareTypeClient.getByName(SERVER_HARDWARE_TYPE_RESOURCE_NAME).get(0);
 
-        try {
-            params = HPOneViewCredential.createCredentials();
-
-            ServerHardwareType serverHardwareType = client.getServerHardwareTypeByName(params, resourceName);
-
-            if (serverHardwareType != null) {
-                System.out.println("ServerHardwareTypeClientSample : getServerHardwareTypeByName : "
-                        + "server hardware object returned to client : " + serverHardwareType.toString());
-            } else {
-                System.out.println("ServerHardwareTypeClientSample : getServerHardwareTypeByName : "
-                        + "server hardware object returned to client : no server hardware found for the name" + resourceName);
-            }
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ServerHardwareTypeClientSample : getServerHardwareTypeByName : " + "resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ServerHardwareTypeClientSample : getServerHardwareTypeByName : " + "no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ServerHardwareTypeClientSample : getServerHardwareTypeByName : " + "Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("ServerHardwareTypeClientSample : getServerHardwareTypeByName : " + "No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ServerHardwareTypeClientSample : getServerHardwareTypeByName : " + "arguments are null ");
-            return;
-        }
+        System.out.println("ServerHardwareTypeClient : getServerHardwareTypeByName : " +
+                "ServerHardwareType object returned to client : " + serverHardwareType.toJsonString());
     }
 
     private void updateServerHardwareType() {
-        RestParams params = new RestParams();
+        ServerHardwareType serverHardwareType
+                = serverHardwareTypeClient.getByName(SERVER_HARDWARE_TYPE_RESOURCE_NAME).get(0);
 
-        try {
-            params = HPOneViewCredential.createCredentials();
+        ServerHardwareTypeUpdate update = new ServerHardwareTypeUpdate();
 
-            String resourceId = client.getId(params, resourceName);
-            ServerHardwareTypeUpdate update = new ServerHardwareTypeUpdate();
+        update.setDescription("Sample description update");
 
-            update.setDescription("Sample description update");
+        ServerHardwareType updated = this.serverHardwareTypeClient.update(serverHardwareType.getResourceId(), update);
 
-            ServerHardwareType serverHardwareType = client.updateServerHardwareType(params, resourceId, update);
-
-            System.out.println("ServerHardwareTypeClientSample : updateServerHardwareType : object returned to client : "
-                    + serverHardwareType.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ServerHardwareTypeClientSample : updateServerHardwareType : resource you are looking is not found");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("ServerHardwareTypeClientSample : updateServerHardwareType : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ServerHardwareTypeClientSample : updateServerHardwareType : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ServerHardwareTypeClientSample : updateServerHardwareType : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ServerHardwareTypeClientSample : updateServerHardwareType : arguments are null ");
-            return;
-        }
+        System.out.println("ServerHardwareTypeClient : updateServerHardwareType : " +
+                "ServerHardwareType object returned to client : " + updated.toJsonString());
     }
 
     private void deleteServerHardwareType() {
-        RestParams params = new RestParams();
+        ServerHardwareType serverHardwareType
+                = serverHardwareTypeClient.getByName(SERVER_HARDWARE_TYPE_RESOURCE_NAME).get(0);
 
-        try {
-            params = HPOneViewCredential.createCredentials();
+        TaskResourceV2 taskResource = this.serverHardwareTypeClient.delete(serverHardwareType.getResourceId(), false);
 
-            String resourceId = client.getId(params, resourceName);
-
-            TaskResourceV2 taskResourceV2 = client.deleteServerHardwareType(params, resourceId, false);
-
-            System.out.println("ServerHardwareTypeClientSample : deleteServerHardwareType : task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ServerHardwareTypeClientSample : deleteServerHardwareType : resource you are looking is not found for delete");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ServerHardwareTypeClientSample : deleteServerHardwareType : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ServerHardwareTypeClientSample : deleteServerHardwareType : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("ServerHardwareTypeClientSample : deleteServerHardwareType : No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ServerHardwareTypeClientSample : deleteServerHardwareType : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("ServerHardwareTypeClientSample : deleteServerHardwareType : errors in task, please check task resource for more details ");
-            return;
-        }
+        System.out.println("ServerHardwareTypeClient : deleteServerHardwareType : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
     public static void main(String[] args) {
@@ -216,7 +94,7 @@ public class ServerHardwareTypeClientSample {
         sample.getServerHardwareTypeByName();
         sample.updateServerHardwareType();
 
-        /* available from OV 2.0 */
+        /*available from OV 2.0*/
         sample.deleteServerHardwareType();
     }
 

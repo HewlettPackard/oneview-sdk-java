@@ -133,8 +133,8 @@ public class EnclosureGroupClientSample {
         dto.setStackingMode(StackingMode.Enclosure);
 
         List<InterconnectBayMapping> interconnectBayMappings = new ArrayList<>();
-        LogicalInterconnectGroup lig = this.interconnectGroupClient.getByName(
-                "encl_group logical interconnect group").get(0);
+        LogicalInterconnectGroup lig
+                = this.interconnectGroupClient.getByName(LogicalInterconnectGroupClientSample.resourceName).get(0);
 
         for (int i = 0; i < 8; i++) {
             InterconnectBayMapping interconnectBayMapping = new InterconnectBayMapping();
