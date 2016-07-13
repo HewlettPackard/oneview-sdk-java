@@ -15,8 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.util;
 
-import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
-import com.hp.ov.sdk.rest.client.EnclosureGroupClientImpl;
+import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.ServerHardwareClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -29,20 +28,16 @@ import com.hp.ov.sdk.rest.http.core.client.RestParams;
 public class SdkUtils {
 
     private final ServerHardwareClient serverHardwareClient;
-    private final EnclosureGroupClient enclosureGroupClient;
 
     private static final class SdkUtilsHolder {
         private static final SdkUtils INSTANCE = new SdkUtils(
-                ServerHardwareClientImpl.getClient(),
-                EnclosureGroupClientImpl.getClient());
+                ServerHardwareClientImpl.getClient());
     }
 
     private SdkUtils(
-        ServerHardwareClient serverHardwareClient,
-        EnclosureGroupClient enclosureGroupClient) {
+        ServerHardwareClient serverHardwareClient) {
 
         this.serverHardwareClient = serverHardwareClient;
-        this.enclosureGroupClient = enclosureGroupClient;
     }
 
     public static SdkUtils getInstance() {
@@ -55,10 +50,6 @@ public class SdkUtils {
 
     public String getServerHardwareTypeUri(final RestParams params, final String serverHardwareName) {
         return serverHardwareClient.getServerHardwareByName(params, serverHardwareName).getServerHardwareTypeUri();
-    }
-
-    public String getEnclosureGroupUri(final RestParams params, final String enclosureGroupName) {
-        return enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();
     }
 
 }

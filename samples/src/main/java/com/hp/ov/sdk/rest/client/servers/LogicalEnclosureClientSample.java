@@ -17,6 +17,7 @@ package com.hp.ov.sdk.rest.client.servers;
 
 import java.util.Arrays;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.AddLogicalEnclosure;
 import com.hp.ov.sdk.dto.FirmwareUpdateOn;
 import com.hp.ov.sdk.dto.Patch;
@@ -25,7 +26,7 @@ import com.hp.ov.sdk.dto.PatchFirmwareValue;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SupportDump;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.EnclosureGroups;
+import com.hp.ov.sdk.dto.generated.EnclosureGroup;
 import com.hp.ov.sdk.dto.generated.LogicalEnclosure;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
@@ -34,12 +35,12 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
-import com.hp.ov.sdk.rest.client.EnclosureGroupClientImpl;
 import com.hp.ov.sdk.rest.client.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.client.FirmwareDriverClientImpl;
 import com.hp.ov.sdk.rest.client.LogicalEnclosureClient;
 import com.hp.ov.sdk.rest.client.LogicalEnclosureClientImpl;
+import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
@@ -68,9 +69,11 @@ public class LogicalEnclosureClientSample {
     // ================================
 
     private LogicalEnclosureClientSample() {
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
         this.logicalEnclosureClient = LogicalEnclosureClientImpl.getClient();
         this.firmwareDriverClient = FirmwareDriverClientImpl.getClient();
-        this.enclosureGroupClient = EnclosureGroupClientImpl.getClient();
+        this.enclosureGroupClient = oneViewClient.enclosureGroup();
     }
 
     private void getLogicalEnclosureById() throws InstantiationException, IllegalAccessException {
@@ -561,7 +564,7 @@ public class LogicalEnclosureClientSample {
     }
 
     private AddLogicalEnclosure buildTestLogicalEnclosureDto() {
-        final EnclosureGroups enclosureGroup = enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName);
+        final EnclosureGroup enclosureGroup = enclosureGroupClient.getByName(enclosureGroupName).get(0);
         final AddLogicalEnclosure dto = new AddLogicalEnclosure();
         dto.setName(resourceName);
         dto.setEnclosureGroupUri(enclosureGroup.getUri());

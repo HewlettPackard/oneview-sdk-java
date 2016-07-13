@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.rest.client.servers;
 
 import java.util.ArrayList;
@@ -22,24 +22,13 @@ import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StackingMode;
-import com.hp.ov.sdk.dto.generated.EnclosureGroups;
+import com.hp.ov.sdk.dto.generated.EnclosureGroup;
 import com.hp.ov.sdk.dto.generated.InterconnectBayMapping;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKBadRequestException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
-import com.hp.ov.sdk.rest.client.EnclosureGroupClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClientSample;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
+import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 
 /*
  * EnclosureGroupClientSample is a sample program enables/consume to set a common configuration across the enclosure
@@ -51,330 +40,101 @@ public class EnclosureGroupClientSample {
     private final EnclosureGroupClient enclosureGroupClient;
     private final LogicalInterconnectGroupClient interconnectGroupClient;
 
-    private RestParams params;
-
     // test values - user input
     // ================================
-    private static final String RESOURCE_NAME = "Enclosure_Test";
-    private static final String LOGICAL_INTERCONNECT_GROUP_NAME = "LIG_PROD";
-    private static final String RESOURCE_ID = "7383eb8d-52ad-4c44-aea3-dc138cc9adbc";
-    private static final String SCRIPT_DATA = "name=Enclosure_test";
+    private static final String ENCLOSURE_GROUP_RESOURCE_ID = "1ac77207-e5e0-432f-a6bb-3d6d7b7b247f";
+    private static final String ENCLOSURE_GROUP_NAME = "Enclosure_Sample";
+    private static final String ENCLOSURE_GROUP_NAME_UPDATED = ENCLOSURE_GROUP_NAME + "_Updated";
+    private static final String ENCLOSURE_SCRIPT_DATA = "name=Enclosure_test";
     // ================================
 
     public EnclosureGroupClientSample() {
         OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
 
         this.interconnectGroupClient = oneViewClient.logicalInterconnectGroup();
-        this.enclosureGroupClient = EnclosureGroupClientImpl.getClient();
+        this.enclosureGroupClient = oneViewClient.enclosureGroup();
     }
 
-    private void getEnclosureGroupById() throws InstantiationException, IllegalAccessException {
-        EnclosureGroups enclosureGroupDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getEnclosureGroup() {
+        EnclosureGroup enclosureGroup = enclosureGroupClient.getById(ENCLOSURE_GROUP_RESOURCE_ID);
 
-            // then make sdk service call to get resource
-            enclosureGroupDto = enclosureGroupClient.getEnclosureGroup(params, RESOURCE_ID);
-
-            System.out.println("EnclosureGroupClientTest : getEnclosureGroupById :"
-                    + " enclosure group object returned to client : " + enclosureGroupDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureGroupClientTest : getEnclosureGroupById :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureGroupClientTest : getEnclosureGroupById :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureGroupClientTest : getEnclosureGroupById :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureGroupClientTest : getEnclosureGroupById :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureGroupClientTest : getEnclosureGroupById :" + " arguments are null ");
-            return;
-        }
+        System.out.println("EnclosureGroupClient : getEnclosureGroup : " +
+                "EnclosureGroup object returned to client : " + enclosureGroup.toJsonString());
     }
 
-    private void getAllEnclosureGroup() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
-            SDKNoSuchUrlException {
-        ResourceCollection<EnclosureGroups> enclosureGroupCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getAllEnclosureGroups() {
+        ResourceCollection<EnclosureGroup> enclosureGroups = enclosureGroupClient.getAll();
 
-            // then make sdk service call to get resource
-            enclosureGroupCollectionDto = enclosureGroupClient.getAllEnclosureGroups(params);
-
-            System.out.println("EnclosureGroupClientTest : getAllEnclosureGroup :"
-                    + " enclosure groups object returned to client : " + enclosureGroupCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureGroupClientTest : getAllEnclosureGroup " + ": resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureGroupClientTest : getAllEnclosureGroup :" + " no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureGroupClientTest : getAllEnclosureGroup :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureGroupClientTest : getAllEnclosureGroup :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureGroupClientTest : getAllEnclosureGroup :" + " arguments are null ");
-            return;
-        }
+        System.out.println("EnclosureGroupClient : getAllEnclosureGroups : " +
+                "EnclosureGroups returned to client (count) : " + enclosureGroups.toJsonString());
     }
 
-    private void getEnclosureGroupByName() throws InstantiationException, IllegalAccessException {
-        EnclosureGroups enclosureGroupDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getEnclosureGroupByName() {
+        EnclosureGroup enclosureGroup = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0);
 
-            // then make sdk service call to get resource
-            enclosureGroupDto = enclosureGroupClient.getEnclosureGroupByName(params, RESOURCE_NAME);
-
-            System.out.println("EnclosureGroupClientTest : getEnclosureGroupByName :"
-                    + " enclosure group object returned to client : " + enclosureGroupDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureGroupClientTest : getEnclosureGroupByName :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureGroupClientTest : getEnclosureGroupByName :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureGroupClientTest : getEnclosureGroupByName :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureGroupClientTest : getEnclosureGroupByName :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureGroupClientTest : getEnclosureGroupByName :" + " arguments are null ");
-            return;
-        }
+        System.out.println("EnclosureGroupClient : getEnclosureGroupByName : " +
+                "EnclosureGroup object returned to client : " + enclosureGroup.toJsonString());
     }
 
-    private void createEnclosureGroup() throws InstantiationException, IllegalAccessException {
-        EnclosureGroups enclosureGroupReturnDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void createEnclosureGroup() {
+        EnclosureGroup enclosureGroup = this.buildEnclosureGroup();
 
-            // create enclosure group request body
-            final EnclosureGroups enclosureGroupDto = buildTestEnclosureGroupDto();
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            enclosureGroupReturnDto = enclosureGroupClient.createEnclosureGroup(params, enclosureGroupDto, false);
+        EnclosureGroup created = this.enclosureGroupClient.create(enclosureGroup);
 
-            System.out.println("EnclosureGroupClientTest : createEnclosureGroup : enclosure group object returned to client : "
-                    + enclosureGroupReturnDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureGroupClientTest : createEnclosureGroup : resource you are looking is not found");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("EnclosureGroupClientTest : createEnclosureGroup : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureGroupClientTest : createEnclosureGroup : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureGroupClientTest : createEnclosureGroup : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureGroupClientTest : createEnclosureGroup : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out
-                    .println("EnclosureGroupClientTest : createEnclosureGroup : errors in task, please check task resource for more details ");
-            return;
-        }
+        System.out.println("EnclosureGroupClient : createEnclosureGroup : " +
+                "EnclosureGroup object returned to client : " + created.toJsonString());
     }
 
-    private void updateEnclosureGroup() throws InstantiationException, IllegalAccessException {
-        EnclosureGroups enclosureGroupReturnDto = null;
-        String resourceId = null;
-        EnclosureGroups enclosureGroupDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateEnclosureGroup() {
+        EnclosureGroup enclosureGroup = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0);
 
-            // fetch resource Id using resource name
-            enclosureGroupDto = enclosureGroupClient.getEnclosureGroupByName(params, RESOURCE_NAME);
+        enclosureGroup.setName(ENCLOSURE_GROUP_NAME_UPDATED);
 
-            enclosureGroupDto.setName(RESOURCE_NAME + "_updated");
+        EnclosureGroup updated = this.enclosureGroupClient.update(enclosureGroup.getResourceId(), enclosureGroup);
 
-            if (null != enclosureGroupDto.getUri()) {
-                resourceId = UrlUtils.getResourceIdFromUri(enclosureGroupDto.getUri());
-            }
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            enclosureGroupReturnDto = enclosureGroupClient.updateEnclosureGroup(params, resourceId, enclosureGroupDto, false);
-
-            System.out.println("EnclosureGroupClientTest : updateEnclosureGroup : "
-                    + "Enclosure group object returned to client : " + enclosureGroupReturnDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureGroupClientTest : updateEnclosureGroup :"
-                    + " resource you are looking is not found for update ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("EnclosureGroupClientTest : updateEnclosureGroup :" + " bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureGroupClientTest : updateEnclosureGroup :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureGroupClientTest : updateEnclosureGroup :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureGroupClientTest : updateEnclosureGroup :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureGroupClientTest : updateEnclosureGroup : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("EnclosureGroupClientTest : updateEnclosureGroup : " + "errors in task, please check task "
-                    + "resource for more details ");
-            return;
-        }
+        System.out.println("EnclosureGroupClient : updateEnclosureGroup : " +
+                "EnclosureGroup object returned to client : " + updated.toJsonString());
     }
 
-    private void deleteEnclosureGroup() throws InstantiationException, IllegalAccessException {
-        // first get the session Id
-        String deleteMsg = null;
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void deleteEnclosureGroup() {
+        EnclosureGroup enclosureGroup = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME_UPDATED).get(0);
 
-            // get resource ID
-            resourceId = enclosureGroupClient.getId(params, RESOURCE_NAME);
+        String response = this.enclosureGroupClient.delete(enclosureGroup.getResourceId());
 
-            // then make sdk service call to get resource
-            deleteMsg = enclosureGroupClient.deleteEnclosureGroup(params, resourceId);
-
-            System.out.println("EnclosureGroupClientTest : deleteEnclosureGroup : "
-                    + "enclosure group object returned to client : " + deleteMsg);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureGroupClientTest : deleteEnclosureGroupSet :"
-                    + " resource you are looking is not found for delete ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureGroupClientTest : deleteEnclosureGroupSet :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureGroupClientTest : deleteEnclosureGroup :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureGroupClientTest : deleteEnclosureGroup : " + "No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureGroupClientTest : deleteEnclosureGroup :" + " arguments are null ");
-            return;
-        }
+        System.out.println("EnclosureGroupClient : deleteEnclosureGroup : " +
+                "Response returned to client : " + response);
     }
 
     private void getConfigurationScript() {
-        String enclosureScript = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        EnclosureGroup enclosureGroup = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0);
 
-            // then make sdk service call to get resource
-            enclosureScript = enclosureGroupClient.getConfigurationScript(params, RESOURCE_ID);
+        String response = this.enclosureGroupClient.getConfigurationScript(enclosureGroup.getResourceId());
 
-            System.out.println("EnclosureGroupClientTest : getConfigurationScript :" + " enclosure script returned to client : "
-                    + enclosureScript);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureGroupClientTest : getConfigurationScript :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureGroupClientTest : getConfigurationScript :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureGroupClientTest : getConfigurationScript :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureGroupClientTest : getConfigurationScript :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureGroupClientTest : getConfigurationScript :" + " arguments are null ");
-            return;
-        }
+        System.out.println("EnclosureGroupClient : getConfigurationScript : " +
+                "Configuration script returned to client : " + response);
     }
 
-    private void updateConfigurationScript() throws InstantiationException, IllegalAccessException {
-        String enclosureScript = null;
-        EnclosureGroups enclosureGroupDto = null;
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateConfigurationScript() {
+        EnclosureGroup enclosureGroup = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0);
 
-            // fetch resource Id using resource name
-            enclosureGroupDto = enclosureGroupClient.getEnclosureGroupByName(params, RESOURCE_NAME);
+        String response = this.enclosureGroupClient.updateConfigurationScript(
+                enclosureGroup.getResourceId(), ENCLOSURE_SCRIPT_DATA);
 
-            if (null != enclosureGroupDto.getUri()) {
-                resourceId = UrlUtils.getResourceIdFromUri(enclosureGroupDto.getUri());
-            }
-
-            // then make sdk service call to get resource
-            enclosureScript = enclosureGroupClient.updateConfigurationScript(params, resourceId, SCRIPT_DATA);
-
-            System.out.println("EnclosureGroupClientTest : updateConfigurationScript :" + " enclosure script returned to client : "
-                    + enclosureScript);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out
-                    .println("EnclosureGroupClientTest : updateConfigurationScript :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureGroupClientTest : updateConfigurationScript :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureGroupClientTest : updateConfigurationScript :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureGroupClientTest : updateConfigurationScript :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureGroupClientTest : updateConfigurationScript :" + " arguments are null ");
-            return;
-        }
+        System.out.println("EnclosureGroupClient : updateConfigurationScript : " +
+                "Configuration script returned to client : " + response);
     }
 
-    private EnclosureGroups buildTestEnclosureGroupDto() {
-        EnclosureGroups dto = new EnclosureGroups();
+    private EnclosureGroup buildEnclosureGroup() {
+        EnclosureGroup dto = new EnclosureGroup();
+
         dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP); //OneView 1.2
         dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP_V200); //OneView 2.0
-        dto.setName(RESOURCE_NAME);
+        dto.setName(ENCLOSURE_GROUP_NAME);
         dto.setStackingMode(StackingMode.Enclosure);
 
-        List<InterconnectBayMapping> interconnectBayMappings = new ArrayList<InterconnectBayMapping>();
-        LogicalInterconnectGroup lig = this.interconnectGroupClient.getByName(LOGICAL_INTERCONNECT_GROUP_NAME).get(0);
+        List<InterconnectBayMapping> interconnectBayMappings = new ArrayList<>();
+        LogicalInterconnectGroup lig = this.interconnectGroupClient.getByName(
+                "encl_group logical interconnect group").get(0);
 
         for (int i = 0; i < 8; i++) {
             InterconnectBayMapping interconnectBayMapping = new InterconnectBayMapping();
@@ -396,16 +156,15 @@ public class EnclosureGroupClientSample {
     }
 
     public static void main(final String[] args) throws Exception {
-        EnclosureGroupClientSample client = new EnclosureGroupClientSample();
+        EnclosureGroupClientSample sample = new EnclosureGroupClientSample();
 
-        client.getAllEnclosureGroup();
-        client.createEnclosureGroup();
-        client.getEnclosureGroupById();
-        client.getEnclosureGroupByName();
-        client.updateConfigurationScript();
-        client.getConfigurationScript();
-        client.updateEnclosureGroup();
-        client.createEnclosureGroup();
-        client.deleteEnclosureGroup();
+        sample.getEnclosureGroup();
+        sample.createEnclosureGroup();
+        sample.getAllEnclosureGroups();
+        sample.getEnclosureGroupByName();
+        sample.getConfigurationScript();
+        sample.updateConfigurationScript();
+        sample.updateEnclosureGroup();
+        sample.deleteEnclosureGroup();
     }
 }

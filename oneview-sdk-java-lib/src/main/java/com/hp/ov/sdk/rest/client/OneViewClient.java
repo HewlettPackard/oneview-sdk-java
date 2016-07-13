@@ -36,6 +36,7 @@ import com.hp.ov.sdk.rest.client.networking.NetworkSetClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
+import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
 import com.hp.ov.sdk.rest.client.storage.StoragePoolClient;
 import com.hp.ov.sdk.rest.client.storage.StorageSystemClient;
@@ -52,6 +53,7 @@ public class OneViewClient {
 
     private final BaseClient baseClient;
 
+    private EnclosureGroupClient enclosureGroupClient;
     private FcoeNetworkClient fcoeNetworkClient;
     private FcNetworkClient fcNetworkClient;
     private EthernetNetworkClient ethernetNetworkClient;
@@ -84,6 +86,10 @@ public class OneViewClient {
                 new LoginSessionClient(this.baseClient));
 
         connector.connect();
+    }
+
+    public synchronized EnclosureGroupClient enclosureGroup() {
+        return this.getClient(this.enclosureGroupClient, EnclosureGroupClient.class);
     }
 
     public synchronized FcoeNetworkClient fcoeNetwork() {

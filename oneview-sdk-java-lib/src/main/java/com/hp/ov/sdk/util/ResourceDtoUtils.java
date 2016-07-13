@@ -375,7 +375,9 @@ public class ResourceDtoUtils {
             serverProfileDto
                     .setServerHardwareUri((serverHardwareUri != null && serverHardwareUri.length() != 0) ? serverHardwareUri : null);
         }
-        serverProfileDto.setEnclosureGroupUri(SdkUtils.getInstance().getEnclosureGroupUri(params, enclosureGroupName));
+
+        serverProfileDto.setEnclosureGroupUri(oneViewClient.enclosureGroup().getByName(enclosureGroupName).get(0).getUri());
+
         serverProfileDto.setAffinity(affinity);
         serverProfileDto.setHideUnusedFlexNics(false);
         serverProfileDto.setFirmware(firmware);
@@ -399,4 +401,5 @@ public class ResourceDtoUtils {
 
         return serverProfileDto;
     }
+
 }
