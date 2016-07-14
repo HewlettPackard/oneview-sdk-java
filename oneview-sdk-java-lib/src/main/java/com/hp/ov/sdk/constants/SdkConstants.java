@@ -86,6 +86,8 @@ public class SdkConstants {
     public static final String PROVIDERS = "providers";
     public static final String QOS_AGGREGATED_CONFIGURATION = "qos-aggregated-configuration";
     public static final String RABBITMQ = "certificates-client-rabbitmq";
+    public static final String RACK = "rack";
+    public static final String RACKS = RACK + "s";
     public static final String REFRESH_STATE = "refreshState";
     public static final String RESET_PORT_PROTECTION = "resetportprotection";
     public static final String SCMB_ALERTS_ROUTING_KEY = "scmb.alerts.#";
