@@ -16,6 +16,7 @@
 package com.hp.ov.sdk.rest.http.core.client;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -29,6 +30,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpDelete;
@@ -39,7 +41,9 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
@@ -150,17 +154,45 @@ public class HttpRestClient {
      * Send the request to OV and read the response.
      *
      * @param restParams connection parameters.
-     * @param requestBody
-     *  request body.
+     * @param requestBody request body.
      *
      * @return
      *  A string representing the response data.
      * @throws
      *  SDKBadRequestException on unsupported method (PUT, GET..)
      **/
-    public String sendRequest(RestParams restParams, String requestBody)
-            throws SDKBadRequestException {
+    public String sendRequest(RestParams restParams, String requestBody) throws SDKBadRequestException {
         return processRequestType(restParams, requestBody, false);
+    }
+
+    public String sendMultipartPostRequest(RestParams restParams, File file) throws SDKBadRequestException {
+        if (restParams.getType() != HttpMethodType.POST) {
+            throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
+                    null, null, null, SdkConstants.APPLIANCE, null);
+        }
+
+        try {
+            HttpPost post = new HttpPost(buildURI(restParams));
+
+            HttpEntity entity = MultipartEntityBuilder.create()
+                    .addBinaryBody("file", file)
+                    .setContentType(ContentType.MULTIPART_FORM_DATA)
+                    .build();
+
+            post.setEntity(entity);
+            post.setConfig(createRequestTimeoutConfiguration());
+
+            post.setHeader("uploadfilename", file.getName());
+            post.setHeader("Auth", restParams.getSessionId());
+            post.setHeader("X-Api-Version", String.valueOf(restParams.getApiVersion().getValue()));
+            post.setHeader("Accept", restParams.getHeaders().get("Accept"));
+            post.setHeader("accept-language", restParams.getHeaders().get("accept-language"));
+
+            return getResponse(post, restParams, false);
+        } catch (IllegalArgumentException e) {
+            throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
+                    null, null, null, SdkConstants.APPLIANCE, e);
+        }
     }
 
     /**

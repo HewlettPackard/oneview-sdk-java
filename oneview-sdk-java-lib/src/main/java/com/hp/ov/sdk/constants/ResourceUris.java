@@ -51,6 +51,7 @@ public class ResourceUris {
     public static final String FC_SANS_PROVIDER_URI = "/rest/fc-sans/providers";
     public static final String FC_SANS_MANAGED_SAN_URI = "/rest/fc-sans/managed-sans";
     public static final String FCOE_NETWORK_URI = "/rest/fcoe-networks";
+    public static final String FIRMWARE_BUNDLE_URI = "/rest/firmware-bundles";
     public static final String FIRMWARE_DRIVER_URI = "/rest/firmware-drivers";
     public static final String ETHERNET_URI = "/rest/ethernet-networks";
     public static final String INTERCONNECT_TYPE_URI = "/rest/interconnect-types";
