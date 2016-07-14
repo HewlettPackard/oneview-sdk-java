@@ -44,6 +44,7 @@ public class SdkConstants {
     public static final String ETHERNET_SETTINGS = "ethernetSettings";
     public static final String FABRIC = "fabric";
     public static final String FIBRE_CHANNEL = "FibreChannel";
+    public static final String FIRMWARE_BUNDLE = "firmware-bundles";
     public static final String FIRMWARE_DRIVER = "firmware-drivers";
     public static final String FC_NETWORK = "FC_NETWORK";
     public static final String FC_NETWORKS = FC_NETWORK + "s";
