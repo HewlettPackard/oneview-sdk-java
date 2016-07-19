@@ -46,7 +46,8 @@ public class LogicalInterconnectGroupClientSample {
     // ================================
     public static final List<Integer> interconnectEntries = Arrays.asList(Integer.valueOf(1), Integer.valueOf(2));
 
-    private static final String resourceName = "LIG_PROD";
+    public static final String resourceName = "LIG_PROD";
+
     private static final InterconnectTypeName permittedInterconnectType = InterconnectTypeName.HP_VC_FlexFabric_20_40_F8_Module;
     private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402", "Prod_403");
     private static final List<String> logicalInterconnectGroupName_A = Arrays.asList("FC_Network_A");

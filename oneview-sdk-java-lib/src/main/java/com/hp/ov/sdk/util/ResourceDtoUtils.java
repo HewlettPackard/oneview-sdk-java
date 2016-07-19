@@ -31,6 +31,7 @@ import com.hp.ov.sdk.dto.PortInfo;
 import com.hp.ov.sdk.dto.ProfileConnectionV3;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageTargetPort;
+import com.hp.ov.sdk.dto.StorageVolume;
 import com.hp.ov.sdk.dto.generated.Bios;
 import com.hp.ov.sdk.dto.generated.Boot;
 import com.hp.ov.sdk.dto.generated.BootMode;
@@ -302,18 +303,20 @@ public class ResourceDtoUtils {
         return sanStorage;
     }
 
-    public VolumeAttachment buildVolumeAttachment(final RestParams params, final String volumeName,
+    public VolumeAttachment buildVolumeAttachment(final String volumeName,
             final Boolean useBayNameForServerHardwareUri, final Integer j, final Boolean isEnabled,
             final List<String> storageTargets, final StorageTargetType storageTargetType, final String lunType,
             final HashMap<String, Integer> fcId) {
-        final Boolean volumeIsSharable = SdkUtils.getInstance().isVolumeSharable(params, volumeName);
-        if (volumeIsSharable || !(useBayNameForServerHardwareUri)) {
+
+        StorageVolume storageVolume = oneViewClient.storageVolume().getByName(volumeName).get(0);
+
+        if (storageVolume.getShareable() || !(useBayNameForServerHardwareUri)) {
             final VolumeAttachment volumeAttachment = new VolumeAttachment();
             volumeAttachment.setId(Double.parseDouble(j.toString()));
             volumeAttachment.setLunType(lunType);
-            volumeAttachment.setVolumeUri(SdkUtils.getInstance().getVolumeUri(params, volumeName));
-            volumeAttachment.setVolumeStoragePoolUri(SdkUtils.getInstance().getStoragePoolFromVolume(params, volumeName));
-            volumeAttachment.setVolumeStorageSystemUri(SdkUtils.getInstance().getStorageSystemFromVolume(params, volumeName));
+            volumeAttachment.setVolumeUri(storageVolume.getUri());
+            volumeAttachment.setVolumeStoragePoolUri(storageVolume.getStoragePoolUri());
+            volumeAttachment.setVolumeStorageSystemUri(storageVolume.getStorageSystemUri());
 
             ResourceCollection<StorageTargetPort> storageTargetPortCollectionDto = oneViewClient.storageSystem().getAllManagedPorts(
                     volumeAttachment.getVolumeStorageSystemUri().substring(
@@ -355,7 +358,7 @@ public class ResourceDtoUtils {
 
         serverProfileDto.setName(profileName);
         if (serverHardwareName != null && serverHardwareName.length() != 0) {
-            final String serverHardwareTypeUri = SdkUtils.getInstance().getServerHardwareTypeUri(params, serverHardwareName);
+            final String serverHardwareTypeUri = getServerHardwareTypeUri(serverHardwareName);
             serverProfileDto
                     .setServerHardwareTypeUri((serverHardwareTypeUri != null && serverHardwareTypeUri.length() != 0) ? serverHardwareTypeUri
                             : null);
@@ -368,11 +371,13 @@ public class ResourceDtoUtils {
                     null);
         }
         if (useBayNameForServerHardwareUri) {
-            final String serverHardwareUri = SdkUtils.getInstance().getServerHardwareUri(params, serverHardwareName);
+            final String serverHardwareUri = getServerHardwareUri(serverHardwareName);
             serverProfileDto
                     .setServerHardwareUri((serverHardwareUri != null && serverHardwareUri.length() != 0) ? serverHardwareUri : null);
         }
-        serverProfileDto.setEnclosureGroupUri(SdkUtils.getInstance().getEnclosureGroupUri(params, enclosureGroupName));
+
+        serverProfileDto.setEnclosureGroupUri(oneViewClient.enclosureGroup().getByName(enclosureGroupName).get(0).getUri());
+
         serverProfileDto.setAffinity(affinity);
         serverProfileDto.setHideUnusedFlexNics(false);
         serverProfileDto.setFirmware(firmware);
@@ -396,4 +401,13 @@ public class ResourceDtoUtils {
 
         return serverProfileDto;
     }
+
+    public String getServerHardwareUri(String serverHardwareName) {
+        return oneViewClient.serverHardware().getByName(serverHardwareName).get(0).getUri();
+    }
+
+    public String getServerHardwareTypeUri(String serverHardwareName) {
+        return oneViewClient.serverHardware().getByName(serverHardwareName).get(0).getServerHardwareTypeUri();
+    }
+
 }

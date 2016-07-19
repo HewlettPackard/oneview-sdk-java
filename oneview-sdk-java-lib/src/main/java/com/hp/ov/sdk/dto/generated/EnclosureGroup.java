@@ -15,52 +15,39 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto.generated;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.StackingMode;
 
 /**
- * The EnclosureGroups data transfer object (DTO) contains the information used
+ * The EnclosureGroup data transfer object (DTO) contains the information used
  * to represent a enclosure group in the system. It is used to pass details
  * about the LIG that the enclosure group uses while adding an enclosure. It is
  * passed to the add/update enclosureGroup REST api, as well as the add/update
  * enclosureGroup through java client api.
  */
+public class EnclosureGroup extends BaseModelResource {
 
-public class EnclosureGroups implements Serializable {
-
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     @Since(200)
     private List<String> associatedLogicalInterconnectGroups = new ArrayList<String>();
-    private String uri;
-    private String category;
-    private String name;
-    private String created;
     @Since(200)
     private List<String> ipRangeUris = new ArrayList<String>();
-    private String modified;
-    private String eTag;
     @Since(200)
     private Integer enclosureCount;
     @Since(200)
     private String enclosureTypeUri;
-    private String status;
-    private String state;
 
-    private EnclosureGroups.PowerMode powerMode;
+    private EnclosureGroup.PowerMode powerMode;
     /**
      *
      * (Required)
@@ -81,8 +68,6 @@ public class EnclosureGroups implements Serializable {
      *
      */
     private List<InterconnectBayMapping> interconnectBayMappings = new ArrayList<InterconnectBayMapping>();
-    private String description;
-    private String type;
 
 
     /**
@@ -104,91 +89,6 @@ public class EnclosureGroups implements Serializable {
 
     /**
      *
-     * @return The type
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     *
-     * @param type
-     *            The type
-     */
-    public void setType(final String type) {
-        this.type = type;
-    }
-
-    /**
-     *
-     * @return The uri
-     */
-    public String getUri() {
-        return uri;
-    }
-
-    /**
-     *
-     * @param uri
-     *            The uri
-     */
-    public void setUri(final String uri) {
-        this.uri = uri;
-    }
-
-    /**
-     *
-     * @return The category
-     */
-    public String getCategory() {
-        return category;
-    }
-
-    /**
-     *
-     * @param category
-     *            The category
-     */
-    public void setCategory(final String category) {
-        this.category = category;
-    }
-
-    /**
-     *
-     * @return The name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     *
-     * @param name
-     *            The name
-     */
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    /**
-     *
-     * @return The created
-     */
-    public String getCreated() {
-        return created;
-    }
-
-    /**
-     *
-     * @param created
-     *            The created
-     */
-    public void setCreated(final String created) {
-        this.created = created;
-    }
-
-    /**
-     *
      * @return The ipRangeUris
      */
     public List<String> getIpRangeUris() {
@@ -202,40 +102,6 @@ public class EnclosureGroups implements Serializable {
      */
     public void setIpRangeUris(final List<String> ipRangeUris) {
         this.ipRangeUris = ipRangeUris;
-    }
-
-    /**
-     *
-     * @return The modified
-     */
-    public String getModified() {
-        return modified;
-    }
-
-    /**
-     *
-     * @param modified
-     *            The modified
-     */
-    public void setModified(final String modified) {
-        this.modified = modified;
-    }
-
-    /**
-     *
-     * @return The eTag
-     */
-    public String getETag() {
-        return eTag;
-    }
-
-    /**
-     *
-     * @param eTag
-     *            The eTag
-     */
-    public void setETag(final String eTag) {
-        this.eTag = eTag;
     }
 
     /**
@@ -274,43 +140,9 @@ public class EnclosureGroups implements Serializable {
 
     /**
      *
-     * @return The status
-     */
-    public String getStatus() {
-        return status;
-    }
-
-    /**
-     *
-     * @param status
-     *            The status
-     */
-    public void setStatus(final String status) {
-        this.status = status;
-    }
-
-    /**
-     *
-     * @return The state
-     */
-    public String getState() {
-        return state;
-    }
-
-    /**
-     *
-     * @param state
-     *            The state
-     */
-    public void setState(final String state) {
-        this.state = state;
-    }
-
-    /**
-     *
      * @return The powerMode
      */
-    public EnclosureGroups.PowerMode getPowerMode() {
+    public EnclosureGroup.PowerMode getPowerMode() {
         return powerMode;
     }
 
@@ -319,7 +151,7 @@ public class EnclosureGroups implements Serializable {
      * @param powerMode
      *            The powerMode
      */
-    public void setPowerMode(final EnclosureGroups.PowerMode powerMode) {
+    public void setPowerMode(final EnclosureGroup.PowerMode powerMode) {
         this.powerMode = powerMode;
     }
 
@@ -420,95 +252,60 @@ public class EnclosureGroups implements Serializable {
         this.interconnectBayMappings = interconnectBayMappings;
     }
 
-    /**
-     *
-     * @return The description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     *
-     * @param description
-     *            The description
-     */
-    public void setDescription(final String description) {
-        this.description = description;
+    @Override
+    public boolean canEqual(Object obj) {
+        return (obj instanceof EnclosureGroup);
     }
 
     @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof EnclosureGroup) {
+            EnclosureGroup that = (EnclosureGroup) obj;
+
+            return new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(associatedLogicalInterconnectGroups, that.associatedLogicalInterconnectGroups)
+                    .append(ipRangeUris, that.ipRangeUris)
+                    .append(enclosureCount, that.enclosureCount)
+                    .append(enclosureTypeUri, that.enclosureTypeUri)
+                    .append(powerMode, that.powerMode)
+                    .append(stackingMode, that.stackingMode)
+                    .append(portMappingCount, that.portMappingCount)
+                    .append(portMappings, that.portMappings)
+                    .append(interconnectBayMappingCount, that.interconnectBayMappingCount)
+                    .append(interconnectBayMappings, that.interconnectBayMappings)
+                    .isEquals();
+        }
+        return false;
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+                .appendSuper(super.hashCode())
                 .append(associatedLogicalInterconnectGroups)
-                .append(uri)
-                .append(category)
-                .append(name)
-                .append(created)
                 .append(ipRangeUris)
-                .append(modified)
-                .append(eTag)
                 .append(enclosureCount)
                 .append(enclosureTypeUri)
-                .append(status)
-                .append(state)
                 .append(powerMode)
                 .append(stackingMode)
                 .append(portMappingCount)
                 .append(portMappings)
                 .append(interconnectBayMappingCount)
                 .append(interconnectBayMappings)
-                .append(description)
-                .append(type)
                 .toHashCode();
-    }
-
-    @Override
-    public boolean equals(final Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof EnclosureGroups) == false) {
-            return false;
-        }
-        final EnclosureGroups rhs = ((EnclosureGroups) other);
-        return new EqualsBuilder()
-                .append(associatedLogicalInterconnectGroups, rhs.associatedLogicalInterconnectGroups)
-                .append(uri, rhs.uri)
-                .append(category, rhs.category)
-                .append(name, rhs.name)
-                .append(created, rhs.created)
-                .append(ipRangeUris, rhs.ipRangeUris)
-                .append(modified, rhs.modified)
-                .append(eTag, rhs.eTag)
-                .append(enclosureCount, rhs.enclosureCount)
-                .append(enclosureTypeUri, rhs.enclosureTypeUri)
-                .append(status, rhs.status)
-                .append(state, rhs.state)
-                .append(powerMode, rhs.powerMode)
-                .append(stackingMode, rhs.stackingMode)
-                .append(portMappingCount, rhs.portMappingCount)
-                .append(portMappings, rhs.portMappings)
-                .append(interconnectBayMappingCount, rhs.interconnectBayMappingCount)
-                .append(interconnectBayMappings, rhs.interconnectBayMappings)
-                .append(description, rhs.description)
-                .append(type, rhs.type)
-                .isEquals();
     }
 
     public static enum PowerMode {
 
         RedundantPowerFeed("RedundantPowerFeed"), RedundantPowerSupply("RedundantPowerSupply");
         private final String value;
-        private static Map<String, EnclosureGroups.PowerMode> constants = new HashMap<String, EnclosureGroups.PowerMode>();
+        private static Map<String, EnclosureGroup.PowerMode> constants = new HashMap<String, EnclosureGroup.PowerMode>();
 
         static {
-            for (final EnclosureGroups.PowerMode c : values()) {
+            for (final EnclosureGroup.PowerMode c : values()) {
                 constants.put(c.value, c);
             }
         }
@@ -522,8 +319,8 @@ public class EnclosureGroups implements Serializable {
             return this.value;
         }
 
-        public static EnclosureGroups.PowerMode fromValue(final String value) {
-            final EnclosureGroups.PowerMode constant = constants.get(value);
+        public static EnclosureGroup.PowerMode fromValue(final String value) {
+            final EnclosureGroup.PowerMode constant = constants.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
             } else {

@@ -17,6 +17,7 @@ package com.hp.ov.sdk.rest.client.storage;
 
 import java.util.List;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ExtraStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
@@ -24,210 +25,74 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeAttachment;
 import com.hp.ov.sdk.dto.StorageVolumeAttachmentPath;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKBadRequestException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.StorageVolumeAttachmentsClient;
-import com.hp.ov.sdk.rest.client.StorageVolumeAttachmentsClientImpl;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class StorageVolumeAttachmentClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String ATTACHMENT_ID = "B854DCBA-260C-43FC-A697-B68268D6C3AB";
-    private static final String PATH_ID = "0B0C5738-D078-4A27-85DC-1F0E5BBFCE7D";
-    private static final String SERVER_PROFILE_ID = "ac0aa4e4-05be-47b8-9ac7-347deb18bb5f";
+    private static final String STORAGE_VOLUME_ATTACHMENT_ID = "AE541765-4034-40B8-8CE3-547AFC8A058F";
+    private static final String STORAGE_VOLUME_ATTACHMENT_PATH_ID = "4E832512-8B26-4CAF-BCE7-FD4568D907E6";
+    private static final String SERVER_PROFILE_ID = "07c52c4a-5d24-40ed-9c32-782c8c0643b0";
     // ================================
 
-    private final StorageVolumeAttachmentsClient storageVolumeAttachmentsClient;
+    private final StorageVolumeAttachmentClient storageVolumeAttachmentClient;
 
     public StorageVolumeAttachmentClientSample() {
-        this.storageVolumeAttachmentsClient = StorageVolumeAttachmentsClientImpl.getClient();
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
+        this.storageVolumeAttachmentClient = oneViewClient.storageVolumeAttachment();
     }
 
     private void getStorageVolumeAttachment() {
-        RestParams params = new RestParams();
-        try {
-            params = HPOneViewCredential.createCredentials();
+        StorageVolumeAttachment storageVolumeAttachment = this.storageVolumeAttachmentClient.getById(
+                STORAGE_VOLUME_ATTACHMENT_ID);
 
-            StorageVolumeAttachment attachment = this.storageVolumeAttachmentsClient.getStorageVolumeAttachment(
-                    params, ATTACHMENT_ID);
-
-            System.out.println("StorageVolumeAttachmentClientSample : getStorageVolumeAttachment : " +
-                    "StorageVolumeAttachment object returned to client : " + attachment);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getStorageVolumeAttachment : " +
-                    "the resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getStorageVolumeAttachment : " +
-                    "no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeAttachmentClientSample : getStorageVolumeAttachment : " +
-                    "appliance not reachable at : " + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getStorageVolumeAttachment : " +
-                    "No response from appliance : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getStorageVolumeAttachment : " +
-                    "arguments are null ");
-        }
+        System.out.println("StorageVolumeAttachmentClient : getStorageVolumeAttachment : " +
+                "StorageVolumeAttachment object returned to client : " + storageVolumeAttachment.toJsonString());
     }
 
     private void getAllStorageVolumeAttachments() {
-        RestParams params = new RestParams();
-        try {
-            params = HPOneViewCredential.createCredentials();
+        ResourceCollection<StorageVolumeAttachment> storageVolumeAttachments = this.storageVolumeAttachmentClient.getAll();
 
-            ResourceCollection<StorageVolumeAttachment> collection
-                    = this.storageVolumeAttachmentsClient.getAllStorageVolumeAttachments(params);
-
-            System.out.println("StorageVolumeAttachmentClientSample : getAllStorageVolumeAttachments : " +
-                    "StorageVolumeAttachmentCollection object returned to client : " + collection);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getAllStorageVolumeAttachments : " +
-                    "the resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getAllStorageVolumeAttachments : " +
-                    "no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeAttachmentClientSample : getAllStorageVolumeAttachments : " +
-                    "appliance not reachable at : " + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getAllStorageVolumeAttachments : " +
-                    "No response from appliance : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getAllStorageVolumeAttachments : " +
-                    "arguments are null ");
-        }
+        System.out.println("StorageVolumeAttachmentClient : getAllStorageVolumeAttachments : " +
+                "StorageVolumeAttachments returned to client : " + storageVolumeAttachments.toJsonString());
     }
 
     private void getStorageVolumeAttachmentPath() {
-        RestParams params = new RestParams();
-        try {
-            params = HPOneViewCredential.createCredentials();
+        StorageVolumeAttachmentPath storageVolumeAttachmentPath = this.storageVolumeAttachmentClient.getAttachmentPath(
+                STORAGE_VOLUME_ATTACHMENT_ID, STORAGE_VOLUME_ATTACHMENT_PATH_ID);
 
-            StorageVolumeAttachmentPath path = this.storageVolumeAttachmentsClient.getStorageVolumeAttachmentPath(
-                    params, ATTACHMENT_ID, PATH_ID);
-
-            System.out.println("StorageVolumeAttachmentClientSample : getStorageVolumeAttachmentPath : " +
-                    "StorageVolumeAttachmentPath object returned to client : " + path);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getStorageVolumeAttachmentPath : " +
-                    "the resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getStorageVolumeAttachmentPath : " +
-                    "no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeAttachmentClientSample : getStorageVolumeAttachmentPath : " +
-                    "appliance not reachable at : " + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getStorageVolumeAttachmentPath : " +
-                    "No response from appliance : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getStorageVolumeAttachmentPath : " +
-                    "arguments are null ");
-        }
+        System.out.println("StorageVolumeAttachmentClient : getStorageVolumeAttachmentPath : " +
+                "StorageVolumeAttachmentPath object returned to client : " + storageVolumeAttachmentPath.toJsonString());
     }
 
     private void getAllStorageVolumeAttachmentPaths() {
-        RestParams params = new RestParams();
-        try {
-            params = HPOneViewCredential.createCredentials();
+        List<StorageVolumeAttachmentPath> storageVolumeAttachmentPaths
+                = this.storageVolumeAttachmentClient.getAllAttachmentPaths(STORAGE_VOLUME_ATTACHMENT_ID);
 
-            List<StorageVolumeAttachmentPath> collection
-                    = this.storageVolumeAttachmentsClient.getAllStorageVolumeAttachmentPaths(params, ATTACHMENT_ID);
-
-            System.out.println("StorageVolumeAttachmentClientSample : getAllStorageVolumeAttachmentPaths : " +
-                    "List of StorageVolumeAttachmentPath object returned to client : " + collection);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getAllStorageVolumeAttachmentPaths : " +
-                    "the resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getAllStorageVolumeAttachmentPaths : " +
-                    "no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeAttachmentClientSample : getAllStorageVolumeAttachmentPaths : " +
-                    "appliance not reachable at : " + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getAllStorageVolumeAttachmentPaths : " +
-                    "No response from appliance : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getAllStorageVolumeAttachmentPaths : " +
-                    "arguments are null ");
-        }
+        System.out.println("StorageVolumeAttachmentClient : getAllStorageVolumeAttachmentPaths : " +
+                "StorageVolumeAttachmentPaths returned to client : " + storageVolumeAttachmentPaths);
     }
 
-    private void getExtraUnmanagedStorageVolumeAttachaments() {
-        RestParams params = new RestParams();
-        try {
-            params = HPOneViewCredential.createCredentials();
+    private void getExtraUnmanagedStorageVolumeAttachments() {
+        ResourceCollection<ExtraStorageVolume> extraStorageVolumes
+                = this.storageVolumeAttachmentClient.getExtraUnmanagedAttachments();
 
-            ResourceCollection<ExtraStorageVolume> collection
-                    = this.storageVolumeAttachmentsClient.getExtraUnmanagedStorageVolumeAttachments(params);
-
-            System.out.println("StorageVolumeAttachmentClientSample : getExtraUnmanagedStorageVolumeAttachments : " +
-                    "ExtraStorageVolumeCollection object returned to client : " + collection);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getExtraUnmanagedStorageVolumeAttachments : " +
-                    "resource you are looking is not found");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getExtraUnmanagedStorageVolumeAttachments : " +
-                    "no such url : " + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeAttachmentClientSample : getExtraUnmanagedStorageVolumeAttachments : " +
-                    "appliance not reachable at : " + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getExtraUnmanagedStorageVolumeAttachments : " +
-                    "No response from appliance : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : getExtraUnmanagedStorageVolumeAttachments : " +
-                    "arguments are null ");
-        }
+        System.out.println("StorageVolumeAttachmentClient : getExtraUnmanagedStorageVolumeAttachments : " +
+                "ExtraStorageVolumes object returned to client : " + extraStorageVolumes.toJsonString());
     }
 
     private void repairExtraUnmanagedStorageVolumeAttachment() {
-        RestParams params = new RestParams();
-        try {
-            params = HPOneViewCredential.createCredentials();
+        ExtraStorageVolumeRepair repair = new ExtraStorageVolumeRepair();
 
-            ExtraStorageVolumeRepair repair = new ExtraStorageVolumeRepair();
+        repair.setType("ExtraUnmanagedStorageVolumes");
+        repair.setResourceUri(String.format("%s/%s", ResourceUris.SERVER_PROFILE_URI, SERVER_PROFILE_ID));
 
-            repair.setType("ExtraUnmanagedStorageVolumes");
-            repair.setResourceUri(String.format("%s/%s", ResourceUris.SERVER_PROFILE_URI, SERVER_PROFILE_ID));
+        TaskResourceV2 task = this.storageVolumeAttachmentClient.repairExtraUnmanagedAttachment(repair, false);
 
-            TaskResourceV2 task = this.storageVolumeAttachmentsClient.repairExtraUnmanagedStorageVolumeAttachment(
-                    params, repair, false);
-
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment :" +
-                    "task object returned to client : " + task);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment : " +
-                    "resource you are looking is not found");
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment : " +
-                    "bad request, may be duplicate resource name or invalid inputs. check inputs and try again");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment : " +
-                    "no such url : " + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment :" +
-                    "appliance not reachable at : " + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment : " +
-                    "No response from appliance : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment : " +
-                    "arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("StorageVolumeAttachmentClientSample : repairExtraUnmanagedStorageVolumeAttachment : "
-                    + "errors in task, please check task resource for more details ");
-        }
+        System.out.println("StorageVolumeAttachmentClient : repairExtraUnmanagedStorageVolumeAttachment :" +
+                "Task object returned to client : " + task.toJsonString());
     }
 
     public static void main(String[] args) {
@@ -237,7 +102,7 @@ public class StorageVolumeAttachmentClientSample {
         client.getAllStorageVolumeAttachments();
         client.getStorageVolumeAttachmentPath();
         client.getAllStorageVolumeAttachmentPaths();
-        client.getExtraUnmanagedStorageVolumeAttachaments();
+        client.getExtraUnmanagedStorageVolumeAttachments();
         client.repairExtraUnmanagedStorageVolumeAttachment();
     }
 

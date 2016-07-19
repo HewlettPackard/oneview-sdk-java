@@ -40,8 +40,9 @@ public class StorageSystemClientSample {
 
     // These are variables to be defined by user
     // ================================
+    public static final String STORAGE_SYSTEM_NAME = "ThreePAR7200-4555";
+
     private static final String STORAGE_SYSTEM_RESOURCE_ID = "TXQ1010307";
-    private static final String STORAGE_SYSTEM_NAME = "ThreePAR7200-4555";
     private static final String TARGET_PORT_ID = "2788DF7C-23BE-4E42-B4EB-61C59246AEE7";
     private static final String USERNAME = "dcs";
     private static final String PASSWORD = "dcs";

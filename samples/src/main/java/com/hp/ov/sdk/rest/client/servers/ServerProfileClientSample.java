@@ -50,13 +50,11 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
-import com.hp.ov.sdk.rest.client.EnclosureGroupClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.rest.client.ServerHardwareClient;
-import com.hp.ov.sdk.rest.client.ServerHardwareClientImpl;
+import com.hp.ov.sdk.rest.client.server.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.ServerProfileClient;
 import com.hp.ov.sdk.rest.client.ServerProfileClientImpl;
+import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -91,10 +89,11 @@ public class ServerProfileClientSample {
     // ================================
 
     private ServerProfileClientSample() {
-        serverProfileClient = ServerProfileClientImpl.getClient();
-        serverHardwareClient = ServerHardwareClientImpl.getClient();
-        enclosureGroupClient = EnclosureGroupClientImpl.getClient();
         oneViewClient = OneViewClientSample.getOneViewClient();
+
+        serverProfileClient = ServerProfileClientImpl.getClient();
+        serverHardwareClient = oneViewClient.serverHardware();
+        enclosureGroupClient = oneViewClient.enclosureGroup();
     }
 
     private void getServerProfileById() throws InstantiationException, IllegalAccessException {
@@ -266,11 +265,10 @@ public class ServerProfileClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // fetch enclosure group uri from enclosure name
-            final String enclosureGroupUri = enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();
+            final String enclosureGroupUri = enclosureGroupClient.getByName(enclosureGroupName).get(0).getUri();
 
             // fetch server hardware type uri from server hardware
-            final String serverHardwareTypeUri = serverHardwareClient.getServerHardwareByName(params, bayName)
-                    .getServerHardwareTypeUri();
+            final String serverHardwareTypeUri = serverHardwareClient.getByName(bayName).get(0).getServerHardwareTypeUri();
 
             // then make sdk service call to get resource
             serverProfileDto = serverProfileClient.getServerProfileTransformation(params, resourceId, serverHardwareTypeUri,
@@ -308,11 +306,10 @@ public class ServerProfileClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // fetch enclosure group uri from enclosure name
-            final String enclosureGroupUri = enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();
+            final String enclosureGroupUri = enclosureGroupClient.getByName(enclosureGroupName).get(0).getUri();
 
             // fetch server hardware type uri from server hardware
-            final String serverHardwareTypeUri = serverHardwareClient.getServerHardwareByName(params, bayName)
-                    .getServerHardwareTypeUri();
+            final String serverHardwareTypeUri = serverHardwareClient.getByName(bayName).get(0).getServerHardwareTypeUri();
 
             // then make sdk service call to get resource
             availableNetworksDto = serverProfileClient.getAvailableNetworksForServerProfile(params, serverHardwareTypeUri,
@@ -351,11 +348,10 @@ public class ServerProfileClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // fetch enclosure group uri from enclosure name
-            final String enclosureGroupUri = enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();
+            final String enclosureGroupUri = enclosureGroupClient.getByName(enclosureGroupName).get(0).getUri();
 
             // fetch server hardware type uri from server hardware
-            final String serverHardwareTypeUri = serverHardwareClient.getServerHardwareByName(params, bayName)
-                    .getServerHardwareTypeUri();
+            final String serverHardwareTypeUri = serverHardwareClient.getByName(bayName).get(0).getServerHardwareTypeUri();
 
             // then make sdk service call to get resource
             availableServersCollectionDto = serverProfileClient.getAvailableServersForServerProfile(params, serverHardwareTypeUri,
@@ -470,11 +466,10 @@ public class ServerProfileClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // fetch enclosure group uri from enclosure name
-            final String enclosureGroupUri = enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();
+            final String enclosureGroupUri = enclosureGroupClient.getByName(enclosureGroupName).get(0).getUri();
 
             // fetch server hardware type uri from server hardware
-            final String serverHardwareTypeUri = serverHardwareClient.getServerHardwareByName(params, bayName)
-                    .getServerHardwareTypeUri();
+            final String serverHardwareTypeUri = serverHardwareClient.getByName(bayName).get(0).getServerHardwareTypeUri();
 
             // then make sdk service call to get resource
             storageSystemDto = serverProfileClient.getAvailableStorageSystemsForServerProfile(params, enclosureGroupUri, serverHardwareTypeUri);
@@ -511,11 +506,10 @@ public class ServerProfileClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // fetch enclosure group uri from enclosure name
-            final String enclosureGroupUri = enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();
+            final String enclosureGroupUri = enclosureGroupClient.getByName(enclosureGroupName).get(0).getUri();
 
             // fetch server hardware type uri from server hardware
-            final String serverHardwareTypeUri = serverHardwareClient.getServerHardwareByName(params, bayName)
-                    .getServerHardwareTypeUri();
+            final String serverHardwareTypeUri = serverHardwareClient.getByName(bayName).get(0).getServerHardwareTypeUri();
 
             // fetch storage system uri from server hardware
             String storageSystemId = serverProfileClient.getAvailableStorageSystemsForServerProfile(params, enclosureGroupUri, serverHardwareTypeUri)
@@ -593,11 +587,10 @@ public class ServerProfileClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // fetch enclosure group uri from enclosure name
-            final String enclosureGroupUri = enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();
+            final String enclosureGroupUri = enclosureGroupClient.getByName(enclosureGroupName).get(0).getUri();
 
             // fetch server hardware type uri from server hardware
-            final String serverHardwareTypeUri = serverHardwareClient.getServerHardwareByName(params, bayName)
-                    .getServerHardwareTypeUri();
+            final String serverHardwareTypeUri = serverHardwareClient.getByName(bayName).get(0).getServerHardwareTypeUri();
 
             // then make sdk service call to get resource
             profilePortsDto = serverProfileClient.getProfilePortsForServerProfile(params, serverHardwareTypeUri, enclosureGroupUri);

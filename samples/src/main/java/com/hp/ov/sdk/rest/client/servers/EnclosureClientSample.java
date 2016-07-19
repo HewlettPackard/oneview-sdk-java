@@ -17,6 +17,7 @@ package com.hp.ov.sdk.rest.client.servers;
 
 import java.util.Arrays;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.AddEnclosureV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
@@ -42,10 +43,10 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.EnclosureClient;
 import com.hp.ov.sdk.rest.client.EnclosureClientImpl;
-import com.hp.ov.sdk.rest.client.EnclosureGroupClient;
-import com.hp.ov.sdk.rest.client.EnclosureGroupClientImpl;
 import com.hp.ov.sdk.rest.client.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.client.FirmwareDriverClientImpl;
+import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
@@ -76,9 +77,11 @@ public class EnclosureClientSample {
     // ================================
 
     private EnclosureClientSample() {
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
         this.enclosureClient = EnclosureClientImpl.getClient();
         this.firmwareDriverClient = FirmwareDriverClientImpl.getClient();
-        this.enclosureGroupClient = EnclosureGroupClientImpl.getClient();
+        this.enclosureGroupClient = oneViewClient.enclosureGroup();
     }
 
     private void getEnclosureById() throws InstantiationException, IllegalAccessException {
@@ -815,7 +818,7 @@ public class EnclosureClientSample {
 
     private AddEnclosureV2 buildTestEnclosureDto() {
 
-        final String enclosureGroupUri = enclosureGroupClient.getEnclosureGroupByName(params, enclosureGroupName).getUri();
+        final String enclosureGroupUri = enclosureGroupClient.getByName(enclosureGroupName).get(0).getUri();
         final AddEnclosureV2 dto = new AddEnclosureV2();
         dto.setHostname(hostname);
         dto.setUsername(username);

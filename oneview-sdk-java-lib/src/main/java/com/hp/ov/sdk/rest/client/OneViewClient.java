@@ -36,8 +36,15 @@ import com.hp.ov.sdk.rest.client.networking.NetworkSetClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
+import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
+import com.hp.ov.sdk.rest.client.server.ServerHardwareClient;
+import com.hp.ov.sdk.rest.client.server.ServerHardwareTypeClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
+import com.hp.ov.sdk.rest.client.storage.StoragePoolClient;
 import com.hp.ov.sdk.rest.client.storage.StorageSystemClient;
+import com.hp.ov.sdk.rest.client.storage.StorageVolumeAttachmentClient;
+import com.hp.ov.sdk.rest.client.storage.StorageVolumeClient;
+import com.hp.ov.sdk.rest.client.storage.StorageVolumeTemplateClient;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -48,6 +55,7 @@ public class OneViewClient {
 
     private final BaseClient baseClient;
 
+    private EnclosureGroupClient enclosureGroupClient;
     private FcoeNetworkClient fcoeNetworkClient;
     private FcNetworkClient fcNetworkClient;
     private EthernetNetworkClient ethernetNetworkClient;
@@ -61,8 +69,15 @@ public class OneViewClient {
     private FabricClient fabricClient;
     private SwitchClient switchClient;
     private StorageSystemClient storageSystemClient;
+    private StoragePoolClient storagePoolClient;
+    private StorageVolumeClient storageVolumeClient;
+    private StorageVolumeAttachmentClient storageVolumeAttachmentClient;
+    private StorageVolumeTemplateClient storageVolumeTemplateClient;
     private InterconnectTypeClient interconnectTypeClient;
     private LogicalInterconnectGroupClient logicalInterconnectGroupClient;
+
+    private ServerHardwareClient serverHardwareClient;
+    private ServerHardwareTypeClient serverHardwareTypeClient;
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
         this.baseClient = new BaseClient(params,
@@ -76,6 +91,10 @@ public class OneViewClient {
                 new LoginSessionClient(this.baseClient));
 
         connector.connect();
+    }
+
+    public synchronized EnclosureGroupClient enclosureGroup() {
+        return this.getClient(this.enclosureGroupClient, EnclosureGroupClient.class);
     }
 
     public synchronized FcoeNetworkClient fcoeNetwork() {
@@ -130,12 +149,36 @@ public class OneViewClient {
         return this.getClient(this.storageSystemClient, StorageSystemClient.class);
     }
 
+    public synchronized StoragePoolClient storagePool() {
+        return this.getClient(this.storagePoolClient, StoragePoolClient.class);
+    }
+
+    public synchronized StorageVolumeClient storageVolume() {
+        return this.getClient(this.storageVolumeClient, StorageVolumeClient.class);
+    }
+
+    public synchronized StorageVolumeAttachmentClient storageVolumeAttachment() {
+        return this.getClient(this.storageVolumeAttachmentClient, StorageVolumeAttachmentClient.class);
+    }
+
+    public synchronized StorageVolumeTemplateClient storageVolumeTemplate() {
+        return this.getClient(this.storageVolumeTemplateClient, StorageVolumeTemplateClient.class);
+    }
+
     public synchronized InterconnectTypeClient interconnectType() {
         return this.getClient(this.interconnectTypeClient, InterconnectTypeClient.class);
     }
 
     public synchronized LogicalInterconnectGroupClient logicalInterconnectGroup() {
         return this.getClient(this.logicalInterconnectGroupClient, LogicalInterconnectGroupClient.class);
+    }
+
+    public synchronized ServerHardwareClient serverHardware() {
+        return this.getClient(this.serverHardwareClient, ServerHardwareClient.class);
+    }
+
+    public synchronized ServerHardwareTypeClient serverHardwareType() {
+        return this.getClient(this.serverHardwareTypeClient, ServerHardwareTypeClient.class);
     }
 
     private <T> T getClient(T client, Class<T> clientClass) {

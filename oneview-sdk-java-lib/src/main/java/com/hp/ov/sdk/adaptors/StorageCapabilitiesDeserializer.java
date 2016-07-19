@@ -18,9 +18,7 @@ package com.hp.ov.sdk.adaptors;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
