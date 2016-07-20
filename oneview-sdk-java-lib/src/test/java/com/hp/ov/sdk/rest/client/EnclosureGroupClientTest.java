@@ -367,6 +367,8 @@ public class EnclosureGroupClientTest {
                 Mockito.anyString()))
         .thenReturn(resourceConfigScript);
 
+        params.getHeaders().put("Content-Type", "text/plain");
+
         String configScript = client.updateConfigurationScript(
                 params,
                 resourceId,
@@ -389,6 +391,8 @@ public class EnclosureGroupClientTest {
                 Mockito.any(RestParams.class),
                 Mockito.anyString()))
         .thenReturn(null);
+
+        params.getHeaders().put("Content-Type", "text/plain");
 
         client.updateConfigurationScript(
                 params,
