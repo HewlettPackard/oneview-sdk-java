@@ -53,8 +53,9 @@ public class StorageSystemClientSample {
 
     // These are variables to be defined by user
     // ================================
+    public static final String resourceName = "ThreePAR7200-4555";
+
     private static final String targetPortId = "2788DF7C-23BE-4E42-B4EB-61C59246AEE7";
-    private static final String resourceName = "ThreePAR7200-4555";
     private static final String username = "dcs";
     private static final String password = "dcs";
     private static final String ipAddress = "172.18.11.12";

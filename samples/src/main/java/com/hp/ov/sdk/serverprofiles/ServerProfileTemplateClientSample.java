@@ -58,7 +58,6 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
  */
 public class ServerProfileTemplateClientSample {
 
-
     private final ServerProfileTemplateClient serverProfileTemplateClient;
 
     private RestParams params;
@@ -67,9 +66,10 @@ public class ServerProfileTemplateClientSample {
     // test values - user input
     // ================================
     private static final String serverProfileTemplateName = "sp_template";
+    private static final String serverProfileTemplateNameUpdated = serverProfileTemplateName + "_Update";
     private static final String resourceId = "09305c00-df29-4147-9a2c-bd0827d2726d";
     private static final String serverHardwareTypeUri = "/rest/server-hardware-types/F98A387B-07BE-4A2C-8A6A-0BAAFA586711";
-    private static final String enclosureGrouUri = "/rest/enclosure-groups/c6871f53-c5e1-483f-a273-a30da743f6b1";
+    private static final String enclosureGroupUri = "/rest/enclosure-groups/c6871f53-c5e1-483f-a273-a30da743f6b1";
     private static final String eth1NetworkUri = "/rest/ethernet-networks/5b1ffd63-6787-4e5f-b409-3f86a998fbd6";
     private static final String eth2NetworkUri = "/rest/ethernet-networks/bdc00905-20f3-46a9-87dd-8020fc0b6bab";
     private static final String fc1NetworkUri = "/rest/fc-networks/1f4a0491-2a41-4633-8362-377081dd0fcc";
@@ -305,7 +305,7 @@ public class ServerProfileTemplateClientSample {
         template.setName(serverProfileTemplateName);
         template.setType(ResourceCategory.RC_SERVER_PROFILE_TEMPLATE);
         template.setServerHardwareTypeUri(serverHardwareTypeUri);
-        template.setEnclosureGroupUri(enclosureGrouUri);
+        template.setEnclosureGroupUri(enclosureGroupUri);
         template.setSerialNumberType("Virtual");
         template.setMacType("Virtual");
         template.setWwnType("Virtual");
@@ -445,7 +445,7 @@ public class ServerProfileTemplateClientSample {
             // fetch resource Id using resource name
             serverProfileTemplateDto = serverProfileTemplateClient.getServerProfileTemplateByName(params, serverProfileTemplateName);
 
-            serverProfileTemplateDto.setName(serverProfileTemplateName + "_Update");
+            serverProfileTemplateDto.setName(serverProfileTemplateNameUpdated);
 
             if (null != serverProfileTemplateDto.getUri()) {
                 resourceId = UrlUtils.getResourceIdFromUri(serverProfileTemplateDto.getUri());

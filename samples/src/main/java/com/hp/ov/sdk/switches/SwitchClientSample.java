@@ -348,12 +348,11 @@ public class SwitchClientSample {
         client.getSwitchEnvironmentalConfiguration();
         client.getSwitchByName();
 
-        client.deleteSwitch();
-
         /* methods available only in version 1.2 */
         client.refreshSwitch();
         client.createSwitch();
         client.updateSwitch();
+        client.deleteSwitch();
 
         /* methods available only in version 200 */
         client.getSwitchStatistics();

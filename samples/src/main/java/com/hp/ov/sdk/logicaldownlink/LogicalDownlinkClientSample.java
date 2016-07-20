@@ -42,8 +42,8 @@ public class LogicalDownlinkClientSample {
 
     // test values - user input
     // ================================
-    private static final String resourceName = "LD03544a65-c7d2-480f-975e-baaede358d15 (HP VC FlexFabric-20/40 F8 Module)";
-    private static final String resourceId = "7462ff65-124b-47a9-b097-e6a2aa195094";
+    private static final String resourceName = "LD75dcb24b-cea1-4d8e-9d38-4baf13a9e316 (HP VC FlexFabric-20/40 F8 Module)";
+    private static final String resourceId = "fb5d9ead-4000-4023-a85d-dde520f13b68";
     // ================================
 
     private LogicalDownlinkClientSample() {
@@ -169,6 +169,35 @@ public class LogicalDownlinkClientSample {
         }
     }
 
+    public void getLogicalDownlinkByName() throws InstantiationException, IllegalAccessException {
+        LogicalDownlink logicalDownlinkDto = null;
+        // first get the session Id
+        try {
+
+            // OneView credentials
+            params = HPOneViewCredential.createCredentials();
+
+            // then make sdk service call to get resource
+            logicalDownlinkDto = logicalDownlinkClient.getLogicalDownlinkByName(params, resourceName);
+
+            System.out.println("LogicalDownlinkClientSample : getLogicalDownlinkByName : LogicalDownlink object returned to client : "
+                            + logicalDownlinkDto.toString());
+        } catch (SDKResourceNotFoundException ex) {
+            System.out.println("LogicalDownlinkClientSample : getLogicalDownlinkByName : resource not found : ");
+        } catch (SDKNoSuchUrlException ex) {
+            System.out.println("LogicalDownlinkClientSample : getLogicalDownlinkByName : no such url : " + params.getUrl());
+        } catch (SDKApplianceNotReachableException e) {
+            System.out.println("LogicalDownlinkClientSample : getLogicalDownlinkByName : Applicance Not reachabe at : "
+                    + params.getHostname());
+        } catch (SDKNoResponseException ex) {
+            System.out.println("LogicalDownlinkClientSample : getLogicalDownlinkByName : No response from appliance : "
+                    + params.getHostname());
+        } catch (SDKInvalidArgumentException ex) {
+            System.out.println("LogicalDownlinkClientSample : getLogicalDownlinkByName : arguments are null ");
+        }
+
+    }
+
     public static void main(String[] args) throws InstantiationException, IllegalAccessException {
         LogicalDownlinkClientSample client = new LogicalDownlinkClientSample();
 
@@ -176,6 +205,7 @@ public class LogicalDownlinkClientSample {
         client.getAllLogicalDownlinksWithoutEthernet();
         client.getLogicalDownlinkById();
         client.getLogicalDownlinkByIdWithoutEthernet();
+        client.getLogicalDownlinkByName();
     }
 
 }

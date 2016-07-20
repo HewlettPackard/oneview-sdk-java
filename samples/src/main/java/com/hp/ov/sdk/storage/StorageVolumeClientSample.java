@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.storage;
 
+import com.google.common.collect.Maps;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.AddStorageVolumeV2;
 import com.hp.ov.sdk.dto.AttachableStorageVolume;
@@ -58,13 +59,11 @@ public class StorageVolumeClientSample {
 
     // These are variables to be defined by user
     // ================================
+    private static final String resourceId = "1834F634-49B7-4E01-858A-E9704FC61A1E";
     private static final String resourceName = "Volume101";
     private static final String resourceNameUpdate = "Volume101_Updated";
-    private static final String storageSystemName = "ThreePAR7200-4310";
-    private static final String storagePoolName = "FST_CPG1";
     private static final String resourceNameForPrivateStorage = "Volume103";
-    private static final String resourceId = "907A557A-8EA4-4AB8-961E-13235A882F33";
-    private static final String storageVolumeSnapshotId = "0863B609-DE0A-4E31-B7D2-3D2207F673E4";
+    private static final String storageVolumeSnapshotId = "85008860-F503-4941-9D92-655255A465B4";
     private static final String capacity = "1234567898";
     // ================================
 
@@ -259,7 +258,10 @@ public class StorageVolumeClientSample {
             if (null != storageVolumeDto.getUri()) {
                 resourceId = UrlUtils.getResourceIdFromUri(storageVolumeDto.getUri());
             }
-            storageVolumeDto.setName(resourceName + "_Updated");
+            storageVolumeDto.setName(resourceNameUpdate);
+
+            //necessary to remove the query otherwise it will be applied to further requests
+            params.setQuery(Maps.<String, String>newHashMap());
 
             /**
              * then make sdk service call to get resource aSync parameter
@@ -369,6 +371,17 @@ public class StorageVolumeClientSample {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
 
+            // fetch resource Id using resource name
+            StorageVolumeV2 storageVolumeDto = storageVolumeClient.getStorageVolumeByName(params, resourceName);
+            String resourceId = StorageVolumeClientSample.resourceId;
+
+            if (null != storageVolumeDto.getUri()) {
+                resourceId = UrlUtils.getResourceIdFromUri(storageVolumeDto.getUri());
+            }
+
+            //necessary to remove the query otherwise it will be applied to further requests
+            params.setQuery(Maps.<String, String>newHashMap());
+
             // then make sdk service call to get resource
             StorageVolumeSnapshot storageVolumeSnapshot = storageVolumeClient.getStorageVolumeSnapshot(params,
                     resourceId, storageVolumeSnapshotId);
@@ -399,6 +412,17 @@ public class StorageVolumeClientSample {
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
+
+            // fetch resource Id using resource name
+            StorageVolumeV2 storageVolumeDto = storageVolumeClient.getStorageVolumeByName(params, resourceName);
+            String resourceId = StorageVolumeClientSample.resourceId;
+
+            //necessary to remove the query otherwise it will be applied to further requests
+            params.setQuery(Maps.<String, String>newHashMap());
+
+            if (null != storageVolumeDto.getUri()) {
+                resourceId = UrlUtils.getResourceIdFromUri(storageVolumeDto.getUri());
+            }
 
             // then make sdk service call to get resource
             ResourceCollection<StorageVolumeSnapshot> storageVolumeSnapshots
@@ -432,6 +456,18 @@ public class StorageVolumeClientSample {
             params = HPOneViewCredential.createCredentials();
 
             StorageVolumeSnapshot snapshot = buildTestStorageVolumeSnapshot();
+
+            // fetch resource Id using resource name
+            StorageVolumeV2 storageVolumeDto = storageVolumeClient.getStorageVolumeByName(params, resourceName);
+            String resourceId = StorageVolumeClientSample.resourceId;
+
+            if (null != storageVolumeDto.getUri()) {
+                resourceId = UrlUtils.getResourceIdFromUri(storageVolumeDto.getUri());
+            }
+
+            //necessary to remove the query otherwise it will be applied to further requests
+            params.setQuery(Maps.<String, String>newHashMap());
+
             /**
              * then make sdk service call to get resource aSync parameter
              * indicates sync vs async useJsonRequest parameter indicates
@@ -470,6 +506,17 @@ public class StorageVolumeClientSample {
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
+
+            // fetch resource Id using resource name
+            StorageVolumeV2 storageVolumeDto = storageVolumeClient.getStorageVolumeByName(params, resourceName);
+            String resourceId = StorageVolumeClientSample.resourceId;
+
+            if (null != storageVolumeDto.getUri()) {
+                resourceId = UrlUtils.getResourceIdFromUri(storageVolumeDto.getUri());
+            }
+
+            //necessary to remove the query otherwise it will be applied to further requests
+            params.setQuery(Maps.<String, String>newHashMap());
 
             /**
              * then make sdk service call to get resource aSync parameter
@@ -548,6 +595,17 @@ public class StorageVolumeClientSample {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
 
+            // fetch resource Id using resource name
+            StorageVolumeV2 storageVolumeDto = storageVolumeClient.getStorageVolumeByName(params, resourceName);
+            String resourceId = StorageVolumeClientSample.resourceId;
+
+            if (null != storageVolumeDto.getUri()) {
+                resourceId = UrlUtils.getResourceIdFromUri(storageVolumeDto.getUri());
+            }
+
+            //necessary to remove the query otherwise it will be applied to further requests
+            params.setQuery(Maps.<String, String>newHashMap());
+
             /**
              * then make sdk service call to get resource aSync parameter
              * indicates sync vs async useJsonRequest parameter indicates
@@ -598,8 +656,10 @@ public class StorageVolumeClientSample {
     }
 
     private AddStorageVolumeV2 buildTestStorageVolumeDto() {
-        String storageSystemUri = storageSystemClient.getStorageSystemByName(params, storageSystemName).getUri();
-        String storagePoolUri = storagePoolClient.getStoragePoolByName(params, storagePoolName, storageSystemUri).getUri();
+        String storageSystemUri = storageSystemClient.getStorageSystemByName(
+                params, StorageSystemClientSample.resourceName).getUri();
+        String storagePoolUri = storagePoolClient.getStoragePoolByName(
+                params, StoragePoolClientSample.resourceName, storageSystemUri).getUri();
 
         AddStorageVolumeV2 dto = new AddStorageVolumeV2();
 
@@ -622,8 +682,10 @@ public class StorageVolumeClientSample {
     }
 
     private AddStorageVolumeV2 buildTestPrivateStorageVolumeDto() {
-        String storageSystemUri = storageSystemClient.getStorageSystemByName(params, storageSystemName).getUri();
-        String storagePoolUri = storagePoolClient.getStoragePoolByName(params, storagePoolName, storageSystemUri).getUri();
+        String storageSystemUri = storageSystemClient.getStorageSystemByName(
+                params, StorageSystemClientSample.resourceName).getUri();
+        String storagePoolUri = storagePoolClient.getStoragePoolByName(
+                params, StoragePoolClientSample.resourceName, storageSystemUri).getUri();
 
         final AddStorageVolumeV2 dto = new AddStorageVolumeV2();
 
@@ -653,17 +715,17 @@ public class StorageVolumeClientSample {
         client.getStorageVolumeById();
         client.getAllStorageVolume();
         client.getStorageVolumeByName();
-        client.updateStorageVolume();
-        client.deleteStorageVolume();
         client.getAttachableVolumes();
 
         client.createStorageVolumeSnapshot();
-
         client.getStorageVolumeSnapshot();
         client.getAllStorageVolumeSnapshots();
         client.deleteStorageVolumeSnapshot();
 
         client.getExtraManagedStorageVolumePaths();
         client.repairExtraManagedStorageVolumePath();
+
+        client.updateStorageVolume();
+        client.deleteStorageVolume();
     }
 }
