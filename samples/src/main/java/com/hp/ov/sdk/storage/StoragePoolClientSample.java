@@ -48,9 +48,9 @@ public class StoragePoolClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String resourceName = "FST_CPG1";
-    private static final String storageSystemName = "ThreePAR7200-4310";
-    private static final String resourceId = "20FCB7C5-3719-4AEC-AB06-8B51C0615743";
+    public static final String resourceName = "FST_CPG1";
+
+    private static final String resourceId = "87DAD4C0-16BD-487A-A66F-E6FB2F8A24E6";
     // ================================
 
     private StoragePoolClientSample() {
@@ -290,7 +290,7 @@ public class StoragePoolClientSample {
     }
 
     private String getStorageSystemUri() {
-        return storageSystemClient.getStorageSystemByName(params, storageSystemName).getUri();
+        return storageSystemClient.getStorageSystemByName(params, StorageSystemClientSample.resourceName).getUri();
     }
 
     public static void main(final String[] args) throws Exception {

@@ -57,9 +57,9 @@ public class FcSansDeviceManagerClientSample {
     // ================================
     private static final String providerName = "Brocade Network Advisor";
     private static final String resourceId = "f7aae238-64a3-4008-878c-d46d0a5798fe";
-    private static final String resourceName = "172.18.15.1";// example value
+    private static final String resourceName = "172.18.15.1";
     private static final String hostName = "Host";
-    private static final String hostValue = "172.18.15.1";// example value
+    private static final String hostValue = "172.18.15.1";
     private static final String userName = "Username";
     private static final String userValue = "dcs";
     private static final String passwordName = "Password";

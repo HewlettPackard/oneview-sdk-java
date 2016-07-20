@@ -287,9 +287,20 @@ public class EnclosureGroupClientImpl implements EnclosureGroupClient {
         LOGGER.info("EnclosureGroupClientImpl : updateConfigurationScript : Start");
 
         // validate args
-        if (null == params) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
+        if ((null == params) || (params.getHeaders() == null)) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument,
+                    null, null, null, SdkConstants.APPLIANCE, null);
         }
+
+        String contentType = params.getHeaders().get("Content-Type");
+
+        if (!"text/plain".equalsIgnoreCase(contentType)) {
+            LOGGER.error("EnclosureGroupClientImpl : updateConfigurationScript : Content-Type must be \"text/plain\"");
+
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument,
+                    null, null, null, SdkConstants.ENCLOSURE_GROUP, null);
+        }
+
         // set the additional params
         params.setType(HttpMethodType.PUT);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_GROUP_URI, resourceId,

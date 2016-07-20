@@ -18,6 +18,7 @@ package com.hp.ov.sdk.enclosuregroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Maps;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StackingMode;
@@ -54,8 +55,7 @@ public class EnclosureGroupClientSample {
     // test values - user input
     // ================================
     private static final String resourceName = "Enclosure_Test";
-    private static final String logicalInterconnectName = "LIG_PROD";
-    private static final String resourceId = "7383eb8d-52ad-4c44-aea3-dc138cc9adbc";
+    private static final String resourceId = "315d89ce-c997-4693-88eb-5737936712a0";
     private static final String scriptData = "name=Enclosure_test";
     // ================================
 
@@ -336,6 +336,9 @@ public class EnclosureGroupClientSample {
                 resourceId = UrlUtils.getResourceIdFromUri(enclosureGroupDto.getUri());
             }
 
+            params.setQuery(Maps.<String, String>newHashMap());
+            params.getHeaders().put("Content-Type", "text/plain"); //script data is a string
+
             // then make sdk service call to get resource
             enclosureScript = enclosureGroupClient.updateConfigurationScript(params, resourceId, scriptData);
 
@@ -365,7 +368,7 @@ public class EnclosureGroupClientSample {
     private EnclosureGroups buildTestEnclosureGroupDto() {
         // fetch resource Id using resource name
         final String logicalInterconnectGroupUri = logicalInterconnectGroupClient.getLogicalInterconnectGroupByName(params,
-                logicalInterconnectName).getUri();
+                LogicalInterconnectGroupClientSample.resourceName).getUri();
 
         final EnclosureGroups dto = new EnclosureGroups();
         dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP); //OneView 1.2
@@ -396,13 +399,15 @@ public class EnclosureGroupClientSample {
     public static void main(final String[] args) throws Exception {
         EnclosureGroupClientSample client = new EnclosureGroupClientSample();
 
-        client.getAllEnclosureGroup();
         client.createEnclosureGroup();
+
+        client.getAllEnclosureGroup();
         client.getEnclosureGroupById();
         client.getEnclosureGroupByName();
         client.updateConfigurationScript();
         client.getConfigurationScript();
         client.updateEnclosureGroup();
+
         client.createEnclosureGroup();
         client.deleteEnclosureGroup();
     }

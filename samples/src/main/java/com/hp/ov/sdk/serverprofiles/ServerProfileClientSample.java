@@ -77,7 +77,8 @@ public class ServerProfileClientSample {
 
     // test values - user input
     // ================================
-    private static final String serverProfileName = "ServerProfile";
+    private static final String serverProfileName = "server-profile";
+    private static final String serverProfileNameUpdated = serverProfileName + "_Updated";
     private static final String bayName = "Encl1, bay 15";
     private static final String enclosureGroupName = "encl_group";
     private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402");
@@ -672,7 +673,7 @@ public class ServerProfileClientSample {
             // fetch resource Id using resource name
             serverProfileDto = serverProfileClient.getServerProfileByName(params, serverProfileName);
 
-            serverProfileDto.setName(serverProfileName + "_Update");
+            serverProfileDto.setName(serverProfileNameUpdated);
 
             if (null != serverProfileDto.getUri()) {
                 resourceId = UrlUtils.getResourceIdFromUri(serverProfileDto.getUri());
@@ -770,7 +771,7 @@ public class ServerProfileClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // get resource ID
-            resourceId = serverProfileClient.getId(params, serverProfileName);
+            resourceId = serverProfileClient.getId(params, serverProfileNameUpdated);
 
             // then make sdk service call to get resource
             taskResourceV2 = serverProfileClient.deleteServerProfile(params, resourceId, false);

@@ -48,7 +48,10 @@ public class PowerDeliveryDeviceClientSample {
     // test values - user input
     // ================================
     private static final String resourceName = "172.18.8.11, PDU 1, L6,Outlet1";
-    private static final String resourceId = "db5271f1-d905-47ce-89be-8f4032ac3f92";
+    private static final String resourceId = "35323930-4936-4450-5531-303053474820_6_1";
+    private static final String hostname = "172.18.8.11";
+    private static final String username = "dcs";
+    private static final String password = "dcs";
     // ================================
 
     private PowerDeliveryDeviceClientSample() {
@@ -368,9 +371,9 @@ public class PowerDeliveryDeviceClientSample {
 
             // create powerDeliveryDevice request body
             final ImportPdd importPddDto = new ImportPdd();
-            importPddDto.setHostname("172.18.8.12");
-            importPddDto.setUsername("dcs");
-            importPddDto.setPassword("dcs");
+            importPddDto.setHostname(hostname);
+            importPddDto.setUsername(username);
+            importPddDto.setPassword(password);
             importPddDto.setForce(true);
 
             taskResourceV2 = powerDeliveryDeviceClient.addPowerDeliveryDeviceByDiscover(params, importPddDto, false);

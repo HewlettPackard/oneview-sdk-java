@@ -47,10 +47,9 @@ public class StorageVolumeTemplateClientSample {
     // These are variables to be defined by user
     // ================================
     private static final String resourceName = "FusionTemplateExample";
-    private static final String storageSystemName = "ThreePAR7200-4310";
-    private static final String storagePoolName = "FST_CPG1";
+
     private static final String capacity = "235834383322";
-    private static final String resourceId = "727bda83-bdd2-4801-a813-169781b3581f";
+    private static final String resourceId = "4f196e2c-35bd-4a44-aba9-5d3367cbe6e9";
     private static final String provisionType = "Thin";
     // ================================
 
@@ -330,9 +329,10 @@ public class StorageVolumeTemplateClientSample {
     }
 
     private StorageVolumeTemplate buildTestStorageVolumeTemplateDto() {
-        String storageSystemUri = storageSystemClient.getStorageSystemByName(params, storageSystemName).getUri();
+        String storageSystemUri = storageSystemClient.getStorageSystemByName(params,
+                StorageSystemClientSample.resourceName).getUri();
         String storagePoolUri = storagePoolClient.getStoragePoolByName(params,
-                storagePoolName, storageSystemUri).getUri();
+                StoragePoolClientSample.resourceName, storageSystemUri).getUri();
 
         StorageVolumeTemplate dto = new StorageVolumeTemplate();
 
