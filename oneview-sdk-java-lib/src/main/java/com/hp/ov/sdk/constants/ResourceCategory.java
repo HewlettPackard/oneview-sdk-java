@@ -36,6 +36,7 @@ public class ResourceCategory {
     public static final String RC_UPLINKSET = "uplink-sets";
     public static final String RC_ENCLOSURE_GROUP = "EnclosureGroupV2";
     public static final String RC_ENCLOSURE_GROUP_V200 = "EnclosureGroupV200";
+    public static final String RC_ENCLOSURE_GROUP_V300 = "EnclosureGroupV300";
     public static final String RC_STORAGE_VOLUME_TEMPLATE = "StorageVolumeTemplate";
     public static final String RC_STORAGE_VOLUME_TEMPLATE_V200 = "StorageVolumeTemplateV3";
     public static final String RC_STORAGE_SYSTEM = "StorageSystemV2";

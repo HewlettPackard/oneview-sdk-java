@@ -22,9 +22,9 @@ import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StackingMode;
-import com.hp.ov.sdk.dto.generated.EnclosureGroup;
 import com.hp.ov.sdk.dto.generated.InterconnectBayMapping;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
+import com.hp.ov.sdk.dto.servers.enclosuregroup.EnclosureGroup;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClientSample;
@@ -58,22 +58,22 @@ public class EnclosureGroupClientSample {
     private void getEnclosureGroup() {
         EnclosureGroup enclosureGroup = enclosureGroupClient.getById(ENCLOSURE_GROUP_RESOURCE_ID);
 
-        System.out.println("EnclosureGroupClient : getEnclosureGroup : " +
-                "EnclosureGroup object returned to client : " + enclosureGroup.toJsonString());
+        System.out.println("EnclosureGroupClient : getEnclosureGroup : " + "EnclosureGroup object returned to client : "
+                + enclosureGroup.toJsonString());
     }
 
     private void getAllEnclosureGroups() {
         ResourceCollection<EnclosureGroup> enclosureGroups = enclosureGroupClient.getAll();
 
-        System.out.println("EnclosureGroupClient : getAllEnclosureGroups : " +
-                "EnclosureGroups returned to client (count) : " + enclosureGroups.toJsonString());
+        System.out.println("EnclosureGroupClient : getAllEnclosureGroups : "
+                + "EnclosureGroups returned to client (count) : " + enclosureGroups.toJsonString());
     }
 
     private void getEnclosureGroupByName() {
         EnclosureGroup enclosureGroup = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0);
 
-        System.out.println("EnclosureGroupClient : getEnclosureGroupByName : " +
-                "EnclosureGroup object returned to client : " + enclosureGroup.toJsonString());
+        System.out.println("EnclosureGroupClient : getEnclosureGroupByName : "
+                + "EnclosureGroup object returned to client : " + enclosureGroup.toJsonString());
     }
 
     private void createEnclosureGroup() {
@@ -81,8 +81,8 @@ public class EnclosureGroupClientSample {
 
         EnclosureGroup created = this.enclosureGroupClient.create(enclosureGroup);
 
-        System.out.println("EnclosureGroupClient : createEnclosureGroup : " +
-                "EnclosureGroup object returned to client : " + created.toJsonString());
+        System.out.println("EnclosureGroupClient : createEnclosureGroup : "
+                + "EnclosureGroup object returned to client : " + created.toJsonString());
     }
 
     private void updateEnclosureGroup() {
@@ -92,8 +92,8 @@ public class EnclosureGroupClientSample {
 
         EnclosureGroup updated = this.enclosureGroupClient.update(enclosureGroup.getResourceId(), enclosureGroup);
 
-        System.out.println("EnclosureGroupClient : updateEnclosureGroup : " +
-                "EnclosureGroup object returned to client : " + updated.toJsonString());
+        System.out.println("EnclosureGroupClient : updateEnclosureGroup : "
+                + "EnclosureGroup object returned to client : " + updated.toJsonString());
     }
 
     private void deleteEnclosureGroup() {
@@ -101,8 +101,8 @@ public class EnclosureGroupClientSample {
 
         String response = this.enclosureGroupClient.delete(enclosureGroup.getResourceId());
 
-        System.out.println("EnclosureGroupClient : deleteEnclosureGroup : " +
-                "Response returned to client : " + response);
+        System.out.println(
+                "EnclosureGroupClient : deleteEnclosureGroup : " + "Response returned to client : " + response);
     }
 
     private void getConfigurationScript() {
@@ -110,31 +110,31 @@ public class EnclosureGroupClientSample {
 
         String response = this.enclosureGroupClient.getConfigurationScript(enclosureGroup.getResourceId());
 
-        System.out.println("EnclosureGroupClient : getConfigurationScript : " +
-                "Configuration script returned to client : " + response);
+        System.out.println("EnclosureGroupClient : getConfigurationScript : "
+                + "Configuration script returned to client : " + response);
     }
 
     private void updateConfigurationScript() {
         EnclosureGroup enclosureGroup = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0);
 
-        String response = this.enclosureGroupClient.updateConfigurationScript(
-                enclosureGroup.getResourceId(), ENCLOSURE_SCRIPT_DATA);
+        String response = this.enclosureGroupClient.updateConfigurationScript(enclosureGroup.getResourceId(),
+                ENCLOSURE_SCRIPT_DATA);
 
-        System.out.println("EnclosureGroupClient : updateConfigurationScript : " +
-                "Configuration script returned to client : " + response);
+        System.out.println("EnclosureGroupClient : updateConfigurationScript : "
+                + "Configuration script returned to client : " + response);
     }
 
     private EnclosureGroup buildEnclosureGroup() {
         EnclosureGroup dto = new EnclosureGroup();
 
-        dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP); //OneView 1.2
-        dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP_V200); //OneView 2.0
+        dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP); // OneView 1.2
+        dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP_V200); // OneView 2.0
+        dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP_V300); // OneView 3.0
         dto.setName(ENCLOSURE_GROUP_NAME);
         dto.setStackingMode(StackingMode.Enclosure);
 
         List<InterconnectBayMapping> interconnectBayMappings = new ArrayList<>();
-        LogicalInterconnectGroup lig
-                = this.interconnectGroupClient.getByName(LogicalInterconnectGroupClientSample.resourceName).get(0);
+        LogicalInterconnectGroup lig = this.interconnectGroupClient.getByName(LogicalInterconnectGroupClientSample.resourceName).get(0);
 
         for (int i = 0; i < 8; i++) {
             InterconnectBayMapping interconnectBayMapping = new InterconnectBayMapping();
