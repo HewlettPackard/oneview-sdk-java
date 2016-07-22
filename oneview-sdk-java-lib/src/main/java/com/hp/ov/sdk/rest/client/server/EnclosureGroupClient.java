@@ -190,6 +190,14 @@ public class EnclosureGroupClient {
                         ResourceUris.ENCLOSURE_GROUP_SCRIPT_URI),
                 scriptData);
 
+        //FIXME [svoboda] Content-Type must be moved from RestParams to Request
+
+        /*
+        in this particular request, even though the documentation states that the content type
+        must ba application/json, it is necessary to change the content type to text/plain
+        otherwise the request fails!
+         */
+
         String response = baseClient.executeRequest(request, String.class);
 
         LOGGER.info("EnclosureGroupClient : updateConfigurationScript : End");

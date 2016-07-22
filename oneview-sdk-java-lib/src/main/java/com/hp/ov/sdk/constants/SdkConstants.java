@@ -42,6 +42,7 @@ public class SdkConstants {
     public static final String ETHERNET_SETTINGS = "ethernetSettings";
     public static final String FABRIC = "fabric";
     public static final String FIBRE_CHANNEL = "FibreChannel";
+    public static final String FIRMWARE_BUNDLE = "firmware-bundles";
     public static final String FIRMWARE_DRIVER = "firmware-drivers";
     public static final String FC_NETWORK = "FC_NETWORK";
     public static final String FC_NETWORKS = FC_NETWORK + "s";
@@ -84,6 +85,8 @@ public class SdkConstants {
     public static final String PROVIDERS = "providers";
     public static final String QOS_AGGREGATED_CONFIGURATION = "qos-aggregated-configuration";
     public static final String RABBITMQ = "certificates-client-rabbitmq";
+    public static final String RACK = "rack";
+    public static final String RACKS = RACK + "s";
     public static final String REFRESH_STATE = "refreshState";
     public static final String RESET_PORT_PROTECTION = "resetportprotection";
     public static final String SCMB_ALERTS_ROUTING_KEY = "scmb.alerts.#";

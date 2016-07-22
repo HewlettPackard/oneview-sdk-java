@@ -45,6 +45,7 @@ import com.hp.ov.sdk.rest.client.InterconnectsClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.UplinkSetClient;
 import com.hp.ov.sdk.rest.client.UplinkSetClientImpl;
+import com.hp.ov.sdk.rest.client.servers.EnclosureClientSample;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -68,12 +69,12 @@ public class UplinkSetClientSample {
     // These are variables to be defined by user
     // ================================
     private static final String resourceName = "Test_uplink_eth_one";
-    private static final String resourceId = "7cf7240e-6bb3-4b5a-87e1-843d6e00ba3a";
+    private static final String resourceNameUpdated = resourceName + "_Updated";
+    private static final String resourceId = "dcae0114-34c6-4f04-bb15-d03cf71b234c";
     private static final String category = "logical-interconnects";
     private static final List<String> fcNetworkName_A = Arrays.asList("FC_Network_A");
     private static final String type = "uplink-setV2";
     private static final String typeV200 = "uplink-setV3";
-    private static final String enclosureName = "Encl1";
     private static final String portValue = "X3";
     private static final String bayValue = "2";
     // ================================
@@ -187,7 +188,7 @@ public class UplinkSetClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // get resource ID
-            resourceId = uplinkSetClient.getId(params, resourceName);
+            resourceId = uplinkSetClient.getId(params, resourceNameUpdated);
 
             // then make sdk service call to get resource
             taskResourceV2 = uplinkSetClient.deleteUplinkSet(params, resourceId, false);
@@ -228,7 +229,7 @@ public class UplinkSetClientSample {
             }
 
             // Change updateSetName
-            uplinkSetDto.setName(resourceName + "_Updated");
+            uplinkSetDto.setName(resourceNameUpdated);
 
             // update uplink set
             taskResourceV2 = uplinkSetClient.updateUplinkSet(params, resourceId, uplinkSetDto, false, false);
@@ -309,7 +310,7 @@ public class UplinkSetClientSample {
         UplinkSets uplinkSetsDto = new UplinkSets();
 
         uplinkSetsDto.setCategory(category);
-        Enclosures enclosuresDto = enclosureClient.getEnclosureByName(params, enclosureName);
+        Enclosures enclosuresDto = enclosureClient.getEnclosureByName(params, EnclosureClientSample.resourceName);
         for (int i = 0; i < enclosuresDto.getInterconnectBayCount(); i++) {
             if (Integer.parseInt(bayValue) == enclosuresDto.getInterconnectBays().get(i).getBayNumber()) {
                 uplinkSetsDto.setLogicalInterconnectUri(enclosuresDto.getInterconnectBays().get(0).getLogicalInterconnectUri());

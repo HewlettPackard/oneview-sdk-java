@@ -4,6 +4,8 @@ The **HPE OneView SDK for Java** enables Java developers to easily integrate the
 
 The SDK provides clients for the REST API specification of each resource type in the HPE OneView resource model.
 
+Javadocs are available at [http://hewlettpackard.github.io/oneview-sdk-java/](http://hewlettpackard.github.io/oneview-sdk-java/)
+
 ## Getting Started ##
 
 ### Minimum requirements ###

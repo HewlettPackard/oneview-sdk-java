@@ -67,7 +67,8 @@ public class EnclosureClientSample {
 
     // test values - user input
     // ================================
-    private static final String resourceName = "Encl1";
+    public static final String resourceName = "Encl1";
+
     private static final String enclosureGroupName = "Enclosure_Test";
     private static final String hostname = "172.18.1.11";
     private static final String username = "dcs";
