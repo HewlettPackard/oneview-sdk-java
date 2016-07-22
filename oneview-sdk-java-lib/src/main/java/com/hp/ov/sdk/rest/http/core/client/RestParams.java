@@ -97,6 +97,8 @@ public class RestParams {
     /**
      *
      * @deprecated use {@link Request#Request(HttpMethodType, String)}
+     *
+     * @return the HttpMethodType
      */
     @Deprecated
     public HttpMethodType getType() {
@@ -104,6 +106,8 @@ public class RestParams {
     }
 
     /**
+     *
+     * @param type the HttpMethodType to set
      *
      * @deprecated use {@link Request#Request(HttpMethodType, String)}
      */
@@ -123,6 +127,8 @@ public class RestParams {
     /**
      *
      * @deprecated use {@link Request#Request(HttpMethodType, String)}
+     *
+     * @return the URL
      */
     @Deprecated
     public String getUrl() {
@@ -130,8 +136,10 @@ public class RestParams {
     }
 
     /**
+     * @param url the URL to set
      *
      * @deprecated use {@link Request#Request(HttpMethodType, String)}
+     *
      */
     @Deprecated
     public void setUrl(final String url) {
@@ -198,6 +206,8 @@ public class RestParams {
     /**
      *
      * @deprecated use {@link Request#addQuery(UrlParameter)} instead
+     *
+     * @return Map containing the current queries
      */
     @Deprecated
     public Map<String, String> getQuery() {
@@ -205,6 +215,8 @@ public class RestParams {
     }
 
     /**
+     *
+     * @param query the query Map to set
      *
      * @deprecated use {@link Request#addQuery(UrlParameter)} instead
      */

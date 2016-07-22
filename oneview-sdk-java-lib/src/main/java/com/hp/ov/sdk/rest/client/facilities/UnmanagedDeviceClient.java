@@ -176,7 +176,7 @@ public class UnmanagedDeviceClient {
 
     /**
      * Returns a description of the environmental configuration (supported feature set,
-     * calibrated minimum & maximum power, location & dimensions, ...) of the resource.
+     * calibrated minimum and maximum power, location and dimensions, ...) of the resource.
      *
      * @param resourceId unmanaged device resource identifier as seen in HPE OneView.
      *
