@@ -178,7 +178,7 @@ public class DataCenterClient {
     }
 
     /**
-     * Retrieves a {@link List}&lt{@link VisualContent}&gt describing each rack
+     * Retrieves a {@link List}&lt;{@link VisualContent}&gt; describing each rack
      * within the data center.
      *
      * @param resourceId data center resource identifier as seen in HPE OneView.
