@@ -13,33 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.servers.logicalenclosure;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+public enum InterconnectLicenseIntent {
+    Yes, No;
 
-public class LogicalEnclosureInterconnectBay {
-    @SerializedName("bayNumber")
-    @Expose
-    private byte bayNumber;
-
-    @SerializedName("licenseIntent")
-    @Expose
-    private InterconnectLicenseIntent licenseIntent;
-
-    public byte getBayNumber() {
-        return bayNumber;
-    }
-
-    public void setBayNumber(final byte bayNumber) {
-        this.bayNumber = bayNumber;
-    }
-
-    public InterconnectLicenseIntent getLicenseIntent() {
-        return licenseIntent;
-    }
-
-    public void setLicenseIntent(final InterconnectLicenseIntent licenseIntent) {
-        this.licenseIntent = licenseIntent;
+    public static InterconnectLicenseIntent toEnum(final String stateName) {
+        if (stateName == null) {
+            return null;
+        }
+        try {
+            return valueOf(stateName);
+        } catch (final IllegalArgumentException e) {
+            return null;
+        }
     }
 }

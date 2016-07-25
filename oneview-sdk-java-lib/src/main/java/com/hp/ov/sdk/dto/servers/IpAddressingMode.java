@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,20 +12,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+ */
+package com.hp.ov.sdk.dto.servers;
 
-public enum InterconnectLicenseIntent {
-    Yes, No;
+public enum IpAddressingMode {
 
-    public static InterconnectLicenseIntent toEnum(final String stateName) {
-        if (stateName == null) {
-            return null;
-        }
-        try {
-            return valueOf(stateName);
-        } catch (final IllegalArgumentException e) {
-            return null;
-        }
-    }
+    IpPool, DHCP, External
+
 }
