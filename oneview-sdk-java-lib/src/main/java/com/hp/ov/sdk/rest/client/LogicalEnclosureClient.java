@@ -15,12 +15,12 @@
  */
 package com.hp.ov.sdk.rest.client;
 
-import com.hp.ov.sdk.dto.AddLogicalEnclosure;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SupportDump;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.LogicalEnclosure;
+import com.hp.ov.sdk.dto.servers.logicalenclosure.AddLogicalEnclosure;
+import com.hp.ov.sdk.dto.servers.logicalenclosure.LogicalEnclosure;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface LogicalEnclosureClient {

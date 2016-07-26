@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.servers.enclosuregroup;
+package com.hp.ov.sdk.dto.servers;
 
 import java.io.Serializable;
 
@@ -21,39 +21,39 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class DeploymentModeSettings implements Serializable {
+public class OSDeploymentSettings implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String deploymentMode;
-    private String deploymentNetworkUri;
+    private DeploymentModeSettings deploymentModeSettings;
+    private boolean manageOSDeployment;
 
     /**
-     * @return the deploymentMode
+     * @return the deploymentModeSettings
      */
-    public String getDeploymentMode() {
-        return deploymentMode;
+    public DeploymentModeSettings getDeploymentModeSettings() {
+        return deploymentModeSettings;
     }
 
     /**
-     * @param deploymentMode the deploymentMode to set
+     * @param deploymentModeSettings the deploymentModeSettings to set
      */
-    public void setDeploymentMode(String deploymentMode) {
-        this.deploymentMode = deploymentMode;
+    public void setDeploymentModeSettings(DeploymentModeSettings deploymentModeSettings) {
+        this.deploymentModeSettings = deploymentModeSettings;
     }
 
     /**
-     * @return the deploymentNetworkUri
+     * @return the manageOSDeployment
      */
-    public String getDeploymentNetworkUri() {
-        return deploymentNetworkUri;
+    public boolean isManageOSDeployment() {
+        return manageOSDeployment;
     }
 
     /**
-     * @param deploymentNetworkUri the deploymentNetworkUri to set
+     * @param manageOSDeployment the manageOSDeployment to set
      */
-    public void setDeploymentNetworkUri(String deploymentNetworkUri) {
-        this.deploymentNetworkUri = deploymentNetworkUri;
+    public void setManageOSDeployment(boolean manageOSDeployment) {
+        this.manageOSDeployment = manageOSDeployment;
     }
 
     @Override
@@ -64,8 +64,8 @@ public class DeploymentModeSettings implements Serializable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(deploymentMode)
-                .append(deploymentNetworkUri)
+                .append(deploymentModeSettings)
+                .append(manageOSDeployment)
                 .toHashCode();
     }
 
@@ -74,13 +74,14 @@ public class DeploymentModeSettings implements Serializable {
         if (other == this) {
             return true;
         }
-        if ((other instanceof DeploymentModeSettings) == false) {
+        if ((other instanceof OSDeploymentSettings) == false) {
             return false;
         }
-        final DeploymentModeSettings rhs = ((DeploymentModeSettings) other);
+        final OSDeploymentSettings rhs = ((OSDeploymentSettings) other);
         return new EqualsBuilder()
-                .append(deploymentMode, rhs.deploymentMode)
-                .append(deploymentNetworkUri, rhs.deploymentNetworkUri)
+                .append(deploymentModeSettings, rhs.deploymentModeSettings)
+                .append(manageOSDeployment, rhs.manageOSDeployment)
                 .isEquals();
     }
+
 }

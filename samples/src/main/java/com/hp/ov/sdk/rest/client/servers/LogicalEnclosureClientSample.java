@@ -18,7 +18,6 @@ package com.hp.ov.sdk.rest.client.servers;
 import java.util.Arrays;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.dto.AddLogicalEnclosure;
 import com.hp.ov.sdk.dto.FirmwareUpdateOn;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.Patch.PatchOperation;
@@ -26,8 +25,9 @@ import com.hp.ov.sdk.dto.PatchFirmwareValue;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SupportDump;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.LogicalEnclosure;
 import com.hp.ov.sdk.dto.servers.enclosuregroup.EnclosureGroup;
+import com.hp.ov.sdk.dto.servers.logicalenclosure.AddLogicalEnclosure;
+import com.hp.ov.sdk.dto.servers.logicalenclosure.LogicalEnclosure;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;

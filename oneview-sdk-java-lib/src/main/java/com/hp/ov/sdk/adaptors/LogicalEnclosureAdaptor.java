@@ -20,10 +20,10 @@ import java.util.Arrays;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.hp.ov.sdk.dto.AddLogicalEnclosure;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.SupportDump;
-import com.hp.ov.sdk.dto.generated.LogicalEnclosure;
+import com.hp.ov.sdk.dto.servers.logicalenclosure.AddLogicalEnclosure;
+import com.hp.ov.sdk.dto.servers.logicalenclosure.LogicalEnclosure;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
