@@ -16,9 +16,7 @@
 package com.hp.ov.sdk.rest.client.servers;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.dto.AddServer;
 import com.hp.ov.sdk.dto.BiosSettings;
-import com.hp.ov.sdk.dto.ConfigurationState;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.IloSsoUrlResult;
 import com.hp.ov.sdk.dto.JavaRemoteConsoleUrlResult;
@@ -28,11 +26,13 @@ import com.hp.ov.sdk.dto.PhysicalServerPowerState;
 import com.hp.ov.sdk.dto.RefreshStateRequest;
 import com.hp.ov.sdk.dto.RemoteConsoleUrlResult;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.ServerHardware;
 import com.hp.ov.sdk.dto.ServerPowerControlRequest;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.UtilizationData;
 import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
+import com.hp.ov.sdk.dto.servers.serverhardware.AddServer;
+import com.hp.ov.sdk.dto.servers.serverhardware.ConfigurationState;
+import com.hp.ov.sdk.dto.servers.serverhardware.ServerHardware;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.server.ServerHardwareClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;

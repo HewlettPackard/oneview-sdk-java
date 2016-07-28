@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.serverhardware;
 
 import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class HpSmartUpdateToolStatus implements Serializable {
 
@@ -29,51 +33,123 @@ public class HpSmartUpdateToolStatus implements Serializable {
     private String serviceState;
     private String version;
 
+    /**
+     * @return the hpSUTInstallState
+     */
     public InstallState getHpSUTInstallState() {
         return hpSUTInstallState;
     }
 
+    /**
+     * @param hpSUTInstallState the hpSUTInstallState to set
+     */
     public void setHpSUTInstallState(InstallState hpSUTInstallState) {
         this.hpSUTInstallState = hpSUTInstallState;
     }
 
+    /**
+     * @return the installState
+     */
     public InstallState getInstallState() {
         return installState;
     }
 
+    /**
+     * @param installState the installState to set
+     */
     public void setInstallState(InstallState installState) {
         this.installState = installState;
     }
 
+    /**
+     * @return the lastOperationTime
+     */
     public String getLastOperationTime() {
         return lastOperationTime;
     }
 
+    /**
+     * @param lastOperationTime the lastOperationTime to set
+     */
     public void setLastOperationTime(String lastOperationTime) {
         this.lastOperationTime = lastOperationTime;
     }
 
+    /**
+     * @return the mode
+     */
     public String getMode() {
         return mode;
     }
 
+    /**
+     * @param mode the mode to set
+     */
     public void setMode(String mode) {
         this.mode = mode;
     }
 
+    /**
+     * @return the serviceState
+     */
     public String getServiceState() {
         return serviceState;
     }
 
+    /**
+     * @param serviceState the serviceState to set
+     */
     public void setServiceState(String serviceState) {
         this.serviceState = serviceState;
     }
 
+    /**
+     * @return the version
+     */
     public String getVersion() {
         return version;
     }
 
+    /**
+     * @param version the version to set
+     */
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    @Override
+    public final boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof HpSmartUpdateToolStatus) {
+            HpSmartUpdateToolStatus that = (HpSmartUpdateToolStatus) obj;
+
+            return new EqualsBuilder()
+                    .append(hpSUTInstallState, that.hpSUTInstallState)
+                    .append(installState, that.installState)
+                    .append(lastOperationTime, that.lastOperationTime)
+                    .append(mode, that.mode)
+                    .append(serviceState, that.serviceState)
+                    .append(version, that.version)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public final int hashCode() {
+        return new HashCodeBuilder()
+                .append(hpSUTInstallState)
+                .append(installState)
+                .append(lastOperationTime)
+                .append(mode)
+                .append(serviceState)
+                .append(version)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

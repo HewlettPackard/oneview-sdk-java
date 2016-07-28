@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.serverhardware;
 
 import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class ServerSettings implements Serializable {
 
@@ -25,19 +29,59 @@ public class ServerSettings implements Serializable {
     private FirmwareAndDriversInstallState firmwareAndDriversInstallState;
     private HpSmartUpdateToolStatus hpSmartUpdateToolStatus;
 
+    /**
+     * @return the firmwareAndDriversInstallState
+     */
     public FirmwareAndDriversInstallState getFirmwareAndDriversInstallState() {
         return firmwareAndDriversInstallState;
     }
 
+    /**
+     * @param firmwareAndDriversInstallState the firmwareAndDriversInstallState to set
+     */
     public void setFirmwareAndDriversInstallState(FirmwareAndDriversInstallState firmwareAndDriversInstallState) {
         this.firmwareAndDriversInstallState = firmwareAndDriversInstallState;
     }
 
+    /**
+     * @return the hpSmartUpdateToolStatus
+     */
     public HpSmartUpdateToolStatus getHpSmartUpdateToolStatus() {
         return hpSmartUpdateToolStatus;
     }
 
+    /**
+     * @param hpSmartUpdateToolStatus the hpSmartUpdateToolStatus to set
+     */
     public void setHpSmartUpdateToolStatus(HpSmartUpdateToolStatus hpSmartUpdateToolStatus) {
         this.hpSmartUpdateToolStatus = hpSmartUpdateToolStatus;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public final boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof ServerSettings) {
+            ServerSettings that = (ServerSettings) obj;
+
+            return new EqualsBuilder()
+                    .append(firmwareAndDriversInstallState, that.firmwareAndDriversInstallState)
+                    .append(hpSmartUpdateToolStatus, that.hpSmartUpdateToolStatus)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public final int hashCode() {
+        return new HashCodeBuilder()
+                .append(firmwareAndDriversInstallState)
+                .append(hpSmartUpdateToolStatus)
+                .toHashCode();
     }
 }
