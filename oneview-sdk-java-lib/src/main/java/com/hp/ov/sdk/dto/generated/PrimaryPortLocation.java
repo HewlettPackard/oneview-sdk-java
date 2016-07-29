@@ -31,13 +31,13 @@ public class PrimaryPortLocation implements Serializable {
 	 * 
 	 */
     private static final long serialVersionUID = 1L;
-    private List<LocationEntry> locationEntries = new ArrayList<LocationEntry>();
+    private List<LogicalLocationEntry> locationEntries = new ArrayList<LogicalLocationEntry>();
 
     /**
      * 
      * @return The locationEntries
      */
-    public List<LocationEntry> getLocationEntries() {
+    public List<LogicalLocationEntry> getLocationEntries() {
         return locationEntries;
     }
 
@@ -46,7 +46,7 @@ public class PrimaryPortLocation implements Serializable {
      * @param locationEntries
      *            The locationEntries
      */
-    public void setLocationEntries(final List<LocationEntry> locationEntries) {
+    public void setLocationEntries(final List<LogicalLocationEntry> locationEntries) {
         this.locationEntries = locationEntries;
     }
 

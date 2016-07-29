@@ -54,8 +54,8 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SubportStatistics;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.TaskState;
-import com.hp.ov.sdk.dto.generated.Interconnects;
-import com.hp.ov.sdk.dto.generated.Port;
+import com.hp.ov.sdk.dto.networking.Port;
+import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
@@ -100,7 +100,7 @@ public class InterconnectsClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
 
-        Interconnects interconnectDto = client.getInterconnectById(params, resourceId);
+        Interconnect interconnectDto = client.getInterconnectById(params, resourceId);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_URI, resourceId));
@@ -132,7 +132,7 @@ public class InterconnectsClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
 
-        Interconnects interconnectDto = client.getInterconnectByName(params, resourceName);
+        Interconnect interconnectDto = client.getInterconnectByName(params, resourceName);
 
         RestParams rp = new RestParams();
 
@@ -166,7 +166,7 @@ public class InterconnectsClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetInterconnectByNameWithNoMembers() {
-        intJson = new Gson().toJson(new ResourceCollection<Interconnects>());
+        intJson = new Gson().toJson(new ResourceCollection<Interconnect>());
 
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))
@@ -182,7 +182,7 @@ public class InterconnectsClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(intJson);
 
-        ResourceCollection<Interconnects> interconnects = client.getAllInterconnects(params);
+        ResourceCollection<Interconnect> interconnects = client.getAllInterconnects(params);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.INTERCONNECT_URI));

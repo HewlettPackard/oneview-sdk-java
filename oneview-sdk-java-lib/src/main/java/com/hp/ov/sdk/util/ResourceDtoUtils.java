@@ -39,7 +39,7 @@ import com.hp.ov.sdk.dto.generated.Firmware;
 import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.generated.InterconnectMapTemplate;
 import com.hp.ov.sdk.dto.generated.LocalStorage;
-import com.hp.ov.sdk.dto.generated.LocationEntry;
+import com.hp.ov.sdk.dto.generated.LogicalLocationEntry;
 import com.hp.ov.sdk.dto.generated.LogicalLocation;
 import com.hp.ov.sdk.dto.generated.LogicalPortConfigInfo;
 import com.hp.ov.sdk.dto.generated.SanStorage;
@@ -133,15 +133,15 @@ public class ResourceDtoUtils {
         for (i = 0; i < 8; i++) {
             final InterconnectMapEntryTemplate interconnectMapEntryTemplateDto = new InterconnectMapEntryTemplate();
             interconnectMapEntryTemplateDto.setLogicalDownlinkUri(null);
-            final List<LocationEntry> locationEntriesDto = new ArrayList<LocationEntry>();
+            final List<LogicalLocationEntry> locationEntriesDto = new ArrayList<LogicalLocationEntry>();
             for (j = 0; j < 2; j++) {
-                final LocationEntry locationEntryDto = new LocationEntry();
+                final LogicalLocationEntry locationEntryDto = new LogicalLocationEntry();
                 if (j == 0) {
                     locationEntryDto.setRelativeValue(i + 1);
-                    locationEntryDto.setType(LocationEntry.Type.Bay);
+                    locationEntryDto.setType(LogicalLocationEntry.Type.Bay);
                 } else {
                     locationEntryDto.setRelativeValue(j);
-                    locationEntryDto.setType(LocationEntry.Type.Enclosure);
+                    locationEntryDto.setType(LogicalLocationEntry.Type.Enclosure);
                 }
                 locationEntriesDto.add(locationEntryDto);
             }
@@ -214,16 +214,16 @@ public class ResourceDtoUtils {
                 logicalPortConfigInfo.setDesiredSpeed(OpSpeed.Auto);
 
                 final LogicalLocation logicalLocation = new LogicalLocation();
-                final List<LocationEntry> locationEntriesList = new ArrayList<LocationEntry>();
-                final LocationEntry locationEntries11 = new LocationEntry();
+                final List<LogicalLocationEntry> locationEntriesList = new ArrayList<LogicalLocationEntry>();
+                final LogicalLocationEntry locationEntries11 = new LogicalLocationEntry();
                 locationEntries11.setRelativeValue(bayRelativeValue);
-                locationEntries11.setType(LocationEntry.Type.Bay);
-                final LocationEntry locationEntries12 = new LocationEntry();
+                locationEntries11.setType(LogicalLocationEntry.Type.Bay);
+                final LogicalLocationEntry locationEntries12 = new LogicalLocationEntry();
                 locationEntries12.setRelativeValue(portNumber);
-                locationEntries12.setType(LocationEntry.Type.Port);
-                final LocationEntry locationEntries13 = new LocationEntry();
+                locationEntries12.setType(LogicalLocationEntry.Type.Port);
+                final LogicalLocationEntry locationEntries13 = new LogicalLocationEntry();
                 locationEntries13.setRelativeValue(1);
-                locationEntries13.setType(LocationEntry.Type.Enclosure);
+                locationEntries13.setType(LogicalLocationEntry.Type.Enclosure);
                 locationEntriesList.add(locationEntries11);
                 locationEntriesList.add(locationEntries12);
                 locationEntriesList.add(locationEntries13);
@@ -264,8 +264,8 @@ public class ResourceDtoUtils {
 
         for (InterconnectMapEntryTemplate mapTemplate : logicalInterconnectGroupsDto.getInterconnectMapTemplate()
                 .getInterconnectMapEntryTemplates()) {
-            for (LocationEntry locationEntry : mapTemplate.getLogicalLocation().getLocationEntries()) {
-                if (locationEntry.getType().equals(LocationEntry.Type.Bay) && locationEntry.getRelativeValue().equals(bay)) {
+            for (LogicalLocationEntry locationEntry : mapTemplate.getLogicalLocation().getLocationEntries()) {
+                if (locationEntry.getType().equals(LogicalLocationEntry.Type.Bay) && locationEntry.getRelativeValue().equals(bay)) {
                     return mapTemplate.getPermittedInterconnectTypeUri();
                 }
             }

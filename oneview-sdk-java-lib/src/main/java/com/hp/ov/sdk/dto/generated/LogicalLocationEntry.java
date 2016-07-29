@@ -22,7 +22,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class LocationEntry implements Serializable {
+public class LogicalLocationEntry implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,11 +32,11 @@ public class LocationEntry implements Serializable {
 
     private Integer relativeValue;
     private String value;
-    private LocationEntry.Type type;
+    private LogicalLocationEntry.Type type;
 
-    public LocationEntry() { }
+    public LogicalLocationEntry() { }
 
-    public LocationEntry(Integer relativeValue, String value, Type type) {
+    public LogicalLocationEntry(Integer relativeValue, String value, Type type) {
         this.relativeValue = relativeValue;
         this.value = value;
         this.type = type;
@@ -58,11 +58,11 @@ public class LocationEntry implements Serializable {
         this.value = value;
     }
 
-    public LocationEntry.Type getType() {
+    public LogicalLocationEntry.Type getType() {
         return type;
     }
 
-    public void setType(final LocationEntry.Type type) {
+    public void setType(final LogicalLocationEntry.Type type) {
         this.type = type;
     }
 
@@ -72,7 +72,7 @@ public class LocationEntry implements Serializable {
 
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        LocationEntry that = (LocationEntry) obj;
+        LogicalLocationEntry that = (LogicalLocationEntry) obj;
 
         return new EqualsBuilder()
                 .append(relativeValue, that.relativeValue)

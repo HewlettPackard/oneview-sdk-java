@@ -24,13 +24,13 @@ import com.hp.ov.sdk.dto.OpSpeed;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.Enclosures;
-import com.hp.ov.sdk.dto.generated.Interconnects;
 import com.hp.ov.sdk.dto.generated.Location;
-import com.hp.ov.sdk.dto.generated.LocationEntry;
+import com.hp.ov.sdk.dto.generated.LogicalLocationEntry;
 import com.hp.ov.sdk.dto.generated.PortConfigInfo;
 import com.hp.ov.sdk.dto.generated.UplinkSets;
 import com.hp.ov.sdk.dto.generated.UplinkSets.ConnectionMode;
 import com.hp.ov.sdk.dto.generated.UplinkSets.ManualLoginRedistributionState;
+import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -339,7 +339,7 @@ public class UplinkSetClientSample {
                     resourceId = UrlUtils.getResourceIdFromUri(enclosuresDto.getInterconnectBays().get(i).getInterconnectUri());
                 }
 
-                Interconnects interconnectsDto = interconnectClient.getInterconnectById(params, resourceId);
+                Interconnect interconnectsDto = interconnectClient.getInterconnectById(params, resourceId);
                 for (int j = 0; j < interconnectsDto.getPortCount(); j++) {
                     if (interconnectsDto.getPorts().get(j).getPortName().equalsIgnoreCase(portValue)) {
                         portConfigInfo.setPortUri(interconnectsDto.getPorts().get(j).getUri());
@@ -349,20 +349,20 @@ public class UplinkSetClientSample {
             }
         }
         Location location = new Location();
-        List<LocationEntry> locationEntries = new ArrayList<LocationEntry>();
-        LocationEntry locationEntry_two = new LocationEntry();
-        LocationEntry locationEntry_one = new LocationEntry();
+        List<LogicalLocationEntry> locationEntries = new ArrayList<LogicalLocationEntry>();
+        LogicalLocationEntry locationEntry_two = new LogicalLocationEntry();
+        LogicalLocationEntry locationEntry_one = new LogicalLocationEntry();
         locationEntry_one.setValue(enclosuresDto.getUri());
-        locationEntry_one.setType(LocationEntry.Type.Enclosure);
+        locationEntry_one.setType(LogicalLocationEntry.Type.Enclosure);
         locationEntries.add(locationEntry_one);
 
         locationEntry_two.setValue(bayValue);
-        locationEntry_two.setType(LocationEntry.Type.Bay);
+        locationEntry_two.setType(LogicalLocationEntry.Type.Bay);
         locationEntries.add(locationEntry_two);
 
-        LocationEntry locationEntry_three = new LocationEntry();
+        LogicalLocationEntry locationEntry_three = new LogicalLocationEntry();
         locationEntry_three.setValue(portValue);
-        locationEntry_three.setType(LocationEntry.Type.Port);
+        locationEntry_three.setType(LogicalLocationEntry.Type.Port);
         locationEntries.add(locationEntry_three);
 
         location.setLocationEntries(locationEntries);

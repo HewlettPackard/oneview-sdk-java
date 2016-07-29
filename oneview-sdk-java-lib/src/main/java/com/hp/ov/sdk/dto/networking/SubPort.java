@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking;
 
 import java.io.Serializable;
 
@@ -33,26 +33,44 @@ public final class SubPort implements Serializable {
     private PortStatus portStatus;
     private PortStatusReason portStatusReason;
 
+    /**
+     * @return the portNumber
+     */
     public Integer getPortNumber() {
         return portNumber;
     }
 
+    /**
+     * @param portNumber the portNumber to set
+     */
     public void setPortNumber(Integer portNumber) {
         this.portNumber = portNumber;
     }
 
+    /**
+     * @return the portStatus
+     */
     public PortStatus getPortStatus() {
         return portStatus;
     }
 
+    /**
+     * @param portStatus the portStatus to set
+     */
     public void setPortStatus(PortStatus portStatus) {
         this.portStatus = portStatus;
     }
 
+    /**
+     * @return the portStatusReason
+     */
     public PortStatusReason getPortStatusReason() {
         return portStatusReason;
     }
 
+    /**
+     * @param portStatusReason the portStatusReason to set
+     */
     public void setPortStatusReason(PortStatusReason portStatusReason) {
         this.portStatusReason = portStatusReason;
     }
@@ -83,10 +101,7 @@ public final class SubPort implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("portNumber", portNumber)
-                .append("portStatus", portStatus)
-                .append("portStatusReason", portStatusReason)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
+
 }

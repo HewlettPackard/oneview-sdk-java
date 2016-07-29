@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking;
 
 import java.io.Serializable;
 
@@ -22,11 +22,17 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.google.gson.annotations.Since;
+
 
 public final class Neighbor implements Serializable {
 
     private static final long serialVersionUID = 3690264515818754364L;
 
+    @Since(300)
+    private String linkLabel;
+    @Since(300)
+    private String linkUri;
     private String remoteChassisId;
     private String remoteChassisIdType;
     private String remoteMgmtAddress;
@@ -39,91 +45,185 @@ public final class Neighbor implements Serializable {
     private String remoteSystemName;
     private String remoteType;
 
+    /**
+     * @return the linkLabel
+     */
+    public String getLinkLabel() {
+        return linkLabel;
+    }
+
+    /**
+     * @param linkLabel the linkLabel to set
+     */
+    public void setLinkLabel(String linkLabel) {
+        this.linkLabel = linkLabel;
+    }
+
+    /**
+     * @return the linkUri
+     */
+    public String getLinkUri() {
+        return linkUri;
+    }
+
+    /**
+     * @param linkUri the linkUri to set
+     */
+    public void setLinkUri(String linkUri) {
+        this.linkUri = linkUri;
+    }
+
+    /**
+     * @return the remoteChassisId
+     */
     public String getRemoteChassisId() {
         return remoteChassisId;
     }
 
-    public void setRemoteChassisId(final String remoteChassisId) {
+    /**
+     * @param remoteChassisId the remoteChassisId to set
+     */
+    public void setRemoteChassisId(String remoteChassisId) {
         this.remoteChassisId = remoteChassisId;
     }
 
+    /**
+     * @return the remoteChassisIdType
+     */
     public String getRemoteChassisIdType() {
         return remoteChassisIdType;
     }
 
-    public void setRemoteChassisIdType(final String remoteChassisIdType) {
+    /**
+     * @param remoteChassisIdType the remoteChassisIdType to set
+     */
+    public void setRemoteChassisIdType(String remoteChassisIdType) {
         this.remoteChassisIdType = remoteChassisIdType;
     }
 
+    /**
+     * @return the remoteMgmtAddress
+     */
     public String getRemoteMgmtAddress() {
         return remoteMgmtAddress;
     }
 
-    public void setRemoteMgmtAddress(final String remoteMgmtAddress) {
+    /**
+     * @param remoteMgmtAddress the remoteMgmtAddress to set
+     */
+    public void setRemoteMgmtAddress(String remoteMgmtAddress) {
         this.remoteMgmtAddress = remoteMgmtAddress;
     }
 
+    /**
+     * @return the remoteMgmtAddressType
+     */
     public String getRemoteMgmtAddressType() {
         return remoteMgmtAddressType;
     }
 
-    public void setRemoteMgmtAddressType(final String remoteMgmtAddressType) {
+    /**
+     * @param remoteMgmtAddressType the remoteMgmtAddressType to set
+     */
+    public void setRemoteMgmtAddressType(String remoteMgmtAddressType) {
         this.remoteMgmtAddressType = remoteMgmtAddressType;
     }
 
+    /**
+     * @return the remotePortDescription
+     */
     public String getRemotePortDescription() {
         return remotePortDescription;
     }
 
-    public void setRemotePortDescription(final String remotePortDescription) {
+    /**
+     * @param remotePortDescription the remotePortDescription to set
+     */
+    public void setRemotePortDescription(String remotePortDescription) {
         this.remotePortDescription = remotePortDescription;
     }
 
+    /**
+     * @return the remotePortId
+     */
     public String getRemotePortId() {
         return remotePortId;
     }
 
-    public void setRemotePortId(final String remotePortId) {
+    /**
+     * @param remotePortId the remotePortId to set
+     */
+    public void setRemotePortId(String remotePortId) {
         this.remotePortId = remotePortId;
     }
 
+    /**
+     * @return the remotePortIdType
+     */
     public String getRemotePortIdType() {
         return remotePortIdType;
     }
 
-    public void setRemotePortIdType(final String remotePortIdType) {
+    /**
+     * @param remotePortIdType the remotePortIdType to set
+     */
+    public void setRemotePortIdType(String remotePortIdType) {
         this.remotePortIdType = remotePortIdType;
     }
 
+    /**
+     * @return the remoteSystemCapabilities
+     */
     public String getRemoteSystemCapabilities() {
         return remoteSystemCapabilities;
     }
 
-    public void setRemoteSystemCapabilities(final String remoteSystemCapabilities) {
+    /**
+     * @param remoteSystemCapabilities the remoteSystemCapabilities to set
+     */
+    public void setRemoteSystemCapabilities(String remoteSystemCapabilities) {
         this.remoteSystemCapabilities = remoteSystemCapabilities;
     }
 
+    /**
+     * @return the remoteSystemDescription
+     */
     public String getRemoteSystemDescription() {
         return remoteSystemDescription;
     }
 
-    public void setRemoteSystemDescription(final String remoteSystemDescription) {
+    /**
+     * @param remoteSystemDescription the remoteSystemDescription to set
+     */
+    public void setRemoteSystemDescription(String remoteSystemDescription) {
         this.remoteSystemDescription = remoteSystemDescription;
     }
 
+    /**
+     * @return the remoteSystemName
+     */
     public String getRemoteSystemName() {
         return remoteSystemName;
     }
 
-    public void setRemoteSystemName(final String remoteSystemName) {
+    /**
+     * @param remoteSystemName the remoteSystemName to set
+     */
+    public void setRemoteSystemName(String remoteSystemName) {
         this.remoteSystemName = remoteSystemName;
     }
 
+    /**
+     * @return the remoteType
+     */
     public String getRemoteType() {
         return remoteType;
     }
 
-    public void setRemoteType(final String remoteType) {
+    /**
+     * @param remoteType the remoteType to set
+     */
+    public void setRemoteType(String remoteType) {
         this.remoteType = remoteType;
     }
 
@@ -136,6 +236,8 @@ public final class Neighbor implements Serializable {
         Neighbor neighbor = (Neighbor) obj;
 
         return new EqualsBuilder()
+                .append(linkLabel, neighbor.linkLabel)
+                .append(linkUri, neighbor.linkUri)
                 .append(remoteChassisId, neighbor.remoteChassisId)
                 .append(remoteChassisIdType, neighbor.remoteChassisIdType)
                 .append(remoteMgmtAddress, neighbor.remoteMgmtAddress)
@@ -153,6 +255,8 @@ public final class Neighbor implements Serializable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+                .append(linkLabel)
+                .append(linkUri)
                 .append(remoteChassisId)
                 .append(remoteChassisIdType)
                 .append(remoteMgmtAddress)
@@ -169,19 +273,7 @@ public final class Neighbor implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("remoteChassisId", remoteChassisId)
-                .append("remoteChassisIdType", remoteChassisIdType)
-                .append("remoteMgmtAddress", remoteMgmtAddress)
-                .append("remoteMgmtAddressType", remoteMgmtAddressType)
-                .append("remotePortDescription", remotePortDescription)
-                .append("remotePortId", remotePortId)
-                .append("remotePortIdType", remotePortIdType)
-                .append("remoteSystemCapabilities", remoteSystemCapabilities)
-                .append("remoteSystemDescription", remoteSystemDescription)
-                .append("remoteSystemName", remoteSystemName)
-                .append("remoteType", remoteType)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
 
 }

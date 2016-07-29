@@ -25,7 +25,7 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SwitchMapEntryTemplate;
 import com.hp.ov.sdk.dto.SwitchMapTemplate;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.LocationEntry;
+import com.hp.ov.sdk.dto.generated.LogicalLocationEntry;
 import com.hp.ov.sdk.dto.generated.LogicalLocation;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
@@ -112,7 +112,7 @@ public class LogicalSwitchGroupClientSample {
         LogicalLocation logicalLocation = new LogicalLocation();
 
         logicalLocation.setLocationEntries(Lists.newArrayList(
-                new LocationEntry(Integer.valueOf(1), null, LocationEntry.Type.StackingMemberId)));
+                new LogicalLocationEntry(Integer.valueOf(1), null, LogicalLocationEntry.Type.StackingMemberId)));
         switchMapEntryTemplate.setLogicalLocation(logicalLocation);
         switchMapEntryTemplate.setPermittedSwitchTypeUri(type.getUri());
 
@@ -131,7 +131,7 @@ public class LogicalSwitchGroupClientSample {
         LogicalLocation logicalLocation = new LogicalLocation();
 
         logicalLocation.setLocationEntries(Lists.newArrayList(
-                new LocationEntry(Integer.valueOf(2), null, LocationEntry.Type.StackingMemberId)));
+                new LogicalLocationEntry(Integer.valueOf(2), null, LogicalLocationEntry.Type.StackingMemberId)));
         switchMapEntryTemplate.setLogicalLocation(logicalLocation);
         switchMapEntryTemplate.setPermittedSwitchTypeUri(type.getUri());
 

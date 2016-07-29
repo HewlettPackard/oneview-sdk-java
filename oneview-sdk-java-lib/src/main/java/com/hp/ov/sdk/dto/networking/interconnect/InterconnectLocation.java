@@ -13,28 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking.interconnect;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.hp.ov.sdk.dto.networking.LocationEntry;
+
 
 public class InterconnectLocation implements Serializable {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
+
     private List<LocationEntry> locationEntries = new ArrayList<LocationEntry>();
 
     /**
-     * 
+     *
      * @return The locationEntries
      */
     public List<LocationEntry> getLocationEntries() {
@@ -42,7 +41,7 @@ public class InterconnectLocation implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param locationEntries
      *            The locationEntries
      */

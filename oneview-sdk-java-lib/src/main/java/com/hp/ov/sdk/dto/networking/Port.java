@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,6 @@ import com.hp.ov.sdk.dto.CapabilityType;
 import com.hp.ov.sdk.dto.DcbxInfo;
 import com.hp.ov.sdk.dto.PortMonitorConfigInfo;
 import com.hp.ov.sdk.dto.PortStatus;
-
 
 public final class Port extends BaseModelResource {
 
@@ -297,6 +296,11 @@ public final class Port extends BaseModelResource {
     }
 
     @Override
+    public boolean canEqual(Object obj) {
+        return (obj instanceof Port);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
 
@@ -304,7 +308,7 @@ public final class Port extends BaseModelResource {
 
         Port port = (Port) obj;
 
-        return new EqualsBuilder()
+        return port.canEqual(this) && new EqualsBuilder()
                 .appendSuper(super.equals(obj))
                 .append(associatedUplinkSetUri, port.associatedUplinkSetUri)
                 .append(available, port.available)
@@ -374,36 +378,7 @@ public final class Port extends BaseModelResource {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .appendSuper(super.toString())
-                .append("associatedUplinkSetUri", associatedUplinkSetUri)
-                .append("available", available)
-                .append("bayNumber", bayNumber)
-                .append("capability", capability)
-                .append("configPortTypes", configPortTypes)
-                .append("connectorType", connectorType)
-                .append("dcbxInfo", dcbxInfo)
-                .append("enabled", enabled)
-                .append("fcPortProperties", fcPortProperties)
-                .append("interconnectName", interconnectName)
-                .append("lagId", lagId)
-                .append("lagStates", lagStates)
-                .append("neighbor", neighbor)
-                .append("operationalSpeed", operationalSpeed)
-                .append("pairedPortName", pairedPortName)
-                .append("portHealthStatus", portHealthStatus)
-                .append("portId", portId)
-                .append("portMonitorConfigInfo", portMonitorConfigInfo)
-                .append("portName", portName)
-                .append("portRunningCapabilityType", portRunningCapabilityType)
-                .append("portSplitMode", portSplitMode)
-                .append("portStatus", portStatus)
-                .append("portStatusReason", portStatusReason)
-                .append("portType", portType)
-                .append("portTypeExtended", portTypeExtended)
-                .append("subports", subports)
-                .append("vendorSpecificPortName", vendorSpecificPortName)
-                .append("vlans", vlans)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
+
 }

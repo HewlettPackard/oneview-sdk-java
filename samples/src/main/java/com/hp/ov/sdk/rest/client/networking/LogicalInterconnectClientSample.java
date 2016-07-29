@@ -35,7 +35,7 @@ import com.hp.ov.sdk.dto.QosConfiguration.QosConfigType;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.Location;
-import com.hp.ov.sdk.dto.generated.LocationEntry;
+import com.hp.ov.sdk.dto.generated.LogicalLocationEntry;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
@@ -826,13 +826,13 @@ public class LogicalInterconnectClientSample {
             Location locationDto = new Location();
 
             // ENCLOSURE
-            LocationEntry enclosureEntry = new LocationEntry();
-            enclosureEntry.setType(LocationEntry.Type.Enclosure);
+            LogicalLocationEntry enclosureEntry = new LogicalLocationEntry();
+            enclosureEntry.setType(LogicalLocationEntry.Type.Enclosure);
             enclosureEntry.setValue(enclosureUri);
 
             // BAY
-            LocationEntry bayEntry = new LocationEntry();
-            bayEntry.setType(LocationEntry.Type.Bay);
+            LogicalLocationEntry bayEntry = new LogicalLocationEntry();
+            bayEntry.setType(LogicalLocationEntry.Type.Bay);
             bayEntry.setValue("1");
 
             locationDto.setLocationEntries(Arrays.asList(enclosureEntry, bayEntry));

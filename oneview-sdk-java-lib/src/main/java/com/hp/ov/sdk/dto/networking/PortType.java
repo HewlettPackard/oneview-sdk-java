@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.hp.ov.sdk.dto.networking;
 
-public enum LocationType {
 
-    Bay,
-    Enclosure,
-    Ip,
-    Password,
-    Port,
-    UserId,
-    StackingDomainId,
-    StackingMemberId
+public enum PortType {
+
+    Auto,
+    CXP,
+    Downlink,
+    Extension,
+    FabricExtender,
+    ILP,
+    Stacking,
+    Unknown,
+    Uplink;
 
 }

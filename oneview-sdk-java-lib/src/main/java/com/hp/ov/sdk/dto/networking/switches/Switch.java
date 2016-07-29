@@ -25,8 +25,8 @@ import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.generated.LogicalSwitchVpc;
-import com.hp.ov.sdk.dto.generated.Port;
 import com.hp.ov.sdk.dto.networking.Location;
+import com.hp.ov.sdk.dto.networking.Port;
 
 /**
  * The Switch data transfer object (DTO) contains the information used to

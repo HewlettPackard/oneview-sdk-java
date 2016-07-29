@@ -74,7 +74,7 @@ public class HttpRestClient {
 
     private static final String CHAR_SET = "UTF-8";
     private static final String LOCATION_HEADER = "Location";
-    private static final int TIMEOUT = 10000; // milliseconds
+    private static final int TIMEOUT = 20000; // milliseconds
 
     /*
     TODO this could be replaced by a one way converter (Object to JSON).

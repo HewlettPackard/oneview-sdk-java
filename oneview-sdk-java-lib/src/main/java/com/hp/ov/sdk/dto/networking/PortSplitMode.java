@@ -13,21 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.generated;
+
+package com.hp.ov.sdk.dto.networking;
 
 
-public enum PortCapability {
+public enum PortSplitMode {
 
-    Ethernet,
-    FibreChannel,
-    EnetFcoe,
+    NotApplicable,
     Unknown,
-    Extension,
-    Dcc,
-    PortExtender,
-    Stacking,
-    Qbg,
-    ConnectionReservation,
-    ConnectionDeployment
+    Unsplit
 
 }

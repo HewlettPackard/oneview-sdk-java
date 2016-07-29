@@ -29,28 +29,28 @@ import com.hp.ov.sdk.dto.NameServer;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.PortStatistics;
 import com.hp.ov.sdk.dto.SubportStatistics;
-import com.hp.ov.sdk.dto.generated.Interconnects;
-import com.hp.ov.sdk.dto.generated.Port;
+import com.hp.ov.sdk.dto.networking.Port;
+import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
-public class InterconnectAdaptor extends BaseAdaptor<Interconnects, Object> {
+public class InterconnectAdaptor extends BaseAdaptor<Interconnect, Object> {
 
     @Override
-    public Interconnects buildDto(Object source) {
+    public Interconnect buildDto(Object source) {
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        final Interconnects interconnectDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), Interconnects.class);
+        final Interconnect interconnectDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), Interconnect.class);
         return interconnectDto;
     }
 
-    public Interconnects buildDto(Object source, final ApiVersion version) {
+    public Interconnect buildDto(Object source, final ApiVersion version) {
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        final Interconnects interconnectDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version.getValue())), Interconnects.class);
+        final Interconnect interconnectDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version.getValue())), Interconnect.class);
         return interconnectDto;
     }
 
