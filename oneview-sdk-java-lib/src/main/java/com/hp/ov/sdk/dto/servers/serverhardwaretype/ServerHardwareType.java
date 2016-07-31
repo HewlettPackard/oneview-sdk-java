@@ -21,16 +21,21 @@ import java.util.List;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.google.gson.annotations.Since;
 import com.google.gson.annotations.Until;
 import com.hp.ov.sdk.dto.BaseModelResource;
 
 public class ServerHardwareType extends BaseModelResource {
+
+    private static final long serialVersionUID = 1L;
 
     private List<Adapter> adapters;
     private List<BiosSettings> biosSettings;
     private List<String> bootCapabilities;
     private List<BootMode> bootModes;
     private List<String> capabilities;
+    @Since(300)
+    private String family;
     private String formFactor;
     @Until(199)
     private String id;
@@ -46,82 +51,156 @@ public class ServerHardwareType extends BaseModelResource {
      */
     private StorageCapabilities storageCapabilities;
 
+    /**
+     * @return the adapters
+     */
     public List<Adapter> getAdapters() {
         return adapters;
     }
 
+    /**
+     * @param adapters the adapters to set
+     */
     public void setAdapters(List<Adapter> adapters) {
         this.adapters = adapters;
     }
 
+    /**
+     * @return the biosSettings
+     */
     public List<BiosSettings> getBiosSettings() {
         return biosSettings;
     }
 
+    /**
+     * @param biosSettings the biosSettings to set
+     */
     public void setBiosSettings(List<BiosSettings> biosSettings) {
         this.biosSettings = biosSettings;
     }
 
+    /**
+     * @return the bootCapabilities
+     */
     public List<String> getBootCapabilities() {
         return bootCapabilities;
     }
 
+    /**
+     * @param bootCapabilities the bootCapabilities to set
+     */
     public void setBootCapabilities(List<String> bootCapabilities) {
         this.bootCapabilities = bootCapabilities;
     }
 
+    /**
+     * @return the bootModes
+     */
     public List<BootMode> getBootModes() {
         return bootModes;
     }
 
+    /**
+     * @param bootModes the bootModes to set
+     */
     public void setBootModes(List<BootMode> bootModes) {
         this.bootModes = bootModes;
     }
 
+    /**
+     * @return the capabilities
+     */
     public List<String> getCapabilities() {
         return capabilities;
     }
 
+    /**
+     * @param capabilities the capabilities to set
+     */
     public void setCapabilities(List<String> capabilities) {
         this.capabilities = capabilities;
     }
 
+    /**
+     * @return the family
+     */
+    public String getFamily() {
+        return family;
+    }
+
+    /**
+     * @param family the family to set
+     */
+    public void setFamily(String family) {
+        this.family = family;
+    }
+
+    /**
+     * @return the formFactor
+     */
     public String getFormFactor() {
         return formFactor;
     }
 
+    /**
+     * @param formFactor the formFactor to set
+     */
     public void setFormFactor(String formFactor) {
         this.formFactor = formFactor;
     }
 
+    /**
+     * @return the id
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * @param id the id to set
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * @return the model
+     */
     public String getModel() {
         return model;
     }
 
+    /**
+     * @param model the model to set
+     */
     public void setModel(String model) {
         this.model = model;
     }
 
+    /**
+     * @return the pxeBootPolicies
+     */
     public List<PxeBootPolicy> getPxeBootPolicies() {
         return pxeBootPolicies;
     }
 
+    /**
+     * @param pxeBootPolicies the pxeBootPolicies to set
+     */
     public void setPxeBootPolicies(List<PxeBootPolicy> pxeBootPolicies) {
         this.pxeBootPolicies = pxeBootPolicies;
     }
 
+    /**
+     * @return the storageCapabilities
+     */
     public StorageCapabilities getStorageCapabilities() {
         return storageCapabilities;
     }
 
+    /**
+     * @param storageCapabilities the storageCapabilities to set
+     */
     public void setStorageCapabilities(StorageCapabilities storageCapabilities) {
         this.storageCapabilities = storageCapabilities;
     }
@@ -145,6 +224,7 @@ public class ServerHardwareType extends BaseModelResource {
                     .append(bootCapabilities, that.bootCapabilities)
                     .append(bootModes, that.bootModes)
                     .append(capabilities, that.capabilities)
+                    .append(family, that.family)
                     .append(formFactor, that.formFactor)
                     .append(id, that.id)
                     .append(model, that.model)
@@ -164,6 +244,7 @@ public class ServerHardwareType extends BaseModelResource {
                 .append(bootCapabilities)
                 .append(bootModes)
                 .append(capabilities)
+                .append(family)
                 .append(formFactor)
                 .append(id)
                 .append(model)
