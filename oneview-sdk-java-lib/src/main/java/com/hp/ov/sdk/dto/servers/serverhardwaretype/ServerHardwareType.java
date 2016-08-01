@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
 import com.google.gson.annotations.Until;
@@ -208,6 +209,11 @@ public class ServerHardwareType extends BaseModelResource {
     @Override
     public final boolean canEqual(Object obj) {
         return (obj instanceof ServerHardwareType);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
     @Override

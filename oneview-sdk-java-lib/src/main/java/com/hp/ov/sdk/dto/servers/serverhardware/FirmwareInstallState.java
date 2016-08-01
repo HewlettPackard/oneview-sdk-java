@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.serverhardware;
 
 public enum FirmwareInstallState {
 
@@ -50,6 +50,7 @@ public enum FirmwareInstallState {
      * firmware and/or OS driver components based on these settings.
      */
     Pending,
+    SPPBootFailed,
     /**
      * Indicates HPE Smart Update Tool has failed to stage the smart components from
      * the SPP bundle specified in the firmware and/or OS driver baseline settings.

@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.hp.ov.sdk.dto.servers.serverhardware;
 
-package com.hp.ov.sdk.dto;
+public enum MigrationState {
 
-public enum InstallState {
-
-    Installed, NotInstalled, Unknown
+    Migrating,
+    NotApplicable,
+    Unknown
 
 }

@@ -13,31 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.serverhardware;
 
-import java.io.Serializable;
-
-public class Signature implements Serializable {
-
-    private static final long serialVersionUID = -5090438335783648169L;
-
-    private Integer personalityChecksum;
-    private Integer serverHwChecksum;
-
-    public Integer getPersonalityChecksum() {
-        return personalityChecksum;
-    }
-
-    public void setPersonalityChecksum(final Integer personalityChecksum) {
-        this.personalityChecksum = personalityChecksum;
-    }
-
-    public Integer getServerHwChecksum() {
-        return serverHwChecksum;
-    }
-
-    public void setServerHwChecksum(final Integer serverHwChecksum) {
-        this.serverHwChecksum = serverHwChecksum;
-    }
-
+public enum ConfigurationState {
+    ImportSHT,
+    Managed,
+    Monitored
 }
