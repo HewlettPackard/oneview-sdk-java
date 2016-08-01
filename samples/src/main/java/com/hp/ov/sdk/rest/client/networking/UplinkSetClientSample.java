@@ -23,7 +23,6 @@ import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.OpSpeed;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.Enclosures;
 import com.hp.ov.sdk.dto.generated.Location;
 import com.hp.ov.sdk.dto.generated.LogicalLocationEntry;
 import com.hp.ov.sdk.dto.generated.PortConfigInfo;
@@ -31,6 +30,7 @@ import com.hp.ov.sdk.dto.generated.UplinkSets;
 import com.hp.ov.sdk.dto.generated.UplinkSets.ConnectionMode;
 import com.hp.ov.sdk.dto.generated.UplinkSets.ManualLoginRedistributionState;
 import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
+import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -310,7 +310,7 @@ public class UplinkSetClientSample {
         UplinkSets uplinkSetsDto = new UplinkSets();
 
         uplinkSetsDto.setCategory(category);
-        Enclosures enclosuresDto = enclosureClient.getEnclosureByName(params, EnclosureClientSample.resourceName);
+        Enclosure enclosuresDto = enclosureClient.getEnclosureByName(params, EnclosureClientSample.resourceName);
         for (int i = 0; i < enclosuresDto.getInterconnectBayCount(); i++) {
             if (Integer.parseInt(bayValue) == enclosuresDto.getInterconnectBays().get(i).getBayNumber()) {
                 uplinkSetsDto.setLogicalInterconnectUri(enclosuresDto.getInterconnectBays().get(0).getLogicalInterconnectUri());

@@ -19,12 +19,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.annotations.Since;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.hp.ov.sdk.dto.LicensingIntent;
+import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.servers.LicensingIntent;
 
 public class AddServer implements Serializable {
 

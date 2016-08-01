@@ -13,28 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.enclosure;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum DevicePresence {
-    PresenceNoOp("PresenceNoOp"),
-    PresenceUnknown("PresenceUnknown"),
-    Absent("Absent"),
-    Present("Present"),
-    Subsumed("Subsumed");
+public enum RefreshState {
+
+    NotRefreshing("NotRefreshing"),
+    RefreshPending("RefreshPending"),
+    Refreshing("Refreshing"),
+    RefreshFailed("RefreshFailed");
 
     private final String value;
-    private static Map<String, DevicePresence> constants = new HashMap<String, DevicePresence>();
+    private static Map<String, RefreshState> constants = new HashMap<String, RefreshState>();
 
     static {
-        for (final DevicePresence c : values()) {
+        for (final RefreshState c : values()) {
             constants.put(c.value, c);
         }
     }
 
-    private DevicePresence(final String value) {
+    private RefreshState(final String value) {
         this.value = value;
     }
 
@@ -43,8 +43,8 @@ public enum DevicePresence {
         return this.value;
     }
 
-    public static DevicePresence fromValue(final String value) {
-        final DevicePresence constant = constants.get(value);
+    public static RefreshState fromValue(final String value) {
+        final RefreshState constant = constants.get(value);
         if (constant == null) {
             throw new IllegalArgumentException(value);
         } else {

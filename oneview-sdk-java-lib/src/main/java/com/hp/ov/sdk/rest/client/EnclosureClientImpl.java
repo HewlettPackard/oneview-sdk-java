@@ -28,7 +28,6 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.AddEnclosureV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
 import com.hp.ov.sdk.dto.HttpMethodType;
@@ -38,8 +37,9 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.UtilizationData;
-import com.hp.ov.sdk.dto.generated.Enclosures;
 import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
+import com.hp.ov.sdk.dto.servers.enclosure.AddEnclosure;
+import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -87,7 +87,7 @@ public class EnclosureClientImpl implements EnclosureClient {
     }
 
     @Override
-    public Enclosures getEnclosure(final RestParams params, final String resourceId) {
+    public Enclosure getEnclosure(final RestParams params, final String resourceId) {
         LOGGER.info("EnclosureClientImpl : getEnclosure : Start");
 
         // validate args
@@ -105,7 +105,7 @@ public class EnclosureClientImpl implements EnclosureClient {
         }
         // Call adaptor to convert to DTO
 
-        final Enclosures enclosureDto = adaptor.buildDto(returnObj);
+        final Enclosure enclosureDto = adaptor.buildDto(returnObj);
 
         LOGGER.debug("EnclosureV2Client : getEnclosure : name :" + enclosureDto.getName());
         LOGGER.info("EnclosureClientImpl : getEnclosure : End");
@@ -114,7 +114,7 @@ public class EnclosureClientImpl implements EnclosureClient {
     }
 
     @Override
-    public ResourceCollection<Enclosures> getAllEnclosures(final RestParams params) {
+    public ResourceCollection<Enclosure> getAllEnclosures(final RestParams params) {
         LOGGER.info("EnclosureClientImpl : getAllEnclosureV2s : Start");
         // validate args
         if (null == params) {
@@ -133,8 +133,8 @@ public class EnclosureClientImpl implements EnclosureClient {
         }
         // Call adaptor to convert to DTO
 
-        ResourceCollection<Enclosures> enclosureCollectionDto
-                = resourceAdaptor.buildResourceCollection(returnObj, Enclosures.class);
+        ResourceCollection<Enclosure> enclosureCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, Enclosure.class);
 
         LOGGER.debug("EnclosureV2Client : getAllEnclosureV2s : members count :" + enclosureCollectionDto.getCount());
         LOGGER.info("EnclosureClientImpl : getAllEnclosureV2s : End");
@@ -144,8 +144,8 @@ public class EnclosureClientImpl implements EnclosureClient {
     }
 
     @Override
-    public Enclosures getEnclosureByName(final RestParams params, final String name) {
-        Enclosures enclosureDto = null;
+    public Enclosure getEnclosureByName(final RestParams params, final String name) {
+        Enclosure enclosureDto = null;
         LOGGER.info("EnclosureClientImpl : getEnclosureByName : Start");
 
         // validate args
@@ -167,8 +167,8 @@ public class EnclosureClientImpl implements EnclosureClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.ENCLOSURE, null);
         }
 
-        ResourceCollection<Enclosures> enclosureCollectionDto
-                = resourceAdaptor.buildResourceCollection(returnObj, Enclosures.class);
+        ResourceCollection<Enclosure> enclosureCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, Enclosure.class);
 
         if (enclosureCollectionDto.getCount() != 0) {
             enclosureDto = enclosureCollectionDto.getMembers().get(0);
@@ -186,7 +186,7 @@ public class EnclosureClientImpl implements EnclosureClient {
     }
 
     @Override
-    public TaskResourceV2 createEnclosure(final RestParams params, final AddEnclosureV2 enclosureDto, final boolean aSync,
+    public TaskResourceV2 createEnclosure(final RestParams params, final AddEnclosure enclosureDto, final boolean aSync,
             final boolean useJsonRequest) {
         LOGGER.info("EnclosureClientImpl : createEnclosure : Start");
         String returnObj = null;
@@ -228,7 +228,7 @@ public class EnclosureClientImpl implements EnclosureClient {
     }
 
     @Override
-    public TaskResourceV2 updateEnclosure(final RestParams params, final String resourceId, final Enclosures enclosureDto,
+    public TaskResourceV2 updateEnclosure(final RestParams params, final String resourceId, final Enclosure enclosureDto,
             final boolean aSync, final boolean useJsonRequest) {
         LOGGER.info("EnclosureClientImpl : updateEnclosure : Start");
 
@@ -285,6 +285,11 @@ public class EnclosureClientImpl implements EnclosureClient {
         if (patchDto == null) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.ENCLOSURE, null);
         }
+
+        if (params.getApiVersion() == ApiVersion.V_300) {
+            params.getHeaders().put("Content-Type", "application/json-patch+json");
+        }
+
         // set the additional params
         params.setType(HttpMethodType.PATCH);
         params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId));
@@ -755,7 +760,7 @@ public class EnclosureClientImpl implements EnclosureClient {
     public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        Enclosures enclosures = getEnclosureByName(params, name);
+        Enclosure enclosures = getEnclosureByName(params, name);
 
         if (null != enclosures.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(enclosures.getUri());
