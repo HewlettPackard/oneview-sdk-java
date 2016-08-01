@@ -15,15 +15,19 @@
  */
 package com.hp.ov.sdk.dto.networking;
 
-public enum LocationType {
 
-    Bay,
-    Enclosure,
-    Ip,
-    Password,
-    Port,
-    UserId,
-    StackingDomainId,
-    StackingMemberId
+public enum PortCapability {
+
+    ConnectionDeployment,
+    ConnectionReservation,
+    Dcc,
+    EnetFcoe,
+    Ethernet,
+    Extension,
+    FibreChannel,
+    PortExtender,
+    Qbg,
+    Stacking,
+    Unknown
 
 }

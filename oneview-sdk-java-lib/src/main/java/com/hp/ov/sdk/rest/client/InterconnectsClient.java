@@ -24,8 +24,8 @@ import com.hp.ov.sdk.dto.PortStatistics;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SubportStatistics;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.Interconnects;
-import com.hp.ov.sdk.dto.generated.Port;
+import com.hp.ov.sdk.dto.networking.Port;
+import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface InterconnectsClient {
@@ -38,9 +38,9 @@ public interface InterconnectsClient {
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
      *            The resource identifier for interconnect as seen in HPE OneView.
-     * @return {@link Interconnects} containing the interconnect details.
+     * @return {@link Interconnect} containing the interconnect details.
      */
-    Interconnects getInterconnectById(final RestParams params, final String resourceId);
+    Interconnect getInterconnectById(final RestParams params, final String resourceId);
 
     /**
      * The module aids in fetching the interconnect details for the interconnect name
@@ -50,9 +50,9 @@ public interface InterconnectsClient {
      *            The {@link RestParams} is a structure containing the connection details.
      * @param interconnectName
      *            The interconnectName is the interconnect name as seen in HPE OneView.
-     * @return {@link Interconnects} containing the interconnect details.
+     * @return {@link Interconnect} containing the interconnect details.
      */
-    Interconnects getInterconnectByName(final RestParams params, final String interconnectName);
+    Interconnect getInterconnectByName(final RestParams params, final String interconnectName);
 
     /**
      * The module aids in fetching the interconnects details for all the
@@ -60,10 +60,10 @@ public interface InterconnectsClient {
      *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link ResourceCollection}&lt;{@link Interconnects}&gt; containing
+     * @return {@link ResourceCollection}&lt;{@link Interconnect}&gt; containing
      * the details for all found interconnects.
      */
-    ResourceCollection<Interconnects> getAllInterconnects(final RestParams params);
+    ResourceCollection<Interconnect> getAllInterconnects(final RestParams params);
 
     /**
      * Performs a specific patch operation for the given interconnect. There are a limited

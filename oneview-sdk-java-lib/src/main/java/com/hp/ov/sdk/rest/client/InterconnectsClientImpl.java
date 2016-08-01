@@ -37,8 +37,8 @@ import com.hp.ov.sdk.dto.PortStatistics;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SubportStatistics;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.Interconnects;
-import com.hp.ov.sdk.dto.generated.Port;
+import com.hp.ov.sdk.dto.networking.Port;
+import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -82,7 +82,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
     }
 
     @Override
-    public Interconnects getInterconnectById(final RestParams params, final String resourceId) {
+    public Interconnect getInterconnectById(final RestParams params, final String resourceId) {
         LOGGER.info("InterconnectsClientImpl : getInterconnects : Start");
 
         // validate args
@@ -104,7 +104,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
         }
         // Call adaptor to convert to DTO
 
-        final Interconnects interconnectDto = adaptor.buildDto(returnObj, params.getApiVersion());
+        final Interconnect interconnectDto = adaptor.buildDto(returnObj, params.getApiVersion());
 
         LOGGER.debug("InterconnectsClientImpl : getInterconnects : name :" + interconnectDto.getName());
         LOGGER.info("InterconnectsClientImpl : getInterconnects : End");
@@ -113,7 +113,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
     }
 
     @Override
-    public ResourceCollection<Interconnects> getAllInterconnects(final RestParams params) {
+    public ResourceCollection<Interconnect> getAllInterconnects(final RestParams params) {
         LOGGER.info("InterconnectsClientImpl : getAllInterconnects : Start");
         // validate args
         if (null == params) {
@@ -134,8 +134,8 @@ public class InterconnectsClientImpl implements InterconnectsClient {
                     null);
         }
 
-        ResourceCollection<Interconnects> interconnectsCollectionDto
-                = resourceAdaptor.buildResourceCollection(returnObj, Interconnects.class);
+        ResourceCollection<Interconnect> interconnectsCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, Interconnect.class);
 
         LOGGER.debug("InterconnectsClientImpl : getAllInterconnects : members count :" + interconnectsCollectionDto.getCount());
         LOGGER.info("InterconnectsClientImpl : getAllInterconnects : End");
@@ -144,8 +144,8 @@ public class InterconnectsClientImpl implements InterconnectsClient {
     }
 
     @Override
-    public Interconnects getInterconnectByName(RestParams params, String interconnectName) {
-        Interconnects interconnectDto = null;
+    public Interconnect getInterconnectByName(RestParams params, String interconnectName) {
+        Interconnect interconnectDto = null;
         LOGGER.info("InterconnectsClientImpl : getInterconnectByName : start");
 
         // validate args
@@ -171,8 +171,8 @@ public class InterconnectsClientImpl implements InterconnectsClient {
                     SdkConstants.INTERCONNECT, null);
         }
 
-        ResourceCollection<Interconnects> interconnectsCollection
-                = resourceAdaptor.buildResourceCollection(returnObj, Interconnects.class);
+        ResourceCollection<Interconnect> interconnectsCollection
+                = resourceAdaptor.buildResourceCollection(returnObj, Interconnect.class);
 
         if (interconnectsCollection.getCount() != 0) {
             interconnectDto = interconnectsCollection.getMembers().get(0);
@@ -529,7 +529,7 @@ public class InterconnectsClientImpl implements InterconnectsClient {
     public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        Interconnects interconnectsDto = getInterconnectByName(params, name);
+        Interconnect interconnectsDto = getInterconnectByName(params, name);
 
         if (null != interconnectsDto.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(interconnectsDto.getUri());

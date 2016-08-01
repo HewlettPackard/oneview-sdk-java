@@ -30,6 +30,7 @@ import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.StackingMode;
 import com.hp.ov.sdk.dto.generated.InterconnectMapTemplate;
 import com.hp.ov.sdk.dto.generated.UplinkSet;
+import com.hp.ov.sdk.dto.networking.EnclosureType;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
 
@@ -49,7 +50,7 @@ public class LogicalInterconnectGroup extends BaseModelResource {
     @Since(200)
     private List<Integer> enclosureIndexes = new ArrayList<Integer>();
     @Since(200)
-    private LogicalInterconnectGroup.EnclosureType enclosureType;
+    private EnclosureType enclosureType;
     private EthernetInterconnectSettingsV2 ethernetSettings;
     @Since(200)
     private String fabricUri;
@@ -88,14 +89,14 @@ public class LogicalInterconnectGroup extends BaseModelResource {
     /**
      * @return the enclosureType
      */
-    public LogicalInterconnectGroup.EnclosureType getEnclosureType() {
+    public EnclosureType getEnclosureType() {
         return enclosureType;
     }
 
     /**
      * @param enclosureType the enclosureType to set
      */
-    public void setEnclosureType(LogicalInterconnectGroup.EnclosureType enclosureType) {
+    public void setEnclosureType(EnclosureType enclosureType) {
         this.enclosureType = enclosureType;
     }
 
@@ -351,41 +352,6 @@ public class LogicalInterconnectGroup extends BaseModelResource {
                 .append(internalNetworkUris, rhs.internalNetworkUris)
                 .appendSuper(super.equals(other))
                 .isEquals();
-    }
-
-    public static enum EnclosureType {
-
-        Unknown("Unknown"),
-        NotApplicable("NotApplicable"),
-        C7000("C7000"),
-        SY12000("SY12000");
-        private final String value;
-        private final static Map<String, LogicalInterconnectGroup.EnclosureType> CONSTANTS = new HashMap<String, LogicalInterconnectGroup.EnclosureType>();
-
-        static {
-            for (LogicalInterconnectGroup.EnclosureType c: values()) {
-                CONSTANTS.put(c.value, c);
-            }
-        }
-
-        private EnclosureType(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static LogicalInterconnectGroup.EnclosureType fromValue(String value) {
-            LogicalInterconnectGroup.EnclosureType constant = CONSTANTS.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
     }
 
     public static enum RedundancyType {

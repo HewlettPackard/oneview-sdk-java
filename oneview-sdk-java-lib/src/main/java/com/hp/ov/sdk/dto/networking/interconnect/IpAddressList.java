@@ -13,42 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking.interconnect;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 
-public class Location implements Serializable {
+public class IpAddressList implements Serializable {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
-    private List<LogicalLocationEntry> locationEntries = new ArrayList<LogicalLocationEntry>();
 
-    /**
-     * 
-     * @return The locationEntries
-     */
-    public List<LogicalLocationEntry> getLocationEntries() {
-        return locationEntries;
-    }
-
-    /**
-     * 
-     * @param locationEntries
-     *            The locationEntries
-     */
-    public void setLocationEntries(final List<LogicalLocationEntry> locationEntries) {
-        this.locationEntries = locationEntries;
-    }
+    private String ipAddress;
+    private IpAddressType ipAddressType;
 
     @Override
     public String toString() {
@@ -57,7 +36,10 @@ public class Location implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(locationEntries).toHashCode();
+        return new HashCodeBuilder()
+                .append(ipAddress)
+                .append(ipAddressType)
+                .toHashCode();
     }
 
     @Override
@@ -65,11 +47,14 @@ public class Location implements Serializable {
         if (other == this) {
             return true;
         }
-        if ((other instanceof Location) == false) {
+        if ((other instanceof IpAddressList) == false) {
             return false;
         }
-        final Location rhs = ((Location) other);
-        return new EqualsBuilder().append(locationEntries, rhs.locationEntries).isEquals();
+        final IpAddressList rhs = ((IpAddressList) other);
+        return new EqualsBuilder()
+                .append(ipAddress, rhs.ipAddress)
+                .append(ipAddressType, rhs.ipAddressType)
+                .isEquals();
     }
 
 }

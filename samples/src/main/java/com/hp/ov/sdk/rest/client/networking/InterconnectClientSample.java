@@ -26,8 +26,8 @@ import com.hp.ov.sdk.dto.PortStatistics;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SubportStatistics;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.Interconnects;
-import com.hp.ov.sdk.dto.generated.Port;
+import com.hp.ov.sdk.dto.networking.Port;
+import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -63,7 +63,7 @@ public class InterconnectClientSample {
     // ================================
 
     private void getInterconnectsById() throws InstantiationException, IllegalAccessException {
-        Interconnects interconnectsDto = null;
+        Interconnect interconnectsDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -96,7 +96,7 @@ public class InterconnectClientSample {
 
     private void getAllInterconnects() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        ResourceCollection<Interconnects> interconnectsCollectionDto = null;
+        ResourceCollection<Interconnect> interconnectsCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -127,7 +127,7 @@ public class InterconnectClientSample {
     }
 
     private void getInterconnectsByName() throws InstantiationException, IllegalAccessException {
-        Interconnects interconnectsDto = null;
+        Interconnect interconnectsDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -160,7 +160,7 @@ public class InterconnectClientSample {
     private void patchInterconnect() {
         TaskResourceV2 taskResourceV2 = null;
         String resourceId = null;
-        Interconnects interconnectDto = null;
+        Interconnect interconnectDto = null;
         Patch patchDto = new Patch();
         try {
             // OneView credentials
@@ -219,7 +219,7 @@ public class InterconnectClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // get resource ID
-            Interconnects interconnect = interconnectsClient.getInterconnectById(params, resourceId);
+            Interconnect interconnect = interconnectsClient.getInterconnectById(params, resourceId);
 
             Port portDto = interconnect.getPorts().get(0);
             portDto.setEnabled(!portDto.getEnabled());
@@ -256,7 +256,7 @@ public class InterconnectClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // get resource ID
-            Interconnects interconnect = interconnectsClient.getInterconnectById(params, resourceId);
+            Interconnect interconnect = interconnectsClient.getInterconnectById(params, resourceId);
 
             // then make sdk service call to get resource
             taskResourceV2 = interconnectsClient.resetInterconnectPortProtection(params, resourceId, false);
@@ -384,7 +384,7 @@ public class InterconnectClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // get resource ID
-            Interconnects interconnect = interconnectsClient.getInterconnectById(params, resourceId);
+            Interconnect interconnect = interconnectsClient.getInterconnectById(params, resourceId);
 
             Port portDto = interconnect.getPorts().get(16);
             portDto.setEnabled(!portDto.getEnabled());

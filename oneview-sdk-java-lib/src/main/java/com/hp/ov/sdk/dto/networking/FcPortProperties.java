@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,82 +39,142 @@ public final class FcPortProperties implements Serializable {
     private String wwnn;
     private String wwpn;
 
+    /**
+     * @return the fcfMac
+     */
     public String getFcfMac() {
         return fcfMac;
     }
 
+    /**
+     * @param fcfMac the fcfMac to set
+     */
     public void setFcfMac(String fcfMac) {
         this.fcfMac = fcfMac;
     }
 
+    /**
+     * @return the logins
+     */
     public String getLogins() {
         return logins;
     }
 
+    /**
+     * @param logins the logins to set
+     */
     public void setLogins(String logins) {
         this.logins = logins;
     }
 
+    /**
+     * @return the loginsCount
+     */
     public Integer getLoginsCount() {
         return loginsCount;
     }
 
+    /**
+     * @param loginsCount the loginsCount to set
+     */
     public void setLoginsCount(Integer loginsCount) {
         this.loginsCount = loginsCount;
     }
 
+    /**
+     * @return the neighborInterconnectName
+     */
     public String getNeighborInterconnectName() {
         return neighborInterconnectName;
     }
 
+    /**
+     * @param neighborInterconnectName the neighborInterconnectName to set
+     */
     public void setNeighborInterconnectName(String neighborInterconnectName) {
         this.neighborInterconnectName = neighborInterconnectName;
     }
 
+    /**
+     * @return the opOnline
+     */
     public Boolean getOpOnline() {
         return opOnline;
     }
 
+    /**
+     * @param opOnline the opOnline to set
+     */
     public void setOpOnline(Boolean opOnline) {
         this.opOnline = opOnline;
     }
 
+    /**
+     * @return the opOnlineReason
+     */
     public String getOpOnlineReason() {
         return opOnlineReason;
     }
 
+    /**
+     * @param opOnlineReason the opOnlineReason to set
+     */
     public void setOpOnlineReason(String opOnlineReason) {
         this.opOnlineReason = opOnlineReason;
     }
 
+    /**
+     * @return the principleInterconnectName
+     */
     public String getPrincipleInterconnectName() {
         return principleInterconnectName;
     }
 
+    /**
+     * @param principleInterconnectName the principleInterconnectName to set
+     */
     public void setPrincipleInterconnectName(String principleInterconnectName) {
         this.principleInterconnectName = principleInterconnectName;
     }
 
+    /**
+     * @return the principleInterconnectNameList
+     */
     public List<String> getPrincipleInterconnectNameList() {
         return principleInterconnectNameList;
     }
 
+    /**
+     * @param principleInterconnectNameList the principleInterconnectNameList to set
+     */
     public void setPrincipleInterconnectNameList(List<String> principleInterconnectNameList) {
         this.principleInterconnectNameList = principleInterconnectNameList;
     }
 
+    /**
+     * @return the wwnn
+     */
     public String getWwnn() {
         return wwnn;
     }
 
+    /**
+     * @param wwnn the wwnn to set
+     */
     public void setWwnn(String wwnn) {
         this.wwnn = wwnn;
     }
 
+    /**
+     * @return the wwpn
+     */
     public String getWwpn() {
         return wwpn;
     }
 
+    /**
+     * @param wwpn the wwpn to set
+     */
     public void setWwpn(String wwpn) {
         this.wwpn = wwpn;
     }
@@ -159,18 +219,7 @@ public final class FcPortProperties implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("fcfMac", fcfMac)
-                .append("logins", logins)
-                .append("loginsCount", loginsCount)
-                .append("neighborInterconnectName", neighborInterconnectName)
-                .append("opOnline", opOnline)
-                .append("opOnlineReason", opOnlineReason)
-                .append("principleInterconnectName", principleInterconnectName)
-                .append("principleInterconnectNameList", principleInterconnectNameList)
-                .append("wwnn", wwnn)
-                .append("wwpn", wwpn)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
 
 }

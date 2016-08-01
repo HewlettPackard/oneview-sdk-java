@@ -28,13 +28,13 @@ public class LogicalLocation implements Serializable {
 
     private static final long serialVersionUID = 2956396709126593171L;
 
-    private List<LocationEntry> locationEntries = new ArrayList<>();
+    private List<LogicalLocationEntry> locationEntries = new ArrayList<>();
 
-    public List<LocationEntry> getLocationEntries() {
+    public List<LogicalLocationEntry> getLocationEntries() {
         return locationEntries;
     }
 
-    public void setLocationEntries(List<LocationEntry> locationEntries) {
+    public void setLocationEntries(List<LogicalLocationEntry> locationEntries) {
         this.locationEntries = locationEntries;
     }
 
