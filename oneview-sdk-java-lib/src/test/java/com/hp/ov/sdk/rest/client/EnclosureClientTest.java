@@ -28,7 +28,6 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.AddEnclosureV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
 import com.hp.ov.sdk.dto.HttpMethodType;
@@ -42,8 +41,10 @@ import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.TaskState;
 import com.hp.ov.sdk.dto.UtilizationData;
-import com.hp.ov.sdk.dto.generated.Enclosures;
 import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
+import com.hp.ov.sdk.dto.servers.enclosure.AddEnclosure;
+import com.hp.ov.sdk.dto.servers.enclosure.BayPowerState;
+import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
@@ -87,7 +88,7 @@ public class EnclosureClientTest {
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class)))
         .thenReturn(enclosureJson);
 
-        Enclosures enclosureDto = client.getEnclosure(params, resourceId);
+        Enclosure enclosureDto = client.getEnclosure(params, resourceId);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI, resourceId));
@@ -95,6 +96,7 @@ public class EnclosureClientTest {
 
         verify(restClient, times(1)).sendRequest(Mockito.eq(params));
 
+        assertEquals(BayPowerState.EFuse, enclosureDto.getManagerBays().get(0).getBayPowerState());
         assertNotNull(enclosureDto);
     }
 
@@ -119,7 +121,7 @@ public class EnclosureClientTest {
 
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(enclosureJson);
 
-        ResourceCollection<Enclosures> enclosureCollection = client.getAllEnclosures(params);
+        ResourceCollection<Enclosure> enclosureCollection = client.getAllEnclosures(params);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI));
@@ -154,7 +156,7 @@ public class EnclosureClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(enclosureJson);
 
-        Enclosures enclosureDto = client.getEnclosureByName(params, resourceName);
+        Enclosure enclosureDto = client.getEnclosureByName(params, resourceName);
 
         RestParams rp = new RestParams();
 
@@ -189,7 +191,7 @@ public class EnclosureClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetEnclosureGroupByNameWithNoMembers() {
-        enclosureJson = new Gson().toJson(new ResourceCollection<Enclosures>());
+        enclosureJson = new Gson().toJson(new ResourceCollection<Enclosure>());
 
         Mockito.when(restClient.sendRequest(Mockito.any(RestParams.class))).thenReturn(enclosureJson);
 
@@ -199,7 +201,7 @@ public class EnclosureClientTest {
     @Test
     public void testCreateEnclosure() {
         enclosureJson = this.getJsonFromFile("EnclosureGet.json");
-        AddEnclosureV2 enclosureDto = new EnclosureAdaptor().buildAddEnclosureDto(enclosureJson);
+        AddEnclosure enclosureDto = new EnclosureAdaptor().buildAddEnclosureDto(enclosureJson);
 
         String jsonCreateTaskCompleted = this.getJsonFromFile("EnclosureCreateTaskCompleted.json");
         TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
@@ -231,7 +233,7 @@ public class EnclosureClientTest {
     @Test (expected = SDKInvalidArgumentException.class)
     public void testCreateEnclosureWithNullParams() {
         enclosureJson = this.getJsonFromFile("EnclosureGet.json");
-        AddEnclosureV2 enclosureDto = adaptor.buildAddEnclosureDto(enclosureJson);
+        AddEnclosure enclosureDto = adaptor.buildAddEnclosureDto(enclosureJson);
         client.createEnclosure(null, enclosureDto, false, false);
     }
 
@@ -243,7 +245,7 @@ public class EnclosureClientTest {
     @Test
     public void testUpdateEnclosure() {
         enclosureJson = this.getJsonFromFile("EnclosureGet.json");
-        Enclosures enclosureDto = new EnclosureAdaptor().buildDto(enclosureJson);
+        Enclosure enclosureDto = new EnclosureAdaptor().buildDto(enclosureJson);
 
         String jsonCreateTaskCompleted = this.getJsonFromFile("EnclosureCreateTaskCompleted.json");
         TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
@@ -282,7 +284,7 @@ public class EnclosureClientTest {
     @Test (expected = SDKInvalidArgumentException.class)
     public void testUpdateEnclosureWithNullParams() {
         enclosureJson = this.getJsonFromFile("EnclosureGet.json");
-        Enclosures enclosureDto = adaptor.buildDto(enclosureJson);
+        Enclosure enclosureDto = adaptor.buildDto(enclosureJson);
 
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class),

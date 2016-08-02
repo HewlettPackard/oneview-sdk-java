@@ -18,11 +18,8 @@ package com.hp.ov.sdk.rest.client.servers;
 import java.util.Arrays;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.dto.AddEnclosureV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
-import com.hp.ov.sdk.dto.FwBaselineOptions;
-import com.hp.ov.sdk.dto.LicensingIntent;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.RefreshState;
@@ -32,8 +29,11 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.UtilizationData;
-import com.hp.ov.sdk.dto.generated.Enclosures;
 import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
+import com.hp.ov.sdk.dto.servers.LicensingIntent;
+import com.hp.ov.sdk.dto.servers.enclosure.AddEnclosure;
+import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
+import com.hp.ov.sdk.dto.servers.enclosure.FwBaselineOptions;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -70,11 +70,11 @@ public class EnclosureClientSample {
     public static final String resourceName = "Encl1";
 
     private static final String enclosureGroupName = "Enclosure_Test";
-    private static final String hostname = "172.18.1.11";
+    private static final String hostname = "172.18.1.13";
     private static final String username = "dcs";
     private static final String password = "dcs";
     private static final String firmware = "Service Pack for ProLiant";
-    private static final String resourceId = "09SGH100X6J1";
+    private static final String resourceId = "09SGH102X6J1";
     // ================================
 
     private EnclosureClientSample() {
@@ -86,7 +86,7 @@ public class EnclosureClientSample {
     }
 
     private void getEnclosureById() throws InstantiationException, IllegalAccessException {
-        Enclosures enclosureDto = null;
+        Enclosure enclosureDto = null;
         // first get the session Id
         try {
             // OneView credentials
@@ -120,7 +120,7 @@ public class EnclosureClientSample {
 
     private void getAllEnclosure() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
             SDKNoSuchUrlException {
-        ResourceCollection<Enclosures> enclosureCollectionDto = null;
+        ResourceCollection<Enclosure> enclosureCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -150,7 +150,7 @@ public class EnclosureClientSample {
     }
 
     private void getEnclosureByName() throws InstantiationException, IllegalAccessException {
-        Enclosures enclosureDto = null;
+        Enclosure enclosureDto = null;
         // first get the session Id
         try {
             // OneView credentials
@@ -182,13 +182,13 @@ public class EnclosureClientSample {
 
     }
 
-    private void createEnclosure() throws InstantiationException, IllegalAccessException {
+    private void addEnclosure() throws InstantiationException, IllegalAccessException {
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
 
             // create network request body
-            final AddEnclosureV2 addEnclosureDto = buildTestEnclosureDto();
+            final AddEnclosure addEnclosureDto = buildTestEnclosureDto();
             /**
              * then make sdk service call to get resource aSync parameter
              * indicates sync vs async useJsonRequest parameter indicates
@@ -225,7 +225,7 @@ public class EnclosureClientSample {
 
     private void updateEnclosure() throws InstantiationException, IllegalAccessException {
         String resourceId = null;
-        Enclosures enclosureDto = null;
+        Enclosure enclosureDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -276,7 +276,7 @@ public class EnclosureClientSample {
 
     private void patchEnclosure() throws InstantiationException, IllegalAccessException {
         String resourceId = null;
-        Enclosures enclosureDto = null;
+        Enclosure enclosureDto = null;
         Patch patchDto = new Patch();
         try {
             // OneView credentials
@@ -817,10 +817,10 @@ public class EnclosureClientSample {
 
     }
 
-    private AddEnclosureV2 buildTestEnclosureDto() {
+    private AddEnclosure buildTestEnclosureDto() {
 
         final String enclosureGroupUri = enclosureGroupClient.getByName(enclosureGroupName).get(0).getUri();
-        final AddEnclosureV2 dto = new AddEnclosureV2();
+        final AddEnclosure dto = new AddEnclosure();
         dto.setHostname(hostname);
         dto.setUsername(username);
         dto.setPassword(password);
@@ -867,7 +867,7 @@ public class EnclosureClientSample {
         EnclosureClientSample client = new EnclosureClientSample();
 
         client.getAllEnclosure();
-        client.createEnclosure();
+        client.addEnclosure();
         client.getEnclosureById();
         client.getActiveOaSsoUrl();
         client.getEnclosureByName();

@@ -13,24 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.servers.enclosure;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
-import com.hp.ov.sdk.dto.DevicePresence;
 
 public class FanBay implements Serializable {
 
-    /**
-	 *
-	 */
     private static final long serialVersionUID = 1L;
     private Integer bayNumber;
     @Since(200)
@@ -38,8 +32,8 @@ public class FanBay implements Serializable {
     private DevicePresence devicePresence;
     private Boolean deviceRequired;
     private Boolean forceInstallFirmware;
-    private FanBay.Status status;
-    private FanBay.State state;
+    private Status status;
+    private State state;
     private String model;
     private String partNumber;
     private String sparePartNumber;
@@ -133,7 +127,7 @@ public class FanBay implements Serializable {
      *
      *@return The status
      */
-    public FanBay.Status getStatus() {
+    public Status getStatus() {
         return status;
     }
 
@@ -142,7 +136,7 @@ public class FanBay implements Serializable {
      *@param status
      *           The status
      */
-    public void setStatus(final FanBay.Status status) {
+    public void setStatus(final Status status) {
         this.status = status;
     }
 
@@ -150,7 +144,7 @@ public class FanBay implements Serializable {
      *
      *@return The state
      */
-    public FanBay.State getState() {
+    public State getState() {
         return state;
     }
 
@@ -159,7 +153,7 @@ public class FanBay implements Serializable {
      *@param state
      *           The state
      */
-    public void setState(final FanBay.State state) {
+    public void setState(final State state) {
         this.state = state;
     }
 
@@ -256,70 +250,6 @@ public class FanBay implements Serializable {
                 .append(partNumber, rhs.partNumber)
                 .append(sparePartNumber, rhs.sparePartNumber)
                 .isEquals();
-    }
-
-    public static enum State {
-
-        Misplaced("Misplaced"), Missing("Missing"), Degraded("Degraded"), Failed("Failed"), OK("OK");
-        private final String value;
-        private static Map<String, FanBay.State> constants = new HashMap<String, FanBay.State>();
-
-        static {
-            for (final FanBay.State c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private State(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static FanBay.State fromValue(final String value) {
-            final FanBay.State constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
-    }
-
-    public static enum Status {
-
-        Unknown("Unknown"), OK("OK"), Disabled("Disabled"), Warning("Warning"), Critical("Critical");
-        private final String value;
-        private static Map<String, FanBay.Status> constants = new HashMap<String, FanBay.Status>();
-
-        static {
-            for (final FanBay.Status c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private Status(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static FanBay.Status fromValue(final String value) {
-            final FanBay.Status constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
     }
 
 }

@@ -20,34 +20,34 @@ import java.util.Arrays;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.hp.ov.sdk.dto.AddEnclosureV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.UtilizationData;
-import com.hp.ov.sdk.dto.generated.Enclosures;
 import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
+import com.hp.ov.sdk.dto.servers.enclosure.AddEnclosure;
+import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
-public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
+public class EnclosureAdaptor extends BaseAdaptor<Enclosure, Object> {
 
     @Override
-    public Enclosures buildDto(final Object source) {
+    public Enclosure buildDto(final Object source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         // convert json Object to DTO, replace quotes and back slash in the file
-        final Enclosures enclosureDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), Enclosures.class);
+        final Enclosure enclosureDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), Enclosure.class);
         return enclosureDto;
     }
 
-    public AddEnclosureV2 buildAddEnclosureDto(final Object source) {
+    public AddEnclosure buildAddEnclosureDto(final Object source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         // convert json Object to DTO, replace quotes and back slash in the file
-        final AddEnclosureV2 enclosureDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), AddEnclosureV2.class);
+        final AddEnclosure enclosureDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), AddEnclosure.class);
         return enclosureDto;
     }
 
@@ -76,7 +76,7 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
         return utilizationData;
     }
 
-    public JSONObject buildJsonObjectFromDto(final Enclosures source) {
+    public JSONObject buildJsonObjectFromDto(final Enclosure source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
@@ -101,7 +101,7 @@ public class EnclosureAdaptor extends BaseAdaptor<Enclosures, Object> {
         return new JSONObject(converter.convertObjectToJsonString(source));
     }
 
-    public JSONObject buildJsonObjectFromDto(final AddEnclosureV2 source) {
+    public JSONObject buildJsonObjectFromDto(final AddEnclosure source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
         return new JSONObject(converter.convertObjectToJsonString(source));
     }

@@ -25,12 +25,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import com.google.gson.annotations.Since;
 import com.google.gson.annotations.Until;
 import com.hp.ov.sdk.dto.BaseModelResource;
-import com.hp.ov.sdk.dto.LicensingIntent;
 import com.hp.ov.sdk.dto.ManagementHostInformation;
 import com.hp.ov.sdk.dto.PhysicalServerMpState;
 import com.hp.ov.sdk.dto.PhysicalServerPowerState;
 import com.hp.ov.sdk.dto.PortMap;
 import com.hp.ov.sdk.dto.RefreshState;
+import com.hp.ov.sdk.dto.servers.LicensingIntent;
+import com.hp.ov.sdk.dto.servers.RemoteSupportSettings;
 
 /**
  * The ServerHardware data transfer object (DTO) contains the information used

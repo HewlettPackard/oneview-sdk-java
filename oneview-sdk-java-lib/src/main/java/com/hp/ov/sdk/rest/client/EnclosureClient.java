@@ -15,7 +15,6 @@
  */
 package com.hp.ov.sdk.rest.client;
 
-import com.hp.ov.sdk.dto.AddEnclosureV2;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
 import com.hp.ov.sdk.dto.Patch;
@@ -24,8 +23,9 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.UtilizationData;
-import com.hp.ov.sdk.dto.generated.Enclosures;
 import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
+import com.hp.ov.sdk.dto.servers.enclosure.AddEnclosure;
+import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface EnclosureClient {
@@ -38,38 +38,38 @@ public interface EnclosureClient {
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
      *            The resource identifier for enclosure as seen in HPE OneView.
-     * @return {@link Enclosures} containing the enclosure details.
+     * @return {@link Enclosure} containing the enclosure details.
      */
-    Enclosures getEnclosure(final RestParams params, final String resourceId);
+    Enclosure getEnclosure(final RestParams params, final String resourceId);
 
     /**
      * The module aids in fetching the enclosure details for all enclosures
      * registered under the current HPE OneView.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link ResourceCollection}&lt;{@link Enclosures}&gt; containing
+     * @return {@link ResourceCollection}&lt;{@link Enclosure}&gt; containing
      * the details for all found enclosures.
      */
-    ResourceCollection<Enclosures> getAllEnclosures(final RestParams params);
+    ResourceCollection<Enclosure> getAllEnclosures(final RestParams params);
 
     /**
      * The module aids in fetching the enclosure details for the specified
      * enclosure name.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param name
      *            The name is the enclosure name as seen in HPE.
-     * @return {@link Enclosures} containing the enclosure details.
+     * @return {@link Enclosure} containing the enclosure details.
      */
-    Enclosures getEnclosureByName(final RestParams params, final String name);
+    Enclosure getEnclosureByName(final RestParams params, final String name);
 
     /**
      * The module aids in the creation of an enclosure when provided with the enclosure
      * details as an AddEnclosure object or JsonRequest. It can process the request
      * asynchronously or synchronously, based on the flag input.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param addEnclosureDto
@@ -83,14 +83,14 @@ public interface EnclosureClient {
      *            processed.
      * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    TaskResourceV2 createEnclosure(final RestParams params, final AddEnclosureV2 addEnclosureDto, final boolean aSync,
+    TaskResourceV2 createEnclosure(final RestParams params, final AddEnclosure addEnclosureDto, final boolean aSync,
             final boolean useJsonRequest);
 
     /**
      * The module takes in an enclosure object or JsonRequest and updates the
      * existing enclosure based on the resource identifier. It can process the request
      * asynchronously or synchronously, based on the flag input.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -106,14 +106,14 @@ public interface EnclosureClient {
      *            converted to Enclosure object using adaptor and processed.
      * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    TaskResourceV2 updateEnclosure(final RestParams params, final String resourceId, final Enclosures enclosureDto,
+    TaskResourceV2 updateEnclosure(final RestParams params, final String resourceId, final Enclosure enclosureDto,
             final boolean aSync, final boolean useJsonRequest);
 
     /**
      * The module takes in a Patch object or JsonRequest and updates the
      * existing enclosure based on the resource identifier and the content of the Patch object.
      * It can process the request asynchronously or synchronously based on the flag input.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -132,7 +132,7 @@ public interface EnclosureClient {
      * The module aids in deleting an enclosure for the specified enclosure
      * resource identifier. It can process the request asynchronously or synchronously,
      * based on the flag input.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -146,7 +146,7 @@ public interface EnclosureClient {
     /**
      * This method aids in fetching data that can be used to construct a single
      * sign-on URL for an Onboard Administrator.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -158,7 +158,7 @@ public interface EnclosureClient {
     /**
      * This method aids in updating the enclosure configuration with that of
      * the enclosure group script. This is not applicable if the enclosure is monitored.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -171,7 +171,7 @@ public interface EnclosureClient {
 
     /**
      * This method aids in reapplying the enclosure configuration.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -187,7 +187,7 @@ public interface EnclosureClient {
      * method can be used to update the OA firmware, or the OA, logical interconnect,
      * and server profiles in the enclosure. This is not applicable if enclosure is
      * monitored.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -205,7 +205,7 @@ public interface EnclosureClient {
     /**
      * This method aids in fetching the environmental configuration of the
      * enclosure identified by the given enclosure identifier.
-     * 
+     *
      * @param param
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -217,7 +217,7 @@ public interface EnclosureClient {
     /**
      * This method aids in updating the environmental configuration of the
      * enclosure resource identifier.
-     * 
+     *
      * @param param
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -232,7 +232,7 @@ public interface EnclosureClient {
 
     /**
      * This method aids in refreshing the enclosure to fix configuration issues.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -250,7 +250,7 @@ public interface EnclosureClient {
     /**
      * The module aids in fetching the configuration script for the specified
      * enclosure resource identifier.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -262,7 +262,7 @@ public interface EnclosureClient {
     /**
      * The module aids in updating the configuration script for the specified
      * enclosure resource identifier.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -284,7 +284,7 @@ public interface EnclosureClient {
     /**
      * This method aids in fetching data that can be used to construct a single
      * sign-on URL for an onboard administrator.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -297,7 +297,7 @@ public interface EnclosureClient {
     /**
      * This method aids in retrieving historical utilization data for the
      * specified enclosure.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
@@ -309,7 +309,7 @@ public interface EnclosureClient {
     /**
      * The module aids in fetching the enclosure resource identifier for the enclosure name
      * as specified in HPE OneView.
-     * 
+     *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
      * @param name
