@@ -21,11 +21,11 @@ import java.util.Map;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.http.entity.ContentType;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
 public class Request {

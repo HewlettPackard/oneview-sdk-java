@@ -32,8 +32,7 @@ import com.hp.ov.sdk.dto.generated.UplinkSets.ConnectionMode;
 import com.hp.ov.sdk.dto.generated.UplinkSets.ManualLoginRedistributionState;
 import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
 import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
-import com.hp.ov.sdk.rest.client.EnclosureClient;
-import com.hp.ov.sdk.rest.client.EnclosureClientImpl;
+import com.hp.ov.sdk.rest.client.server.EnclosureClient;
 import com.hp.ov.sdk.rest.client.InterconnectsClient;
 import com.hp.ov.sdk.rest.client.InterconnectsClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
@@ -69,7 +68,7 @@ public class UplinkSetClientSample {
         this.oneViewClient = OneViewClientSample.getOneViewClient();
 
         uplinkSetClient = oneViewClient.uplinkSet();
-        enclosureClient = EnclosureClientImpl.getClient();
+        enclosureClient = oneViewClient.enclosure();
         interconnectClient = InterconnectsClientImpl.getClient();
     }
 
@@ -130,7 +129,7 @@ public class UplinkSetClientSample {
 
         uplinkSetsDto.setCategory(ResourceCategory.RC_LOGICAL_INTERCONNECTS);
 
-        Enclosure enclosuresDto = enclosureClient.getEnclosureByName(params, EnclosureClientSample.resourceName);
+        Enclosure enclosuresDto = enclosureClient.getByName(EnclosureClientSample.RESOURCE_NAME).get(0);
 
         for (int i = 0; i < enclosuresDto.getInterconnectBayCount(); i++) {
             if (Integer.parseInt(BAY_VALUE) == enclosuresDto.getInterconnectBays().get(i).getBayNumber()) {

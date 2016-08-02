@@ -70,17 +70,17 @@ public class LogicalEnclosureClientSample {
     }
 
     private void getAllLogicalEnclosures() {
-        ResourceCollection<LogicalEnclosure> enclosureGroups = logicalEnclosureClient.getAll();
+        ResourceCollection<LogicalEnclosure> logicalEnclosures = logicalEnclosureClient.getAll();
 
         System.out.println("LogicalEnclosureClientSample : getAllLogicalEnclosures : "
-                + "LogicalEnclosures returned to client (count) : " + enclosureGroups.toJsonString());
+                + "LogicalEnclosures returned to client (count) : " + logicalEnclosures.toJsonString());
     }
 
     private void getLogicalEnclosureByName() {
-        LogicalEnclosure enclosureGroup = logicalEnclosureClient.getByName(RESOURCE_NAME).get(0);
+        LogicalEnclosure logicalEnclosure = logicalEnclosureClient.getByName(RESOURCE_NAME).get(0);
 
         System.out.println("LogicalEnclosureClientSample : getLogicalEnclosureByName : "
-                + "LogicalEnclosure object returned to client : " + enclosureGroup.toJsonString());
+                + "LogicalEnclosure object returned to client : " + logicalEnclosure.toJsonString());
     }
 
     private void createLogicalEnclosure() {

@@ -71,7 +71,6 @@ public class LogicalEnclosureClientTest {
                 LogicalEnclosure.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
     }
 
-
     @Test
     public void shouldCreateLogicalEnclosure() {
         AddLogicalEnclosure logicalEnclosure = new AddLogicalEnclosure();

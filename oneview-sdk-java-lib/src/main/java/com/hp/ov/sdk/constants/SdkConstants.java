@@ -20,8 +20,7 @@ public class SdkConstants {
     /**
      * PLEASE, try to keep it in alphabetical order
      */
-    public static final String ACTIVE_OA_SSO_URL = "activeOaSsoUrl";
-    public static final String ACTIVE_OA_SSO_URL_V200 = "sso";
+
     public static final String APPLIANCE = "appliance";
     public static final String BULK_ETHERNET_NETWORK = "bulk-ethernet-network";
     public static final String CERTS = "appliance-certificates";
@@ -104,8 +103,6 @@ public class SdkConstants {
     public static final String SERVER_PROFILES = SERVER_PROFILE + "s";
     public static final String SETTINGS = "settings";
     public static final String SNMP_CONFIGURATION = "snmp-configuration";
-    public static final String STANDBY_OA_SSO_URL = "standbyOaSsoUrl";
-    public static final String STANDBY_OA_SSO_URL_V200 = "sso";
     public static final String SSL_VERSION = "TLSv1.2";
     public static final String STATISTICS = "statistics";
     public static final String STORAGE_ATTACHABLE_VOLUMES = "attachable-volumes";

@@ -40,6 +40,7 @@ import com.hp.ov.sdk.rest.client.networking.SwitchClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
 import com.hp.ov.sdk.rest.client.networking.UplinkSetClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
+import com.hp.ov.sdk.rest.client.server.EnclosureClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.server.LogicalEnclosureClient;
 import com.hp.ov.sdk.rest.client.server.ServerHardwareClient;
@@ -66,6 +67,7 @@ public class OneViewClient {
     private final BaseClient baseClient;
 
     private EnclosureGroupClient enclosureGroupClient;
+    private EnclosureClient enclosureClient;
     private LogicalEnclosureClient logicalEnclosureClient;
     private FcoeNetworkClient fcoeNetworkClient;
     private FcNetworkClient fcNetworkClient;
@@ -116,6 +118,10 @@ public class OneViewClient {
 
     public synchronized EnclosureGroupClient enclosureGroup() {
         return this.getClient(this.enclosureGroupClient, EnclosureGroupClient.class);
+    }
+
+    public synchronized EnclosureClient enclosure() {
+        return this.getClient(this.enclosureClient, EnclosureClient.class);
     }
 
     public synchronized LogicalEnclosureClient logicalEnclosure() {

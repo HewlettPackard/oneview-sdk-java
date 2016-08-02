@@ -45,13 +45,11 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -69,6 +67,7 @@ import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKMethodNotAllowed;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKUnauthorizedException;
+import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.util.JsonSerializer;
 import com.hp.ov.sdk.util.UrlUtils;
 
@@ -296,7 +295,7 @@ public class HttpRestClient {
                 HttpEntity entity = EntityBuilder.create()
                         .setText(serializer.toJsonArray((Patch) request.getEntity(),
                                 params.getApiVersion()))
-                        .setContentType(ContentType.APPLICATION_JSON).build();
+                        .setContentType(toApacheContentType(request.getContentType())).build();
 
                 patch.setEntity(entity);
 
@@ -334,27 +333,27 @@ public class HttpRestClient {
             HttpEntity entity;
             ContentType contentType = request.getContentType();
 
+            //TODO add support for Content-Type "application/json-patch+json" (PATCH)
+
             if (ContentType.APPLICATION_JSON == contentType) {
                 entity = EntityBuilder.create()
-                        .setContentType(contentType)
+                        .setContentType(toApacheContentType(contentType))
                         .setText(serializer.toJson(request.getEntity(), params.getApiVersion()))
                         .build();
             } else if (ContentType.TEXT_PLAIN == contentType) {
                 entity = EntityBuilder.create()
-                        .setContentType(contentType)
+                        .setContentType(toApacheContentType(contentType))
                         .setText(request.getEntity().toString())
                         .build();
             } else if (ContentType.MULTIPART_FORM_DATA == contentType) {
                 File file = (File) request.getEntity();
                 entity = MultipartEntityBuilder.create()
-                        .setContentType(contentType)
+                        .setContentType(toApacheContentType(contentType))
                         .addBinaryBody("file", file)
                         .build();
 
-                /*
-                TODO evaluate a new approach to deal with the headers
-                (perhaps having a headers field inside the Request)
-                */
+
+                //TODO add support for custom headers in Request object
                 base.setHeader("uploadfilename", file.getName());
             } else {
                 LOGGER.error("Unknown entity Content-Type");
@@ -364,6 +363,10 @@ public class HttpRestClient {
             }
             base.setEntity(entity);
         }
+    }
+
+    private org.apache.http.entity.ContentType toApacheContentType(ContentType contentType) {
+        return org.apache.http.entity.ContentType.create(contentType.getMimeType(), contentType.getCharset());
     }
 
     /**
