@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,8 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hp.ov.sdk.rest.client.fcsans;
+ */
+package com.hp.ov.sdk.rest.client.storage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +26,13 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SanProviderResponse;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.rest.client.storage.FcSanDeviceManagerClient;
-import com.hp.ov.sdk.rest.client.storage.FcSanProviderClient;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * DeviceManagerClientSample is a sample program to consume the network advisor by managing the
  * san manager  of HPE OneView. It invokes APIs of DeviceManagerClient which is in sdk library to
  * perform GET/PUT/POST/DELETE operations on san manager resource
  */
-public class FcSansDeviceManagerClientSample {
+public class FcSanDeviceManagerClientSample {
 
     private final FcSanDeviceManagerClient fcSanDeviceManagerClient;
     private final FcSanProviderClient fcSanProviderClient;
@@ -57,7 +53,7 @@ public class FcSansDeviceManagerClientSample {
     private static final String USE_SSL_VALUE = "true";
     // ================================
 
-    private FcSansDeviceManagerClientSample() {
+    private FcSanDeviceManagerClientSample() {
         OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
         
         fcSanDeviceManagerClient = oneViewClient.fcSanDeviceManager();
@@ -171,7 +167,7 @@ public class FcSansDeviceManagerClientSample {
     }
 
     public static void main(final String[] args) throws Exception {
-        FcSansDeviceManagerClientSample client = new FcSansDeviceManagerClientSample();
+        FcSanDeviceManagerClientSample client = new FcSanDeviceManagerClientSample();
 
         client.addFcSanDeviceManager();
         client.getFcSanDeviceManagerById();

@@ -46,6 +46,7 @@ import com.hp.ov.sdk.rest.client.settings.FirmwareBundleClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
 import com.hp.ov.sdk.rest.client.storage.FcSanDeviceManagerClient;
+import com.hp.ov.sdk.rest.client.storage.FcSanManagedSanClient;
 import com.hp.ov.sdk.rest.client.storage.FcSanProviderClient;
 import com.hp.ov.sdk.rest.client.storage.StoragePoolClient;
 import com.hp.ov.sdk.rest.client.storage.StorageSystemClient;
@@ -84,6 +85,7 @@ public class OneViewClient {
     private StorageVolumeTemplateClient storageVolumeTemplateClient;
     private FcSanDeviceManagerClient fcSanDeviceManagerClient;
     private FcSanProviderClient fcSanProviderClient;
+    private FcSanManagedSanClient fcSanManagedSanClient;
     private InterconnectTypeClient interconnectTypeClient;
     private LogicalInterconnectGroupClient logicalInterconnectGroupClient;
     private LogicalDownlinkClient logicalDownlinkClient;
@@ -194,6 +196,10 @@ public class OneViewClient {
 
     public synchronized FcSanProviderClient fcSanProvider() {
         return this.getClient(this.fcSanProviderClient, FcSanProviderClient.class);
+    }
+
+    public synchronized FcSanManagedSanClient fcSanManagedSan() {
+        return this.getClient(this.fcSanManagedSanClient, FcSanManagedSanClient.class);
     }
 
     public synchronized InterconnectTypeClient interconnectType() {
