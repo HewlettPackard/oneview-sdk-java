@@ -33,6 +33,7 @@ public class ResourceCategory {
     public static final String RC_LOGICAL_SWITCH_GROUP_V300 = "logical-switch-groupV300";
     public static final String RC_LOGICAL_SWITCH = "logical-switch";
     public static final String RC_LOGICAL_SWITCH_V300 = "logical-switchV300";
+    public static final String RC_LOGICAL_INTERCONNECTS = "logical-interconnects";
     public static final String RC_LOGICALINTERCONNECTGROUP = "logical-interconnect-groupV2";
     public static final String RC_LOGICALINTERCONNECTGROUP_V200 = "logical-interconnect-groupV3";
     public static final String RC_LOGICALINTERCONNECTGROUP_V300 = "logical-interconnect-groupV300";
@@ -52,8 +53,8 @@ public class ResourceCategory {
     public static final String RC_STORAGE_VOLUME_TEMPLATE = "StorageVolumeTemplate";
     public static final String RC_STORAGE_VOLUME_TEMPLATE_V200 = "StorageVolumeTemplateV3";
     public static final String RC_SWITCH = "switch";
-    public static final String RC_UPLINKSET_V120 = "uplink-setV2";
-    public static final String RC_UPLINKSET_V200 = "uplink-setV3";
-    public static final String RC_UPLINKSET_V300 = "uplink-setV300";
+    public static final String RC_UPLINKSET = "uplink-sets";
+    public static final String RC_UPLINKS_SETS = "uplink-setV2";
+    public static final String RC_UPLINKS_SETSV200 = "uplink-setV3";
 
 }

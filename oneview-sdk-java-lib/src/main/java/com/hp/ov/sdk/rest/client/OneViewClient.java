@@ -38,6 +38,7 @@ import com.hp.ov.sdk.rest.client.networking.LogicalSwitchGroupClient;
 import com.hp.ov.sdk.rest.client.networking.NetworkSetClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
+import com.hp.ov.sdk.rest.client.networking.UplinkSetClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.server.LogicalEnclosureClient;
@@ -72,6 +73,7 @@ public class OneViewClient {
     private LogicalSwitchClient logicalSwitchClient;
     private LogicalSwitchGroupClient logicalSwitchGroupClient;
     private NetworkSetClient networkSetClient;
+    private UplinkSetClient uplinkSetClient;
     private SwitchTypeClient switchTypeClient;
     private RackClient rackClient;
     private DataCenterClient dataCenterClient;
@@ -142,6 +144,10 @@ public class OneViewClient {
 
     public synchronized NetworkSetClient networkSet() {
         return this.getClient(this.networkSetClient, NetworkSetClient.class);
+    }
+
+    public synchronized UplinkSetClient uplinkSet() {
+        return this.getClient(this.uplinkSetClient, UplinkSetClient.class);
     }
 
     public synchronized SwitchTypeClient switchType() {

@@ -51,14 +51,14 @@ public class NetworkSetClientSample {
         this.resourceDtoUtils = new ResourceDtoUtils(oneViewClient);
     }
 
-    private void getNetworkSetById() throws InstantiationException, IllegalAccessException {
+    private void getNetworkSetById() {
         NetworkSet networkSet = client.getById(resourceId);
 
         System.out.println("NetworkSetClientSample : getNetworkSet : " +
                 "NetworkSet object returned to client : " + networkSet);
     }
 
-    private void getAllNetworkSet() throws InstantiationException, IllegalAccessException {
+    private void getAllNetworkSet() {
 
         ResourceCollection<NetworkSet> networkSets = client.getAll();
 
@@ -66,14 +66,14 @@ public class NetworkSetClientSample {
                 "NetworkSets returned to client (count) : " + networkSets.getCount());
     }
 
-    private void getNetworkSetByName() throws InstantiationException, IllegalAccessException {
+    private void getNetworkSetByName() {
         NetworkSet networkSet = client.getByName(resourceName);
 
         System.out.println("NetworkSetClientSample : getNetworkSetByName : " +
                 "NetworkSet object returned to client : " + networkSet);
     }
 
-    private void createNetworkSet() throws InstantiationException, IllegalAccessException {
+    private void createNetworkSet() {
         NetworkSet networkSet = resourceDtoUtils.buildNetworkSetDto(resourceName, networkNames);
 
         networkSet.setName(resourceName);
@@ -85,7 +85,7 @@ public class NetworkSetClientSample {
                 "Task object returned to client : " + task);
     }
 
-    private void updateNetworkSet() throws InstantiationException, IllegalAccessException {
+    private void updateNetworkSet() {
         NetworkSet networkSet = client.getByName(resourceName);
 
         networkSet.setName(resourceName + "_Updated");
@@ -97,7 +97,7 @@ public class NetworkSetClientSample {
                 "Task object returned to client : " + task);
     }
 
-    private void deleteNetworkSet() throws InstantiationException, IllegalAccessException {
+    private void deleteNetworkSet() {
         NetworkSet networkSet = client.getByName(resourceName);
 
         TaskResourceV2 task = this.client.delete(UrlUtils.getResourceIdFromUri(networkSet.getUri()), false);
