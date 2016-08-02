@@ -22,6 +22,7 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKException;
 import com.hp.ov.sdk.rest.client.facilities.DataCenterClient;
+import com.hp.ov.sdk.rest.client.facilities.RackClient;
 import com.hp.ov.sdk.rest.client.facilities.UnmanagedDeviceClient;
 import com.hp.ov.sdk.rest.client.networking.ConnectionTemplateClient;
 import com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient;
@@ -65,6 +66,7 @@ public class OneViewClient {
     private LogicalSwitchGroupClient logicalSwitchGroupClient;
     private NetworkSetClient networkSetClient;
     private SwitchTypeClient switchTypeClient;
+    private RackClient rackClient;
     private DataCenterClient dataCenterClient;
     private UnmanagedDeviceClient unmanagedDeviceClient;
     private ConnectionTemplateClient connectionTemplateClient;
@@ -128,6 +130,10 @@ public class OneViewClient {
 
     public synchronized SwitchTypeClient switchType() {
         return this.getClient(this.switchTypeClient, SwitchTypeClient.class);
+    }
+
+    public synchronized RackClient rack() {
+        return this.getClient(this.rackClient, RackClient.class);
     }
 
     public synchronized DataCenterClient dataCenter() {
