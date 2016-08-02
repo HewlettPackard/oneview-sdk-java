@@ -36,7 +36,6 @@ import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
-import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClientImpl;
 import com.hp.ov.sdk.rest.client.LogicalEnclosureClient;
 import com.hp.ov.sdk.rest.client.LogicalEnclosureClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
@@ -72,7 +71,7 @@ public class LogicalEnclosureClientSample {
         OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
 
         this.logicalEnclosureClient = LogicalEnclosureClientImpl.getClient();
-        this.firmwareDriverClient = FirmwareDriverClientImpl.getClient();
+        this.firmwareDriverClient = oneViewClient.firmwareDriver();
         this.enclosureGroupClient = oneViewClient.enclosureGroup();
     }
 
@@ -569,7 +568,7 @@ public class LogicalEnclosureClientSample {
         dto.setName(resourceName);
         dto.setEnclosureGroupUri(enclosureGroup.getUri());
         dto.setEnclosureUris(Arrays.asList("/rest/enclosures/" + enclosureResourceId));
-        dto.setFirmwareBaselineUri(firmwareDriverClient.getFirmwareDriverByName(params, firmware).getUri());
+        dto.setFirmwareBaselineUri(firmwareDriverClient.getByName(firmware).get(0).getUri());
         dto.setForceInstallFirmware(false);
         return dto;
     }

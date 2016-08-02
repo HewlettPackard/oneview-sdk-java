@@ -40,6 +40,7 @@ import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.server.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.server.ServerHardwareTypeClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareBundleClient;
+import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
 import com.hp.ov.sdk.rest.client.storage.StoragePoolClient;
 import com.hp.ov.sdk.rest.client.storage.StorageSystemClient;
@@ -81,6 +82,7 @@ public class OneViewClient {
     private ServerHardwareTypeClient serverHardwareTypeClient;
 
     private FirmwareBundleClient firmwareBundleClient;
+    private FirmwareDriverClient firmwareDriverClient;
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
         this.baseClient = new BaseClient(params,
@@ -186,6 +188,10 @@ public class OneViewClient {
 
     public synchronized FirmwareBundleClient firmwareBundle() {
         return this.getClient(this.firmwareBundleClient, FirmwareBundleClient.class);
+    }
+
+    public synchronized FirmwareDriverClient firmwareDriver() {
+        return this.getClient(this.firmwareDriverClient, FirmwareDriverClient.class);
     }
 
     private <T> T getClient(T client, Class<T> clientClass) {

@@ -44,7 +44,6 @@ import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.EnclosureClient;
 import com.hp.ov.sdk.rest.client.EnclosureClientImpl;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
-import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -81,7 +80,7 @@ public class EnclosureClientSample {
         OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
 
         this.enclosureClient = EnclosureClientImpl.getClient();
-        this.firmwareDriverClient = FirmwareDriverClientImpl.getClient();
+        this.firmwareDriverClient = oneViewClient.firmwareDriver();
         this.enclosureGroupClient = oneViewClient.enclosureGroup();
     }
 
@@ -827,7 +826,7 @@ public class EnclosureClientSample {
         dto.setLicensingIntent(LicensingIntent.OneView);
         dto.setForce(false);
         dto.setEnclosureGroupUri(enclosureGroupUri);
-        dto.setFirmwareBaselineUri(firmwareDriverClient.getFirmwareDriverByName(params, firmware).getUri());
+        dto.setFirmwareBaselineUri(firmwareDriverClient.getByName(firmware).get(0).getUri());
         dto.setUpdateFirmwareOn(FwBaselineOptions.EnclosureOnly);
         dto.setForceInstallFirmware(false);
         return dto;
@@ -836,7 +835,7 @@ public class EnclosureClientSample {
     private FwBaselineConfig buildFwBaselineConfig() {
         FwBaselineConfig fwBaselineConfigDto = new FwBaselineConfig();
 
-        fwBaselineConfigDto.setFwBaselineUri(firmwareDriverClient.getFirmwareDriverByName(params, firmware).getUri());
+        fwBaselineConfigDto.setFwBaselineUri(firmwareDriverClient.getByName(firmware).get(0).getUri());
         fwBaselineConfigDto.setIsFwManaged(true);
         fwBaselineConfigDto.setFirmwareUpdateOn("EnclosureOnly");
         fwBaselineConfigDto.setForceInstallFirmware(false);
