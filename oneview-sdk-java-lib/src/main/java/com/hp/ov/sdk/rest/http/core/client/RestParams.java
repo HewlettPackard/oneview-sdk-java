@@ -38,7 +38,6 @@ public class RestParams {
     private String hostname = null;
     private String userName = null;
     private String password = null;
-    private Map<String, String> headers = new HashMap<String, String>();
     private String locale = null;
     private String domain = "LOCAL";
 
@@ -55,12 +54,6 @@ public class RestParams {
 
     private TrustManager trustManager = null;
     private HostnameVerifier hostVerifier = null;
-
-    public RestParams() {
-        headers.put("Accept", "application/json");
-        headers.put("Content-Type", "application/json; charset=UTF-8");
-        headers.put("accept-language", "en_US");
-    }
 
     public String getRoutingKey() {
         return routingKey;
@@ -185,14 +178,6 @@ public class RestParams {
 
     public void setPassword(final String password) {
         this.password = password;
-    }
-
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
-
-    public void setHeaders(Map<String, String> headers) {
-        this.headers = headers;
     }
 
     public String getLocale() {

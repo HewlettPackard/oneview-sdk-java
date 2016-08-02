@@ -18,6 +18,7 @@ package com.hp.ov.sdk.rest.client.server;
 
 import static org.mockito.BDDMockito.then;
 
+import org.apache.http.entity.ContentType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -122,6 +123,8 @@ public class EnclosureGroupClientTest {
                 + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID
                 + "/" + ResourceUris.ENCLOSURE_GROUP_SCRIPT_URI;
         Request request = new Request(HttpMethodType.PUT, expectedUri, ANY_ENCLOSURE_GROUP_CONFIGURATION_SCRIPT);
+
+        request.setContentType(ContentType.TEXT_PLAIN);
 
         then(baseClient).should().executeRequest(request, String.class);
     }

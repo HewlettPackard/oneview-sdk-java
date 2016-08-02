@@ -15,6 +15,7 @@
  */
 package com.hp.ov.sdk.rest.client.server;
 
+import org.apache.http.entity.ContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -190,7 +191,7 @@ public class EnclosureGroupClient {
                         ResourceUris.ENCLOSURE_GROUP_SCRIPT_URI),
                 scriptData);
 
-        //FIXME [svoboda] Content-Type must be moved from RestParams to Request
+        request.setContentType(ContentType.TEXT_PLAIN);
 
         /*
         in this particular request, even though the documentation states that the content type

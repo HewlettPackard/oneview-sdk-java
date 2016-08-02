@@ -46,7 +46,7 @@ public class LogicalInterconnectGroupClient {
      *            The resource identifier for logical interconnect group as seen in HPE OneView.
      * @return {@link LogicalInterconnectGroup} containing the logical interconnect group details.
      */
-    public LogicalInterconnectGroup getById(final String resourceId) {
+    public LogicalInterconnectGroup getById(String resourceId) {
         LOGGER.info("LogicalInterconnectGroupClient : getById : Start");
 
         LogicalInterconnectGroup lig = baseClient.getResource(
@@ -84,7 +84,7 @@ public class LogicalInterconnectGroupClient {
      * @return {@link ResourceCollection}&lt;{@link LogicalInterconnectGroup}&gt; containing the logical
      * interconnect group details.
      */
-    public ResourceCollection<LogicalInterconnectGroup> getByName(final String name) {
+    public ResourceCollection<LogicalInterconnectGroup> getByName(String name) {
         LOGGER.info("LogicalInterconnectGroupClient : getByName : Start");
 
         ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = baseClient.getResourceCollection(
@@ -108,7 +108,7 @@ public class LogicalInterconnectGroupClient {
      *            Flag input to process request asynchronously or synchronously.
      * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 create(final LogicalInterconnectGroup logicalInterconnectGroupDto, final boolean aSync) {
+    public TaskResourceV2 create(LogicalInterconnectGroup logicalInterconnectGroupDto, boolean aSync) {
         LOGGER.info("LogicalInterconnectGroupClient : create : Start");
 
         TaskResourceV2 taskResource = baseClient.createResource(
@@ -134,7 +134,7 @@ public class LogicalInterconnectGroupClient {
      *            Flag input to process request asynchronously or synchronously.
      * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 update(final String resourceId, final LogicalInterconnectGroup logicalInterconnectGroupDto, final boolean aSync) {
+    public TaskResourceV2 update(String resourceId, LogicalInterconnectGroup logicalInterconnectGroupDto, boolean aSync) {
         LOGGER.info("LogicalInterconnectGroupClient : update : Start");
 
         TaskResourceV2 taskResource = baseClient.updateResource(
@@ -156,7 +156,7 @@ public class LogicalInterconnectGroupClient {
      *            Flag input to process request asynchronously or synchronously.
      * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 delete(final String resourceId, final boolean aSync) {
+    public TaskResourceV2 delete(String resourceId, boolean aSync) {
         LOGGER.info("LogicalInterconnectGroupClient : delete : Start");
 
         TaskResourceV2 taskResource = baseClient.deleteResource(
@@ -215,7 +215,7 @@ public class LogicalInterconnectGroupClient {
      *            The settingId for logical interconnect group as seen in HPE OneView.
      * @return {@link InterconnectSettingsV2} containing the interconnect setting details.
      */
-    public InterconnectSettingsV2 getInterconnectSettings(final String resourceId, final String settingId) {
+    public InterconnectSettingsV2 getInterconnectSettings(String resourceId, String settingId) {
         LOGGER.info("LogicalInterconnectGroupClient : getInterconnectSettings : Start");
 
         InterconnectSettingsV2 settings = baseClient.getResource(

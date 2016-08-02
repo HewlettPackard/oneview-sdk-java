@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.http.entity.ContentType;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
@@ -34,6 +35,7 @@ public class Request {
 
     private Map<String, String> query;
     private Optional<Object> entity;
+    private ContentType contentType;
     private boolean forceTaskReturn;
     private int timeout;
 
@@ -46,6 +48,7 @@ public class Request {
         this.uri = uri;
 
         this.entity = Optional.fromNullable(entity);
+        this.contentType = ContentType.APPLICATION_JSON;
         this.forceTaskReturn = false;
         this.timeout = 60000;
     }
@@ -75,12 +78,30 @@ public class Request {
         return query;
     }
 
+    public boolean hasEntity() {
+        return entity.isPresent();
+    }
+
     public Object getEntity() {
         return entity.orNull();
     }
 
     public void setEntity(Object entity) {
         this.entity = Optional.fromNullable(entity);
+    }
+
+    /**
+     * @return the contentType
+     */
+    public ContentType getContentType() {
+        return contentType;
+    }
+
+    /**
+     * @param contentType the contentType to set
+     */
+    public void setContentType(ContentType contentType) {
+        this.contentType = contentType;
     }
 
     public boolean isForceTaskReturn() {
@@ -112,6 +133,7 @@ public class Request {
                     .append(uri, request.uri)
                     .append(query, request.query)
                     .append(entity, request.entity)
+                    .append(contentType, request.contentType)
                     .append(timeout, request.timeout)
                     .isEquals();
 
@@ -126,6 +148,7 @@ public class Request {
                 .append(uri)
                 .append(query)
                 .append(entity)
+                .append(contentType)
                 .append(timeout)
                 .append(forceTaskReturn)
                 .toHashCode();
