@@ -67,6 +67,12 @@ public class ResourceUris {
     public static final String LOGIN_SESSIONS = "/rest/login-sessions";
     public static final String MANAGED_PORTS_STORAGE_SYSTEM_URI = "managedPorts";
     public static final String NETWORK_SETS_URI = "/rest/network-sets";
+    public static final String POWER_DEVICE_DISCOVERY_URI = "/rest/power-devices/discover";
+    public static final String POWER_DEVICE_POWER_STATE_URI = "powerState";
+    public static final String POWER_DEVICE_REFRESH_STATE_URI = "refreshState";
+    public static final String POWER_DEVICE_UID_STATE_URI = "uidState";
+    public static final String POWER_DEVICE_UTILIZATION_URI = "utilization";
+    public static final String POWER_DEVICE_SYNCHRONOUS_URI = "synchronous";
     public static final String POWER_DEVICE_URI = "/rest/power-devices";
     public static final String POWER_STATE_URI = "powerState";
     public static final String PROFILE_PORTS_URI = SERVER_PROFILE_URI + "/profile-ports";

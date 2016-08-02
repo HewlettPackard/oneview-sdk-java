@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.facilities;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ImportPdd;
 import com.hp.ov.sdk.dto.Light;
 import com.hp.ov.sdk.dto.OutletState;
@@ -25,560 +26,186 @@ import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.UtilizationData;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKBadRequestException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.PowerDeliveryDeviceClient;
-import com.hp.ov.sdk.rest.client.PowerDeliveryDeviceClientImpl;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
+import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
 public class PowerDeliveryDeviceClientSample {
 
-    private final PowerDeliveryDeviceClient powerDeliveryDeviceClient;
-
-    private RestParams params;
-    private TaskResourceV2 taskResourceV2;
-
     // test values - user input
     // ================================
-    private static final String resourceName = "172.18.8.11, PDU 1, L6,Outlet1";
-    private static final String resourceId = "35323930-4936-4450-5531-303053474820_6_1";
-    private static final String hostname = "172.18.8.11";
-    private static final String username = "dcs";
-    private static final String password = "dcs";
+    private static final String RESOURCE_ID = "66a80189-d239-4505-878c-7244c8fddc9b";
+    private static final String RESOURCE_NAME = "172.18.8.11, PDU 1, L6,Outlet1";
+    private static final String SAMPLE_RESOURCE_NAME = "SamplePDD";
+    private static final String SAMPLE_RESOURCE_NAME_UPDATED = "SamplePDD-Updated";
+    private static final String HOSTNAME = "172.18.8.11";
+    private static final String USERNAME = "dcs";
+    private static final String PASSWORD = "dcs";
     // ================================
 
+    private final PowerDeliveryDeviceClient client;
+
     private PowerDeliveryDeviceClientSample() {
-        powerDeliveryDeviceClient = PowerDeliveryDeviceClientImpl.getClient();
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
+        client = oneViewClient.powerDeliveryDevice();
     }
 
-    private void getPowerDeliveryDeviceById() throws InstantiationException, IllegalAccessException {
-        PowerDeliveryDevice powerDeliveryDeviceDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getPowerDeliveryDeviceById() {
+        PowerDeliveryDevice powerDeliveryDevice = this.client.getById(RESOURCE_ID);
 
-            // then make sdk service call to get resource
-            powerDeliveryDeviceDto = powerDeliveryDeviceClient.getPowerDeliveryDeviceById(params, resourceId);
-
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceById : powerDeliveryDevice object returned to client : "
-                    + powerDeliveryDeviceDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceById : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceById : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceById : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceById : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceById : arguments are null ");
-            return;
-        }
-
+        System.out.println("PowerDeliveryDeviceClientSample : getPowerDeliveryDeviceById : " +
+                "PowerDeliveryDevice object returned to client : " + powerDeliveryDevice.toJsonString());
     }
 
-    private void getAllPowerDeliveryDevices() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
-            SDKNoSuchUrlException {
-        ResourceCollection<PowerDeliveryDevice> powerDeliveryDeviceCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getAllPowerDeliveryDevices() {
+        ResourceCollection<PowerDeliveryDevice> powerDeliveryDevices = this.client.getAll();
 
-            // then make sdk service call to get resource
-            powerDeliveryDeviceCollectionDto = powerDeliveryDeviceClient.getAllPowerDeliveryDevices(params);
-
-            System.out.println("PowerDeliveryDeviceClientTest : getAllPowerDeliveryDevices : powerDeliveryDevice object returned to client : "
-                    + powerDeliveryDeviceCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getAllPowerDeliveryDevices : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getAllPowerDeliveryDevices : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : getAllPowerDeliveryDevices : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getAllPowerDeliveryDevices : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getAllPowerDeliveryDevices : arguments are null ");
-            return;
-        }
+        System.out.println("PowerDeliveryDeviceClientSample : getAllPowerDeliveryDevices : " +
+                "PowerDeliveryDevices returned to client : " + powerDeliveryDevices.toJsonString());
     }
 
-    private void getPowerDeliveryDeviceByName() throws InstantiationException, IllegalAccessException {
-        PowerDeliveryDevice powerDeliveryDeviceDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getPowerDeliveryDeviceByName() {
+        PowerDeliveryDevice powerDeliveryDevice = this.client.getByName(RESOURCE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            powerDeliveryDeviceDto = powerDeliveryDeviceClient.getPowerDeliveryDeviceByName(params, resourceName);
-
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceByName : powerDeliveryDevice object returned to client : "
-                    + powerDeliveryDeviceDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceByName : resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceByName : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceByName : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceByName : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceByName : arguments are null ");
-            return;
-        }
-
+        System.out.println("PowerDeliveryDeviceClientSample : getPowerDeliveryDeviceByName : " +
+                "PowerDeliveryDevice object returned to client : " + powerDeliveryDevice.toJsonString());
     }
 
-    private void getPowerDeliveryDevicePowerState() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void addPowerDeliveryDevice() {
+        PowerDeliveryDevice powerDeliveryDevice = new PowerDeliveryDevice();
+        powerDeliveryDevice.setName(SAMPLE_RESOURCE_NAME);
+        powerDeliveryDevice.setRatedCapacity(40);
 
-            Power power = powerDeliveryDeviceClient.getPowerDeliveryDevicePowerState(params, resourceId);
+        PowerDeliveryDevice addedPowerDeliveryDevice = this.client.add(powerDeliveryDevice);
 
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDevicePowerState : Power object returned to client : "
-                    + power.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDevicePowerState : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDevicePowerState : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDevicePowerState : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDevicePowerState : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDevicePowerState : arguments are null ");
-            return;
-        }
-
+        System.out.println("PowerDeliveryDeviceClientSample : addPowerDeliveryDevice : " +
+                "PowerDeliveryDevice object returned to client : " + addedPowerDeliveryDevice.toJsonString());
     }
 
-    private void updatePowerDeliveryDevicePowerState() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void addPowerDeliveryDeviceByDiscover() {
+        ImportPdd importPdd = new ImportPdd();
 
-            OutletState outletStateDto = new OutletState();
-            outletStateDto.setPowerState(Power.On);
+        importPdd.setHostname(HOSTNAME);
+        importPdd.setUsername(USERNAME);
+        importPdd.setPassword(PASSWORD);
+        importPdd.setForce(true);
 
-            taskResourceV2 = powerDeliveryDeviceClient.updatePowerDeliveryDevicePowerState(params, resourceId, outletStateDto, false);
+        TaskResourceV2 task = this.client.add(importPdd, false);
 
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDevicePowerState : task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDevicePowerState : resource you are looking is not found");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDevicePowerState : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDevicePowerState : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDevicePowerState : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDevicePowerState : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out
-                    .println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDevicePowerState : errors in task, please check task resource for more details ");
-            return;
-        }
+        System.out.println("PowerDeliveryDeviceClientSample : addPowerDeliveryDeviceByDiscover : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
-    private void updatePowerDeliveryDeviceRefreshState() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updatePowerDeliveryDevice() {
+        PowerDeliveryDevice powerDeliveryDevice = this.client.getByName(SAMPLE_RESOURCE_NAME).get(0);
+        String resourceId = powerDeliveryDevice.getResourceId();
 
+        powerDeliveryDevice.setName(SAMPLE_RESOURCE_NAME_UPDATED);
 
-            PowerDeliveryDeviceRefreshRequest refreshRequest = new PowerDeliveryDeviceRefreshRequest();
-            refreshRequest.setRefreshState(RefreshState.RefreshPending);
+        PowerDeliveryDevice updatedPowerDeliveryDevice = this.client.update(resourceId,
+                powerDeliveryDevice);
 
-            taskResourceV2 = powerDeliveryDeviceClient.updatePowerDeliveryDeviceRefreshState(params, resourceId, refreshRequest , false);
-
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDeviceRefreshState : task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDeviceRefreshState : resource you are looking is not found");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDeviceRefreshState : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDeviceRefreshState : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDeviceRefreshState : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDeviceRefreshState : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out
-                    .println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDeviceRefreshState : errors in task, please check task resource for more details ");
-            return;
-        }
+        System.out.println("PowerDeliveryDeviceClientSample : updatePowerDeliveryDevice : " +
+                "PowerDeliveryDevice object returned to client : " + updatedPowerDeliveryDevice.toJsonString());
     }
 
-    private void getPowerDeliveryDeviceUidState() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void removePowerDeliveryDevice() {
+        PowerDeliveryDevice powerDeliveryDevice = this.client.getByName(SAMPLE_RESOURCE_NAME).get(0);
 
-            Light light = powerDeliveryDeviceClient.getPowerDeliveryDeviceUidState(params, resourceId);
+        TaskResourceV2 task = this.client.remove(powerDeliveryDevice.getResourceId(), false);
 
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceUidState : Light object returned to client : "
-                    + light.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceUidState : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceUidState : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceUidState : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceUidState : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceUidState : arguments are null ");
-            return;
-        }
-
+        System.out.println("PowerDeliveryDeviceClientSample : removePowerDeliveryDevice : " +
+                "Task object returned to client : " + task);
     }
 
-    private void updatePowerDeliveryDeviceUidState() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void removePowerDeliveryDeviceByFilter() {
+        String filter = "name='" + SAMPLE_RESOURCE_NAME +"'";
+        TaskResourceV2 task = this.client.removeByFilter(filter, false);
 
-            OutletState outletStateDto = new OutletState();
-            outletStateDto.setUidState(Light.On);
-
-            taskResourceV2 = powerDeliveryDeviceClient.updatePowerDeliveryDeviceUidState(params, resourceId, outletStateDto, false);
-
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDeviceUidState : task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDeviceUidState : resource you are looking is not found");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDeviceUidState : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDeviceUidState : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDeviceUidState : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDeviceUidState : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out
-                    .println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDeviceUidState : errors in task, please check task resource for more details ");
-            return;
-        }
+        System.out.println("PowerDeliveryDeviceClientSample : removePowerDeliveryDeviceByFilter : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
-    private void addPowerDeliveryDevice() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void removePowerDeliveryDeviceSynchronously() {
+        PowerDeliveryDevice powerDeliveryDevice = this.client.getByName(SAMPLE_RESOURCE_NAME).get(0);
 
-            // create powerDeliveryDevice request body
-            PowerDeliveryDevice newPDD = new PowerDeliveryDevice();
-            newPDD.setName("myPDD");
-            newPDD.setRatedCapacity(40);
+        String response = this.client.remove(powerDeliveryDevice.getResourceId());
 
-            newPDD = powerDeliveryDeviceClient.addPowerDeliveryDevice(params, newPDD, false);
-
-            System.out.println("PowerDeliveryDeviceClientTest : addPowerDeliveryDevice : Power Delivery Device returned to client : "
-                    + newPDD.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : addPowerDeliveryDevice : resource you are looking is not found");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : addPowerDeliveryDevice : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : addPowerDeliveryDevice : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : addPowerDeliveryDevice : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : addPowerDeliveryDevice : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out
-                    .println("PowerDeliveryDeviceClientTest : addPowerDeliveryDevice : errors in task, please check task resource for more details ");
-            return;
-        }
-
+        System.out.println("PowerDeliveryDeviceClientSample : removePowerDeliveryDeviceSynchronously : " +
+                "Response returned to client : " + response);
     }
 
-    private void addPowerDeliveryDeviceByDiscover() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getPowerDeliveryDevicePowerState() {
+        PowerDeliveryDevice powerDeliveryDevice = this.client.getByName(RESOURCE_NAME).get(0);
 
-            // create powerDeliveryDevice request body
-            final ImportPdd importPddDto = new ImportPdd();
-            importPddDto.setHostname(hostname);
-            importPddDto.setUsername(username);
-            importPddDto.setPassword(password);
-            importPddDto.setForce(true);
+        Power power = client.getPowerState(powerDeliveryDevice.getResourceId());
 
-            taskResourceV2 = powerDeliveryDeviceClient.addPowerDeliveryDeviceByDiscover(params, importPddDto, false);
-
-            System.out.println("PowerDeliveryDeviceClientTest : addPowerDeliveryDeviceByDiscover : task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : addPowerDeliveryDeviceByDiscover : resource you are looking is not found");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : addPowerDeliveryDeviceByDiscover : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : addPowerDeliveryDeviceByDiscover : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : addPowerDeliveryDeviceByDiscover : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : addPowerDeliveryDeviceByDiscover : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out
-                    .println("PowerDeliveryDeviceClientTest : addPowerDeliveryDeviceByDiscover : errors in task, please check task resource for more details ");
-            return;
-        }
-
+        System.out.println("PowerDeliveryDeviceClientSample : getPowerDeliveryDevicePowerState : " +
+                "Power object returned to client : " + power);
     }
 
-    private void updatePowerDeliveryDevice() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        PowerDeliveryDevice powerDeliveryDeviceDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updatePowerDeliveryDevicePowerState() {
+        PowerDeliveryDevice powerDeliveryDevice = this.client.getByName(RESOURCE_NAME).get(0);
+        OutletState outletState = new OutletState();
 
-            // fetch resource Id using resource name
-            powerDeliveryDeviceDto = powerDeliveryDeviceClient.getPowerDeliveryDeviceByName(params, resourceName);
+        outletState.setPowerState(Power.On);
 
-            powerDeliveryDeviceDto.setName(resourceName + "_Update");
+        TaskResourceV2 task = this.client.updatePowerState(powerDeliveryDevice.getResourceId(), outletState, false);
 
-            if (null != powerDeliveryDeviceDto.getUri()) {
-                resourceId = UrlUtils.getResourceIdFromUri(powerDeliveryDeviceDto.getUri());
-            }
-
-            powerDeliveryDeviceDto = powerDeliveryDeviceClient.updatePowerDeliveryDevice(params, resourceId, powerDeliveryDeviceDto, false);
-
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDevice : " + "powerDeliveryDevice object returned to client : "
-                    + powerDeliveryDeviceDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDevice :"
-                    + " resource you are looking is not found for update ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDevice :" + " bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDevice :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDevice :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDevice :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDevice : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : updatePowerDeliveryDevice : " + "errors in task, please check task "
-                    + "resource for more details ");
-            return;
-        }
+        System.out.println("PowerDeliveryDeviceClientSample : updatePowerDeliveryDevicePowerState : " +
+                "Task object returned to client : " + task);
     }
 
-    private void removePowerDeliveryDevice() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updatePowerDeliveryDeviceRefreshState() {
+        PowerDeliveryDevice powerDeliveryDevice = this.client.getByName(RESOURCE_NAME).get(0);
+        PowerDeliveryDeviceRefreshRequest refreshState = new PowerDeliveryDeviceRefreshRequest();
 
-            taskResourceV2 = powerDeliveryDeviceClient.removePowerDeliveryDevice(params, resourceId, false);
+        refreshState.setRefreshState(RefreshState.RefreshPending);
 
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDevice : task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDevice : resource you are looking is not found for delete ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDevice : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDevice : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDevice : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDevice : arguments are null ");
-            return;
-        }
+        TaskResourceV2 task = this.client.updateRefreshState(powerDeliveryDevice.getResourceId(), refreshState, false);
 
+        System.out.println("PowerDeliveryDeviceClientSample : updatePowerDeliveryDeviceRefreshState : " +
+                "Task object returned to client : " + task);
     }
 
-    private void removePowerDeliveryDeviceSynchronously() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getPowerDeliveryDeviceUidState() {
+        PowerDeliveryDevice powerDeliveryDevice = this.client.getByName(RESOURCE_NAME).get(0);
 
-            String result = powerDeliveryDeviceClient.removePowerDeliveryDeviceSynchronously(params, resourceId);
+        Light light = client.getUidState(powerDeliveryDevice.getResourceId());
 
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDeviceSynchronously : String object returned to client : "
-                    + result);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDeviceSynchronously : resource you are looking is not found for delete ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDeviceSynchronously : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDeviceSynchronously : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDeviceSynchronously : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDeviceSynchronously : arguments are null ");
-            return;
-        }
-
+        System.out.println("PowerDeliveryDeviceClientSample : getPowerDeliveryDeviceUidState : " +
+                "Light object returned to client : " + light);
     }
 
-    private void removePowerDeliveryDeviceByFilter() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updatePowerDeliveryDeviceUidState() {
+        PowerDeliveryDevice powerDeliveryDevice = this.client.getByName(RESOURCE_NAME).get(0);
+        OutletState outletStateState = new OutletState();
 
-            String filter = "'name' matches 'my%'";
-            taskResourceV2 = powerDeliveryDeviceClient.removePowerDeliveryDeviceByFilter(params, filter, false);
+        outletStateState.setUidState(Light.On);
 
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDeviceByFilter : task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out
-                    .println("PowerDeliveryDeviceClientTest : removePowerDeliveryDeviceByFilter : resource you are looking is not found for delete ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDeviceByFilter : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDeviceByFilter : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDeviceByFilter : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : removePowerDeliveryDeviceByFilter : arguments are null ");
-            return;
-        }
+        TaskResourceV2 task = this.client.updateUidState(powerDeliveryDevice.getResourceId(), outletStateState, false);
+
+        System.out.println("PowerDeliveryDeviceClientSample : updatePowerDeliveryDeviceUidState : " +
+                "Task object returned to client : " + task);
     }
 
-    private void getPowerDeliveryDeviceUtilization() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getPowerDeliveryDeviceUtilization() {
+        PowerDeliveryDevice powerDeliveryDevice = this.client.getByName(RESOURCE_NAME).get(0);
 
-            UtilizationData utilizationDto = powerDeliveryDeviceClient.getPowerDeliveryDeviceUtilization(params, resourceId);
+        UtilizationData utilization = client.getUtilization(powerDeliveryDevice.getResourceId());
 
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceUtilization : UtilizationData object returned to client : "
-                    + utilizationDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceUtilization : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceUtilization : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceUtilization : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceUtilization : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("PowerDeliveryDeviceClientTest : getPowerDeliveryDeviceUtilization : arguments are null ");
-            return;
-        }
-
+        System.out.println("PowerDeliveryDeviceClientSample : getPowerDeliveryDeviceUtilization : " +
+                "UtilizationData object returned to client : " + JsonPrettyPrinter.print(utilization));
     }
 
     public static void main(String[] args) throws InstantiationException, IllegalAccessException {
         PowerDeliveryDeviceClientSample client = new PowerDeliveryDeviceClientSample();
 
         client.getPowerDeliveryDeviceById();
+
+        client.addPowerDeliveryDevice();
+        client.addPowerDeliveryDeviceByDiscover();
+
         client.getAllPowerDeliveryDevices();
         client.getPowerDeliveryDeviceByName();
 
@@ -591,9 +218,6 @@ public class PowerDeliveryDeviceClientSample {
         client.updatePowerDeliveryDeviceUidState();
 
         client.getPowerDeliveryDeviceUtilization();
-
-        client.addPowerDeliveryDevice();
-        client.addPowerDeliveryDeviceByDiscover();
 
         client.updatePowerDeliveryDevice();
 
