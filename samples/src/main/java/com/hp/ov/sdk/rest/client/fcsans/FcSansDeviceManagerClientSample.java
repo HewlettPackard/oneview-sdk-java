@@ -18,25 +18,18 @@ package com.hp.ov.sdk.rest.client.fcsans;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
 import com.hp.ov.sdk.dto.Property;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SanProviderResponse;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKBadRequestException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.FcSansDeviceManagerClient;
-import com.hp.ov.sdk.rest.client.FcSansDeviceManagerClientImpl;
 import com.hp.ov.sdk.rest.client.FcSansProviderClient;
 import com.hp.ov.sdk.rest.client.FcSansProviderClientImpl;
+import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.storage.FcSanDeviceManagerClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
@@ -44,274 +37,129 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
  * san manager  of HPE OneView. It invokes APIs of DeviceManagerClient which is in sdk library to
  * perform GET/PUT/POST/DELETE operations on san manager resource
  */
-
 public class FcSansDeviceManagerClientSample {
 
-    private final FcSansDeviceManagerClient fcSansDeviceManagerClient;
+    private final FcSanDeviceManagerClient fcSansDeviceManagerClient;
     private final FcSansProviderClient fcSansProviderClient;
-
-    private RestParams params;
-    private TaskResourceV2 taskResourceV2;
 
     // test values - user input
     // ================================
-    private static final String providerName = "Brocade Network Advisor";
-    private static final String resourceId = "f7aae238-64a3-4008-878c-d46d0a5798fe";
-    private static final String resourceName = "172.18.15.1";
-    private static final String hostName = "Host";
-    private static final String hostValue = "172.18.15.1";
-    private static final String userName = "Username";
-    private static final String userValue = "dcs";
-    private static final String passwordName = "Password";
-    private static final String passwordValue = "dcs";
-    private static final String portName = "Port";
-    private static final String useSSLName = "UseSsl";
-    private static final String useSSLValue = "true";
+    private static final String PROVIDER_NAME = "Brocade Network Advisor";
+    private static final String RESOURCE_ID = "841d3cdc-81c0-4644-baaa-b16b2df77547";
+    private static final String RESOURCE_NAME = "172.18.15.1";
+    private static final String HOSTNAME = "Host";
+    private static final String HOSTNAME_VALUE = "172.18.15.1";
+    private static final String USERNAME = "Username";
+    private static final String USERNAME_VALUE = "dcs";
+    private static final String PASSWORD = "Password";
+    private static final String PASSWORD_VALUE = "dcs";
+    private static final String PORT = "Port";
+    private static final String USE_SSL = "UseSsl";
+    private static final String USE_SSL_VALUE = "true";
     // ================================
 
     private FcSansDeviceManagerClientSample() {
-        fcSansDeviceManagerClient = FcSansDeviceManagerClientImpl.getClient();
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        
+        fcSansDeviceManagerClient = oneViewClient.fcSanDeviceManager();
         fcSansProviderClient = FcSansProviderClientImpl.getClient();
     }
 
-    private void createDeviceManager() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getFcSanDeviceManagerById() {
+        DeviceManagerResponse deviceManager = this.fcSansDeviceManagerClient.getById(RESOURCE_ID);
 
-            final SanProviderResponse sanProviderResponseDto = getProviderUrl(params, providerName);
-
-            // create network request body
-            final DeviceManagerResponse addDeviceManagerResponseDto = buildTestDeviceManagerDto(sanProviderResponseDto);
-
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = fcSansDeviceManagerClient.createDeviceManager(params,
-                    sanProviderResponseDto.getDeviceManagersUri(), addDeviceManagerResponseDto, false);
-
-            System.out.println("DeviceManagerClientTest : createDeviceManager : task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("DeviceManagerClientTest : createDeviceManager : resource you are looking is not found ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("DeviceManagerClientTest : createDeviceManager : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("DeviceManagerClientTest : createDeviceManager : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("DeviceManagerClientTest : createDeviceManager : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("DeviceManagerClientTest : createDeviceManager : arguments are null ");
-            return;
-        }
+        System.out.println("FcSanDeviceManagerClientSample : getFcSanDeviceManager : " +
+                "DeviceManagerResponse object returned to client : " + deviceManager.toJsonString());
     }
 
-    private void getDeviceManager() throws InstantiationException, IllegalAccessException {
-        DeviceManagerResponse deviceManagerResponseDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getAllFcSanDeviceManagers() {
+        ResourceCollection<DeviceManagerResponse> deviceManagers = this.fcSansDeviceManagerClient.getAll();
 
-            // then make sdk service call to get resource
-            deviceManagerResponseDto = fcSansDeviceManagerClient.getDeviceManager(params, resourceId);
-
-            System.out.println("DeviceManagerClientTest : getDeviceManager :" + " device manager object returned to client : "
-                    + deviceManagerResponseDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("DeviceManagerClientTest : getDeviceManager :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("DeviceManagerClientTest : getDeviceManager :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("DeviceManagerClientTest : getDeviceManager :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("DeviceManagerClientTest : getDeviceManager :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("DeviceManagerClientTest : getDeviceManager :" + " arguments are null ");
-            return;
-        }
-
+        System.out.println("FcSanDeviceManagerClientSample : getAllFcSanDeviceManagers : " +
+                "DeviceManagers returned to client : " + deviceManagers.toJsonString());
     }
 
-    private void getAllDeviceManager() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
-            SDKNoSuchUrlException {
-        ResourceCollection<DeviceManagerResponse> deviceManagerResponseCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getFcSanDeviceManagerByName() {
+        DeviceManagerResponse deviceManager = this.fcSansDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            deviceManagerResponseCollectionDto = fcSansDeviceManagerClient.getAllDeviceManager(params);
-
-            System.out.println("DeviceManagerClientTest : getAllDeviceManager :" + " device manager object returned to client : "
-                    + deviceManagerResponseCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("DeviceManagerClientTest : getAllDeviceManager " + ": resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("DeviceManagerClientTest : getAllDeviceManager :" + " no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("DeviceManagerClientTest : getAllDeviceManager :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("DeviceManagerClientTest : getAllDeviceManager :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("DeviceManagerClientTest : getAllDeviceManager :" + " arguments are null ");
-            return;
-        }
-
+        System.out.println("FcSanDeviceManagerClientSample : getFcSanDeviceManagerByName : " +
+                "DeviceManagerResponse object returned to client : " + deviceManager.toJsonString());
     }
 
-    private void updateDeviceManager() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        DeviceManagerResponse deviceManagerResponseDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void addFcSanDeviceManager() {
+        RestParams params = HPOneViewCredential.createCredentials();
+        SanProviderResponse sanProvider = fcSansProviderClient.getProviderByName(params, PROVIDER_NAME);
+        DeviceManagerResponse deviceManager = this.buildDeviceManager(sanProvider);
 
-            // fetch resource Id using resource name
-            deviceManagerResponseDto = fcSansDeviceManagerClient.getDeviceManagerByName(params, resourceName);
-            deviceManagerResponseDto.setRefreshState(RefreshState.RefreshPending);
-            deviceManagerResponseDto = updateHostConnectionDetails(deviceManagerResponseDto);
+        TaskResourceV2 taskResource = fcSansDeviceManagerClient.add(sanProvider.getDeviceManagersUri(),
+                deviceManager, false);
 
-            if (null != deviceManagerResponseDto.getUri()) {
-                resourceId = UrlUtils.getResourceIdFromUri(deviceManagerResponseDto.getUri());
-            }
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = fcSansDeviceManagerClient.updateDeviceManager(params, resourceId,
-                    deviceManagerResponseDto, false, false);
-
-            System.out.println("DeviceManagerClientTest : updateDeviceManager : " + " task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("DeviceManagerClientTest : updateDeviceManager :"
-                    + " resource you are looking is not found for update ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("DeviceManagerClientTest : updateDeviceManager :" + " bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("DeviceManagerClientTest : updateDeviceManager :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("DeviceManagerClientTest : updateDeviceManager :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("DeviceManagerClientTest : updateDeviceManager :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("DeviceManagerClientTest : updateDeviceManager : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("DeviceManagerClientTest : updateDeviceManager : " + "errors in task, please check task "
-                    + "resource for more details ");
-            return;
-        }
+        System.out.println("FcSanDeviceManagerClientSample : addFcSanDeviceManager : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void deleteDeviceManager() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateFcSanDeviceManager() {
+        DeviceManagerResponse deviceManager = this.fcSansDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            String resourceId = fcSansDeviceManagerClient.getId(params, resourceName);
+        deviceManager = updateHostConnectionDetails(deviceManager);
+        deviceManager.setRefreshState(RefreshState.RefreshPending);
 
-            // then make sdk service call to get resource
-            taskResourceV2 = fcSansDeviceManagerClient.deleteDeviceManager(params, resourceId, false);
+        TaskResourceV2 taskResource = fcSansDeviceManagerClient.update(deviceManager.getResourceId(),
+                deviceManager, false);
 
-            System.out.println("DeviceManagerClientTest : deleteDeviceManager : " + "device manager object deleted!");
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("DeviceManagerClientTest : deleteDeviceManager:"
-                    + " resource you are looking is not found for delete ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("DeviceManagerClientTest : deleteDeviceManager:" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("DeviceManagerClientTest : deleteDeviceManager :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("DeviceManagerClientTest : deleteDeviceManager : " + "No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("DeviceManagerClientTest : deleteDeviceManager :" + " arguments are null ");
-            return;
-        }
+        System.out.println("FcSanDeviceManagerClientSample : updateFcSanDeviceManager : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private SanProviderResponse getProviderUrl(final RestParams params, final String providerName) {
-        return fcSansProviderClient.getProviderByName(params, providerName);
+    private void removeFcSanDeviceManager() {
+        DeviceManagerResponse deviceManager = this.fcSansDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
+        TaskResourceV2 taskResource = this.fcSansDeviceManagerClient.remove(deviceManager.getResourceId(), false);
+
+        System.out.println("FcSanDeviceManagerClientSample : removeFcSanDeviceManager : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private DeviceManagerResponse updateHostConnectionDetails(DeviceManagerResponse deviceManagerResponseDto) {
-        for (Property property : deviceManagerResponseDto.getConnectionInfo()) {
+    private DeviceManagerResponse updateHostConnectionDetails(DeviceManagerResponse deviceManager) {
+        for (Property property : deviceManager.getConnectionInfo()) {
             if (property.getName().equalsIgnoreCase("host")) {
-                property.setValue(hostValue);
+                property.setValue(HOSTNAME_VALUE);
             }
             if (property.getName().equalsIgnoreCase("password")) {
-                property.setValue(passwordValue);
+                property.setValue(PASSWORD_VALUE);
             }
         }
-        return deviceManagerResponseDto;
+        return deviceManager;
     }
 
-    private DeviceManagerResponse buildTestDeviceManagerDto(SanProviderResponse sanProviderResponseDto) {
+    private DeviceManagerResponse buildDeviceManager(SanProviderResponse sanProviderResponse) {
         DeviceManagerResponse deviceManagerResponseDto = new DeviceManagerResponse();
-        List<Property> connectionInfo = new ArrayList<Property>();
+        List<Property> connectionInfo = new ArrayList<>();
         String portValue = "";
-        for (Property property : sanProviderResponseDto.getDefaultConnectionInfo()) {
+        for (Property property : sanProviderResponse.getDefaultConnectionInfo()) {
             if (property.getDisplayName().contains("Port")) {
                 portValue = property.getValue();
             }
         }
 
         Property host = new Property();
-        host.setName(hostName);
-        host.setValue(hostValue);
+        host.setName(HOSTNAME);
+        host.setValue(HOSTNAME_VALUE);
 
         Property port = new Property();
-        port.setName(portName);
+        port.setName(PORT);
         port.setValue(portValue);
 
         Property user = new Property();
-        user.setName(userName);
-        user.setValue(userValue);
+        user.setName(USERNAME);
+        user.setValue(USERNAME_VALUE);
 
         Property password = new Property();
-        password.setName(passwordName);
-        password.setValue(passwordValue);
+        password.setName(PASSWORD);
+        password.setValue(PASSWORD_VALUE);
 
         Property useSsl = new Property();
-        useSsl.setName(useSSLName);
-        useSsl.setValue(useSSLValue);
+        useSsl.setName(USE_SSL);
+        useSsl.setValue(USE_SSL_VALUE);
 
         connectionInfo.add(host);
         connectionInfo.add(port);
@@ -327,10 +175,11 @@ public class FcSansDeviceManagerClientSample {
     public static void main(final String[] args) throws Exception {
         FcSansDeviceManagerClientSample client = new FcSansDeviceManagerClientSample();
 
-        client.createDeviceManager();
-        client.updateDeviceManager();
-        client.getAllDeviceManager();
-        client.getDeviceManager();
-        client.deleteDeviceManager();
+        client.addFcSanDeviceManager();
+        client.getFcSanDeviceManagerById();
+        client.getAllFcSanDeviceManagers();
+        client.getFcSanDeviceManagerByName();
+        client.updateFcSanDeviceManager();
+        client.removeFcSanDeviceManager();
     }
 }
