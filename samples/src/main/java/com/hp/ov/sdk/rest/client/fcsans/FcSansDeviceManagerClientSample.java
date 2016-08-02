@@ -25,10 +25,9 @@ import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SanProviderResponse;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.rest.client.FcSansProviderClient;
-import com.hp.ov.sdk.rest.client.FcSansProviderClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.storage.FcSanDeviceManagerClient;
+import com.hp.ov.sdk.rest.client.storage.FcSanProviderClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
@@ -39,8 +38,8 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
  */
 public class FcSansDeviceManagerClientSample {
 
-    private final FcSanDeviceManagerClient fcSansDeviceManagerClient;
-    private final FcSansProviderClient fcSansProviderClient;
+    private final FcSanDeviceManagerClient fcSanDeviceManagerClient;
+    private final FcSanProviderClient fcSanProviderClient;
 
     // test values - user input
     // ================================
@@ -61,37 +60,36 @@ public class FcSansDeviceManagerClientSample {
     private FcSansDeviceManagerClientSample() {
         OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
         
-        fcSansDeviceManagerClient = oneViewClient.fcSanDeviceManager();
-        fcSansProviderClient = FcSansProviderClientImpl.getClient();
+        fcSanDeviceManagerClient = oneViewClient.fcSanDeviceManager();
+        fcSanProviderClient = oneViewClient.fcSanProvider();
     }
 
     private void getFcSanDeviceManagerById() {
-        DeviceManagerResponse deviceManager = this.fcSansDeviceManagerClient.getById(RESOURCE_ID);
+        DeviceManagerResponse deviceManager = this.fcSanDeviceManagerClient.getById(RESOURCE_ID);
 
         System.out.println("FcSanDeviceManagerClientSample : getFcSanDeviceManager : " +
                 "DeviceManagerResponse object returned to client : " + deviceManager.toJsonString());
     }
 
     private void getAllFcSanDeviceManagers() {
-        ResourceCollection<DeviceManagerResponse> deviceManagers = this.fcSansDeviceManagerClient.getAll();
+        ResourceCollection<DeviceManagerResponse> deviceManagers = this.fcSanDeviceManagerClient.getAll();
 
         System.out.println("FcSanDeviceManagerClientSample : getAllFcSanDeviceManagers : " +
                 "DeviceManagers returned to client : " + deviceManagers.toJsonString());
     }
 
     private void getFcSanDeviceManagerByName() {
-        DeviceManagerResponse deviceManager = this.fcSansDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
+        DeviceManagerResponse deviceManager = this.fcSanDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
 
         System.out.println("FcSanDeviceManagerClientSample : getFcSanDeviceManagerByName : " +
                 "DeviceManagerResponse object returned to client : " + deviceManager.toJsonString());
     }
 
     private void addFcSanDeviceManager() {
-        RestParams params = HPOneViewCredential.createCredentials();
-        SanProviderResponse sanProvider = fcSansProviderClient.getProviderByName(params, PROVIDER_NAME);
+        SanProviderResponse sanProvider = fcSanProviderClient.getByName(PROVIDER_NAME);
         DeviceManagerResponse deviceManager = this.buildDeviceManager(sanProvider);
 
-        TaskResourceV2 taskResource = fcSansDeviceManagerClient.add(sanProvider.getDeviceManagersUri(),
+        TaskResourceV2 taskResource = fcSanDeviceManagerClient.add(sanProvider.getDeviceManagersUri(),
                 deviceManager, false);
 
         System.out.println("FcSanDeviceManagerClientSample : addFcSanDeviceManager : " +
@@ -99,12 +97,12 @@ public class FcSansDeviceManagerClientSample {
     }
 
     private void updateFcSanDeviceManager() {
-        DeviceManagerResponse deviceManager = this.fcSansDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
+        DeviceManagerResponse deviceManager = this.fcSanDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
 
         deviceManager = updateHostConnectionDetails(deviceManager);
         deviceManager.setRefreshState(RefreshState.RefreshPending);
 
-        TaskResourceV2 taskResource = fcSansDeviceManagerClient.update(deviceManager.getResourceId(),
+        TaskResourceV2 taskResource = fcSanDeviceManagerClient.update(deviceManager.getResourceId(),
                 deviceManager, false);
 
         System.out.println("FcSanDeviceManagerClientSample : updateFcSanDeviceManager : " +
@@ -112,8 +110,8 @@ public class FcSansDeviceManagerClientSample {
     }
 
     private void removeFcSanDeviceManager() {
-        DeviceManagerResponse deviceManager = this.fcSansDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
-        TaskResourceV2 taskResource = this.fcSansDeviceManagerClient.remove(deviceManager.getResourceId(), false);
+        DeviceManagerResponse deviceManager = this.fcSanDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
+        TaskResourceV2 taskResource = this.fcSanDeviceManagerClient.remove(deviceManager.getResourceId(), false);
 
         System.out.println("FcSanDeviceManagerClientSample : removeFcSanDeviceManager : " +
                 "Task object returned to client : " + taskResource.toJsonString());
