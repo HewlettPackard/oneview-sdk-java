@@ -30,6 +30,7 @@ import com.hp.ov.sdk.rest.client.networking.FabricClient;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.InterconnectTypeClient;
+import com.hp.ov.sdk.rest.client.networking.LogicalDownlinkClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchGroupClient;
@@ -79,6 +80,7 @@ public class OneViewClient {
     private StorageVolumeTemplateClient storageVolumeTemplateClient;
     private InterconnectTypeClient interconnectTypeClient;
     private LogicalInterconnectGroupClient logicalInterconnectGroupClient;
+    private LogicalDownlinkClient logicalDownlinkClient;
 
     private ServerHardwareClient serverHardwareClient;
     private ServerHardwareTypeClient serverHardwareTypeClient;
@@ -182,6 +184,10 @@ public class OneViewClient {
 
     public synchronized LogicalInterconnectGroupClient logicalInterconnectGroup() {
         return this.getClient(this.logicalInterconnectGroupClient, LogicalInterconnectGroupClient.class);
+    }
+
+    public synchronized LogicalDownlinkClient logicalDownlink() {
+        return this.getClient(this.logicalDownlinkClient, LogicalDownlinkClient.class);
     }
 
     public synchronized ServerHardwareClient serverHardware() {
