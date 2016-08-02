@@ -213,33 +213,6 @@ public class HttpRestClient {
         return processRequestType(restParams, requestBody, false);
     }
 
-    public String sendMultipartPostRequest(RestParams restParams, File file) throws SDKBadRequestException {
-        if (restParams.getType() != HttpMethodType.POST) {
-            throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
-                    null, null, null, SdkConstants.APPLIANCE, null);
-        }
-
-        try {
-            HttpPost post = new HttpPost(buildURI(restParams));
-
-            HttpEntity entity = MultipartEntityBuilder.create()
-                    .addBinaryBody("file", file)
-                    .setContentType(ContentType.MULTIPART_FORM_DATA)
-                    .build();
-
-            post.setEntity(entity);
-            post.setConfig(createRequestTimeoutConfiguration());
-            post.setHeader("uploadfilename", file.getName());
-
-            setRequestHeaders(restParams, post);
-
-            return getResponse(post, restParams, false);
-        } catch (IllegalArgumentException e) {
-            throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
-                    null, null, null, SdkConstants.APPLIANCE, e);
-        }
-    }
-
     /**
      * Process the request type to be sent to HPE OneView.
      *
@@ -372,6 +345,18 @@ public class HttpRestClient {
                         .setContentType(contentType)
                         .setText(request.getEntity().toString())
                         .build();
+            } else if (ContentType.MULTIPART_FORM_DATA == contentType) {
+                File file = (File) request.getEntity();
+                entity = MultipartEntityBuilder.create()
+                        .setContentType(contentType)
+                        .addBinaryBody("file", file)
+                        .build();
+
+                /*
+                TODO evaluate a new approach to deal with the headers
+                (perhaps having a headers field inside the Request)
+                */
+                base.setHeader("uploadfilename", file.getName());
             } else {
                 LOGGER.error("Unknown entity Content-Type");
 

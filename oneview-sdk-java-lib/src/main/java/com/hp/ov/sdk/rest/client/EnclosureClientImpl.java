@@ -286,9 +286,13 @@ public class EnclosureClientImpl implements EnclosureClient {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.ENCLOSURE, null);
         }
 
+        /*
+        TODO [svoboda] uncomment this code after the migration to the new client interface
+
         if (params.getApiVersion() == ApiVersion.V_300) {
             params.getHeaders().put("Content-Type", "application/json-patch+json");
         }
+        */
 
         // set the additional params
         params.setType(HttpMethodType.PATCH);
