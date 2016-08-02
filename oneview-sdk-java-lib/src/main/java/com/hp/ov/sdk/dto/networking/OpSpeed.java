@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +30,7 @@ public enum OpSpeed {
     Speed4G("Speed4G"),
     Speed8G("Speed8G"),
     Speed10G("Speed10G"),
+    Speed16G("Speed16G"),
     Auto("Auto"),
     Speed20G("Speed20G"),
     Speed40G("Speed40G"),
