@@ -15,22 +15,22 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /**
  * The SupportDump data transfer object (DTO) contains the information
  * used to generate a support dump for a logical enclosure.
  */
-
 public class SupportDump {
-    private String errorCode;
 
+    private String errorCode;
     private boolean encrypt = true;
 
     // By default, appliance content is included
     private boolean excludeApplianceDump = false;
 
-    public SupportDump()
-    {
-    }
+    public SupportDump() { }
 
     public SupportDump(final String errorCode, final boolean encrypt, final boolean excludeApplianceDump)
     {
@@ -61,5 +61,30 @@ public class SupportDump {
 
     public void setExcludeApplianceDump(final boolean excludeApplianceDump) {
         this.excludeApplianceDump = excludeApplianceDump;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof SupportDump) {
+            SupportDump that = (SupportDump) obj;
+
+            return new EqualsBuilder()
+                    .append(encrypt, that.encrypt)
+                    .append(excludeApplianceDump, that.excludeApplianceDump)
+                    .append(errorCode, that.errorCode)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(errorCode)
+                .append(encrypt)
+                .append(excludeApplianceDump)
+                .toHashCode();
     }
 }

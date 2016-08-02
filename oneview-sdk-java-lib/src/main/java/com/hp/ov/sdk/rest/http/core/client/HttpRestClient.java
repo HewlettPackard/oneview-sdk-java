@@ -293,14 +293,13 @@ public class HttpRestClient {
                 break;
             case PATCH:
                 HttpPatch patch = new HttpPatch(uri);
+                HttpEntity entity = EntityBuilder.create()
+                        .setText(serializer.toJsonArray((Patch) request.getEntity(),
+                                params.getApiVersion()))
+                        .setContentType(ContentType.APPLICATION_JSON).build();
 
-                StringEntity stringEntity = new StringEntity(
-                        serializer.toJsonArray((Patch) request.getEntity(), params.getApiVersion()),
-                        ContentType.APPLICATION_JSON);
+                patch.setEntity(entity);
 
-                patch.setEntity(stringEntity);
-
-                fillRequestEntity(patch, params, request);
                 requestBase = patch;
                 break;
             case PUT:

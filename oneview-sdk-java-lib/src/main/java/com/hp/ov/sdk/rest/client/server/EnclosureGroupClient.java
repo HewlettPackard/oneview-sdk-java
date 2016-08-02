@@ -177,10 +177,11 @@ public class EnclosureGroupClient {
     }
 
     /**
-     * Retrieves the configuration script for the specified enclosure group resource identifier.
+     * Updates the configuration script for the specified enclosure group resource identifier.
      * 
      * @param resourceId enclosure group resource identifier as seen in HPE OneView.
      * @param scriptData script data to be updated for enclosure group.
+     *
      * @return the configuration script for the specified enclosure group.
      */
     public String updateConfigurationScript(String resourceId, String scriptData) {
