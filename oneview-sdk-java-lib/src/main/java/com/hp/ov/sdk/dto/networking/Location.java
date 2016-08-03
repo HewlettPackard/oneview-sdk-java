@@ -62,8 +62,6 @@ public class Location implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("locationEntries", locationEntries)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
 }

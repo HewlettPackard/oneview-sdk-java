@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking;
 
 import java.io.Serializable;
 
@@ -26,17 +26,13 @@ public class LogicalLocationEntry implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public enum Type {
-        Port, Bay, Enclosure, Ip, Password, UserId, StackingDomainId, StackingMemberId
-    }
-
     private Integer relativeValue;
     private String value;
-    private LogicalLocationEntry.Type type;
+    private LocationType type;
 
     public LogicalLocationEntry() { }
 
-    public LogicalLocationEntry(Integer relativeValue, String value, Type type) {
+    public LogicalLocationEntry(Integer relativeValue, String value, LocationType type) {
         this.relativeValue = relativeValue;
         this.value = value;
         this.type = type;
@@ -58,11 +54,11 @@ public class LogicalLocationEntry implements Serializable {
         this.value = value;
     }
 
-    public LogicalLocationEntry.Type getType() {
+    public LocationType getType() {
         return type;
     }
 
-    public void setType(final LogicalLocationEntry.Type type) {
+    public void setType(final LocationType type) {
         this.type = type;
     }
 

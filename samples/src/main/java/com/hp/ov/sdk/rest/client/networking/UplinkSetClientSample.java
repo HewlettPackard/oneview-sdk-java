@@ -20,16 +20,19 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.hp.ov.sdk.OneViewClientSample;
+import com.hp.ov.sdk.dto.NetworkType;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.Location;
-import com.hp.ov.sdk.dto.generated.LogicalLocationEntry;
-import com.hp.ov.sdk.dto.generated.PortConfigInfo;
-import com.hp.ov.sdk.dto.generated.UplinkSets;
-import com.hp.ov.sdk.dto.generated.UplinkSets.ConnectionMode;
-import com.hp.ov.sdk.dto.generated.UplinkSets.ManualLoginRedistributionState;
+import com.hp.ov.sdk.dto.networking.EthernetNetworkType;
+import com.hp.ov.sdk.dto.networking.Location;
+import com.hp.ov.sdk.dto.networking.LocationEntry;
+import com.hp.ov.sdk.dto.networking.LocationType;
 import com.hp.ov.sdk.dto.networking.OpSpeed;
 import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
+import com.hp.ov.sdk.dto.networking.uplinksets.ConnectionMode;
+import com.hp.ov.sdk.dto.networking.uplinksets.ManualLoginRedistributionState;
+import com.hp.ov.sdk.dto.networking.uplinksets.PortConfigInfo;
+import com.hp.ov.sdk.dto.networking.uplinksets.UplinkSet;
 import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
@@ -68,9 +71,9 @@ public class UplinkSetClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String resourceName = "Test_uplink_eth_one";
+    private static final String resourceName = "EthernetUplinkSet";
     private static final String resourceNameUpdated = resourceName + "_Updated";
-    private static final String resourceId = "dcae0114-34c6-4f04-bb15-d03cf71b234c";
+    private static final String resourceId = "f127c822-c9e4-4726-85ee-604b1b7b2468";
     private static final String category = "logical-interconnects";
     private static final List<String> fcNetworkName_A = Arrays.asList("FC_Network_A");
     private static final String type = "uplink-setV2";
@@ -88,7 +91,7 @@ public class UplinkSetClientSample {
     }
 
     private void getUplinkSetById() throws InstantiationException, IllegalAccessException {
-        UplinkSets uplinkSetDto = null;
+        UplinkSet uplinkSetDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -120,7 +123,7 @@ public class UplinkSetClientSample {
     }
 
     private void getAllUplinkSet() throws InstantiationException, IllegalAccessException {
-        ResourceCollection<UplinkSets> uplinkSetCollectionDto = null;
+        ResourceCollection<UplinkSet> uplinkSetCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -150,7 +153,7 @@ public class UplinkSetClientSample {
     }
 
     private void getUplinkSetByName() throws InstantiationException, IllegalAccessException {
-        UplinkSets uplinkSetDto = null;
+        UplinkSet uplinkSetDto = null;
         // first get the session Id
         try {
             // OneView credentials
@@ -215,7 +218,7 @@ public class UplinkSetClientSample {
     }
 
     private void updateUplinkSet() throws InstantiationException, IllegalAccessException {
-        UplinkSets uplinkSetDto = null;
+        UplinkSet uplinkSetDto = null;
         String resourceId = null;
         try {
             // OneView credentials
@@ -269,7 +272,7 @@ public class UplinkSetClientSample {
             params = HPOneViewCredential.createCredentials();
 
             // create network request body
-            UplinkSets uplinkSetsDto = buildTestUplinkSetDto();
+            UplinkSet uplinkSetsDto = buildTestUplinkSetDto();
             if (params.getApiVersion().getValue() >= ApiVersion.V_200.getValue()) {
                 uplinkSetsDto.setType(typeV200);
             }
@@ -305,9 +308,9 @@ public class UplinkSetClientSample {
         }
     }
 
-    private UplinkSets buildTestUplinkSetDto() {
+    private UplinkSet buildTestUplinkSetDto() {
         String resourceId = null;
-        UplinkSets uplinkSetsDto = new UplinkSets();
+        UplinkSet uplinkSetsDto = new UplinkSet();
 
         uplinkSetsDto.setCategory(category);
         Enclosure enclosuresDto = enclosureClient.getEnclosureByName(params, EnclosureClientSample.resourceName);
@@ -319,8 +322,8 @@ public class UplinkSetClientSample {
         }
         uplinkSetsDto.setType(type);
         uplinkSetsDto.setConnectionMode(ConnectionMode.Auto);
-        uplinkSetsDto.setEthernetNetworkType(UplinkSets.EthernetNetworkType.NotApplicable);
-        uplinkSetsDto.setNetworkType(UplinkSets.NetworkType.FibreChannel);
+        uplinkSetsDto.setEthernetNetworkType(EthernetNetworkType.NotApplicable);
+        uplinkSetsDto.setNetworkType(NetworkType.FibreChannel);
         uplinkSetsDto.setName(resourceName);
         uplinkSetsDto.setManualLoginRedistributionState(ManualLoginRedistributionState.Supported);
         List<String> networkUris = new ArrayList<String>();
@@ -349,20 +352,20 @@ public class UplinkSetClientSample {
             }
         }
         Location location = new Location();
-        List<LogicalLocationEntry> locationEntries = new ArrayList<LogicalLocationEntry>();
-        LogicalLocationEntry locationEntry_two = new LogicalLocationEntry();
-        LogicalLocationEntry locationEntry_one = new LogicalLocationEntry();
+        List<LocationEntry> locationEntries = new ArrayList<LocationEntry>();
+        LocationEntry locationEntry_two = new LocationEntry();
+        LocationEntry locationEntry_one = new LocationEntry();
         locationEntry_one.setValue(enclosuresDto.getUri());
-        locationEntry_one.setType(LogicalLocationEntry.Type.Enclosure);
+        locationEntry_one.setType(LocationType.Enclosure);
         locationEntries.add(locationEntry_one);
 
         locationEntry_two.setValue(bayValue);
-        locationEntry_two.setType(LogicalLocationEntry.Type.Bay);
+        locationEntry_two.setType(LocationType.Bay);
         locationEntries.add(locationEntry_two);
 
-        LogicalLocationEntry locationEntry_three = new LogicalLocationEntry();
+        LocationEntry locationEntry_three = new LocationEntry();
         locationEntry_three.setValue(portValue);
-        locationEntry_three.setType(LogicalLocationEntry.Type.Port);
+        locationEntry_three.setType(LocationType.Port);
         locationEntries.add(locationEntry_three);
 
         location.setLocationEntries(locationEntries);

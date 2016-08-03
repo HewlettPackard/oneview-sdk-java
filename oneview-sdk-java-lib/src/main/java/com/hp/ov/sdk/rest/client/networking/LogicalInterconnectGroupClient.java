@@ -15,8 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.networking;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +23,6 @@ import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.UplinkSet;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
@@ -130,17 +127,15 @@ public class LogicalInterconnectGroupClient {
      *
      * @param resourceId
      *            The resource identifier for logical interconnect group as seen in HPE OneView.
-     * @param uplinkSetDto
-     *            List of UplinkSet details used to update a logical interconnect group.
+     * @param logicalInterconnectGroupDto
+     *            Object containing the logical interconnect group details,
+     *            used to update a logical interconnect group.
      * @param aSync
      *            Flag input to process request asynchronously or synchronously.
      * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 update(final String resourceId, final List<UplinkSet> uplinkSetDto, final boolean aSync) {
+    public TaskResourceV2 update(final String resourceId, final LogicalInterconnectGroup logicalInterconnectGroupDto, final boolean aSync) {
         LOGGER.info("LogicalInterconnectGroupClient : update : Start");
-
-        final LogicalInterconnectGroup logicalInterconnectGroupDto = this.getById(resourceId);
-        logicalInterconnectGroupDto.setUplinkSets(uplinkSetDto);
 
         TaskResourceV2 taskResource = baseClient.updateResource(
                 UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId), logicalInterconnectGroupDto, aSync);

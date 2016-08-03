@@ -25,6 +25,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import com.google.gson.annotations.Since;
 import com.google.gson.annotations.Until;
 import com.hp.ov.sdk.dto.BaseModelResource;
+import com.hp.ov.sdk.dto.networking.EthernetNetworkType;
 
 /**
  * The Network data transfer object (DTO) contains the information used to
@@ -34,14 +35,6 @@ import com.hp.ov.sdk.dto.BaseModelResource;
 public class Network extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
-
-    public enum EthernetNetworkType {
-        ImageStreamer, Tagged, Untagged, Tunnel, Unknown, NotApplicable
-    }
-
-    public enum Purpose {
-        General, ISCSI, Management, VMMigration, FaultTolerance
-    }
 
     private String connectionTemplateUri;
     private EthernetNetworkType ethernetNetworkType = EthernetNetworkType.Tagged;

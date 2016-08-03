@@ -32,8 +32,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.InterconnectSettingsV2;
-import com.hp.ov.sdk.dto.generated.UplinkSet;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
+import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
@@ -85,14 +85,14 @@ public class LogicalInterconnectGroupClientTest {
 
     @Test
     public void shouldUpdateLogicalInterconnectGroup() {
-        List<UplinkSet> uplinkSets = new ArrayList<UplinkSet>();
+        List<UplinkSetGroup> uplinkSets = new ArrayList<UplinkSetGroup>();
         LogicalInterconnectGroup lig = new LogicalInterconnectGroup();
         lig.setUplinkSets(uplinkSets);
 
         given(baseClient.getResource(anyString(), any(Class.class)))
         .willReturn(lig);
 
-        client.update(ANY_RESOURCE_ID, uplinkSets, false);
+        client.update(ANY_RESOURCE_ID, lig, false);
 
         String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI + "/" + ANY_RESOURCE_ID;
 

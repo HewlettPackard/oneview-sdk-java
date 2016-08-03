@@ -29,7 +29,6 @@ import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.StackingMode;
 import com.hp.ov.sdk.dto.generated.InterconnectMapTemplate;
-import com.hp.ov.sdk.dto.generated.UplinkSet;
 import com.hp.ov.sdk.dto.networking.EnclosureType;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 import com.hp.ov.sdk.dto.networking.StackingHealth;
@@ -71,7 +70,7 @@ public class LogicalInterconnectGroup extends BaseModelResource {
     private StackingHealth stackingHealth;
     private StackingMode stackingMode;
     private TelemetryConfiguration telemetryConfiguration;
-    private List<UplinkSet> uplinkSets = new ArrayList<UplinkSet>();
+    private List<UplinkSetGroup> uplinkSets = new ArrayList<UplinkSetGroup>();
 
     /**
      * @return the enclosureIndexes
@@ -286,14 +285,14 @@ public class LogicalInterconnectGroup extends BaseModelResource {
     /**
      * @return the uplinkSets
      */
-    public List<UplinkSet> getUplinkSets() {
+    public List<UplinkSetGroup> getUplinkSets() {
         return uplinkSets;
     }
 
     /**
      * @param uplinkSets the uplinkSets to set
      */
-    public void setUplinkSets(List<UplinkSet> uplinkSets) {
+    public void setUplinkSets(List<UplinkSetGroup> uplinkSets) {
         this.uplinkSets = uplinkSets;
     }
 

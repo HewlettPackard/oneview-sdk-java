@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,13 +42,14 @@ public class LogicalLocation implements Serializable {
     public boolean equals(Object obj) {
         if (this == obj) return true;
 
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj instanceof LogicalLocation){
+            LogicalLocation that = (LogicalLocation) obj;
 
-        LogicalLocation that = (LogicalLocation) obj;
-
-        return new EqualsBuilder()
-                .append(locationEntries, that.locationEntries)
-                .isEquals();
+            return new EqualsBuilder()
+                    .append(locationEntries, that.locationEntries)
+                    .isEquals();
+        }
+        return false;
     }
 
     @Override
@@ -60,8 +61,6 @@ public class LogicalLocation implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("locationEntries", locationEntries)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
 }

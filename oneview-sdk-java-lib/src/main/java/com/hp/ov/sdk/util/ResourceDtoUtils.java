@@ -26,6 +26,7 @@ import com.hp.ov.sdk.dto.ConnectionBoot;
 import com.hp.ov.sdk.dto.ConnectionBoot.BootControl;
 import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.dto.InterconnectTypeName;
+import com.hp.ov.sdk.dto.NetworkType;
 import com.hp.ov.sdk.dto.PortInfo;
 import com.hp.ov.sdk.dto.ProfileConnectionV3;
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -38,19 +39,21 @@ import com.hp.ov.sdk.dto.generated.Firmware;
 import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.generated.InterconnectMapTemplate;
 import com.hp.ov.sdk.dto.generated.LocalStorage;
-import com.hp.ov.sdk.dto.generated.LogicalLocation;
-import com.hp.ov.sdk.dto.generated.LogicalLocationEntry;
-import com.hp.ov.sdk.dto.generated.LogicalPortConfigInfo;
 import com.hp.ov.sdk.dto.generated.SanStorage;
 import com.hp.ov.sdk.dto.generated.ServerProfile;
 import com.hp.ov.sdk.dto.generated.StoragePath;
 import com.hp.ov.sdk.dto.generated.StoragePath.StorageTargetType;
-import com.hp.ov.sdk.dto.generated.UplinkSet;
 import com.hp.ov.sdk.dto.generated.VolumeAttachment;
+import com.hp.ov.sdk.dto.networking.LocationType;
+import com.hp.ov.sdk.dto.networking.LogicalLocation;
+import com.hp.ov.sdk.dto.networking.LogicalLocationEntry;
 import com.hp.ov.sdk.dto.networking.OpSpeed;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
+import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.EnetPortSetAggregationMode;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
+import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalPortConfigInfo;
+import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.dto.networking.networkset.NetworkSet;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -138,10 +141,10 @@ public class ResourceDtoUtils {
                 final LogicalLocationEntry locationEntryDto = new LogicalLocationEntry();
                 if (j == 0) {
                     locationEntryDto.setRelativeValue(i + 1);
-                    locationEntryDto.setType(LogicalLocationEntry.Type.Bay);
+                    locationEntryDto.setType(LocationType.Bay);
                 } else {
                     locationEntryDto.setRelativeValue(j);
-                    locationEntryDto.setType(LogicalLocationEntry.Type.Enclosure);
+                    locationEntryDto.setType(LocationType.Enclosure);
                 }
                 locationEntriesDto.add(locationEntryDto);
             }
@@ -178,16 +181,16 @@ public class ResourceDtoUtils {
      *
      * }
      */
-    public UplinkSet buildUplinkSetDto(final String ligName, final String uplinkSetName,
+    public UplinkSetGroup buildUplinkSetDto(final String ligName, final String uplinkSetName,
             final String uplinkSetType, final List<String> networkNames, final HashMap<Integer, List<String>> bayPortMap,
             final String lacpTimer, final String fcUplinkSpeed) {
         return buildUplinkSetDto(ligName, uplinkSetName, uplinkSetType, bayPortMap, networkNames);
     }
 
-    public UplinkSet buildUplinkSetDto(final String ligName, final String uplinkSetName,
+    public UplinkSetGroup buildUplinkSetDto(final String ligName, final String uplinkSetName,
             final String uplinkSetType, final HashMap<Integer, List<String>> bayPortMap, final List<String> networkNames) {
         final List<LogicalPortConfigInfo> logicalPortConfigInfos = new ArrayList<LogicalPortConfigInfo>();
-        final UplinkSet uplinkSetDto = new UplinkSet();
+        final UplinkSetGroup uplinkSetDto = new UplinkSetGroup();
 
         InterconnectTypeClient interconnectTypeClient = oneViewClient.interconnectType();
 
@@ -217,13 +220,13 @@ public class ResourceDtoUtils {
                 final List<LogicalLocationEntry> locationEntriesList = new ArrayList<LogicalLocationEntry>();
                 final LogicalLocationEntry locationEntries11 = new LogicalLocationEntry();
                 locationEntries11.setRelativeValue(bayRelativeValue);
-                locationEntries11.setType(LogicalLocationEntry.Type.Bay);
+                locationEntries11.setType(LocationType.Bay);
                 final LogicalLocationEntry locationEntries12 = new LogicalLocationEntry();
                 locationEntries12.setRelativeValue(portNumber);
-                locationEntries12.setType(LogicalLocationEntry.Type.Port);
+                locationEntries12.setType(LocationType.Port);
                 final LogicalLocationEntry locationEntries13 = new LogicalLocationEntry();
                 locationEntries13.setRelativeValue(1);
-                locationEntries13.setType(LogicalLocationEntry.Type.Enclosure);
+                locationEntries13.setType(LocationType.Enclosure);
                 locationEntriesList.add(locationEntries11);
                 locationEntriesList.add(locationEntries12);
                 locationEntriesList.add(locationEntries13);
@@ -235,12 +238,12 @@ public class ResourceDtoUtils {
         }
 
         uplinkSetDto.setName(uplinkSetName);
-        uplinkSetDto.setMode(UplinkSet.Mode.Auto);
+        uplinkSetDto.setMode(EnetPortSetAggregationMode.Auto);
         if (uplinkSetType.equalsIgnoreCase(SdkConstants.ETHERNET)) {
-            uplinkSetDto.setNetworkType(UplinkSet.NetworkType.Ethernet);
+            uplinkSetDto.setNetworkType(NetworkType.Ethernet);
             uplinkSetDto.setNetworkUris(this.getNetworkUris(networkNames));
         } else if (uplinkSetType.equalsIgnoreCase(SdkConstants.FIBRE_CHANNEL)) {
-            uplinkSetDto.setNetworkType(UplinkSet.NetworkType.FibreChannel);
+            uplinkSetDto.setNetworkType(NetworkType.FibreChannel);
             uplinkSetDto.setNetworkUris(this.getFcNetworkUris(networkNames));
         }
         uplinkSetDto.setPrimaryPort(null);
@@ -265,7 +268,7 @@ public class ResourceDtoUtils {
         for (InterconnectMapEntryTemplate mapTemplate : logicalInterconnectGroupsDto.getInterconnectMapTemplate()
                 .getInterconnectMapEntryTemplates()) {
             for (LogicalLocationEntry locationEntry : mapTemplate.getLogicalLocation().getLocationEntries()) {
-                if (locationEntry.getType().equals(LogicalLocationEntry.Type.Bay) && locationEntry.getRelativeValue().equals(bay)) {
+                if (locationEntry.getType().equals(LocationType.Bay) && locationEntry.getRelativeValue().equals(bay)) {
                     return mapTemplate.getPermittedInterconnectTypeUri();
                 }
             }

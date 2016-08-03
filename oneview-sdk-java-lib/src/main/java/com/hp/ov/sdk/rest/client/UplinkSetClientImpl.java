@@ -29,7 +29,7 @@ import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.UplinkSets;
+import com.hp.ov.sdk.dto.networking.uplinksets.UplinkSet;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -69,7 +69,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
     }
 
     @Override
-    public UplinkSets getUplinkSet(final RestParams params, final String resourceId) {
+    public UplinkSet getUplinkSet(final RestParams params, final String resourceId) {
         LOGGER.info("UplinkSetClientImpl : getUplinkSet : Start");
 
         // validate args
@@ -86,7 +86,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.UPLINKSET, null);
         }
 
-        UplinkSets uplinkSetDto = adaptor.buildResourceObject(returnObj, UplinkSets.class);
+        UplinkSet uplinkSetDto = adaptor.buildResourceObject(returnObj, UplinkSet.class);
 
         LOGGER.debug("UplinkSetClientImpl : getUplinkSet : Name :" + uplinkSetDto.getName());
         LOGGER.info("UplinkSetClientImpl : getUplinkSet : End");
@@ -95,7 +95,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
     }
 
     @Override
-    public ResourceCollection<UplinkSets> getAllUplinkSet(final RestParams params) {
+    public ResourceCollection<UplinkSet> getAllUplinkSet(final RestParams params) {
         LOGGER.info("UplinkSetClientImpl : getAllUplinkSet : Start");
 
         // validate args
@@ -112,8 +112,8 @@ public class UplinkSetClientImpl implements UplinkSetClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.UPLINKSETS, null);
         }
 
-        ResourceCollection<UplinkSets> uplinkSetCollectionDto = adaptor.buildResourceCollection(returnObj,
-                UplinkSets.class);
+        ResourceCollection<UplinkSet> uplinkSetCollectionDto = adaptor.buildResourceCollection(returnObj,
+                UplinkSet.class);
 
         LOGGER.debug("UplinkSetClientImpl : getAllUplinkSet : members count :" + uplinkSetCollectionDto.getCount());
         LOGGER.info("UplinkSetClientImpl : getAllUplinkSet : End");
@@ -159,7 +159,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
     }
 
     @Override
-    public TaskResourceV2 updateUplinkSet(final RestParams params, final String resourceId, final UplinkSets uplinkDto,
+    public TaskResourceV2 updateUplinkSet(final RestParams params, final String resourceId, final UplinkSet uplinkDto,
             final boolean aSync, final boolean useJsonRequest) {
 
         LOGGER.info("UplinkSetClientImpl : updateUplinkSet : Start");
@@ -206,8 +206,8 @@ public class UplinkSetClientImpl implements UplinkSetClient {
     }
 
     @Override
-    public UplinkSets getUplinkSetsByName(final RestParams params, final String name) {
-        UplinkSets uplinkSetDto = null;
+    public UplinkSet getUplinkSetsByName(final RestParams params, final String name) {
+        UplinkSet uplinkSetDto = null;
         LOGGER.info("UplinkSetClientImpl : getUplinkSetsByName : start");
 
         // validate args
@@ -229,8 +229,8 @@ public class UplinkSetClientImpl implements UplinkSetClient {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.UPLINKSET, null);
         }
 
-        ResourceCollection<UplinkSets> uplinkSetCollectionDto
-                = adaptor.buildResourceCollection(returnObj, UplinkSets.class);
+        ResourceCollection<UplinkSet> uplinkSetCollectionDto
+                = adaptor.buildResourceCollection(returnObj, UplinkSet.class);
 
         if (uplinkSetCollectionDto.getCount() != 0) {
             uplinkSetDto = uplinkSetCollectionDto.getMembers().get(0);
@@ -248,7 +248,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
     }
 
     @Override
-    public TaskResourceV2 createUplinkSet(RestParams params, UplinkSets uplinkSetDto, boolean aSync, boolean useJsonRequest) {
+    public TaskResourceV2 createUplinkSet(RestParams params, UplinkSet uplinkSetDto, boolean aSync, boolean useJsonRequest) {
         LOGGER.info("UplinkSetClientImpl : createUplinkSet : Start");
         String returnObj = null;
 
@@ -296,7 +296,7 @@ public class UplinkSetClientImpl implements UplinkSetClient {
     public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        UplinkSets uplinkSetsDto = getUplinkSetsByName(params, name);
+        UplinkSet uplinkSetsDto = getUplinkSetsByName(params, name);
 
         if (null != uplinkSetsDto.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(uplinkSetsDto.getUri());

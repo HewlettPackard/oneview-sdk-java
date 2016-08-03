@@ -17,9 +17,9 @@ package com.hp.ov.sdk.rest.client;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyInt;
-import static org.mockito.Mockito.anyString;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -47,7 +47,7 @@ import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.TaskState;
-import com.hp.ov.sdk.dto.generated.UplinkSets;
+import com.hp.ov.sdk.dto.networking.uplinksets.UplinkSet;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
@@ -86,7 +86,7 @@ public class UplinkSetClientTest {
         uplinkSetJson = this.getJsonFromFile("UplinkSetGet.json");
         when(restClient.sendRequest(any(RestParams.class))).thenReturn(uplinkSetJson);
 
-        UplinkSets uplinkSetDto = client.getUplinkSet(params, resourceId);
+        UplinkSet uplinkSetDto = client.getUplinkSet(params, resourceId);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI, resourceId));
@@ -114,7 +114,7 @@ public class UplinkSetClientTest {
         uplinkSetJson = this.getJsonFromFile("UplinkSetGetAll.json");
         when(restClient.sendRequest(any(RestParams.class))).thenReturn(uplinkSetJson);
 
-        ResourceCollection<UplinkSets> upLinkSetCollection = client.getAllUplinkSet(params);
+        ResourceCollection<UplinkSet> upLinkSetCollection = client.getAllUplinkSet(params);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.UPLINK_SETS_URI));
@@ -181,7 +181,7 @@ public class UplinkSetClientTest {
     public void testUpdateUplinkSet() {
         uplinkSetJson = this.getJsonFromFile("UplinkSetGet.json");
 
-        UplinkSets uplinkSetDto = adaptor.buildResourceObject(uplinkSetJson, UplinkSets.class);
+        UplinkSet uplinkSetDto = adaptor.buildResourceObject(uplinkSetJson, UplinkSet.class);
 
         String jsonCreateTaskCompleted = this.getJsonFromFile("UplinkSetCreateTaskCompleted.json");
         TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
@@ -218,7 +218,7 @@ public class UplinkSetClientTest {
 
     @Test (expected = SDKInvalidArgumentException.class)
     public void testUpdateUplinkSetWithNullParams() {
-        client.updateUplinkSet(null, resourceId, new UplinkSets(), false, false);
+        client.updateUplinkSet(null, resourceId, new UplinkSet(), false, false);
     }
 
     @Test (expected = SDKInvalidArgumentException.class)
@@ -231,7 +231,7 @@ public class UplinkSetClientTest {
         uplinkSetJson = this.getJsonFromFile("UplinkSetGetByName.json");
         when(restClient.sendRequest(any(RestParams.class))).thenReturn(uplinkSetJson);
 
-        UplinkSets uplinkSetDto = client.getUplinkSetsByName(params, resourceName);
+        UplinkSet uplinkSetDto = client.getUplinkSetsByName(params, resourceName);
 
         RestParams rp = new RestParams();
 
@@ -263,7 +263,7 @@ public class UplinkSetClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetUplinkSetByNameWithNoMembers() {
-        uplinkSetJson = new Gson().toJson(new ResourceCollection<UplinkSets>());
+        uplinkSetJson = new Gson().toJson(new ResourceCollection<UplinkSet>());
 
         when(restClient.sendRequest(any(RestParams.class))).thenReturn(uplinkSetJson);
 
@@ -274,7 +274,7 @@ public class UplinkSetClientTest {
     public void testCreateUplinkSet() {
         uplinkSetJson = this.getJsonFromFile("UplinkSetGet.json");
 
-        UplinkSets uplinkSetDto = adaptor.buildResourceObject(uplinkSetJson, UplinkSets.class);
+        UplinkSet uplinkSetDto = adaptor.buildResourceObject(uplinkSetJson, UplinkSet.class);
 
         String jsonCreateTaskCompleted = this.getJsonFromFile("UplinkSetCreateTaskCompleted.json");
         TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(jsonCreateTaskCompleted);
@@ -312,7 +312,7 @@ public class UplinkSetClientTest {
     public void testCreateUplinkSetWithNullParams() {
         uplinkSetJson = this.getJsonFromFile("UplinkSetGet.json");
 
-        UplinkSets uplinkSetDto = adaptor.buildResourceObject(uplinkSetJson, UplinkSets.class);
+        UplinkSet uplinkSetDto = adaptor.buildResourceObject(uplinkSetJson, UplinkSet.class);
 
         client.createUplinkSet(null, uplinkSetDto, false, false);
     }

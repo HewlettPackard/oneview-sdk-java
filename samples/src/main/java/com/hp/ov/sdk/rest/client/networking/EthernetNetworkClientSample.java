@@ -22,9 +22,11 @@ import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.BulkEthernetNetwork;
+import com.hp.ov.sdk.dto.networking.EthernetNetworkType;
 import com.hp.ov.sdk.dto.networking.ethernet.Bandwidth;
+import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
+import com.hp.ov.sdk.dto.networking.ethernet.Purpose;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class EthernetNetworkClientSample {
@@ -56,8 +58,8 @@ public class EthernetNetworkClientSample {
         network.setPrivateNetwork(false);
         network.setConnectionTemplateUri(null);
         network.setConnectionTemplate(null);
-        network.setPurpose(Network.Purpose.General);
-        network.setEthernetNetworkType(Network.EthernetNetworkType.Tagged);
+        network.setPurpose(Purpose.General);
+        network.setEthernetNetworkType(EthernetNetworkType.Tagged);
 
         TaskResourceV2 task = this.client.create(network, false);
 
@@ -129,7 +131,7 @@ public class EthernetNetworkClientSample {
         BulkEthernetNetwork network = new BulkEthernetNetwork();
 
         network.setVlanIdRange("401-405");
-        network.setPurpose(Network.Purpose.General);
+        network.setPurpose(Purpose.General);
         network.setNamePrefix("Prod");
         network.setSmartLink(false);
         network.setPrivateNetwork(false);

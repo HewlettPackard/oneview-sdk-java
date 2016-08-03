@@ -22,8 +22,8 @@ import java.util.List;
 import com.hp.ov.sdk.dto.ProfileConnectionV3;
 import com.hp.ov.sdk.dto.generated.SanStorage;
 import com.hp.ov.sdk.dto.generated.ServerProfile;
-import com.hp.ov.sdk.dto.generated.UplinkSet;
 import com.hp.ov.sdk.dto.generated.VolumeAttachment;
+import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.dto.samples.NetworkForServerProfile;
 import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile.StorageVolume;
 import com.hp.ov.sdk.dto.samples.ServerProfileValue;
@@ -39,8 +39,8 @@ public class ResourceDtoUtilsWrapper {
         this.resourceDtoUtils = resourceDtoUtils;
     }
 
-    public List<UplinkSet> buildUplinkSetGroupDto(final List<UplinkSetValue> uplinkSetValues) {
-        final List<UplinkSet> uplinkSetGroupDto = new ArrayList<UplinkSet>();
+    public List<UplinkSetGroup> buildUplinkSetGroupDto(final List<UplinkSetValue> uplinkSetValues) {
+        final List<UplinkSetGroup> uplinkSetGroupDto = new ArrayList<UplinkSetGroup>();
 
         for (UplinkSetValue uplinkSetValue : uplinkSetValues) {
             uplinkSetGroupDto.add(resourceDtoUtils.buildUplinkSetDto(uplinkSetValue.getLigName(),
