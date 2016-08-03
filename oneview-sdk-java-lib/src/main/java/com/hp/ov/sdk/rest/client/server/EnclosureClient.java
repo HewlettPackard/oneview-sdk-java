@@ -459,7 +459,7 @@ public class EnclosureClient {
     public EnvironmentalConfiguration updateEnvironmentalConfiguration(String resourceId,
             EnvironmentalConfigurationUpdate updateEnvironmentalConfiguration) {
 
-        LOGGER.info("EnclosureClient : getEnvironmentalConfiguration : Start");
+        LOGGER.info("EnclosureClient : updateEnvironmentalConfiguration : Start");
 
         Request request = new Request(
                 HttpMethodType.PUT,

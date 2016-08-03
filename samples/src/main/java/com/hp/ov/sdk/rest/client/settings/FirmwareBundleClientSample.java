@@ -46,7 +46,7 @@ public class FirmwareBundleClientSample {
                 "Task object returned to client : " + task);
     }
 
-    public static void main(final String[] args) throws Exception {
+    public static void main(final String[] args) {
         FirmwareBundleClientSample client = new FirmwareBundleClientSample();
 
         client.addFirmwareBundle();

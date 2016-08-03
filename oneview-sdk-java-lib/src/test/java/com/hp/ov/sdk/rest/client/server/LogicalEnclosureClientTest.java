@@ -75,9 +75,13 @@ public class LogicalEnclosureClientTest {
     public void shouldCreateLogicalEnclosure() {
         AddLogicalEnclosure logicalEnclosure = new AddLogicalEnclosure();
 
+        Request request = new Request(HttpMethodType.POST, ResourceUris.LOGICAL_ENCLOSURE_URI, logicalEnclosure);
+
+        request.setTimeout(300000);
+
         logicalEnclosureClient.create(logicalEnclosure, false);
 
-        then(baseClient).should().createResource(ResourceUris.LOGICAL_ENCLOSURE_URI, logicalEnclosure, false);
+        then(baseClient).should().executeMonitorableRequest(request, false);
     }
 
     @Test
@@ -87,8 +91,11 @@ public class LogicalEnclosureClientTest {
         logicalEnclosureClient.update(ANY_RESOURCE_ID, logicalEnclosure, false);
 
         String expectedUri = ResourceUris.LOGICAL_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
+        Request request = new Request(HttpMethodType.PUT, expectedUri, logicalEnclosure);
 
-        then(baseClient).should().updateResource(expectedUri, logicalEnclosure, false);
+        request.setTimeout(300000);
+
+        then(baseClient).should().executeMonitorableRequest(request, false);
     }
 
     @Test
@@ -100,6 +107,8 @@ public class LogicalEnclosureClientTest {
         String expectedUri = ResourceUris.LOGICAL_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
         Request request = new Request(HttpMethodType.PATCH, expectedUri, patch);
 
+        request.setTimeout(300000);
+
         then(baseClient).should().executeMonitorableRequest(request, false);
     }
 
@@ -108,8 +117,11 @@ public class LogicalEnclosureClientTest {
         logicalEnclosureClient.delete(ANY_RESOURCE_ID, false);
 
         String expectedUri = ResourceUris.LOGICAL_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
+        Request request = new Request(HttpMethodType.DELETE, expectedUri);
 
-        then(baseClient).should().deleteResource(expectedUri, false);
+        request.setTimeout(300000);
+
+        then(baseClient).should().executeMonitorableRequest(request, false);
     }
 
     @Test

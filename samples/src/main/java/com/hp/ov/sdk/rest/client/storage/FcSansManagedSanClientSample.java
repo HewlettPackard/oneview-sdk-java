@@ -103,11 +103,11 @@ public class FcSansManagedSanClientSample {
         SanResponse san = this.fcSanManagedSanClient.getByName(RESOURCE_NAME).get(0);
         FcSansManagedSanTask task = this.fcSanManagedSanClient.createIssuesReport(san.getResourceId(), false);
 
-        System.out.println("FcSanDeviceManagerClientSample : createFcSanManagedSanIssuesReport : " +
+        System.out.println("FcSansManagedSanClientSample : createFcSanManagedSanIssuesReport : " +
                 "Task object returned to client : " + task.getTask().toJsonString());
 
         for (FcIssueResponse issue : task.getIssues()) {
-            System.out.println("FcSanDeviceManagerClientSample : createFcSanManagedSanIssuesReport : " +
+            System.out.println("FcSansManagedSanClientSample : createFcSanManagedSanIssuesReport : " +
                     "Issue returned to client : " + JsonPrettyPrinter.print(issue));
         }
     }

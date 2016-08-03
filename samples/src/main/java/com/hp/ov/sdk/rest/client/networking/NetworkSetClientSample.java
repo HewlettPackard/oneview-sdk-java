@@ -106,7 +106,7 @@ public class NetworkSetClientSample {
                 "Task object returned to client : " + task);
     }
 
-    public static void main(final String[] args) throws Exception {
+    public static void main(final String[] args) {
         NetworkSetClientSample client = new NetworkSetClientSample();
 
         client.getAllNetworkSet();

@@ -110,8 +110,11 @@ public class LogicalEnclosureClient {
     public TaskResourceV2 create(AddLogicalEnclosure logicalEnclosure, boolean aSync) {
         LOGGER.info("LogicalEnclosureClient : create : Start");
 
-        TaskResourceV2 taskResource = this.baseClient.createResource(
-                ResourceUris.LOGICAL_ENCLOSURE_URI, logicalEnclosure, aSync);
+        Request request = new Request(HttpMethodType.POST, ResourceUris.LOGICAL_ENCLOSURE_URI, logicalEnclosure);
+
+        request.setTimeout(TIMEOUT);
+
+        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalEnclosureClient : create : End");
 
@@ -131,9 +134,12 @@ public class LogicalEnclosureClient {
     public TaskResourceV2 update(String resourceId, LogicalEnclosure logicalEnclosure, boolean aSync) {
         LOGGER.info("LogicalEnclosureClient : update : Start");
 
-        TaskResourceV2 taskResource = this.baseClient.updateResource(
-                UrlUtils.createUrl(ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId),
-                logicalEnclosure, aSync);
+        Request request = new Request(HttpMethodType.PUT,
+                UrlUtils.createUrl(ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId), logicalEnclosure);
+
+        request.setTimeout(TIMEOUT);
+
+        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalEnclosureClient : update : End");
 
@@ -157,6 +163,8 @@ public class LogicalEnclosureClient {
         Request request = new Request(HttpMethodType.PATCH,
                 UrlUtils.createUrl(ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId), patch);
 
+        request.setTimeout(TIMEOUT);
+
         TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalEnclosureClient : patch : End");
@@ -176,8 +184,12 @@ public class LogicalEnclosureClient {
     public TaskResourceV2 delete(String resourceId, boolean aSync) {
         LOGGER.info("LogicalEnclosureClient : delete : Start");
 
-        TaskResourceV2 taskResource = this.baseClient.deleteResource(
-                UrlUtils.createUrl(ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId), aSync);
+        Request request = new Request(HttpMethodType.DELETE,
+                UrlUtils.createUrl(ResourceUris.LOGICAL_ENCLOSURE_URI, resourceId));
+
+        request.setTimeout(TIMEOUT);
+
+        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalEnclosureClient : delete : End");
 
@@ -301,7 +313,7 @@ public class LogicalEnclosureClient {
 
         Request request = new Request(HttpMethodType.POST, createUri, supportDump);
 
-        request.setTimeout(300000);
+        request.setTimeout(TIMEOUT);
 
         TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 

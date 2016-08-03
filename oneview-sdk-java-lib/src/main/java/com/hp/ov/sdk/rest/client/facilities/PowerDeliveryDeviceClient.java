@@ -37,6 +37,7 @@ import com.hp.ov.sdk.util.UrlUtils;
 public class PowerDeliveryDeviceClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PowerDeliveryDeviceClient.class);
+    private static final int TIMEOUT = 1200000; // in milliseconds
 
     private final BaseClient baseClient;
 
@@ -114,6 +115,7 @@ public class PowerDeliveryDeviceClient {
         LOGGER.info("PowerDeliveryDeviceClient : add : Start");
 
         Request request = new Request(HttpMethodType.POST, ResourceUris.POWER_DEVICE_URI, powerDeliveryDevice);
+
         PowerDeliveryDevice createdPowerDeliveryDevice = this.baseClient.executeRequest(request, PowerDeliveryDevice.class);
 
         LOGGER.info("PowerDeliveryDeviceClient : add : End");
@@ -138,8 +140,11 @@ public class PowerDeliveryDeviceClient {
     public TaskResourceV2 add(ImportPdd importPdd, boolean aSync) {
         LOGGER.info("PowerDeliveryDeviceClient : add : Start");
 
-        TaskResourceV2 taskResource = this.baseClient.createResource(
-                ResourceUris.POWER_DEVICE_DISCOVERY_URI, importPdd, aSync);
+        Request request = new Request(HttpMethodType.POST, ResourceUris.POWER_DEVICE_DISCOVERY_URI, importPdd);
+
+        request.setTimeout(TIMEOUT);
+
+        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("PowerDeliveryDeviceClient : add : End");
 
@@ -159,6 +164,7 @@ public class PowerDeliveryDeviceClient {
 
         Request request = new Request(HttpMethodType.PUT,
                 UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI, resourceId), powerDeliveryDevice);
+
         PowerDeliveryDevice updatedPowerDeliveryDevice = this.baseClient.executeRequest(request, PowerDeliveryDevice.class);
 
         LOGGER.info("PowerDeliveryDeviceClient : update : End");
@@ -178,8 +184,12 @@ public class PowerDeliveryDeviceClient {
     public TaskResourceV2 remove(String resourceId, boolean aSync) {
         LOGGER.info("PowerDeliveryDeviceClient : remove : Start");
 
-        TaskResourceV2 taskResource = this.baseClient.deleteResource(
-                UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI, resourceId), aSync);
+        Request request = new Request(HttpMethodType.DELETE,
+                UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI, resourceId));
+
+        request.setTimeout(TIMEOUT);
+
+        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("PowerDeliveryDeviceClient : remove : End");
 
@@ -200,8 +210,12 @@ public class PowerDeliveryDeviceClient {
     public TaskResourceV2 removeByFilter(String filter, boolean aSync) {
         LOGGER.info("PowerDeliveryDeviceClient : removeByFilter : Start");
 
-        TaskResourceV2 taskResource = baseClient.deleteResource(
-                ResourceUris.POWER_DEVICE_URI, aSync, new UrlParameter("filter", filter));
+        Request request = new Request(HttpMethodType.DELETE, ResourceUris.POWER_DEVICE_URI);
+
+        request.setTimeout(TIMEOUT);
+        request.addQuery(new UrlParameter("filter", filter));
+
+        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.trace("PowerDeliveryDeviceClient : removeByFilter : End");
 
@@ -264,10 +278,14 @@ public class PowerDeliveryDeviceClient {
     public TaskResourceV2 updatePowerState(String resourceId, OutletState outletState, boolean aSync) {
         LOGGER.info("PowerDeliveryDeviceClient : updatePowerState : Start");
 
-        TaskResourceV2 taskResource = this.baseClient.updateResource(
+        Request request = new Request(HttpMethodType.PUT,
                 UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI, resourceId,
-                        ResourceUris.POWER_DEVICE_POWER_STATE_URI),
-                outletState, aSync);
+                    ResourceUris.POWER_DEVICE_POWER_STATE_URI),
+                outletState);
+
+        request.setTimeout(TIMEOUT);
+
+        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("PowerDeliveryDeviceClient : updatePowerState : End");
 
@@ -289,10 +307,14 @@ public class PowerDeliveryDeviceClient {
 
         LOGGER.info("PowerDeliveryDeviceClient : updateRefreshState : Start");
 
-        TaskResourceV2 taskResource = this.baseClient.updateResource(
+        Request request = new Request(HttpMethodType.PUT,
                 UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI, resourceId,
                         ResourceUris.POWER_DEVICE_REFRESH_STATE_URI),
-                refreshState, aSync);
+                refreshState);
+
+        request.setTimeout(TIMEOUT);
+
+        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("PowerDeliveryDeviceClient : updateRefreshState : End");
 
@@ -335,10 +357,14 @@ public class PowerDeliveryDeviceClient {
     public TaskResourceV2 updateUidState(String resourceId, OutletState outletState, boolean aSync) {
         LOGGER.info("PowerDeliveryDeviceClient : updateUidState : Start");
 
-        TaskResourceV2 taskResource = this.baseClient.updateResource(
+        Request request = new Request(HttpMethodType.PUT,
                 UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI, resourceId,
                         ResourceUris.POWER_DEVICE_UID_STATE_URI),
-                outletState, aSync);
+                outletState);
+
+        request.setTimeout(TIMEOUT);
+
+        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("PowerDeliveryDeviceClient : updateUidState : End");
 

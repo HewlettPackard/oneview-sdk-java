@@ -91,7 +91,11 @@ public class PowerDeliveryDeviceClientTest {
 
         powerDeliveryDeviceClient.add(importPdd, false);
 
-        then(baseClient).should().createResource(ResourceUris.POWER_DEVICE_DISCOVERY_URI, importPdd, false);
+        Request request = new Request(HttpMethodType.POST, ResourceUris.POWER_DEVICE_DISCOVERY_URI, importPdd);
+
+        request.setTimeout(1200000);
+
+        then(baseClient).should().executeMonitorableRequest(request, false);
     }
 
     @Test
@@ -111,8 +115,11 @@ public class PowerDeliveryDeviceClientTest {
         powerDeliveryDeviceClient.remove(ANY_RESOURCE_ID, false);
 
         String expectedUri = ResourceUris.POWER_DEVICE_URI + "/" + ANY_RESOURCE_ID;
+        Request request = new Request(HttpMethodType.DELETE, expectedUri);
 
-        then(baseClient).should().deleteResource(expectedUri, false);
+        request.setTimeout(1200000);
+
+        then(baseClient).should().executeMonitorableRequest(request, false);
     }
 
     @Test
@@ -120,8 +127,12 @@ public class PowerDeliveryDeviceClientTest {
         powerDeliveryDeviceClient.removeByFilter(ANY_RESOURCE_NAME, false);
 
         UrlParameter filter = new UrlParameter("filter", ANY_RESOURCE_NAME);
+        Request request = new Request(HttpMethodType.DELETE, ResourceUris.POWER_DEVICE_URI);
 
-        then(baseClient).should().deleteResource(ResourceUris.POWER_DEVICE_URI, false, filter);
+        request.setTimeout(1200000);
+        request.addQuery(filter);
+
+        then(baseClient).should().executeMonitorableRequest(request, false);
     }
 
     @Test
@@ -160,7 +171,11 @@ public class PowerDeliveryDeviceClientTest {
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.POWER_DEVICE_POWER_STATE_URI;
 
-        then(baseClient).should().updateResource(expectedUri, powerState, false);
+        Request request = new Request(HttpMethodType.PUT, expectedUri, powerState);
+
+        request.setTimeout(1200000);
+
+        then(baseClient).should().executeMonitorableRequest(request, false);
     }
 
     @Test
@@ -172,8 +187,11 @@ public class PowerDeliveryDeviceClientTest {
         String expectedUri = ResourceUris.POWER_DEVICE_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.POWER_DEVICE_REFRESH_STATE_URI;
+        Request request = new Request(HttpMethodType.PUT, expectedUri, refreshState);
 
-        then(baseClient).should().updateResource(expectedUri, refreshState, false);
+        request.setTimeout(1200000);
+
+        then(baseClient).should().executeMonitorableRequest(request, false);
     }
 
     @Test
@@ -199,7 +217,11 @@ public class PowerDeliveryDeviceClientTest {
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.POWER_DEVICE_UID_STATE_URI;
 
-        then(baseClient).should().updateResource(expectedUri, uidState, false);
+        Request request = new Request(HttpMethodType.PUT, expectedUri, uidState);
+
+        request.setTimeout(1200000);
+
+        then(baseClient).should().executeMonitorableRequest(request, false);
     }
 
     @Test

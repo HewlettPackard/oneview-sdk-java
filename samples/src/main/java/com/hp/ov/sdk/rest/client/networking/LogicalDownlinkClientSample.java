@@ -44,7 +44,7 @@ public class LogicalDownlinkClientSample {
     private void getLogicalDownlinkById() {
         LogicalDownlink logicalDownlink = this.logicalDownlinkClient.getById(LOGICAL_DOWNLINK_RESOURCE_ID);
 
-        System.out.println("LogicalDownlinkClientSample : getLogicalDownlink : " +
+        System.out.println("LogicalDownlinkClientSample : getLogicalDownlinkById : " +
                 "LogicalDownlink object returned to client : " + logicalDownlink.toJsonString());
     }
 

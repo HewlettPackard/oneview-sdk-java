@@ -194,7 +194,7 @@ public class UplinkSetClientSample {
         return uplinkSetsDto;
     }
 
-    public static void main(final String[] args) throws Exception {
+    public static void main(final String[] args) {
         UplinkSetClientSample client = new UplinkSetClientSample();
 
         client.getUplinkSetById();

@@ -198,7 +198,7 @@ public class PowerDeliveryDeviceClientSample {
                 "UtilizationData object returned to client : " + JsonPrettyPrinter.print(utilization));
     }
 
-    public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+    public static void main(String[] args) {
         PowerDeliveryDeviceClientSample client = new PowerDeliveryDeviceClientSample();
 
         client.getPowerDeliveryDeviceById();

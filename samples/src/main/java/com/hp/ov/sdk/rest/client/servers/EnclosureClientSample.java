@@ -74,7 +74,7 @@ public class EnclosureClientSample {
     private void getEnclosureById() {
         Enclosure enclosure = enclosureClient.getById(RESOURCE_ID);
 
-        System.out.println("EnclosureClientSample : getEnclosure : "
+        System.out.println("EnclosureClientSample : getEnclosureById : "
                 + "Enclosure object returned to client : " + enclosure.toJsonString());
     }
 
@@ -230,7 +230,7 @@ public class EnclosureClientSample {
         EnvironmentalConfiguration environmental = this.enclosureClient.updateEnvironmentalConfiguration(
                 enclosure.getResourceId(), configuration);
 
-        System.out.println("EnclosureClientSample : updateEnclosureFwBaseline : " +
+        System.out.println("EnclosureClientSample : updateEnclosureEnvironmentalConfiguration : " +
                 "EnvironmentalConfiguration object returned to client : " + JsonPrettyPrinter.print(environmental));
     }
 
