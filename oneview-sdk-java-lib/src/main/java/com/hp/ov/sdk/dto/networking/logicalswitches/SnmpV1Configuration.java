@@ -14,28 +14,26 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking.logicalswitches;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class SwitchMap implements Serializable {
+public class SnmpV1Configuration implements Serializable {
 
-    private static final long serialVersionUID = -7784352408192006990L;
+    private static final long serialVersionUID = 172738703510634775L;
 
-    private List<SwitchMapEntry> switchMapEntries = new ArrayList<>();
+    private String communityString;
 
-    public List<SwitchMapEntry> getSwitchMapEntries() {
-        return switchMapEntries;
+    public String getCommunityString() {
+        return communityString;
     }
 
-    public void setSwitchMapEntries(List<SwitchMapEntry> switchMapEntries) {
-        this.switchMapEntries = switchMapEntries;
+    public void setCommunityString(String communityString) {
+        this.communityString = communityString;
     }
 
     @Override
@@ -44,24 +42,24 @@ public class SwitchMap implements Serializable {
 
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        SwitchMap switchMap = (SwitchMap) obj;
+        SnmpV1Configuration that = (SnmpV1Configuration) obj;
 
         return new EqualsBuilder()
-                .append(switchMapEntries, switchMap.switchMapEntries)
+                .append(communityString, that.communityString)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(switchMapEntries)
+                .append(communityString)
                 .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("switchMapEntries", switchMapEntries)
+                .append("communityString", communityString)
                 .toString();
     }
 }

@@ -32,6 +32,7 @@ import com.hp.ov.sdk.dto.generated.InterconnectMapTemplate;
 import com.hp.ov.sdk.dto.generated.UplinkSet;
 import com.hp.ov.sdk.dto.networking.EnclosureType;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
+import com.hp.ov.sdk.dto.networking.StackingHealth;
 import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
 
 /**
@@ -67,7 +68,7 @@ public class LogicalInterconnectGroup extends BaseModelResource {
     @Since(300)
     private List<String> scopeUris = new ArrayList<String>();
     private SnmpConfiguration snmpConfiguration;
-    private LogicalInterconnectGroup.StackingHealth stackingHealth;
+    private StackingHealth stackingHealth;
     private StackingMode stackingMode;
     private TelemetryConfiguration telemetryConfiguration;
     private List<UplinkSet> uplinkSets = new ArrayList<UplinkSet>();
@@ -243,14 +244,14 @@ public class LogicalInterconnectGroup extends BaseModelResource {
     /**
      * @return the stackingHealth
      */
-    public LogicalInterconnectGroup.StackingHealth getStackingHealth() {
+    public StackingHealth getStackingHealth() {
         return stackingHealth;
     }
 
     /**
      * @param stackingHealth the stackingHealth to set
      */
-    public void setStackingHealth(LogicalInterconnectGroup.StackingHealth stackingHealth) {
+    public void setStackingHealth(StackingHealth stackingHealth) {
         this.stackingHealth = stackingHealth;
     }
 
@@ -380,43 +381,6 @@ public class LogicalInterconnectGroup extends BaseModelResource {
 
         public static LogicalInterconnectGroup.RedundancyType fromValue(String value) {
             LogicalInterconnectGroup.RedundancyType constant = CONSTANTS.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
-    }
-
-    public static enum StackingHealth {
-
-        Unknown("Unknown"),
-        Connected("Connected"),
-        BiConnected("BiConnected"),
-        Disconnected("Disconnected"),
-        DisconnectedShutdown("DisconnectedShutdown"),
-        NotApplicable("NotApplicable");
-        private final String value;
-        private final static Map<String, LogicalInterconnectGroup.StackingHealth> CONSTANTS = new HashMap<String, LogicalInterconnectGroup.StackingHealth>();
-
-        static {
-            for (LogicalInterconnectGroup.StackingHealth c: values()) {
-                CONSTANTS.put(c.value, c);
-            }
-        }
-
-        private StackingHealth(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static LogicalInterconnectGroup.StackingHealth fromValue(String value) {
-            LogicalInterconnectGroup.StackingHealth constant = CONSTANTS.get(value);
             if (constant == null) {
                 throw new IllegalArgumentException(value);
             } else {

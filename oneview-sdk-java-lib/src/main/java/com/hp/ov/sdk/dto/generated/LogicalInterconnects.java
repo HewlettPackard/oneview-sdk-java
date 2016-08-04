@@ -16,9 +16,7 @@
 package com.hp.ov.sdk.dto.generated;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -30,7 +28,9 @@ import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.FcoeInterconnectSettings;
 import com.hp.ov.sdk.dto.InterconnectMap;
 import com.hp.ov.sdk.dto.PortMonitor;
+import com.hp.ov.sdk.dto.networking.Compliance;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
+import com.hp.ov.sdk.dto.networking.StackingHealth;
 import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
 
 /**
@@ -54,7 +54,7 @@ public class LogicalInterconnects extends BaseModelResource {
      * (Required)
      *
      */
-    private LogicalInterconnects.StackingHealth stackingHealth;
+    private StackingHealth stackingHealth;
     private SnmpConfiguration snmpConfiguration;
     private TelemetryConfiguration telemetryConfiguration;
     private EthernetInterconnectSettingsV2 ethernetSettings;
@@ -72,7 +72,7 @@ public class LogicalInterconnects extends BaseModelResource {
      *
      * @return The stackingHealth
      */
-    public LogicalInterconnects.StackingHealth getStackingHealth() {
+    public StackingHealth getStackingHealth() {
         return stackingHealth;
     }
 
@@ -81,7 +81,7 @@ public class LogicalInterconnects extends BaseModelResource {
      * @param stackingHealth
      *            The stackingHealth
      */
-    public void setStackingHealth(final LogicalInterconnects.StackingHealth stackingHealth) {
+    public void setStackingHealth(final StackingHealth stackingHealth) {
         this.stackingHealth = stackingHealth;
     }
 
@@ -348,73 +348,6 @@ public class LogicalInterconnects extends BaseModelResource {
                 .append(fcoeSettings, rhs.fcoeSettings)
                 .appendSuper(super.equals(other))
                 .isEquals();
-    }
-
-    public static enum StackingHealth {
-
-        Unknown("Unknown"),
-        Connected("Connected"),
-        BiConnected("BiConnected"),
-        Disconnected("Disconnected");
-
-        private final String value;
-        private static Map<String, LogicalInterconnects.StackingHealth> constants = new HashMap<String, LogicalInterconnects.StackingHealth>();
-
-        static {
-            for (final LogicalInterconnects.StackingHealth c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private StackingHealth(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static LogicalInterconnects.StackingHealth fromValue(final String value) {
-            final LogicalInterconnects.StackingHealth constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
-    }
-
-    public static enum Compliance {
-
-        CONSISTENT("CONSISTENT"), NOT_CONSISTENT("NOT_CONSISTENT");
-        private final String value;
-        private static Map<String, LogicalInterconnects.Compliance> constants = new HashMap<String, LogicalInterconnects.Compliance>();
-
-        static {
-            for (final LogicalInterconnects.Compliance c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private Compliance(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static LogicalInterconnects.Compliance fromValue(final String value) {
-            final LogicalInterconnects.Compliance constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
     }
 
 }

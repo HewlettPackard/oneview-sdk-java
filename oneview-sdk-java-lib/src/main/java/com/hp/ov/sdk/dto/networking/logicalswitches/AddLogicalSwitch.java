@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking.logicalswitches;
 
 import java.io.Serializable;
 import java.util.ArrayList;
