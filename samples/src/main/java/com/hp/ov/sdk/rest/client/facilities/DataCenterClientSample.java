@@ -42,10 +42,10 @@ public class DataCenterClientSample {
         this.dataCenterClient = oneViewClient.dataCenter();
     }
 
-    private void getDataCenter() {
+    private void getDataCenterById() {
         DataCenter dataCenter = this.dataCenterClient.getById(DATA_CENTER_RESOURCE_ID);
 
-        System.out.println("DataCenterClientSample : getDataCenter : " +
+        System.out.println("DataCenterClientSample : getDataCenterById : " +
                 "DataCenter object returned to client : " + dataCenter.toJsonString());
     }
 
@@ -122,7 +122,7 @@ public class DataCenterClientSample {
     public static void main(String[] args) {
         DataCenterClientSample sample = new DataCenterClientSample();
 
-        sample.getDataCenter();
+        sample.getDataCenterById();
         sample.getAllDataCenters();
         sample.addDataCenter();
         sample.updateDataCenter();

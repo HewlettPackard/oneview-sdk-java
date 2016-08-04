@@ -28,6 +28,7 @@ import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.servers.enclosuregroup.EnclosureGroup;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 
@@ -122,6 +123,8 @@ public class EnclosureGroupClientTest {
                 + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID
                 + "/" + ResourceUris.ENCLOSURE_GROUP_SCRIPT_URI;
         Request request = new Request(HttpMethodType.PUT, expectedUri, ANY_ENCLOSURE_GROUP_CONFIGURATION_SCRIPT);
+
+        request.setContentType(ContentType.TEXT_PLAIN);
 
         then(baseClient).should().executeRequest(request, String.class);
     }

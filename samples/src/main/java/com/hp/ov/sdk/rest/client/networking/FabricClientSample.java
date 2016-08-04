@@ -57,7 +57,7 @@ public class FabricClientSample {
                 "Fabric object returned to client : " + fabric.toJsonString());
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         FabricClientSample client = new FabricClientSample();
 
         client.getFabric();

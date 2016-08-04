@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,181 +12,68 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
+
 package com.hp.ov.sdk.rest.client.settings;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.FwBaseline;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.rest.client.FirmwareDriverClient;
-import com.hp.ov.sdk.rest.client.FirmwareDriverClientImpl;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 
-/*
- * FirmwareDriverClientSample is a sample program to consume the firmware driver software resource of HPE OneView
- * It invokes APIs of FirmwareDriverClient which is in sdk library to perform GET/DELETE
- * operations on firmware driver resource
- */
 public class FirmwareDriverClientSample {
-
-    private final FirmwareDriverClient firmwareDriverClient;
-
-    private RestParams params;
-    private TaskResourceV2 taskResourceV2;
 
     // These are variables to be defined by user
     // ================================
-    private static final String resourceName = "HP Service Pack For ProLiant OneView 2014 11 13";
-    private static final String resourceId = "bp-hp-service-pack-for-proliant-oneview-2014-11-30-05";
+    private static final String FIRMWARE_DRIVER_RESOURCE_ID = "bp-hp-service-pack-for-proliant-oneview-2014-11-30-05";
+    private static final String FIRMWARE_DRIVER_NAME = "hp-firmware-a1b08f8a6b-HPGH-1_1_i386";
     // ================================
 
-    private FirmwareDriverClientSample() {
-        this.firmwareDriverClient = FirmwareDriverClientImpl.getClient();
+    private final FirmwareDriverClient client;
+
+    public FirmwareDriverClientSample() {
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
+        this.client = oneViewClient.firmwareDriver();
     }
 
-    private void getFirmwareDriverById() throws InstantiationException, IllegalAccessException {
-        FwBaseline fwBaselineDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getFirmwareDriverById() {
+        FwBaseline firmwareDriver = this.client.getById(FIRMWARE_DRIVER_RESOURCE_ID);
 
-            // then make sdk service call to get resource
-            fwBaselineDto = firmwareDriverClient.getFirmwareDriver(params, resourceId);
-
-            System.out.println("FirmwareDriverClientTest : getFirmwareDriverById :"
-                    + " fwBaseline group object returned to client : " + fwBaselineDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("FirmwareDriverClientTest : getFirmwareDriverById :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("FirmwareDriverClientTest : getFirmwareDriverById :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("FirmwareDriverClientTest : getFirmwareDriverById :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("FirmwareDriverClientTest : getFirmwareDriverById :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("FirmwareDriverClientTest : getFirmwareDriverById :" + " arguments are null ");
-            return;
-        }
+        System.out.println("FirmwareDriverClientSample : getFirmwareDriver : " +
+                "FwBaseline object returned to client : " + firmwareDriver.toJsonString());
     }
 
-    private void getAllFirmwareDriver() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
-            SDKNoSuchUrlException {
-        ResourceCollection<FwBaseline> fwBaselineCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getAllFirmwareDrivers() {
+        ResourceCollection<FwBaseline> firmwareDrivers = this.client.getAll();
 
-            // then make sdk service call to get resource
-            fwBaselineCollectionDto = firmwareDriverClient.getAllFirmwareDrivers(params);
-
-            System.out.println("FirmwareDriverClientTest : getAllFirmwareDriver :"
-                    + " fwBaseline groups object returned to client : " + fwBaselineCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("FirmwareDriverClientTest : getAllFirmwareDriver " + ": resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("FirmwareDriverClientTest : getAllFirmwareDriver :" + " no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("FirmwareDriverClientTest : getAllFirmwareDriver :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("FirmwareDriverClientTest : getAllFirmwareDriver :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("FirmwareDriverClientTest : getAllFirmwareDriver :" + " arguments are null ");
-            return;
-        }
+        System.out.println("FirmwareDriverClientSample : getAllFirmwareDrivers : " +
+                "FwBaselines returned to client : " + firmwareDrivers.toJsonString());
     }
 
-    private void getFirmwareDriverByName() throws InstantiationException, IllegalAccessException {
-        FwBaseline fwBaselineDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getFirmwareDriverByName() {
+        FwBaseline firmwareDriver = this.client.getByName(FIRMWARE_DRIVER_NAME).get(0);
 
-            // then make sdk service call to get resource
-            fwBaselineDto = firmwareDriverClient.getFirmwareDriverByName(params, resourceName);
-
-            System.out.println("FirmwareDriverClientTest : getFirmwareDriverByName :"
-                    + " fwBaseline group object returned to client : " + fwBaselineDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("FirmwareDriverClientTest : getFirmwareDriverByName :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("FirmwareDriverClientTest : getFirmwareDriverByName :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("FirmwareDriverClientTest : getFirmwareDriverByName :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("FirmwareDriverClientTest : getFirmwareDriverByName :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("FirmwareDriverClientTest : getFirmwareDriverByName :" + " arguments are null ");
-            return;
-        }
+        System.out.println("FirmwareDriverClientSample : getFirmwareDriverByName : " +
+                "FwBaseline object returned to client : " + firmwareDriver.toJsonString());
     }
 
-    private void deleteFirmwareDriver() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void deleteFirmwareDriver() {
+        FwBaseline firmwareDriver = this.client.getByName(FIRMWARE_DRIVER_NAME).get(0);
+        TaskResourceV2 task = this.client.delete(firmwareDriver.getResourceId(), false);
 
-            // get resource ID
-            resourceId = firmwareDriverClient.getId(params, resourceName);
-
-            // then make sdk service call to get resource
-            taskResourceV2 = firmwareDriverClient.deleteFirmwareDriver(params, resourceId, false, false);
-
-            System.out.println("FirmwareDriverClientTest : deleteFirmwareDriver : "
-                    + "fcNetwork group object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("FirmwareDriverClientTest : deleteFirmwareDriver :"
-                    + " resource you are looking is not found for delete ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("FirmwareDriverClientTest : deleteFirmwareDriver :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("FirmwareDriverClientTest : deleteFirmwareDriver :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("FirmwareDriverClientTest : deleteFirmwareDriver : " + "No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("FirmwareDriverClientTest : deleteFirmwareDriver :" + " arguments are null ");
-            return;
-        }
+        System.out.println("FirmwareDriverClientSample : deleteFirmwareDriver : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
-    public static void main(final String[] args) throws Exception {
-        FirmwareDriverClientSample client = new FirmwareDriverClientSample();
+    public static void main(String[] args) {
+        FirmwareDriverClientSample sample = new FirmwareDriverClientSample();
 
-        client.getFirmwareDriverById();
-        client.getAllFirmwareDriver();
-        client.getFirmwareDriverByName();
-        client.deleteFirmwareDriver();
+        sample.getFirmwareDriverById();
+        sample.getAllFirmwareDrivers();
+        sample.getFirmwareDriverByName();
+        sample.deleteFirmwareDriver();
     }
+
 }

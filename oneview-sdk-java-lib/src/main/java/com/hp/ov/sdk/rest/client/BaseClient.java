@@ -33,6 +33,7 @@ import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -52,6 +53,10 @@ public class BaseClient {
         this.adaptor = adaptor;
         this.client = client;
         this.monitor = monitor;
+    }
+
+    public ApiVersion getApiVersion() {
+        return this.params.getApiVersion();
     }
 
     public <T> T getResource(String uri, Class<T> returnType) {

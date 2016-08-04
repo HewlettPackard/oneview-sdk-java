@@ -42,8 +42,9 @@ public class EnclosureGroupClientSample {
 
     // test values - user input
     // ================================
+    public static final String ENCLOSURE_GROUP_NAME = "Enclosure_Sample";
+
     private static final String ENCLOSURE_GROUP_RESOURCE_ID = "1ac77207-e5e0-432f-a6bb-3d6d7b7b247f";
-    private static final String ENCLOSURE_GROUP_NAME = "Enclosure_Sample";
     private static final String ENCLOSURE_GROUP_NAME_UPDATED = ENCLOSURE_GROUP_NAME + "_Updated";
     private static final String ENCLOSURE_SCRIPT_DATA = "name=Enclosure_test";
     // ================================

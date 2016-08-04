@@ -15,8 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.servers;
 
-import java.util.Arrays;
-
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
@@ -34,22 +32,11 @@ import com.hp.ov.sdk.dto.servers.LicensingIntent;
 import com.hp.ov.sdk.dto.servers.enclosure.AddEnclosure;
 import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
 import com.hp.ov.sdk.dto.servers.enclosure.FwBaselineOptions;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKBadRequestException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.EnclosureClient;
-import com.hp.ov.sdk.rest.client.EnclosureClientImpl;
-import com.hp.ov.sdk.rest.client.FirmwareDriverClient;
-import com.hp.ov.sdk.rest.client.FirmwareDriverClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.server.EnclosureClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
+import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
+import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
 /*
  * EnclosureClientSample is a sample program to consume the REST API of c7000 enclosure managed
@@ -62,781 +49,224 @@ public class EnclosureClientSample {
     private final FirmwareDriverClient firmwareDriverClient;
     private final EnclosureGroupClient enclosureGroupClient;
 
-    private RestParams params;
-    private TaskResourceV2 taskResourceV2;
-
     // test values - user input
     // ================================
-    public static final String resourceName = "Encl1";
+    public static final String RESOURCE_NAME = "Encl1";
+    public static final String RESOURCE_NAME_UPDATED = "Encl1_Updated";
 
-    private static final String enclosureGroupName = "Enclosure_Test";
-    private static final String hostname = "172.18.1.13";
-    private static final String username = "dcs";
-    private static final String password = "dcs";
-    private static final String firmware = "Service Pack for ProLiant";
-    private static final String resourceId = "09SGH102X6J1";
+    private static final String RESOURCE_ID = "09SGH100X6J1";
+    private static final String ENCLOSURE_GROUP_NAME = "Enclosure_Test";
+    private static final String ENCLOSURE_CONFIGURATION_SCRIPT = "name=Enclosure_test_script";
+    private static final String HOSTNAME = "172.18.1.11";
+    private static final String USERNAME = "dcs";
+    private static final String PASSWORD = "dcs";
+    private static final String FIRMWARE = "Service Pack for ProLiant";
     // ================================
 
     private EnclosureClientSample() {
         OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
 
-        this.enclosureClient = EnclosureClientImpl.getClient();
-        this.firmwareDriverClient = FirmwareDriverClientImpl.getClient();
+        this.enclosureClient = oneViewClient.enclosure();
+        this.firmwareDriverClient = oneViewClient.firmwareDriver();
         this.enclosureGroupClient = oneViewClient.enclosureGroup();
     }
 
-    private void getEnclosureById() throws InstantiationException, IllegalAccessException {
-        Enclosure enclosureDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getEnclosureById() {
+        Enclosure enclosure = enclosureClient.getById(RESOURCE_ID);
 
-            // then make sdk service call to get resource
-            enclosureDto = enclosureClient.getEnclosure(params, resourceId);
-
-            System.out.println("EnclosureClientTest : getEnclosureById :" + " enclosure object returned to client : "
-                    + enclosureDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : getEnclosureById :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : getEnclosureById :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out
-                    .println("EnclosureClientTest : getEnclosureById :" + " Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out
-                    .println("EnclosureClientTest : getEnclosureById :" + " No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : getEnclosureById :" + " arguments are null ");
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : getEnclosureById : "
+                + "Enclosure object returned to client : " + enclosure.toJsonString());
     }
 
-    private void getAllEnclosure() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
-            SDKNoSuchUrlException {
-        ResourceCollection<Enclosure> enclosureCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getAllEnclosures() {
+        ResourceCollection<Enclosure> enclosures = enclosureClient.getAll();
 
-            // then make sdk service call to get resource
-            enclosureCollectionDto = enclosureClient.getAllEnclosures(params);
-
-            System.out.println("EnclosureClientTest : getAllEnclosure :" + " enclosure object returned to client : "
-                    + enclosureCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : getAllEnclosure " + ": resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : getAllEnclosure :" + " no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : getAllEnclosure :" + " Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureClientTest : getAllEnclosure :" + " No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : getAllEnclosure :" + " arguments are null ");
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : getAllEnclosures : "
+                + "Enclosure returned to client (count) : " + enclosures.toJsonString());
     }
 
-    private void getEnclosureByName() throws InstantiationException, IllegalAccessException {
-        Enclosure enclosureDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getEnclosureByName() {
+        Enclosure enclosure = enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            enclosureDto = enclosureClient.getEnclosureByName(params, resourceName);
-
-            System.out.println("EnclosureClientTest : getEnclosureByName :" + " enclosure object returned to client : "
-                    + enclosureDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : getEnclosureByName :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : getEnclosureByName :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : getEnclosureByName :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureClientTest : getEnclosureByName :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : getEnclosureByName :" + " arguments are null ");
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : getEnclosureByName : "
+                + "Enclosure object returned to client : " + enclosure.toJsonString());
     }
 
-    private void addEnclosure() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void addEnclosure() {
+        AddEnclosure addEnclosure = buildAddEnclosure();
 
-            // create network request body
-            final AddEnclosure addEnclosureDto = buildTestEnclosureDto();
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = enclosureClient.createEnclosure(params, addEnclosureDto, false, false);
+        TaskResourceV2 taskResource = this.enclosureClient.add(addEnclosure, false);
 
-            System.out.println("EnclosureClientTest : createEnclosure : enclosure object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : createEnclosure : resource you are looking is not found ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("EnclosureClientTest : createEnclosure : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : createEnclosure : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : createEnclosure : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : createEnclosure : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("EnclosureClientTest : createEnclosure : errors in task, please check task resource for more details ");
-            System.out.println("Task Errors: " + Arrays.toString(e.getMessageParameters()));
-            System.out.println("Task Recomendations: " + Arrays.toString(e.getRecommendedActionsParameters()));
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : addEnclosure : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void updateEnclosure() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        Enclosure enclosureDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateEnclosure() {
+        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-            // fetch resource Id using resource name
-            enclosureDto = enclosureClient.getEnclosureByName(params, resourceName);
+        enclosure.setName(RESOURCE_NAME_UPDATED);
 
-            if (null != enclosureDto.getUri()) {
-                resourceId = UrlUtils.getResourceIdFromUri(enclosureDto.getUri());
-            }
-            enclosureDto.setName(resourceName + "_Updated");
+        TaskResourceV2 taskResource = this.enclosureClient.update(enclosure.getResourceId(), enclosure, false);
 
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = enclosureClient.updateEnclosure(params, resourceId, enclosureDto, false, false);
-
-            System.out.println("EnclosureClientTest : updateEnclosure : " + "Enclosure task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : updateEnclosure :" + " resource you are looking is not found for update ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("EnclosureClientTest : updateEnclosure :" + " bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : updateEnclosure :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : updateEnclosure :" + " Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureClientTest : updateEnclosure :" + " No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : updateEnclosure : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("EnclosureClientTest : updateEnclosure : " + "errors in task, please check task "
-                    + "resource for more details ");
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : updateEnclosure : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void patchEnclosure() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        Enclosure enclosureDto = null;
-        Patch patchDto = new Patch();
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void patchEnclosure() {
+        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
+        Patch patch = new Patch();
 
-            // fetch resource Id using resource name
-            enclosureDto = enclosureClient.getEnclosureByName(params, resourceName);
+        // Enclosure patch supports the update of Name and Rack Name
+        patch.setOp(PatchOperation.replace);
+        patch.setPath("/name");
+        patch.setValue(RESOURCE_NAME_UPDATED);
 
-            if (null != enclosureDto.getUri()) {
-                resourceId = UrlUtils.getResourceIdFromUri(enclosureDto.getUri());
-            }
+        TaskResourceV2 taskResource = this.enclosureClient.patch(enclosure.getResourceId(), patch, false);
 
-            // Enclosure patch supports the update of Name and Rack Name
-            patchDto.setOp(PatchOperation.replace);
-            patchDto.setPath("/name");
-            patchDto.setValue(resourceName + "_Updated");
-
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = enclosureClient.patchEnclosure(params, resourceId, patchDto, false);
-
-            System.out.println("EnclosureClientTest : updateEnclosure : " + "Enclosure task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : updateEnclosure :" + " resource you are looking is not found for update ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("EnclosureClientTest : updateEnclosure :" + " bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : updateEnclosure :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : updateEnclosure :" + " Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureClientTest : updateEnclosure :" + " No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : updateEnclosure : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("EnclosureClientTest : updateEnclosure : " + "errors in task, please check task "
-                    + "resource for more details ");
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : patchEnclosure : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void deleteEnclosure() throws InstantiationException, IllegalAccessException {
-        // first get the session Id
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void removeEnclosure() {
+        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME_UPDATED).get(0);
 
-            // get resource ID
-            resourceId = enclosureClient.getId(params, resourceName);
+        TaskResourceV2 taskResource = this.enclosureClient.remove(enclosure.getResourceId(), false);
 
-            // make sdk service call to get resource
-            taskResourceV2 = enclosureClient.deleteEnclosure(params, resourceId, false);
-
-            System.out.println("EnclosureClientTest : deleteEnclosure : " + "enclosure object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : deleteEnclosureSet :" + " resource you are looking is not found for delete ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : deleteEnclosureSet :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : deleteEnclosure :" + " Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureClientTest : deleteEnclosure : " + "No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : deleteEnclosure :" + " arguments are null ");
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : removeEnclosure : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void getActiveOaSsoUrl() throws InstantiationException, IllegalAccessException {
-        SsoUrlData ssoUrlDataDto = null;
-        String resourceId = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateEnclosureConfiguration() {
+        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = enclosureClient.getId(params, resourceName);
+        TaskResourceV2 taskResource = this.enclosureClient.updateConfiguration(enclosure.getResourceId(), false);
 
-            // then make sdk service call to get resource
-            ssoUrlDataDto = enclosureClient.getActiveOaSsoUrl(params, resourceId);
-
-            System.out.println("EnclosureClientTest : getActiveOaSsoUrl :" + " enclosure sso url data object returned to client : "
-                    + ssoUrlDataDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : getActiveOaSsoUrl :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : getActiveOaSsoUrl :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : getActiveOaSsoUrl :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureClientTest : getActiveOaSsoUrl :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : getActiveOaSsoUrl :" + " arguments are null ");
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : updateEnclosureConfiguration : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void updateCompliance() throws InstantiationException, IllegalAccessException {
-        TaskResourceV2 taskResourceV2 = null;
-        String resourceId = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getEnclosureConfigurationScript() {
+        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = enclosureClient.getId(params, resourceName);
+        String script = this.enclosureClient.getConfigurationScript(enclosure.getResourceId());
 
-            // then make sdk service call to get resource
-            taskResourceV2 = enclosureClient.updateCompliance(params, resourceId, false);
-
-            System.out.println("EnclosureClientTest : updateCompliance :" + " task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : updateCompliance :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : updateCompliance :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out
-                    .println("EnclosureClientTest : updateCompliance :" + " Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out
-                    .println("EnclosureClientTest : updateCompliance :" + " No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : updateCompliance :" + " arguments are null ");
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : getEnclosureConfigurationScript : "
+                + "Script returned to client : " + script);
     }
 
-    private void updateConfiguration() throws InstantiationException, IllegalAccessException {
-        TaskResourceV2 taskResourceV2 = null;
-        String resourceId = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateEnclosureConfigurationScript() {
+        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = enclosureClient.getId(params, resourceName);
+        TaskResourceV2 taskResource = this.enclosureClient.updateConfigurationScript(enclosure.getResourceId(),
+                ENCLOSURE_CONFIGURATION_SCRIPT, false);
 
-            // then make sdk service call to get resource
-            taskResourceV2 = enclosureClient.updateConfiguration(params, resourceId, false);
-
-            System.out.println("EnclosureClientTest : updateConfiguration :" + " task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : updateConfiguration :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : updateConfiguration :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : updateConfiguration :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureClientTest : updateConfiguration :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : updateConfiguration :" + " arguments are null ");
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : updateEnclosureConfigurationScript : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void updateEnclosureFwBaseline() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        FwBaselineConfig fwBaselineConfigDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getEnclosureActiveOaSsoUrl() {
+        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = enclosureClient.getId(params, resourceName);
+        SsoUrlData ssoUrlData = this.enclosureClient.getActiveOaSsoUrl(enclosure.getResourceId());
 
-            fwBaselineConfigDto = buildFwBaselineConfig();
-
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = enclosureClient.updateEnclosureFwBaseline(params, resourceId, fwBaselineConfigDto, false);
-
-            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline : " + "Enclosure task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline :"
-                    + " resource you are looking is not found for update ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline :" + " bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("EnclosureClientTest : updateEnclosureFwBaseline : " + "errors in task, please check task "
-                    + "resource for more details ");
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : getEnclosureActiveOaSsoUrl : "
+                + "SsoUrlData object returned to client : " + JsonPrettyPrinter.print(ssoUrlData));
     }
 
-    private void getEnvironmentalConfiguration() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        EnvironmentalConfiguration environmentalConfigurationDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getEnclosureStandbyOaSsoUrl() {
+        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = enclosureClient.getId(params, resourceName);
+        SsoUrlData ssoUrlData = this.enclosureClient.getStandbyOaSsoUrl(enclosure.getResourceId());
 
-            // then make sdk service call to get resource
-            environmentalConfigurationDto = enclosureClient.getEnvironmentalConfiguration(params, resourceId);
-
-            System.out.println("EnclosureClientTest : getEnvironmentalConfiguration :"
-                    + " enclosure environmental configuration object returned to client : "
-                    + environmentalConfigurationDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : getEnvironmentalConfiguration :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : getEnvironmentalConfiguration :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : getEnvironmentalConfiguration :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureClientTest : getEnvironmentalConfiguration :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : getEnvironmentalConfiguration :" + " arguments are null ");
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : getEnclosureStandbyOaSsoUrl : "
+                + "SsoUrlData object returned to client : " + JsonPrettyPrinter.print(ssoUrlData));
     }
 
-    private void updateEnvironmentalConfiguration() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        EnvironmentalConfiguration environmentalConfigurationDto = null;
-        EnvironmentalConfigurationUpdate environmentalConfigurationUpdateDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateEnclosureCompliance() {
+        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = enclosureClient.getId(params, resourceName);
+        TaskResourceV2 taskResource = this.enclosureClient.updateCompliance(enclosure.getResourceId(), false);
 
-            environmentalConfigurationUpdateDto = buildEnvironmentalConfigurationUpdateConfig();
-
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            environmentalConfigurationDto = enclosureClient.updateEnvironmentalConfiguration(params, resourceId,
-                    environmentalConfigurationUpdateDto);
-
-            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration : "
-                    + "Enclosure task object returned to client : " + environmentalConfigurationDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration :"
-                    + " resource you are looking is not found for update ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration :" + " bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("EnclosureClientTest : updateEnvironmentalConfiguration : " + "errors in task, please check task "
-                    + "resource for more details ");
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : updateEnclosureCompliance : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void updateRefreshState() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateEnclosureFwBaseline() {
+        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = enclosureClient.getId(params, resourceName);
+        FwBaselineConfig fwBaselineConfig = buildFwBaselineConfig();
 
-            RefreshStateConfig refreshStateConfigDto = buildRefreshStateConfig();
+        TaskResourceV2 taskResource = this.enclosureClient.updateFwBaseline(
+                enclosure.getResourceId(), fwBaselineConfig, false);
 
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = enclosureClient.updateRefreshState(params, resourceId, refreshStateConfigDto, false);
-
-            System.out.println("EnclosureClientTest : updateRefreshState : " + "Enclosure task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : updateRefreshState :" + " resource you are looking is not found for update ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("EnclosureClientTest : updateRefreshState :" + " bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : updateRefreshState :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : updateRefreshState :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureClientTest : updateRefreshState :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : updateRefreshState : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("EnclosureClientTest : updateRefreshState : " + "errors in task, please check task "
-                    + "resource for more details ");
-            return;
-        }
+        System.out.println("EnclosureClientSample : updateEnclosureFwBaseline : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void getScript() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        String script = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getEnclosureUtilization() {
+        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = enclosureClient.getId(params, resourceName);
+        UtilizationData utilizationData = this.enclosureClient.getUtilization(enclosure.getResourceId());
 
-            // then make sdk service call to get resource
-            script = enclosureClient.getScript(params, resourceId);
-
-            System.out.println("EnclosureClientTest : getScript :"
-                    + " enclosure environmental configuration object returned to client : " + script);
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : getScript :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : getScript :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : getScript :" + " Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureClientTest : getScript :" + " No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : getScript :" + " arguments are null ");
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : getEnclosureUtilization : "
+                + "UtilizationData object returned to client : " + JsonPrettyPrinter.print(utilizationData));
     }
 
-    private void updateScript() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getEnclosureEnvironmentalConfiguration() {
+        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = enclosureClient.getId(params, resourceName);
+        EnvironmentalConfiguration configuration = this.enclosureClient.getEnvironmentalConfiguration(
+                enclosure.getResourceId());
 
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = enclosureClient.updateScript(params, resourceId, "name=Enclosure_test_two", false, false);
-
-            System.out.println("EnclosureClientTest : updateScript : " + "Enclosure task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : updateScript :" + " resource you are looking is not found for update ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("EnclosureClientTest : updateScript :" + " bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : updateScript :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : updateScript :" + " Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureClientTest : updateScript :" + " No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : updateScript : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("EnclosureClientTest : updateScript : " + "errors in task, please check task "
-                    + "resource for more details ");
-            return;
-        }
+        System.out.println("EnclosureClientSample : getEnclosureEnvironmentalConfiguration : "
+                + "EnvironmentalConfiguration object returned to client : " + JsonPrettyPrinter.print(configuration));
     }
 
-    public void getStandbyOaSsoUrl() throws InstantiationException, IllegalAccessException {
-        SsoUrlData ssoUrlDataDto = null;
-        String resourceId = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateEnclosureEnvironmentalConfiguration() {
+        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = enclosureClient.getId(params, resourceName);
+        EnvironmentalConfigurationUpdate configuration = buildEnvironmentalConfigurationUpdateConfig();
 
-            // then make sdk service call to get resource
-            ssoUrlDataDto = enclosureClient.getStandbyOaSsoUrl(params, resourceId);
+        EnvironmentalConfiguration environmental = this.enclosureClient.updateEnvironmentalConfiguration(
+                enclosure.getResourceId(), configuration);
 
-            System.out.println("EnclosureClientTest : getStandbyOaSsoUrl :"
-                    + " enclosure sso url data object returned to client : " + ssoUrlDataDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : getStandbyOaSsoUrl :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : getStandbyOaSsoUrl :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : getStandbyOaSsoUrl :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureClientTest : getStandbyOaSsoUrl :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : getStandbyOaSsoUrl :" + " arguments are null ");
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : updateEnclosureEnvironmentalConfiguration : " +
+                "EnvironmentalConfiguration object returned to client : " + JsonPrettyPrinter.print(environmental));
     }
 
-    public void getUtilization() throws InstantiationException, IllegalAccessException {
-        UtilizationData utilizationDataDto = null;
-        String resourceId = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateEnclosureRefreshState() {
+        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = enclosureClient.getId(params, resourceName);
+        RefreshStateConfig refreshStateConfig = buildRefreshStateConfig();
 
-            // then make sdk service call to get resource
-            params.getQuery().clear();
-            utilizationDataDto = enclosureClient.getUtilization(params, resourceId);
+        TaskResourceV2 taskResource = this.enclosureClient.updateRefreshState(
+                enclosure.getResourceId(), refreshStateConfig, false);
 
-            System.out.println("EnclosureClientTest : getUtilization :"
-                    + " enclosure utilization data object returned to client : " + utilizationDataDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("EnclosureClientTest : getUtilization :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("EnclosureClientTest : getUtilization :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("EnclosureClientTest : getUtilization :" + " Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("EnclosureClientTest : getUtilization :" + " No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("EnclosureClientTest : getUtilization :" + " arguments are null ");
-            return;
-        }
-
+        System.out.println("EnclosureClientSample : updateEnclosureRefreshState : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private AddEnclosure buildTestEnclosureDto() {
+    private AddEnclosure buildAddEnclosure() {
+        String enclosureGroupUri = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0).getUri();
+        AddEnclosure addEnclosure = new AddEnclosure();
 
-        final String enclosureGroupUri = enclosureGroupClient.getByName(enclosureGroupName).get(0).getUri();
-        final AddEnclosure dto = new AddEnclosure();
-        dto.setHostname(hostname);
-        dto.setUsername(username);
-        dto.setPassword(password);
-        dto.setLicensingIntent(LicensingIntent.OneView);
-        dto.setForce(false);
-        dto.setEnclosureGroupUri(enclosureGroupUri);
-        dto.setFirmwareBaselineUri(firmwareDriverClient.getFirmwareDriverByName(params, firmware).getUri());
-        dto.setUpdateFirmwareOn(FwBaselineOptions.EnclosureOnly);
-        dto.setForceInstallFirmware(false);
-        return dto;
+        addEnclosure.setHostname(HOSTNAME);
+        addEnclosure.setUsername(USERNAME);
+        addEnclosure.setPassword(PASSWORD);
+        addEnclosure.setLicensingIntent(LicensingIntent.OneView);
+        addEnclosure.setForce(false);
+        addEnclosure.setEnclosureGroupUri(enclosureGroupUri);
+        addEnclosure.setFirmwareBaselineUri(firmwareDriverClient.getByName(FIRMWARE).get(0).getUri());
+        addEnclosure.setUpdateFirmwareOn(FwBaselineOptions.EnclosureOnly);
+        addEnclosure.setForceInstallFirmware(false);
+
+        return addEnclosure;
     }
 
     private FwBaselineConfig buildFwBaselineConfig() {
         FwBaselineConfig fwBaselineConfigDto = new FwBaselineConfig();
 
-        fwBaselineConfigDto.setFwBaselineUri(firmwareDriverClient.getFirmwareDriverByName(params, firmware).getUri());
+        fwBaselineConfigDto.setFwBaselineUri(firmwareDriverClient.getByName(FIRMWARE).get(0).getUri());
         fwBaselineConfigDto.setIsFwManaged(true);
         fwBaselineConfigDto.setFirmwareUpdateOn("EnclosureOnly");
         fwBaselineConfigDto.setForceInstallFirmware(false);
@@ -852,47 +282,46 @@ public class EnclosureClientSample {
     }
 
     private RefreshStateConfig buildRefreshStateConfig() {
-        RefreshStateConfig refreshStateConfigDto = new RefreshStateConfig();
-        RefreshForceOptions refreshForceOptions = refreshStateConfigDto.getNewRefreshForceOptions();
-        refreshForceOptions.setAddress(hostname);
-        refreshForceOptions.setUsername(username);
-        refreshForceOptions.setPassword(password);
-        refreshStateConfigDto.setRefreshForceOptions(refreshForceOptions);
-        refreshStateConfigDto.setRefreshState(RefreshState.RefreshPending);
+        RefreshStateConfig refreshStateConfig = new RefreshStateConfig();
+        RefreshForceOptions refreshForceOptions = refreshStateConfig.getNewRefreshForceOptions();
 
-        return refreshStateConfigDto;
+        refreshForceOptions.setAddress(HOSTNAME);
+        refreshForceOptions.setUsername(USERNAME);
+        refreshForceOptions.setPassword(PASSWORD);
+        refreshStateConfig.setRefreshForceOptions(refreshForceOptions);
+        refreshStateConfig.setRefreshState(RefreshState.RefreshPending);
+
+        return refreshStateConfig;
     }
 
     public static void main(final String[] args) throws Exception {
         EnclosureClientSample client = new EnclosureClientSample();
 
-        client.getAllEnclosure();
+        client.getAllEnclosures();
         client.addEnclosure();
         client.getEnclosureById();
-        client.getActiveOaSsoUrl();
+        client.getEnclosureActiveOaSsoUrl();
         client.getEnclosureByName();
-        client.getActiveOaSsoUrl();
-        client.updateConfiguration();
+        client.updateEnclosureConfiguration();
 
-        client.updateCompliance(); // For 2.0 use LogicalEnclosure.updateFromGroup() method
+        client.updateEnclosureCompliance(); // For 2.0 use LogicalEnclosure.updateFromGroup() method
         client.updateEnclosureFwBaseline(); // For 2.0 use LogicalEnclosure.patch() method
 
-        client.getEnvironmentalConfiguration();
+        client.getEnclosureEnvironmentalConfiguration();
         // Check if the privilege exists
-        client.updateEnvironmentalConfiguration();
+        client.updateEnclosureEnvironmentalConfiguration();
 
-        client.updateRefreshState();
+        client.updateEnclosureRefreshState();
 
-        client.updateScript(); // For 2.0 use LogicalEnclosure.updateScript() method
+        client.updateEnclosureConfigurationScript(); // For 2.0 use LogicalEnclosure.updateScript() method
 
-        client.getScript();
-        client.getStandbyOaSsoUrl();
-        client.getUtilization();
+        client.getEnclosureConfigurationScript();
+        client.getEnclosureStandbyOaSsoUrl();
+        client.getEnclosureUtilization();
 
         client.updateEnclosure(); // For 2.0 use patchEnclosure() method
 
         client.patchEnclosure();
-
-        client.deleteEnclosure();
+        client.removeEnclosure();
     }
 }

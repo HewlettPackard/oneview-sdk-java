@@ -30,9 +30,11 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.EntityBuilder;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
@@ -43,7 +45,6 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -62,9 +63,11 @@ import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKForbiddenException;
 import com.hp.ov.sdk.exceptions.SDKInternalServerErrorException;
+import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKMethodNotAllowed;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKUnauthorizedException;
+import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.util.JsonSerializer;
 import com.hp.ov.sdk.util.UrlUtils;
 
@@ -209,36 +212,6 @@ public class HttpRestClient {
         return processRequestType(restParams, requestBody, false);
     }
 
-    public String sendMultipartPostRequest(RestParams restParams, File file) throws SDKBadRequestException {
-        if (restParams.getType() != HttpMethodType.POST) {
-            throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
-                    null, null, null, SdkConstants.APPLIANCE, null);
-        }
-
-        try {
-            HttpPost post = new HttpPost(buildURI(restParams));
-
-            HttpEntity entity = MultipartEntityBuilder.create()
-                    .addBinaryBody("file", file)
-                    .setContentType(ContentType.MULTIPART_FORM_DATA)
-                    .build();
-
-            post.setEntity(entity);
-            post.setConfig(createRequestTimeoutConfiguration());
-
-            post.setHeader("uploadfilename", file.getName());
-            post.setHeader("Auth", restParams.getSessionId());
-            post.setHeader("X-Api-Version", String.valueOf(restParams.getApiVersion().getValue()));
-            post.setHeader("Accept", restParams.getHeaders().get("Accept"));
-            post.setHeader("accept-language", restParams.getHeaders().get("accept-language"));
-
-            return getResponse(post, restParams, false);
-        } catch (IllegalArgumentException e) {
-            throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
-                    null, null, null, SdkConstants.APPLIANCE, e);
-        }
-    }
-
     /**
      * Process the request type to be sent to HPE OneView.
      *
@@ -310,7 +283,7 @@ public class HttpRestClient {
         switch (request.getType()) {
             case POST:
                 HttpPost post = new HttpPost(uri);
-                fillRequestEntity(post, params, request.getEntity());
+                fillRequestEntity(post, params, request);
                 requestBase = post;
                 break;
             case GET:
@@ -319,19 +292,18 @@ public class HttpRestClient {
                 break;
             case PATCH:
                 HttpPatch patch = new HttpPatch(uri);
+                HttpEntity entity = EntityBuilder.create()
+                        .setText(serializer.toJsonArray((Patch) request.getEntity(),
+                                params.getApiVersion()))
+                        .setContentType(toApacheContentType(request.getContentType())).build();
 
-                StringEntity stringEntity = new StringEntity(
-                        serializer.toJsonArray((Patch) request.getEntity(), params.getApiVersion()),
-                        ContentType.APPLICATION_JSON);
+                patch.setEntity(entity);
 
-                patch.setEntity(stringEntity);
-
-                fillRequestEntity(patch, params, request.getEntity());
                 requestBase = patch;
                 break;
             case PUT:
                 HttpPut put = new HttpPut(uri);
-                fillRequestEntity(put, params, request.getEntity());
+                fillRequestEntity(put, params, request);
                 requestBase = put;
                 break;
             case DELETE:
@@ -356,14 +328,45 @@ public class HttpRestClient {
                 SdkConstants.APPLIANCE, null);
     }
 
-    private void fillRequestEntity(HttpEntityEnclosingRequestBase base, RestParams params, Object entity) {
-        if (entity != null) {
-            StringEntity stringEntity = new StringEntity(
-                    serializer.toJson(entity, params.getApiVersion()),
-                    ContentType.APPLICATION_JSON);
+    private void fillRequestEntity(HttpEntityEnclosingRequestBase base, RestParams params, Request request) {
+        if (request.hasEntity()) {
+            HttpEntity entity;
+            ContentType contentType = request.getContentType();
 
-            base.setEntity(stringEntity);
+            //TODO add support for Content-Type "application/json-patch+json" (PATCH)
+
+            if (ContentType.APPLICATION_JSON == contentType) {
+                entity = EntityBuilder.create()
+                        .setContentType(toApacheContentType(contentType))
+                        .setText(serializer.toJson(request.getEntity(), params.getApiVersion()))
+                        .build();
+            } else if (ContentType.TEXT_PLAIN == contentType) {
+                entity = EntityBuilder.create()
+                        .setContentType(toApacheContentType(contentType))
+                        .setText(request.getEntity().toString())
+                        .build();
+            } else if (ContentType.MULTIPART_FORM_DATA == contentType) {
+                File file = (File) request.getEntity();
+                entity = MultipartEntityBuilder.create()
+                        .setContentType(toApacheContentType(contentType))
+                        .addBinaryBody("file", file)
+                        .build();
+
+
+                //TODO add support for custom headers in Request object
+                base.setHeader("uploadfilename", file.getName());
+            } else {
+                LOGGER.error("Unknown entity Content-Type");
+
+                throw new SDKInvalidArgumentException(SDKErrorEnum.internalServerError,
+                        null, null, null, "Unknown entity Content-Type", null);
+            }
+            base.setEntity(entity);
         }
+    }
+
+    private org.apache.http.entity.ContentType toApacheContentType(ContentType contentType) {
+        return org.apache.http.entity.ContentType.create(contentType.getMimeType(), contentType.getCharset());
     }
 
     /**
@@ -381,6 +384,7 @@ public class HttpRestClient {
             throws SDKBadRequestException {
         HttpDelete delete = new HttpDelete(buildURI(params));
         setRequestHeaders(params, delete);
+        delete.setHeader("Content-Type", "application/json; charset=UTF-8");
         delete.setConfig(createRequestTimeoutConfiguration());
         return getResponse(delete, params, forceReturnTask);
     }
@@ -407,6 +411,7 @@ public class HttpRestClient {
             }
             put.setEntity(new StringEntity(requestBody, CHAR_SET));
             setRequestHeaders(params, put);
+            put.setHeader("Content-Type", "application/json; charset=UTF-8");
             put.setConfig(createRequestTimeoutConfiguration());
             return getResponse(put, params, forceReturnTask);
         } catch (IllegalArgumentException e) {
@@ -433,6 +438,7 @@ public class HttpRestClient {
             throws SDKBadRequestException {
         HttpGet get = new HttpGet(buildURI(params));
         setRequestHeaders(params, get);
+        get.setHeader("Content-Type", "application/json; charset=UTF-8");
         get.setConfig(createRequestTimeoutConfiguration());
         return getResponse(get, params, forceReturnTask);
     }
@@ -459,6 +465,7 @@ public class HttpRestClient {
             }
             post.setEntity(new StringEntity(requestBody, CHAR_SET));
             setRequestHeaders(params, post);
+            post.setHeader("Content-Type", "application/json; charset=UTF-8");
             post.setConfig(createRequestTimeoutConfiguration());
             return getResponse(post, params, forceReturnTask);
         } catch (IllegalArgumentException e) {
@@ -490,6 +497,7 @@ public class HttpRestClient {
             }
             patch.setEntity(new StringEntity(requestBody, CHAR_SET));
             setRequestHeaders(params, patch);
+            patch.setHeader("Content-Type", "application/json; charset=UTF-8");
             patch.setConfig(createRequestTimeoutConfiguration());
             return getResponse(patch, params, forceReturnTask);
         } catch (IllegalArgumentException e) {
@@ -568,13 +576,12 @@ public class HttpRestClient {
      *  Request information
      */
     private void setRequestHeaders(RestParams params, HttpUriRequest request) {
-        if (params.getSessionId() != null) {
-            request.setHeader("auth", params.getSessionId());
+        if (StringUtils.isNotBlank(params.getSessionId())) {
+            request.setHeader("Auth", params.getSessionId());
         }
-        request.setHeader("X-API-Version", String.valueOf(params.getApiVersion().getValue()));
-        request.setHeader("Content-Type", params.getHeaders().get("Content-Type"));
-        request.setHeader("Accept", params.getHeaders().get("Accept"));
-        request.setHeader("accept-language", params.getHeaders().get("accept-language"));
+        request.setHeader("Accept", "application/json");
+        request.setHeader("accept-language", "en_US");
+        request.setHeader("X-Api-Version", String.valueOf(params.getApiVersion().getValue()));
     }
 
     /**

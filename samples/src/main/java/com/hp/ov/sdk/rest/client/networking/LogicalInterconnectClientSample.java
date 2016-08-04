@@ -47,8 +47,7 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.FirmwareDriverClient;
-import com.hp.ov.sdk.rest.client.FirmwareDriverClientImpl;
+import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectClient;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
@@ -87,7 +86,8 @@ public class LogicalInterconnectClientSample {
     private LogicalInterconnectClientSample() {
         this.oneViewClient = OneViewClientSample.getOneViewClient();
         this.logicalInterconnectClient = LogicalInterconnectClientImpl.getClient();
-        this.firmwareDriverClient = FirmwareDriverClientImpl.getClient();
+
+        this.firmwareDriverClient = oneViewClient.firmwareDriver();
     }
 
     private void getLogicalInterconnectById() throws InstantiationException, IllegalAccessException {
@@ -301,7 +301,7 @@ public class LogicalInterconnectClientSample {
         final LiFirmware liFirmware = new LiFirmware();
 
         liFirmware.setCommand(Command.STAGE);
-        liFirmware.setSppUri(firmwareDriverClient.getFirmwareDriverByName(params, sppName).getUri());
+        liFirmware.setSppUri(firmwareDriverClient.getByName(sppName).get(0).getUri());
         liFirmware.setForce(true);
         return liFirmware;
     }
@@ -380,7 +380,7 @@ public class LogicalInterconnectClientSample {
         final LiFirmware liFirmware = new LiFirmware();
 
         liFirmware.setCommand(Command.STAGE);
-        liFirmware.setSppUri(firmwareDriverClient.getFirmwareDriverByName(params, sppName).getUri());
+        liFirmware.setSppUri(firmwareDriverClient.getByName(sppName).get(0).getUri());
         final List<PhysicalInterconnectFirmware> interconnects = new ArrayList<PhysicalInterconnectFirmware>();
         for (int i = 0; i < initliFirmware.getInterconnects().size(); i++) {
             String interconnectName = null;
@@ -447,7 +447,7 @@ public class LogicalInterconnectClientSample {
         final LiFirmware liFirmware = new LiFirmware();
 
         liFirmware.setCommand(Command.UPDATE);
-        liFirmware.setSppUri(firmwareDriverClient.getFirmwareDriverByName(params, sppName).getUri());
+        liFirmware.setSppUri(firmwareDriverClient.getByName(sppName).get(0).getUri());
         liFirmware.setForce(true);
         return liFirmware;
     }

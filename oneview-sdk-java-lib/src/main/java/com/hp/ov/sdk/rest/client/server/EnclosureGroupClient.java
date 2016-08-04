@@ -23,6 +23,7 @@ import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.servers.enclosuregroup.EnclosureGroup;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -176,10 +177,11 @@ public class EnclosureGroupClient {
     }
 
     /**
-     * Retrieves the configuration script for the specified enclosure group resource identifier.
+     * Updates the configuration script for the specified enclosure group resource identifier.
      * 
      * @param resourceId enclosure group resource identifier as seen in HPE OneView.
      * @param scriptData script data to be updated for enclosure group.
+     *
      * @return the configuration script for the specified enclosure group.
      */
     public String updateConfigurationScript(String resourceId, String scriptData) {
@@ -190,7 +192,7 @@ public class EnclosureGroupClient {
                         ResourceUris.ENCLOSURE_GROUP_SCRIPT_URI),
                 scriptData);
 
-        //FIXME [svoboda] Content-Type must be moved from RestParams to Request
+        request.setContentType(ContentType.TEXT_PLAIN);
 
         /*
         in this particular request, even though the documentation states that the content type

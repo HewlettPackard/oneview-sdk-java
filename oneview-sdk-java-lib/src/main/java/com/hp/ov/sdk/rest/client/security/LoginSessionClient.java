@@ -46,12 +46,12 @@ public class LoginSessionClient {
      * for further requests.
      */
     public LoginSession authenticate(LoginInformation loginInformation) {
-        LOGGER.info("FcoeNetworkClient : authenticate : Start");
+        LOGGER.info("LoginSessionClient : authenticate : Start");
 
         Request request = new Request(HttpMethodType.POST, ResourceUris.LOGIN_SESSIONS, loginInformation);
         LoginSession loginSession = baseClient.executeRequest(request, LoginSession.class);
 
-        LOGGER.info("FcoeNetworkClient : authenticate : End");
+        LOGGER.info("LoginSessionClient : authenticate : End");
 
         return loginSession;
     }

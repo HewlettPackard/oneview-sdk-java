@@ -22,6 +22,8 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKException;
 import com.hp.ov.sdk.rest.client.facilities.DataCenterClient;
+import com.hp.ov.sdk.rest.client.facilities.PowerDeliveryDeviceClient;
+import com.hp.ov.sdk.rest.client.facilities.RackClient;
 import com.hp.ov.sdk.rest.client.facilities.UnmanagedDeviceClient;
 import com.hp.ov.sdk.rest.client.networking.ConnectionTemplateClient;
 import com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient;
@@ -29,17 +31,26 @@ import com.hp.ov.sdk.rest.client.networking.FabricClient;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.InterconnectTypeClient;
+import com.hp.ov.sdk.rest.client.networking.LogicalDownlinkClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchGroupClient;
 import com.hp.ov.sdk.rest.client.networking.NetworkSetClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
+import com.hp.ov.sdk.rest.client.networking.UplinkSetClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
+import com.hp.ov.sdk.rest.client.server.EnclosureClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
+import com.hp.ov.sdk.rest.client.server.LogicalEnclosureClient;
 import com.hp.ov.sdk.rest.client.server.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.server.ServerHardwareTypeClient;
+import com.hp.ov.sdk.rest.client.settings.FirmwareBundleClient;
+import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
+import com.hp.ov.sdk.rest.client.storage.FcSanDeviceManagerClient;
+import com.hp.ov.sdk.rest.client.storage.FcSanManagedSanClient;
+import com.hp.ov.sdk.rest.client.storage.FcSanProviderClient;
 import com.hp.ov.sdk.rest.client.storage.StoragePoolClient;
 import com.hp.ov.sdk.rest.client.storage.StorageSystemClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeAttachmentClient;
@@ -56,14 +67,19 @@ public class OneViewClient {
     private final BaseClient baseClient;
 
     private EnclosureGroupClient enclosureGroupClient;
+    private EnclosureClient enclosureClient;
+    private LogicalEnclosureClient logicalEnclosureClient;
     private FcoeNetworkClient fcoeNetworkClient;
     private FcNetworkClient fcNetworkClient;
     private EthernetNetworkClient ethernetNetworkClient;
     private LogicalSwitchClient logicalSwitchClient;
     private LogicalSwitchGroupClient logicalSwitchGroupClient;
     private NetworkSetClient networkSetClient;
+    private UplinkSetClient uplinkSetClient;
     private SwitchTypeClient switchTypeClient;
+    private RackClient rackClient;
     private DataCenterClient dataCenterClient;
+    private PowerDeliveryDeviceClient powerDeliveryDeviceClient;
     private UnmanagedDeviceClient unmanagedDeviceClient;
     private ConnectionTemplateClient connectionTemplateClient;
     private FabricClient fabricClient;
@@ -73,11 +89,18 @@ public class OneViewClient {
     private StorageVolumeClient storageVolumeClient;
     private StorageVolumeAttachmentClient storageVolumeAttachmentClient;
     private StorageVolumeTemplateClient storageVolumeTemplateClient;
+    private FcSanDeviceManagerClient fcSanDeviceManagerClient;
+    private FcSanProviderClient fcSanProviderClient;
+    private FcSanManagedSanClient fcSanManagedSanClient;
     private InterconnectTypeClient interconnectTypeClient;
     private LogicalInterconnectGroupClient logicalInterconnectGroupClient;
+    private LogicalDownlinkClient logicalDownlinkClient;
 
     private ServerHardwareClient serverHardwareClient;
     private ServerHardwareTypeClient serverHardwareTypeClient;
+
+    private FirmwareBundleClient firmwareBundleClient;
+    private FirmwareDriverClient firmwareDriverClient;
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
         this.baseClient = new BaseClient(params,
@@ -95,6 +118,14 @@ public class OneViewClient {
 
     public synchronized EnclosureGroupClient enclosureGroup() {
         return this.getClient(this.enclosureGroupClient, EnclosureGroupClient.class);
+    }
+
+    public synchronized EnclosureClient enclosure() {
+        return this.getClient(this.enclosureClient, EnclosureClient.class);
+    }
+
+    public synchronized LogicalEnclosureClient logicalEnclosure() {
+        return this.getClient(this.logicalEnclosureClient, LogicalEnclosureClient.class);
     }
 
     public synchronized FcoeNetworkClient fcoeNetwork() {
@@ -121,12 +152,24 @@ public class OneViewClient {
         return this.getClient(this.networkSetClient, NetworkSetClient.class);
     }
 
+    public synchronized UplinkSetClient uplinkSet() {
+        return this.getClient(this.uplinkSetClient, UplinkSetClient.class);
+    }
+
     public synchronized SwitchTypeClient switchType() {
         return this.getClient(this.switchTypeClient, SwitchTypeClient.class);
     }
 
+    public synchronized RackClient rack() {
+        return this.getClient(this.rackClient, RackClient.class);
+    }
+
     public synchronized DataCenterClient dataCenter() {
         return this.getClient(this.dataCenterClient, DataCenterClient.class);
+    }
+
+    public synchronized PowerDeliveryDeviceClient powerDeliveryDevice() {
+        return this.getClient(this.powerDeliveryDeviceClient, PowerDeliveryDeviceClient.class);
     }
 
     public synchronized UnmanagedDeviceClient unmanagedDevice() {
@@ -165,6 +208,18 @@ public class OneViewClient {
         return this.getClient(this.storageVolumeTemplateClient, StorageVolumeTemplateClient.class);
     }
 
+    public synchronized FcSanDeviceManagerClient fcSanDeviceManager() {
+        return this.getClient(this.fcSanDeviceManagerClient, FcSanDeviceManagerClient.class);
+    }
+
+    public synchronized FcSanProviderClient fcSanProvider() {
+        return this.getClient(this.fcSanProviderClient, FcSanProviderClient.class);
+    }
+
+    public synchronized FcSanManagedSanClient fcSanManagedSan() {
+        return this.getClient(this.fcSanManagedSanClient, FcSanManagedSanClient.class);
+    }
+
     public synchronized InterconnectTypeClient interconnectType() {
         return this.getClient(this.interconnectTypeClient, InterconnectTypeClient.class);
     }
@@ -173,12 +228,24 @@ public class OneViewClient {
         return this.getClient(this.logicalInterconnectGroupClient, LogicalInterconnectGroupClient.class);
     }
 
+    public synchronized LogicalDownlinkClient logicalDownlink() {
+        return this.getClient(this.logicalDownlinkClient, LogicalDownlinkClient.class);
+    }
+
     public synchronized ServerHardwareClient serverHardware() {
         return this.getClient(this.serverHardwareClient, ServerHardwareClient.class);
     }
 
     public synchronized ServerHardwareTypeClient serverHardwareType() {
         return this.getClient(this.serverHardwareTypeClient, ServerHardwareTypeClient.class);
+    }
+
+    public synchronized FirmwareBundleClient firmwareBundle() {
+        return this.getClient(this.firmwareBundleClient, FirmwareBundleClient.class);
+    }
+
+    public synchronized FirmwareDriverClient firmwareDriver() {
+        return this.getClient(this.firmwareDriverClient, FirmwareDriverClient.class);
     }
 
     private <T> T getClient(T client, Class<T> clientClass) {
