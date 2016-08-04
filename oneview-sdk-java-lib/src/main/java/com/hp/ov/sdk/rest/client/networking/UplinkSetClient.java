@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.UplinkSets;
+import com.hp.ov.sdk.dto.networking.uplinksets.UplinkSet;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -42,13 +42,13 @@ public class UplinkSetClient {
      *
      * @param resourceId resource identifier for uplink set as seen in HPE OneView.
      *
-     * @return {@link UplinkSets} containing the uplink set details.
+     * @return {@link UplinkSet} containing the uplink set details.
      */
-    public UplinkSets getById(String resourceId) {
+    public UplinkSet getById(String resourceId) {
         LOGGER.info("UplinkSetClient : getById : Start");
 
-        UplinkSets uplinkSet = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.UPLINK_SETS_URI, resourceId), UplinkSets.class);
+        UplinkSet uplinkSet = baseClient.getResource(
+                UrlUtils.createUrl(ResourceUris.UPLINK_SETS_URI, resourceId), UplinkSet.class);
 
         LOGGER.info("UplinkSetClient : getById : End");
 
@@ -59,14 +59,14 @@ public class UplinkSetClient {
      * The module aids in fetching the uplink set details for all the
      * uplink sets found under the current HPE OneView.
      *
-     * @return {@link ResourceCollection}&lt;{@link UplinkSets}&gt; containing
+     * @return {@link ResourceCollection}&lt;{@link UplinkSet}&gt; containing
      * the details for all found uplink sets.
      */
-    public ResourceCollection<UplinkSets> getAll() {
+    public ResourceCollection<UplinkSet> getAll() {
         LOGGER.info("UplinkSetClient : getAll : Start");
 
-        ResourceCollection<UplinkSets> uplinkSets = baseClient.getResourceCollection(
-                ResourceUris.UPLINK_SETS_URI, UplinkSets.class);
+        ResourceCollection<UplinkSet> uplinkSets = baseClient.getResourceCollection(
+                ResourceUris.UPLINK_SETS_URI, UplinkSet.class);
 
         LOGGER.info("UplinkSetClient : getAll : End");
 
@@ -79,14 +79,14 @@ public class UplinkSetClient {
      *
      * @param name uplink set name as seen in HPE OneView.
      *
-     * @return {@link ResourceCollection}&lt;{@link UplinkSets}&gt; containing
+     * @return {@link ResourceCollection}&lt;{@link UplinkSet}&gt; containing
      * the details for all found uplink sets.
      */
-    public ResourceCollection<UplinkSets> getByName(String name) {
+    public ResourceCollection<UplinkSet> getByName(String name) {
         LOGGER.info("UplinkSetClient : getByName : Start");
 
-        ResourceCollection<UplinkSets> uplinkSets = baseClient.getResourceCollection(
-                ResourceUris.UPLINK_SETS_URI, UplinkSets.class, UrlParameter.getFilterByNameParameter(name));
+        ResourceCollection<UplinkSet> uplinkSets = baseClient.getResourceCollection(
+                ResourceUris.UPLINK_SETS_URI, UplinkSet.class, UrlParameter.getFilterByNameParameter(name));
 
         LOGGER.info("UplinkSetClient : getByName : End");
 
@@ -95,7 +95,7 @@ public class UplinkSetClient {
 
     /**
      * The module aids in the creation of a uplink set when provided with the
-     * uplink set details as a UplinkSets object. It can process
+     * uplink set details as a UplinkSet object. It can process
      * the request asynchronously or synchronously, based on the flag input.
      *
      * @param uplinkSet containing the uplink set details, used to create a uplink set.
@@ -104,7 +104,7 @@ public class UplinkSetClient {
      *
      * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 create(UplinkSets uplinkSet, boolean aSync) {
+    public TaskResourceV2 create(UplinkSet uplinkSet, boolean aSync) {
         LOGGER.info("UplinkSetClient : create : Start");
 
         TaskResourceV2 taskResource = baseClient.createResource(
@@ -116,7 +116,7 @@ public class UplinkSetClient {
     }
 
     /**
-     * The module takes in a UplinkSets object and updates the existing uplink
+     * The module takes in a UplinkSet object and updates the existing uplink
      * set based on the resource identifier. It can process the request
      * asynchronously or synchronously, based on the flag input.
      *
@@ -127,7 +127,7 @@ public class UplinkSetClient {
      *
      * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    public TaskResourceV2 update(String resourceId, UplinkSets uplinkSet, boolean aSync) {
+    public TaskResourceV2 update(String resourceId, UplinkSet uplinkSet, boolean aSync) {
         LOGGER.info("UplinkSetClient : update : Start");
 
         TaskResourceV2 taskResource = baseClient.updateResource(

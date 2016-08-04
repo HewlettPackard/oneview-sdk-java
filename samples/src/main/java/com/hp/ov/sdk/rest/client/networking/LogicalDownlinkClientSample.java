@@ -16,8 +16,8 @@
 package com.hp.ov.sdk.rest.client.networking;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.dto.LogicalDownlink;
 import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.networking.logicaldownlinks.LogicalDownlink;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 /*

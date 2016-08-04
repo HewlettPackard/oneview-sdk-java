@@ -25,7 +25,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.generated.UplinkSets;
+import com.hp.ov.sdk.dto.networking.uplinksets.UplinkSet;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
@@ -47,14 +47,14 @@ public class UplinkSetClientTest {
 
         String expectedUri = ResourceUris.UPLINK_SETS_URI + "/" + ANY_RESOURCE_ID;
 
-        then(baseClient).should().getResource(expectedUri, UplinkSets.class);
+        then(baseClient).should().getResource(expectedUri, UplinkSet.class);
     }
 
     @Test
     public void shouldGetAllUplinkSets() {
         uplinkSetClient.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.UPLINK_SETS_URI, UplinkSets.class);
+        then(baseClient).should().getResourceCollection(ResourceUris.UPLINK_SETS_URI, UplinkSet.class);
     }
 
     @Test
@@ -62,12 +62,12 @@ public class UplinkSetClientTest {
         uplinkSetClient.getByName(ANY_RESOURCE_NAME);
 
         then(baseClient).should().getResourceCollection(ResourceUris.UPLINK_SETS_URI,
-                UplinkSets.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+                UplinkSet.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
     }
 
     @Test
     public void shouldCreateUplinkSet() {
-        UplinkSets uplinkSet = new UplinkSets();
+        UplinkSet uplinkSet = new UplinkSet();
 
         uplinkSetClient.create(uplinkSet, false);
 
@@ -76,7 +76,7 @@ public class UplinkSetClientTest {
 
     @Test
     public void shouldUpdateUplinkSet() {
-        UplinkSets uplinkSet = new UplinkSets();
+        UplinkSet uplinkSet = new UplinkSet();
 
         uplinkSetClient.update(ANY_RESOURCE_ID, uplinkSet, false);
 

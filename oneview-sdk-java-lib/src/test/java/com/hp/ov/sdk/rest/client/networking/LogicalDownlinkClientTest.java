@@ -25,7 +25,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.LogicalDownlink;
+import com.hp.ov.sdk.dto.networking.logicaldownlinks.LogicalDownlink;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
