@@ -18,6 +18,8 @@ package com.hp.ov.sdk.dto;
 
 import org.junit.Test;
 
+import com.hp.ov.sdk.dto.networking.logicalswitches.LogicalSwitch;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 

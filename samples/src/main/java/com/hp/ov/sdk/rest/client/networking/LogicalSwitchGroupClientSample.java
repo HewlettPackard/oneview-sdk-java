@@ -25,8 +25,8 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SwitchMapEntryTemplate;
 import com.hp.ov.sdk.dto.SwitchMapTemplate;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.LogicalLocationEntry;
 import com.hp.ov.sdk.dto.generated.LogicalLocation;
+import com.hp.ov.sdk.dto.generated.LogicalLocationEntry;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class LogicalSwitchGroupClientSample {

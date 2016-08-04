@@ -14,26 +14,28 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking.logicalswitches;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class SnmpV1Configuration implements Serializable {
+public class StackingGroup implements Serializable {
 
-    private static final long serialVersionUID = 172738703510634775L;
+    private static final long serialVersionUID = 1772958185022103403L;
 
-    private String communityString;
+    private List<StackingPortPair> switchStackingElements = new ArrayList<>();
 
-    public String getCommunityString() {
-        return communityString;
+    public List<StackingPortPair> getSwitchStackingElements() {
+        return switchStackingElements;
     }
 
-    public void setCommunityString(String communityString) {
-        this.communityString = communityString;
+    public void setSwitchStackingElements(List<StackingPortPair> switchStackingElements) {
+        this.switchStackingElements = switchStackingElements;
     }
 
     @Override
@@ -42,24 +44,24 @@ public class SnmpV1Configuration implements Serializable {
 
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        SnmpV1Configuration that = (SnmpV1Configuration) obj;
+        StackingGroup that = (StackingGroup) obj;
 
         return new EqualsBuilder()
-                .append(communityString, that.communityString)
+                .append(switchStackingElements, that.switchStackingElements)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(communityString)
+                .append(switchStackingElements)
                 .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("communityString", communityString)
+                .append("switchStackingElements", switchStackingElements)
                 .toString();
     }
 }

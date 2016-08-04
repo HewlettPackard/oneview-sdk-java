@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking.logicalswitches;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,18 +24,18 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class StackingGroup implements Serializable {
+public class SwitchMap implements Serializable {
 
-    private static final long serialVersionUID = 1772958185022103403L;
+    private static final long serialVersionUID = -7784352408192006990L;
 
-    private List<StackingPortPair> switchStackingElements = new ArrayList<>();
+    private List<SwitchMapEntry> switchMapEntries = new ArrayList<>();
 
-    public List<StackingPortPair> getSwitchStackingElements() {
-        return switchStackingElements;
+    public List<SwitchMapEntry> getSwitchMapEntries() {
+        return switchMapEntries;
     }
 
-    public void setSwitchStackingElements(List<StackingPortPair> switchStackingElements) {
-        this.switchStackingElements = switchStackingElements;
+    public void setSwitchMapEntries(List<SwitchMapEntry> switchMapEntries) {
+        this.switchMapEntries = switchMapEntries;
     }
 
     @Override
@@ -44,24 +44,24 @@ public class StackingGroup implements Serializable {
 
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        StackingGroup that = (StackingGroup) obj;
+        SwitchMap switchMap = (SwitchMap) obj;
 
         return new EqualsBuilder()
-                .append(switchStackingElements, that.switchStackingElements)
+                .append(switchMapEntries, switchMap.switchMapEntries)
                 .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(switchStackingElements)
+                .append(switchMapEntries)
                 .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("switchStackingElements", switchStackingElements)
+                .append("switchMapEntries", switchMapEntries)
                 .toString();
     }
 }

@@ -20,25 +20,25 @@ import com.google.common.collect.Lists;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.AddLogicalSwitch;
-import com.hp.ov.sdk.dto.LogicalSwitch;
 import com.hp.ov.sdk.dto.LogicalSwitchGroup;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.SnmpV1Configuration;
-import com.hp.ov.sdk.dto.SnmpVersion;
-import com.hp.ov.sdk.dto.SwitchCredentialConfiguration;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.ConnectionProperty;
-import com.hp.ov.sdk.dto.networking.switches.SwitchManagementConnection;
 import com.hp.ov.sdk.dto.generated.ValueFormat;
 import com.hp.ov.sdk.dto.generated.ValueType;
+import com.hp.ov.sdk.dto.networking.logicalswitches.AddLogicalSwitch;
+import com.hp.ov.sdk.dto.networking.logicalswitches.LogicalSwitch;
+import com.hp.ov.sdk.dto.networking.logicalswitches.SnmpV1Configuration;
+import com.hp.ov.sdk.dto.networking.logicalswitches.SnmpVersion;
+import com.hp.ov.sdk.dto.networking.logicalswitches.SwitchCredentialConfiguration;
+import com.hp.ov.sdk.dto.networking.switches.SwitchManagementConnection;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class LogicalSwitchClientSample {
 
     // These are variables to be defined by the user
     // ================================
-    private static final String LOGICAL_SWITCH_RESOURCE_ID = "060af776-fb29-4d6c-a1f1-7e513ab4e677";
+    private static final String LOGICAL_SWITCH_RESOURCE_ID = "272c526f-25ee-4850-b77e-9212ea25fa71";
     private static final String LOGICAL_SWITCH_NAME = "Logical-Switch_SAMPLE";
     private static final String LOGICAL_SWITCH_MANAGEMENT_HOST = "172.18.16.1";
     // ================================
@@ -128,9 +128,12 @@ public class LogicalSwitchClientSample {
         switchCredentialConfiguration.setSnmpV1Configuration(snmpV1Configuration);
 
         logicalSwitch.setSwitchCredentialConfiguration(Lists.newArrayList(switchCredentialConfiguration));
-        logicalSwitch.setLogicalSwitchGroupUri(ResourceUris.LOGICAL_SWITCH_GROUPS_URI
+        logicalSwitch.setLogicalSwitchGroupUri(ResourceUris.LOGICAL_SWITCH_GROUPS_URI + "/"
                 + logicalSwitchGroup.getResourceId());
-        logicalSwitch.setType(ResourceCategory.RC_LOGICAL_SWITCHES);
+
+        logicalSwitch.setType(ResourceCategory.RC_LOGICAL_SWITCH);
+        logicalSwitch.setType(ResourceCategory.RC_LOGICAL_SWITCH_V300);
+
         logicalSwitch.setName(LOGICAL_SWITCH_NAME);
 
         SwitchManagementConnection switchManagementConnection = new SwitchManagementConnection();
