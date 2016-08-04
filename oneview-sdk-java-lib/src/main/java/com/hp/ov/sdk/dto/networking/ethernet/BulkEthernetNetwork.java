@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking.ethernet;
 
 import java.io.Serializable;
 
 import com.hp.ov.sdk.dto.JsonRequest;
-import com.hp.ov.sdk.dto.networking.ethernet.Bandwidth;
-import com.hp.ov.sdk.dto.networking.ethernet.Network;
 
 
 public class BulkEthernetNetwork implements Serializable {
@@ -31,7 +29,7 @@ public class BulkEthernetNetwork implements Serializable {
     private String namePrefix;
     private String vlanIdRange;
     private Boolean privateNetwork;
-    private Network.Purpose purpose;
+    private Purpose purpose;
     private String type;
 
     private transient JsonRequest jsonRequest;
@@ -76,11 +74,11 @@ public class BulkEthernetNetwork implements Serializable {
         this.privateNetwork = privateNetwork;
     }
 
-    public Network.Purpose getPurpose() {
+    public Purpose getPurpose() {
         return purpose;
     }
 
-    public void setPurpose(final Network.Purpose purpose) {
+    public void setPurpose(final Purpose purpose) {
         this.purpose = purpose;
     }
 

@@ -22,7 +22,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.hp.ov.sdk.dto.generated.LogicalLocation;
+import com.hp.ov.sdk.dto.networking.LogicalLocation;
 
 public class SwitchMapEntryTemplate implements Serializable{
 

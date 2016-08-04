@@ -25,7 +25,7 @@ import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.BulkEthernetNetwork;
+import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;

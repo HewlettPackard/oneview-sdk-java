@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking.uplinksets;
 
 import java.io.Serializable;
 
@@ -21,68 +21,58 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.hp.ov.sdk.dto.networking.Location;
 import com.hp.ov.sdk.dto.networking.OpSpeed;
 
 
 public class PortConfigInfo implements Serializable {
 
-    /**
-	 *
-	 */
     private static final long serialVersionUID = 1L;
+
     private OpSpeed desiredSpeed;
-    private String portUri;
     private Location location;
+    private String portUri;
 
     /**
-     *
-     * @return The desiredSpeed
+     * @return the desiredSpeed
      */
     public OpSpeed getDesiredSpeed() {
         return desiredSpeed;
     }
 
     /**
-     *
-     * @param desiredSpeed
-     *            The desiredSpeed
+     * @param desiredSpeed the desiredSpeed to set
      */
-    public void setDesiredSpeed(final OpSpeed desiredSpeed) {
+    public void setDesiredSpeed(OpSpeed desiredSpeed) {
         this.desiredSpeed = desiredSpeed;
     }
 
     /**
-     *
-     * @return The portUri
-     */
-    public String getPortUri() {
-        return portUri;
-    }
-
-    /**
-     *
-     * @param portUri
-     *            The portUri
-     */
-    public void setPortUri(final String portUri) {
-        this.portUri = portUri;
-    }
-
-    /**
-     *
-     * @return The location
+     * @return the location
      */
     public Location getLocation() {
         return location;
     }
 
     /**
-     *
-     * @param location
-     *            The location
+     * @param location the location to set
      */
-    public void setLocation(final Location location) {
+    public void setLocation(Location location) {
         this.location = location;
+    }
+
+    /**
+     * @return the portUri
+     */
+    public String getPortUri() {
+        return portUri;
+    }
+
+    /**
+     * @param portUri the portUri to set
+     */
+    public void setPortUri(String portUri) {
+        this.portUri = portUri;
     }
 
     @Override
@@ -92,7 +82,11 @@ public class PortConfigInfo implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(desiredSpeed).append(portUri).append(location).toHashCode();
+        return new HashCodeBuilder()
+                .append(desiredSpeed)
+                .append(location)
+                .append(portUri)
+                .toHashCode();
     }
 
     @Override
@@ -104,8 +98,11 @@ public class PortConfigInfo implements Serializable {
             return false;
         }
         final PortConfigInfo rhs = ((PortConfigInfo) other);
-        return new EqualsBuilder().append(desiredSpeed, rhs.desiredSpeed).append(portUri, rhs.portUri)
-                .append(location, rhs.location).isEquals();
+        return new EqualsBuilder()
+                .append(desiredSpeed, rhs.desiredSpeed)
+                .append(location, rhs.location)
+                .append(portUri, rhs.portUri)
+                .isEquals();
     }
 
 }

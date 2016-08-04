@@ -17,7 +17,7 @@ package com.hp.ov.sdk.rest.client;
 
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.UplinkSets;
+import com.hp.ov.sdk.dto.networking.uplinksets.UplinkSet;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface UplinkSetClient {
@@ -30,9 +30,9 @@ public interface UplinkSetClient {
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
      *            The resource identifier for uplink set as seen in HPE OneView.
-     * @return {@link UplinkSets} containing a the uplink set details.
+     * @return {@link UplinkSet} containing a the uplink set details.
      */
-    UplinkSets getUplinkSet(final RestParams params, final String resourceId);
+    UplinkSet getUplinkSet(final RestParams params, final String resourceId);
 
     /**
      * The module aids in fetching the uplink set details for all the uplink sets
@@ -40,10 +40,10 @@ public interface UplinkSetClient {
      *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link ResourceCollection}&lt;{@link UplinkSets}&gt; containing
+     * @return {@link ResourceCollection}&lt;{@link UplinkSet}&gt; containing
      * the details for all found uplink sets.
      */
-    ResourceCollection<UplinkSets> getAllUplinkSet(final RestParams params);
+    ResourceCollection<UplinkSet> getAllUplinkSet(final RestParams params);
 
     /**
      * The module aids in deleting a uplink set for the specified uplink set
@@ -78,7 +78,7 @@ public interface UplinkSetClient {
      *            converted to UplinkSet object using an adaptor and processed.
      * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    TaskResourceV2 updateUplinkSet(final RestParams params, final String resourceId, final UplinkSets uplinkDto,
+    TaskResourceV2 updateUplinkSet(final RestParams params, final String resourceId, final UplinkSet uplinkDto,
             final boolean aSync, final boolean useJsonRequest);
 
     /**
@@ -89,9 +89,9 @@ public interface UplinkSetClient {
      *            The {@link RestParams} is a structure containing the connection details.
      * @param uplinkSetName
      *            The uplinkSetName is the uplink set name as seen in HPE OneView.
-     * @return {@link UplinkSets} containing the uplink set details.
+     * @return {@link UplinkSet} containing the uplink set details.
      */
-    UplinkSets getUplinkSetsByName(final RestParams params, final String uplinkSetName);
+    UplinkSet getUplinkSetsByName(final RestParams params, final String uplinkSetName);
 
     /**
      * This module aids in creation of uplink set.
@@ -108,7 +108,7 @@ public interface UplinkSetClient {
      *            converted to UplinkSets object using an adaptor and processed.
      * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    TaskResourceV2 createUplinkSet(final RestParams params, final UplinkSets uplinkSetDto, final boolean aSync,
+    TaskResourceV2 createUplinkSet(final RestParams params, final UplinkSet uplinkSetDto, final boolean aSync,
             final boolean useJsonRequest);
 
     /**

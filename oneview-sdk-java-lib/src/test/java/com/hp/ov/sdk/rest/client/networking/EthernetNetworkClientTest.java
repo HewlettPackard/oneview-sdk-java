@@ -36,7 +36,7 @@ import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.generated.BulkEthernetNetwork;
+import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;

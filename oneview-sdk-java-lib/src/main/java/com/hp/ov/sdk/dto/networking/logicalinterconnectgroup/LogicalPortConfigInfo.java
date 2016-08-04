@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking.logicalinterconnectgroup;
 
 import java.io.Serializable;
 
@@ -21,49 +21,42 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.hp.ov.sdk.dto.networking.LogicalLocation;
 import com.hp.ov.sdk.dto.networking.OpSpeed;
 
 
 public class LogicalPortConfigInfo implements Serializable {
 
-    /**
-	 *
-	 */
     private static final long serialVersionUID = 1L;
+
     private LogicalLocation logicalLocation;
     private OpSpeed desiredSpeed;
 
     /**
-     *
-     * @return The logicalLocation
+     * @return the logicalLocation
      */
     public LogicalLocation getLogicalLocation() {
         return logicalLocation;
     }
 
     /**
-     *
-     * @param logicalLocation
-     *            The logicalLocation
+     * @param logicalLocation the logicalLocation to set
      */
-    public void setLogicalLocation(final LogicalLocation logicalLocation) {
+    public void setLogicalLocation(LogicalLocation logicalLocation) {
         this.logicalLocation = logicalLocation;
     }
 
     /**
-     *
-     * @return The desiredSpeed
+     * @return the desiredSpeed
      */
     public OpSpeed getDesiredSpeed() {
         return desiredSpeed;
     }
 
     /**
-     *
-     * @param desiredSpeed
-     *            The desiredSpeed
+     * @param desiredSpeed the desiredSpeed to set
      */
-    public void setDesiredSpeed(final OpSpeed desiredSpeed) {
+    public void setDesiredSpeed(OpSpeed desiredSpeed) {
         this.desiredSpeed = desiredSpeed;
     }
 
@@ -74,19 +67,24 @@ public class LogicalPortConfigInfo implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(logicalLocation).append(desiredSpeed).toHashCode();
+        return new HashCodeBuilder()
+                .append(logicalLocation)
+                .append(desiredSpeed).toHashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
-        if (other == this) {
-            return true;
+    public boolean equals(final Object obj) {
+        if (obj == this) return true;
+
+        if (obj instanceof LogicalPortConfigInfo) {
+            LogicalPortConfigInfo that = ((LogicalPortConfigInfo) obj);
+
+            return new EqualsBuilder()
+                    .append(logicalLocation, that.logicalLocation)
+                    .append(desiredSpeed, that.desiredSpeed)
+                    .isEquals();
         }
-        if ((other instanceof LogicalPortConfigInfo) == false) {
-            return false;
-        }
-        final LogicalPortConfigInfo rhs = ((LogicalPortConfigInfo) other);
-        return new EqualsBuilder().append(logicalLocation, rhs.logicalLocation).append(desiredSpeed, rhs.desiredSpeed).isEquals();
+        return false;
     }
 
 }

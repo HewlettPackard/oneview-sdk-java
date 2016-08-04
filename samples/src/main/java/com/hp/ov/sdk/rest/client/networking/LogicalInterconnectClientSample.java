@@ -34,9 +34,10 @@ import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
 import com.hp.ov.sdk.dto.QosConfiguration.QosConfigType;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.Location;
-import com.hp.ov.sdk.dto.generated.LogicalLocationEntry;
 import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
+import com.hp.ov.sdk.dto.networking.Location;
+import com.hp.ov.sdk.dto.networking.LocationEntry;
+import com.hp.ov.sdk.dto.networking.LocationType;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -72,8 +73,8 @@ public class LogicalInterconnectClientSample {
     // These are variables to be defined by user
     // ================================
     private static final String sppName = "Service Pack for ProLiant";
-    private static final String resourceName = "Encl1-LI";
-    private static final String resourceId = "b63caa92-556e-4816-99b8-76ac2b3ddb96";
+    private static final String resourceName = "Encl1-LIG_PROD";
+    private static final String resourceId = "f4a1ad7c-c282-4089-b57c-dd28052cde6a";
     private static final String telemetryId = "2770fdeb-5c49-499c-aef7-3eac45f2887e";
     private static final String enclosureUri = "/rest/enclosures/09SGH100X6J1";
     private static final String networkName = "Prod_401";
@@ -826,13 +827,13 @@ public class LogicalInterconnectClientSample {
             Location locationDto = new Location();
 
             // ENCLOSURE
-            LogicalLocationEntry enclosureEntry = new LogicalLocationEntry();
-            enclosureEntry.setType(LogicalLocationEntry.Type.Enclosure);
+            LocationEntry enclosureEntry = new LocationEntry();
+            enclosureEntry.setType(LocationType.Enclosure);
             enclosureEntry.setValue(enclosureUri);
 
             // BAY
-            LogicalLocationEntry bayEntry = new LogicalLocationEntry();
-            bayEntry.setType(LogicalLocationEntry.Type.Bay);
+            LocationEntry bayEntry = new LocationEntry();
+            bayEntry.setType(LocationType.Bay);
             bayEntry.setValue("1");
 
             locationDto.setLocationEntries(Arrays.asList(enclosureEntry, bayEntry));

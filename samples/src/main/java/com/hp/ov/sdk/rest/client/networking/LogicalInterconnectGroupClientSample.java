@@ -27,8 +27,8 @@ import com.hp.ov.sdk.dto.InterconnectTypeName;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
-import com.hp.ov.sdk.dto.generated.UplinkSet;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
+import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.dto.samples.UplinkSetValue;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
@@ -111,9 +111,10 @@ public class LogicalInterconnectGroupClientSample {
         LogicalInterconnectGroup lig = logicalInterconnectGroups.getMembers().get(0);
         lig.setName(resourceName + "_Update");
 
-        final List<UplinkSet> uplinkSetDto = buildUplinkSetGroupDto();
+        final List<UplinkSetGroup> uplinkSetDto = buildUplinkSetGroupDto();
+        lig.setUplinkSets(uplinkSetDto);
 
-        TaskResourceV2 task = this.client.update(lig.getResourceId(), uplinkSetDto, false);
+        TaskResourceV2 task = this.client.update(lig.getResourceId(), lig, false);
 
         System.out.println("LogicalInterconnectGroupClientSample : updateLogicalInterconnectGroup : " +
                 "Task object returned to client : " + task);
@@ -162,8 +163,8 @@ public class LogicalInterconnectGroupClientSample {
         return  dto;
     }
 
-    private List<UplinkSet> buildUplinkSetGroupDto() {
-        List<UplinkSet> uplinkSetGroupDto = new ArrayList<UplinkSet>();
+    private List<UplinkSetGroup> buildUplinkSetGroupDto() {
+        List<UplinkSetGroup> uplinkSetGroupDto = new ArrayList<UplinkSetGroup>();
 
         final HashMap<Integer, List<String>> ethBayPortMap = new HashMap<Integer, List<String>>();
         ethBayPortMap.put(1, ethPort);
