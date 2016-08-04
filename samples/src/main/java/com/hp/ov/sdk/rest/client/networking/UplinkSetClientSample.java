@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.dto.OpSpeed;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.Location;
@@ -29,6 +28,7 @@ import com.hp.ov.sdk.dto.generated.PortConfigInfo;
 import com.hp.ov.sdk.dto.generated.UplinkSets;
 import com.hp.ov.sdk.dto.generated.UplinkSets.ConnectionMode;
 import com.hp.ov.sdk.dto.generated.UplinkSets.ManualLoginRedistributionState;
+import com.hp.ov.sdk.dto.networking.OpSpeed;
 import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
 import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;

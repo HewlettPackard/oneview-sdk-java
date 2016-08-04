@@ -15,8 +15,8 @@
  */
 package com.hp.ov.sdk.rest.client;
 
-import com.hp.ov.sdk.dto.LogicalDownlink;
 import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.networking.logicaldownlinks.LogicalDownlink;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface LogicalDownlinkClient {

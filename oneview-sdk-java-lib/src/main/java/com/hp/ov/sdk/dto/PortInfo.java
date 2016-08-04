@@ -19,6 +19,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hp.ov.sdk.dto.networking.PortCapabilityType;
+
 public class PortInfo implements Serializable {
 
     private static final long serialVersionUID = -7589558435931639188L;
