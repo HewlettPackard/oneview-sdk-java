@@ -15,23 +15,20 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto.servers.logicalenclosure;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class LogicalEnclosureInterconnectBay {
-    @SerializedName("bayNumber")
-    @Expose
-    private byte bayNumber;
 
-    @SerializedName("licenseIntent")
-    @Expose
+    private Integer bayNumber;
     private InterconnectLicenseIntent licenseIntent;
 
-    public byte getBayNumber() {
+    public Integer getBayNumber() {
         return bayNumber;
     }
 
-    public void setBayNumber(final byte bayNumber) {
+    public void setBayNumber(Integer bayNumber) {
         this.bayNumber = bayNumber;
     }
 
@@ -39,7 +36,35 @@ public class LogicalEnclosureInterconnectBay {
         return licenseIntent;
     }
 
-    public void setLicenseIntent(final InterconnectLicenseIntent licenseIntent) {
+    public void setLicenseIntent(InterconnectLicenseIntent licenseIntent) {
         this.licenseIntent = licenseIntent;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof LogicalEnclosureInterconnectBay) {
+            LogicalEnclosureInterconnectBay that = (LogicalEnclosureInterconnectBay) obj;
+
+            return new EqualsBuilder()
+                    .append(bayNumber, that.bayNumber)
+                    .append(licenseIntent, that.licenseIntent)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(bayNumber)
+                .append(licenseIntent)
+                .toHashCode();
     }
 }
