@@ -33,6 +33,7 @@ import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.InterconnectClient;
 import com.hp.ov.sdk.rest.client.networking.InterconnectTypeClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalDownlinkClient;
+import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchGroupClient;
@@ -96,11 +97,10 @@ public class OneViewClient {
     private InterconnectTypeClient interconnectTypeClient;
     private InterconnectClient interconnectClient;
     private LogicalInterconnectGroupClient logicalInterconnectGroupClient;
+    private LogicalInterconnectClient logicalInterconnectClient;
     private LogicalDownlinkClient logicalDownlinkClient;
-
     private ServerHardwareClient serverHardwareClient;
     private ServerHardwareTypeClient serverHardwareTypeClient;
-
     private FirmwareBundleClient firmwareBundleClient;
     private FirmwareDriverClient firmwareDriverClient;
 
@@ -232,6 +232,10 @@ public class OneViewClient {
 
     public synchronized LogicalInterconnectGroupClient logicalInterconnectGroup() {
         return this.getClient(this.logicalInterconnectGroupClient, LogicalInterconnectGroupClient.class);
+    }
+
+    public synchronized LogicalInterconnectClient logicalInterconnect() {
+        return this.getClient(this.logicalInterconnectClient, LogicalInterconnectClient.class);
     }
 
     public synchronized LogicalDownlinkClient logicalDownlink() {

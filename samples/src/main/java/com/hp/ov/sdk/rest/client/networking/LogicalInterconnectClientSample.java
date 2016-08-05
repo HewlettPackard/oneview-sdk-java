@@ -40,20 +40,9 @@ import com.hp.ov.sdk.dto.networking.logicalinterconnects.LiFirmware;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.LogicalInterconnect;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.PhysicalInterconnectFirmware;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.PortMonitor;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKBadRequestException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.LogicalInterconnectClient;
-import com.hp.ov.sdk.rest.client.LogicalInterconnectClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
+import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
 /*
  * LogicalInterconnectClientSample, sample program consumes the available networks through the interconnect uplinks and
@@ -66,332 +55,124 @@ public class LogicalInterconnectClientSample {
     private final FirmwareDriverClient firmwareDriverClient;
     private final OneViewClient oneViewClient;
 
-    private RestParams params;
-    private TaskResourceV2 taskResourceV2;
-
     // These are variables to be defined by user
     // ================================
-    private static final String sppName = "Service Pack for ProLiant";
-    private static final String resourceName = "Encl1-LIG_PROD";
-    private static final String resourceId = "f4a1ad7c-c282-4089-b57c-dd28052cde6a";
-    private static final String telemetryId = "2770fdeb-5c49-499c-aef7-3eac45f2887e";
-    private static final String enclosureUri = "/rest/enclosures/09SGH100X6J1";
-    private static final String networkName = "Prod_401";
+    private static final String SPP_NAME = "Service Pack for ProLiant";
+    private static final String RESOURCE_NAME = "Encl1-LIG_PROD";
+    private static final String RESOURCE_ID = "f4a1ad7c-c282-4089-b57c-dd28052cde6a";
+    private static final String TELEMETRY_ID = "2770fdeb-5c49-499c-aef7-3eac45f2887e";
+    private static final String ENCLOSURE_URI = "/rest/enclosures/09SGH100X6J1";
+    private static final String NETWORK_NAME = "Prod_401";
 
-    // InterconnectUri
-    private static final String interconnectNameOne = "Encl1, interconnect 1";
-    private static final String interconnectNameTwo = "Encl1, interconnect 2";
+    private static final String INTERCONNECT_NAME_ONE = "Encl1, interconnect 1";
+    private static final String INTERCONNECT_NAME_TWO = "Encl1, interconnect 2";
     // ================================
 
     private LogicalInterconnectClientSample() {
         this.oneViewClient = OneViewClientSample.getOneViewClient();
-        this.logicalInterconnectClient = LogicalInterconnectClientImpl.getClient();
 
+        this.logicalInterconnectClient = oneViewClient.logicalInterconnect();
         this.firmwareDriverClient = oneViewClient.firmwareDriver();
     }
 
-    private void getLogicalInterconnectById() throws InstantiationException, IllegalAccessException {
-        LogicalInterconnect logicalInterconnectsDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getLogicalInterconnectById() {
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getById(RESOURCE_ID);
 
-            // then make sdk service call to get resource
-            logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnect(params, resourceId);
-
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectById : logical interconnect"
-                    + "  object returned to client : " + logicalInterconnectsDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "getLogicalInterconnectById : resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out
-                    .println("LogicalInterconnectClientSample : " + "getLogicalInterconnectById : no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectById : Applicance Not reachabe at : "
-                    + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectById : No response from appliance : "
-                    + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectById : arguments are null ");
-        }
-
+        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectById : " +
+                "LogicalInterconnect object returned to client : " + logicalInterconnect.toJsonString());
     }
 
     private void getLogicalInterconnectByName() {
-        LogicalInterconnect logicalInterconnectDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            logicalInterconnectDto = logicalInterconnectClient.getLogicalInterconnectByName(params, resourceName);
-
-            System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectByName :" + " logical interconnect object returned to client : "
-                    + logicalInterconnectDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectByName :" + " resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectByName :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectByName :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectByName :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectByName :" + " arguments are null ");
-            return;
-        }
+        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectByName : " +
+                "LogicalInterconnect object returned to client : " + logicalInterconnect.toJsonString());
     }
 
-    private void getAllLogicalInterconnects() throws InstantiationException, IllegalAccessException {
-        ResourceCollection<LogicalInterconnect> logicalInterconnectCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getAllLogicalInterconnects() {
+        ResourceCollection<LogicalInterconnect> logicalInterconnects = logicalInterconnectClient.getAll();
 
-            // then make sdk service call to get resource
-            logicalInterconnectCollectionDto = logicalInterconnectClient.getAllLogicalInterconnects(params);
-
-            System.out.println("LogicalInterconnectClientSample : getAllLogicalInterconnects "
-                    + ": logical interconnect object returned to client : " + logicalInterconnectCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "getAllLogicalInterconnects : resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out
-                    .println("LogicalInterconnectClientSample : " + "getAllLogicalInterconnects : no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : " + "getAllLogicalInterconnects : Applicance Not reachabe at : "
-                    + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getAllLogicalInterconnects : No response from appliance : "
-                    + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getAllLogicalInterconnects : arguments are null ");
-        }
-
+        System.out.println("LogicalInterconnectClientSample : getAllLogicalInterconnects : " +
+                "LogicalInterconnect returned to client : " + logicalInterconnects.toJsonString());
     }
 
-    private void updateLogicalInterconnectSnmpConfigurationById() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        LogicalInterconnect logicalInterconnectsDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateLogicalInterconnectSnmpConfiguration() {
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // fetch logicalInterconnectsDto Uri
-            logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnectByName(params, resourceName);
+        logicalInterconnect.getSnmpConfiguration().setReadCommunity("private");
 
-            if (null != logicalInterconnectsDto.getUri()) {
-                resourceId = UrlUtils.getResourceIdFromUri(logicalInterconnectsDto.getUri());
-            }
+        TaskResourceV2 task = logicalInterconnectClient.updateSnmpConfiguration(logicalInterconnect.getResourceId(),
+                logicalInterconnect.getSnmpConfiguration(), false);
 
-            logicalInterconnectsDto.getSnmpConfiguration().setReadCommunity("private");
-            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectSnmpConfigurationById(params, resourceId,
-                    logicalInterconnectsDto.getSnmpConfiguration(), false, false);
-
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectSnmpConfigurationById : status of "
-                    + "logicalInterconnect object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectSnmpConfigurationById : resource you are looking is not found for update");
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectSnmpConfigurationById : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectSnmpConfigurationById : no such url : " + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectSnmpConfigurationById : Applicance Not reachabe at : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectSnmpConfigurationById : arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectSnmpConfigurationById : errors in task, "
-                    + "please check task resource for more details ");
-        }
+        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectSnmpConfiguration : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
-    private void updateLogicalInterconnectComplianceById() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateLogicalInterconnectCompliance() {
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = logicalInterconnectClient.getId(params, resourceName);
+        TaskResourceV2 task = logicalInterconnectClient.updateCompliance(logicalInterconnect.getResourceId(), false);
 
-            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectComplianceById(params, resourceId, false);
-
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectComplianceById : status of "
-                    + "logicalInterconnect object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectComplianceById : resource you are looking is not found for update");
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectComplianceById : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectComplianceById : no such url : "
-                    + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectComplianceById : Applicance Not reachabe at : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out
-                    .println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectComplianceById : arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectComplianceById : errors in task, "
-                    + "please check task resource for more details ");
-        }
+        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectCompliance : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
-    private void updateLogicalInterconnectFirmwareStageById() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        LiFirmware liFirmwareDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateLogicalInterconnectFirmware() {
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = logicalInterconnectClient.getId(params, resourceName);
-
-            liFirmwareDto = buildLIFirmwareStageDto();
-            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectFirmwareById(params, resourceId, liFirmwareDto,
-                    false, false);
-
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectFirmwareStageById : status of "
-                    + "logicalInterconnect object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectFirmwareStageById : resource you are looking is not found for update");
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectFirmwareStageById : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectFirmwareStageById : no such url : "
-                    + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectFirmwareStageById : Applicance Not reachabe at : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectFirmwareStageById : arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectFirmwareStageById : errors in task, "
-                    + "please check task resource for more details ");
-        }
-
-    }
-
-    private LiFirmware buildLIFirmwareStageDto() {
-        final LiFirmware liFirmware = new LiFirmware();
+        LiFirmware liFirmware = new LiFirmware();
 
         liFirmware.setCommand(Command.STAGE);
-        liFirmware.setSppUri(firmwareDriverClient.getByName(sppName).get(0).getUri());
+        liFirmware.setSppUri(firmwareDriverClient.getByName(SPP_NAME).get(0).getUri());
         liFirmware.setForce(true);
-        return liFirmware;
+
+        TaskResourceV2 task = logicalInterconnectClient.updateFirmware(logicalInterconnect.getResourceId(),
+                liFirmware, false);
+
+        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectFirmware : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
-    private void getLogicalInterconnectFirmwareById() throws InstantiationException, IllegalAccessException {
-        LiFirmware firmwareDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getLogicalInterconnectFirmware() {
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            firmwareDto = logicalInterconnectClient.getLogicalInterconnectFirmwareById(params, resourceId);
+        LiFirmware liFirmware = logicalInterconnectClient.getFirmware(logicalInterconnect.getResourceId());
 
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectFirmwareById : firmware"
-                    + "  object returned to client : " + firmwareDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "getLogicalInterconnectFirmwareById : resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out
-                    .println("LogicalInterconnectClientSample : " + "getLogicalInterconnectFirmwareById : no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectFirmwareById : Applicance Not reachabe at : "
-                    + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectFirmwareById : No response from appliance : "
-                    + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectFirmwareById : arguments are null ");
-        }
+        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectFirmware : " +
+                "LiFirmware object returned to client : " + JsonPrettyPrinter.print(liFirmware));
     }
 
-    private void updateLogicalInterconnectFirmwareActiveById() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        LiFirmware liFirmwareDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateLogicalInterconnectFirmwareActive() {
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = logicalInterconnectClient.getId(params, resourceName);
+        LiFirmware liFirmware = logicalInterconnectClient.getFirmware(logicalInterconnect.getResourceId());
 
-            liFirmwareDto = logicalInterconnectClient.getLogicalInterconnectFirmwareById(params, resourceId);
-            liFirmwareDto = buildLIFirmwareActiveDto(liFirmwareDto);
+        liFirmware = buildLiFirmwareActive(liFirmware);
 
-            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectFirmwareById(params, resourceId, liFirmwareDto,
-                    false, false);
+        TaskResourceV2 task = logicalInterconnectClient.updateFirmware(logicalInterconnect.getResourceId(),
+                liFirmware, false);
 
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectFirmwareActiveById : status of "
-                    + "logicalInterconnect object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectFirmwareActiveById : resource you are looking is not found for update");
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectFirmwareActiveById : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectFirmwareActiveById : no such url : "
-                    + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectFirmwareActiveById : Applicance Not reachabe at : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectFirmwareActiveById : arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectFirmwareActiveById : errors in task, "
-                    + "please check task resource for more details ");
-        }
-
+        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectFirmwareActive : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
-    private LiFirmware buildLIFirmwareActiveDto(final LiFirmware initliFirmware) {
-        final LiFirmware liFirmware = new LiFirmware();
+    private LiFirmware buildLiFirmwareActive(LiFirmware currentLiFirmware) {
+        LiFirmware liFirmware = new LiFirmware();
+        List<PhysicalInterconnectFirmware> interconnects = new ArrayList<>();
 
         liFirmware.setCommand(Command.STAGE);
-        liFirmware.setSppUri(firmwareDriverClient.getByName(sppName).get(0).getUri());
-        final List<PhysicalInterconnectFirmware> interconnects = new ArrayList<PhysicalInterconnectFirmware>();
-        for (int i = 0; i < initliFirmware.getInterconnects().size(); i++) {
+        liFirmware.setSppUri(firmwareDriverClient.getByName(SPP_NAME).get(0).getUri());
+
+        for (int i = 0; i < currentLiFirmware.getInterconnects().size(); i++) {
             String interconnectName = null;
-            if (initliFirmware.getInterconnects().get(i).getInterconnectName().equals(interconnectNameOne)) {
-                interconnectName = interconnectNameOne;
-            } else if (initliFirmware.getInterconnects().get(i).getInterconnectName().equals(interconnectNameTwo)) {
-                interconnectName = interconnectNameTwo;
+            if (currentLiFirmware.getInterconnects().get(i).getInterconnectName().equals(INTERCONNECT_NAME_ONE)) {
+                interconnectName = INTERCONNECT_NAME_ONE;
+            } else if (currentLiFirmware.getInterconnects().get(i).getInterconnectName().equals(INTERCONNECT_NAME_TWO)) {
+                interconnectName = INTERCONNECT_NAME_TWO;
             }
             if (interconnectName != null) {
                 final PhysicalInterconnectFirmware interconnect = new PhysicalInterconnectFirmware();
-                interconnect.setInterconnectUri(initliFirmware.getInterconnects().get(i).getInterconnectUri());
+                interconnect.setInterconnectUri(currentLiFirmware.getInterconnects().get(i).getInterconnectUri());
                 interconnect.setInterconnectName(interconnectName);
                 interconnects.add(interconnect);
             }
@@ -401,698 +182,259 @@ public class LogicalInterconnectClientSample {
         return liFirmware;
     }
 
-    private void updateLogicalInterconnectFirmwareUpdateById() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        LiFirmware liFirmwareDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void updateLogicalInterconnectFirmwareUpdate() {
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            liFirmwareDto = buildLIFirmwareUpdateDto();
-
-            // get resource ID
-            resourceId = logicalInterconnectClient.getId(params, resourceName);
-
-            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectFirmwareById(params, resourceId, liFirmwareDto,
-                    false, false);
-
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectFirmwareUpdateById : status of "
-                    + "logicalInterconnect object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectFirmwareUpdateById : resource you are looking is not found for update"
-                    + params.getHostname());
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectFirmwareUpdateById : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectFirmwareUpdateById : no such url : "
-                    + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectFirmwareUpdateById : Applicance Not reachabe at : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectFirmwareUpdateById : arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("EnclosureClientTest : createEnclosure : errors in task, please check task resource for more details ");
-            System.out.println("Task Errors: " + Arrays.toString(e.getMessageParameters()));
-            System.out.println("Task Recomendations: " + Arrays.toString(e.getRecommendedActionsParameters()));
-            return;
-        }
-    }
-
-    private LiFirmware buildLIFirmwareUpdateDto() {
-        final LiFirmware liFirmware = new LiFirmware();
-
+        LiFirmware liFirmware = new LiFirmware();
         liFirmware.setCommand(Command.UPDATE);
-        liFirmware.setSppUri(firmwareDriverClient.getByName(sppName).get(0).getUri());
+        liFirmware.setSppUri(firmwareDriverClient.getByName(SPP_NAME).get(0).getUri());
         liFirmware.setForce(true);
-        return liFirmware;
+
+        TaskResourceV2 task = logicalInterconnectClient.updateFirmware(logicalInterconnect.getResourceId(),
+                liFirmware, false);
+
+        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectFirmwareUpdate : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
     private void getLogicalInterconnectForwardingInformationBase() {
-        ResourceCollection<InterconnectFibDataEntry> fibDataDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            fibDataDto = logicalInterconnectClient.getLogicalInterconnectForwardingInformationBase(params, resourceId);
+        ResourceCollection<InterconnectFibDataEntry> fibData = logicalInterconnectClient.getForwardingInformationBase(
+                logicalInterconnect.getResourceId());
 
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectForwardingInformationBase : logical interconnect data"
-                    + "  object returned to client : " + fibDataDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "getLogicalInterconnectForwardingInformationBase : resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out
-                    .println("LogicalInterconnectClientSample : " + "getLogicalInterconnectForwardingInformationBase : no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectForwardingInformationBase : Applicance Not reachabe at : "
-                    + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectForwardingInformationBase : No response from appliance : "
-                    + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectForwardingInformationBase : arguments are null ");
-        }
-
+        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectForwardingInformationBase : " +
+                "InterconnectFibData returned to client : " + fibData.toJsonString());
     }
 
     private void createLogicalInterconnectForwardingInformationBase() {
-        InterconnectFibDataInfo fibDataDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            fibDataDto = logicalInterconnectClient.createLogicalInterconnectForwardingInformationBase(params, resourceId);
+        InterconnectFibDataInfo fibData = logicalInterconnectClient.createForwardingInformationBase(
+                logicalInterconnect.getResourceId());
 
-            System.out.println("LogicalInterconnectClientSample : " + "createLogicalInterconnectForwardingInformationBase : logical interconnect info"
-                    + "  object returned to client : " + fibDataDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "createLogicalInterconnectForwardingInformationBase : resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out
-                    .println("LogicalInterconnectClientSample : " + "createLogicalInterconnectForwardingInformationBase : no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : " + "createLogicalInterconnectForwardingInformationBase : Applicance Not reachabe at : "
-                    + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "createLogicalInterconnectForwardingInformationBase : No response from appliance : "
-                    + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "createLogicalInterconnectForwardingInformationBase : arguments are null ");
-        }
-
+        System.out.println("LogicalInterconnectClientSample : createLogicalInterconnectForwardingInformationBase : " +
+                "InterconnectFibDataInfo object returned to client : " + JsonPrettyPrinter.print(fibData));
     }
 
-    private void getLogicalInterconnectSnmpConfigurationById() {
-        SnmpConfiguration snmpConfigDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getLogicalInterconnectSnmpConfiguration() {
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            snmpConfigDto = logicalInterconnectClient.getLogicalInterconnectSnmpConfigurationById(params, resourceId);
+        SnmpConfiguration snmpConfiguration = logicalInterconnectClient.getSnmpConfiguration(
+                logicalInterconnect.getResourceId());
 
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectSnmpConfigurationById : logical interconnect data"
-                    + "  object returned to client : " + snmpConfigDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "getLogicalInterconnectSnmpConfigurationById : resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out
-                    .println("LogicalInterconnectClientSample : " + "getLogicalInterconnectSnmpConfigurationById : no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectSnmpConfigurationById : Applicance Not reachabe at : "
-                    + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectSnmpConfigurationById : No response from appliance : "
-                    + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectSnmpConfigurationById : arguments are null ");
-        }
-
+        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectSnmpConfiguration : " +
+                "SnmpConfiguration object returned to client : " + snmpConfiguration.toJsonString());
     }
 
     private void getLogicalInterconnectUnassignedUplinkPortsForPortMonitor() {
-        ResourceCollection<PortMonitorUplinkPort> uplinkPortCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            uplinkPortCollectionDto = logicalInterconnectClient.getLogicalInterconnectUnassignedUplinkPortsForPortMonitor(params, resourceId);
+        ResourceCollection<PortMonitorUplinkPort> uplinkPorts
+                = logicalInterconnectClient.getUnassignedUplinkPortsForPortMonitor(logicalInterconnect.getResourceId());
 
-            System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectUnassignedUplinkPortsForPortMonitor "
-                    + ": uplink port object returned to client : " + uplinkPortCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "getLogicalInterconnectUnassignedUplinkPortsForPortMonitor : resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out
-                    .println("LogicalInterconnectClientSample : " + "getLogicalInterconnectUnassignedUplinkPortsForPortMonitor : no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectUnassignedUplinkPortsForPortMonitor : Applicance Not reachabe at : "
-                    + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectUnassignedUplinkPortsForPortMonitor : No response from appliance : "
-                    + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectUnassignedUplinkPortsForPortMonitor : arguments are null ");
-        }
+        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectUnassignedUplinkPortsForPortMonitor : " +
+                "UplinkPorts returned to client : " + uplinkPorts.toJsonString());
     }
 
     private void updateLogicalInterconnectConfiguration() {
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = logicalInterconnectClient.getId(params, resourceName);
+        TaskResourceV2 task = logicalInterconnectClient.updateConfiguration(logicalInterconnect.getResourceId(), false);
 
-            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectConfiguration(params, resourceId);
-
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectConfiguration : status of "
-                    + "logicalInterconnect object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectConfiguration : resource you are looking is not found for update"
-                    + params.getHostname());
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectConfiguration : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectConfiguration : no such url : "
-                    + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectConfiguration : Applicance Not reachabe at : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectConfiguration : arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectConfiguration : errors in task, "
-                    + "please check task resource for more details ");
-        }
+        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectConfiguration : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
     private void getLogicalInterconnectPortMonitorConfiguration() {
-        PortMonitor portMonitorDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            portMonitorDto = logicalInterconnectClient.getLogicalInterconnectPortMonitorConfiguration(params, resourceId);
+        PortMonitor portMonitor = logicalInterconnectClient.getPortMonitorConfiguration(
+                logicalInterconnect.getResourceId());
 
-            System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectPortMonitorConfiguration "
-                    + ": uplink port object returned to client : " + portMonitorDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "getLogicalInterconnectPortMonitorConfiguration : resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out
-                    .println("LogicalInterconnectClientSample : " + "getLogicalInterconnectPortMonitorConfiguration : no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectPortMonitorConfiguration : Applicance Not reachabe at : "
-                    + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectPortMonitorConfiguration : No response from appliance : "
-                    + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectPortMonitorConfiguration : arguments are null ");
-        }
+        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectPortMonitorConfiguration : " +
+                "PortMonitor object returned to client : " + portMonitor.toJsonString());
     }
 
     private void updateLogicalInterconnectPortMonitorConfiguration() {
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = logicalInterconnectClient.getId(params, resourceName);
+        PortMonitor portMonitor = logicalInterconnectClient.getPortMonitorConfiguration(
+                logicalInterconnect.getResourceId());
+        portMonitor.setEnablePortMonitor(false);
 
-            PortMonitor portMonitorDto = logicalInterconnectClient.getLogicalInterconnectPortMonitorConfiguration(params, resourceId);
-            portMonitorDto.setEnablePortMonitor(false);
+        TaskResourceV2 task = logicalInterconnectClient.updatePortMonitorConfiguration(
+                logicalInterconnect.getResourceId(), portMonitor, false);
 
-            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectPortMonitorConfiguration(params, resourceId, portMonitorDto);
-
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectPortMonitorConfiguration : status of "
-                    + "task object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectPortMonitorConfiguration : resource you are looking is not found for update"
-                    + params.getHostname());
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectPortMonitorConfiguration : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectPortMonitorConfiguration : no such url : "
-                    + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectPortMonitorConfiguration : Applicance Not reachabe at : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectPortMonitorConfiguration : arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectPortMonitorConfiguration : errors in task, "
-                    + "please check task resource for more details ");
-        }
+        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectPortMonitorConfiguration : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
     private void getLogicalInterconnectTelemetryConfiguration() {
-        TelemetryConfiguration telemetryConfigDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            telemetryConfigDto = logicalInterconnectClient.getLogicalInterconnectTelemetryConfiguration(params, resourceId, telemetryId);
+        TelemetryConfiguration telemetryConfiguration = logicalInterconnectClient.getTelemetryConfiguration(
+                logicalInterconnect.getResourceId(), TELEMETRY_ID);
 
-            System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectTelemetryConfiguration "
-                    + ": uplink port object returned to client : " + telemetryConfigDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "getLogicalInterconnectTelemetryConfiguration : resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out
-                    .println("LogicalInterconnectClientSample : " + "getLogicalInterconnectTelemetryConfiguration : no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectTelemetryConfiguration : Applicance Not reachabe at : "
-                    + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectTelemetryConfiguration : No response from appliance : "
-                    + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectTelemetryConfiguration : arguments are null ");
-        }
+        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectTelemetryConfiguration : " +
+                "TelemetryConfiguration object returned to client : " + telemetryConfiguration.toJsonString());
     }
 
     private void updateLogicalInterconnectTelemetryConfiguration() {
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = logicalInterconnectClient.getId(params, resourceName);
+        TelemetryConfiguration telemetryConfiguration = logicalInterconnectClient.getTelemetryConfiguration(
+                logicalInterconnect.getResourceId(), TELEMETRY_ID);
+        telemetryConfiguration.setEnableTelemetry(!telemetryConfiguration.getEnableTelemetry());
 
-            TelemetryConfiguration telemetryDto = logicalInterconnectClient.getLogicalInterconnectTelemetryConfiguration(params, resourceId, telemetryId);
-            telemetryDto.setEnableTelemetry(!telemetryDto.getEnableTelemetry());
+        TelemetryConfiguration telemetryConfigurationUpdated = logicalInterconnectClient.updateTelemetryConfiguration(
+                logicalInterconnect.getResourceId(), TELEMETRY_ID, telemetryConfiguration);
 
-            TelemetryConfiguration updatedDto = logicalInterconnectClient.updateLogicalInterconnectTelemetryConfiguration(params, resourceId, telemetryId, telemetryDto);
-
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectTelemetryConfiguration : "
-                    + "TelemetryConfiguration object returned to client : " + updatedDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectTelemetryConfiguration : resource you are looking is not found for update"
-                    + params.getHostname());
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectTelemetryConfiguration : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectTelemetryConfiguration : no such url : "
-                    + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectTelemetryConfiguration : Applicance Not reachabe at : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectTelemetryConfiguration : arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectTelemetryConfiguration : errors in task, "
-                    + "please check task resource for more details ");
-        }
+        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectTelemetryConfiguration : " +
+                "TelemetryConfiguration object returned to client : " + telemetryConfigurationUpdated.toJsonString());
     }
 
     private void updateLogicalInterconnectTelemetryConfigurationV200() {
-        String resourceId = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            resourceId = logicalInterconnectClient.getId(params, resourceName);
+        TelemetryConfiguration telemetryConfiguration = logicalInterconnectClient.getTelemetryConfiguration(
+                logicalInterconnect.getResourceId(), TELEMETRY_ID);
+        telemetryConfiguration.setEnableTelemetry(!telemetryConfiguration.getEnableTelemetry());
 
-            TelemetryConfiguration telemetryDto = logicalInterconnectClient.getLogicalInterconnectTelemetryConfiguration(params, resourceId, telemetryId);
-            telemetryDto.setEnableTelemetry(!telemetryDto.getEnableTelemetry());
+        TaskResourceV2 task = logicalInterconnectClient.updateTelemetryConfigurationV200(
+                logicalInterconnect.getResourceId(), TELEMETRY_ID, telemetryConfiguration, false);
 
-            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectTelemetryConfigurationV200(params, resourceId, telemetryId, telemetryDto);
-
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectTelemetryConfigurationV200 : status of "
-                    + "task object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectTelemetryConfigurationV200 : resource you are looking is not found for update"
-                    + params.getHostname());
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectTelemetryConfigurationV200 : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectTelemetryConfigurationV200 : no such url : "
-                    + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectTelemetryConfigurationV200 : Applicance Not reachabe at : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectTelemetryConfigurationV200 : arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectTelemetryConfigurationV200 : errors in task, "
-                    + "please check task resource for more details ");
-        }
+        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectTelemetryConfigurationV200 : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
     private void updateEthernetSettings() {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            LogicalInterconnect logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnect(params, resourceId);
+        EthernetInterconnectSettingsV2 ethSettingsDto = logicalInterconnect.getEthernetSettings();
+        ethSettingsDto.setEnablePauseFloodProtection(!ethSettingsDto.getEnablePauseFloodProtection());
 
-            EthernetInterconnectSettingsV2 ethSettingsDto = logicalInterconnectsDto.getEthernetSettings();
-            ethSettingsDto.setEnablePauseFloodProtection(!ethSettingsDto.getEnablePauseFloodProtection());
+        TaskResourceV2 task = logicalInterconnectClient.updateEthernetSettings(logicalInterconnect.getResourceId(),
+                ethSettingsDto, false);
 
-            taskResourceV2 = logicalInterconnectClient.updateEthernetSettings(params, resourceId, ethSettingsDto, false);
-
-            System.out.println("LogicalInterconnectClientSample : " + "updateEthernetSettings : status of "
-                    + "task object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateEthernetSettings : resource you are looking is not found for update"
-                    + params.getHostname());
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateEthernetSettings : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "updateEthernetSettings : no such url : "
-                    + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateEthernetSettings : Applicance Not reachabe at : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateEthernetSettings : arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateEthernetSettings : errors in task, "
-                    + "please check task resource for more details ");
-        }
+        System.out.println("LogicalInterconnectClientSample : updateEthernetSettings : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
-    private void createLogicalInterconnect() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void createLogicalInterconnect() {
+        Location location = new Location();
 
-            // create network request body
-            Location locationDto = new Location();
+        // ENCLOSURE
+        LocationEntry enclosureEntry = new LocationEntry();
+        enclosureEntry.setType(LocationType.Enclosure);
+        enclosureEntry.setValue(ENCLOSURE_URI);
 
-            // ENCLOSURE
-            LocationEntry enclosureEntry = new LocationEntry();
-            enclosureEntry.setType(LocationType.Enclosure);
-            enclosureEntry.setValue(enclosureUri);
+        // BAY
+        LocationEntry bayEntry = new LocationEntry();
+        bayEntry.setType(LocationType.Bay);
+        bayEntry.setValue("1");
 
-            // BAY
-            LocationEntry bayEntry = new LocationEntry();
-            bayEntry.setType(LocationType.Bay);
-            bayEntry.setValue("1");
+        location.setLocationEntries(Arrays.asList(enclosureEntry, bayEntry));
 
-            locationDto.setLocationEntries(Arrays.asList(enclosureEntry, bayEntry));
+        TaskResourceV2 task = logicalInterconnectClient.createInterconnect(location, false);
 
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = logicalInterconnectClient.createLogicalInterconnect(params, locationDto, false, false);
-
-            System.out.println("LogicalInterconnectClientSample : createLogicalInterconnect : task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : createLogicalInterconnect : resource you are looking is not found ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectClientSample : createLogicalInterconnect : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : createLogicalInterconnect : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : createLogicalInterconnect : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : createLogicalInterconnect : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out
-                    .println("LogicalInterconnectClientSample : createLogicalInterconnect : errors in task, please check task resource for more details ");
-            return;
-        }
+        System.out.println("LogicalInterconnectClientSample : createLogicalInterconnect : " +
+                "Task object returned to client : " + task.toJsonString());
     }
-    private void deleteLogicalInterconnect() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
 
-            // make sdk service call to get resource
-            taskResourceV2 = logicalInterconnectClient.deleteLogicalInterconnect(params, enclosureUri, "1", false);
+    private void deleteLogicalInterconnect() {
+        TaskResourceV2 task = logicalInterconnectClient.deleteInterconnect(ENCLOSURE_URI, "1", false);
 
-            System.out.println("LogicalInterconnectClientSample : deleteLogicalInterconnect : task object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : deleteLogicalInterconnect : resource you are looking is not found for delete ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : deleteLogicalInterconnect : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : deleteLogicalInterconnect : Applicance Not reachabe at : " + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectClientSample : deleteLogicalInterconnect : No response from appliance : " + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : deleteLogicalInterconnect : arguments are null ");
-            return;
-        }
+        System.out.println("LogicalInterconnectClientSample : deleteLogicalInterconnect : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
     private void updateLogicalInterconnectInternalNetworks() {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // get resource ID
-            String resourceId = logicalInterconnectClient.getId(params, resourceName);
+        String networkUri = oneViewClient.ethernetNetwork().getByName(NETWORK_NAME).getUri();
 
-            String networkUri = oneViewClient.ethernetNetwork().getByName(networkName).getUri();
+        TaskResourceV2 task = logicalInterconnectClient.updateInternalNetworks(
+                logicalInterconnect.getResourceId(), Arrays.asList(networkUri), false);
 
-            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectInternalNetworks(params,
-                    resourceId, Arrays.asList(networkUri));
-
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectCompliance : status of "
-                    + "task object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectCompliance : resource you are looking is not found for update "
-                    + params.getHostname());
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectCompliance : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectCompliance : no such url : "
-                    + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectCompliance : Applicance Not reachabe at : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectCompliance : arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectCompliance : errors in task, "
-                    + "please check task resource for more details ");
-        }
+        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectInternalNetworks : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
     private void getLogicalInterconnectInternalVlans() {
-        ResourceCollection<InternalVlanAssociation> vlanCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            vlanCollectionDto = logicalInterconnectClient.getLogicalInterconnectInternalVlans(params, resourceId);
+        ResourceCollection<InternalVlanAssociation> vlans = logicalInterconnectClient.getInternalVlans(
+                logicalInterconnect.getResourceId());
 
-            System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectInternalVlans "
-                    + ": vlan collection object returned to client : " + vlanCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "getLogicalInterconnectInternalVlans : resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out
-                    .println("LogicalInterconnectClientSample : " + "getLogicalInterconnectInternalVlans : no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectInternalVlans : Applicance Not reachabe at : "
-                    + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectInternalVlans : No response from appliance : "
-                    + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectInternalVlans : arguments are null ");
-        }
+        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectInternalVlans : " +
+                "Internal Vlans returned to client : " + vlans.toJsonString());
     }
 
     private void getLogicalInterconnectQosAggregatedConfiguration() {
-        QosAggregatedConfiguration qosConfigurationDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            qosConfigurationDto = logicalInterconnectClient.getLogicalInterconnectQosAggregatedConfiguration(params, resourceId);
+        QosAggregatedConfiguration qosConfiguration = logicalInterconnectClient.getQosAggregatedConfiguration(
+                logicalInterconnect.getResourceId());
 
-            System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectQosAggregatedConfiguration "
-                    + ": vlan collection object returned to client : " + qosConfigurationDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "getLogicalInterconnectQosAggregatedConfiguration : resource you are looking is not found ");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out
-                    .println("LogicalInterconnectClientSample : " + "getLogicalInterconnectQosAggregatedConfiguration : no such url : " + params.getUrl());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectQosAggregatedConfiguration : Applicance Not reachabe at : "
-                    + params.getHostname());
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectQosAggregatedConfiguration : No response from appliance : "
-                    + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "getLogicalInterconnectQosAggregatedConfiguration : arguments are null ");
-        }
+        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectQosAggregatedConfiguration : " +
+                "QosAggregatedConfiguration object returned to client : " + qosConfiguration.toJsonString());
     }
 
     private void updateLogicalInterconnectQosAggregatedConfiguration() {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            QosAggregatedConfiguration qosConfigDto = logicalInterconnectClient.getLogicalInterconnectQosAggregatedConfiguration(params, resourceId);
-            qosConfigDto.getActiveQosConfig().setConfigType(QosConfigType.Passthrough);
+        QosAggregatedConfiguration qosConfiguration = logicalInterconnectClient.getQosAggregatedConfiguration(
+                logicalInterconnect.getResourceId());
+        qosConfiguration.getActiveQosConfig().setConfigType(QosConfigType.Passthrough);
 
-            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectQosAggregatedConfiguration(params, resourceId, qosConfigDto);
+        TaskResourceV2 task = logicalInterconnectClient.updateQosAggregatedConfiguration(
+                logicalInterconnect.getResourceId(), qosConfiguration, false);
 
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectQosAggregatedConfiguration : status of "
-                    + "task object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectQosAggregatedConfiguration : resource you are looking is not found for update"
-                    + params.getHostname());
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectQosAggregatedConfiguration : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectQosAggregatedConfiguration : no such url : "
-                    + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectQosAggregatedConfiguration : Applicance Not reachabe at : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectQosAggregatedConfiguration : arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectQosAggregatedConfiguration : errors in task, "
-                    + "please check task resource for more details ");
-        }
-
+        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectQosAggregatedConfiguration : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
     private void updateLogicalInterconnectSettings() {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-            LogicalInterconnect logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnect(params, resourceId);
+        InterconnectSettingsV2 settings = new InterconnectSettingsV2();
+        settings.setType("InterconnectSettingsV3");
+        settings.setEthernetSettings(logicalInterconnect.getEthernetSettings());
+        settings.setFcoeSettings(logicalInterconnect.getFcoeSettings());
+        settings.getEthernetSettings().setMacRefreshInterval(6);
 
-            InterconnectSettingsV2 settingsDto = new InterconnectSettingsV2();
-            settingsDto.setType("InterconnectSettingsV3");
-            settingsDto.setEthernetSettings(logicalInterconnectsDto.getEthernetSettings());
-            settingsDto.setFcoeSettings(logicalInterconnectsDto.getFcoeSettings());
-            settingsDto.getEthernetSettings().setMacRefreshInterval(6);
+        TaskResourceV2 task = logicalInterconnectClient.updateSettings(
+                logicalInterconnect.getResourceId(), settings, false);
 
-            taskResourceV2 = logicalInterconnectClient.updateLogicalInterconnectSettings(params, resourceId, settingsDto);
-
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectQosAggregatedConfiguration : status of "
-                    + "task object returned to client : " + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectQosAggregatedConfiguration : resource you are looking is not found for update"
-                    + params.getHostname());
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectQosAggregatedConfiguration : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("LogicalInterconnectClientSample : " + "updateLogicalInterconnectQosAggregatedConfiguration : no such url : "
-                    + params.getHostname());
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectQosAggregatedConfiguration : Applicance Not reachabe at : " + params.getHostname());
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectQosAggregatedConfiguration : arguments are null ");
-        } catch (final SDKTasksException e) {
-            System.out.println("LogicalInterconnectClientSample : "
-                    + "updateLogicalInterconnectQosAggregatedConfiguration : errors in task, "
-                    + "please check task resource for more details ");
-        }
+        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectSettings : " +
+                "Task object returned to client : " + task.toJsonString());
     }
 
-    public static void main(final String[] args) throws Exception {
+    public static void main(final String[] args) {
         LogicalInterconnectClientSample client = new LogicalInterconnectClientSample();
 
         client.getLogicalInterconnectById();
         client.getLogicalInterconnectByName();
         client.getAllLogicalInterconnects();
-        client.updateLogicalInterconnectComplianceById();
-        client.updateLogicalInterconnectFirmwareStageById();
+        client.updateLogicalInterconnectCompliance();
 
-        client.getLogicalInterconnectFirmwareById();
+        client.getLogicalInterconnectFirmware();
+        client.updateLogicalInterconnectFirmware();
 
-        client.updateLogicalInterconnectSnmpConfigurationById();
+        client.getLogicalInterconnectSnmpConfiguration();
+        client.updateLogicalInterconnectSnmpConfiguration();
 
-        client.createLogicalInterconnectForwardingInformationBase();
         client.getLogicalInterconnectForwardingInformationBase();
-        client.getLogicalInterconnectSnmpConfigurationById();
+        client.createLogicalInterconnectForwardingInformationBase();
+
         client.getLogicalInterconnectUnassignedUplinkPortsForPortMonitor();
         client.updateLogicalInterconnectConfiguration();
+
         client.getLogicalInterconnectPortMonitorConfiguration();
-
         client.updateLogicalInterconnectPortMonitorConfiguration();
-        client.getLogicalInterconnectTelemetryConfiguration();
 
+        client.getLogicalInterconnectTelemetryConfiguration();
         client.updateLogicalInterconnectTelemetryConfiguration(); //OneView 1.2
         client.updateLogicalInterconnectTelemetryConfigurationV200(); //OneView 2.0
 
@@ -1105,9 +447,8 @@ public class LogicalInterconnectClientSample {
         client.updateLogicalInterconnectQosAggregatedConfiguration();
         client.updateLogicalInterconnectSettings();
 
-        client.updateLogicalInterconnectFirmwareActiveById();
-        client.updateLogicalInterconnectFirmwareUpdateById();
-
+        client.updateLogicalInterconnectFirmwareActive();
+        client.updateLogicalInterconnectFirmwareUpdate();
     }
 
 }
