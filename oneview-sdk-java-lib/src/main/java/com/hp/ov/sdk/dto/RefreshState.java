@@ -16,5 +16,12 @@
 package com.hp.ov.sdk.dto;
 
 public enum RefreshState {
-    NotRefreshing, RefreshFailed, RefreshPending, Refreshing
+
+    NotRefreshing,
+    RefreshFailed,
+    Refreshing,
+    RefreshPending,
+    Stable,
+    Unknown;
+
 }

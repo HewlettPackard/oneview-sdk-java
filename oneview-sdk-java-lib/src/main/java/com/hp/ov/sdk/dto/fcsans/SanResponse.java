@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.fcsans;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,28 +23,26 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.BaseModelResource;
+import com.hp.ov.sdk.dto.Property;
+import com.hp.ov.sdk.dto.RefreshState;
 
 public class SanResponse extends BaseModelResource {
 
     private static final long serialVersionUID = -1495921065098648747L;
 
-    public enum RefreshState {
-        RefreshFailed, RefreshPending, Refreshing, Stable, Unknown
-    }
-
     private Integer aliasCount;
     private String aliasesUri;
-
     @Since(200)
     private List<NetworkResponse> associatedNetworks = new ArrayList<>();
-
     private String deviceManagerName;
     private String deviceManagerUri;
     private String deviceManagersUri;
     private String displayName;
     private String endpointsUri;
+    @Since(300)
+    private String fcMap;
     private Boolean imported;
-
     @Since(200)
     private Boolean isActualFc;
     @Since(200)
@@ -57,7 +55,6 @@ public class SanResponse extends BaseModelResource {
     private Boolean isFcCapable;
     @Since(200)
     private Boolean isFcoeCapable;
-
     private Boolean isInternal;
     private Integer portsFreeCount;
     private Integer portsTotalCount;
@@ -65,10 +62,8 @@ public class SanResponse extends BaseModelResource {
     private Integer portsUsedCount;
     private String principalSwitch;
     private String providerName;
-
     private List<Property> publicAttributes = new ArrayList<>();
     private RefreshState refreshState;
-
     private String routingId;
     private SanPolicy sanPolicy;
     private Integer sanServicesCount;
@@ -76,292 +71,514 @@ public class SanResponse extends BaseModelResource {
     private String sanType;
     private Integer switchCount;
     private String switchesUri;
-
     @Since(200)
     private Integer vLanId;
-
     private Integer zoneCount;
     private String zonesUri;
     private ZoningState zoningState;
 
+    /**
+     * @return the aliasCount
+     */
     public Integer getAliasCount() {
         return aliasCount;
     }
 
+    /**
+     * @param aliasCount the aliasCount to set
+     */
     public void setAliasCount(Integer aliasCount) {
         this.aliasCount = aliasCount;
     }
 
+    /**
+     * @return the aliasesUri
+     */
     public String getAliasesUri() {
         return aliasesUri;
     }
 
+    /**
+     * @param aliasesUri the aliasesUri to set
+     */
     public void setAliasesUri(String aliasesUri) {
         this.aliasesUri = aliasesUri;
     }
 
-    public String getDeviceManagerName() {
-        return deviceManagerName;
-    }
-
-    public void setDeviceManagerName(String deviceManagerName) {
-        this.deviceManagerName = deviceManagerName;
-    }
-
-    public String getDeviceManagerUri() {
-        return deviceManagerUri;
-    }
-
-    public void setDeviceManagerUri(String deviceManagerUri) {
-        this.deviceManagerUri = deviceManagerUri;
-    }
-
-    public String getDeviceManagersUri() {
-        return deviceManagersUri;
-    }
-
-    public void setDeviceManagersUri(String deviceManagersUri) {
-        this.deviceManagersUri = deviceManagersUri;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public String getEndpointsUri() {
-        return endpointsUri;
-    }
-
-    public void setEndpointsUri(String endpointsUri) {
-        this.endpointsUri = endpointsUri;
-    }
-
-    public Boolean getImported() {
-        return imported;
-    }
-
-    public void setImported(Boolean imported) {
-        this.imported = imported;
-    }
-
-    public Boolean getIsInternal() {
-        return isInternal;
-    }
-
-    public void setIsInternal(Boolean isInternal) {
-        this.isInternal = isInternal;
-    }
-
-    public Integer getPortsFreeCount() {
-        return portsFreeCount;
-    }
-
-    public void setPortsFreeCount(Integer portsFreeCount) {
-        this.portsFreeCount = portsFreeCount;
-    }
-
-    public Integer getPortsTotalCount() {
-        return portsTotalCount;
-    }
-
-    public void setPortsTotalCount(Integer portsTotalCount) {
-        this.portsTotalCount = portsTotalCount;
-    }
-
-    public String getPortsUri() {
-        return portsUri;
-    }
-
-    public void setPortsUri(String portsUri) {
-        this.portsUri = portsUri;
-    }
-
-    public Integer getPortsUsedCount() {
-        return portsUsedCount;
-    }
-
-    public void setPortsUsedCount(Integer portsUsedCount) {
-        this.portsUsedCount = portsUsedCount;
-    }
-
-    public String getPrincipalSwitch() {
-        return principalSwitch;
-    }
-
-    public void setPrincipalSwitch(String principalSwitch) {
-        this.principalSwitch = principalSwitch;
-    }
-
-    public String getProviderName() {
-        return providerName;
-    }
-
-    public void setProviderName(String providerName) {
-        this.providerName = providerName;
-    }
-
-    public List<Property> getPublicAttributes() {
-        return publicAttributes;
-    }
-
-    public void setPublicAttributes(List<Property> publicAttributes) {
-        this.publicAttributes = publicAttributes;
-    }
-
-    public RefreshState getRefreshState() {
-        return refreshState;
-    }
-
-    public void setRefreshState(RefreshState refreshState) {
-        this.refreshState = refreshState;
-    }
-
-    public String getRoutingId() {
-        return routingId;
-    }
-
-    public void setRoutingId(String routingId) {
-        this.routingId = routingId;
-    }
-
-    public SanPolicy getSanPolicy() {
-        return sanPolicy;
-    }
-
-    public void setSanPolicy(SanPolicy sanPolicy) {
-        this.sanPolicy = sanPolicy;
-    }
-
-    public Integer getSanServicesCount() {
-        return sanServicesCount;
-    }
-
-    public void setSanServicesCount(Integer sanServicesCount) {
-        this.sanServicesCount = sanServicesCount;
-    }
-
-    public String getSanServicesUri() {
-        return sanServicesUri;
-    }
-
-    public void setSanServicesUri(String sanServicesUri) {
-        this.sanServicesUri = sanServicesUri;
-    }
-
-    public String getSanType() {
-        return sanType;
-    }
-
-    public void setSanType(String sanType) {
-        this.sanType = sanType;
-    }
-
-    public Integer getSwitchCount() {
-        return switchCount;
-    }
-
-    public void setSwitchCount(Integer switchCount) {
-        this.switchCount = switchCount;
-    }
-
-    public String getSwitchesUri() {
-        return switchesUri;
-    }
-
-    public void setSwitchesUri(String switchesUri) {
-        this.switchesUri = switchesUri;
-    }
-
-    public Integer getZoneCount() {
-        return zoneCount;
-    }
-
-    public void setZoneCount(Integer zoneCount) {
-        this.zoneCount = zoneCount;
-    }
-
-    public String getZonesUri() {
-        return zonesUri;
-    }
-
-    public void setZonesUri(String zonesUri) {
-        this.zonesUri = zonesUri;
-    }
-
-    public ZoningState getZoningState() {
-        return zoningState;
-    }
-
-    public void setZoningState(ZoningState zoningState) {
-        this.zoningState = zoningState;
-    }
-
-    public Boolean getIsActualFc() {
-        return isActualFc;
-    }
-
-    public void setIsActualFc(Boolean isActualFc) {
-        this.isActualFc = isActualFc;
-    }
-
-    public Boolean getIsActualFcoe() {
-        return isActualFcoe;
-    }
-
-    public void setIsActualFcoe(Boolean isActualFcoe) {
-        this.isActualFcoe = isActualFcoe;
-    }
-
-    public Boolean getIsExpectedFc() {
-        return isExpectedFc;
-    }
-
-    public void setIsExpectedFc(Boolean isExpectedFc) {
-        this.isExpectedFc = isExpectedFc;
-    }
-
-    public Boolean getIsExpectedFcoe() {
-        return isExpectedFcoe;
-    }
-
-    public void setIsExpectedFcoe(Boolean isExpectedFcoe) {
-        this.isExpectedFcoe = isExpectedFcoe;
-    }
-
-    public Boolean getIsFcCapable() {
-        return isFcCapable;
-    }
-
-    public void setIsFcCapable(Boolean isFcCapable) {
-        this.isFcCapable = isFcCapable;
-    }
-
-    public Boolean getIsFcoeCapable() {
-        return isFcoeCapable;
-    }
-
-    public void setIsFcoeCapable(Boolean isFcoeCapable) {
-        this.isFcoeCapable = isFcoeCapable;
-    }
-
-    public Integer getVlanId() {
-        return vLanId;
-    }
-
-    public void setVlanId(Integer vLanId) {
-        this.vLanId = vLanId;
-    }
-
+    /**
+     * @return the associatedNetworks
+     */
     public List<NetworkResponse> getAssociatedNetworks() {
         return associatedNetworks;
     }
 
+    /**
+     * @param associatedNetworks the associatedNetworks to set
+     */
     public void setAssociatedNetworks(List<NetworkResponse> associatedNetworks) {
         this.associatedNetworks = associatedNetworks;
+    }
+
+    /**
+     * @return the deviceManagerName
+     */
+    public String getDeviceManagerName() {
+        return deviceManagerName;
+    }
+
+    /**
+     * @param deviceManagerName the deviceManagerName to set
+     */
+    public void setDeviceManagerName(String deviceManagerName) {
+        this.deviceManagerName = deviceManagerName;
+    }
+
+    /**
+     * @return the deviceManagerUri
+     */
+    public String getDeviceManagerUri() {
+        return deviceManagerUri;
+    }
+
+    /**
+     * @param deviceManagerUri the deviceManagerUri to set
+     */
+    public void setDeviceManagerUri(String deviceManagerUri) {
+        this.deviceManagerUri = deviceManagerUri;
+    }
+
+    /**
+     * @return the deviceManagersUri
+     */
+    public String getDeviceManagersUri() {
+        return deviceManagersUri;
+    }
+
+    /**
+     * @param deviceManagersUri the deviceManagersUri to set
+     */
+    public void setDeviceManagersUri(String deviceManagersUri) {
+        this.deviceManagersUri = deviceManagersUri;
+    }
+
+    /**
+     * @return the displayName
+     */
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    /**
+     * @param displayName the displayName to set
+     */
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    /**
+     * @return the endpointsUri
+     */
+    public String getEndpointsUri() {
+        return endpointsUri;
+    }
+
+    /**
+     * @param endpointsUri the endpointsUri to set
+     */
+    public void setEndpointsUri(String endpointsUri) {
+        this.endpointsUri = endpointsUri;
+    }
+
+    /**
+     * @return the fcMap
+     */
+    public String getFcMap() {
+        return fcMap;
+    }
+
+    /**
+     * @param fcMap the fcMap to set
+     */
+    public void setFcMap(String fcMap) {
+        this.fcMap = fcMap;
+    }
+
+    /**
+     * @return the imported
+     */
+    public Boolean getImported() {
+        return imported;
+    }
+
+    /**
+     * @param imported the imported to set
+     */
+    public void setImported(Boolean imported) {
+        this.imported = imported;
+    }
+
+    /**
+     * @return the isActualFc
+     */
+    public Boolean getIsActualFc() {
+        return isActualFc;
+    }
+
+    /**
+     * @param isActualFc the isActualFc to set
+     */
+    public void setIsActualFc(Boolean isActualFc) {
+        this.isActualFc = isActualFc;
+    }
+
+    /**
+     * @return the isActualFcoe
+     */
+    public Boolean getIsActualFcoe() {
+        return isActualFcoe;
+    }
+
+    /**
+     * @param isActualFcoe the isActualFcoe to set
+     */
+    public void setIsActualFcoe(Boolean isActualFcoe) {
+        this.isActualFcoe = isActualFcoe;
+    }
+
+    /**
+     * @return the isExpectedFc
+     */
+    public Boolean getIsExpectedFc() {
+        return isExpectedFc;
+    }
+
+    /**
+     * @param isExpectedFc the isExpectedFc to set
+     */
+    public void setIsExpectedFc(Boolean isExpectedFc) {
+        this.isExpectedFc = isExpectedFc;
+    }
+
+    /**
+     * @return the isExpectedFcoe
+     */
+    public Boolean getIsExpectedFcoe() {
+        return isExpectedFcoe;
+    }
+
+    /**
+     * @param isExpectedFcoe the isExpectedFcoe to set
+     */
+    public void setIsExpectedFcoe(Boolean isExpectedFcoe) {
+        this.isExpectedFcoe = isExpectedFcoe;
+    }
+
+    /**
+     * @return the isFcCapable
+     */
+    public Boolean getIsFcCapable() {
+        return isFcCapable;
+    }
+
+    /**
+     * @param isFcCapable the isFcCapable to set
+     */
+    public void setIsFcCapable(Boolean isFcCapable) {
+        this.isFcCapable = isFcCapable;
+    }
+
+    /**
+     * @return the isFcoeCapable
+     */
+    public Boolean getIsFcoeCapable() {
+        return isFcoeCapable;
+    }
+
+    /**
+     * @param isFcoeCapable the isFcoeCapable to set
+     */
+    public void setIsFcoeCapable(Boolean isFcoeCapable) {
+        this.isFcoeCapable = isFcoeCapable;
+    }
+
+    /**
+     * @return the isInternal
+     */
+    public Boolean getIsInternal() {
+        return isInternal;
+    }
+
+    /**
+     * @param isInternal the isInternal to set
+     */
+    public void setIsInternal(Boolean isInternal) {
+        this.isInternal = isInternal;
+    }
+
+    /**
+     * @return the portsFreeCount
+     */
+    public Integer getPortsFreeCount() {
+        return portsFreeCount;
+    }
+
+    /**
+     * @param portsFreeCount the portsFreeCount to set
+     */
+    public void setPortsFreeCount(Integer portsFreeCount) {
+        this.portsFreeCount = portsFreeCount;
+    }
+
+    /**
+     * @return the portsTotalCount
+     */
+    public Integer getPortsTotalCount() {
+        return portsTotalCount;
+    }
+
+    /**
+     * @param portsTotalCount the portsTotalCount to set
+     */
+    public void setPortsTotalCount(Integer portsTotalCount) {
+        this.portsTotalCount = portsTotalCount;
+    }
+
+    /**
+     * @return the portsUri
+     */
+    public String getPortsUri() {
+        return portsUri;
+    }
+
+    /**
+     * @param portsUri the portsUri to set
+     */
+    public void setPortsUri(String portsUri) {
+        this.portsUri = portsUri;
+    }
+
+    /**
+     * @return the portsUsedCount
+     */
+    public Integer getPortsUsedCount() {
+        return portsUsedCount;
+    }
+
+    /**
+     * @param portsUsedCount the portsUsedCount to set
+     */
+    public void setPortsUsedCount(Integer portsUsedCount) {
+        this.portsUsedCount = portsUsedCount;
+    }
+
+    /**
+     * @return the principalSwitch
+     */
+    public String getPrincipalSwitch() {
+        return principalSwitch;
+    }
+
+    /**
+     * @param principalSwitch the principalSwitch to set
+     */
+    public void setPrincipalSwitch(String principalSwitch) {
+        this.principalSwitch = principalSwitch;
+    }
+
+    /**
+     * @return the providerName
+     */
+    public String getProviderName() {
+        return providerName;
+    }
+
+    /**
+     * @param providerName the providerName to set
+     */
+    public void setProviderName(String providerName) {
+        this.providerName = providerName;
+    }
+
+    /**
+     * @return the publicAttributes
+     */
+    public List<Property> getPublicAttributes() {
+        return publicAttributes;
+    }
+
+    /**
+     * @param publicAttributes the publicAttributes to set
+     */
+    public void setPublicAttributes(List<Property> publicAttributes) {
+        this.publicAttributes = publicAttributes;
+    }
+
+    /**
+     * @return the refreshState
+     */
+    public RefreshState getRefreshState() {
+        return refreshState;
+    }
+
+    /**
+     * @param refreshState the refreshState to set
+     */
+    public void setRefreshState(RefreshState refreshState) {
+        this.refreshState = refreshState;
+    }
+
+    /**
+     * @return the routingId
+     */
+    public String getRoutingId() {
+        return routingId;
+    }
+
+    /**
+     * @param routingId the routingId to set
+     */
+    public void setRoutingId(String routingId) {
+        this.routingId = routingId;
+    }
+
+    /**
+     * @return the sanPolicy
+     */
+    public SanPolicy getSanPolicy() {
+        return sanPolicy;
+    }
+
+    /**
+     * @param sanPolicy the sanPolicy to set
+     */
+    public void setSanPolicy(SanPolicy sanPolicy) {
+        this.sanPolicy = sanPolicy;
+    }
+
+    /**
+     * @return the sanServicesCount
+     */
+    public Integer getSanServicesCount() {
+        return sanServicesCount;
+    }
+
+    /**
+     * @param sanServicesCount the sanServicesCount to set
+     */
+    public void setSanServicesCount(Integer sanServicesCount) {
+        this.sanServicesCount = sanServicesCount;
+    }
+
+    /**
+     * @return the sanServicesUri
+     */
+    public String getSanServicesUri() {
+        return sanServicesUri;
+    }
+
+    /**
+     * @param sanServicesUri the sanServicesUri to set
+     */
+    public void setSanServicesUri(String sanServicesUri) {
+        this.sanServicesUri = sanServicesUri;
+    }
+
+    /**
+     * @return the sanType
+     */
+    public String getSanType() {
+        return sanType;
+    }
+
+    /**
+     * @param sanType the sanType to set
+     */
+    public void setSanType(String sanType) {
+        this.sanType = sanType;
+    }
+
+    /**
+     * @return the switchCount
+     */
+    public Integer getSwitchCount() {
+        return switchCount;
+    }
+
+    /**
+     * @param switchCount the switchCount to set
+     */
+    public void setSwitchCount(Integer switchCount) {
+        this.switchCount = switchCount;
+    }
+
+    /**
+     * @return the switchesUri
+     */
+    public String getSwitchesUri() {
+        return switchesUri;
+    }
+
+    /**
+     * @param switchesUri the switchesUri to set
+     */
+    public void setSwitchesUri(String switchesUri) {
+        this.switchesUri = switchesUri;
+    }
+
+    /**
+     * @return the vLanId
+     */
+    public Integer getvLanId() {
+        return vLanId;
+    }
+
+    /**
+     * @param vLanId the vLanId to set
+     */
+    public void setvLanId(Integer vLanId) {
+        this.vLanId = vLanId;
+    }
+
+    /**
+     * @return the zoneCount
+     */
+    public Integer getZoneCount() {
+        return zoneCount;
+    }
+
+    /**
+     * @param zoneCount the zoneCount to set
+     */
+    public void setZoneCount(Integer zoneCount) {
+        this.zoneCount = zoneCount;
+    }
+
+    /**
+     * @return the zonesUri
+     */
+    public String getZonesUri() {
+        return zonesUri;
+    }
+
+    /**
+     * @param zonesUri the zonesUri to set
+     */
+    public void setZonesUri(String zonesUri) {
+        this.zonesUri = zonesUri;
+    }
+
+    /**
+     * @return the zoningState
+     */
+    public ZoningState getZoningState() {
+        return zoningState;
+    }
+
+    /**
+     * @param zoningState the zoningState to set
+     */
+    public void setZoningState(ZoningState zoningState) {
+        this.zoningState = zoningState;
     }
 
     @Override
@@ -382,6 +599,7 @@ public class SanResponse extends BaseModelResource {
                     .append(displayName, that.displayName)
                     .append(endpointsUri, that.endpointsUri)
                     .append(imported, that.imported)
+                    .append(fcMap, that.fcMap)
                     .append(isActualFc, that.isActualFc)
                     .append(isActualFcoe, that.isActualFcoe)
                     .append(isExpectedFc, that.isExpectedFc)
@@ -426,6 +644,7 @@ public class SanResponse extends BaseModelResource {
                 .append(displayName)
                 .append(endpointsUri)
                 .append(imported)
+                .append(fcMap)
                 .append(isActualFc)
                 .append(isActualFcoe)
                 .append(isExpectedFc)
@@ -457,44 +676,7 @@ public class SanResponse extends BaseModelResource {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .appendSuper(super.toString())
-                .append("aliasCount", aliasCount)
-                .append("aliasesUri", aliasesUri)
-                .append("associatedNetworks", associatedNetworks)
-                .append("deviceManagerName", deviceManagerName)
-                .append("deviceManagersUri", deviceManagersUri)
-                .append("deviceManagerUri", deviceManagerUri)
-                .append("displayName", displayName)
-                .append("endpointsUri", endpointsUri)
-                .append("imported", imported)
-                .append("isActualFc", isActualFc)
-                .append("isActualFcoe", isActualFcoe)
-                .append("isExpectedFc", isExpectedFc)
-                .append("isExpectedFcoe", isExpectedFcoe)
-                .append("isFcCapable", isFcCapable)
-                .append("isFcoeCapable", isFcoeCapable)
-                .append("isInternal", isInternal)
-                .append("portsFreeCount", portsFreeCount)
-                .append("portsTotalCount", portsTotalCount)
-                .append("portsUri", portsUri)
-                .append("portsUsedCount", portsUsedCount)
-                .append("principalSwitch", principalSwitch)
-                .append("providerName", providerName)
-                .append("publicAttributes", publicAttributes)
-                .append("refreshState", refreshState)
-                .append("routingId", routingId)
-                .append("sanPolicy", sanPolicy)
-                .append("sanServicesCount", sanServicesCount)
-                .append("sanServicesUri", sanServicesUri)
-                .append("sanType", sanType)
-                .append("switchCount", switchCount)
-                .append("switchesUri", switchesUri)
-                .append("vLanId", vLanId)
-                .append("zoneCount", zoneCount)
-                .append("zonesUri", zonesUri)
-                .append("zoningState", zoningState)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
 
 }
