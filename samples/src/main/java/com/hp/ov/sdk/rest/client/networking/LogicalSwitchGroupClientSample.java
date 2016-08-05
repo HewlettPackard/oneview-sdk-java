@@ -20,14 +20,14 @@ import com.google.common.collect.Lists;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.InterconnectType;
-import com.hp.ov.sdk.dto.LogicalSwitchGroup;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.SwitchMapEntryTemplate;
-import com.hp.ov.sdk.dto.SwitchMapTemplate;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.networking.LocationType;
 import com.hp.ov.sdk.dto.networking.LogicalLocation;
 import com.hp.ov.sdk.dto.networking.LogicalLocationEntry;
+import com.hp.ov.sdk.dto.networking.logicalswitchgroup.LogicalSwitchGroup;
+import com.hp.ov.sdk.dto.networking.logicalswitchgroup.SwitchMapEntryTemplate;
+import com.hp.ov.sdk.dto.networking.logicalswitchgroup.SwitchMapTemplate;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class LogicalSwitchGroupClientSample {

@@ -14,31 +14,65 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking.logicalswitchgroup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.BaseModelResource;
 
 public class LogicalSwitchGroup extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
     private String fabricUri;
+    @Since(300)
+    private List<String> scopeUris = new ArrayList<String>();
     private SwitchMapTemplate switchMapTemplate;
 
+    /**
+     * @return the fabricUri
+     */
     public String getFabricUri() {
         return fabricUri;
     }
 
+    /**
+     * @param fabricUri the fabricUri to set
+     */
     public void setFabricUri(String fabricUri) {
         this.fabricUri = fabricUri;
     }
 
+    /**
+     * @return the scopeUris
+     */
+    public List<String> getScopeUris() {
+        return scopeUris;
+    }
+
+    /**
+     * @param scopeUris the scopeUris to set
+     */
+    public void setScopeUris(List<String> scopeUris) {
+        this.scopeUris = scopeUris;
+    }
+
+    /**
+     * @return the switchMapTemplate
+     */
     public SwitchMapTemplate getSwitchMapTemplate() {
         return switchMapTemplate;
     }
 
+    /**
+     * @param switchMapTemplate the switchMapTemplate to set
+     */
     public void setSwitchMapTemplate(SwitchMapTemplate switchMapTemplate) {
         this.switchMapTemplate = switchMapTemplate;
     }
@@ -54,6 +88,7 @@ public class LogicalSwitchGroup extends BaseModelResource {
         return new EqualsBuilder()
                 .appendSuper(super.equals(obj))
                 .append(fabricUri, that.fabricUri)
+                .append(scopeUris, that.scopeUris)
                 .append(switchMapTemplate, that.switchMapTemplate)
                 .isEquals();
     }
@@ -63,16 +98,14 @@ public class LogicalSwitchGroup extends BaseModelResource {
         return new HashCodeBuilder()
                 .appendSuper(super.hashCode())
                 .append(fabricUri)
+                .append(scopeUris)
                 .append(switchMapTemplate)
                 .toHashCode();
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .appendSuper(super.toString())
-                .append("fabricUri", fabricUri)
-                .append("switchMapTemplate", switchMapTemplate)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
+
 }
