@@ -20,7 +20,6 @@ import com.google.common.collect.Lists;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.LogicalSwitchGroup;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.ConnectionProperty;
@@ -31,6 +30,7 @@ import com.hp.ov.sdk.dto.networking.logicalswitches.LogicalSwitch;
 import com.hp.ov.sdk.dto.networking.logicalswitches.SnmpV1Configuration;
 import com.hp.ov.sdk.dto.networking.logicalswitches.SnmpVersion;
 import com.hp.ov.sdk.dto.networking.logicalswitches.SwitchCredentialConfiguration;
+import com.hp.ov.sdk.dto.networking.logicalswitchgroup.LogicalSwitchGroup;
 import com.hp.ov.sdk.dto.networking.switches.SwitchManagementConnection;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
