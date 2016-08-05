@@ -30,6 +30,7 @@ import com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FabricClient;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
+import com.hp.ov.sdk.rest.client.networking.InterconnectClient;
 import com.hp.ov.sdk.rest.client.networking.InterconnectTypeClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalDownlinkClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClient;
@@ -93,6 +94,7 @@ public class OneViewClient {
     private FcSanProviderClient fcSanProviderClient;
     private FcSanManagedSanClient fcSanManagedSanClient;
     private InterconnectTypeClient interconnectTypeClient;
+    private InterconnectClient interconnectClient;
     private LogicalInterconnectGroupClient logicalInterconnectGroupClient;
     private LogicalDownlinkClient logicalDownlinkClient;
 
@@ -222,6 +224,10 @@ public class OneViewClient {
 
     public synchronized InterconnectTypeClient interconnectType() {
         return this.getClient(this.interconnectTypeClient, InterconnectTypeClient.class);
+    }
+
+    public synchronized InterconnectClient interconnect() {
+        return this.getClient(this.interconnectClient, InterconnectClient.class);
     }
 
     public synchronized LogicalInterconnectGroupClient logicalInterconnectGroup() {
