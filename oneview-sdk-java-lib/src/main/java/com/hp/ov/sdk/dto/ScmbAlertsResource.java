@@ -18,10 +18,13 @@ package com.hp.ov.sdk.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hp.ov.sdk.dto.alerts.AssociatedResource;
+import com.hp.ov.sdk.dto.alerts.ChangeLog;
+
 public class ScmbAlertsResource extends BaseModelResource {
 
     /**
-	 * 
+	 *
 	 */
     private static final long serialVersionUID = 1L;
     private String severity;

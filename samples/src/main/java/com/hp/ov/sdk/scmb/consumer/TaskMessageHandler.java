@@ -16,10 +16,10 @@
 
 package com.hp.ov.sdk.scmb.consumer;
 
-import com.hp.ov.sdk.dto.AssociatedResource;
 import com.hp.ov.sdk.dto.ScmbAlertsMessageDto;
 import com.hp.ov.sdk.dto.ScmbAlertsResource;
 import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.alerts.AssociatedResource;
 import com.hp.ov.sdk.messaging.scmb.listeners.ScmbListener;
 
 public class TaskMessageHandler implements ScmbListener {

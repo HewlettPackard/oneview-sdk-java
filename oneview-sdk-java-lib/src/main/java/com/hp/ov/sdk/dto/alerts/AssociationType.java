@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.alerts;
 
 public enum AssociationType {
-    HAS_A, IS_A, MANAGED_BY
+
+    HAS_A,
+    IS_A,
+    MANAGED_BY;
+
 }
