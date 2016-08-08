@@ -1,5 +1,5 @@
 /*******************************************************************************
- * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -13,14 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.networking.interconnect;
+package com.hp.ov.sdk.dto.networking.logicalinterconnects;
 
-public enum IcmLicenseStates {
+public enum LsFwStateEnum {
 
-    Yes,
-    YesWillBeApplied,
-    YesIncompatible,
-    No,
-    NoIncompatible;
+    ACTIVATED,
+    ACTIVATING,
+    ACTIVATION_FAILED,
+    PARTIALLY_ACTIVATED,
+    PARTIALLY_STAGED,
+    STAGED,
+    STAGING,
+    STAGING_FAILED,
+    UNINITIALIZED,
+    UNKNOWN;
 
 }

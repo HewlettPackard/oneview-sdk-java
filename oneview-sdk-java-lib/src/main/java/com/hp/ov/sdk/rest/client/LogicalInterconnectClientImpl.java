@@ -28,22 +28,22 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.InterconnectFibDataEntry;
 import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
-import com.hp.ov.sdk.dto.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.InternalVlanAssociation;
-import com.hp.ov.sdk.dto.LiFirmware;
-import com.hp.ov.sdk.dto.PortMonitor;
 import com.hp.ov.sdk.dto.PortMonitorUplinkPort;
 import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
 import com.hp.ov.sdk.dto.networking.Location;
+import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.LiFirmware;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.LogicalInterconnect;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.PortMonitor;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -86,7 +86,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     }
 
     @Override
-    public LogicalInterconnects getLogicalInterconnect(final RestParams params, final String resourceId) {
+    public LogicalInterconnect getLogicalInterconnect(final RestParams params, final String resourceId) {
         LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnect : Start");
 
         // validate args
@@ -105,7 +105,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
         }
         // Call adaptor to convert to DTO
 
-        final LogicalInterconnects logicalInterconnectDto = adaptor.buildDto(returnObj, params.getApiVersion());
+        final LogicalInterconnect logicalInterconnectDto = adaptor.buildDto(returnObj, params.getApiVersion());
 
         LOGGER.debug("LogicalInterconnectClientImpl : getLogicalInterconnect : Name :" + logicalInterconnectDto.getName());
         LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnect : End");
@@ -114,7 +114,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     }
 
     @Override
-    public ResourceCollection<LogicalInterconnects> getAllLogicalInterconnects(final RestParams params) {
+    public ResourceCollection<LogicalInterconnect> getAllLogicalInterconnects(final RestParams params) {
         LOGGER.info("LogicalInterconnectClientImpl : getAllLogicalInterconnects : Start");
 
         // validate args
@@ -132,8 +132,8 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
                     SdkConstants.LOGICAL_INTERCONNECTS, null);
         }
 
-        ResourceCollection<LogicalInterconnects> logicalInterconnectCollectionDto
-                = resourceAdaptor.buildResourceCollection(returnObj, LogicalInterconnects.class);
+        ResourceCollection<LogicalInterconnect> logicalInterconnectCollectionDto
+                = resourceAdaptor.buildResourceCollection(returnObj, LogicalInterconnect.class);
 
         LOGGER.debug("LogicalInterconnectClientImpl : getAllLogicalInterconnects : members count :"
                 + logicalInterconnectCollectionDto.getCount());
@@ -143,13 +143,13 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     }
 
     @Override
-    public LogicalInterconnects getLogicalInterconnectByName(final RestParams params, final String logicalInterconnectName) {
+    public LogicalInterconnect getLogicalInterconnectByName(final RestParams params, final String logicalInterconnectName) {
         LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectByName : start");
 
         // Filters are not supported
-        ResourceCollection<LogicalInterconnects> logicalInterconnectCollectionDto = getAllLogicalInterconnects(params);
+        ResourceCollection<LogicalInterconnect> logicalInterconnectCollectionDto = getAllLogicalInterconnects(params);
 
-        for (final LogicalInterconnects logicalInterconnectDto : new ArrayList<>(logicalInterconnectCollectionDto.getMembers())) {
+        for (final LogicalInterconnect logicalInterconnectDto : new ArrayList<>(logicalInterconnectCollectionDto.getMembers())) {
             if (logicalInterconnectDto.getName().equalsIgnoreCase(logicalInterconnectName)) {
                 LOGGER.debug("Found: " + logicalInterconnectDto.getName());
                 LOGGER.info("LogicalInterconnectClientImpl : getLogicalInterconnectByName : End");
@@ -961,7 +961,7 @@ public class LogicalInterconnectClientImpl implements LogicalInterconnectClient 
     public String getId(final RestParams params, final String name) {
         String resourceId = "";
         // fetch resource Id using resource name
-        LogicalInterconnects logicalInterconnectsDto = getLogicalInterconnectByName(params, name);
+        LogicalInterconnect logicalInterconnectsDto = getLogicalInterconnectByName(params, name);
 
         if (null != logicalInterconnectsDto.getUri()) {
             resourceId = UrlUtils.getResourceIdFromUri(logicalInterconnectsDto.getUri());

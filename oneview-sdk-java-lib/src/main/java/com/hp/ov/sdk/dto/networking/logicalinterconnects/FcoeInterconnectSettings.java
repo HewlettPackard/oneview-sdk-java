@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking.logicalinterconnects;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 
 public class FcoeInterconnectSettings implements Serializable {
@@ -40,39 +42,30 @@ public class FcoeInterconnectSettings implements Serializable {
         this.fcoeMode = fcoeMode;
     }
 
-    public static enum FcoeMode {
-
-        FcfNpv("FcfNpv"),
-        NotApplicable("NotApplicable"),
-        Transit("Transit"),
-        Unknown("Unknown");
-
-        private final String value;
-        private static Map<String, FcoeInterconnectSettings.FcoeMode> constants = new HashMap<String, FcoeInterconnectSettings.FcoeMode>();
-
-        static {
-            for (final FcoeInterconnectSettings.FcoeMode c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private FcoeMode(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static FcoeInterconnectSettings.FcoeMode fromValue(final String value) {
-            final FcoeInterconnectSettings.FcoeMode constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
+
+    @Override
+    public final boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof FcoeInterconnectSettings) {
+            FcoeInterconnectSettings that = (FcoeInterconnectSettings) obj;
+
+            return new EqualsBuilder()
+                    .append(fcoeMode, that.fcoeMode)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public final int hashCode() {
+        return new HashCodeBuilder()
+                .append(fcoeMode)
+                .toHashCode();
+    }
+
 }

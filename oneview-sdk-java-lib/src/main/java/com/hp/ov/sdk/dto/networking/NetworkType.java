@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking;
 
-public enum LsFwStateEnum {
-    ACTIVATED, ACTIVATING, ACTIVATION_FAILED, PARTIALLY_ACTIVATED, PARTIALLY_STAGED, STAGED, STAGING, STAGING_FAILED, UNINITIALIZED, UNKNOWN
+public enum NetworkType {
+
+    Ethernet,
+    FibreChannel;
+
 }

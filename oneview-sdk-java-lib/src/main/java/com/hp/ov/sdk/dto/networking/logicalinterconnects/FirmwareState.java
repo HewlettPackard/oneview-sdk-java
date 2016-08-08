@@ -13,8 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking.logicalinterconnects;
 
-public enum Command {
-    ACTIVATE, NONE, STAGE, UPDATE
+public enum FirmwareState {
+
+    Activated,
+    Activating,
+    Activation_Failed,
+    Active,
+    Applied,
+    Applying,
+    Staging_Failed,
+    Uninitialized;
+
 }

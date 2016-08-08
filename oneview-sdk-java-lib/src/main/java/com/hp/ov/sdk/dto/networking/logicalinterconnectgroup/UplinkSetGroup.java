@@ -23,10 +23,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.hp.ov.sdk.dto.NetworkType;
 import com.hp.ov.sdk.dto.networking.EthernetNetworkType;
 import com.hp.ov.sdk.dto.networking.LacpTimer;
 import com.hp.ov.sdk.dto.networking.LogicalLocation;
+import com.hp.ov.sdk.dto.networking.NetworkType;
 import com.hp.ov.sdk.dto.networking.Reachability;
 
 public class UplinkSetGroup implements Serializable {
