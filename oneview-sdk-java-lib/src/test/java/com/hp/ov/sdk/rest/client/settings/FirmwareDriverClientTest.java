@@ -16,11 +16,7 @@
 
 package com.hp.ov.sdk.rest.client.settings;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.then;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +25,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.generated.FwBaseline;
+import com.hp.ov.sdk.dto.firmware.FwBaseline;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
