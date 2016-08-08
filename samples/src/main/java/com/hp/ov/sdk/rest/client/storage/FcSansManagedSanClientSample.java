@@ -20,11 +20,12 @@ import com.hp.ov.sdk.dto.EndpointResponse;
 import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.dto.FcIssueResponse;
 import com.hp.ov.sdk.dto.FcSansManagedSanTask;
+import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.SanPolicy;
-import com.hp.ov.sdk.dto.SanRequest;
-import com.hp.ov.sdk.dto.SanResponse;
-import com.hp.ov.sdk.dto.ZoningPolicy;
+import com.hp.ov.sdk.dto.fcsans.SanPolicy;
+import com.hp.ov.sdk.dto.fcsans.SanRequest;
+import com.hp.ov.sdk.dto.fcsans.SanResponse;
+import com.hp.ov.sdk.dto.fcsans.ZoningPolicy;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
@@ -83,7 +84,7 @@ public class FcSansManagedSanClientSample {
         sanPolicy.setZoneNameFormat("sample_zone_name_format");
 
         sanRequest.setSanPolicy(sanPolicy);
-        sanRequest.setRefreshState(SanResponse.RefreshState.RefreshPending);
+        sanRequest.setRefreshState(RefreshState.RefreshPending);
 
         SanResponse updatedSan = this.fcSanManagedSanClient.update(san.getResourceId(), sanRequest);
 

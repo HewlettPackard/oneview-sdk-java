@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.fcsans;
 
-public enum ZoningPolicy {
-    NoZoning,
-    SingleInitiatorAllTargets,
-    SingleInitiatorSingleStorageSystem,
-    SingleInitiatorSingleTarget,
-    Unknown
+public enum ZoningState {
+    
+    Open, 
+    Unknown, 
+    Zoned;
+    
 }

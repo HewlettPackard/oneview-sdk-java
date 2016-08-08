@@ -15,17 +15,16 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto.servers.enclosure;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.ReconfigurationState;
+import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.generated.InterconnectBay;
 import com.hp.ov.sdk.dto.generated.Oa;
 import com.hp.ov.sdk.dto.servers.LicensingIntent;
