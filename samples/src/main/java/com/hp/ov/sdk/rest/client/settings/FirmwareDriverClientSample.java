@@ -19,15 +19,15 @@ package com.hp.ov.sdk.rest.client.settings;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.FwBaseline;
+import com.hp.ov.sdk.dto.firmware.FwBaseline;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class FirmwareDriverClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String FIRMWARE_DRIVER_RESOURCE_ID = "bp-hp-service-pack-for-proliant-oneview-2014-11-30-05";
-    private static final String FIRMWARE_DRIVER_NAME = "hp-firmware-a1b08f8a6b-HPGH-1_1_i386";
+    private static final String FIRMWARE_DRIVER_RESOURCE_ID = "SPPgen9snap6_2016_0405_87";
+    private static final String FIRMWARE_DRIVER_NAME = "Service Pack for ProLiant";
     // ================================
 
     private final FirmwareDriverClient client;

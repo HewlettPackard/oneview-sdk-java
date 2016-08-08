@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.FwBaseline;
+import com.hp.ov.sdk.dto.firmware.FwBaseline;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.util.UrlUtils;
