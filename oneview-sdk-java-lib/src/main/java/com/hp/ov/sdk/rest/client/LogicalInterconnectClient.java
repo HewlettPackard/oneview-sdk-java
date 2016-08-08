@@ -17,21 +17,21 @@ package com.hp.ov.sdk.rest.client;
 
 import java.util.List;
 
-import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.InterconnectFibDataEntry;
 import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
-import com.hp.ov.sdk.dto.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.InternalVlanAssociation;
-import com.hp.ov.sdk.dto.LiFirmware;
-import com.hp.ov.sdk.dto.PortMonitor;
 import com.hp.ov.sdk.dto.PortMonitorUplinkPort;
 import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
 import com.hp.ov.sdk.dto.networking.Location;
+import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.LiFirmware;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.LogicalInterconnect;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.PortMonitor;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public interface LogicalInterconnectClient {
@@ -44,9 +44,9 @@ public interface LogicalInterconnectClient {
      *            The {@link RestParams} is a structure containing the connection details.
      * @param resourceId
      *            The resource identifier for logical interconnect as seen in HPE OneView.
-     * @return {@link LogicalInterconnects} containing the logical interconnect details.
+     * @return {@link LogicalInterconnect} containing the logical interconnect details.
      */
-    LogicalInterconnects getLogicalInterconnect(RestParams params, String resourceId);
+    LogicalInterconnect getLogicalInterconnect(RestParams params, String resourceId);
 
     /**
      * The module aids in fetching the logical interconnect details for all
@@ -54,10 +54,10 @@ public interface LogicalInterconnectClient {
      *
      * @param params
      *            The {@link RestParams} is a structure containing the connection details.
-     * @return {@link ResourceCollection}&lt;{@link LogicalInterconnects}&gt; containing
+     * @return {@link ResourceCollection}&lt;{@link LogicalInterconnect}&gt; containing
      * the details for all found logical interconnects.
      */
-    ResourceCollection<LogicalInterconnects> getAllLogicalInterconnects(final RestParams params);
+    ResourceCollection<LogicalInterconnect> getAllLogicalInterconnects(final RestParams params);
 
     /**
      * This modules aids in fetching a logical interconnect to a consistent state. The current logical
@@ -188,9 +188,9 @@ public interface LogicalInterconnectClient {
      * @param logicalInterconnectName
      *            The logicalInterconnectName is the logical interconnect name as
      *            seen in HPE OneView.
-     * @return {@link LogicalInterconnects} containing the logical interconnect details.
+     * @return {@link LogicalInterconnect} containing the logical interconnect details.
      */
-    LogicalInterconnects getLogicalInterconnectByName(RestParams params, String logicalInterconnectName);
+    LogicalInterconnect getLogicalInterconnectByName(RestParams params, String logicalInterconnectName);
 
     /**
      * The module aids in fetching the logical interconnect firmware for the specified

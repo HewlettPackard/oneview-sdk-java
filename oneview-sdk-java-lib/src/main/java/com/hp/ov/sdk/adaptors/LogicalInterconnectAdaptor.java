@@ -17,36 +17,36 @@ package com.hp.ov.sdk.adaptors;
 
 import org.json.JSONObject;
 
-import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
-import com.hp.ov.sdk.dto.InterconnectSettingsV2;
-import com.hp.ov.sdk.dto.LiFirmware;
-import com.hp.ov.sdk.dto.PortMonitor;
 import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
-import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
 import com.hp.ov.sdk.dto.networking.Location;
+import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.LiFirmware;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.LogicalInterconnect;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.PortMonitor;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
-public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnects, Object> {
+public class LogicalInterconnectAdaptor extends BaseAdaptor<LogicalInterconnect, Object> {
 
     @Override
-    public LogicalInterconnects buildDto(final Object source) {
+    public LogicalInterconnect buildDto(final Object source) {
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        final LogicalInterconnects logicalInterconnectsDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), LogicalInterconnects.class);
+        final LogicalInterconnect logicalInterconnectsDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source)), LogicalInterconnect.class);
         return logicalInterconnectsDto;
     }
 
-    public LogicalInterconnects buildDto(final Object source, final ApiVersion version) {
+    public LogicalInterconnect buildDto(final Object source, final ApiVersion version) {
         // convert json Object to DTO, replace quotes and back slash in the file
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-        final LogicalInterconnects logicalInterconnectsDto = converter.convertJsonToObject(
-                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version.getValue())), LogicalInterconnects.class);
+        final LogicalInterconnect logicalInterconnectsDto = converter.convertJsonToObject(
+                StringUtil.replaceQuotesAndBackSlash(converter.convertObjectToJsonString(source, version.getValue())), LogicalInterconnect.class);
         return logicalInterconnectsDto;
     }
 

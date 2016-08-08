@@ -22,11 +22,11 @@ import java.util.List;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
-import com.hp.ov.sdk.dto.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.InterconnectTypeName;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
+import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.dto.samples.UplinkSetValue;

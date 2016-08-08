@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking.logicalinterconnects;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class InterconnectMap implements Serializable {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
+
     private List<InterconnectMapEntry> interconnectMapEntries = new ArrayList<InterconnectMapEntry>();
 
     public List<InterconnectMapEntry> getInterconnectMapEntries() {
@@ -35,4 +37,29 @@ public class InterconnectMap implements Serializable {
         this.interconnectMapEntries = interconnectMapEntries;
     }
 
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public final boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof InterconnectMap) {
+            InterconnectMap that = (InterconnectMap) obj;
+
+            return new EqualsBuilder()
+                    .append(interconnectMapEntries, that.interconnectMapEntries)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public final int hashCode() {
+        return new HashCodeBuilder()
+                .append(interconnectMapEntries)
+                .toHashCode();
+    }
 }

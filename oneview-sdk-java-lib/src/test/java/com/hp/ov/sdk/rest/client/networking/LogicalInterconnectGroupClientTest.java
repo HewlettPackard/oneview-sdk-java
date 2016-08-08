@@ -31,7 +31,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.InterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.rest.client.BaseClient;

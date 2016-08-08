@@ -25,6 +25,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.networking.EnclosureType;
+import com.hp.ov.sdk.dto.networking.IcmLicensesDto;
 import com.hp.ov.sdk.dto.networking.Port;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 

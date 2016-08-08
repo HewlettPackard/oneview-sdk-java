@@ -20,9 +20,9 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;

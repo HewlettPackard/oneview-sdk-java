@@ -20,26 +20,26 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.dto.Command;
-import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.InterconnectFibDataEntry;
 import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
-import com.hp.ov.sdk.dto.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.InternalVlanAssociation;
-import com.hp.ov.sdk.dto.LiFirmware;
-import com.hp.ov.sdk.dto.PhysicalInterconnectFirmware;
-import com.hp.ov.sdk.dto.PortMonitor;
 import com.hp.ov.sdk.dto.PortMonitorUplinkPort;
 import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
 import com.hp.ov.sdk.dto.QosConfiguration.QosConfigType;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
+import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.Location;
 import com.hp.ov.sdk.dto.networking.LocationEntry;
 import com.hp.ov.sdk.dto.networking.LocationType;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.Command;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.LiFirmware;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.LogicalInterconnect;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.PhysicalInterconnectFirmware;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.PortMonitor;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -47,10 +47,10 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectClient;
 import com.hp.ov.sdk.rest.client.LogicalInterconnectClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
@@ -91,7 +91,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getLogicalInterconnectById() throws InstantiationException, IllegalAccessException {
-        LogicalInterconnects logicalInterconnectsDto = null;
+        LogicalInterconnect logicalInterconnectsDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -120,7 +120,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getLogicalInterconnectByName() {
-        LogicalInterconnects logicalInterconnectDto = null;
+        LogicalInterconnect logicalInterconnectDto = null;
         // first get the session Id
         try {
             // OneView credentials
@@ -152,7 +152,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getAllLogicalInterconnects() throws InstantiationException, IllegalAccessException {
-        ResourceCollection<LogicalInterconnects> logicalInterconnectCollectionDto = null;
+        ResourceCollection<LogicalInterconnect> logicalInterconnectCollectionDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -182,7 +182,7 @@ public class LogicalInterconnectClientSample {
 
     private void updateLogicalInterconnectSnmpConfigurationById() throws InstantiationException, IllegalAccessException {
         String resourceId = null;
-        LogicalInterconnects logicalInterconnectsDto = null;
+        LogicalInterconnect logicalInterconnectsDto = null;
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
@@ -785,7 +785,7 @@ public class LogicalInterconnectClientSample {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
 
-            LogicalInterconnects logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnect(params, resourceId);
+            LogicalInterconnect logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnect(params, resourceId);
 
             EthernetInterconnectSettingsV2 ethSettingsDto = logicalInterconnectsDto.getEthernetSettings();
             ethSettingsDto.setEnablePauseFloodProtection(!ethSettingsDto.getEnablePauseFloodProtection());
@@ -1034,7 +1034,7 @@ public class LogicalInterconnectClientSample {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
 
-            LogicalInterconnects logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnect(params, resourceId);
+            LogicalInterconnect logicalInterconnectsDto = logicalInterconnectClient.getLogicalInterconnect(params, resourceId);
 
             InterconnectSettingsV2 settingsDto = new InterconnectSettingsV2();
             settingsDto.setType("InterconnectSettingsV3");

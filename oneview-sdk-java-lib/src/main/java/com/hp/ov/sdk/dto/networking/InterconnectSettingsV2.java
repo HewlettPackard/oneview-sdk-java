@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking;
 
 import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.BaseModelResource;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.FcoeInterconnectSettings;
 
 public class InterconnectSettingsV2 extends BaseModelResource {
 

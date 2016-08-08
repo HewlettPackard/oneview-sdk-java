@@ -13,17 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking.logicalinterconnects;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import com.hp.ov.sdk.dto.BaseModelResource;
+
 public class PortMonitor extends BaseModelResource {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
+
     private MonitorPortInfo analyzerPort;
     private Boolean enablePortMonitor;
     private List<MonitorPortInfo> monitoredPorts = new ArrayList<MonitorPortInfo>();
@@ -71,6 +75,38 @@ public class PortMonitor extends BaseModelResource {
      */
     public void setMonitoredPorts(final List<MonitorPortInfo> monitoredPorts) {
         this.monitoredPorts = monitoredPorts;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(analyzerPort)
+                .append(enablePortMonitor)
+                .append(monitoredPorts)
+                .appendSuper(super.hashCode())
+                .toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        if (other == this) {
+            return true;
+        }
+        if ((other instanceof PortMonitor) == false) {
+            return false;
+        }
+        final PortMonitor rhs = ((PortMonitor) other);
+        return new EqualsBuilder()
+                .append(analyzerPort, rhs.analyzerPort)
+                .append(enablePortMonitor, rhs.enablePortMonitor)
+                .append(monitoredPorts, rhs.monitoredPorts)
+                .appendSuper(super.equals(other))
+                .isEquals();
     }
 
 }

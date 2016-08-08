@@ -41,25 +41,25 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.adaptors.TaskAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.InterconnectFibDataEntry;
 import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
-import com.hp.ov.sdk.dto.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.InternalVlanAssociation;
-import com.hp.ov.sdk.dto.LiFirmware;
-import com.hp.ov.sdk.dto.PortMonitor;
 import com.hp.ov.sdk.dto.PortMonitorUplinkPort;
 import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.TaskState;
-import com.hp.ov.sdk.dto.generated.LogicalInterconnects;
+import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.Location;
 import com.hp.ov.sdk.dto.networking.LocationEntry;
 import com.hp.ov.sdk.dto.networking.LocationType;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.LiFirmware;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.LogicalInterconnect;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.PortMonitor;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
@@ -104,7 +104,7 @@ public class LogicalInterconnectClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
 
-        LogicalInterconnects liDto = client.getLogicalInterconnect(params, resourceId);
+        LogicalInterconnect liDto = client.getLogicalInterconnect(params, resourceId);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId));
@@ -136,7 +136,7 @@ public class LogicalInterconnectClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
 
-        ResourceCollection<LogicalInterconnects> liCollectionDto = client.getAllLogicalInterconnects(params);
+        ResourceCollection<LogicalInterconnect> liCollectionDto = client.getAllLogicalInterconnects(params);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI));
@@ -442,7 +442,7 @@ public class LogicalInterconnectClientTest {
                 Mockito.any(RestParams.class)))
         .thenReturn(liJson);
 
-        LogicalInterconnects liDto = client.getLogicalInterconnectByName(params, resourceName);
+        LogicalInterconnect liDto = client.getLogicalInterconnectByName(params, resourceName);
 
         RestParams rp = new RestParams();
         rp.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.LOGICAL_INTERCONNECT_URI));
@@ -469,7 +469,7 @@ public class LogicalInterconnectClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testGetLogicalInterconnectByNameWithNoMembers() {
-        liJson= new Gson().toJson(new ResourceCollection<LogicalInterconnects>());
+        liJson= new Gson().toJson(new ResourceCollection<LogicalInterconnect>());
 
         Mockito.when(restClient.sendRequest(
                 Mockito.any(RestParams.class)))

@@ -23,10 +23,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
-import com.hp.ov.sdk.dto.NetworkType;
 import com.hp.ov.sdk.dto.networking.EthernetNetworkType;
 import com.hp.ov.sdk.dto.networking.LacpTimer;
 import com.hp.ov.sdk.dto.networking.Location;
+import com.hp.ov.sdk.dto.networking.NetworkType;
 import com.hp.ov.sdk.dto.networking.Reachability;
 
 public class UplinkSet extends BaseModelResource {
