@@ -124,6 +124,7 @@ public class ResourceUris {
     public static final String SERVER_HARDWARE_URI = "/rest/server-hardware";
     public static final String SERVER_HARDWARE_UTILIZATION_URI = "utilization";
     public static final String SERVER_PROFILE_TEMPLATE_URI = "/rest/server-profile-templates";
+    public static final String SERVER_PROFILE_TEMPLATE_NEW_PROFILE_URI = "new-profile";
     public static final String SERVER_PROFILE_COMPLIANCE_PREVIEW_URI = "compliance-preview";
     public static final String SERVER_PROFILE_COMPLIANCE_MESSAGES_URI = "messages";
     public static final String SERVER_PROFILE_COMPLIANCE_TRANSFORMATION_URI = "transformation";

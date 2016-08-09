@@ -37,20 +37,9 @@ import com.hp.ov.sdk.dto.StoragePathTemplate;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.VolumeAttachmentTemplate;
 import com.hp.ov.sdk.dto.generated.ServerProfile;
-import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
-import com.hp.ov.sdk.exceptions.SDKBadRequestException;
-import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.exceptions.SDKNoResponseException;
-import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
-import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.server.ServerProfileClient;
-import com.hp.ov.sdk.rest.client.ServerProfileTemplateClient;
-import com.hp.ov.sdk.rest.client.ServerProfileTemplateClientImpl;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
+import com.hp.ov.sdk.rest.client.server.ServerProfileTemplateClient;
 
 /*
  * ServerProfileClientSample is a sample program capture/consume the entire server configuration managed
@@ -62,254 +51,116 @@ public class ServerProfileTemplateClientSample {
     private final ServerProfileTemplateClient serverProfileTemplateClient;
     private final ServerProfileClient serverProfileClient;
 
-    private RestParams params;
-    private TaskResourceV2 taskResourceV2;
-
     // test values - user input
     // ================================
-    private static final String serverProfileTemplateName = "sp_template";
-    private static final String serverProfileTemplateNameUpdated = serverProfileTemplateName + "_Update";
-    private static final String resourceId = "09305c00-df29-4147-9a2c-bd0827d2726d";
-    private static final String serverHardwareTypeUri = "/rest/server-hardware-types/F98A387B-07BE-4A2C-8A6A-0BAAFA586711";
-    private static final String enclosureGroupUri = "/rest/enclosure-groups/c6871f53-c5e1-483f-a273-a30da743f6b1";
-    private static final String eth1NetworkUri = "/rest/ethernet-networks/5b1ffd63-6787-4e5f-b409-3f86a998fbd6";
-    private static final String eth2NetworkUri = "/rest/ethernet-networks/bdc00905-20f3-46a9-87dd-8020fc0b6bab";
-    private static final String fc1NetworkUri = "/rest/fc-networks/1f4a0491-2a41-4633-8362-377081dd0fcc";
-    private static final String fc2NetworkUri = "/rest/fc-networks/4e261a94-125a-4654-9b93-12ba22cf13e4";
-    private static final String storageVolumeUri = "/rest/storage-volumes/8CA32073-02F0-461C-A907-433EA0FAD8C5";
-    private static final String serverHardwareUri = "/rest/server-hardware/30303437-3933-4753-4831-30305835524E";
+    private static final String SERVER_PROFILE_TEMPLATE_NAME = "server-profile-template";
+    private static final String SERVER_PROFILE_TEMPLATE_NAME_UPDATED = SERVER_PROFILE_TEMPLATE_NAME + "_Updated";
+    private static final String RESOURCE_ID = "0fa0d573-4e38-4ed6-9523-e04d9a18c977";
+    private static final String SERVER_HARDWARE_TYPE_URI = "/rest/server-hardware-types/F98A387B-07BE-4A2C-8A6A-0BAAFA586711";
+    private static final String ENCLOSURE_GROUP_URI = "/rest/enclosure-groups/c6871f53-c5e1-483f-a273-a30da743f6b1";
+    private static final String ETH_1_NETWORK_URI = "/rest/ethernet-networks/5b1ffd63-6787-4e5f-b409-3f86a998fbd6";
+    private static final String ETH_2_NETWORK_URI = "/rest/ethernet-networks/bdc00905-20f3-46a9-87dd-8020fc0b6bab";
+    private static final String FC_1_NETWORK_URI = "/rest/fc-networks/1f4a0491-2a41-4633-8362-377081dd0fcc";
+    private static final String FC_2_NETWORK_URI = "/rest/fc-networks/4e261a94-125a-4654-9b93-12ba22cf13e4";
+    private static final String STORAGE_VOLUME_URI = "/rest/storage-volumes/8CA32073-02F0-461C-A907-433EA0FAD8C5";
+    private static final String SERVER_HARDWARE_URI = "/rest/server-hardware/37333036-3831-4753-4831-30355838524E";
     // ================================
 
     private ServerProfileTemplateClientSample() {
         OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
 
-        serverProfileTemplateClient = ServerProfileTemplateClientImpl.getClient();
+        this.serverProfileTemplateClient = oneViewClient.serverProfileTemplate();
         this.serverProfileClient = oneViewClient.serverProfile();
     }
 
-    private void getServerProfileTemplateById() throws InstantiationException, IllegalAccessException {
-        ServerProfileTemplate serverProfileTemplateDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getServerProfileTemplateById() {
+        ServerProfileTemplate serverProfileTemplate = serverProfileTemplateClient.getById(RESOURCE_ID);
 
-            // then make sdk service call to get resource
-            serverProfileTemplateDto = serverProfileTemplateClient.getServerProfileTemplateById(params, resourceId);
-
-            System.out.println("ServerProfileTemplateClientSample : getServerProfileTemplateById : serverProfileTemplate object returned to client : "
-                    + serverProfileTemplateDto.getName());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ServerProfileTemplateClientSample : getServerProfileTemplateById : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ServerProfileTemplateClientSample : getServerProfileTemplateById : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ServerProfileTemplateClientSample : getServerProfileTemplateById : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("ServerProfileTemplateClientSample : getServerProfileTemplateById : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ServerProfileTemplateClientSample : getServerProfileTemplateById : arguments are null ");
-            return;
-        }
-
+        System.out.println("ServerProfileTemplateClientSample : getServerProfileTemplateById : " +
+                "ServerProfileTemplate object returned to client : " + serverProfileTemplate.toJsonString());
     }
 
-    private void getAllServerProfileTemplate() throws InstantiationException, IllegalAccessException, SDKResourceNotFoundException,
-            SDKNoSuchUrlException {
-        ResourceCollection<ServerProfileTemplate> serverProfileTemplateCollectionDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getAllServerProfileTemplates() {
+        ResourceCollection<ServerProfileTemplate> serverProfileTemplates = serverProfileTemplateClient.getAll();
 
-            // then make sdk service call to get resource
-            serverProfileTemplateCollectionDto = serverProfileTemplateClient.getAllServerProfileTemplates(params);
-
-            System.out.println("ServerProfileTemplateClientTest : getAllServerProfileTemplate : serverProfileTemplate object returned to client : "
-                    + serverProfileTemplateCollectionDto.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ServerProfileTemplateClientTest : getAllServerProfileTemplate : resource you are looking is not found");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ServerProfileTemplateClientTest : getAllServerProfileTemplate : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ServerProfileTemplateClientTest : getAllServerProfileTemplate : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("ServerProfileTemplateClientTest : getAllServerProfileTemplate : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ServerProfileTemplateClientTest : getAllServerProfileTemplate : arguments are null ");
-            return;
-        }
+        System.out.println("ServerProfileTemplateClientSample : getAllServerProfileTemplates : " +
+                "Server profile templates returned to client : " + serverProfileTemplates.toJsonString());
     }
 
-    private void getServerProfileTemplateByName() throws InstantiationException, IllegalAccessException {
-        ServerProfileTemplate serverProfileTemplateDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void getServerProfileTemplateByName() {
+        ServerProfileTemplate serverProfileTemplate
+                = this.serverProfileTemplateClient.getByName(SERVER_PROFILE_TEMPLATE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            serverProfileTemplateDto = serverProfileTemplateClient.getServerProfileTemplateByName(params, serverProfileTemplateName);
-
-            System.out.println("ServerProfileTemplateClientTest : getServerProfileTemplateByName : serverProfileTemplate object returned to client : "
-                    + serverProfileTemplateDto.getName());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ServerProfileTemplateClientTest : getServerProfileTemplateByName : resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ServerProfileTemplateClientTest : getServerProfileTemplateByName : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ServerProfileTemplateClientTest : getServerProfileTemplateByName : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("ServerProfileTemplateClientTest : getServerProfileTemplateByName : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ServerProfileTemplateClientTest : getServerProfileTemplateByName : arguments are null ");
-            return;
-        }
-
+        System.out.println("ServerProfileTemplateClientSample : getServerProfileTemplateByName : " +
+                "ServerProfileTemplate object returned to client : " + serverProfileTemplate.toJsonString());
     }
 
-    private void getNewServerProfile() throws InstantiationException, IllegalAccessException {
-        ServerProfile serverProfileDto = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+    private void createServerProfileTemplate() {
+        ServerProfileTemplate serverProfileTemplate = buildServerProfileTemplate();
 
-            // then make sdk service call to get resource
-            serverProfileDto = serverProfileTemplateClient.getNewServerProfile(params, resourceId);
+        TaskResourceV2 taskResource = serverProfileTemplateClient.create(serverProfileTemplate, false);
 
-            System.out.println("ServerProfileTemplateClientTest : getNewServerProfile : serverProfile object returned to client : "
-                    + serverProfileDto.getName());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ServerProfileTemplateClientTest : getNewServerProfile : resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ServerProfileTemplateClientTest : getNewServerProfile : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ServerProfileTemplateClientTest : getNewServerProfile : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("ServerProfileTemplateClientTest : getNewServerProfile : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ServerProfileTemplateClientTest : getNewServerProfile : arguments are null ");
-            return;
-        }
+        System.out.println("ServerProfileTemplateClientSample : createServerProfileTemplate : " +
+                "Task object returned to client : " + taskResource.toJsonString());
+    }
 
+    private void deleteServerProfileTemplate() {
+        ServerProfileTemplate serverProfileTemplate
+                = this.serverProfileTemplateClient.getByName(SERVER_PROFILE_TEMPLATE_NAME_UPDATED).get(0);
+
+        TaskResourceV2 taskResource = serverProfileTemplateClient.delete(serverProfileTemplate.getResourceId(), false);
+
+        System.out.println("ServerProfileTemplateClientSample : deleteServerProfileTemplate : " +
+                "Task object returned to client : " + taskResource.toJsonString());
+    }
+
+    private void updateServerProfileTemplate() {
+        ServerProfileTemplate serverProfileTemplate
+                = this.serverProfileTemplateClient.getByName(SERVER_PROFILE_TEMPLATE_NAME).get(0);
+
+        serverProfileTemplate.setName(SERVER_PROFILE_TEMPLATE_NAME_UPDATED);
+
+        TaskResourceV2 taskResource = serverProfileTemplateClient.update(serverProfileTemplate.getResourceId(),
+                serverProfileTemplate, false);
+
+        System.out.println("ServerProfileTemplateClientSample : updateServerProfileTemplate : " +
+                "Task object returned to client : " + taskResource.toJsonString());
+    }
+
+    private void getNewServerProfile() {
+        ServerProfileTemplate serverProfileTemplate
+                = this.serverProfileTemplateClient.getByName(SERVER_PROFILE_TEMPLATE_NAME).get(0);
+
+        ServerProfile serverProfile = serverProfileTemplateClient.getNewServerProfile(
+                serverProfileTemplate.getResourceId());
+
+        System.out.println("ServerProfileTemplateClientSample : getNewServerProfile : " +
+                "ServerProfile object returned to client : " + serverProfile.toJsonString());
     }
 
     private void createServerProfileFromTemplate() {
-        ServerProfile serverProfile = null;
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
+        ServerProfileTemplate serverProfileTemplate
+                = this.serverProfileTemplateClient.getByName(SERVER_PROFILE_TEMPLATE_NAME).get(0);
 
-            // then make sdk service call to get resource
-            serverProfile = serverProfileTemplateClient.getNewServerProfile(params, resourceId);
+        ServerProfile serverProfile = serverProfileTemplateClient.getNewServerProfile(
+                serverProfileTemplate.getResourceId());
 
-            System.out.println("ServerProfileTemplateClientTest : createServerProfileFromTemplate : serverProfile object returned to client : "
-                    + serverProfile.getName());
+        serverProfile.setName("ServerProfileFromTemplate");
+        serverProfile.setServerHardwareUri(SERVER_HARDWARE_URI);
 
-            serverProfile.setName("ServerProfileFromTemplate");
-            serverProfile.setServerHardwareUri(serverHardwareUri);
+        TaskResourceV2 taskResource = serverProfileClient.create(serverProfile, false);
 
-            taskResourceV2 = serverProfileClient.create(serverProfile, false);
-
-            System.out.println("Server Profile creation status: " + taskResourceV2.getStatus());
-
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ServerProfileTemplateClientTest : createServerProfileFromTemplate : resource you are looking is not found ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ServerProfileTemplateClientTest : createServerProfileFromTemplate : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ServerProfileTemplateClientTest : createServerProfileFromTemplate : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("ServerProfileTemplateClientTest : createServerProfileFromTemplate : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ServerProfileTemplateClientTest : createServerProfileFromTemplate : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("ServerProfileTemplateClientTest : createServerProfileFromTemplate : " + "errors in task, please check task "
-                    + "resource for more details ");
-            return;
-        }
+        System.out.println("ServerProfileTemplateClientSample : createServerProfileFromTemplate : " +
+                "Task object returned to client : " + taskResource.toJsonString());
     }
 
-    private void createServerProfileTemplate() throws InstantiationException, IllegalAccessException {
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
-
-            // create serverProfile request body
-            final ServerProfileTemplate serverProfileTemplateDto = buildServerProfileTemplateDto(params);
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = serverProfileTemplateClient.createServerProfileTemplate(params, serverProfileTemplateDto, false);
-
-            System.out.println("ServerProfileTemplateClientTest : createServerProfileTemplate : serverProfileTemplate object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ServerProfileTemplateClientTest : createServerProfileTemplate : resource you are looking is not found");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("ServerProfileTemplateClientTest : createServerProfileTemplate : bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ServerProfileTemplateClientTest : createServerProfileTemplate : no such url : " + params.getHostname());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ServerProfileTemplateClientTest : createServerProfileTemplate : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ServerProfileTemplateClientTest : createServerProfileTemplate : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out
-                    .println("ServerProfileTemplateClientTest : createServerProfileTemplate : errors in task, please check task resource for more details ");
-            return;
-        }
-
-    }
-
-    private ServerProfileTemplate buildServerProfileTemplateDto(RestParams restParams) {
+    private ServerProfileTemplate buildServerProfileTemplate() {
         ServerProfileTemplate template = new ServerProfileTemplate();
 
-        template.setName(serverProfileTemplateName);
+        template.setName(SERVER_PROFILE_TEMPLATE_NAME);
         template.setType(ResourceCategory.RC_SERVER_PROFILE_TEMPLATE);
-        template.setServerHardwareTypeUri(serverHardwareTypeUri);
-        template.setEnclosureGroupUri(enclosureGroupUri);
+        template.setServerHardwareTypeUri(SERVER_HARDWARE_TYPE_URI);
+        template.setEnclosureGroupUri(ENCLOSURE_GROUP_URI);
         template.setSerialNumberType("Virtual");
         template.setMacType("Virtual");
         template.setWwnType("Virtual");
@@ -354,15 +205,15 @@ public class ServerProfileTemplateClientSample {
     }
 
     private List<VolumeAttachmentTemplate> buildVolumeAttachments() {
-        List<VolumeAttachmentTemplate> volumeAttachments = new ArrayList<VolumeAttachmentTemplate>();
+        List<VolumeAttachmentTemplate> volumeAttachments = new ArrayList<>();
         VolumeAttachmentTemplate volume = new VolumeAttachmentTemplate();
         volume.setId(1L);
-        volume.setVolumeUri(storageVolumeUri);
+        volume.setVolumeUri(STORAGE_VOLUME_URI);
         volume.setLunType("Manual");
         volume.setLun("0");
 
         // Storage Paths
-        List<StoragePathTemplate> storagePaths = new ArrayList<StoragePathTemplate>();
+        List<StoragePathTemplate> storagePaths = new ArrayList<>();
 
         StoragePathTemplate storagePath1 = new StoragePathTemplate();
         storagePath1.setIsEnabled(true);
@@ -386,10 +237,10 @@ public class ServerProfileTemplateClientSample {
     }
 
     private List<ProfileConnectionTemplate> buildConnectionsTemplate() {
-        List<ProfileConnectionTemplate> connections = new ArrayList<ProfileConnectionTemplate>();
+        List<ProfileConnectionTemplate> connections = new ArrayList<>();
 
         ProfileConnectionTemplate eth1 = new ProfileConnectionTemplate();
-        eth1.setNetworkUri(eth1NetworkUri);
+        eth1.setNetworkUri(ETH_1_NETWORK_URI);
         eth1.setId(1L);
         eth1.setName("Prod_401");
         eth1.setFunctionType("Ethernet");
@@ -401,7 +252,7 @@ public class ServerProfileTemplateClientSample {
         connections.add(eth1);
 
         ProfileConnectionTemplate eth2 = new ProfileConnectionTemplate();
-        eth2.setNetworkUri(eth2NetworkUri);
+        eth2.setNetworkUri(ETH_2_NETWORK_URI);
         eth2.setId(2L);
         eth2.setName("Prod_402");
         eth2.setFunctionType("Ethernet");
@@ -413,7 +264,7 @@ public class ServerProfileTemplateClientSample {
         connections.add(eth2);
 
         ProfileConnectionTemplate fc1 = new ProfileConnectionTemplate();
-        fc1.setNetworkUri(fc1NetworkUri);
+        fc1.setNetworkUri(FC_1_NETWORK_URI);
         fc1.setId(3L);
         fc1.setName("FC_Network_A");
         fc1.setFunctionType("FibreChannel");
@@ -425,7 +276,7 @@ public class ServerProfileTemplateClientSample {
         connections.add(fc1);
 
         ProfileConnectionTemplate fc2 = new ProfileConnectionTemplate();
-        fc2.setNetworkUri(fc2NetworkUri);
+        fc2.setNetworkUri(FC_2_NETWORK_URI);
         fc2.setId(4L);
         fc2.setName("FC_Network_B");
         fc2.setFunctionType("FibreChannel");
@@ -439,105 +290,16 @@ public class ServerProfileTemplateClientSample {
         return connections;
     }
 
-    private void updateServerProfileTemplate() throws InstantiationException, IllegalAccessException {
-        String resourceId = null;
-        ServerProfileTemplate serverProfileTemplateDto = null;
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
-
-            // fetch resource Id using resource name
-            serverProfileTemplateDto = serverProfileTemplateClient.getServerProfileTemplateByName(params, serverProfileTemplateName);
-
-            serverProfileTemplateDto.setName(serverProfileTemplateNameUpdated);
-
-            if (null != serverProfileTemplateDto.getUri()) {
-                resourceId = UrlUtils.getResourceIdFromUri(serverProfileTemplateDto.getUri());
-            }
-            /**
-             * then make sdk service call to get resource aSync parameter
-             * indicates sync vs async useJsonRequest parameter indicates
-             * whether json input request present or not
-             */
-            taskResourceV2 = serverProfileTemplateClient.updateServerProfileTemplate(params, resourceId, serverProfileTemplateDto, false);
-
-            System.out.println("ServerProfileTemplateClientTest : updateServerProfileTemplate : " + "serverProfileTemplate object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ServerProfileTemplateClientTest : updateServerProfileTemplate :"
-                    + " resource you are looking is not found for update ");
-            return;
-        } catch (final SDKBadRequestException ex) {
-            System.out.println("ServerProfileTemplateClientTest : updateServerProfileTemplate :" + " bad request, try again : "
-                    + "may be duplicate resource name or invalid inputs. check inputs and try again");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ServerProfileTemplateClientTest : updateServerProfileTemplate :" + " no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ServerProfileTemplateClientTest : updateServerProfileTemplate :" + " Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("ServerProfileTemplateClientTest : updateServerProfileTemplate :" + " No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ServerProfileTemplateClientTest : updateServerProfileTemplate : " + "arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out.println("ServerProfileTemplateClientTest : updateServerProfileTemplate : " + "errors in task, please check task "
-                    + "resource for more details ");
-            return;
-        }
-    }
-
-    private void deleteServerProfileTemplate() throws InstantiationException, IllegalAccessException {
-        // first get the session Id
-        try {
-            // OneView credentials
-            params = HPOneViewCredential.createCredentials();
-
-            // then make sdk service call to get resource
-            taskResourceV2 = serverProfileTemplateClient.deleteServerProfileTemplate(params, resourceId, false);
-
-            System.out.println("ServerProfileTemplateClientTest : deleteServerProfileTemplate : serverProfileTemplate object returned to client : "
-                    + taskResourceV2.toString());
-        } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ServerProfileTemplateClientTest : deleteServerProfileTemplate : resource you are looking is not found for delete ");
-            return;
-        } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ServerProfileTemplateClientTest : deleteServerProfileTemplate : no such url : " + params.getUrl());
-            return;
-        } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ServerProfileTemplateClientTest : deleteServerProfileTemplate : Applicance Not reachabe at : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKNoResponseException ex) {
-            System.out.println("ServerProfileTemplateClientTest : deleteServerProfileTemplate : No response from appliance : "
-                    + params.getHostname());
-            return;
-        } catch (final SDKInvalidArgumentException ex) {
-            System.out.println("ServerProfileTemplateClientTest : deleteServerProfileTemplate : arguments are null ");
-            return;
-        } catch (final SDKTasksException e) {
-            System.out
-                    .println("ServerProfileTemplateClientTest : deleteServerProfileTemplate : errors in task, please check task resource for more details ");
-            return;
-        }
-
-    }
-
     public static void main(final String[] args) throws Exception {
         ServerProfileTemplateClientSample client = new ServerProfileTemplateClientSample();
 
-        client.getAllServerProfileTemplate();
         client.createServerProfileTemplate();
+        client.getAllServerProfileTemplates();
+        client.createServerProfileFromTemplate();
         client.getServerProfileTemplateById();
         client.getServerProfileTemplateByName();
-        client.updateServerProfileTemplate();
         client.getNewServerProfile();
-        client.createServerProfileFromTemplate();
+        client.updateServerProfileTemplate();
         client.deleteServerProfileTemplate();
     }
 

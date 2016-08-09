@@ -48,6 +48,7 @@ import com.hp.ov.sdk.rest.client.server.LogicalEnclosureClient;
 import com.hp.ov.sdk.rest.client.server.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.server.ServerHardwareTypeClient;
 import com.hp.ov.sdk.rest.client.server.ServerProfileClient;
+import com.hp.ov.sdk.rest.client.server.ServerProfileTemplateClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareBundleClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
@@ -103,6 +104,7 @@ public class OneViewClient {
     private ServerHardwareClient serverHardwareClient;
     private ServerHardwareTypeClient serverHardwareTypeClient;
     private ServerProfileClient serverProfileClient;
+    private ServerProfileTemplateClient serverProfileTemplateClient;
     private FirmwareBundleClient firmwareBundleClient;
     private FirmwareDriverClient firmwareDriverClient;
 
@@ -254,6 +256,10 @@ public class OneViewClient {
 
     public synchronized ServerProfileClient serverProfile() {
         return this.getClient(this.serverProfileClient, ServerProfileClient.class);
+    }
+
+    public synchronized ServerProfileTemplateClient serverProfileTemplate() {
+        return this.getClient(this.serverProfileTemplateClient, ServerProfileTemplateClient.class);
     }
 
     public synchronized FirmwareBundleClient firmwareBundle() {
