@@ -28,6 +28,7 @@ import com.hp.ov.sdk.dto.samples.NetworkForServerProfile;
 import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile.StorageVolume;
 import com.hp.ov.sdk.dto.samples.ServerProfileValue;
 import com.hp.ov.sdk.dto.samples.UplinkSetValue;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 
@@ -51,7 +52,7 @@ public class ResourceDtoUtilsWrapper {
         return uplinkSetGroupDto;
     }
 
-    public ServerProfile buildServerProfile(final RestParams params, final ServerProfileValue serverProfileValue) {
+    public ServerProfile buildServerProfile(ApiVersion apiVersion, final ServerProfileValue serverProfileValue) {
         Integer j = 1;
         final HashMap<String, Integer> fcId = new HashMap<String, Integer>();
         List<ProfileConnectionV3> connections = new ArrayList<ProfileConnectionV3>();
@@ -59,7 +60,7 @@ public class ResourceDtoUtilsWrapper {
 
         if (serverProfileValue.getNetworkForServerProfile().size() > 0) {
             for (final NetworkForServerProfile networkForServerProfile : serverProfileValue.getNetworkForServerProfile()) {
-                connections.add(resourceDtoUtils.buildProfileConnection(params, j, networkForServerProfile.getNetworkName(),
+                connections.add(resourceDtoUtils.buildProfileConnection(j, networkForServerProfile.getNetworkName(),
                         networkForServerProfile.getRequestedMbps(), networkForServerProfile.getAllocatedMbps(),
                         networkForServerProfile.getMaximumMbps(), networkForServerProfile.getNetworkType(),
                         networkForServerProfile.getBoot()));
@@ -79,13 +80,13 @@ public class ResourceDtoUtilsWrapper {
                         storageVolume.getStorageTargets(), storageVolume.getStorageTargetType(), storageVolume.getLunType(), fcId));
                 j++;
             }
-            sanStorage = resourceDtoUtils.buildSanStorage(params, serverProfileValue.getStorageVolumeForServerProfile()
+            sanStorage = resourceDtoUtils.buildSanStorage(serverProfileValue.getStorageVolumeForServerProfile()
                     .getHostOSType(), volumeAttachments);
         } else {
             sanStorage = null;
         }
 
-        return resourceDtoUtils.buildServerProfile(params, serverProfileValue.getTemplateName(), serverProfileValue.getBayName(),
+        return resourceDtoUtils.buildServerProfile(apiVersion, serverProfileValue.getTemplateName(), serverProfileValue.getBayName(),
                 serverProfileValue.getUseBayNameForServerHardwareUri(), serverProfileValue.getEnclosureGroupName(),
                 serverProfileValue.getAffinity(), serverProfileValue.getWwnType(), serverProfileValue.getMacType(),
                 serverProfileValue.getSerialNumberType(), sanStorage, connections, serverProfileValue.getLocalStorage(),

@@ -477,6 +477,7 @@ public class LogicalInterconnectClient {
     /**
      * This module aids in updating the port monitor configuration of a logical interconnect.
      *
+     * @param resourceId resource identifier for logical interconnect as seen in HPE OneView.
      * @param portMonitor port monitor fom the logical interconnect as seen in HPE OneView.
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.

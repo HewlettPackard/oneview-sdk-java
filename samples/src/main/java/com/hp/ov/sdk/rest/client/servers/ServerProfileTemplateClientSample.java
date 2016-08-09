@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.BiosSettingsTemplate;
 import com.hp.ov.sdk.dto.BootModeSettingsTemplate;
@@ -43,8 +44,8 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.exceptions.SDKNoSuchUrlException;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
-import com.hp.ov.sdk.rest.client.ServerProfileClient;
-import com.hp.ov.sdk.rest.client.ServerProfileClientImpl;
+import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.server.ServerProfileClient;
 import com.hp.ov.sdk.rest.client.ServerProfileTemplateClient;
 import com.hp.ov.sdk.rest.client.ServerProfileTemplateClientImpl;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -59,6 +60,7 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 public class ServerProfileTemplateClientSample {
 
     private final ServerProfileTemplateClient serverProfileTemplateClient;
+    private final ServerProfileClient serverProfileClient;
 
     private RestParams params;
     private TaskResourceV2 taskResourceV2;
@@ -79,7 +81,10 @@ public class ServerProfileTemplateClientSample {
     // ================================
 
     private ServerProfileTemplateClientSample() {
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+
         serverProfileTemplateClient = ServerProfileTemplateClientImpl.getClient();
+        this.serverProfileClient = oneViewClient.serverProfile();
     }
 
     private void getServerProfileTemplateById() throws InstantiationException, IllegalAccessException {
@@ -214,23 +219,22 @@ public class ServerProfileTemplateClientSample {
     }
 
     private void createServerProfileFromTemplate() {
-        ServerProfile serverProfileDto = null;
+        ServerProfile serverProfile = null;
         // first get the session Id
         try {
             // OneView credentials
             params = HPOneViewCredential.createCredentials();
 
             // then make sdk service call to get resource
-            serverProfileDto = serverProfileTemplateClient.getNewServerProfile(params, resourceId);
+            serverProfile = serverProfileTemplateClient.getNewServerProfile(params, resourceId);
 
             System.out.println("ServerProfileTemplateClientTest : createServerProfileFromTemplate : serverProfile object returned to client : "
-                    + serverProfileDto.getName());
+                    + serverProfile.getName());
 
-            serverProfileDto.setName("ServerProfileFromTemplate");
-            serverProfileDto.setServerHardwareUri(serverHardwareUri);
+            serverProfile.setName("ServerProfileFromTemplate");
+            serverProfile.setServerHardwareUri(serverHardwareUri);
 
-            ServerProfileClient spClient = ServerProfileClientImpl.getClient();
-            taskResourceV2 = spClient.createServerProfile(params, serverProfileDto, false, false);
+            taskResourceV2 = serverProfileClient.create(serverProfile, false);
 
             System.out.println("Server Profile creation status: " + taskResourceV2.getStatus());
 
