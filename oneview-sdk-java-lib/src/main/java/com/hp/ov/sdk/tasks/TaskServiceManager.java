@@ -48,7 +48,7 @@ public class TaskServiceManager {
         final String returnObj = httpClient.sendRequest(params);
         LOGGER.debug("TaskServiceManager : getTaskResource : response from OV :" + returnObj);
         if (null == returnObj || returnObj.equals("")) {
-            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.NETWORKS, null);
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.TASK_MONITOR, null);
         }
         // Call adaptor to convert to DTO
 
