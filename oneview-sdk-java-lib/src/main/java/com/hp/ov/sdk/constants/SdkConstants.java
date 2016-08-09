@@ -28,14 +28,9 @@ public class SdkConstants {
     public static final String ETHERNET = "Ethernet";
     public static final String FIBRE_CHANNEL = "FibreChannel";
     public static final String FIRMWARE_BUNDLE = "firmware-bundles";
-    public static final String FC_NETWORK = "FC_NETWORK";
-    public static final String FCOE_NETWORK = "FCOE_NETWORK";
     public static final String HTTPS = "https://";
-    public static final String LOGICAL_SWITCH_GROUPS = "logical-switch-groups";
-    public static final String LOGICAL_SWITCHES = "logical-switches";
     public static final String MSMB_ALERTS_ROUTING_KEY = "msmb.#";
     public static final String MSMB_EXCHANGE_NAME = "msmb";
-    public static final String NETWORKSET = "network-set";
 
     public static final int PERCENTAGE_100 = 100;
 

@@ -19,12 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
-import com.hp.ov.sdk.exceptions.SDKErrorEnum;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -76,30 +73,23 @@ public class FcNetworkClient {
     }
 
     /**
-     * Retrieves the {@link FcNetwork} details for the specified FC network identified by name.
+     * Retrieves a {@link ResourceCollection}&lt;{@link FcNetwork}&gt; containing details
+     * for the available FC networks found under the current HPE OneView that match the name.
      *
      * @param name FC network name as seen in HPE OneView.
      *
-     * @return {@link FcNetwork} object containing the details.
+     * @return {@link ResourceCollection}&lt;{@link FcNetwork}&gt; containing
+     * the details for the found FC networks.
      */
-    public FcNetwork getByName(String name) {
+    public ResourceCollection<FcNetwork> getByName(String name) {
         LOGGER.info("FcNetworkClient : getByName : Start");
 
-        FcNetwork fcNetwork;
         ResourceCollection<FcNetwork> fcNetworks = baseClient.getResourceCollection(
                 ResourceUris.FC_NETWORK_URI, FcNetwork.class, UrlParameter.getFilterByNameParameter(name));
 
-        if (!fcNetworks.isEmpty()) {
-            fcNetwork = fcNetworks.getMembers().get(0);
-        } else {
-            LOGGER.info("FcNetworkClient : getByName : No FC networking found for the name " + name);
-
-            throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound,
-                    null, null, null, SdkConstants.FC_NETWORK, null);
-        }
         LOGGER.info("FcNetworkClient : getByName : End");
 
-        return fcNetwork;
+        return fcNetworks;
     }
 
     /**

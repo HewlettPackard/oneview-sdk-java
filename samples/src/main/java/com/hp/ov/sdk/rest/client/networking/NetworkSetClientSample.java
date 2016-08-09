@@ -67,7 +67,7 @@ public class NetworkSetClientSample {
     }
 
     private void getNetworkSetByName() {
-        NetworkSet networkSet = client.getByName(resourceName);
+        NetworkSet networkSet = client.getByName(resourceName).get(0);
 
         System.out.println("NetworkSetClientSample : getNetworkSetByName : " +
                 "NetworkSet object returned to client : " + networkSet);
@@ -86,7 +86,7 @@ public class NetworkSetClientSample {
     }
 
     private void updateNetworkSet() {
-        NetworkSet networkSet = client.getByName(resourceName);
+        NetworkSet networkSet = client.getByName(resourceName).get(0);
 
         networkSet.setName(resourceName + "_Updated");
 
@@ -98,7 +98,7 @@ public class NetworkSetClientSample {
     }
 
     private void deleteNetworkSet() {
-        NetworkSet networkSet = client.getByName(resourceName);
+        NetworkSet networkSet = client.getByName(resourceName).get(0);
 
         TaskResourceV2 task = this.client.delete(UrlUtils.getResourceIdFromUri(networkSet.getUri()), false);
 

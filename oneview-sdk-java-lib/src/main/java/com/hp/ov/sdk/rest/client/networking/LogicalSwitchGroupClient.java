@@ -20,12 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.networking.logicalswitchgroup.LogicalSwitchGroup;
-import com.hp.ov.sdk.exceptions.SDKErrorEnum;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -77,31 +74,24 @@ public class LogicalSwitchGroupClient {
     }
 
     /**
-     * Retrieves the {@link LogicalSwitchGroup} details for the specified logical switch group identified by name.
+     * Retrieves a {@link ResourceCollection}&lt;{@link LogicalSwitchGroup}&gt; containing details
+     * for the available logical switch groups found under the current HPE OneView that match the name.
      *
      * @param name logical switch group name as seen in HPE OneView.
      *
-     * @return {@link LogicalSwitchGroup} object containing the details.
+     * @return {@link ResourceCollection}&lt;{@link LogicalSwitchGroup}&gt; containing
+     * the details for the found logical switch groups.
      */
-    public LogicalSwitchGroup getByName(String name) {
+    public ResourceCollection<LogicalSwitchGroup> getByName(String name) {
         LOGGER.info("LogicalSwitchGroupClient : getByName : Start");
 
-        LogicalSwitchGroup logicalSwitchGroup;
         ResourceCollection<LogicalSwitchGroup> logicalSwitchGroups = baseClient.getResourceCollection(
                 ResourceUris.LOGICAL_SWITCH_GROUPS_URI, LogicalSwitchGroup.class,
                 UrlParameter.getFilterByNameParameter(name));
 
-        if (!logicalSwitchGroups.isEmpty()) {
-            logicalSwitchGroup = logicalSwitchGroups.getMembers().get(0);
-        } else {
-            LOGGER.info("LogicalSwitchGroupClient : getByName : No logical switch group found for the name " + name);
-
-            throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound,
-                    null, null, null, SdkConstants.LOGICAL_SWITCH_GROUPS, null);
-        }
         LOGGER.info("LogicalSwitchGroupClient : getByName : End");
 
-        return logicalSwitchGroup;
+        return logicalSwitchGroups;
     }
 
     /**

@@ -53,7 +53,7 @@ public class SwitchTypeClientSample {
     }
 
     private void getSwitchTypeByName() {
-        InterconnectType switchType = client.getByName(SWITCH_TYPE_NAME);
+        InterconnectType switchType = client.getByName(SWITCH_TYPE_NAME).get(0);
 
         System.out.println("SwitchTypeClientSample : getSwitchTypeByName : " +
                 "SwitchType object returned to client : " + switchType);

@@ -82,14 +82,14 @@ public class EthernetNetworkClientSample {
     }
 
     private void getEthernetNetworkByName() {
-        Network network = client.getByName(ETHERNET_NETWORK_NAME);
+        Network network = client.getByName(ETHERNET_NETWORK_NAME).get(0);
 
         System.out.println("EthernetNetworkClientSample : getEthernetNetworkByName : " +
                 "EthernetNetwork object returned to client : " + network);
     }
 
     private void updateEthernetNetwork() {
-        Network network = client.getByName(ETHERNET_NETWORK_NAME);
+        Network network = client.getByName(ETHERNET_NETWORK_NAME).get(0);
 
         network.setName(ETHERNET_NETWORK_NAME_UPDATED);
 
@@ -101,7 +101,7 @@ public class EthernetNetworkClientSample {
     }
 
     private void deleteEthernetNetwork() {
-        Network network = client.getByName(ETHERNET_NETWORK_NAME_UPDATED);
+        Network network = client.getByName(ETHERNET_NETWORK_NAME_UPDATED).get(0);
 
         TaskResourceV2 task = this.client.delete(network.getResourceId(), false);
 
@@ -110,7 +110,7 @@ public class EthernetNetworkClientSample {
     }
 
     private void getAssociatedProfiles() {
-        Network network = client.getByName(ETHERNET_NETWORK_NAME);
+        Network network = client.getByName(ETHERNET_NETWORK_NAME).get(0);
 
         List<String> uris = client.getAssociatedProfiles(network.getResourceId());
 
@@ -119,7 +119,7 @@ public class EthernetNetworkClientSample {
     }
 
     private void getAssociatedUplinkGroups() {
-        Network network = client.getByName(ETHERNET_NETWORK_NAME);
+        Network network = client.getByName(ETHERNET_NETWORK_NAME).get(0);
 
         List<String> uris = client.getAssociatedProfiles(network.getResourceId());
 

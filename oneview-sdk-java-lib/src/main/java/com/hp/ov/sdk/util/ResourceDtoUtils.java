@@ -88,7 +88,7 @@ public class ResourceDtoUtils {
         List<String> networkUris = new ArrayList<String>();
 
         for (String networkName : networkNames) {
-            Network dto = oneViewClient.ethernetNetwork().getByName(networkName);
+            Network dto = oneViewClient.ethernetNetwork().getByName(networkName).get(0);
 
             if (dto.getUri() != null) {
                 String networkUri = dto.getUri();
@@ -105,7 +105,7 @@ public class ResourceDtoUtils {
         String fcNetworkUri = null;
 
         for (String networkName : networkNames) {
-            dto = oneViewClient.fcNetwork().getByName(networkName);
+            dto = oneViewClient.fcNetwork().getByName(networkName).get(0);
 
             if (null != dto.getUri()) {
                 fcNetworkUri = dto.getUri();
@@ -286,7 +286,7 @@ public class ResourceDtoUtils {
         if (functionType.toString().equalsIgnoreCase("Ethernet")) {
             connection.setNetworkUri(oneViewClient.ethernetNetwork().getByName(networkName).getUri());
         } else if (functionType.toString().equalsIgnoreCase("FibreChannel")) {
-            connection.setNetworkUri(oneViewClient.fcNetwork().getByName(networkName).getUri());
+            connection.setNetworkUri(oneViewClient.fcNetwork().getByName(networkName).get(0).getUri());
         }
         connection.setRequestedMbps(requestedMbps);
         connection.setAllocatedMbps(allocatedMbps);

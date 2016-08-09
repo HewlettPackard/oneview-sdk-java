@@ -20,14 +20,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.networking.logicalswitches.AddLogicalSwitch;
 import com.hp.ov.sdk.dto.networking.logicalswitches.LogicalSwitch;
-import com.hp.ov.sdk.exceptions.SDKErrorEnum;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
@@ -80,30 +77,23 @@ public class LogicalSwitchClient {
     }
 
     /**
-     * Retrieves the {@link LogicalSwitch} details for the specified logical switch identified by name.
+     * Retrieves a {@link ResourceCollection}&lt;{@link LogicalSwitch}&gt; containing details
+     * for the available logical switches found under the current HPE OneView that match the name.
      *
      * @param name logical switch name as seen in HPE OneView.
      *
-     * @return {@link LogicalSwitch} object containing the details.
+     * @return {@link ResourceCollection}&lt;{@link LogicalSwitch}&gt; containing
+     * the details for the found logical switches.
      */
-    public LogicalSwitch getByName(String name) {
+    public ResourceCollection<LogicalSwitch> getByName(String name) {
         LOGGER.info("LogicalSwitchClient : getByName : Start");
 
-        LogicalSwitch logicalSwitch;
         ResourceCollection<LogicalSwitch> logicalSwitches = baseClient.getResourceCollection(
                 ResourceUris.LOGICAL_SWITCHES_URI, LogicalSwitch.class, UrlParameter.getFilterByNameParameter(name));
 
-        if (!logicalSwitches.isEmpty()) {
-            logicalSwitch = logicalSwitches.getMembers().get(0);
-        } else {
-            LOGGER.info("LogicalSwitchClient : getByName : No logical switch found for the name " + name);
-
-            throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound,
-                    null, null, null, SdkConstants.LOGICAL_SWITCHES, null);
-        }
         LOGGER.info("LogicalSwitchClient : getByName : End");
 
-        return logicalSwitch;
+        return logicalSwitches;
     }
 
     /**

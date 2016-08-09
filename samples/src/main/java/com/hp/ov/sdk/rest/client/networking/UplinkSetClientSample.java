@@ -147,7 +147,7 @@ public class UplinkSetClientSample {
         uplinkSetsDto.setManualLoginRedistributionState(ManualLoginRedistributionState.Supported);
         List<String> networkUris = new ArrayList<>();
         for (int i = 0; i < FC_NETWORK_NAME.size(); i++) {
-            networkUris.add(oneViewClient.fcNetwork().getByName(FC_NETWORK_NAME.get(i)).getUri());
+            networkUris.add(oneViewClient.fcNetwork().getByName(FC_NETWORK_NAME.get(i)).get(0).getUri());
         }
         uplinkSetsDto.setFcNetworkUris(networkUris);
 

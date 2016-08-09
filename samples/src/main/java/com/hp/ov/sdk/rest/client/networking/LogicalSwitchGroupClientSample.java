@@ -73,14 +73,14 @@ public class LogicalSwitchGroupClientSample {
     }
 
     private void getLogicalSwitchGroupByName() {
-        LogicalSwitchGroup logicalSwitchGroup = client.getByName(LOGICAL_SWITCH_GROUP_NAME);
+        LogicalSwitchGroup logicalSwitchGroup = client.getByName(LOGICAL_SWITCH_GROUP_NAME).get(0);
 
         System.out.println("LogicalSwitchGroupClientSample : getLogicalSwitchGroupByName : " +
                 "LogicalSwitchGroup object returned to client : " + logicalSwitchGroup);
     }
 
     private void updateLogicalSwitchGroup() {
-        LogicalSwitchGroup logicalSwitchGroup = client.getByName(LOGICAL_SWITCH_GROUP_NAME);
+        LogicalSwitchGroup logicalSwitchGroup = client.getByName(LOGICAL_SWITCH_GROUP_NAME).get(0);
 
         logicalSwitchGroup = this.buildUpdateLogicalSwitchGroup(logicalSwitchGroup);
 
@@ -91,7 +91,7 @@ public class LogicalSwitchGroupClientSample {
     }
 
     private void deleteLogicalSwitchGroup() {
-        LogicalSwitchGroup logicalSwitchGroup = client.getByName(LOGICAL_SWITCH_GROUP_NAME);
+        LogicalSwitchGroup logicalSwitchGroup = client.getByName(LOGICAL_SWITCH_GROUP_NAME).get(0);
 
         TaskResourceV2 task = this.client.delete(logicalSwitchGroup.getResourceId(), false);
 
@@ -100,7 +100,7 @@ public class LogicalSwitchGroupClientSample {
     }
 
     private LogicalSwitchGroup buildLogicalSwitchGroup() {
-        InterconnectType type = this.typeClient.getByName(SwitchTypeClientSample.SWITCH_TYPE_NAME);
+        InterconnectType type = this.typeClient.getByName(SwitchTypeClientSample.SWITCH_TYPE_NAME).get(0);
 
         LogicalSwitchGroup group = new LogicalSwitchGroup();
 
@@ -125,7 +125,7 @@ public class LogicalSwitchGroupClientSample {
         return group;
     }
     private LogicalSwitchGroup buildUpdateLogicalSwitchGroup(LogicalSwitchGroup logicalSwitchGroup) {
-        InterconnectType type = this.typeClient.getByName(SwitchTypeClientSample.SWITCH_TYPE_NAME);
+        InterconnectType type = this.typeClient.getByName(SwitchTypeClientSample.SWITCH_TYPE_NAME).get(0);
 
         SwitchMapTemplate switchMapTemplate = logicalSwitchGroup.getSwitchMapTemplate();
 

@@ -16,13 +16,7 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 
 import java.util.List;
 
@@ -32,13 +26,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
@@ -70,32 +61,12 @@ public class EthernetNetworkClientTest {
         then(baseClient).should().getResourceCollection(ResourceUris.ETHERNET_URI, Network.class);
     }
 
-    @Test(expected = SDKResourceNotFoundException.class)
-    public void shouldThrowExceptionWhenEmptyEthernetNetworkCollectionIsReturnedForTheGivenName() {
-        given(baseClient.getResourceCollection(anyString(), any(Class.class), any(UrlParameter.class)))
-                .willReturn(new ResourceCollection());
-
+    @Test
+    public void shouldGetEthernetNetworksByName() {
         ethClient.getByName(ANY_ETHERNET_RESOURCE_NAME);
 
         then(baseClient).should().getResourceCollection(ResourceUris.ETHERNET_URI,
                 Network.class, UrlParameter.getFilterByNameParameter(ANY_ETHERNET_RESOURCE_NAME));
-    }
-
-    @Test
-    public void shouldGetEthernetNetworkCollectionByName() {
-        ResourceCollection<Network> ethernetNetworks = new ResourceCollection();
-
-        ethernetNetworks.setMembers(Lists.newArrayList(new Network()));
-
-        given(baseClient.getResourceCollection(anyString(), any(Class.class), any(UrlParameter.class)))
-                .willReturn(ethernetNetworks);
-
-        Network network = ethClient.getByName(ANY_ETHERNET_RESOURCE_NAME);
-
-        then(baseClient).should().getResourceCollection(ResourceUris.ETHERNET_URI,
-                Network.class, UrlParameter.getFilterByNameParameter(ANY_ETHERNET_RESOURCE_NAME));
-
-        assertThat(network, is(notNullValue()));
     }
 
     @Test

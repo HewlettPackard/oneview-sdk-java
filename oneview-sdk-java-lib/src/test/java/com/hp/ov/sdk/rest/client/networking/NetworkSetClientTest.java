@@ -16,13 +16,7 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,11 +24,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.collect.Lists;
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.networkset.NetworkSet;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
@@ -66,32 +57,12 @@ public class NetworkSetClientTest {
         then(baseClient).should().getResourceCollection(ResourceUris.NETWORK_SETS_URI, NetworkSet.class);
     }
 
-    @Test(expected = SDKResourceNotFoundException.class)
-    public void shouldThrowExceptionWhenEmptyNetworkSetCollectionIsReturnedForTheGivenName() {
-        given(baseClient.getResourceCollection(anyString(), any(Class.class), any(UrlParameter.class)))
-                .willReturn(new ResourceCollection());
-
+    @Test
+    public void shouldGetNetworkSetsByName() {
         networkSetClient.getByName(ANY_NETWORK_SET_RESOURCE_NAME);
 
         then(baseClient).should().getResourceCollection(ResourceUris.NETWORK_SETS_URI,
                 NetworkSet.class, UrlParameter.getFilterByNameParameter(ANY_NETWORK_SET_RESOURCE_NAME));
-    }
-
-    @Test
-    public void shouldGetNetworkSetCollectionByName() {
-        ResourceCollection<NetworkSet> networkSets = new ResourceCollection();
-
-        networkSets.setMembers(Lists.newArrayList(new NetworkSet()));
-
-        given(baseClient.getResourceCollection(anyString(), any(Class.class), any(UrlParameter.class)))
-                .willReturn(networkSets);
-
-        NetworkSet networkSet = networkSetClient.getByName(ANY_NETWORK_SET_RESOURCE_NAME);
-
-        then(baseClient).should().getResourceCollection(ResourceUris.NETWORK_SETS_URI,
-                NetworkSet.class, UrlParameter.getFilterByNameParameter(ANY_NETWORK_SET_RESOURCE_NAME));
-
-        assertThat(networkSet, is(notNullValue()));
     }
 
     @Test
