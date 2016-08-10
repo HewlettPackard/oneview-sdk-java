@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.alerts;
 
 import java.io.Serializable;
 
@@ -21,74 +21,96 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class AssociatedResource implements Serializable {
+public class ChangeLog implements Serializable {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
-    private String resourceName;
-    private String resourceUri;
-    private String resourceCategory;
-    private AssociationType associationType;
 
-    public String getResourceName() {
-        return resourceName;
-    }
+    private String created;
+    private String notes;
+    private String uri;
+    private String userEntered;
+    private String username;
 
-    public void setResourceName(final String resourceName) {
-        this.resourceName = resourceName;
-    }
-
-    public String getResourceUri() {
-        return resourceUri;
-    }
-
-    public void setResourceUri(final String resourceUri) {
-        this.resourceUri = resourceUri;
-    }
-
-    public String getResourceCategory() {
-        return resourceCategory;
-    }
-
-    public void setResourceCategory(final String resourceCategory) {
-        this.resourceCategory = resourceCategory;
-    }
-
-    public AssociationType getAssociationType() {
-        return associationType;
-    }
-
-    public void setAssociationType(final AssociationType associationType) {
-        this.associationType = associationType;
+    /**
+     * @return the created
+     */
+    public String getCreated() {
+        return created;
     }
 
     /**
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
+     * @param created the created to set
      */
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
+    /**
+     * @return the notes
+     */
+    public String getNotes() {
+        return notes;
+    }
+
+    /**
+     * @param notes the notes to set
+     */
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    /**
+     * @return the uri
+     */
+    public String getUri() {
+        return uri;
+    }
+
+    /**
+     * @param uri the uri to set
+     */
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    /**
+     * @return the userEntered
+     */
+    public String getUserEntered() {
+        return userEntered;
+    }
+
+    /**
+     * @param userEntered the userEntered to set
+     */
+    public void setUserEntered(String userEntered) {
+        this.userEntered = userEntered;
+    }
+
+    /**
+     * @return the username
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * @param username the username to set
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    /**
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(final Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
 
-    /**
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);

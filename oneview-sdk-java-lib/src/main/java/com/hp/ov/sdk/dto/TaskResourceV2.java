@@ -23,6 +23,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.hp.ov.sdk.dto.alerts.AssociatedResource;
+
 public class TaskResourceV2 extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
