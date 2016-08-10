@@ -200,7 +200,7 @@ public class ServerProfileClientSample {
         AvailableNetworks availableNetworks = serverProfileClient.getAvailableNetworks(
                 serverHardwareTypeUri, enclosureGroupUri);
 
-        System.out.println("ServerProfileClientSample : getServerProfileAvailableNetworks : " +
+        System.out.println("ServerProfileClientSample : getAvailableNetworksForServerProfile : " +
                 "AvailableNetworks object returned to client : " + JsonPrettyPrinter.print(availableNetworks));
     }
 
