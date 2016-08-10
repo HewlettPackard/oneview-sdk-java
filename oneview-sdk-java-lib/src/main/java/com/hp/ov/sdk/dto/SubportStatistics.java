@@ -18,6 +18,9 @@ package com.hp.ov.sdk.dto;
 import java.math.BigInteger;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.google.gson.annotations.Since;
 
 public class SubportStatistics extends BaseModelResource {
@@ -60,5 +63,40 @@ public class SubportStatistics extends BaseModelResource {
 
     public void setFipSnoopingInfo(List<FipSnoopingInfo> fipSnoopingInfo) {
         this.fipSnoopingInfo = fipSnoopingInfo;
+    }
+
+    @Override
+    public boolean canEqual(Object obj) {
+        return (obj instanceof SubportStatistics);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof SubportStatistics) {
+            SubportStatistics that = (SubportStatistics) obj;
+
+            return new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    .append(subportNumber, that.subportNumber)
+                    .append(subportCommonStatistics, that.subportCommonStatistics)
+                    .append(subportAdvancedStatistics, that.subportAdvancedStatistics)
+                    .append(fipSnoopingInfo, that.fipSnoopingInfo)
+                    .isEquals();
+        }
+        return false;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                .append(subportNumber)
+                .append(subportCommonStatistics)
+                .append(subportAdvancedStatistics)
+                .append(fipSnoopingInfo)
+                .toHashCode();
     }
 }

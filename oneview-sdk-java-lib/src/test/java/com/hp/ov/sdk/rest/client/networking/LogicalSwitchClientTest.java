@@ -16,13 +16,7 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,13 +24,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.collect.Lists;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.logicalswitches.AddLogicalSwitch;
 import com.hp.ov.sdk.dto.networking.logicalswitches.LogicalSwitch;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
@@ -69,32 +60,12 @@ public class LogicalSwitchClientTest {
         then(baseClient).should().getResourceCollection(ResourceUris.LOGICAL_SWITCHES_URI, LogicalSwitch.class);
     }
 
-    @Test(expected = SDKResourceNotFoundException.class)
-    public void shouldThrowExceptionWhenEmptyLogicalSwitchCollectionIsReturnedForTheGivenName() {
-        given(baseClient.getResourceCollection(anyString(), any(Class.class), any(UrlParameter.class)))
-                .willReturn(new ResourceCollection());
-
+    @Test
+    public void shouldGetLogicalSwitchesByName() {
         switchClient.getByName(ANY_LOGICAL_SWITCH_RESOURCE_NAME);
 
         then(baseClient).should().getResourceCollection(ResourceUris.LOGICAL_SWITCHES_URI,
                 LogicalSwitch.class, UrlParameter.getFilterByNameParameter(ANY_LOGICAL_SWITCH_RESOURCE_NAME));
-    }
-
-    @Test
-    public void shouldGetLogicalSwitchCollectionByName() {
-        ResourceCollection<LogicalSwitch> logicalSwitches = new ResourceCollection();
-
-        logicalSwitches.setMembers(Lists.newArrayList(new LogicalSwitch()));
-
-        given(baseClient.getResourceCollection(anyString(), any(Class.class), any(UrlParameter.class)))
-                .willReturn(logicalSwitches);
-
-        LogicalSwitch logicalSwitch = switchClient.getByName(ANY_LOGICAL_SWITCH_RESOURCE_NAME);
-
-        then(baseClient).should().getResourceCollection(ResourceUris.LOGICAL_SWITCHES_URI,
-                LogicalSwitch.class, UrlParameter.getFilterByNameParameter(ANY_LOGICAL_SWITCH_RESOURCE_NAME));
-
-        assertThat(logicalSwitch, is(notNullValue()));
     }
 
     @Test

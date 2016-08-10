@@ -67,14 +67,14 @@ public class FcNetworkClientSample {
     }
 
     private void getFcNetworkByName() {
-        FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME);
+        FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME).get(0);
 
         System.out.println("FcNetworkClientSample : getFcNetworkByName : " +
                 "FcNetwork object returned to client : " + fcNetwork);
     }
 
     private void updateFcNetwork() {
-        FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME);
+        FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME).get(0);
 
         fcNetwork.setName(FC_NETWORK_NAME_UPDATED);
 
@@ -86,7 +86,7 @@ public class FcNetworkClientSample {
     }
 
     private void deleteFcNetwork() {
-        FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME_UPDATED);
+        FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME_UPDATED).get(0);
 
         TaskResourceV2 task = this.client.delete(fcNetwork.getResourceId(), false);
 

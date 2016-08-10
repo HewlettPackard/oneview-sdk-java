@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,23 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
+ */
 package com.hp.ov.sdk.dto.servers.logicalenclosure;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class LogicalEnclosureContainedEnclosure {
 
-    @Expose
     private String enclosureUri;
-
-    @SerializedName("interconnectBays")
-    @Expose
-    private Set<LogicalEnclosureInterconnectBay> interconnectBays = new HashSet<LogicalEnclosureInterconnectBay>();
+    private Set<LogicalEnclosureInterconnectBay> interconnectBays = new HashSet<>();
 
     public String getEnclosureUri() {
         return enclosureUri;
@@ -48,10 +45,38 @@ public class LogicalEnclosureContainedEnclosure {
 
     public void addInterconnectBay(final LogicalEnclosureInterconnectBay bay) {
         if (interconnectBays == null) {
-            interconnectBays = new HashSet<LogicalEnclosureInterconnectBay>();
+            interconnectBays = new HashSet<>();
         }
         if (bay != null) {
             interconnectBays.add(bay);
         }
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof LogicalEnclosureContainedEnclosure) {
+            LogicalEnclosureContainedEnclosure that = (LogicalEnclosureContainedEnclosure) obj;
+
+            return new EqualsBuilder()
+                    .append(enclosureUri, that.enclosureUri)
+                    .append(interconnectBays, that.interconnectBays)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(enclosureUri)
+                .append(interconnectBays)
+                .toHashCode();
     }
 }

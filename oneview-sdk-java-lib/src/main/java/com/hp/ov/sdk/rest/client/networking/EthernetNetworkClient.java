@@ -22,13 +22,10 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
-import com.hp.ov.sdk.exceptions.SDKErrorEnum;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -80,30 +77,23 @@ public class EthernetNetworkClient {
     }
 
     /**
-     * Retrieves the {@link Network} details for the specified network identified by name.
+     * Retrieves a {@link ResourceCollection}&lt;{@link Network}&gt; containing details
+     * for the available ethernet networks found under the current HPE OneView that match the name.
      *
      * @param name network name as seen in HPE OneView.
      *
-     * @return {@link Network} object containing the details.
+     * @return {@link ResourceCollection}&lt;{@link Network}&gt; containing
+     * the details for the found ethernet networks.
      */
-    public Network getByName(String name) {
+    public ResourceCollection<Network> getByName(String name) {
         LOGGER.info("NetworkClient : getByName : Start");
 
-        Network network;
         ResourceCollection<Network> networks = baseClient.getResourceCollection(
                 ResourceUris.ETHERNET_URI, Network.class, UrlParameter.getFilterByNameParameter(name));
 
-        if (!networks.isEmpty()) {
-            network = networks.getMembers().get(0);
-        } else {
-            LOGGER.info("NetworkClient : getByName : No networking found for the name " + name);
-
-            throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound,
-                    null, null, null, SdkConstants.ETHERNET, null);
-        }
         LOGGER.info("NetworkClient : getByName : End");
 
-        return network;
+        return networks;
     }
 
     /**

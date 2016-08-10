@@ -59,10 +59,15 @@ public class BaseClient {
         return this.params.getApiVersion();
     }
 
-    public <T> T getResource(String uri, Class<T> returnType) {
+    public <T> T getResource(String uri, Class<T> returnType, UrlParameter... queries) {
         this.validateNotNullArguments(uri, returnType);
 
         Request request = new Request(HttpMethodType.GET, uri);
+
+        for (UrlParameter query : queries) {
+            request.addQuery(query);
+        }
+
         String response = this.executeRequest(request);
 
         T resource = adaptor.buildResourceObject(response, returnType);
@@ -70,10 +75,16 @@ public class BaseClient {
         return resource;
     }
 
-    public <T> List<T> getResourceList(String uri, TypeToken<List<T>> resourceType) {
+    public <T> List<T> getResourceList(String uri, TypeToken<List<T>> resourceType,
+            UrlParameter... queries) {
         this.validateNotNullArguments(uri, resourceType);
 
         Request request = new Request(HttpMethodType.GET, uri);
+
+        for (UrlParameter query : queries) {
+            request.addQuery(query);
+        }
+
         String response = this.executeRequest(request);
 
         List<T> resource = adaptor.buildListOfResourceObject(response, resourceType.getType());

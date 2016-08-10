@@ -30,8 +30,10 @@ import com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FabricClient;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
+import com.hp.ov.sdk.rest.client.networking.InterconnectClient;
 import com.hp.ov.sdk.rest.client.networking.InterconnectTypeClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalDownlinkClient;
+import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchGroupClient;
@@ -45,6 +47,8 @@ import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.server.LogicalEnclosureClient;
 import com.hp.ov.sdk.rest.client.server.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.server.ServerHardwareTypeClient;
+import com.hp.ov.sdk.rest.client.server.ServerProfileClient;
+import com.hp.ov.sdk.rest.client.server.ServerProfileTemplateClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareBundleClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
@@ -93,12 +97,14 @@ public class OneViewClient {
     private FcSanProviderClient fcSanProviderClient;
     private FcSanManagedSanClient fcSanManagedSanClient;
     private InterconnectTypeClient interconnectTypeClient;
+    private InterconnectClient interconnectClient;
     private LogicalInterconnectGroupClient logicalInterconnectGroupClient;
+    private LogicalInterconnectClient logicalInterconnectClient;
     private LogicalDownlinkClient logicalDownlinkClient;
-
     private ServerHardwareClient serverHardwareClient;
     private ServerHardwareTypeClient serverHardwareTypeClient;
-
+    private ServerProfileClient serverProfileClient;
+    private ServerProfileTemplateClient serverProfileTemplateClient;
     private FirmwareBundleClient firmwareBundleClient;
     private FirmwareDriverClient firmwareDriverClient;
 
@@ -224,8 +230,16 @@ public class OneViewClient {
         return this.getClient(this.interconnectTypeClient, InterconnectTypeClient.class);
     }
 
+    public synchronized InterconnectClient interconnect() {
+        return this.getClient(this.interconnectClient, InterconnectClient.class);
+    }
+
     public synchronized LogicalInterconnectGroupClient logicalInterconnectGroup() {
         return this.getClient(this.logicalInterconnectGroupClient, LogicalInterconnectGroupClient.class);
+    }
+
+    public synchronized LogicalInterconnectClient logicalInterconnect() {
+        return this.getClient(this.logicalInterconnectClient, LogicalInterconnectClient.class);
     }
 
     public synchronized LogicalDownlinkClient logicalDownlink() {
@@ -238,6 +252,14 @@ public class OneViewClient {
 
     public synchronized ServerHardwareTypeClient serverHardwareType() {
         return this.getClient(this.serverHardwareTypeClient, ServerHardwareTypeClient.class);
+    }
+
+    public synchronized ServerProfileClient serverProfile() {
+        return this.getClient(this.serverProfileClient, ServerProfileClient.class);
+    }
+
+    public synchronized ServerProfileTemplateClient serverProfileTemplate() {
+        return this.getClient(this.serverProfileTemplateClient, ServerProfileTemplateClient.class);
     }
 
     public synchronized FirmwareBundleClient firmwareBundle() {

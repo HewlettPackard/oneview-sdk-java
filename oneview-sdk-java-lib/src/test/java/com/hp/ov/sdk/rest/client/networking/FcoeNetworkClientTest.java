@@ -16,13 +16,7 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,11 +24,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.collect.Lists;
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.fcoenetworks.FcoeNetwork;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
@@ -66,32 +57,12 @@ public class FcoeNetworkClientTest {
         then(baseClient).should().getResourceCollection(ResourceUris.FCOE_NETWORK_URI, FcoeNetwork.class);
     }
 
-    @Test(expected = SDKResourceNotFoundException.class)
-    public void shouldThrowExceptionWhenEmptyFcoeNetworkCollectionIsReturnedForTheGivenName() {
-        given(baseClient.getResourceCollection(anyString(), any(Class.class), any(UrlParameter.class)))
-                .willReturn(new ResourceCollection());
-
+    @Test
+    public void shouldGetFcoeNetworksByName() {
         fcoeClient.getByName(ANY_FCOE_RESOURCE_NAME);
 
         then(baseClient).should().getResourceCollection(ResourceUris.FCOE_NETWORK_URI,
                 FcoeNetwork.class, UrlParameter.getFilterByNameParameter(ANY_FCOE_RESOURCE_NAME));
-    }
-
-    @Test
-    public void shouldGetFcoeNetworkCollectionByName() {
-        ResourceCollection<FcoeNetwork> fcoeNetworks = new ResourceCollection();
-
-        fcoeNetworks.setMembers(Lists.newArrayList(new FcoeNetwork()));
-
-        given(baseClient.getResourceCollection(anyString(), any(Class.class), any(UrlParameter.class)))
-                .willReturn(fcoeNetworks);
-
-        FcoeNetwork fcoeNetwork = fcoeClient.getByName(ANY_FCOE_RESOURCE_NAME);
-
-        then(baseClient).should().getResourceCollection(ResourceUris.FCOE_NETWORK_URI,
-                FcoeNetwork.class, UrlParameter.getFilterByNameParameter(ANY_FCOE_RESOURCE_NAME));
-
-        assertThat(fcoeNetwork, is(notNullValue()));
     }
 
     @Test

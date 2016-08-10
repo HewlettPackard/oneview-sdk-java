@@ -35,8 +35,6 @@ import com.hp.ov.sdk.dto.networking.uplinksets.ManualLoginRedistributionState;
 import com.hp.ov.sdk.dto.networking.uplinksets.PortConfigInfo;
 import com.hp.ov.sdk.dto.networking.uplinksets.UplinkSet;
 import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
-import com.hp.ov.sdk.rest.client.InterconnectsClient;
-import com.hp.ov.sdk.rest.client.InterconnectsClientImpl;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureClient;
 import com.hp.ov.sdk.rest.client.servers.EnclosureClientSample;
@@ -53,7 +51,7 @@ public class UplinkSetClientSample {
 
     private final UplinkSetClient uplinkSetClient;
     private final EnclosureClient enclosureClient;
-    private final InterconnectsClient interconnectClient;
+    private final InterconnectClient interconnectClient;
     private final OneViewClient oneViewClient;
 
     // These are variables to be defined by user
@@ -72,7 +70,7 @@ public class UplinkSetClientSample {
 
         uplinkSetClient = oneViewClient.uplinkSet();
         enclosureClient = oneViewClient.enclosure();
-        interconnectClient = InterconnectsClientImpl.getClient();
+        interconnectClient = oneViewClient.interconnect();
     }
 
     private void getUplinkSetById() {
@@ -149,7 +147,7 @@ public class UplinkSetClientSample {
         uplinkSetsDto.setManualLoginRedistributionState(ManualLoginRedistributionState.Supported);
         List<String> networkUris = new ArrayList<>();
         for (int i = 0; i < FC_NETWORK_NAME.size(); i++) {
-            networkUris.add(oneViewClient.fcNetwork().getByName(FC_NETWORK_NAME.get(i)).getUri());
+            networkUris.add(oneViewClient.fcNetwork().getByName(FC_NETWORK_NAME.get(i)).get(0).getUri());
         }
         uplinkSetsDto.setFcNetworkUris(networkUris);
 
@@ -163,7 +161,7 @@ public class UplinkSetClientSample {
                     resourceId = UrlUtils.getResourceIdFromUri(enclosuresDto.getInterconnectBays().get(i).getInterconnectUri());
                 }
 
-                Interconnect interconnectsDto = interconnectClient.getInterconnectById(params, resourceId);
+                Interconnect interconnectsDto = interconnectClient.getById(resourceId);
                 for (int j = 0; j < interconnectsDto.getPortCount(); j++) {
                     if (interconnectsDto.getPorts().get(j).getPortName().equalsIgnoreCase(PORT_VALUE)) {
                         portConfigInfo.setPortUri(interconnectsDto.getPorts().get(j).getUri());

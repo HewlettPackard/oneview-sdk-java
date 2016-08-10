@@ -68,14 +68,14 @@ public class FcoeNetworkClientSample {
     }
 
     private void getFcoeNetworkByName() {
-        FcoeNetwork fcoeNetwork = client.getByName(FCOE_NETWORK_NAME);
+        FcoeNetwork fcoeNetwork = client.getByName(FCOE_NETWORK_NAME).get(0);
 
         System.out.println("FcoeNetworkClientSample : getFcoeNetworkByName : " +
                 "FcoeNetwork object returned to client : " + fcoeNetwork);
     }
 
     private void updateFcoeNetwork() {
-        FcoeNetwork fcoeNetwork = client.getByName(FCOE_NETWORK_NAME);
+        FcoeNetwork fcoeNetwork = client.getByName(FCOE_NETWORK_NAME).get(0);
 
         fcoeNetwork.setName(FCOE_NETWORK_NAME_UPDATED);
 
@@ -87,7 +87,7 @@ public class FcoeNetworkClientSample {
     }
 
     private void deleteFcoeNetwork() {
-        FcoeNetwork fcoeNetwork = client.getByName(FCOE_NETWORK_NAME_UPDATED);
+        FcoeNetwork fcoeNetwork = client.getByName(FCOE_NETWORK_NAME_UPDATED).get(0);
 
         TaskResourceV2 task = this.client.delete(fcoeNetwork.getResourceId(), false);
 

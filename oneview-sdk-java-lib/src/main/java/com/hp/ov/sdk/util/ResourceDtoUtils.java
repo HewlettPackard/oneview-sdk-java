@@ -88,7 +88,7 @@ public class ResourceDtoUtils {
         List<String> networkUris = new ArrayList<String>();
 
         for (String networkName : networkNames) {
-            Network dto = oneViewClient.ethernetNetwork().getByName(networkName);
+            Network dto = oneViewClient.ethernetNetwork().getByName(networkName).get(0);
 
             if (dto.getUri() != null) {
                 String networkUri = dto.getUri();
@@ -105,7 +105,7 @@ public class ResourceDtoUtils {
         String fcNetworkUri = null;
 
         for (String networkName : networkNames) {
-            dto = oneViewClient.fcNetwork().getByName(networkName);
+            dto = oneViewClient.fcNetwork().getByName(networkName).get(0);
 
             if (null != dto.getUri()) {
                 fcNetworkUri = dto.getUri();
@@ -276,7 +276,7 @@ public class ResourceDtoUtils {
         return null;
     }
 
-    public ProfileConnectionV3 buildProfileConnection(final RestParams params, final Integer j, final String networkName,
+    public ProfileConnectionV3 buildProfileConnection(final Integer j, final String networkName,
             final String requestedMbps, final Integer allocatedMbps, final Integer maximumMbps,
             final ProfileConnectionV3.FunctionType functionType, final BootControl bootControl) {
         final ProfileConnectionV3 connection = new ProfileConnectionV3();
@@ -286,7 +286,7 @@ public class ResourceDtoUtils {
         if (functionType.toString().equalsIgnoreCase("Ethernet")) {
             connection.setNetworkUri(oneViewClient.ethernetNetwork().getByName(networkName).getUri());
         } else if (functionType.toString().equalsIgnoreCase("FibreChannel")) {
-            connection.setNetworkUri(oneViewClient.fcNetwork().getByName(networkName).getUri());
+            connection.setNetworkUri(oneViewClient.fcNetwork().getByName(networkName).get(0).getUri());
         }
         connection.setRequestedMbps(requestedMbps);
         connection.setAllocatedMbps(allocatedMbps);
@@ -297,7 +297,7 @@ public class ResourceDtoUtils {
         return connection;
     }
 
-    public SanStorage buildSanStorage(final RestParams params, final String hostOSType,
+    public SanStorage buildSanStorage(final String hostOSType,
             final List<VolumeAttachment> volumeAttachments) {
         final SanStorage sanStorage = new SanStorage();
         sanStorage.setHostOSType(hostOSType);
@@ -344,7 +344,7 @@ public class ResourceDtoUtils {
         return null;
     }
 
-    public ServerProfile buildServerProfile(final RestParams params, final String profileName, final String serverHardwareName,
+    public ServerProfile buildServerProfile(ApiVersion apiVersion, final String profileName, final String serverHardwareName,
             final Boolean useBayNameForServerHardwareUri, final String enclosureGroupName,
             final ServerProfile.ProfileAffinity affinity, final ServerProfile.AssignmentType wwnType,
             final ServerProfile.AssignmentType macType, final ServerProfile.AssignmentType serialNumberType,
@@ -353,7 +353,7 @@ public class ResourceDtoUtils {
         final ServerProfile serverProfileDto = new ServerProfile();
         serverProfileDto.setDescription("profile");
 
-        if (params.getApiVersion().getValue() < ApiVersion.V_200.getValue()) {
+        if (apiVersion.getValue() < ApiVersion.V_200.getValue()) {
             serverProfileDto.setType(ResourceCategory.RC_SERVER_PROFILE);
         } else {
             serverProfileDto.setType(ResourceCategory.RC_SERVER_PROFILE_V200);

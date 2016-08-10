@@ -77,14 +77,14 @@ public class LogicalSwitchClientSample {
     }
 
     private void getLogicalSwitchByName() {
-        LogicalSwitch logicalSwitch = client.getByName(LOGICAL_SWITCH_NAME);
+        LogicalSwitch logicalSwitch = client.getByName(LOGICAL_SWITCH_NAME).get(0);
 
         System.out.println("LogicalSwitchClientSample : getLogicalSwitchByName : " +
                 "LogicalSwitch object returned to client : " + logicalSwitch);
     }
 
     private void updateLogicalSwitch() {
-        LogicalSwitch logicalSwitch = this.client.getByName(LOGICAL_SWITCH_NAME);
+        LogicalSwitch logicalSwitch = this.client.getByName(LOGICAL_SWITCH_NAME).get(0);
         AddLogicalSwitch addLogicalSwitch = this.buildUpdateAddLogicalSwitch(logicalSwitch);
 
         TaskResourceV2 task = this.client.update(logicalSwitch.getResourceId(), addLogicalSwitch, false);
@@ -94,7 +94,7 @@ public class LogicalSwitchClientSample {
     }
 
     private void deleteLogicalSwitch() {
-        LogicalSwitch logicalSwitch = client.getByName(LOGICAL_SWITCH_NAME);
+        LogicalSwitch logicalSwitch = client.getByName(LOGICAL_SWITCH_NAME).get(0);
 
         TaskResourceV2 task = this.client.delete(logicalSwitch.getResourceId(), false);
 
@@ -103,7 +103,7 @@ public class LogicalSwitchClientSample {
     }
 
     private void refreshLogicalSwitch() {
-        LogicalSwitch logicalSwitch = client.getByName(LOGICAL_SWITCH_NAME);
+        LogicalSwitch logicalSwitch = client.getByName(LOGICAL_SWITCH_NAME).get(0);
 
         TaskResourceV2 task = this.client.refresh(logicalSwitch.getResourceId(), false);
 
@@ -113,7 +113,7 @@ public class LogicalSwitchClientSample {
 
     private AddLogicalSwitch buildAddLogicalSwitch() {
         LogicalSwitchGroup logicalSwitchGroup =
-                this.groupClient.getByName(LogicalSwitchGroupClientSample.LOGICAL_SWITCH_GROUP_NAME);
+                this.groupClient.getByName(LogicalSwitchGroupClientSample.LOGICAL_SWITCH_GROUP_NAME).get(0);
 
         AddLogicalSwitch addLogicalSwitch = new AddLogicalSwitch();
         LogicalSwitch logicalSwitch = new LogicalSwitch();

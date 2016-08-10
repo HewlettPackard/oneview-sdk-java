@@ -16,13 +16,7 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.any;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,11 +24,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.collect.Lists;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.InterconnectType;
-import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
@@ -66,31 +57,11 @@ public class SwitchTypeClientTest {
         then(baseClient).should().getResourceCollection(ResourceUris.SWITCH_TYPE_URI, InterconnectType.class);
     }
 
-    @Test(expected = SDKResourceNotFoundException.class)
-    public void shouldThrowExceptionWhenEmptySwitchTypeCollectionIsReturnedForTheGivenName() {
-        given(baseClient.getResourceCollection(anyString(), any(Class.class), any(UrlParameter.class)))
-                .willReturn(new ResourceCollection());
-
+    @Test
+    public void shouldGetSwitchTypesByName() {
         switchClient.getByName(ANY_SWITCH_TYPE_RESOURCE_NAME);
 
         then(baseClient).should().getResourceCollection(ResourceUris.SWITCH_TYPE_URI,
                 InterconnectType.class, UrlParameter.getFilterByNameParameter(ANY_SWITCH_TYPE_RESOURCE_NAME));
-    }
-
-    @Test
-    public void shouldGetSwitchTypeCollectionByName() {
-        ResourceCollection<InterconnectType> switchTypes = new ResourceCollection();
-
-        switchTypes.setMembers(Lists.newArrayList(new InterconnectType()));
-
-        given(baseClient.getResourceCollection(anyString(), any(Class.class), any(UrlParameter.class)))
-                .willReturn(switchTypes);
-
-        InterconnectType switchType = switchClient.getByName(ANY_SWITCH_TYPE_RESOURCE_NAME);
-
-        then(baseClient).should().getResourceCollection(ResourceUris.SWITCH_TYPE_URI,
-                InterconnectType.class, UrlParameter.getFilterByNameParameter(ANY_SWITCH_TYPE_RESOURCE_NAME));
-
-        assertThat(switchType, is(notNullValue()));
     }
 }

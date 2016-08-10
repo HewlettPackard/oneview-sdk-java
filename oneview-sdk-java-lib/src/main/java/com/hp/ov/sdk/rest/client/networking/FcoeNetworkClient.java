@@ -19,12 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.networking.fcoenetworks.FcoeNetwork;
-import com.hp.ov.sdk.exceptions.SDKErrorEnum;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -76,30 +73,23 @@ public class FcoeNetworkClient {
     }
 
     /**
-     * Retrieves the {@link FcoeNetwork} details for the specified FCoE network identified by name.
+     * Retrieves a {@link ResourceCollection}&lt;{@link FcoeNetwork}&gt; containing details
+     * for the available FCoE networks found under the current HPE OneView that match the name.
      *
      * @param name FCoE network name as seen in HPE OneView.
      *
-     * @return {@link FcoeNetwork} object containing the details.
+     * @return {@link ResourceCollection}&lt;{@link FcoeNetwork}&gt; containing
+     * the details for the found FCoE networks.
      */
-    public FcoeNetwork getByName(String name) {
+    public ResourceCollection<FcoeNetwork> getByName(String name) {
         LOGGER.info("FcoeNetworkClient : getByName : Start");
 
-        FcoeNetwork fcoeNetwork;
         ResourceCollection<FcoeNetwork> fcoeNetworks = baseClient.getResourceCollection(
                 ResourceUris.FCOE_NETWORK_URI, FcoeNetwork.class, UrlParameter.getFilterByNameParameter(name));
 
-        if (!fcoeNetworks.isEmpty()) {
-            fcoeNetwork = fcoeNetworks.getMembers().get(0);
-        } else {
-            LOGGER.info("FcoeNetworkClient : getByName : No FCoE networking found for the name " + name);
-
-            throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound,
-                    null, null, null, SdkConstants.FCOE_NETWORK, null);
-        }
         LOGGER.info("FcoeNetworkClient : getByName : End");
 
-        return fcoeNetwork;
+        return fcoeNetworks;
     }
 
     /**

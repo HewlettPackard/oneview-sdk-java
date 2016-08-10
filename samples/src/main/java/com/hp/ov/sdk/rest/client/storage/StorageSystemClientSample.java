@@ -166,7 +166,7 @@ public class StorageSystemClientSample {
                 managed_one.setGroupName(storageSystemDto.getUnmanagedPorts().get(i).getGroupName());
                 String fc_network_one = null;
                 for (int j = 0; j < FC_NETWORK_A.size(); j++) {
-                    fc_network_one = oneViewClient.fcNetwork().getByName(FC_NETWORK_A.get(j)).getUri();
+                    fc_network_one = oneViewClient.fcNetwork().getByName(FC_NETWORK_A.get(j)).get(0).getUri();
                 }
                 managed_one.setExpectedNetworkUri(fc_network_one);
                 managed_one.setPortName(storageSystemDto.getUnmanagedPorts().get(i).getPortName());
@@ -186,7 +186,7 @@ public class StorageSystemClientSample {
                 managed_two.setGroupName(storageSystemDto.getUnmanagedPorts().get(i).getGroupName());
                 String fc_network_two = null;
                 for (int j = 0; j < FC_NETWORK_B.size(); j++) {
-                    fc_network_two = oneViewClient.fcNetwork().getByName(FC_NETWORK_B.get(j)).getUri();
+                    fc_network_two = oneViewClient.fcNetwork().getByName(FC_NETWORK_B.get(j)).get(0).getUri();
                 }
                 managed_two.setExpectedNetworkUri(fc_network_two);
                 managed_two.setPortName(storageSystemDto.getUnmanagedPorts().get(i).getPortName());

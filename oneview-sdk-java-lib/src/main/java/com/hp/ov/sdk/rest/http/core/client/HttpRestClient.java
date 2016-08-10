@@ -24,6 +24,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map.Entry;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -336,9 +338,18 @@ public class HttpRestClient {
             //TODO add support for Content-Type "application/json-patch+json" (PATCH)
 
             if (ContentType.APPLICATION_JSON == contentType) {
+                String textEntity;
+
+                if (request.getEntity() instanceof List) {
+                    textEntity = serializer.toJsonArray((List) request.getEntity(),
+                            params.getApiVersion());
+                } else {
+                    textEntity = serializer.toJson(request.getEntity(), params.getApiVersion());
+                }
+
                 entity = EntityBuilder.create()
                         .setContentType(toApacheContentType(contentType))
-                        .setText(serializer.toJson(request.getEntity(), params.getApiVersion()))
+                        .setText(textEntity)
                         .build();
             } else if (ContentType.TEXT_PLAIN == contentType) {
                 entity = EntityBuilder.create()
@@ -351,7 +362,6 @@ public class HttpRestClient {
                         .setContentType(toApacheContentType(contentType))
                         .addBinaryBody("file", file)
                         .build();
-
 
                 //TODO add support for custom headers in Request object
                 base.setHeader("uploadfilename", file.getName());

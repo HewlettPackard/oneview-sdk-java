@@ -19,12 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.networking.networkset.NetworkSet;
-import com.hp.ov.sdk.exceptions.SDKErrorEnum;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -77,31 +74,23 @@ public class NetworkSetClient {
     }
 
     /**
-     * The module aids in fetching the network set details for the network set
-     * name as specified in HPE OneView.
+     * Retrieves a {@link ResourceCollection}&lt;{@link NetworkSet}&gt; containing details
+     * for the available networks sets found under the current HPE OneView that match the name.
      *
-     * @param name
-     *            The name is the network set name as seen in HPE OneView.
-     * @return {@link NetworkSet} containing the network set details.
+     * @param name networks sets name as seen in HPE OneView.
+     *
+     * @return {@link ResourceCollection}&lt;{@link NetworkSet}&gt; containing
+     * the details for the found networks sets.
      */
-    public NetworkSet getByName(String name) {
+    public ResourceCollection<NetworkSet> getByName(String name) {
         LOGGER.info("NetworkSetClient : getByName : Start");
 
-        NetworkSet networkSet;
         ResourceCollection<NetworkSet> networkSets = baseClient.getResourceCollection(
                 ResourceUris.NETWORK_SETS_URI, NetworkSet.class, UrlParameter.getFilterByNameParameter(name));
 
-        if (!networkSets.isEmpty()) {
-            networkSet = networkSets.getMembers().get(0);
-        } else {
-            LOGGER.info("NetworkSetClient : getByName : No network set found for the name " + name);
-
-            throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound,
-                    null, null, null, SdkConstants.NETWORKSET, null);
-        }
         LOGGER.info("NetworkSetClient : getByName : End");
 
-        return networkSet;
+        return networkSets;
     }
 
     /**

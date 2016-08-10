@@ -20,11 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.exceptions.SDKErrorEnum;
-import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -76,30 +73,23 @@ public class SwitchTypeClient {
     }
 
     /**
-     * Retrieves the {@link InterconnectType} details for the specified switch type identified by name.
+     * Retrieves a {@link ResourceCollection}&lt;{@link InterconnectType}&gt; containing details
+     * for the available switch types found under the current HPE OneView that match the name.
      *
      * @param name switch type name as seen in HPE OneView.
      *
-     * @return {@link InterconnectType} object containing the details.
+     * @return {@link ResourceCollection}&lt;{@link InterconnectType}&gt; containing
+     * the details for the found switch types.
      */
-    public InterconnectType getByName(String name) {
+    public ResourceCollection<InterconnectType> getByName(String name) {
         LOGGER.info("SwitchTypeClient : getByName : Start");
 
-        InterconnectType switchType;
         ResourceCollection<InterconnectType> switchTypes = baseClient.getResourceCollection(
                 ResourceUris.SWITCH_TYPE_URI, InterconnectType.class, UrlParameter.getFilterByNameParameter(name));
 
-        if (!switchTypes.isEmpty()) {
-            switchType = switchTypes.getMembers().get(0);
-        } else {
-            LOGGER.info("SwitchTypeClient : getByName : No switch type found for the name " + name);
-
-            throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound,
-                    null, null, null, SdkConstants.SWITCH_TYPES, null);
-        }
         LOGGER.info("SwitchTypeClient : getByName : End");
 
-        return switchType;
+        return switchTypes;
     }
 
 

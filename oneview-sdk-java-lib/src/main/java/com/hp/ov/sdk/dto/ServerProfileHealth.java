@@ -18,7 +18,7 @@ package com.hp.ov.sdk.dto;
 import java.io.Serializable;
 import java.util.Set;
 
-public class ServerProfileHealth implements Serializable{
+public class ServerProfileHealth implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
