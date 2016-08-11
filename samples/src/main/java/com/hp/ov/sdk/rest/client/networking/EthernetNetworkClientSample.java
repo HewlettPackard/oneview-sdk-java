@@ -18,6 +18,9 @@ package com.hp.ov.sdk.rest.client.networking;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -30,6 +33,8 @@ import com.hp.ov.sdk.dto.networking.ethernet.Purpose;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class EthernetNetworkClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EthernetNetworkClientSample.class);
 
     // These are variables to be defined by the user
     // ================================
@@ -70,22 +75,19 @@ public class EthernetNetworkClientSample {
     private void getEthernetNetwork() {
         Network network = client.getById(ETHERNET_NETWORK_RESOURCE_ID);
 
-        System.out.println("EthernetNetworkClientSample : getEthernetNetwork : " +
-                "EthernetNetwork object returned to client : " + network);
+        LOGGER.info("Ethernet network returned to client: {}", network.toJsonString());
     }
 
     private void getAllEthernetNetworks() {
         ResourceCollection<Network> networks = client.getAll();
 
-        System.out.println("EthernetNetworkClientSample : getAllEthernetNetworks : " +
-                "EthernetNetworks returned to client (count) : " + networks.getCount());
+        LOGGER.info("Ethernet networks returned to client: {}", networks.toJsonString());
     }
 
     private void getEthernetNetworkByName() {
         Network network = client.getByName(ETHERNET_NETWORK_NAME).get(0);
 
-        System.out.println("EthernetNetworkClientSample : getEthernetNetworkByName : " +
-                "EthernetNetwork object returned to client : " + network);
+        LOGGER.info("Ethernet network returned to client: {}", network.toJsonString());
     }
 
     private void updateEthernetNetwork() {
@@ -96,8 +98,7 @@ public class EthernetNetworkClientSample {
         TaskResourceV2 task = this.client.update(network.getResourceId(),
                 network, false);
 
-        System.out.println("EthernetNetworkClientSample : updateEthernetNetwork : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void deleteEthernetNetwork() {
@@ -105,14 +106,15 @@ public class EthernetNetworkClientSample {
 
         TaskResourceV2 task = this.client.delete(network.getResourceId(), false);
 
-        System.out.println("EthernetNetworkClientSample : deleteEthernetNetwork : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void getAssociatedProfiles() {
         Network network = client.getByName(ETHERNET_NETWORK_NAME).get(0);
 
         List<String> uris = client.getAssociatedProfiles(network.getResourceId());
+
+        LOGGER.info("Ethernet network returned to client: {}", network.toJsonString());
 
         System.out.println("EthernetNetworkClientSample : getAssociatedProfiles : " +
                 "Associated Profile URIs returned to client : " + uris);
@@ -145,8 +147,7 @@ public class EthernetNetworkClientSample {
 
         TaskResourceV2 task = this.client.createInBulk(network, false);
 
-        System.out.println("EthernetNetworkClientSample : createEthernetNetworkInBulk : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     public static void main(String[] args) {

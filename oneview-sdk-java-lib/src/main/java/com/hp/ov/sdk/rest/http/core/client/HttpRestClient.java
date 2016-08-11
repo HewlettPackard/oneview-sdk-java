@@ -624,7 +624,7 @@ public class HttpRestClient {
                 }
             }
 
-            LOGGER.error("Response Body: " + responseBody.toString());
+            LOGGER.info("Response Body: " + responseBody.toString());
             checkResponse(responseCode);
 
             if (forceReturnTask || ((responseCode == HttpURLConnection.HTTP_ACCEPTED) && (responseBody.length() == 0)
