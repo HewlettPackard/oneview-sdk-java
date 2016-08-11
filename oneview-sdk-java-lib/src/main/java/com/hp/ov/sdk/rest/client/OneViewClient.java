@@ -21,6 +21,7 @@ import java.lang.reflect.Constructor;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKException;
+import com.hp.ov.sdk.rest.client.activity.AlertClient;
 import com.hp.ov.sdk.rest.client.facilities.DataCenterClient;
 import com.hp.ov.sdk.rest.client.facilities.PowerDeliveryDeviceClient;
 import com.hp.ov.sdk.rest.client.facilities.RackClient;
@@ -70,6 +71,7 @@ public class OneViewClient {
 
     private final BaseClient baseClient;
 
+    private AlertClient alertClient;
     private EnclosureGroupClient enclosureGroupClient;
     private EnclosureClient enclosureClient;
     private LogicalEnclosureClient logicalEnclosureClient;
@@ -120,6 +122,10 @@ public class OneViewClient {
                 new LoginSessionClient(this.baseClient));
 
         connector.connect();
+    }
+
+    public synchronized AlertClient alert() {
+        return this.getClient(this.alertClient, AlertClient.class);
     }
 
     public synchronized EnclosureGroupClient enclosureGroup() {
