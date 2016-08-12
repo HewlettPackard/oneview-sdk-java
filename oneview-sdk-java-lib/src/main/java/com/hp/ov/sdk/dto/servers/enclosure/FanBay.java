@@ -22,6 +22,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.HealthStatus;
 
 public class FanBay implements Serializable {
 
@@ -32,7 +33,7 @@ public class FanBay implements Serializable {
     private DevicePresence devicePresence;
     private Boolean deviceRequired;
     private Boolean forceInstallFirmware;
-    private Status status;
+    private HealthStatus status;
     private State state;
     private String model;
     private String partNumber;
@@ -127,7 +128,7 @@ public class FanBay implements Serializable {
      *
      *@return The status
      */
-    public Status getStatus() {
+    public HealthStatus getStatus() {
         return status;
     }
 
@@ -136,7 +137,7 @@ public class FanBay implements Serializable {
      *@param status
      *           The status
      */
-    public void setStatus(final Status status) {
+    public void setStatus(final HealthStatus status) {
         this.status = status;
     }
 

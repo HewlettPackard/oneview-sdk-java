@@ -23,6 +23,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.hp.ov.sdk.dto.BaseModelResource;
+import com.hp.ov.sdk.dto.HealthStatus;
 
 public class AlertResource extends BaseModelResource {
 
@@ -47,8 +48,8 @@ public class AlertResource extends BaseModelResource {
     private String resourceUri;
     private ServiceEventData serviceEventDetails;
     private Boolean serviceEventSource;
-    private String severity;
-    private String urgency;
+    private HealthStatus severity;
+    private AlertUrgency urgency;
 
     /**
      * @return the activityUri
@@ -319,28 +320,28 @@ public class AlertResource extends BaseModelResource {
     /**
      * @return the severity
      */
-    public String getSeverity() {
+    public HealthStatus getSeverity() {
         return severity;
     }
 
     /**
      * @param severity the severity to set
      */
-    public void setSeverity(String severity) {
+    public void setSeverity(HealthStatus severity) {
         this.severity = severity;
     }
 
     /**
      * @return the urgency
      */
-    public String getUrgency() {
+    public AlertUrgency getUrgency() {
         return urgency;
     }
 
     /**
      * @param urgency the urgency to set
      */
-    public void setUrgency(String urgency) {
+    public void setUrgency(AlertUrgency urgency) {
         this.urgency = urgency;
     }
 
