@@ -27,7 +27,7 @@ Below are the steps to perform this task:
 
 #### Fetch the authorization token from OneView using a REST client ####
 Example:
-```
+```sh
 curl -X POST -H "Content-Type:application/json" -d '{"userName":"{USERNAME}","password":"{PASSWORD}"}' \
 -k https://{HOST}/rest/login-sessions
 ```
@@ -35,7 +35,7 @@ Replace `{USERNAME}`, `{PASSWORD}` and `{HOST}` with your OneView credentials an
 
 #### Fetch server CA certificate ####
 Example:
-```
+```sh
 openssl s_client -showcerts -host {HOST} -port 443
 ```
 Copy the server certificate content from `-----BEGIN CERTIFICATE-----` to `-----END CERTIFICATE-----` (inclusive).
@@ -43,7 +43,7 @@ Paste the content into a file called `default-server.crt`.
 
 #### Fetch the SSL client certificates for RabbitMQ using a REST client ####
 Example:
-```
+```sh
 curl -X GET -H "Auth:{AUTHORIZATION_TOKEN}" -H "X-Api-Version:200" -k https://{HOST}/rest/certificates/client/rabbitmq/keypair/default  
 ```
 * Paste the content of `base64SSLCertData` into a file called `default-client.crt`
@@ -53,27 +53,27 @@ curl -X GET -H "Auth:{AUTHORIZATION_TOKEN}" -H "X-Api-Version:200" -k https://{H
 
 If you receive a response containing the message `Certificate/Private key file is missing`, you will have to perform a request to the OneView to generate the certificates.
 Example:
-```
+```sh
 curl -X POST -H "Auth:{AUTHORIZATION_TOKEN}" -H "X-Api-Version:200" -H "Content-Type:application/json" -d '{"commonName":"default","type":"RabbitMqClientCertV2"}' -k https://{HOST}/rest/certificates/client/rabbitmq
 ```
 
 #### Generate `TrustStore` ####
 Example:
-```
+```sh
 keytool -import -v -trustcacerts -alias myservercert -file default-server.crt -keystore TrustStore
 ```
 > Note: Choose the *yes* option, when prompted to trust the certificate.
 
 #### Generate `KeyStore` ####
 Example:
-```
+```sh
 openssl pkcs12 -export -name myclientcert -in default-client.crt -inkey default-client.key -out myclient.p12
 
 keytool -importkeystore -destkeystore KeyStore -srckeystore myclient.p12 -srcstoretype pkcs12 -alias myclientcert
 ```
 
 ### Example programs ###
-The SDK comes with several sample programs in the `samples` directory. For each of the supported resource types, there is a corresponding sample file. To run one of them, we recommend the use of an IDE ([Eclipse](https://eclipse.org/downloads/) or [IntelliJ](https://www.jetbrains.com/idea/download/)).
+The SDK comes with several sample programs inside the `samples` module. For each of the supported resource types, there is a corresponding sample file. To run one of them, we recommend the use of an IDE ([Eclipse](https://eclipse.org/downloads/) or [IntelliJ](https://www.jetbrains.com/idea/download/)).
 
 > Note: If you choose to use Eclipse IDE, you will need to generate the Eclipse IDE files (`\*.classpath`, `\*.project`, `\*.wtpmodules` and the `.settings` folder). You can generate these files using Maven Eclipse Plugin with the command `mvn clean eclipse:clean eclipse:eclipse`
 
@@ -82,6 +82,19 @@ The file `SamplesConstants.java` must be updated to contain the following inform
 * OneView credentials and host information
 
 > Note: Instead of changing the location of SSL files you can just place them inside the directory `samples/src/main/resources`
+
+## SDK Logging Configuration ##
+The OneView SDK for Java uses the Simple Logging Facade for Java (SLF4J) for logging. The SLF4J serves as a simple facade or abstraction for various logging frameworks, such as `java.util.logging`, `logback` and `log4j`. SLF4J allows the end-user to plug in the desired logging framework at deployment time.
+
+We highly recommend that you read the [SLF4J user manual](http://www.slf4j.org/manual.html) to understand how you can use one of the "SLF4J bindings" to configure the SDK logs.
+
+For example, the `samples` module uses the `log4j` as the underlying logging framework. To do this, we simply declare `org.slf4j:slf4j-log4j12` as a dependency in the pom.xml file as shown below.
+```xml
+<dependency>
+  <groupId>org.slf4j</groupId>
+  <artifactId>slf4j-log4j12</artifactId>
+</dependency>
+```
 
 ## License ##
 The OneView SDK for Java is released under version 2.0 of the [Apache License](http://www.apache.org/licenses/LICENSE-2.0).
