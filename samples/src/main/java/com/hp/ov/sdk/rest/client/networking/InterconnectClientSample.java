@@ -131,7 +131,7 @@ public class InterconnectClientSample {
         InterconnectsStatistics statistics = this.interconnectClient.getStatistics(interconnect.getResourceId());
 
         System.out.println("InterconnectClientSample : getInterconnectStatistics : " +
-                "InterconnectsStatistics object returned to client : " + statistics.toJsonString());
+                "InterconnectsStatistics object returned to client : " + JsonPrettyPrinter.print(statistics));
     }
 
     private void getInterconnectPortStatistics() {
@@ -141,7 +141,7 @@ public class InterconnectClientSample {
                 interconnect.getResourceId(), PORT_NAME);
 
         System.out.println("InterconnectClientSample : getInterconnectPortStatistics : " +
-                "PortStatistics object returned to client : " + statistics.toJsonString());
+                "PortStatistics object returned to client : " + JsonPrettyPrinter.print(statistics));
     }
 
     private void getInterconnectSubportStatistics() {
@@ -151,7 +151,7 @@ public class InterconnectClientSample {
                 interconnect.getResourceId(), PORT_NAME, 1);
 
         System.out.println("InterconnectClientSample : getInterconnectSubportStatistics : " +
-                "SubportStatistics object returned to client : " + statistics.toJsonString());
+                "SubportStatistics object returned to client : " + JsonPrettyPrinter.print(statistics));
     }
 
     private void getInterconnectNamedServers() {

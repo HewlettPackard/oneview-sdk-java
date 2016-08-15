@@ -15,88 +15,90 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.google.gson.annotations.Since;
 
-public class SubportStatistics extends BaseModelResource {
+public class SubportStatistics implements Serializable {
 
     private final static long serialVersionUID = 1L;
 
-    private BigInteger subportNumber;
-    private SubportCommonStatistics subportCommonStatistics;
-    private SubportAdvancedStatistics subportAdvancedStatistics;
     @Since(200)
     private List<FipSnoopingInfo> fipSnoopingInfo;
+    private SubportAdvancedStatistics subportAdvancedStatistics;
+    private SubportCommonStatistics subportCommonStatistics;
+    private BigInteger subportNumber;
+    private String type;
 
-    public BigInteger getSubportNumber() {
-        return subportNumber;
-    }
-
-    public void setSubportNumber(BigInteger subportNumber) {
-        this.subportNumber = subportNumber;
-    }
-
-    public SubportCommonStatistics getSubportCommonStatistics() {
-        return subportCommonStatistics;
-    }
-
-    public void setSubportCommonStatistics(SubportCommonStatistics subportCommonStatistics) {
-        this.subportCommonStatistics = subportCommonStatistics;
-    }
-
-    public SubportAdvancedStatistics getSubportAdvancedStatistics() {
-        return subportAdvancedStatistics;
-    }
-
-    public void setSubportAdvancedStatistics(SubportAdvancedStatistics subportAdvancedStatistics) {
-        this.subportAdvancedStatistics = subportAdvancedStatistics;
-    }
-
+    /**
+     * @return the fipSnoopingInfo
+     */
     public List<FipSnoopingInfo> getFipSnoopingInfo() {
         return fipSnoopingInfo;
     }
 
+    /**
+     * @param fipSnoopingInfo the fipSnoopingInfo to set
+     */
     public void setFipSnoopingInfo(List<FipSnoopingInfo> fipSnoopingInfo) {
         this.fipSnoopingInfo = fipSnoopingInfo;
     }
 
-    @Override
-    public boolean canEqual(Object obj) {
-        return (obj instanceof SubportStatistics);
+    /**
+     * @return the subportAdvancedStatistics
+     */
+    public SubportAdvancedStatistics getSubportAdvancedStatistics() {
+        return subportAdvancedStatistics;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj instanceof SubportStatistics) {
-            SubportStatistics that = (SubportStatistics) obj;
-
-            return new EqualsBuilder()
-                    .appendSuper(super.equals(obj))
-                    .append(subportNumber, that.subportNumber)
-                    .append(subportCommonStatistics, that.subportCommonStatistics)
-                    .append(subportAdvancedStatistics, that.subportAdvancedStatistics)
-                    .append(fipSnoopingInfo, that.fipSnoopingInfo)
-                    .isEquals();
-        }
-        return false;
-
+    /**
+     * @param subportAdvancedStatistics the subportAdvancedStatistics to set
+     */
+    public void setSubportAdvancedStatistics(SubportAdvancedStatistics subportAdvancedStatistics) {
+        this.subportAdvancedStatistics = subportAdvancedStatistics;
     }
 
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .appendSuper(super.hashCode())
-                .append(subportNumber)
-                .append(subportCommonStatistics)
-                .append(subportAdvancedStatistics)
-                .append(fipSnoopingInfo)
-                .toHashCode();
+    /**
+     * @return the subportCommonStatistics
+     */
+    public SubportCommonStatistics getSubportCommonStatistics() {
+        return subportCommonStatistics;
+    }
+
+    /**
+     * @param subportCommonStatistics the subportCommonStatistics to set
+     */
+    public void setSubportCommonStatistics(SubportCommonStatistics subportCommonStatistics) {
+        this.subportCommonStatistics = subportCommonStatistics;
+    }
+
+    /**
+     * @return the subportNumber
+     */
+    public BigInteger getSubportNumber() {
+        return subportNumber;
+    }
+
+    /**
+     * @param subportNumber the subportNumber to set
+     */
+    public void setSubportNumber(BigInteger subportNumber) {
+        this.subportNumber = subportNumber;
+    }
+
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(String type) {
+        this.type = type;
     }
 }

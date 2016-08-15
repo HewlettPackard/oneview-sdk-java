@@ -25,10 +25,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class AvailableNetworks implements Serializable {
 
-    /**
-	 *
-	 */
     private static final long serialVersionUID = 1L;
+
     private List<Object> ethernetNetworks = new ArrayList<Object>();
     private List<Object> networkSets = new ArrayList<Object>();
     private List<Object> fcNetworks = new ArrayList<Object>();

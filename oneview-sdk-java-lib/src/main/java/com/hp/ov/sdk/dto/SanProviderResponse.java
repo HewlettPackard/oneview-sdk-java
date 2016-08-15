@@ -20,10 +20,8 @@ import java.util.List;
 
 public class SanProviderResponse extends BaseModelResource {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
+
     private List<Property> defaultConnectionInfo = new ArrayList<Property>();
     private String deviceManagersUri;
     private String displayName;

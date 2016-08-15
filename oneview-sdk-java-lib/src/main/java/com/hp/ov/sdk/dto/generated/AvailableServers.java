@@ -23,10 +23,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class AvailableServers implements Serializable {
 
-    /**
-	 *
-	 */
     private static final long serialVersionUID = 1L;
+
     private String serverHardwareUri;
     private String enclosureGroupUri;
     private String serverHardwareTypeUri;

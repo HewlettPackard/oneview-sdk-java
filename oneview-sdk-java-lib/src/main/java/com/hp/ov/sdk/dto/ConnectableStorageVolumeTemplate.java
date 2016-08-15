@@ -19,6 +19,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hp.ov.sdk.util.UrlUtils;
+
 public class ConnectableStorageVolumeTemplate implements Serializable {
 
     private static final long serialVersionUID = 6717327182104772977L;
@@ -77,6 +79,10 @@ public class ConnectableStorageVolumeTemplate implements Serializable {
 
     public void setTemplateUri(final String templateUri) {
         this.templateUri = templateUri;
+    }
+
+    public String getResourceId() {
+        return UrlUtils.getResourceIdFromUri(this.getTemplateUri());
     }
 
 }

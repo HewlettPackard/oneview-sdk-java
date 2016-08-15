@@ -15,12 +15,12 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
-public class InternalVlanAssociation  extends BaseModelResource {
+public class InternalVlanAssociation extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer internalVlanId;
     private String generalNetworkUri;
+    private Integer internalVlanId;
     private String logicalInterconnectUri;
 
     /**
