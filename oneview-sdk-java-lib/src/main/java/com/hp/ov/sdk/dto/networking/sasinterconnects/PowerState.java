@@ -13,25 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.networking;
+package com.hp.ov.sdk.dto.networking.sasinterconnects;
 
-public enum LocationType {
+public enum PowerState {
 
-    Bay,
-    Box,
-    ControllerPort,
-    Datacenter,
-    Enclosure,
-    Ip,
-    Password,
-    Port,
-    Rack,
-    SasPort,
-    Slot,
-    SwitchBay,
-    Username,
-    UserId,
-    StackingDomainId,
-    StackingMemberId
+    On,
+    Off,
+    Unknown,
+    PoweringOn,
+    PoweringOff;
 
 }

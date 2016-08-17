@@ -39,6 +39,7 @@ import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchGroupClient;
 import com.hp.ov.sdk.rest.client.networking.NetworkSetClient;
+import com.hp.ov.sdk.rest.client.networking.SasInterconnectClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
 import com.hp.ov.sdk.rest.client.networking.UplinkSetClient;
@@ -89,6 +90,7 @@ public class OneViewClient {
     private UnmanagedDeviceClient unmanagedDeviceClient;
     private ConnectionTemplateClient connectionTemplateClient;
     private FabricClient fabricClient;
+    private SasInterconnectClient sasInterconnectClient;
     private SwitchClient switchClient;
     private StorageSystemClient storageSystemClient;
     private StoragePoolClient storagePoolClient;
@@ -194,6 +196,10 @@ public class OneViewClient {
 
     public synchronized FabricClient fabric() {
         return this.getClient(this.fabricClient, FabricClient.class);
+    }
+
+    public synchronized SasInterconnectClient sasInterconnects() {
+        return this.getClient(this.sasInterconnectClient, SasInterconnectClient.class);
     }
 
     public synchronized SwitchClient switches() {

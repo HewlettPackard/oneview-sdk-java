@@ -28,95 +28,155 @@ public class BaseModelResource implements Serializable {
 
     private static final long serialVersionUID = 5688679045442246487L;
 
-    private String name;
+    private String category;
+    private String created;
     private String description;
+    private String eTag;
+    private String modified;
+    private String name;
     private String state;
     private String status;
-    private String uri;
-    private String category;
     private String type;
-    private String eTag;
-    private String created;
-    private String modified;
+    private String uri;
 
-    public String getUri() {
-        return uri;
-    }
-
-    public void setUri(final String uri) {
-        this.uri = uri;
-    }
-
+    /**
+     * @return the category
+     */
     public String getCategory() {
         return category;
     }
 
-    public void setCategory(final String category) {
+    /**
+     * @param category the category to set
+     */
+    public void setCategory(String category) {
         this.category = category;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(final String type) {
-        this.type = type;
-    }
-
-    public String getETag() {
-        return eTag;
-    }
-
-    public void setETag(final String eTag) {
-        this.eTag = eTag;
-    }
-
+    /**
+     * @return the created
+     */
     public String getCreated() {
         return created;
     }
 
-    public void setCreated(final String created) {
+    /**
+     * @param created the created to set
+     */
+    public void setCreated(String created) {
         this.created = created;
     }
 
-    public String getModified() {
-        return modified;
-    }
-
-    public void setModified(final String modified) {
-        this.modified = modified;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
+    /**
+     * @return the description
+     */
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(final String description) {
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * @return the eTag
+     */
+    public String getETag() {
+        return eTag;
+    }
+
+    /**
+     * @param eTag the eTag to set
+     */
+    public void setETag(String eTag) {
+        this.eTag = eTag;
+    }
+
+    /**
+     * @return the modified
+     */
+    public String getModified() {
+        return modified;
+    }
+
+    /**
+     * @param modified the modified to set
+     */
+    public void setModified(String modified) {
+        this.modified = modified;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return the state
+     */
     public String getState() {
         return state;
     }
 
-    public void setState(final String state) {
+    /**
+     * @param state the state to set
+     */
+    public void setState(String state) {
         this.state = state;
     }
 
+    /**
+     * @return the status
+     */
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(final String status) {
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(String status) {
         this.status = status;
+    }
+
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
+     * @return the uri
+     */
+    public String getUri() {
+        return uri;
+    }
+
+    /**
+     * @param uri the uri to set
+     */
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public String getResourceId() {
@@ -135,16 +195,16 @@ public class BaseModelResource implements Serializable {
             BaseModelResource that = (BaseModelResource) obj;
 
             return that.canEqual(this) && new EqualsBuilder()
-                    .append(name, that.name)
+                    .append(category, that.category)
+                    .append(created, that.created)
                     .append(description, that.description)
+                    .append(eTag, that.eTag)
+                    .append(modified, that.modified)
+                    .append(name, that.name)
                     .append(state, that.state)
                     .append(status, that.status)
-                    .append(uri, that.uri)
-                    .append(category, that.category)
                     .append(type, that.type)
-                    .append(eTag, that.eTag)
-                    .append(created, that.created)
-                    .append(modified, that.modified)
+                    .append(uri, that.uri)
                     .isEquals();
         }
         return false;
@@ -153,22 +213,17 @@ public class BaseModelResource implements Serializable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(name)
+                .append(category)
+                .append(created)
                 .append(description)
+                .append(eTag)
+                .append(modified)
+                .append(name)
                 .append(state)
                 .append(status)
-                .append(uri)
-                .append(category)
                 .append(type)
-                .append(eTag)
-                .append(created)
-                .append(modified)
+                .append(uri)
                 .toHashCode();
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
     }
 
     public String toJsonString() {
@@ -177,5 +232,10 @@ public class BaseModelResource implements Serializable {
                 .setPrettyPrinting()
                 .disableHtmlEscaping()
                 .create().toJson(this);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

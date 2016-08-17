@@ -18,7 +18,6 @@ package com.hp.ov.sdk.dto.generated;
 import java.io.Serializable;
 import java.util.List;
 
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -29,13 +28,10 @@ import com.hp.ov.sdk.dto.LocalStorageEmbeddedController;
 
 public class LocalStorage implements Serializable {
 
-    /**
-	 *
-	 */
     private static final long serialVersionUID = 1L;
 
     @Until(199)
-    private List<LogicalDrife> logicalDrives;
+    private List<LogicalDrive> logicalDrives;
     @Until(199)
     private Boolean manageLocalStorage;
     @Until(199)
@@ -47,7 +43,7 @@ public class LocalStorage implements Serializable {
      *
      * @return The logicalDrives
      */
-    public List<LogicalDrife> getLogicalDrives() {
+    public List<LogicalDrive> getLogicalDrives() {
         return logicalDrives;
     }
 
@@ -56,7 +52,7 @@ public class LocalStorage implements Serializable {
      * @param logicalDrives
      *            The logicalDrives
      */
-    public void setLogicalDrives(final List<LogicalDrife> logicalDrives) {
+    public void setLogicalDrives(final List<LogicalDrive> logicalDrives) {
         this.logicalDrives = logicalDrives;
     }
 
@@ -101,20 +97,12 @@ public class LocalStorage implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(logicalDrives).append(manageLocalStorage).append(initialize).toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
-    public boolean equals(final Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof LocalStorage) == false) {
-            return false;
-        }
-        final LocalStorage rhs = ((LocalStorage) other);
-        return new EqualsBuilder().append(logicalDrives, rhs.logicalDrives).append(manageLocalStorage, rhs.manageLocalStorage)
-                .append(initialize, rhs.initialize).isEquals();
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
 }
