@@ -18,7 +18,9 @@ package com.hp.ov.sdk.dto;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.google.gson.annotations.Until;
+import com.hp.ov.sdk.util.UrlUtils;
 
 public class AttachableStorageVolume implements Serializable {
 
@@ -126,6 +128,10 @@ public class AttachableStorageVolume implements Serializable {
 
     public void setUri(final String uri) {
         this.uri = uri;
+    }
+
+    public String getResourceId() {
+        return UrlUtils.getResourceIdFromUri(this.getUri());
     }
 
     public List<String> getAvailableNetworks() {

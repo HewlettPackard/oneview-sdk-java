@@ -18,92 +18,56 @@ package com.hp.ov.sdk.dto.networking;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.hp.ov.sdk.dto.BaseModelResource;
 
 public class TelemetryConfiguration extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
-    /**
-     *
-     * (Required)
-     *
-     */
+
     private Integer sampleInterval = 300;
-    /**
-     *
-     * (Required)
-     *
-     */
     private Boolean enableTelemetry = true;
-    /**
-     *
-     * (Required)
-     *
-     */
     private Integer sampleCount = 12;
 
     /**
-     *
-     * (Required)
-     *
-     * @return The sampleInterval
+     * @return the sampleInterval
      */
     public Integer getSampleInterval() {
         return sampleInterval;
     }
 
     /**
-     *
-     * (Required)
-     *
-     * @param sampleInterval
-     *            The sampleInterval
+     * @param sampleInterval the sampleInterval to set
      */
-    public void setSampleInterval(final Integer sampleInterval) {
+    public void setSampleInterval(Integer sampleInterval) {
         this.sampleInterval = sampleInterval;
     }
 
     /**
-     *
-     * (Required)
-     *
-     * @return The enableTelemetry
+     * @return the enableTelemetry
      */
     public Boolean getEnableTelemetry() {
         return enableTelemetry;
     }
 
     /**
-     *
-     * (Required)
-     *
-     * @param enableTelemetry
-     *            The enableTelemetry
+     * @param enableTelemetry the enableTelemetry to set
      */
-    public void setEnableTelemetry(final Boolean enableTelemetry) {
+    public void setEnableTelemetry(Boolean enableTelemetry) {
         this.enableTelemetry = enableTelemetry;
     }
 
     /**
-     *
-     * (Required)
-     *
-     * @return The sampleCount
+     * @return the sampleCount
      */
     public Integer getSampleCount() {
         return sampleCount;
     }
 
     /**
-     *
-     * (Required)
-     *
-     * @param sampleCount
-     *            The sampleCount
+     * @param sampleCount the sampleCount to set
      */
-    public void setSampleCount(final Integer sampleCount) {
+    public void setSampleCount(Integer sampleCount) {
         this.sampleCount = sampleCount;
     }
 

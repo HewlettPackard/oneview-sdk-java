@@ -18,7 +18,7 @@ package com.hp.ov.sdk.dto;
 import java.io.Serializable;
 import java.util.List;
 
-public class NameServer implements Serializable{
+public class NameServer implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

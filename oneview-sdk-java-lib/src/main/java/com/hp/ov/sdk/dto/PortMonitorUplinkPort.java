@@ -31,36 +31,40 @@ public class PortMonitorUplinkPort implements Serializable {
     public String getPortName() {
         return portName;
     }
+
     /**
      * @param portName the portName to set
      */
     public void setPortName(String portName) {
         this.portName = portName;
     }
+
     /**
      * @return the interconnectName
      */
     public String getInterconnectName() {
         return interconnectName;
     }
+
     /**
      * @param interconnectName the interconnectName to set
      */
     public void setInterconnectName(String interconnectName) {
         this.interconnectName = interconnectName;
     }
+
     /**
      * @return the uri
      */
     public String getUri() {
         return uri;
     }
+
     /**
      * @param uri the uri to set
      */
     public void setUri(String uri) {
         this.uri = uri;
     }
-
 
 }

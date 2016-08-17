@@ -16,6 +16,8 @@
 package com.hp.ov.sdk.dto;
 
 import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.util.UrlUtils;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -228,6 +230,10 @@ public class EndpointResponse implements Serializable {
 
     public void setZonesUri(String zonesUri) {
         this.zonesUri = zonesUri;
+    }
+
+    public String getResourceId() {
+        return UrlUtils.getResourceIdFromUri(this.getUri());
     }
 
     @Override

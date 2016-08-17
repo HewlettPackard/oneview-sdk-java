@@ -15,49 +15,90 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.google.gson.annotations.Since;
 
-public class InterconnectsStatistics extends BaseModelResource {
+public class InterconnectsStatistics implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String switchId;
     private ModuleStatistics moduleStatistics;
     private List<PortStatistics> portStatistics;
     @Since(200)
     private String resetEpoch;
+    private String switchId;
+    private String type;
 
-    public String getSwitchId() {
-        return switchId;
-    }
-
-    public void setSwitchId(String switchId) {
-        this.switchId = switchId;
-    }
-
+    /**
+     * @return the moduleStatistics
+     */
     public ModuleStatistics getModuleStatistics() {
         return moduleStatistics;
     }
 
+    /**
+     * @param moduleStatistics the moduleStatistics to set
+     */
     public void setModuleStatistics(ModuleStatistics moduleStatistics) {
         this.moduleStatistics = moduleStatistics;
     }
 
+    /**
+     * @return the portStatistics
+     */
     public List<PortStatistics> getPortStatistics() {
         return portStatistics;
     }
 
+    /**
+     * @param portStatistics the portStatistics to set
+     */
     public void setPortStatistics(List<PortStatistics> portStatistics) {
         this.portStatistics = portStatistics;
     }
 
+    /**
+     * @return the resetEpoch
+     */
     public String getResetEpoch() {
         return resetEpoch;
     }
 
+    /**
+     * @param resetEpoch the resetEpoch to set
+     */
     public void setResetEpoch(String resetEpoch) {
         this.resetEpoch = resetEpoch;
     }
+
+    /**
+     * @return the switchId
+     */
+    public String getSwitchId() {
+        return switchId;
+    }
+
+    /**
+     * @param switchId the switchId to set
+     */
+    public void setSwitchId(String switchId) {
+        this.switchId = switchId;
+    }
+
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
 }
