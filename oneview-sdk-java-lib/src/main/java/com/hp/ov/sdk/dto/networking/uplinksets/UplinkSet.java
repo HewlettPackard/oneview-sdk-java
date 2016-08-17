@@ -27,6 +27,7 @@ import com.hp.ov.sdk.dto.Location;
 import com.hp.ov.sdk.dto.networking.EthernetNetworkType;
 import com.hp.ov.sdk.dto.networking.LacpTimer;
 import com.hp.ov.sdk.dto.networking.NetworkType;
+import com.hp.ov.sdk.dto.networking.PortConfigInfo;
 import com.hp.ov.sdk.dto.networking.Reachability;
 
 public class UplinkSet extends BaseModelResource {

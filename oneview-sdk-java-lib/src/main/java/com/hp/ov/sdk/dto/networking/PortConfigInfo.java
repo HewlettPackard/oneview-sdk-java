@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.networking.uplinksets;
+package com.hp.ov.sdk.dto.networking;
 
 import java.io.Serializable;
 
@@ -21,8 +21,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.Location;
-import com.hp.ov.sdk.dto.networking.OpSpeed;
 
 
 public class PortConfigInfo implements Serializable {
@@ -30,6 +30,8 @@ public class PortConfigInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private OpSpeed desiredSpeed;
+    @Since(300)
+    private NeighborConfigInfo expectedNeighbor;
     private Location location;
     private String portUri;
 
@@ -45,6 +47,20 @@ public class PortConfigInfo implements Serializable {
      */
     public void setDesiredSpeed(OpSpeed desiredSpeed) {
         this.desiredSpeed = desiredSpeed;
+    }
+
+    /**
+     * @return the expectedNeighbor
+     */
+    public NeighborConfigInfo getExpectedNeighbor() {
+        return expectedNeighbor;
+    }
+
+    /**
+     * @param expectedNeighbor the expectedNeighbor to set
+     */
+    public void setExpectedNeighbor(NeighborConfigInfo expectedNeighbor) {
+        this.expectedNeighbor = expectedNeighbor;
     }
 
     /**
@@ -81,28 +97,12 @@ public class PortConfigInfo implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .append(desiredSpeed)
-                .append(location)
-                .append(portUri)
-                .toHashCode();
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
-    public boolean equals(final Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof PortConfigInfo) == false) {
-            return false;
-        }
-        final PortConfigInfo rhs = ((PortConfigInfo) other);
-        return new EqualsBuilder()
-                .append(desiredSpeed, rhs.desiredSpeed)
-                .append(location, rhs.location)
-                .append(portUri, rhs.portUri)
-                .isEquals();
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
-
 }

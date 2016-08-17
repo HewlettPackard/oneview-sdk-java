@@ -34,6 +34,7 @@ import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.InterconnectClient;
 import com.hp.ov.sdk.rest.client.networking.InterconnectLinkTopologyClient;
 import com.hp.ov.sdk.rest.client.networking.InterconnectTypeClient;
+import com.hp.ov.sdk.rest.client.networking.InternalLinkSetClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalDownlinkClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClient;
@@ -95,6 +96,7 @@ public class OneViewClient {
     private InterconnectClient interconnectClient;
     private InterconnectLinkTopologyClient interconnectLinkTopologyClient;
     private InterconnectTypeClient interconnectTypeClient;
+    private InternalLinkSetClient internalLinkSetClient;
     private LogicalDownlinkClient logicalDownlinkClient;
     private LogicalEnclosureClient logicalEnclosureClient;
     private LogicalInterconnectClient logicalInterconnectClient;
@@ -206,6 +208,10 @@ public class OneViewClient {
 
     public synchronized InterconnectTypeClient interconnectType() {
         return this.getClient(this.interconnectTypeClient, InterconnectTypeClient.class);
+    }
+
+    public synchronized InternalLinkSetClient internalLinkSet() {
+        return this.getClient(this.internalLinkSetClient, InternalLinkSetClient.class);
     }
 
     public synchronized LogicalDownlinkClient logicalDownlink() {
