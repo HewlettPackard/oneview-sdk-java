@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,26 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-package com.hp.ov.sdk.dto.networking;
+ *******************************************************************************/
+package com.hp.ov.sdk.dto.networking.sasinterconnects;
 
-public enum LocationType {
+public enum SasPortStatusReason {
 
-    Bay,
-    Box,
-    ControllerPort,
-    Datacenter,
-    Enclosure,
-    Ip,
-    Password,
-    Port,
-    Rack,
-    SasPort,
-    Slot,
-    SwitchBay,
-    Username,
-    UserId,
-    StackingDomainId,
-    StackingMemberId
+    Active,
+    LinkErrors,
+    LoopDetected,
+    None;
 
 }
