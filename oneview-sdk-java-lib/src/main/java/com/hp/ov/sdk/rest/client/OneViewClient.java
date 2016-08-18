@@ -40,6 +40,7 @@ import com.hp.ov.sdk.rest.client.networking.LogicalSwitchClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchGroupClient;
 import com.hp.ov.sdk.rest.client.networking.NetworkSetClient;
 import com.hp.ov.sdk.rest.client.networking.SasInterconnectClient;
+import com.hp.ov.sdk.rest.client.networking.SasInterconnectTypeClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
 import com.hp.ov.sdk.rest.client.networking.UplinkSetClient;
@@ -111,6 +112,7 @@ public class OneViewClient {
     private ServerProfileTemplateClient serverProfileTemplateClient;
     private FirmwareBundleClient firmwareBundleClient;
     private FirmwareDriverClient firmwareDriverClient;
+    private SasInterconnectTypeClient sasInterconnectTypeClient;
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
         this.baseClient = new BaseClient(params,
@@ -280,6 +282,10 @@ public class OneViewClient {
 
     public synchronized FirmwareDriverClient firmwareDriver() {
         return this.getClient(this.firmwareDriverClient, FirmwareDriverClient.class);
+    }
+
+    public synchronized SasInterconnectTypeClient sasInterconnectType() {
+        return this.getClient(this.sasInterconnectTypeClient, SasInterconnectTypeClient.class);
     }
 
     private <T> T getClient(T client, Class<T> clientClass) {
