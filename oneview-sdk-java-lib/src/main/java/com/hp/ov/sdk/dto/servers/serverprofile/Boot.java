@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,13 +12,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+ */
+package com.hp.ov.sdk.dto.servers.serverprofile;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -27,12 +26,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Boot implements Serializable {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
 
-    private List<String> order = new ArrayList<String>();
+    private List<String> order = new ArrayList<>();
     private Boolean manageBoot;
 
     /**
@@ -76,19 +72,12 @@ public class Boot implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(order).append(manageBoot).toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
-    public boolean equals(final Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof Boot) == false) {
-            return false;
-        }
-        final Boot rhs = ((Boot) other);
-        return new EqualsBuilder().append(order, rhs.order).append(manageBoot, rhs.manageBoot).isEquals();
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
 }

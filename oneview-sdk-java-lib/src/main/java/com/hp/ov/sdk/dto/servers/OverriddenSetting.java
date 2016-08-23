@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers;
 
 import java.io.Serializable;
 
@@ -21,7 +21,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class OverriddenSettingsTemplate implements Serializable {
+
+public class OverriddenSetting implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -57,35 +58,18 @@ public class OverriddenSettingsTemplate implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-
-        OverriddenSettingsTemplate that = (OverriddenSettingsTemplate) obj;
-
-        return new EqualsBuilder()
-                .append(id, that.id)
-                .append(value, that.value)
-                .isEquals();
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(id)
-                .append(value)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("id", id)
-                .append("value", value)
-                .toString();
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
 }

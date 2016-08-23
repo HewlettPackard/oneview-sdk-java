@@ -28,15 +28,16 @@ import com.hp.ov.sdk.dto.BootSettingsTemplate;
 import com.hp.ov.sdk.dto.ConnectionBootTemplate;
 import com.hp.ov.sdk.dto.FirmwareSettingsTemplate;
 import com.hp.ov.sdk.dto.LocalStorageSettingsTemplate;
-import com.hp.ov.sdk.dto.OverriddenSettingsTemplate;
 import com.hp.ov.sdk.dto.ProfileConnectionTemplate;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.SanStorageTemplate;
 import com.hp.ov.sdk.dto.ServerProfileTemplate;
-import com.hp.ov.sdk.dto.StoragePathTemplate;
 import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.dto.VolumeAttachmentTemplate;
-import com.hp.ov.sdk.dto.generated.ServerProfile;
+import com.hp.ov.sdk.dto.servers.OverriddenSetting;
+import com.hp.ov.sdk.dto.servers.serverprofile.SanStorage;
+import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
+import com.hp.ov.sdk.dto.servers.serverprofile.StoragePath;
+import com.hp.ov.sdk.dto.servers.serverprofile.StorageTargetType;
+import com.hp.ov.sdk.dto.servers.serverprofile.VolumeAttachment;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.server.ServerProfileClient;
 import com.hp.ov.sdk.rest.client.server.ServerProfileTemplateClient;
@@ -189,12 +190,12 @@ public class ServerProfileTemplateClientSample {
 
         BiosSettingsTemplate bios = new BiosSettingsTemplate();
         bios.setManageBios(false);
-        bios.setOverriddenSettings(Collections.<OverriddenSettingsTemplate>emptyList());
+        bios.setOverriddenSettings(Collections.<OverriddenSetting>emptyList());
         template.setBios(bios);
 
         template.setLocalStorage(new LocalStorageSettingsTemplate());
 
-        SanStorageTemplate sanStorage = new SanStorageTemplate();
+        SanStorage sanStorage = new SanStorage();
         sanStorage.setHostOSType("Windows 2012 / WS2012 R2");
         sanStorage.setManageSanStorage(true);
 
@@ -204,28 +205,28 @@ public class ServerProfileTemplateClientSample {
         return template;
     }
 
-    private List<VolumeAttachmentTemplate> buildVolumeAttachments() {
-        List<VolumeAttachmentTemplate> volumeAttachments = new ArrayList<>();
-        VolumeAttachmentTemplate volume = new VolumeAttachmentTemplate();
-        volume.setId(1L);
+    private List<VolumeAttachment> buildVolumeAttachments() {
+        List<VolumeAttachment> volumeAttachments = new ArrayList<>();
+        VolumeAttachment volume = new VolumeAttachment();
+        volume.setId(1);
         volume.setVolumeUri(STORAGE_VOLUME_URI);
         volume.setLunType("Manual");
         volume.setLun("0");
 
         // Storage Paths
-        List<StoragePathTemplate> storagePaths = new ArrayList<>();
+        List<StoragePath> storagePaths = new ArrayList<>();
 
-        StoragePathTemplate storagePath1 = new StoragePathTemplate();
+        StoragePath storagePath1 = new StoragePath();
         storagePath1.setIsEnabled(true);
         storagePath1.setConnectionId(3);
-        storagePath1.setStorageTargetType("Auto");
+        storagePath1.setStorageTargetType(StorageTargetType.Auto);
         storagePath1.setStorageTargets(Collections.<String>emptyList());
         storagePaths.add(storagePath1);
 
-        StoragePathTemplate storagePath2 = new StoragePathTemplate();
+        StoragePath storagePath2 = new StoragePath();
         storagePath2.setIsEnabled(true);
         storagePath2.setConnectionId(4);
-        storagePath2.setStorageTargetType("Auto");
+        storagePath2.setStorageTargetType(StorageTargetType.Auto);
         storagePath2.setStorageTargets(Collections.<String>emptyList());
         storagePaths.add(storagePath2);
 

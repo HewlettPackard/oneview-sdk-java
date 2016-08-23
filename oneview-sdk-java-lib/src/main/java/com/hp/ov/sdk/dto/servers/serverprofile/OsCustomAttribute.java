@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,8 +12,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+ */
+
+package com.hp.ov.sdk.dto.servers.serverprofile;
 
 import java.io.Serializable;
 
@@ -21,46 +22,39 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+public class OsCustomAttribute implements Serializable {
 
-public class LogicalDrive implements Serializable {
+    private static final long serialVersionUID = -7048409528058641214L;
 
-    private static final long serialVersionUID = 1L;
-
-    private Boolean bootable;
-    private String raidLevel;
+    private String name;
+    private String value;
 
     /**
-     *
-     * @return The bootable
+     * @return the name
      */
-    public Boolean getBootable() {
-        return bootable;
+    public String getName() {
+        return name;
     }
 
     /**
-     *
-     * @param bootable
-     *            The bootable
+     * @param name the name to set
      */
-    public void setBootable(final Boolean bootable) {
-        this.bootable = bootable;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
-     *
-     * @return The raidLevel
+     * @return the value
      */
-    public String getRaidLevel() {
-        return raidLevel;
+    public String getValue() {
+        return value;
     }
 
     /**
-     *
-     * @param raidLevel
-     *            The raidLevel
+     * @param value the value to set
      */
-    public void setRaidLevel(final String raidLevel) {
-        this.raidLevel = raidLevel;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     @Override

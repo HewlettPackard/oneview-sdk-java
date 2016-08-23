@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,23 +12,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hp.ov.sdk.dto;
+ */
+package com.hp.ov.sdk.dto.servers.serverprofile;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
 
-public class ProfileConnectionV3 implements Serializable {
+public class ProfileConnection implements Serializable {
 
-    /**
-	 *
-	 */
     private static final long serialVersionUID = 1L;
 
     private Integer allocatedMbps;
+    @Since(200)
+    private Integer allocatedVFs;
     private ConnectionBoot boot;
     private ConnectionStatus deploymentStatus;
     private FunctionType functionType;
@@ -46,8 +47,6 @@ public class ProfileConnectionV3 implements Serializable {
     private AssignmentType wwpnType;
     @Since(200)
     private String requestedVFs;
-    @Since(200)
-    private Integer allocatedVFs;
 
     /**
      *
@@ -349,106 +348,19 @@ public class ProfileConnectionV3 implements Serializable {
         this.allocatedVFs = allocatedVFs;
     }
 
-    public static enum AssignmentType {
-
-        Physical("Physical"),
-        UserDefined("UserDefined"),
-        Virtual("Virtual");
-
-        private final String value;
-        private static Map<String, ProfileConnectionV3.AssignmentType> constants = new HashMap<String, ProfileConnectionV3.AssignmentType>();
-
-        static {
-            for (final ProfileConnectionV3.AssignmentType c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private AssignmentType(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static ProfileConnectionV3.AssignmentType fromValue(final String value) {
-            final ProfileConnectionV3.AssignmentType constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
-    public static enum FunctionType {
-
-        Ethernet("Ethernet"),
-        FibreChannel("FibreChannel");
-
-        private final String value;
-        private static Map<String, ProfileConnectionV3.FunctionType> constants = new HashMap<String, ProfileConnectionV3.FunctionType>();
-
-        static {
-            for (final ProfileConnectionV3.FunctionType c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private FunctionType(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static ProfileConnectionV3.FunctionType fromValue(final String value) {
-            final ProfileConnectionV3.FunctionType constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    public static enum ConnectionStatus {
-
-        Deployed("Deployed"),
-        Reserved("Reserved"),
-        Undefined("Undefined");
-
-        private final String value;
-        private static Map<String, ProfileConnectionV3.ConnectionStatus> constants = new HashMap<String, ProfileConnectionV3.ConnectionStatus>();
-
-        static {
-            for (final ProfileConnectionV3.ConnectionStatus c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private ConnectionStatus(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static ProfileConnectionV3.ConnectionStatus fromValue(final String value) {
-            final ProfileConnectionV3.ConnectionStatus constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
 }

@@ -19,17 +19,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.hp.ov.sdk.dto.ProfileConnectionV3;
-import com.hp.ov.sdk.dto.generated.SanStorage;
-import com.hp.ov.sdk.dto.generated.ServerProfile;
-import com.hp.ov.sdk.dto.generated.VolumeAttachment;
+import com.hp.ov.sdk.dto.servers.serverprofile.ProfileConnection;
+import com.hp.ov.sdk.dto.servers.serverprofile.SanStorage;
+import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
+import com.hp.ov.sdk.dto.servers.serverprofile.VolumeAttachment;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.dto.samples.NetworkForServerProfile;
 import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile.StorageVolume;
 import com.hp.ov.sdk.dto.samples.ServerProfileValue;
 import com.hp.ov.sdk.dto.samples.UplinkSetValue;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 
 public class ResourceDtoUtilsWrapper {
@@ -55,7 +54,7 @@ public class ResourceDtoUtilsWrapper {
     public ServerProfile buildServerProfile(ApiVersion apiVersion, final ServerProfileValue serverProfileValue) {
         Integer j = 1;
         final HashMap<String, Integer> fcId = new HashMap<String, Integer>();
-        List<ProfileConnectionV3> connections = new ArrayList<ProfileConnectionV3>();
+        List<ProfileConnection> connections = new ArrayList<ProfileConnection>();
         SanStorage sanStorage;
 
         if (serverProfileValue.getNetworkForServerProfile().size() > 0) {

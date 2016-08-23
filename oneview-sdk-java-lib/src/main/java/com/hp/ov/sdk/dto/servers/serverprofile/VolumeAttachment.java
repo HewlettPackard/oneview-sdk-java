@@ -13,28 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.serverprofile;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class VolumeAttachmentTemplate implements Serializable {
+import com.google.gson.annotations.Since;
+
+public class VolumeAttachment implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private Integer id;
+    @Since(300)
+    private Boolean isBootVolume;
     private String lun;
     private String lunType;
     private Boolean permanent;
-    private List<StoragePathTemplate> storagePaths;
+    private VolumeAttachmentState state;
+    private String status;
+    private List<StoragePath> storagePaths = new ArrayList<>();
     private String volumeDescription;
     private String volumeName;
-    private String volumeProvisionedCapacityBytes;
     private String volumeProvisionType;
+    private String volumeProvisionedCapacityBytes;
     private Boolean volumeShareable;
     private String volumeStoragePoolUri;
     private String volumeStorageSystemUri;
@@ -43,15 +50,29 @@ public class VolumeAttachmentTemplate implements Serializable {
     /**
      * @return the id
      */
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    /**
+     * @return the isBootVolume
+     */
+    public Boolean getBootVolume() {
+        return isBootVolume;
+    }
+
+    /**
+     * @param isBootVolume the isBootVolume to set
+     */
+    public void setBootVolume(Boolean isBootVolume) {
+        this.isBootVolume = isBootVolume;
     }
 
     /**
@@ -97,16 +118,44 @@ public class VolumeAttachmentTemplate implements Serializable {
     }
 
     /**
+     * @return the state
+     */
+    public VolumeAttachmentState getState() {
+        return state;
+    }
+
+    /**
+     * @param state the state to set
+     */
+    public void setState(VolumeAttachmentState state) {
+        this.state = state;
+    }
+
+    /**
+     * @return the status
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    /**
      * @return the storagePaths
      */
-    public List<StoragePathTemplate> getStoragePaths() {
+    public List<StoragePath> getStoragePaths() {
         return storagePaths;
     }
 
     /**
      * @param storagePaths the storagePaths to set
      */
-    public void setStoragePaths(List<StoragePathTemplate> storagePaths) {
+    public void setStoragePaths(List<StoragePath> storagePaths) {
         this.storagePaths = storagePaths;
     }
 
@@ -139,20 +188,6 @@ public class VolumeAttachmentTemplate implements Serializable {
     }
 
     /**
-     * @return the volumeProvisionedCapacityBytes
-     */
-    public String getVolumeProvisionedCapacityBytes() {
-        return volumeProvisionedCapacityBytes;
-    }
-
-    /**
-     * @param volumeProvisionedCapacityBytes the volumeProvisionedCapacityBytes to set
-     */
-    public void setVolumeProvisionedCapacityBytes(String volumeProvisionedCapacityBytes) {
-        this.volumeProvisionedCapacityBytes = volumeProvisionedCapacityBytes;
-    }
-
-    /**
      * @return the volumeProvisionType
      */
     public String getVolumeProvisionType() {
@@ -164,6 +199,20 @@ public class VolumeAttachmentTemplate implements Serializable {
      */
     public void setVolumeProvisionType(String volumeProvisionType) {
         this.volumeProvisionType = volumeProvisionType;
+    }
+
+    /**
+     * @return the volumeProvisionedCapacityBytes
+     */
+    public String getVolumeProvisionedCapacityBytes() {
+        return volumeProvisionedCapacityBytes;
+    }
+
+    /**
+     * @param volumeProvisionedCapacityBytes the volumeProvisionedCapacityBytes to set
+     */
+    public void setVolumeProvisionedCapacityBytes(String volumeProvisionedCapacityBytes) {
+        this.volumeProvisionedCapacityBytes = volumeProvisionedCapacityBytes;
     }
 
     /**
@@ -223,68 +272,18 @@ public class VolumeAttachmentTemplate implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-
-        VolumeAttachmentTemplate that = (VolumeAttachmentTemplate) obj;
-
-        return new EqualsBuilder()
-                .append(id, that.id)
-                .append(lun, that.lun)
-                .append(lunType, that.lunType)
-                .append(permanent, that.permanent)
-                .append(storagePaths, that.storagePaths)
-                .append(volumeDescription, that.volumeDescription)
-                .append(volumeName, that.volumeName)
-                .append(volumeProvisionedCapacityBytes, that.volumeProvisionedCapacityBytes)
-                .append(volumeProvisionType, that.volumeProvisionType)
-                .append(volumeShareable, that.volumeShareable)
-                .append(volumeStoragePoolUri, that.volumeStoragePoolUri)
-                .append(volumeStorageSystemUri, that.volumeStorageSystemUri)
-                .append(volumeUri, that.volumeUri)
-                .isEquals();
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(id)
-                .append(lun)
-                .append(lunType)
-                .append(permanent)
-                .append(storagePaths)
-                .append(volumeDescription)
-                .append(volumeName)
-                .append(volumeProvisionedCapacityBytes)
-                .append(volumeProvisionType)
-                .append(volumeShareable)
-                .append(volumeStoragePoolUri)
-                .append(volumeStorageSystemUri)
-                .append(volumeUri)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("id", id)
-                .append("lun", lun)
-                .append("lunType", lunType)
-                .append("permanent", permanent)
-                .append("storagePaths", storagePaths)
-                .append("volumeDescription", volumeDescription)
-                .append("volumeName", volumeName)
-                .append("volumeProvisionedCapacityBytes", volumeProvisionedCapacityBytes)
-                .append("volumeProvisionType", volumeProvisionType)
-                .append("volumeShareable", volumeShareable)
-                .append("volumeStoragePoolUri", volumeStoragePoolUri)
-                .append("volumeStorageSystemUri", volumeStorageSystemUri)
-                .append("volumeUri", volumeUri)
-                .toString();
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
 }

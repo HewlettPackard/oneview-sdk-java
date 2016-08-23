@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,28 +12,26 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+ */
+package com.hp.ov.sdk.dto.servers.serverprofile;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.hp.ov.sdk.dto.servers.OverriddenSetting;
+
 
 public class Bios implements Serializable {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
 
     private Boolean manageBios;
-    private List<OverriddenSetting> overriddenSettings = new ArrayList<OverriddenSetting>();
+    private List<OverriddenSetting> overriddenSettings = new ArrayList<>();
 
     /**
      * 
@@ -76,19 +74,12 @@ public class Bios implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(manageBios).append(overriddenSettings).toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
-    public boolean equals(final Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof Bios) == false) {
-            return false;
-        }
-        final Bios rhs = ((Bios) other);
-        return new EqualsBuilder().append(manageBios, rhs.manageBios).append(overriddenSettings, rhs.overriddenSettings).isEquals();
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
 }

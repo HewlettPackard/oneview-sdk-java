@@ -22,27 +22,14 @@ import java.util.Map.Entry;
 
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.ConnectionBoot;
-import com.hp.ov.sdk.dto.ConnectionBoot.BootControl;
 import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.dto.InterconnectTypeName;
 import com.hp.ov.sdk.dto.PortInfo;
-import com.hp.ov.sdk.dto.ProfileConnectionV3;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageTargetPort;
 import com.hp.ov.sdk.dto.StorageVolume;
-import com.hp.ov.sdk.dto.generated.Bios;
-import com.hp.ov.sdk.dto.generated.Boot;
-import com.hp.ov.sdk.dto.generated.BootMode;
-import com.hp.ov.sdk.dto.generated.Firmware;
 import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.generated.InterconnectMapTemplate;
-import com.hp.ov.sdk.dto.generated.LocalStorage;
-import com.hp.ov.sdk.dto.generated.SanStorage;
-import com.hp.ov.sdk.dto.generated.ServerProfile;
-import com.hp.ov.sdk.dto.generated.StoragePath;
-import com.hp.ov.sdk.dto.generated.StoragePath.StorageTargetType;
-import com.hp.ov.sdk.dto.generated.VolumeAttachment;
 import com.hp.ov.sdk.dto.networking.LocationType;
 import com.hp.ov.sdk.dto.networking.LogicalLocation;
 import com.hp.ov.sdk.dto.networking.LogicalLocationEntry;
@@ -55,12 +42,27 @@ import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnect
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalPortConfigInfo;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.dto.networking.networkset.NetworkSet;
+import com.hp.ov.sdk.dto.servers.serverprofile.AssignmentType;
+import com.hp.ov.sdk.dto.servers.serverprofile.Bios;
+import com.hp.ov.sdk.dto.servers.serverprofile.Boot;
+import com.hp.ov.sdk.dto.servers.serverprofile.BootControl;
+import com.hp.ov.sdk.dto.servers.serverprofile.BootMode;
+import com.hp.ov.sdk.dto.servers.serverprofile.ConnectionBoot;
+import com.hp.ov.sdk.dto.servers.serverprofile.Firmware;
+import com.hp.ov.sdk.dto.servers.serverprofile.FunctionType;
+import com.hp.ov.sdk.dto.servers.serverprofile.LocalStorage;
+import com.hp.ov.sdk.dto.servers.serverprofile.ProfileAffinity;
+import com.hp.ov.sdk.dto.servers.serverprofile.ProfileConnection;
+import com.hp.ov.sdk.dto.servers.serverprofile.SanStorage;
+import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
+import com.hp.ov.sdk.dto.servers.serverprofile.StoragePath;
+import com.hp.ov.sdk.dto.servers.serverprofile.StorageTargetType;
+import com.hp.ov.sdk.dto.servers.serverprofile.VolumeAttachment;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.networking.InterconnectTypeClient;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public class ResourceDtoUtils {
 
@@ -276,10 +278,10 @@ public class ResourceDtoUtils {
         return null;
     }
 
-    public ProfileConnectionV3 buildProfileConnection(final Integer j, final String networkName,
+    public ProfileConnection buildProfileConnection(final Integer j, final String networkName,
             final String requestedMbps, final Integer allocatedMbps, final Integer maximumMbps,
-            final ProfileConnectionV3.FunctionType functionType, final BootControl bootControl) {
-        final ProfileConnectionV3 connection = new ProfileConnectionV3();
+            final FunctionType functionType, final BootControl bootControl) {
+        final ProfileConnection connection = new ProfileConnection();
         connection.setId(j);
         connection.setName(networkName);
         connection.setFunctionType(functionType);
@@ -307,7 +309,7 @@ public class ResourceDtoUtils {
     }
 
     public VolumeAttachment buildVolumeAttachment(final String volumeName,
-            final Boolean useBayNameForServerHardwareUri, final Integer j, final Boolean isEnabled,
+            final Boolean useBayNameForServerHardwareUri, final Integer volumeAttachmentId, final Boolean isEnabled,
             final List<String> storageTargets, final StorageTargetType storageTargetType, final String lunType,
             final HashMap<String, Integer> fcId) {
 
@@ -315,7 +317,7 @@ public class ResourceDtoUtils {
 
         if (storageVolume.getShareable() || !(useBayNameForServerHardwareUri)) {
             final VolumeAttachment volumeAttachment = new VolumeAttachment();
-            volumeAttachment.setId(Double.parseDouble(j.toString()));
+            volumeAttachment.setId(volumeAttachmentId);
             volumeAttachment.setLunType(lunType);
             volumeAttachment.setVolumeUri(storageVolume.getUri());
             volumeAttachment.setVolumeStoragePoolUri(storageVolume.getStoragePoolUri());
@@ -346,9 +348,9 @@ public class ResourceDtoUtils {
 
     public ServerProfile buildServerProfile(ApiVersion apiVersion, final String profileName, final String serverHardwareName,
             final Boolean useBayNameForServerHardwareUri, final String enclosureGroupName,
-            final ServerProfile.ProfileAffinity affinity, final ServerProfile.AssignmentType wwnType,
-            final ServerProfile.AssignmentType macType, final ServerProfile.AssignmentType serialNumberType,
-            final SanStorage sanStorage, final List<ProfileConnectionV3> connections, final LocalStorage localStorage,
+            final ProfileAffinity affinity, final AssignmentType wwnType,
+            final AssignmentType macType, final AssignmentType serialNumberType,
+            final SanStorage sanStorage, final List<ProfileConnection> connections, final LocalStorage localStorage,
             final Boot boot, final Bios bios, final Firmware firmware) {
         final ServerProfile serverProfileDto = new ServerProfile();
         serverProfileDto.setDescription("profile");

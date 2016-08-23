@@ -21,6 +21,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.hp.ov.sdk.dto.servers.serverprofile.SanStorage;
+
 public class ServerProfileTemplate extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
@@ -35,7 +37,7 @@ public class ServerProfileTemplate extends BaseModelResource {
     private Boolean hideUnusedFlexNics;
     private LocalStorageSettingsTemplate localStorage;
     private String macType;
-    private SanStorageTemplate sanStorage;
+    private SanStorage sanStorage;
     private String serialNumberType;
     private String serverHardwareTypeUri;
     private String serverProfileDescription;
@@ -184,14 +186,14 @@ public class ServerProfileTemplate extends BaseModelResource {
     /**
      * @return the sanStorage
      */
-    public SanStorageTemplate getSanStorage() {
+    public SanStorage getSanStorage() {
         return sanStorage;
     }
 
     /**
      * @param sanStorage the sanStorage to set
      */
-    public void setSanStorage(SanStorageTemplate sanStorage) {
+    public void setSanStorage(SanStorage sanStorage) {
         this.sanStorage = sanStorage;
     }
 

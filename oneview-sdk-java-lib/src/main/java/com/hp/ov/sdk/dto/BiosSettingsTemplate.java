@@ -22,12 +22,14 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.hp.ov.sdk.dto.servers.OverriddenSetting;
+
 public class BiosSettingsTemplate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Boolean manageBios;
-    private List<OverriddenSettingsTemplate> overriddenSettings;
+    private List<OverriddenSetting> overriddenSettings;
 
     /**
      * @return the manageBios
@@ -46,47 +48,30 @@ public class BiosSettingsTemplate implements Serializable {
     /**
      * @return the overriddenSettings
      */
-    public List<OverriddenSettingsTemplate> getOverriddenSettings() {
+    public List<OverriddenSetting> getOverriddenSettings() {
         return overriddenSettings;
     }
 
     /**
      * @param overriddenSettings the overriddenSettings to set
      */
-    public void setOverriddenSettings(List<OverriddenSettingsTemplate> overriddenSettings) {
+    public void setOverriddenSettings(List<OverriddenSetting> overriddenSettings) {
         this.overriddenSettings = overriddenSettings;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-
-        BiosSettingsTemplate that = (BiosSettingsTemplate) obj;
-
-        return new EqualsBuilder()
-                .append(manageBios, that.manageBios)
-                .append(overriddenSettings, that.overriddenSettings)
-                .isEquals();
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(manageBios)
-                .append(overriddenSettings)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("manageBios", manageBios)
-                .append("overriddenSettings", overriddenSettings)
-                .toString();
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
 }

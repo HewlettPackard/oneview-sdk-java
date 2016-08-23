@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,15 +12,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+ */
+package com.hp.ov.sdk.dto.servers.serverprofile;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -29,23 +26,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class StoragePath implements Serializable {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
-    private List<String> storageTargets = new ArrayList<String>();
-    private StoragePath.StorageTargetType storageTargetType;
-    /**
-     * 
-     * (Required)
-     * 
-     */
+
+    private List<String> storageTargets = new ArrayList<>();
+    private StorageTargetType storageTargetType;
     private Integer connectionId;
-    /**
-     * 
-     * (Required)
-     * 
-     */
     private Boolean isEnabled;
     private String status;
 
@@ -70,7 +55,7 @@ public class StoragePath implements Serializable {
      * 
      * @return The storageTargetType
      */
-    public StoragePath.StorageTargetType getStorageTargetType() {
+    public StorageTargetType getStorageTargetType() {
         return storageTargetType;
     }
 
@@ -79,7 +64,7 @@ public class StoragePath implements Serializable {
      * @param storageTargetType
      *            The storageTargetType
      */
-    public void setStorageTargetType(final StoragePath.StorageTargetType storageTargetType) {
+    public void setStorageTargetType(final StorageTargetType storageTargetType) {
         this.storageTargetType = storageTargetType;
     }
 
@@ -149,53 +134,12 @@ public class StoragePath implements Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(storageTargets).append(storageTargetType).append(connectionId).append(isEnabled)
-                .append(status).toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
-    public boolean equals(final Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof StoragePath) == false) {
-            return false;
-        }
-        final StoragePath rhs = ((StoragePath) other);
-        return new EqualsBuilder().append(storageTargets, rhs.storageTargets).append(storageTargetType, rhs.storageTargetType)
-                .append(connectionId, rhs.connectionId).append(isEnabled, rhs.isEnabled).append(status, rhs.status).isEquals();
-    }
-
-    public static enum StorageTargetType {
-
-        Auto("Auto"), TargetPorts("TargetPorts");
-        private final String value;
-        private static Map<String, StoragePath.StorageTargetType> constants = new HashMap<String, StoragePath.StorageTargetType>();
-
-        static {
-            for (final StoragePath.StorageTargetType c : values()) {
-                constants.put(c.value, c);
-            }
-        }
-
-        private StorageTargetType(final String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static StoragePath.StorageTargetType fromValue(final String value) {
-            final StoragePath.StorageTargetType constant = constants.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
 }
