@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,8 +12,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+ */
+
+package com.hp.ov.sdk.dto.networking.saslogicalinterconnect;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,25 +24,24 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+public class SasInterconnectMap implements Serializable {
 
-public class InterconnectMapTemplate implements Serializable {
+    private static final long serialVersionUID = 242042550933554368L;
 
-    private static final long serialVersionUID = 1L;
-
-    private List<InterconnectMapEntryTemplate> interconnectMapEntryTemplates = new ArrayList<>();
+    private List<SasInterconnectMapEntry> interconnectMapEntries = new ArrayList<>();
 
     /**
-     * @return the interconnectMapEntryTemplates
+     * @return the interconnectMapEntries
      */
-    public List<InterconnectMapEntryTemplate> getInterconnectMapEntryTemplates() {
-        return interconnectMapEntryTemplates;
+    public List<SasInterconnectMapEntry> getInterconnectMapEntries() {
+        return interconnectMapEntries;
     }
 
     /**
-     * @param interconnectMapEntryTemplates the interconnectMapEntryTemplates to set
+     * @param interconnectMapEntries the interconnectMapEntries to set
      */
-    public void setInterconnectMapEntryTemplates(List<InterconnectMapEntryTemplate> interconnectMapEntryTemplates) {
-        this.interconnectMapEntryTemplates = interconnectMapEntryTemplates;
+    public void setInterconnectMapEntries(List<SasInterconnectMapEntry> interconnectMapEntries) {
+        this.interconnectMapEntries = interconnectMapEntries;
     }
 
     @Override

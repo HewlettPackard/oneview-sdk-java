@@ -41,7 +41,7 @@ public class SasLogicalInterconnectGroupClientSample {
 
     // These are variables to be defined by the user
     // ================================
-    private static final String SAS_LOGICAL_INTERCONNECT_GROUP_RESOURCE_ID = "57ff628b-eb62-40c1-93e6-566106107b2e";
+    private static final String SAS_LOGICAL_INTERCONNECT_GROUP_RESOURCE_ID = "8ff0eda0-c9b5-43f3-9e5e-013c509202b8";
 
     private static final String SAS_LOGICAL_INTERCONNECT_GROUP_NAME = "SAS-Logical-Interconnect-Group-Sample";
     private static final String SAS_LOGICAL_INTERCONNECT_GROUP_NAME_UPDATED
@@ -66,7 +66,7 @@ public class SasLogicalInterconnectGroupClientSample {
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
-    private void getSasLogicalInterconnectGroup() {
+    private void getSasLogicalInterconnectGroupById() {
         SasLogicalInterconnectGroup interconnectGroup = client.getById(SAS_LOGICAL_INTERCONNECT_GROUP_RESOURCE_ID);
 
         LOGGER.info("SAS logical interconnect group returned to client: {}", interconnectGroup.toJsonString());
@@ -147,7 +147,7 @@ public class SasLogicalInterconnectGroupClientSample {
         SasLogicalInterconnectGroupClientSample sample = new SasLogicalInterconnectGroupClientSample();
 
         sample.createSasLogicalInterconnectGroup();
-        sample.getSasLogicalInterconnectGroup();
+        sample.getSasLogicalInterconnectGroupById();
         sample.getSasLogicalInterconnectGroupByName();
         sample.getAllSasLogicalInterconnectGroups();
         sample.updateSasLogicalInterconnectGroup();

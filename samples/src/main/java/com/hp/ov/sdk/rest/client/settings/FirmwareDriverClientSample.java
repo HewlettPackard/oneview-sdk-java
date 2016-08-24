@@ -26,8 +26,9 @@ public class FirmwareDriverClientSample {
 
     // These are variables to be defined by user
     // ================================
+    public static final String FIRMWARE_DRIVER_NAME = "Service Pack for ProLiant";
+
     private static final String FIRMWARE_DRIVER_RESOURCE_ID = "SPPgen9snap6_2016_0405_87";
-    private static final String FIRMWARE_DRIVER_NAME = "Service Pack for ProLiant";
     // ================================
 
     private final FirmwareDriverClient client;
