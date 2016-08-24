@@ -31,6 +31,7 @@ import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.dto.networking.ethernet.Purpose;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
 public class EthernetNetworkClientSample {
 
@@ -68,8 +69,7 @@ public class EthernetNetworkClientSample {
 
         TaskResourceV2 task = this.client.create(network, false);
 
-        System.out.println("EthernetNetworkClientSample : createEthernetNetwork : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void getEthernetNetwork() {
@@ -114,19 +114,15 @@ public class EthernetNetworkClientSample {
 
         List<String> uris = client.getAssociatedProfiles(network.getResourceId());
 
-        LOGGER.info("Ethernet network returned to client: {}", network.toJsonString());
-
-        System.out.println("EthernetNetworkClientSample : getAssociatedProfiles : " +
-                "Associated Profile URIs returned to client : " + uris);
+        LOGGER.info("Associated profile URIs returned to client: {}", JsonPrettyPrinter.print(uris));
     }
 
     private void getAssociatedUplinkGroups() {
         Network network = client.getByName(ETHERNET_NETWORK_NAME).get(0);
 
-        List<String> uris = client.getAssociatedProfiles(network.getResourceId());
+        List<String> uris = client.getAssociatedUplinkGroups(network.getResourceId());
 
-        System.out.println("EthernetNetworkClientSample : getAssociatedUplinkGroups : " +
-                "Associated Uplink Group URIs returned to client : " + uris);
+        LOGGER.info("Associated uplink group URIs returned to client: {}", JsonPrettyPrinter.print(uris));
     }
 
     private void createEthernetNetworkInBulk() {
