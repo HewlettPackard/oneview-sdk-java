@@ -13,24 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.serverprofiletemplate;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class LocalStorageEmbeddedControllerTemplate implements Serializable {
+import com.google.gson.annotations.Since;
+import com.google.gson.annotations.Until;
+
+public class LocalStorageControllerTemplate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Since(300)
+    private String deviceSlot;
     private Boolean initialize;
-    private List<LogicalDriveTemplate> logicalDrives;
+    private List<LogicalDriveTemplate> logicalDrives = new ArrayList<>();
+    @Until(299)
     private Boolean managed;
     private String mode;
+    @Until(299)
     private String slotNumber;
+
+    /**
+     * @return the deviceSlot
+     */
+    public String getDeviceSlot() {
+        return deviceSlot;
+    }
+
+    /**
+     * @param deviceSlot the deviceSlot to set
+     */
+    public void setDeviceSlot(String deviceSlot) {
+        this.deviceSlot = deviceSlot;
+    }
 
     /**
      * @return the initialize
@@ -64,9 +86,9 @@ public class LocalStorageEmbeddedControllerTemplate implements Serializable {
      * @return the managed
      */
     public Boolean getManaged() {
-
         return managed;
     }
+
     /**
      * @param managed the managed to set
      */
@@ -103,44 +125,18 @@ public class LocalStorageEmbeddedControllerTemplate implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-
-        LocalStorageEmbeddedControllerTemplate that = (LocalStorageEmbeddedControllerTemplate) obj;
-
-        return new EqualsBuilder()
-                .append(initialize, that.initialize)
-                .append(logicalDrives, that.logicalDrives)
-                .append(managed, that.managed)
-                .append(mode, that.mode)
-                .append(slotNumber, that.slotNumber)
-                .isEquals();
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(initialize)
-                .append(logicalDrives)
-                .append(managed)
-                .append(mode)
-                .append(slotNumber)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("initialize", initialize)
-                .append("logicalDrives", logicalDrives)
-                .append("managed", managed)
-                .append("mode", mode)
-                .append("slotNumber", slotNumber)
-                .toString();
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
 }

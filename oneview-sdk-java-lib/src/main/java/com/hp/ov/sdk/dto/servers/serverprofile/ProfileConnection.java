@@ -22,6 +22,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.servers.AssignmentType;
+import com.hp.ov.sdk.dto.servers.FunctionType;
 
 public class ProfileConnection implements Serializable {
 
@@ -42,11 +44,11 @@ public class ProfileConnection implements Serializable {
     private String networkUri;
     private String portId;
     private String requestedMbps;
+    @Since(200)
+    private String requestedVFs;
     private String wwnn;
     private String wwpn;
     private AssignmentType wwpnType;
-    @Since(200)
-    private String requestedVFs;
 
     /**
      *

@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.ServerProfileTemplate;
+import com.hp.ov.sdk.dto.servers.serverprofiletemplate.ServerProfileTemplate;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
 import com.hp.ov.sdk.rest.client.BaseClient;

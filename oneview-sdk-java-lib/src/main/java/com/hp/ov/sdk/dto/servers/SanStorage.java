@@ -13,72 +13,82 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.servers.serverprofile;
+package com.hp.ov.sdk.dto.servers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 
-public class BootMode implements Serializable {
+public class SanStorage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Boolean manageMode = false;
-    private String pxeBootPolicy;
-    private String mode;
+    private List<VolumeAttachment> volumeAttachments = new ArrayList<>();
+    private String hostOSType;
+    private Boolean manageSanStorage;
 
     /**
      * 
-     * @return The manageMode
+     * @return The volumeAttachments
      */
-    public Boolean getManageMode() {
-        return manageMode;
+    public List<VolumeAttachment> getVolumeAttachments() {
+        return volumeAttachments;
     }
 
     /**
      * 
-     * @param manageMode
-     *            The manageMode
+     * @param volumeAttachments
+     *            The volumeAttachments
      */
-    public void setManageMode(final Boolean manageMode) {
-        this.manageMode = manageMode;
+    public void setVolumeAttachments(final List<VolumeAttachment> volumeAttachments) {
+        this.volumeAttachments = volumeAttachments;
     }
 
     /**
      * 
-     * @return The pxeBootPolicy
+     * (Required)
+     * 
+     * @return The hostOSType
      */
-    public String getPxeBootPolicy() {
-        return pxeBootPolicy;
+    public String getHostOSType() {
+        return hostOSType;
     }
 
     /**
      * 
-     * @param pxeBootPolicy
-     *            The pxeBootPolicy
+     * (Required)
+     * 
+     * @param hostOSType
+     *            The hostOSType
      */
-    public void setPxeBootPolicy(final String pxeBootPolicy) {
-        this.pxeBootPolicy = pxeBootPolicy;
+    public void setHostOSType(final String hostOSType) {
+        this.hostOSType = hostOSType;
     }
 
     /**
      * 
-     * @return The mode
+     * (Required)
+     * 
+     * @return The manageSanStorage
      */
-    public String getMode() {
-        return mode;
+    public Boolean getManageSanStorage() {
+        return manageSanStorage;
     }
 
     /**
      * 
-     * @param mode
-     *            The mode
+     * (Required)
+     * 
+     * @param manageSanStorage
+     *            The manageSanStorage
      */
-    public void setMode(final String mode) {
-        this.mode = mode;
+    public void setManageSanStorage(final Boolean manageSanStorage) {
+        this.manageSanStorage = manageSanStorage;
     }
 
     @Override

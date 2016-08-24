@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.servers.serverprofile;
+package com.hp.ov.sdk.dto.servers;
 
-public enum AssignmentType {
+public enum BootVolumeSource {
 
-    Physical,
-    UserDefined,
-    Virtual
+    AdapterBIOS,
+    ManagedVolume,
+    UserDefined
 
 }

@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.servers.serverprofile;
+package com.hp.ov.sdk.dto.servers;
 
-public enum FunctionType {
+public enum ProfileAffinity {
 
-    Ethernet,
-    FibreChannel,
-    iSCSI
+    Bay,
+    BayAndServer
 
 }

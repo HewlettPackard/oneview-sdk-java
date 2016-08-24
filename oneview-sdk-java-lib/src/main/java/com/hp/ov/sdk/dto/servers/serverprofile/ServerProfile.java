@@ -20,10 +20,17 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
+import com.hp.ov.sdk.dto.servers.AssignmentType;
+import com.hp.ov.sdk.dto.servers.Bios;
+import com.hp.ov.sdk.dto.servers.Boot;
+import com.hp.ov.sdk.dto.servers.BootMode;
+import com.hp.ov.sdk.dto.servers.Firmware;
+import com.hp.ov.sdk.dto.servers.ProfileAffinity;
+import com.hp.ov.sdk.dto.servers.SanStorage;
+import com.hp.ov.sdk.dto.servers.SourceType;
 
 /**
  * The ServerProfile data transfer object (DTO) contains the information used to
@@ -446,11 +453,6 @@ public class ServerProfile extends BaseModelResource {
      */
     public void setWwnType(AssignmentType wwnType) {
         this.wwnType = wwnType;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
     }
 
     @Override

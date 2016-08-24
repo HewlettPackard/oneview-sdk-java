@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.servers.serverprofile;
+package com.hp.ov.sdk.dto.servers.serverprofiletemplate;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -24,27 +23,20 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
+import com.google.gson.annotations.Until;
 import com.hp.ov.sdk.dto.servers.BootTarget;
 import com.hp.ov.sdk.dto.servers.BootVolumeSource;
 import com.hp.ov.sdk.dto.servers.ChapLevel;
 import com.hp.ov.sdk.dto.servers.InitiatorNameSource;
 
-public class ConnectionBoot implements Serializable {
+public class ConnectionBootTemplate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Since(300)
-    private String bootTargetLun;
-    @Since(300)
-    private String bootTargetName;
-    @Since(300)
     private BootVolumeSource bootVolumeSource;
     @Since(300)
     private ChapLevel chapLevel;
-    @Since(300)
-    private String chapName;
-    @Since(300)
-    private String chapSecret;
     @Since(300)
     private String firstBootTargetIp;
     @Since(300)
@@ -52,53 +44,19 @@ public class ConnectionBoot implements Serializable {
     @Since(300)
     private String initiatorGateway;
     @Since(300)
-    private String initiatorIp;
-    @Since(300)
-    private String initiatorName;
-    @Since(300)
     private InitiatorNameSource initiatorNameSource;
     @Since(300)
     private String initiatorSubnetMask;
     @Since(300)
     private Integer initiatorVlanId;
-    @Since(300)
-    private String mutualChapName;
-    @Since(300)
-    private String mutualChapSecret;
-    private BootControl priority;
+    private String priority;
     @Since(300)
     private String secondBootTargetIp;
     @Since(300)
     private String secondBootTargetPort;
-    private List<BootTarget> targets = new ArrayList<>();
-
-    /**
-     * @return the bootTargetLun
-     */
-    public String getBootTargetLun() {
-        return bootTargetLun;
-    }
-
-    /**
-     * @param bootTargetLun the bootTargetLun to set
-     */
-    public void setBootTargetLun(String bootTargetLun) {
-        this.bootTargetLun = bootTargetLun;
-    }
-
-    /**
-     * @return the bootTargetName
-     */
-    public String getBootTargetName() {
-        return bootTargetName;
-    }
-
-    /**
-     * @param bootTargetName the bootTargetName to set
-     */
-    public void setBootTargetName(String bootTargetName) {
-        this.bootTargetName = bootTargetName;
-    }
+    @Until(299)
+    private Boolean specifyBootTarget;
+    private List<BootTarget> targets;
 
     /**
      * @return the bootVolumeSource
@@ -126,34 +84,6 @@ public class ConnectionBoot implements Serializable {
      */
     public void setChapLevel(ChapLevel chapLevel) {
         this.chapLevel = chapLevel;
-    }
-
-    /**
-     * @return the chapName
-     */
-    public String getChapName() {
-        return chapName;
-    }
-
-    /**
-     * @param chapName the chapName to set
-     */
-    public void setChapName(String chapName) {
-        this.chapName = chapName;
-    }
-
-    /**
-     * @return the chapSecret
-     */
-    public String getChapSecret() {
-        return chapSecret;
-    }
-
-    /**
-     * @param chapSecret the chapSecret to set
-     */
-    public void setChapSecret(String chapSecret) {
-        this.chapSecret = chapSecret;
     }
 
     /**
@@ -199,34 +129,6 @@ public class ConnectionBoot implements Serializable {
     }
 
     /**
-     * @return the initiatorIp
-     */
-    public String getInitiatorIp() {
-        return initiatorIp;
-    }
-
-    /**
-     * @param initiatorIp the initiatorIp to set
-     */
-    public void setInitiatorIp(String initiatorIp) {
-        this.initiatorIp = initiatorIp;
-    }
-
-    /**
-     * @return the initiatorName
-     */
-    public String getInitiatorName() {
-        return initiatorName;
-    }
-
-    /**
-     * @param initiatorName the initiatorName to set
-     */
-    public void setInitiatorName(String initiatorName) {
-        this.initiatorName = initiatorName;
-    }
-
-    /**
      * @return the initiatorNameSource
      */
     public InitiatorNameSource getInitiatorNameSource() {
@@ -269,44 +171,16 @@ public class ConnectionBoot implements Serializable {
     }
 
     /**
-     * @return the mutualChapName
-     */
-    public String getMutualChapName() {
-        return mutualChapName;
-    }
-
-    /**
-     * @param mutualChapName the mutualChapName to set
-     */
-    public void setMutualChapName(String mutualChapName) {
-        this.mutualChapName = mutualChapName;
-    }
-
-    /**
-     * @return the mutualChapSecret
-     */
-    public String getMutualChapSecret() {
-        return mutualChapSecret;
-    }
-
-    /**
-     * @param mutualChapSecret the mutualChapSecret to set
-     */
-    public void setMutualChapSecret(String mutualChapSecret) {
-        this.mutualChapSecret = mutualChapSecret;
-    }
-
-    /**
      * @return the priority
      */
-    public BootControl getPriority() {
+    public String getPriority() {
         return priority;
     }
 
     /**
      * @param priority the priority to set
      */
-    public void setPriority(BootControl priority) {
+    public void setPriority(String priority) {
         this.priority = priority;
     }
 
@@ -336,6 +210,20 @@ public class ConnectionBoot implements Serializable {
      */
     public void setSecondBootTargetPort(String secondBootTargetPort) {
         this.secondBootTargetPort = secondBootTargetPort;
+    }
+
+    /**
+     * @return the specifyBootTarget
+     */
+    public Boolean getSpecifyBootTarget() {
+        return specifyBootTarget;
+    }
+
+    /**
+     * @param specifyBootTarget the specifyBootTarget to set
+     */
+    public void setSpecifyBootTarget(Boolean specifyBootTarget) {
+        this.specifyBootTarget = specifyBootTarget;
     }
 
     /**

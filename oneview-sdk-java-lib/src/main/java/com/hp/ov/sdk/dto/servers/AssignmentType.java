@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.servers.serverprofile;
+package com.hp.ov.sdk.dto.servers;
 
-public enum StorageTargetType {
+public enum AssignmentType {
 
-    Auto,
-    TargetPorts
+    Physical,
+    UserDefined,
+    Virtual
 
 }

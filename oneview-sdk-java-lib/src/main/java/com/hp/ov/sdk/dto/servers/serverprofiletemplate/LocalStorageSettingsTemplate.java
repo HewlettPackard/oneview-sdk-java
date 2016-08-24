@@ -13,62 +13,67 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.serverprofiletemplate;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.google.gson.annotations.Since;
+
 public class LocalStorageSettingsTemplate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private List<LocalStorageEmbeddedControllerTemplate> controllers;
+    private List<LocalStorageControllerTemplate> controllers = new ArrayList<>();
+    @Since(300)
+    private List<LogicalJbodTemplate> sasLogicalJBODs = new ArrayList<>();
 
     /**
      * @return the controllers
      */
-    public List<LocalStorageEmbeddedControllerTemplate> getControllers() {
+    public List<LocalStorageControllerTemplate> getControllers() {
         return controllers;
     }
 
     /**
      * @param controllers the controllers to set
      */
-    public void setControllers(List<LocalStorageEmbeddedControllerTemplate> controllers) {
+    public void setControllers(List<LocalStorageControllerTemplate> controllers) {
         this.controllers = controllers;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-
-        LocalStorageSettingsTemplate that = (LocalStorageSettingsTemplate) obj;
-
-        return new EqualsBuilder()
-                .append(controllers, that.controllers)
-                .isEquals();
+    /**
+     * @return the sasLogicalJBODs
+     */
+    public List<LogicalJbodTemplate> getSasLogicalJBODs() {
+        return sasLogicalJBODs;
     }
 
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .append(controllers)
-                .toHashCode();
+    /**
+     * @param sasLogicalJBODs the sasLogicalJBODs to set
+     */
+    public void setSasLogicalJBODs(List<LogicalJbodTemplate> sasLogicalJBODs) {
+        this.sasLogicalJBODs = sasLogicalJBODs;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("controllers", controllers)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
 }

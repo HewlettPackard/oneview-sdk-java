@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.servers.serverprofile;
+package com.hp.ov.sdk.dto.servers;
 
-public enum ProfileAffinity {
+public enum InitiatorNameSource {
 
-    Bay,
-    BayAndServer
+    ProfileInitiatorName,
+    UserDefined
 
 }

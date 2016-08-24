@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.serverprofiletemplate;
 
 import java.io.Serializable;
 
@@ -21,12 +21,14 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.hp.ov.sdk.dto.servers.FunctionType;
+
 public class ProfileConnectionTemplate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private ConnectionBootTemplate boot;
-    private String functionType;
+    private FunctionType functionType;
     private Long id;
     private String name;
     private String networkUri;
@@ -51,14 +53,14 @@ public class ProfileConnectionTemplate implements Serializable {
     /**
      * @return the functionType
      */
-    public String getFunctionType() {
+    public FunctionType getFunctionType() {
         return functionType;
     }
 
     /**
      * @param functionType the functionType to set
      */
-    public void setFunctionType(String functionType) {
+    public void setFunctionType(FunctionType functionType) {
         this.functionType = functionType;
     }
 
@@ -147,53 +149,18 @@ public class ProfileConnectionTemplate implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-
-        ProfileConnectionTemplate that = (ProfileConnectionTemplate) obj;
-
-        return new EqualsBuilder()
-                .append(boot, that.boot)
-                .append(functionType, that.functionType)
-                .append(id, that.id)
-                .append(name, that.name)
-                .append(networkUri, that.networkUri)
-                .append(portId, that.portId)
-                .append(requestedMbps, that.requestedMbps)
-                .append(requestedVFs, that.requestedVFs)
-                .isEquals();
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(boot)
-                .append(functionType)
-                .append(id)
-                .append(name)
-                .append(networkUri)
-                .append(portId)
-                .append(requestedMbps)
-                .append(requestedVFs)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("boot", boot)
-                .append("functionType", functionType)
-                .append("id", id)
-                .append("name", name)
-                .append("networkUri", networkUri)
-                .append("portId", portId)
-                .append("requestedMbps", requestedMbps)
-                .append("requestedVFs", requestedVFs)
-                .toString();
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
 }

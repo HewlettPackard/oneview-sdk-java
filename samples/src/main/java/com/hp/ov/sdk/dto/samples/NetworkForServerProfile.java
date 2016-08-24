@@ -16,8 +16,7 @@
 package com.hp.ov.sdk.dto.samples;
 
 import com.hp.ov.sdk.dto.servers.serverprofile.BootControl;
-import com.hp.ov.sdk.dto.servers.serverprofile.FunctionType;
-import com.hp.ov.sdk.dto.servers.serverprofile.ProfileConnection;
+import com.hp.ov.sdk.dto.servers.FunctionType;
 
 public class NetworkForServerProfile {
     private String networkName;

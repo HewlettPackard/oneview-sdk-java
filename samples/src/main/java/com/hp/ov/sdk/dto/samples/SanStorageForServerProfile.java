@@ -18,7 +18,7 @@ package com.hp.ov.sdk.dto.samples;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hp.ov.sdk.dto.servers.serverprofile.StorageTargetType;
+import com.hp.ov.sdk.dto.servers.StorageTargetType;
 
 
 public class SanStorageForServerProfile {

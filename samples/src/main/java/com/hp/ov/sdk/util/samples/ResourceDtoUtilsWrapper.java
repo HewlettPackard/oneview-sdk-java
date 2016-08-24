@@ -20,9 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.hp.ov.sdk.dto.servers.serverprofile.ProfileConnection;
-import com.hp.ov.sdk.dto.servers.serverprofile.SanStorage;
+import com.hp.ov.sdk.dto.servers.SanStorage;
 import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
-import com.hp.ov.sdk.dto.servers.serverprofile.VolumeAttachment;
+import com.hp.ov.sdk.dto.servers.VolumeAttachment;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.dto.samples.NetworkForServerProfile;
 import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile.StorageVolume;

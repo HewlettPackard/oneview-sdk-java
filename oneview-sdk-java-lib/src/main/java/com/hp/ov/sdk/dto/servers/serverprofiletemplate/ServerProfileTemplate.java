@@ -13,89 +13,99 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.serverprofiletemplate;
 
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.hp.ov.sdk.dto.servers.serverprofile.SanStorage;
+import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.BaseModelResource;
+import com.hp.ov.sdk.dto.servers.Bios;
+import com.hp.ov.sdk.dto.servers.Boot;
+import com.hp.ov.sdk.dto.servers.BootMode;
+import com.hp.ov.sdk.dto.servers.Firmware;
+import com.hp.ov.sdk.dto.servers.ProfileAffinity;
+import com.hp.ov.sdk.dto.servers.SourceType;
+import com.hp.ov.sdk.dto.servers.AssignmentType;
+import com.hp.ov.sdk.dto.servers.SanStorage;
 
 public class ServerProfileTemplate extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
-    private String affinity;
-    private BiosSettingsTemplate bios;
-    private BootSettingsTemplate boot;
-    private BootModeSettingsTemplate bootMode;
+    private ProfileAffinity affinity;
+    private Bios bios;
+    private Boot boot;
+    private BootMode bootMode;
     private List<ProfileConnectionTemplate> connections;
     private String enclosureGroupUri;
-    private FirmwareSettingsTemplate firmware;
+    private Firmware firmware;
     private Boolean hideUnusedFlexNics;
+    @Since(300)
+    private SourceType iscsiInitiatorNameType;
     private LocalStorageSettingsTemplate localStorage;
-    private String macType;
+    private AssignmentType macType;
     private SanStorage sanStorage;
-    private String serialNumberType;
+    private AssignmentType serialNumberType;
     private String serverHardwareTypeUri;
     private String serverProfileDescription;
-    private String wwnType;
+    private AssignmentType wwnType;
 
     /**
      * @return the affinity
      */
-    public String getAffinity() {
+    public ProfileAffinity getAffinity() {
         return affinity;
     }
 
     /**
      * @param affinity the affinity to set
      */
-    public void setAffinity(String affinity) {
+    public void setAffinity(ProfileAffinity affinity) {
         this.affinity = affinity;
     }
 
     /**
      * @return the bios
      */
-    public BiosSettingsTemplate getBios() {
+    public Bios getBios() {
         return bios;
     }
 
     /**
      * @param bios the bios to set
      */
-    public void setBios(BiosSettingsTemplate bios) {
+    public void setBios(Bios bios) {
         this.bios = bios;
     }
 
     /**
      * @return the boot
      */
-    public BootSettingsTemplate getBoot() {
+    public Boot getBoot() {
         return boot;
     }
 
     /**
      * @param boot the boot to set
      */
-    public void setBoot(BootSettingsTemplate boot) {
+    public void setBoot(Boot boot) {
         this.boot = boot;
     }
 
     /**
      * @return the bootMode
      */
-    public BootModeSettingsTemplate getBootMode() {
+    public BootMode getBootMode() {
         return bootMode;
     }
 
     /**
      * @param bootMode the bootMode to set
      */
-    public void setBootMode(BootModeSettingsTemplate bootMode) {
+    public void setBootMode(BootMode bootMode) {
         this.bootMode = bootMode;
     }
 
@@ -130,14 +140,14 @@ public class ServerProfileTemplate extends BaseModelResource {
     /**
      * @return the firmware
      */
-    public FirmwareSettingsTemplate getFirmware() {
+    public Firmware getFirmware() {
         return firmware;
     }
 
     /**
      * @param firmware the firmware to set
      */
-    public void setFirmware(FirmwareSettingsTemplate firmware) {
+    public void setFirmware(Firmware firmware) {
         this.firmware = firmware;
     }
 
@@ -153,6 +163,20 @@ public class ServerProfileTemplate extends BaseModelResource {
      */
     public void setHideUnusedFlexNics(Boolean hideUnusedFlexNics) {
         this.hideUnusedFlexNics = hideUnusedFlexNics;
+    }
+
+    /**
+     * @return the iscsiInitiatorNameType
+     */
+    public SourceType getIscsiInitiatorNameType() {
+        return iscsiInitiatorNameType;
+    }
+
+    /**
+     * @param iscsiInitiatorNameType the iscsiInitiatorNameType to set
+     */
+    public void setIscsiInitiatorNameType(SourceType iscsiInitiatorNameType) {
+        this.iscsiInitiatorNameType = iscsiInitiatorNameType;
     }
 
     /**
@@ -172,14 +196,14 @@ public class ServerProfileTemplate extends BaseModelResource {
     /**
      * @return the macType
      */
-    public String getMacType() {
+    public AssignmentType getMacType() {
         return macType;
     }
 
     /**
      * @param macType the macType to set
      */
-    public void setMacType(String macType) {
+    public void setMacType(AssignmentType macType) {
         this.macType = macType;
     }
 
@@ -200,14 +224,14 @@ public class ServerProfileTemplate extends BaseModelResource {
     /**
      * @return the serialNumberType
      */
-    public String getSerialNumberType() {
+    public AssignmentType getSerialNumberType() {
         return serialNumberType;
     }
 
     /**
      * @param serialNumberType the serialNumberType to set
      */
-    public void setSerialNumberType(String serialNumberType) {
+    public void setSerialNumberType(AssignmentType serialNumberType) {
         this.serialNumberType = serialNumberType;
     }
 
@@ -242,87 +266,25 @@ public class ServerProfileTemplate extends BaseModelResource {
     /**
      * @return the wwnType
      */
-    public String getWwnType() {
+    public AssignmentType getWwnType() {
         return wwnType;
     }
 
     /**
      * @param wwnType the wwnType to set
      */
-    public void setWwnType(String wwnType) {
+    public void setWwnType(AssignmentType wwnType) {
         this.wwnType = wwnType;
     }
 
     @Override
-    public final boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj instanceof InterconnectType) {
-            ServerProfileTemplate that = (ServerProfileTemplate) obj;
-
-            return that.canEqual(this) && new EqualsBuilder()
-                    .appendSuper(super.equals(obj))
-                    .append(affinity, that.affinity)
-                    .append(bios, that.bios)
-                    .append(boot, that.boot)
-                    .append(bootMode, that.bootMode)
-                    .append(connections, that.connections)
-                    .append(enclosureGroupUri, that.enclosureGroupUri)
-                    .append(firmware, that.firmware)
-                    .append(hideUnusedFlexNics, that.hideUnusedFlexNics)
-                    .append(localStorage, that.localStorage)
-                    .append(macType, that.macType)
-                    .append(sanStorage, that.sanStorage)
-                    .append(serialNumberType, that.serialNumberType)
-                    .append(serverHardwareTypeUri, that.serverHardwareTypeUri)
-                    .append(serverProfileDescription, that.serverProfileDescription)
-                    .append(wwnType, that.wwnType)
-                    .isEquals();
-        }
-        return false;
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .appendSuper(super.hashCode())
-                .append(affinity)
-                .append(bios)
-                .append(boot)
-                .append(bootMode)
-                .append(connections)
-                .append(enclosureGroupUri)
-                .append(firmware)
-                .append(hideUnusedFlexNics)
-                .append(localStorage)
-                .append(macType)
-                .append(sanStorage)
-                .append(serialNumberType)
-                .append(serverHardwareTypeUri)
-                .append(serverProfileDescription)
-                .append(wwnType)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .appendSuper(super.toString())
-                .append("affinity", affinity)
-                .append("bios", bios)
-                .append("boot", boot)
-                .append("bootMode", bootMode)
-                .append("connections", connections)
-                .append("enclosureGroupUri", enclosureGroupUri)
-                .append("firmware", firmware)
-                .append("hideUnusedFlexNics", hideUnusedFlexNics)
-                .append("localStorage", localStorage)
-                .append("macType", macType)
-                .append("sanStorage", sanStorage)
-                .append("serialNumberType", serialNumberType)
-                .append("serverHardwareTypeUri", serverHardwareTypeUri)
-                .append("serverProfileDescription", serverProfileDescription)
-                .append("wwnType", wwnType)
-                .toString();
-    }
 }

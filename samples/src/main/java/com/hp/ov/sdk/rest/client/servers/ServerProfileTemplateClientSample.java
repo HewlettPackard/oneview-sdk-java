@@ -22,22 +22,25 @@ import java.util.List;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
-import com.hp.ov.sdk.dto.BiosSettingsTemplate;
-import com.hp.ov.sdk.dto.BootModeSettingsTemplate;
-import com.hp.ov.sdk.dto.BootSettingsTemplate;
-import com.hp.ov.sdk.dto.ConnectionBootTemplate;
-import com.hp.ov.sdk.dto.FirmwareSettingsTemplate;
-import com.hp.ov.sdk.dto.LocalStorageSettingsTemplate;
-import com.hp.ov.sdk.dto.ProfileConnectionTemplate;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.ServerProfileTemplate;
 import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.servers.AssignmentType;
+import com.hp.ov.sdk.dto.servers.Bios;
+import com.hp.ov.sdk.dto.servers.Boot;
+import com.hp.ov.sdk.dto.servers.BootMode;
+import com.hp.ov.sdk.dto.servers.Firmware;
+import com.hp.ov.sdk.dto.servers.FunctionType;
 import com.hp.ov.sdk.dto.servers.OverriddenSetting;
-import com.hp.ov.sdk.dto.servers.serverprofile.SanStorage;
+import com.hp.ov.sdk.dto.servers.ProfileAffinity;
+import com.hp.ov.sdk.dto.servers.SanStorage;
+import com.hp.ov.sdk.dto.servers.StoragePath;
+import com.hp.ov.sdk.dto.servers.StorageTargetType;
+import com.hp.ov.sdk.dto.servers.VolumeAttachment;
 import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
-import com.hp.ov.sdk.dto.servers.serverprofile.StoragePath;
-import com.hp.ov.sdk.dto.servers.serverprofile.StorageTargetType;
-import com.hp.ov.sdk.dto.servers.serverprofile.VolumeAttachment;
+import com.hp.ov.sdk.dto.servers.serverprofiletemplate.ConnectionBootTemplate;
+import com.hp.ov.sdk.dto.servers.serverprofiletemplate.LocalStorageSettingsTemplate;
+import com.hp.ov.sdk.dto.servers.serverprofiletemplate.ProfileConnectionTemplate;
+import com.hp.ov.sdk.dto.servers.serverprofiletemplate.ServerProfileTemplate;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.server.ServerProfileClient;
 import com.hp.ov.sdk.rest.client.server.ServerProfileTemplateClient;
@@ -162,33 +165,33 @@ public class ServerProfileTemplateClientSample {
         template.setType(ResourceCategory.RC_SERVER_PROFILE_TEMPLATE);
         template.setServerHardwareTypeUri(SERVER_HARDWARE_TYPE_URI);
         template.setEnclosureGroupUri(ENCLOSURE_GROUP_URI);
-        template.setSerialNumberType("Virtual");
-        template.setMacType("Virtual");
-        template.setWwnType("Virtual");
-        template.setAffinity("Bay");
+        template.setSerialNumberType(AssignmentType.Virtual);
+        template.setMacType(AssignmentType.Virtual);
+        template.setWwnType(AssignmentType.Virtual);
+        template.setAffinity(ProfileAffinity.Bay);
         template.setHideUnusedFlexNics(true);
 
         template.setConnections(this.buildConnectionsTemplate());
 
-        BootSettingsTemplate boot = new BootSettingsTemplate();
+        Boot boot = new Boot();
         boot.setManageBoot(true);
         boot.setOrder(Arrays.asList("HardDisk"));
         template.setBoot(boot);
 
-        BootModeSettingsTemplate bootMode = new BootModeSettingsTemplate();
+        BootMode bootMode = new BootMode();
         bootMode.setManageMode(true);
         bootMode.setMode("UEFI");
         bootMode.setPxeBootPolicy("Auto");
         template.setBootMode(bootMode);
 
-        FirmwareSettingsTemplate firmware = new FirmwareSettingsTemplate();
+        Firmware firmware = new Firmware();
         firmware.setManageFirmware(false);
         firmware.setFirmwareBaselineUri("");
         firmware.setForceInstallFirmware(false);
         firmware.setFirmwareInstallType(null);
         template.setFirmware(firmware);
 
-        BiosSettingsTemplate bios = new BiosSettingsTemplate();
+        Bios bios = new Bios();
         bios.setManageBios(false);
         bios.setOverriddenSettings(Collections.<OverriddenSetting>emptyList());
         template.setBios(bios);
@@ -244,7 +247,7 @@ public class ServerProfileTemplateClientSample {
         eth1.setNetworkUri(ETH_1_NETWORK_URI);
         eth1.setId(1L);
         eth1.setName("Prod_401");
-        eth1.setFunctionType("Ethernet");
+        eth1.setFunctionType(FunctionType.Ethernet);
         eth1.setPortId("Auto");
         eth1.setRequestedMbps("3000");
         ConnectionBootTemplate eth1Boot = new ConnectionBootTemplate();
@@ -256,7 +259,7 @@ public class ServerProfileTemplateClientSample {
         eth2.setNetworkUri(ETH_2_NETWORK_URI);
         eth2.setId(2L);
         eth2.setName("Prod_402");
-        eth2.setFunctionType("Ethernet");
+        eth2.setFunctionType(FunctionType.Ethernet);
         eth2.setPortId("Auto");
         eth2.setRequestedMbps("3000");
         ConnectionBootTemplate eth2Boot = new ConnectionBootTemplate();
@@ -268,7 +271,7 @@ public class ServerProfileTemplateClientSample {
         fc1.setNetworkUri(FC_1_NETWORK_URI);
         fc1.setId(3L);
         fc1.setName("FC_Network_A");
-        fc1.setFunctionType("FibreChannel");
+        fc1.setFunctionType(FunctionType.FibreChannel);
         fc1.setPortId("Auto");
         fc1.setRequestedMbps("2500");
         ConnectionBootTemplate fc1Boot = new ConnectionBootTemplate();
@@ -280,7 +283,7 @@ public class ServerProfileTemplateClientSample {
         fc2.setNetworkUri(FC_2_NETWORK_URI);
         fc2.setId(4L);
         fc2.setName("FC_Network_B");
-        fc2.setFunctionType("FibreChannel");
+        fc2.setFunctionType(FunctionType.FibreChannel);
         fc2.setPortId("Auto");
         fc2.setRequestedMbps("2500");
         ConnectionBootTemplate fc2Boot = new ConnectionBootTemplate();

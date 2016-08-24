@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.servers.serverprofile;
+package com.hp.ov.sdk.dto.servers;
 
 import java.io.Serializable;
 
@@ -22,66 +22,30 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.servers.serverprofile.FirmwareInstallType;
 
 public class Firmware implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Boolean forceInstallFirmware;
     private String firmwareBaselineUri;
-    private Boolean manageFirmware;
     @Since(200)
     private FirmwareInstallType firmwareInstallType;
+    private Boolean forceInstallFirmware;
+    private Boolean manageFirmware;
 
     /**
-     *
-     * @return The forceInstallFirmware
-     */
-    public Boolean getForceInstallFirmware() {
-        return forceInstallFirmware;
-    }
-
-    /**
-     *
-     * @param forceInstallFirmware
-     *            The forceInstallFirmware
-     */
-    public void setForceInstallFirmware(final Boolean forceInstallFirmware) {
-        this.forceInstallFirmware = forceInstallFirmware;
-    }
-
-    /**
-     *
-     * @return The firmwareBaselineUri
+     * @return the firmwareBaselineUri
      */
     public String getFirmwareBaselineUri() {
         return firmwareBaselineUri;
     }
 
     /**
-     *
-     * @param firmwareBaselineUri
-     *            The firmwareBaselineUri
+     * @param firmwareBaselineUri the firmwareBaselineUri to set
      */
-    public void setFirmwareBaselineUri(final String firmwareBaselineUri) {
+    public void setFirmwareBaselineUri(String firmwareBaselineUri) {
         this.firmwareBaselineUri = firmwareBaselineUri;
-    }
-
-    /**
-     *
-     * @return The manageFirmware
-     */
-    public Boolean getManageFirmware() {
-        return manageFirmware;
-    }
-
-    /**
-     *
-     * @param manageFirmware
-     *            The manageFirmware
-     */
-    public void setManageFirmware(final Boolean manageFirmware) {
-        this.manageFirmware = manageFirmware;
     }
 
     /**
@@ -96,6 +60,34 @@ public class Firmware implements Serializable {
      */
     public void setFirmwareInstallType(FirmwareInstallType firmwareInstallType) {
         this.firmwareInstallType = firmwareInstallType;
+    }
+
+    /**
+     * @return the forceInstallFirmware
+     */
+    public Boolean getForceInstallFirmware() {
+        return forceInstallFirmware;
+    }
+
+    /**
+     * @param forceInstallFirmware the forceInstallFirmware to set
+     */
+    public void setForceInstallFirmware(Boolean forceInstallFirmware) {
+        this.forceInstallFirmware = forceInstallFirmware;
+    }
+
+    /**
+     * @return the manageFirmware
+     */
+    public Boolean getManageFirmware() {
+        return manageFirmware;
+    }
+
+    /**
+     * @param manageFirmware the manageFirmware to set
+     */
+    public void setManageFirmware(Boolean manageFirmware) {
+        this.manageFirmware = manageFirmware;
     }
 
     @Override

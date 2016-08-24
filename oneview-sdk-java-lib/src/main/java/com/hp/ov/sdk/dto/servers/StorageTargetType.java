@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.servers.serverprofile;
+package com.hp.ov.sdk.dto.servers;
 
-public enum BootVolumeSource {
+public enum StorageTargetType {
 
-    AdapterBIOS,
-    ManagedVolume,
-    UserDefined
+    Auto,
+    TargetPorts
 
 }

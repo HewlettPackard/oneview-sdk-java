@@ -13,49 +13,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.hp.ov.sdk.dto.servers.OverriddenSetting;
 
-public class BiosSettingsTemplate implements Serializable {
+public class Bios implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Boolean manageBios;
-    private List<OverriddenSetting> overriddenSettings;
+    private List<OverriddenSetting> overriddenSettings = new ArrayList<>();
 
     /**
-     * @return the manageBios
+     * 
+     * @return The manageBios
      */
     public Boolean getManageBios() {
         return manageBios;
     }
 
     /**
-     * @param manageBios the manageBios to set
+     * 
+     * @param manageBios
+     *            The manageBios
      */
-    public void setManageBios(Boolean manageBios) {
+    public void setManageBios(final Boolean manageBios) {
         this.manageBios = manageBios;
     }
 
     /**
-     * @return the overriddenSettings
+     * 
+     * @return The overriddenSettings
      */
     public List<OverriddenSetting> getOverriddenSettings() {
         return overriddenSettings;
     }
 
     /**
-     * @param overriddenSettings the overriddenSettings to set
+     * 
+     * @param overriddenSettings
+     *            The overriddenSettings
      */
-    public void setOverriddenSettings(List<OverriddenSetting> overriddenSettings) {
+    public void setOverriddenSettings(final List<OverriddenSetting> overriddenSettings) {
         this.overriddenSettings = overriddenSettings;
     }
 

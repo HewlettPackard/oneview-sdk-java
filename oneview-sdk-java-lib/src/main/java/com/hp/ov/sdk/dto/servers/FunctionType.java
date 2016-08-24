@@ -14,25 +14,12 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.servers.serverprofile;
+package com.hp.ov.sdk.dto.servers;
 
-public enum VolumeAttachmentState {
+public enum FunctionType {
 
-    AttachFailed,
-    Attached,
-    Attaching,
-    Creating,
-    DeleteFailed,
-    Deleted,
-    Deleting,
-    ReserveFailed,
-    Reserved,
-    Reserving,
-    Updating,
-    UserDeleted,
-    VolumeCreateFailed,
-    VolumeCreating,
-    VolumeDeleteFailed,
-    VolumeDeleting
+    Ethernet,
+    FibreChannel,
+    iSCSI
 
 }

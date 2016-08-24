@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.serverprofiletemplate;
 
 import java.io.Serializable;
 
@@ -21,15 +21,23 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.google.gson.annotations.Since;
+import com.google.gson.annotations.Until;
+
 public class LogicalDriveTemplate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Boolean bootable;
+    @Until(299)
     private String driveName;
     private String driveTechnology;
+    @Since(300)
+    private String name;
     private Integer numPhysicalDrives;
     private String raidLevel;
+    @Since(300)
+    private Integer sasLogicalJBODId;
 
     /**
      * @return the bootable
@@ -74,6 +82,20 @@ public class LogicalDriveTemplate implements Serializable {
     }
 
     /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
      * @return the numPhysicalDrives
      */
     public Integer getNumPhysicalDrives() {
@@ -101,45 +123,33 @@ public class LogicalDriveTemplate implements Serializable {
         this.raidLevel = raidLevel;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-
-        LogicalDriveTemplate that = (LogicalDriveTemplate) obj;
-
-        return new EqualsBuilder()
-                .append(bootable, that.bootable)
-                .append(driveName, that.driveName)
-                .append(driveTechnology, that.driveTechnology)
-                .append(numPhysicalDrives, that.numPhysicalDrives)
-                .append(raidLevel, that.raidLevel)
-                .isEquals();
+    /**
+     * @return the sasLogicalJBODId
+     */
+    public Integer getSasLogicalJBODId() {
+        return sasLogicalJBODId;
     }
 
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .append(bootable)
-                .append(driveName)
-                .append(driveTechnology)
-                .append(numPhysicalDrives)
-                .append(raidLevel)
-                .toHashCode();
+    /**
+     * @param sasLogicalJBODId the sasLogicalJBODId to set
+     */
+    public void setSasLogicalJBODId(Integer sasLogicalJBODId) {
+        this.sasLogicalJBODId = sasLogicalJBODId;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("bootable", bootable)
-                .append("driveName", driveName)
-                .append("driveTechnology", driveTechnology)
-                .append("numPhysicalDrives", numPhysicalDrives)
-                .append("raidLevel", raidLevel)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
 }

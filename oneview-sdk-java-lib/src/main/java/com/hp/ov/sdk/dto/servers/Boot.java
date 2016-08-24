@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.servers.serverprofile;
+package com.hp.ov.sdk.dto.servers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,48 +23,46 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.hp.ov.sdk.dto.servers.OverriddenSetting;
 
-
-public class Bios implements Serializable {
+public class Boot implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Boolean manageBios;
-    private List<OverriddenSetting> overriddenSettings = new ArrayList<>();
+    private Boolean manageBoot;
+    private List<String> order = new ArrayList<>();
 
     /**
      * 
-     * @return The manageBios
+     * @return The order
      */
-    public Boolean getManageBios() {
-        return manageBios;
+    public List<String> getOrder() {
+        return order;
     }
 
     /**
      * 
-     * @param manageBios
-     *            The manageBios
+     * @param order
+     *            The order
      */
-    public void setManageBios(final Boolean manageBios) {
-        this.manageBios = manageBios;
+    public void setOrder(final List<String> order) {
+        this.order = order;
     }
 
     /**
      * 
-     * @return The overriddenSettings
+     * @return The manageBoot
      */
-    public List<OverriddenSetting> getOverriddenSettings() {
-        return overriddenSettings;
+    public Boolean getManageBoot() {
+        return manageBoot;
     }
 
     /**
      * 
-     * @param overriddenSettings
-     *            The overriddenSettings
+     * @param manageBoot
+     *            The manageBoot
      */
-    public void setOverriddenSettings(final List<OverriddenSetting> overriddenSettings) {
-        this.overriddenSettings = overriddenSettings;
+    public void setManageBoot(final Boolean manageBoot) {
+        this.manageBoot = manageBoot;
     }
 
     @Override

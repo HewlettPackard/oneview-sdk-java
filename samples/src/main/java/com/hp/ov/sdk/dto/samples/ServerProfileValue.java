@@ -17,12 +17,12 @@ package com.hp.ov.sdk.dto.samples;
 
 import java.util.List;
 
-import com.hp.ov.sdk.dto.servers.serverprofile.AssignmentType;
-import com.hp.ov.sdk.dto.servers.serverprofile.Bios;
-import com.hp.ov.sdk.dto.servers.serverprofile.Boot;
-import com.hp.ov.sdk.dto.servers.serverprofile.Firmware;
+import com.hp.ov.sdk.dto.servers.AssignmentType;
+import com.hp.ov.sdk.dto.servers.Bios;
+import com.hp.ov.sdk.dto.servers.Boot;
+import com.hp.ov.sdk.dto.servers.Firmware;
 import com.hp.ov.sdk.dto.servers.serverprofile.LocalStorage;
-import com.hp.ov.sdk.dto.servers.serverprofile.ProfileAffinity;
+import com.hp.ov.sdk.dto.servers.ProfileAffinity;
 
 public class ServerProfileValue {
 
