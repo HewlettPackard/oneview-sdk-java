@@ -15,15 +15,15 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto.samples;
 
-import com.hp.ov.sdk.dto.ConnectionBoot.BootControl;
-import com.hp.ov.sdk.dto.ProfileConnectionV3;
+import com.hp.ov.sdk.dto.servers.serverprofile.BootControl;
+import com.hp.ov.sdk.dto.servers.FunctionType;
 
 public class NetworkForServerProfile {
     private String networkName;
     private String requestedMbps;
     private Integer allocatedMbps;
     private Integer maximumMbps;
-    private ProfileConnectionV3.FunctionType networkType;
+    private FunctionType networkType;
     private BootControl boot;
 
     public String getNetworkName() {
@@ -58,11 +58,11 @@ public class NetworkForServerProfile {
         this.maximumMbps = maximumMbps;
     }
 
-    public ProfileConnectionV3.FunctionType getNetworkType() {
+    public FunctionType getNetworkType() {
         return networkType;
     }
 
-    public void setNetworkType(final ProfileConnectionV3.FunctionType networkType) {
+    public void setNetworkType(final FunctionType networkType) {
         this.networkType = networkType;
     }
 

@@ -26,8 +26,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.ServerProfileTemplate;
-import com.hp.ov.sdk.dto.generated.ServerProfile;
+import com.hp.ov.sdk.dto.servers.serverprofiletemplate.ServerProfileTemplate;
+import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;

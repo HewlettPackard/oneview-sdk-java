@@ -23,26 +23,27 @@ import com.google.common.base.Optional;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.AvailableStorageSystem;
 import com.hp.ov.sdk.dto.AvailableTargets;
-import com.hp.ov.sdk.dto.ConnectionBoot.BootControl;
 import com.hp.ov.sdk.dto.Patch;
-import com.hp.ov.sdk.dto.ProfileConnectionV3;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.ServerProfileCompliancePreview;
 import com.hp.ov.sdk.dto.ServerProfileHealth;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.AvailableNetworks;
 import com.hp.ov.sdk.dto.generated.AvailableServers;
-import com.hp.ov.sdk.dto.generated.Bios;
-import com.hp.ov.sdk.dto.generated.Boot;
-import com.hp.ov.sdk.dto.generated.Firmware;
 import com.hp.ov.sdk.dto.generated.ProfilePorts;
-import com.hp.ov.sdk.dto.generated.ServerProfile;
-import com.hp.ov.sdk.dto.generated.ServerProfile.ProfileAffinity;
-import com.hp.ov.sdk.dto.generated.StoragePath.StorageTargetType;
 import com.hp.ov.sdk.dto.samples.NetworkForServerProfile;
 import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile;
 import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile.StorageVolume;
 import com.hp.ov.sdk.dto.samples.ServerProfileValue;
+import com.hp.ov.sdk.dto.servers.AssignmentType;
+import com.hp.ov.sdk.dto.servers.Bios;
+import com.hp.ov.sdk.dto.servers.Boot;
+import com.hp.ov.sdk.dto.servers.serverprofile.BootControl;
+import com.hp.ov.sdk.dto.servers.Firmware;
+import com.hp.ov.sdk.dto.servers.FunctionType;
+import com.hp.ov.sdk.dto.servers.ProfileAffinity;
+import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
+import com.hp.ov.sdk.dto.servers.StorageTargetType;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.server.ServerHardwareClient;
@@ -302,7 +303,7 @@ public class ServerProfileClientSample {
             networkForServerProfile.setMaximumMbps(1000);
             networkForServerProfile.setAllocatedMbps(1000);
             networkForServerProfile.setRequestedMbps("1000");
-            networkForServerProfile.setNetworkType(ProfileConnectionV3.FunctionType.Ethernet);
+            networkForServerProfile.setNetworkType(FunctionType.Ethernet);
             networkForServerProfiles.add(networkForServerProfile);
         }
 
@@ -313,7 +314,7 @@ public class ServerProfileClientSample {
             networkForServerProfile.setMaximumMbps(2500);
             networkForServerProfile.setAllocatedMbps(2500);
             networkForServerProfile.setRequestedMbps("2500");
-            networkForServerProfile.setNetworkType(ProfileConnectionV3.FunctionType.FibreChannel);
+            networkForServerProfile.setNetworkType(FunctionType.FibreChannel);
             networkForServerProfiles.add(networkForServerProfile);
         }
 
@@ -339,13 +340,13 @@ public class ServerProfileClientSample {
         serverProfileValue.setEnclosureGroupName(ENCLOSURE_GROUP_NAME);
         serverProfileValue.setFirmware(firmware);
         serverProfileValue.setLocalStorage(null);
-        serverProfileValue.setMacType(ServerProfile.AssignmentType.Virtual);
+        serverProfileValue.setMacType(AssignmentType.Virtual);
         serverProfileValue.setNetworkForServerProfile(networkForServerProfiles);
-        serverProfileValue.setSerialNumberType(ServerProfile.AssignmentType.Physical);
+        serverProfileValue.setSerialNumberType(AssignmentType.Physical);
         serverProfileValue.setStorageVolumeForServerProfile(sanStorageForServerProfile);
         serverProfileValue.setTemplateName(SERVER_PROFILE_NAME);
         serverProfileValue.setUseBayNameForServerHardwareUri(USE_BAY_NAME_FOR_SERVER_HARDWARE_URI);
-        serverProfileValue.setWwnType(ServerProfile.AssignmentType.Virtual);
+        serverProfileValue.setWwnType(AssignmentType.Virtual);
 
         ResourceDtoUtilsWrapper resourceDtoUtilsWrapper = new ResourceDtoUtilsWrapper(new ResourceDtoUtils(oneViewClient));
 

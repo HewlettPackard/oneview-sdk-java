@@ -38,7 +38,7 @@ import com.hp.ov.sdk.dto.ServerProfileHealth;
 import com.hp.ov.sdk.dto.generated.AvailableNetworks;
 import com.hp.ov.sdk.dto.generated.AvailableServers;
 import com.hp.ov.sdk.dto.generated.ProfilePorts;
-import com.hp.ov.sdk.dto.generated.ServerProfile;
+import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;

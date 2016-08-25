@@ -17,11 +17,12 @@ package com.hp.ov.sdk.dto.samples;
 
 import java.util.List;
 
-import com.hp.ov.sdk.dto.generated.Bios;
-import com.hp.ov.sdk.dto.generated.Boot;
-import com.hp.ov.sdk.dto.generated.Firmware;
-import com.hp.ov.sdk.dto.generated.LocalStorage;
-import com.hp.ov.sdk.dto.generated.ServerProfile;
+import com.hp.ov.sdk.dto.servers.AssignmentType;
+import com.hp.ov.sdk.dto.servers.Bios;
+import com.hp.ov.sdk.dto.servers.Boot;
+import com.hp.ov.sdk.dto.servers.Firmware;
+import com.hp.ov.sdk.dto.servers.serverprofile.LocalStorage;
+import com.hp.ov.sdk.dto.servers.ProfileAffinity;
 
 public class ServerProfileValue {
 
@@ -30,16 +31,16 @@ public class ServerProfileValue {
     private String description;
     private Boolean useBayNameForServerHardwareUri;
     private String enclosureGroupName;
-    private ServerProfile.ProfileAffinity affinity;
+    private ProfileAffinity affinity;
     private SanStorageForServerProfile sanStorageForServerProfile;
     private LocalStorage localStorage;
     private List<NetworkForServerProfile> networkForServerProfile;
     private Boot boot;
     private Bios bios;
     private Firmware firmware;
-    private ServerProfile.AssignmentType macType;
-    private ServerProfile.AssignmentType wwnType;
-    private ServerProfile.AssignmentType serialNumberType;
+    private AssignmentType macType;
+    private AssignmentType wwnType;
+    private AssignmentType serialNumberType;
 
     public String getTemplateName() {
         return templateName;
@@ -81,11 +82,11 @@ public class ServerProfileValue {
         this.enclosureGroupName = enclosureGroupName;
     }
 
-    public ServerProfile.ProfileAffinity getAffinity() {
+    public ProfileAffinity getAffinity() {
         return affinity;
     }
 
-    public void setAffinity(final ServerProfile.ProfileAffinity affinity) {
+    public void setAffinity(final ProfileAffinity affinity) {
         this.affinity = affinity;
     }
 
@@ -137,27 +138,27 @@ public class ServerProfileValue {
         this.firmware = firmware;
     }
 
-    public ServerProfile.AssignmentType getMacType() {
+    public AssignmentType getMacType() {
         return macType;
     }
 
-    public void setMacType(final ServerProfile.AssignmentType macType) {
+    public void setMacType(final AssignmentType macType) {
         this.macType = macType;
     }
 
-    public ServerProfile.AssignmentType getWwnType() {
+    public AssignmentType getWwnType() {
         return wwnType;
     }
 
-    public void setWwnType(final ServerProfile.AssignmentType wwnType) {
+    public void setWwnType(final AssignmentType wwnType) {
         this.wwnType = wwnType;
     }
 
-    public ServerProfile.AssignmentType getSerialNumberType() {
+    public AssignmentType getSerialNumberType() {
         return serialNumberType;
     }
 
-    public void setSerialNumberType(final ServerProfile.AssignmentType serialNumberType) {
+    public void setSerialNumberType(final AssignmentType serialNumberType) {
         this.serialNumberType = serialNumberType;
     }
 
