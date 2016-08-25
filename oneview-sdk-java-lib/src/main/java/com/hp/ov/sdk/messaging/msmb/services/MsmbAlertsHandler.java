@@ -15,11 +15,12 @@
  *******************************************************************************/
 package com.hp.ov.sdk.messaging.msmb.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.adaptors.MsmbAlertsMessageAdaptor;
 import com.hp.ov.sdk.dto.MsmbAlertsMessageDto;
 import com.hp.ov.sdk.messaging.msmb.listeners.MsmbListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class MsmbAlertsHandler {
 

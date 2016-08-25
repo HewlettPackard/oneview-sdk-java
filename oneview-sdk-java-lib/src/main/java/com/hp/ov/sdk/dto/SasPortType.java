@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.networking.sasinterconnects;
+package com.hp.ov.sdk.dto;
 
-public enum SasPortStatusReason {
+public enum SasPortType {
 
-    Active,
-    LinkErrors,
-    LoopDetected,
-    None;
+    Downlink,
+    External,
+    Internal,
+    Stacking,
+    Uplink;
 
 }

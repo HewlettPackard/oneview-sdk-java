@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.networking.interconnect;
+package com.hp.ov.sdk.dto;
 
 public enum UIDState {
 
@@ -21,6 +21,8 @@ public enum UIDState {
     Flashing,
     NA,
     Off,
-    On;
+    On,
+    Reserved,
+    Unknown;
 
 }

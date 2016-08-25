@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hp.ov.sdk.dto.networking.sasinterconnects;
+ */
+package com.hp.ov.sdk.dto.storage.driveenclosures;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,33 +26,107 @@ import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.HardResetState;
 import com.hp.ov.sdk.dto.Location;
 import com.hp.ov.sdk.dto.PowerState;
-import com.hp.ov.sdk.dto.SasPort;
+import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.UIDState;
 
-public class SasInterconnect extends BaseModelResource {
+public class DriveEnclosure extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
+    private Integer bay;
+    private int driveBayCount;
+    private List<DriveBay> driveBays = new ArrayList<DriveBay>();
+    private Location driveEnclosureLocation;
+    private DriveEnclosurePortMap driveEnclosurePortMap;
     private String enclosureName;
     private String enclosureUri;
     private String firmwareVersion;
     private HardResetState hardResetState;
-    private String interconnectIP;
-    private Location interconnectLocation;
-    private String interconnectTypeUri;
-    private String logicalSasInterconnectUri;
+    private Integer interconnectBaySet;
+    private List<String> interconnectUri;
+    private int ioAdapterCount;
+    private List<DriveEnclosureIOAdapter> ioAdapters = new ArrayList<DriveEnclosureIOAdapter>();
+    private String manufacturer;
     private String model;
     private String partNumber;
-    private int portCount;
     private PowerState powerState;
     private String productName;
-    private String sasLogicalInterconnectUri;
-    private List<SasPort> sasPorts = new ArrayList<SasPort>();
-    private String sasWWN;
+    private RefreshState refreshState;
     private String serialNumber;
-    private SoftResetState softResetState;
     private String stateReason;
+    private Integer temperature;
     private UIDState uidState;
+    private String wwid;
+
+    /**
+     * @return the bay
+     */
+    public Integer getBay() {
+        return bay;
+    }
+
+    /**
+     * @param bay the bay to set
+     */
+    public void setBay(Integer bay) {
+        this.bay = bay;
+    }
+
+    /**
+     * @return the driveBayCount
+     */
+    public int getDriveBayCount() {
+        return driveBayCount;
+    }
+
+    /**
+     * @param driveBayCount the driveBayCount to set
+     */
+    public void setDriveBayCount(int driveBayCount) {
+        this.driveBayCount = driveBayCount;
+    }
+
+    /**
+     * @return the driveBays
+     */
+    public List<DriveBay> getDriveBays() {
+        return driveBays;
+    }
+
+    /**
+     * @param driveBays the driveBays to set
+     */
+    public void setDriveBays(List<DriveBay> driveBays) {
+        this.driveBays = driveBays;
+    }
+
+    /**
+     * @return the driveEnclosureLocation
+     */
+    public Location getDriveEnclosureLocation() {
+        return driveEnclosureLocation;
+    }
+
+    /**
+     * @param driveEnclosureLocation the driveEnclosureLocation to set
+     */
+    public void setDriveEnclosureLocation(Location driveEnclosureLocation) {
+        this.driveEnclosureLocation = driveEnclosureLocation;
+    }
+
+    /**
+     * @return the driveEnclosurePortMap
+     */
+    public DriveEnclosurePortMap getDriveEnclosurePortMap() {
+        return driveEnclosurePortMap;
+    }
+
+    /**
+     * @param driveEnclosurePortMap the driveEnclosurePortMap to set
+     */
+    public void setDriveEnclosurePortMap(DriveEnclosurePortMap driveEnclosurePortMap) {
+        this.driveEnclosurePortMap = driveEnclosurePortMap;
+    }
 
     /**
      * @return the enclosureName
@@ -111,59 +185,73 @@ public class SasInterconnect extends BaseModelResource {
     }
 
     /**
-     * @return the interconnectIP
+     * @return the interconnectBaySet
      */
-    public String getInterconnectIP() {
-        return interconnectIP;
+    public Integer getInterconnectBaySet() {
+        return interconnectBaySet;
     }
 
     /**
-     * @param interconnectIP the interconnectIP to set
+     * @param interconnectBaySet the interconnectBaySet to set
      */
-    public void setInterconnectIP(String interconnectIP) {
-        this.interconnectIP = interconnectIP;
+    public void setInterconnectBaySet(Integer interconnectBaySet) {
+        this.interconnectBaySet = interconnectBaySet;
     }
 
     /**
-     * @return the interconnectLocation
+     * @return the interconnectUri
      */
-    public Location getInterconnectLocation() {
-        return interconnectLocation;
+    public List<String> getInterconnectUri() {
+        return interconnectUri;
     }
 
     /**
-     * @param interconnectLocation the interconnectLocation to set
+     * @param interconnectUri the interconnectUri to set
      */
-    public void setInterconnectLocation(Location interconnectLocation) {
-        this.interconnectLocation = interconnectLocation;
+    public void setInterconnectUri(List<String> interconnectUri) {
+        this.interconnectUri = interconnectUri;
     }
 
     /**
-     * @return the interconnectTypeUri
+     * @return the ioAdapterCount
      */
-    public String getInterconnectTypeUri() {
-        return interconnectTypeUri;
+    public int getIoAdapterCount() {
+        return ioAdapterCount;
     }
 
     /**
-     * @param interconnectTypeUri the interconnectTypeUri to set
+     * @param ioAdapterCount the ioAdapterCount to set
      */
-    public void setInterconnectTypeUri(String interconnectTypeUri) {
-        this.interconnectTypeUri = interconnectTypeUri;
+    public void setIoAdapterCount(int ioAdapterCount) {
+        this.ioAdapterCount = ioAdapterCount;
     }
 
     /**
-     * @return the logicalSasInterconnectUri
+     * @return the ioAdapters
      */
-    public String getLogicalSasInterconnectUri() {
-        return logicalSasInterconnectUri;
+    public List<DriveEnclosureIOAdapter> getIoAdapters() {
+        return ioAdapters;
     }
 
     /**
-     * @param logicalSasInterconnectUri the logicalSasInterconnectUri to set
+     * @param ioAdapters the ioAdapters to set
      */
-    public void setLogicalSasInterconnectUri(String logicalSasInterconnectUri) {
-        this.logicalSasInterconnectUri = logicalSasInterconnectUri;
+    public void setIoAdapters(List<DriveEnclosureIOAdapter> ioAdapters) {
+        this.ioAdapters = ioAdapters;
+    }
+
+    /**
+     * @return the manufacturer
+     */
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    /**
+     * @param manufacturer the manufacturer to set
+     */
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
     }
 
     /**
@@ -195,20 +283,6 @@ public class SasInterconnect extends BaseModelResource {
     }
 
     /**
-     * @return the portCount
-     */
-    public int getPortCount() {
-        return portCount;
-    }
-
-    /**
-     * @param portCount the portCount to set
-     */
-    public void setPortCount(int portCount) {
-        this.portCount = portCount;
-    }
-
-    /**
      * @return the powerState
      */
     public PowerState getPowerState() {
@@ -237,45 +311,17 @@ public class SasInterconnect extends BaseModelResource {
     }
 
     /**
-     * @return the sasLogicalInterconnectUri
+     * @return the refreshState
      */
-    public String getSasLogicalInterconnectUri() {
-        return sasLogicalInterconnectUri;
+    public RefreshState getRefreshState() {
+        return refreshState;
     }
 
     /**
-     * @param sasLogicalInterconnectUri the sasLogicalInterconnectUri to set
+     * @param refreshState the refreshState to set
      */
-    public void setSasLogicalInterconnectUri(String sasLogicalInterconnectUri) {
-        this.sasLogicalInterconnectUri = sasLogicalInterconnectUri;
-    }
-
-    /**
-     * @return the sasPorts
-     */
-    public List<SasPort> getSasPorts() {
-        return sasPorts;
-    }
-
-    /**
-     * @param sasPorts the sasPorts to set
-     */
-    public void setSasPorts(List<SasPort> sasPorts) {
-        this.sasPorts = sasPorts;
-    }
-
-    /**
-     * @return the sasWWN
-     */
-    public String getSasWWN() {
-        return sasWWN;
-    }
-
-    /**
-     * @param sasWWN the sasWWN to set
-     */
-    public void setSasWWN(String sasWWN) {
-        this.sasWWN = sasWWN;
+    public void setRefreshState(RefreshState refreshState) {
+        this.refreshState = refreshState;
     }
 
     /**
@@ -293,20 +339,6 @@ public class SasInterconnect extends BaseModelResource {
     }
 
     /**
-     * @return the softResetState
-     */
-    public SoftResetState getSoftResetState() {
-        return softResetState;
-    }
-
-    /**
-     * @param softResetState the softResetState to set
-     */
-    public void setSoftResetState(SoftResetState softResetState) {
-        this.softResetState = softResetState;
-    }
-
-    /**
      * @return the stateReason
      */
     public String getStateReason() {
@@ -318,6 +350,20 @@ public class SasInterconnect extends BaseModelResource {
      */
     public void setStateReason(String stateReason) {
         this.stateReason = stateReason;
+    }
+
+    /**
+     * @return the temperature
+     */
+    public Integer getTemperature() {
+        return temperature;
+    }
+
+    /**
+     * @param temperature the temperature to set
+     */
+    public void setTemperature(Integer temperature) {
+        this.temperature = temperature;
     }
 
     /**
@@ -334,6 +380,25 @@ public class SasInterconnect extends BaseModelResource {
         this.uidState = uidState;
     }
 
+    /**
+     * @return the wwid
+     */
+    public String getWwid() {
+        return wwid;
+    }
+
+    /**
+     * @param wwid the wwid to set
+     */
+    public void setWwid(String wwid) {
+        this.wwid = wwid;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
     @Override
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
@@ -344,8 +409,4 @@ public class SasInterconnect extends BaseModelResource {
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
 }

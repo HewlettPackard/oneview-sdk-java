@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.networking.sasinterconnects;
+package com.hp.ov.sdk.dto.storage.driveenclosures;
 
-public enum PowerState {
+public enum DriveMedia {
 
-    On,
-    Off,
-    Unknown,
-    PoweringOn,
-    PoweringOff;
+    HDD,
+    SSD,
+    Unknown;
 
 }

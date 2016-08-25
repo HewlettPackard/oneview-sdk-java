@@ -15,11 +15,11 @@
  *******************************************************************************/
 package com.hp.ov.sdk.messaging.core;
 
+import javax.net.ssl.SSLContext;
+
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DefaultSaslConfig;
-
-import javax.net.ssl.SSLContext;
 
 
 public class RabbitMqClientConnectionFactory {
