@@ -15,13 +15,13 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
-import com.google.gson.annotations.Since;
-import com.hp.ov.sdk.util.UrlUtils;
+import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.io.Serializable;
+import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.util.UrlUtils;
 
 public class EndpointResponse implements Serializable {
 

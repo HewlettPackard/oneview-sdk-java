@@ -54,6 +54,7 @@ import com.hp.ov.sdk.rest.client.server.ServerProfileTemplateClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareBundleClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
+import com.hp.ov.sdk.rest.client.storage.DriveEnclosureClient;
 import com.hp.ov.sdk.rest.client.storage.FcSanDeviceManagerClient;
 import com.hp.ov.sdk.rest.client.storage.FcSanManagedSanClient;
 import com.hp.ov.sdk.rest.client.storage.FcSanProviderClient;
@@ -73,6 +74,7 @@ public class OneViewClient {
     private final BaseClient baseClient;
 
     private AlertClient alertClient;
+    private DriveEnclosureClient driveEnclosureClient;
     private EnclosureGroupClient enclosureGroupClient;
     private EnclosureClient enclosureClient;
     private LogicalEnclosureClient logicalEnclosureClient;
@@ -128,6 +130,10 @@ public class OneViewClient {
 
     public synchronized AlertClient alert() {
         return this.getClient(this.alertClient, AlertClient.class);
+    }
+
+    public synchronized DriveEnclosureClient driveEnclosure() {
+        return this.getClient(this.driveEnclosureClient, DriveEnclosureClient.class);
     }
 
     public synchronized EnclosureGroupClient enclosureGroup() {

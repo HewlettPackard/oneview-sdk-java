@@ -15,11 +15,11 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto;
 
+import java.util.List;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import java.util.List;
 
 public class EndpointReport {
 

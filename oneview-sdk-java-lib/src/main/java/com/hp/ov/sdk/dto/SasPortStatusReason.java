@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto.networking.sasinterconnects;
+package com.hp.ov.sdk.dto;
 
-public enum HardResetState {
+public enum SasPortStatusReason {
 
-    NA,
-    Normal,
-    Reset,
-    Resetting;
+    Active,
+    LinkErrors,
+    LoopDetected,
+    None;
 
 }

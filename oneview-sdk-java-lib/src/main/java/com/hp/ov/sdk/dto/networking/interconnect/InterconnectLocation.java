@@ -23,7 +23,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.hp.ov.sdk.dto.networking.LocationEntry;
+import com.hp.ov.sdk.dto.LocationEntry;
 
 
 public class InterconnectLocation implements Serializable {

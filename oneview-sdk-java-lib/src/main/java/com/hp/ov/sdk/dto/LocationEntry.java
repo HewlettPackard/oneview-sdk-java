@@ -14,40 +14,47 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto.networking;
+package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+public class LocationEntry implements Serializable {
 
-public class Location implements Serializable {
+    private static final long serialVersionUID = -5702441534608109731L;
 
-    private static final long serialVersionUID = 229124690819104043L;
+    private LocationType type;
+    private String value;
 
-    private List<LocationEntry> locationEntries = new ArrayList<>();
-
-    public List<LocationEntry> getLocationEntries() {
-        return locationEntries;
+    public LocationType getType() {
+        return type;
     }
 
-    public void setLocationEntries(List<LocationEntry> locationEntries) {
-        this.locationEntries = locationEntries;
+    public void setType(final LocationType type) {
+        this.type = type;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(final String value) {
+        this.value = value;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
 
-        if (obj instanceof Location) {
-            Location location = (Location) obj;
+        if (obj instanceof LocationEntry) {
+            LocationEntry that = (LocationEntry) obj;
 
             return new EqualsBuilder()
-                    .append(locationEntries, location.locationEntries)
+                    .append(type, that.type)
+                    .append(value, that.value)
                     .isEquals();
         }
         return false;
@@ -56,12 +63,17 @@ public class Location implements Serializable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .append(locationEntries)
+                .append(type)
+                .append(value)
                 .toHashCode();
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return new ToStringBuilder(this)
+                .append("type", type)
+                .append("value", value)
+                .toString();
     }
+
 }

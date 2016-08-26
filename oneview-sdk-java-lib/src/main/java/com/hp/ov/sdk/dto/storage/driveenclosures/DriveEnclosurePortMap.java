@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,8 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+ */
+package com.hp.ov.sdk.dto.storage.driveenclosures;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,30 +23,41 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.google.gson.GsonBuilder;
 
-public class ProfilePorts implements Serializable {
+public class DriveEnclosurePortMap implements Serializable {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
-    private List<Object> ports = new ArrayList<Object>();
+
+    private List<DeviceSlots> deviceSlots = new ArrayList<DeviceSlots>();
+    private String type;
 
     /**
-     * 
-     * @return The ports
+     * @return the deviceSlots
      */
-    public List<Object> getPorts() {
-        return ports;
+    public List<DeviceSlots> getDeviceSlots() {
+        return deviceSlots;
     }
 
     /**
-     * 
-     * @param ports
-     *            The ports
+     * @param deviceSlots the deviceSlots to set
      */
-    public void setPorts(final List<Object> ports) {
-        this.ports = ports;
+    public void setDeviceSlots(List<DeviceSlots> deviceSlots) {
+        this.deviceSlots = deviceSlots;
+    }
+
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
@@ -55,20 +66,13 @@ public class ProfilePorts implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(ports).toHashCode();
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
-    public boolean equals(final Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof ProfilePorts) == false) {
-            return false;
-        }
-        final ProfilePorts rhs = ((ProfilePorts) other);
-        return new EqualsBuilder().append(ports, rhs.ports).isEquals();
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
 }
