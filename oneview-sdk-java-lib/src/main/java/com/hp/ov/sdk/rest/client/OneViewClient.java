@@ -40,6 +40,9 @@ import com.hp.ov.sdk.rest.client.networking.LogicalSwitchClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalSwitchGroupClient;
 import com.hp.ov.sdk.rest.client.networking.NetworkSetClient;
 import com.hp.ov.sdk.rest.client.networking.SasInterconnectClient;
+import com.hp.ov.sdk.rest.client.networking.SasInterconnectTypeClient;
+import com.hp.ov.sdk.rest.client.networking.SasLogicalInterconnectClient;
+import com.hp.ov.sdk.rest.client.networking.SasLogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
 import com.hp.ov.sdk.rest.client.networking.UplinkSetClient;
@@ -113,6 +116,9 @@ public class OneViewClient {
     private ServerProfileTemplateClient serverProfileTemplateClient;
     private FirmwareBundleClient firmwareBundleClient;
     private FirmwareDriverClient firmwareDriverClient;
+    private SasInterconnectTypeClient sasInterconnectTypeClient;
+    private SasLogicalInterconnectGroupClient sasLogicalInterconnectGroupClient;
+    private SasLogicalInterconnectClient sasLogicalInterconnectClient;
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
         this.baseClient = new BaseClient(params,
@@ -286,6 +292,18 @@ public class OneViewClient {
 
     public synchronized FirmwareDriverClient firmwareDriver() {
         return this.getClient(this.firmwareDriverClient, FirmwareDriverClient.class);
+    }
+
+    public synchronized SasInterconnectTypeClient sasInterconnectType() {
+        return this.getClient(this.sasInterconnectTypeClient, SasInterconnectTypeClient.class);
+    }
+
+    public synchronized SasLogicalInterconnectGroupClient sasLogicalInterconnectGroup() {
+        return this.getClient(this.sasLogicalInterconnectGroupClient, SasLogicalInterconnectGroupClient.class);
+    }
+
+    public synchronized SasLogicalInterconnectClient sasLogicalInterconnect() {
+        return this.getClient(this.sasLogicalInterconnectClient, SasLogicalInterconnectClient.class);
     }
 
     private <T> T getClient(T client, Class<T> clientClass) {

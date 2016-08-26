@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,36 +12,49 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hp.ov.sdk.dto.generated;
+ */
+
+package com.hp.ov.sdk.dto.networking.saslogicalinterconnect;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+public class ReplaceDriveEnclosure implements Serializable {
 
-public class InterconnectMapTemplate implements Serializable {
+    private static final long serialVersionUID = 6569920144870555357L;
 
-    private static final long serialVersionUID = 1L;
-
-    private List<InterconnectMapEntryTemplate> interconnectMapEntryTemplates = new ArrayList<>();
+    private String newSerialNumber;
+    private String oldSerialNumber;
 
     /**
-     * @return the interconnectMapEntryTemplates
+     * @return the newSerialNumber
      */
-    public List<InterconnectMapEntryTemplate> getInterconnectMapEntryTemplates() {
-        return interconnectMapEntryTemplates;
+    public String getNewSerialNumber() {
+        return newSerialNumber;
     }
 
     /**
-     * @param interconnectMapEntryTemplates the interconnectMapEntryTemplates to set
+     * @param newSerialNumber the newSerialNumber to set
      */
-    public void setInterconnectMapEntryTemplates(List<InterconnectMapEntryTemplate> interconnectMapEntryTemplates) {
-        this.interconnectMapEntryTemplates = interconnectMapEntryTemplates;
+    public void setNewSerialNumber(String newSerialNumber) {
+        this.newSerialNumber = newSerialNumber;
+    }
+
+    /**
+     * @return the oldSerialNumber
+     */
+    public String getOldSerialNumber() {
+        return oldSerialNumber;
+    }
+
+    /**
+     * @param oldSerialNumber the oldSerialNumber to set
+     */
+    public void setOldSerialNumber(String oldSerialNumber) {
+        this.oldSerialNumber = oldSerialNumber;
     }
 
     @Override

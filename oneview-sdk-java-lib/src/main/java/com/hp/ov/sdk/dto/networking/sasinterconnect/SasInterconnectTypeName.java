@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,14 +12,25 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hp.ov.sdk.dto.networking.logicalinterconnects;
+ */
 
-public enum Command {
-    
-    Activate,
-    None,
-    Stage,
-    Update
-    
+package com.hp.ov.sdk.dto.networking.sasinterconnect;
+
+public enum SasInterconnectTypeName {
+
+    SYNERGY_12GB_SAS_CONNECTION_MODULE("Synergy 12Gb SAS Connection Module");
+
+    private final String value;
+
+    SasInterconnectTypeName(String value) {
+        this.value = value;
+    }
+
+    /**
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
+
 }

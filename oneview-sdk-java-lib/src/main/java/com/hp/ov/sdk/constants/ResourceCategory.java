@@ -42,6 +42,7 @@ public class ResourceCategory {
     public static final String RC_NETWORK_V300 = "ethernet-networkV300";
     public static final String RC_NETWORKSET = "network-set";
     public static final String RC_NETWORKSET_V300 = "network-setV300";
+    public static final String RC_SAS_LOGICAL_INTERCONNECT_GROUP = "sas-logical-interconnect-group";
     public static final String RC_SERVER_PROFILE = "ServerProfileV4";
     public static final String RC_SERVER_PROFILE_TEMPLATE = "ServerProfileTemplateV1";
     public static final String RC_SERVER_PROFILE_V200 = "ServerProfileV5";

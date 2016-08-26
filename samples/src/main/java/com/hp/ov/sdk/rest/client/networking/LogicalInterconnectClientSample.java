@@ -122,7 +122,7 @@ public class LogicalInterconnectClientSample {
 
         LiFirmware liFirmware = new LiFirmware();
 
-        liFirmware.setCommand(Command.STAGE);
+        liFirmware.setCommand(Command.Stage);
         liFirmware.setSppUri(firmwareDriverClient.getByName(SPP_NAME).get(0).getUri());
         liFirmware.setForce(true);
 
@@ -160,7 +160,7 @@ public class LogicalInterconnectClientSample {
         LiFirmware liFirmware = new LiFirmware();
         List<PhysicalInterconnectFirmware> interconnects = new ArrayList<>();
 
-        liFirmware.setCommand(Command.STAGE);
+        liFirmware.setCommand(Command.Stage);
         liFirmware.setSppUri(firmwareDriverClient.getByName(SPP_NAME).get(0).getUri());
 
         for (int i = 0; i < currentLiFirmware.getInterconnects().size(); i++) {
@@ -186,7 +186,7 @@ public class LogicalInterconnectClientSample {
         LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
         LiFirmware liFirmware = new LiFirmware();
-        liFirmware.setCommand(Command.UPDATE);
+        liFirmware.setCommand(Command.Update);
         liFirmware.setSppUri(firmwareDriverClient.getByName(SPP_NAME).get(0).getUri());
         liFirmware.setForce(true);
 

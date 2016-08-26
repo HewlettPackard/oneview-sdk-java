@@ -26,10 +26,8 @@ import com.hp.ov.sdk.dto.networking.LogicalLocation;
 
 public class InterconnectMapEntryTemplate implements Serializable {
 
-    /**
-	 *
-	 */
     private static final long serialVersionUID = 1L;
+
     private String permittedInterconnectTypeUri;
     private LogicalLocation logicalLocation;
     @Since(200)
@@ -110,30 +108,12 @@ public class InterconnectMapEntryTemplate implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .append(permittedInterconnectTypeUri)
-                .append(logicalLocation)
-                .append(enclosureIndex)
-                .append(logicalDownlinkUri)
-                .toHashCode();
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
-    public boolean equals(final Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof InterconnectMapEntryTemplate) == false) {
-            return false;
-        }
-        final InterconnectMapEntryTemplate rhs = ((InterconnectMapEntryTemplate) other);
-        return new EqualsBuilder()
-                .append(permittedInterconnectTypeUri, rhs.permittedInterconnectTypeUri)
-                .append(logicalLocation, rhs.logicalLocation)
-                .append(enclosureIndex, rhs.enclosureIndex)
-                .append(logicalDownlinkUri, rhs.logicalDownlinkUri)
-                .isEquals();
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
-
 }
