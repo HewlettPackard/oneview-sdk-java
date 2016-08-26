@@ -18,6 +18,9 @@ package com.hp.ov.sdk.rest.client.networking;
 
 import static org.mockito.BDDMockito.then;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -26,9 +29,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.SwitchPortStatistics;
-import com.hp.ov.sdk.dto.SwitchStatistics;
 import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
+import com.hp.ov.sdk.dto.networking.Port;
+import com.hp.ov.sdk.dto.networking.SwitchPortStatistics;
+import com.hp.ov.sdk.dto.networking.SwitchStatistics;
 import com.hp.ov.sdk.dto.networking.switches.Switch;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
@@ -138,5 +142,21 @@ public class SwitchClientTest {
                 + "/" + ResourceUris.SWITCHES_STATISTICS_URI + "/" + ANY_SWITCH_RESOURCE_PORT_NAME;
 
         then(baseClient).should().getResource(expectedUri, SwitchPortStatistics.class);
+    }
+    
+    @Test
+    public void shouldUpdatePorts() {
+        List<Port> ports = new ArrayList<>();
+
+        switchClient.updatePorts(ANY_SWITCH_RESOURCE_ID, ports);
+
+        String expectedUri = ResourceUris.SWITCHES_URI
+                + "/" + ANY_SWITCH_RESOURCE_ID
+                + "/" + ResourceUris.SWITCHES_UPDATE_PORTS_URI;
+        
+        Request request = new Request(HttpMethodType.PUT, expectedUri, ports);
+
+        then(baseClient).should().executeRequest(request, String.class);
+        
     }
 }

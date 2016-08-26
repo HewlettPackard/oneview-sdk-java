@@ -30,39 +30,33 @@ public class SwitchManagementConnection implements Serializable {
     private static final long serialVersionUID = 1877808539542026858L;
 
     private List<ConnectionProperty> connectionProperties = new ArrayList<>();
-
+    
+    /**
+     * @return the connectionProperties
+     */
     public List<ConnectionProperty> getConnectionProperties() {
         return connectionProperties;
     }
 
+    /**
+     * @param connectionProperties the connectionProperties to set
+     */
     public void setConnectionProperties(List<ConnectionProperty> connectionProperties) {
         this.connectionProperties = connectionProperties;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        SwitchManagementConnection that = (SwitchManagementConnection) obj;
-
-        return new EqualsBuilder()
-                .append(connectionProperties, that.connectionProperties)
-                .isEquals();
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(connectionProperties)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("connectionProperties", connectionProperties)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
 }

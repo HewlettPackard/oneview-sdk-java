@@ -16,7 +16,6 @@
 
 package com.hp.ov.sdk.dto.networking;
 
-
 public enum PortSplitMode {
 
     NotApplicable,

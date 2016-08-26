@@ -15,7 +15,6 @@
  */
 package com.hp.ov.sdk.dto.networking;
 
-
 public enum PortStatusReason {
 
     Active,
@@ -46,7 +45,7 @@ public enum PortStatusReason {
     StandbyFcoeActive,
     StandbyFcoeError,
     StandbyFcoeNone,
-    StandbyLagPort ,
+    StandbyLagPort,
     Unavailable,
     Unknown,
     Unpopulated,

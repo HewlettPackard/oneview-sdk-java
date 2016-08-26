@@ -15,18 +15,22 @@
  */
 package com.hp.ov.sdk.dto.networking;
 
-
 public enum PortCapability {
 
+    ConnectionBandwidthConfiguration,
     ConnectionDeployment,
     ConnectionReservation,
+    ConnectionVirtualMAC,
+    ConnectionVirtualWWN,
     Dcc,
     EnetFcoe,
     Ethernet,
     Extension,
     FibreChannel,
+    iSCSI,
     PortExtender,
     Qbg,
+    SRIOV,
     Stacking,
     Unknown
 

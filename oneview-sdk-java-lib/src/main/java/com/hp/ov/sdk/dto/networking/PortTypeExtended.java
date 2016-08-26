@@ -15,11 +15,10 @@
  */
 package com.hp.ov.sdk.dto.networking;
 
-
 public enum PortTypeExtended {
 
-    External, 
-    Internal, 
+    External,
+    Internal,
     Unknown
 
 }

@@ -15,7 +15,6 @@
  */
 package com.hp.ov.sdk.dto.networking.switches;
 
-
 public enum SwitchRole {
 
     Access,

@@ -24,7 +24,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
 
-
 public final class Neighbor implements Serializable {
 
     private static final long serialVersionUID = 3690264515818754364L;
@@ -229,46 +228,12 @@ public final class Neighbor implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        Neighbor neighbor = (Neighbor) obj;
-
-        return new EqualsBuilder()
-                .append(linkLabel, neighbor.linkLabel)
-                .append(linkUri, neighbor.linkUri)
-                .append(remoteChassisId, neighbor.remoteChassisId)
-                .append(remoteChassisIdType, neighbor.remoteChassisIdType)
-                .append(remoteMgmtAddress, neighbor.remoteMgmtAddress)
-                .append(remoteMgmtAddressType, neighbor.remoteMgmtAddressType)
-                .append(remotePortDescription, neighbor.remotePortDescription)
-                .append(remotePortId, neighbor.remotePortId)
-                .append(remotePortIdType, neighbor.remotePortIdType)
-                .append(remoteSystemCapabilities, neighbor.remoteSystemCapabilities)
-                .append(remoteSystemDescription, neighbor.remoteSystemDescription)
-                .append(remoteSystemName, neighbor.remoteSystemName)
-                .append(remoteType, neighbor.remoteType)
-                .isEquals();
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(linkLabel)
-                .append(linkUri)
-                .append(remoteChassisId)
-                .append(remoteChassisIdType)
-                .append(remoteMgmtAddress)
-                .append(remoteMgmtAddressType)
-                .append(remotePortDescription)
-                .append(remotePortId)
-                .append(remotePortIdType)
-                .append(remoteSystemCapabilities)
-                .append(remoteSystemDescription)
-                .append(remoteSystemName)
-                .append(remoteType)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override

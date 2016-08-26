@@ -13,9 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking;
 
 import java.util.List;
+
+import com.hp.ov.sdk.dto.BaseModelResource;
+import com.hp.ov.sdk.dto.FexCommonStatistics;
 
 public class FexPortStatistics extends BaseModelResource {
 
@@ -33,54 +36,64 @@ public class FexPortStatistics extends BaseModelResource {
     public FexAdvancedStatistics getFexAdvancedStatistics() {
         return fexAdvancedStatistics;
     }
+    
     /**
      * @param fexAdvancedStatistics the fexAdvancedStatistics to set
      */
     public void setFexAdvancedStatistics(FexAdvancedStatistics fexAdvancedStatistics) {
         this.fexAdvancedStatistics = fexAdvancedStatistics;
     }
+    
     /**
      * @return the commonStatistics
      */
     public FexCommonStatistics getCommonStatistics() {
         return commonStatistics;
     }
+    
     /**
      * @param commonStatistics the commonStatistics to set
      */
     public void setCommonStatistics(FexCommonStatistics commonStatistics) {
         this.commonStatistics = commonStatistics;
     }
+    
     /**
      * @return the isUplink
      */
     public boolean isUplink() {
         return isUplink;
     }
+    
     /**
      * @param isUplink the isUplink to set
      */
+    
     public void setUplink(boolean isUplink) {
         this.isUplink = isUplink;
     }
+    
     /**
      * @return the downlinks
      */
     public List<String> getDownlinks() {
         return downlinks;
     }
+    
     /**
      * @param downlinks the downlinks to set
      */
     public void setDownlinks(List<String> downlinks) {
         this.downlinks = downlinks;
     }
+    
     /**
      * @return the vlanId
      */
     public List<VlanInfo> getVlanId() {
         return vlanId;
     }
+    
     /**
      * @param vlanId the vlanId to set
      */

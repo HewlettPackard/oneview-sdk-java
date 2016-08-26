@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking.switches;
 
 import java.io.Serializable;
 
@@ -28,49 +28,46 @@ public class VpcPeer implements Serializable {
     private String name;
     private String uri;
 
+    /**
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @param name the name to set
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * @return the uri
+     */
     public String getUri() {
         return uri;
     }
 
+    /**
+     * @param uri the uri to set
+     */
     public void setUri(String uri) {
         this.uri = uri;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        VpcPeer vpcPeer = (VpcPeer) obj;
-
-        return new EqualsBuilder()
-                .append(name, vpcPeer.name)
-                .append(uri, vpcPeer.uri)
-                .isEquals();
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(name)
-                .append(uri)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("name", name)
-                .append("uri", uri)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
 }

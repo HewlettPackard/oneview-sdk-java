@@ -20,6 +20,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import com.google.gson.annotations.Since;
+import com.hp.ov.sdk.dto.networking.FexPortStatistics;
 
 public class PortStatistics implements Serializable {
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,6 +23,8 @@ import java.util.List;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import com.hp.ov.sdk.dto.networking.CapabilityType;
 
 public class SwitchPortStatistics implements Serializable {
 
