@@ -20,12 +20,12 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.Location;
 import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
-import com.hp.ov.sdk.dto.generated.LogicalSwitchVpc;
 import com.hp.ov.sdk.dto.networking.Port;
 
 /**
@@ -48,95 +48,177 @@ public final class Switch extends BaseModelResource {
     @Since(200)
     private List<Port> ports = new ArrayList<>();
     private List<SwitchRole> roles = new ArrayList<>();
+    @Since(300)
+    private List<String> scopeUris = new ArrayList<>();
     private String serialNumber;
     @Since(200)
     private Location switchLocation;
     private SwitchManagementConnection switchManagementConnection;
 
+    /**
+     * @return the chassisId
+     */
     public String getChassisId() {
         return chassisId;
     }
 
+    /**
+     * @param chassisId the chassisId to set
+     */
     public void setChassisId(String chassisId) {
         this.chassisId = chassisId;
     }
 
+    /**
+     * @return the environmentalConfiguration
+     */
     public EnvironmentalConfiguration getEnvironmentalConfiguration() {
         return environmentalConfiguration;
     }
 
+    /**
+     * @param environmentalConfiguration the environmentalConfiguration to set
+     */
     public void setEnvironmentalConfiguration(EnvironmentalConfiguration environmentalConfiguration) {
         this.environmentalConfiguration = environmentalConfiguration;
     }
 
+    /**
+     * @return the firmwareVersion
+     */
     public String getFirmwareVersion() {
         return firmwareVersion;
     }
 
+    /**
+     * @param firmwareVersion the firmwareVersion to set
+     */
     public void setFirmwareVersion(String firmwareVersion) {
         this.firmwareVersion = firmwareVersion;
     }
 
+    /**
+     * @return the logicalSwitchUri
+     */
     public String getLogicalSwitchUri() {
         return logicalSwitchUri;
     }
 
+    /**
+     * @param logicalSwitchUri the logicalSwitchUri to set
+     */
     public void setLogicalSwitchUri(String logicalSwitchUri) {
         this.logicalSwitchUri = logicalSwitchUri;
     }
 
+    /**
+     * @return the logicalSwitchVPC
+     */
     public LogicalSwitchVpc getLogicalSwitchVPC() {
         return logicalSwitchVPC;
     }
 
+    /**
+     * @param logicalSwitchVPC the logicalSwitchVPC to set
+     */
     public void setLogicalSwitchVPC(LogicalSwitchVpc logicalSwitchVPC) {
         this.logicalSwitchVPC = logicalSwitchVPC;
     }
 
+    /**
+     * @return the modelName
+     */
     public String getModelName() {
         return modelName;
     }
 
+    /**
+     * @param modelName the modelName to set
+     */
     public void setModelName(String modelName) {
         this.modelName = modelName;
     }
 
+    /**
+     * @return the ports
+     */
     public List<Port> getPorts() {
         return ports;
     }
 
+    /**
+     * @param ports the ports to set
+     */
     public void setPorts(List<Port> ports) {
         this.ports = ports;
     }
 
+    /**
+     * @return the roles
+     */
     public List<SwitchRole> getRoles() {
         return roles;
     }
 
+    /**
+     * @param roles the roles to set
+     */
     public void setRoles(List<SwitchRole> roles) {
         this.roles = roles;
     }
 
+    /**
+     * @return the scopeUris
+     */
+    public List<String> getScopeUris() {
+        return scopeUris;
+    }
+
+    /**
+     * @param scopeUris the scopeUris to set
+     */
+    public void setScopeUris(List<String> scopeUris) {
+        this.scopeUris = scopeUris;
+    }
+
+    /**
+     * @return the serialNumber
+     */
     public String getSerialNumber() {
         return serialNumber;
     }
 
+    /**
+     * @param serialNumber the serialNumber to set
+     */
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
     }
 
+    /**
+     * @return the switchLocation
+     */
     public Location getSwitchLocation() {
         return switchLocation;
     }
 
+    /**
+     * @param switchLocation the switchLocation to set
+     */
     public void setSwitchLocation(Location switchLocation) {
         this.switchLocation = switchLocation;
     }
 
+    /**
+     * @return the switchManagementConnection
+     */
     public SwitchManagementConnection getSwitchManagementConnection() {
         return switchManagementConnection;
     }
 
+    /**
+     * @param switchManagementConnection the switchManagementConnection to set
+     */
     public void setSwitchManagementConnection(SwitchManagementConnection switchManagementConnection) {
         this.switchManagementConnection = switchManagementConnection;
     }
@@ -145,48 +227,20 @@ public final class Switch extends BaseModelResource {
     public boolean canEqual(Object obj) {
         return (obj instanceof Switch);
     }
-
+    
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj instanceof Switch) {
-            Switch that = (Switch) obj;
-
-            return new EqualsBuilder()
-                    .appendSuper(super.equals(obj))
-                    .append(chassisId, that.chassisId)
-                    .append(environmentalConfiguration, that.environmentalConfiguration)
-                    .append(firmwareVersion, that.firmwareVersion)
-                    .append(logicalSwitchUri, that.logicalSwitchUri)
-                    .append(logicalSwitchVPC, that.logicalSwitchVPC)
-                    .append(modelName, that.modelName)
-                    .append(ports, that.ports)
-                    .append(roles, that.roles)
-                    .append(serialNumber, that.serialNumber)
-                    .append(switchLocation, that.switchLocation)
-                    .append(switchManagementConnection, that.switchManagementConnection)
-                    .isEquals();
-        }
-        return false;
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .appendSuper(super.hashCode())
-                .append(chassisId)
-                .append(environmentalConfiguration)
-                .append(firmwareVersion)
-                .append(logicalSwitchUri)
-                .append(logicalSwitchVPC)
-                .append(modelName)
-                .append(ports)
-                .append(roles)
-                .append(serialNumber)
-                .append(switchLocation)
-                .append(switchManagementConnection)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
 }

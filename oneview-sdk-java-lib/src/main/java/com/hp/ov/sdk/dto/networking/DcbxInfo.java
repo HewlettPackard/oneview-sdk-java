@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking;
 
 import java.io.Serializable;
 
@@ -31,72 +31,75 @@ public final class DcbxInfo implements Serializable {
     private DcbxReason dcbxPgReason;
     private DcbxStatus dcbxStatus;
 
+    /**
+     * @return the dcbxApReason
+     */
     public DcbxReason getDcbxApReason() {
         return dcbxApReason;
     }
 
+    /**
+     * @param dcbxApReason the dcbxApReason to set
+     */
     public void setDcbxApReason(DcbxReason dcbxApReason) {
         this.dcbxApReason = dcbxApReason;
     }
 
+    /**
+     * @return the dcbxPfcReason
+     */
     public DcbxReason getDcbxPfcReason() {
         return dcbxPfcReason;
     }
 
+    /**
+     * @param dcbxPfcReason the dcbxPfcReason to set
+     */
     public void setDcbxPfcReason(DcbxReason dcbxPfcReason) {
         this.dcbxPfcReason = dcbxPfcReason;
     }
 
+    /**
+     * @return the dcbxPgReason
+     */
     public DcbxReason getDcbxPgReason() {
         return dcbxPgReason;
     }
 
+    /**
+     * @param dcbxPgReason the dcbxPgReason to set
+     */
     public void setDcbxPgReason(DcbxReason dcbxPgReason) {
         this.dcbxPgReason = dcbxPgReason;
     }
 
+    /**
+     * @return the dcbxStatus
+     */
     public DcbxStatus getDcbxStatus() {
         return dcbxStatus;
     }
 
+    /**
+     * @param dcbxStatus the dcbxStatus to set
+     */
     public void setDcbxStatus(DcbxStatus dcbxStatus) {
         this.dcbxStatus = dcbxStatus;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        DcbxInfo dcbxInfo = (DcbxInfo) obj;
-
-        return new EqualsBuilder()
-                .append(dcbxApReason, dcbxInfo.dcbxApReason)
-                .append(dcbxPfcReason, dcbxInfo.dcbxPfcReason)
-                .append(dcbxPgReason, dcbxInfo.dcbxPgReason)
-                .append(dcbxStatus, dcbxInfo.dcbxStatus)
-                .isEquals();
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(dcbxApReason)
-                .append(dcbxPfcReason)
-                .append(dcbxPgReason)
-                .append(dcbxStatus)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("dcbxApReason", dcbxApReason)
-                .append("dcbxPfcReason", dcbxPfcReason)
-                .append("dcbxPgReason", dcbxPgReason)
-                .append("dcbxStatus", dcbxStatus)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
 
 }

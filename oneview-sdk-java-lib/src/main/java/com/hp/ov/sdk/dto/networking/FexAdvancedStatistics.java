@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking;
+
+import com.hp.ov.sdk.dto.BaseModelResource;
 
 public class FexAdvancedStatistics extends BaseModelResource {
 

@@ -181,40 +181,12 @@ public final class FcPortProperties implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        FcPortProperties that = (FcPortProperties) obj;
-
-        return new EqualsBuilder()
-                .append(fcfMac, that.fcfMac)
-                .append(logins, that.logins)
-                .append(loginsCount, that.loginsCount)
-                .append(neighborInterconnectName, that.neighborInterconnectName)
-                .append(opOnline, that.opOnline)
-                .append(opOnlineReason, that.opOnlineReason)
-                .append(principleInterconnectName, that.principleInterconnectName)
-                .append(principleInterconnectNameList, that.principleInterconnectNameList)
-                .append(wwnn, that.wwnn)
-                .append(wwpn, that.wwpn)
-                .isEquals();
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(fcfMac)
-                .append(logins)
-                .append(loginsCount)
-                .append(neighborInterconnectName)
-                .append(opOnline)
-                .append(opOnlineReason)
-                .append(principleInterconnectName)
-                .append(principleInterconnectNameList)
-                .append(wwnn)
-                .append(wwpn)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override

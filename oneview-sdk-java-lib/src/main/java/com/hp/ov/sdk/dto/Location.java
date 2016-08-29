@@ -24,40 +24,34 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-
 public class Location implements Serializable {
 
     private static final long serialVersionUID = 229124690819104043L;
 
     private List<LocationEntry> locationEntries = new ArrayList<>();
 
+    /**
+     * @return the locationEntries
+     */
     public List<LocationEntry> getLocationEntries() {
         return locationEntries;
     }
 
+    /**
+     * @param locationEntries the locationEntries to set
+     */
     public void setLocationEntries(List<LocationEntry> locationEntries) {
         this.locationEntries = locationEntries;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj instanceof Location) {
-            Location location = (Location) obj;
-
-            return new EqualsBuilder()
-                    .append(locationEntries, location.locationEntries)
-                    .isEquals();
-        }
-        return false;
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(locationEntries)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto.networking.switches;
 
 import java.io.Serializable;
 
@@ -34,127 +34,145 @@ public final class LogicalSwitchVpc implements Serializable {
     private VpcPeer peer;
     private String role;
     private String state;
-
+    
+    /**
+     * @return the domainId
+     */
     public String getDomainId() {
         return domainId;
     }
 
+    /**
+     * @param domainId the domainId to set
+     */
     public void setDomainId(String domainId) {
         this.domainId = domainId;
     }
 
+    /**
+     * @return the firmware
+     */
     public String getFirmware() {
         return firmware;
     }
 
+    /**
+     * @param firmware the firmware to set
+     */
     public void setFirmware(String firmware) {
         this.firmware = firmware;
     }
 
+    /**
+     * @return the ipAddress
+     */
     public String getIpAddress() {
         return ipAddress;
     }
 
+    /**
+     * @param ipAddress the ipAddress to set
+     */
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
 
+    /**
+     * @return the masterMACId
+     */
     public String getMasterMACId() {
         return masterMACId;
     }
 
+    /**
+     * @param masterMACId the masterMACId to set
+     */
     public void setMasterMACId(String masterMACId) {
         this.masterMACId = masterMACId;
     }
 
+    /**
+     * @return the memberId
+     */
     public String getMemberId() {
         return memberId;
     }
 
+    /**
+     * @param memberId the memberId to set
+     */
     public void setMemberId(String memberId) {
         this.memberId = memberId;
     }
 
+    /**
+     * @return the model
+     */
     public String getModel() {
         return model;
     }
 
+    /**
+     * @param model the model to set
+     */
     public void setModel(String model) {
         this.model = model;
     }
 
+    /**
+     * @return the peer
+     */
     public VpcPeer getPeer() {
         return peer;
     }
 
+    /**
+     * @param peer the peer to set
+     */
     public void setPeer(VpcPeer peer) {
         this.peer = peer;
     }
 
+    /**
+     * @return the role
+     */
     public String getRole() {
         return role;
     }
 
+    /**
+     * @param role the role to set
+     */
     public void setRole(String role) {
         this.role = role;
     }
 
+    /**
+     * @return the state
+     */
     public String getState() {
         return state;
     }
 
+    /**
+     * @param state the state to set
+     */
     public void setState(String state) {
         this.state = state;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        LogicalSwitchVpc that = (LogicalSwitchVpc) obj;
-
-        return new EqualsBuilder()
-                .append(domainId, that.domainId)
-                .append(firmware, that.firmware)
-                .append(ipAddress, that.ipAddress)
-                .append(masterMACId, that.masterMACId)
-                .append(memberId, that.memberId)
-                .append(model, that.model)
-                .append(peer, that.peer)
-                .append(role, that.role)
-                .append(state, that.state)
-                .isEquals();
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(domainId)
-                .append(firmware)
-                .append(ipAddress)
-                .append(masterMACId)
-                .append(memberId)
-                .append(model)
-                .append(peer)
-                .append(role)
-                .append(state)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("domainId", domainId)
-                .append("firmware", firmware)
-                .append("ipAddress", ipAddress)
-                .append("masterMACId", masterMACId)
-                .append("memberId", memberId)
-                .append("model", model)
-                .append("peer", peer)
-                .append("role", role)
-                .append("state", state)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
 }

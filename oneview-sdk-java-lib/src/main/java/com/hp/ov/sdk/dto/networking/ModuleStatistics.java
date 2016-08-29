@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -22,6 +22,8 @@ import java.math.BigInteger;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import com.hp.ov.sdk.dto.PortTelemetry;
 
 public class ModuleStatistics implements Serializable {
 

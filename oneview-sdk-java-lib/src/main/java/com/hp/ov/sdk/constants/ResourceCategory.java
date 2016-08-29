@@ -55,8 +55,10 @@ public class ResourceCategory {
     public static final String RC_STORAGE_VOLUME_TEMPLATE = "StorageVolumeTemplate";
     public static final String RC_STORAGE_VOLUME_TEMPLATE_V200 = "StorageVolumeTemplateV3";
     public static final String RC_SWITCH = "switch";
+    public static final String RC_SWITCH_V300 = "switchV300";
     public static final String RC_UPLINKSET = "uplink-sets";
     public static final String RC_UPLINKS_SETS = "uplink-setV2";
     public static final String RC_UPLINKS_SETSV200 = "uplink-setV3";
+   
 
 }

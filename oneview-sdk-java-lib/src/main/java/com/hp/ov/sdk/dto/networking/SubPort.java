@@ -22,7 +22,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-
 public final class SubPort implements Serializable {
 
     private static final long serialVersionUID = -470998644380158072L;
@@ -30,7 +29,7 @@ public final class SubPort implements Serializable {
     private Integer portNumber;
     private PortStatus portStatus;
     private PortStatusReason portStatusReason;
-
+    
     /**
      * @return the portNumber
      */
@@ -75,26 +74,12 @@ public final class SubPort implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        SubPort subPort = (SubPort) obj;
-
-        return new EqualsBuilder()
-                .append(portNumber, subPort.portNumber)
-                .append(portStatus, subPort.portStatus)
-                .append(portStatusReason, subPort.portStatusReason)
-                .isEquals();
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(portNumber)
-                .append(portStatus)
-                .append(portStatusReason)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override

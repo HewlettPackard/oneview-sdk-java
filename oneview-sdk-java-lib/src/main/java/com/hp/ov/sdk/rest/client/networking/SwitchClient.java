@@ -16,16 +16,19 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.SwitchPortStatistics;
-import com.hp.ov.sdk.dto.SwitchStatistics;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
+import com.hp.ov.sdk.dto.networking.Port;
+import com.hp.ov.sdk.dto.networking.SwitchPortStatistics;
+import com.hp.ov.sdk.dto.networking.SwitchStatistics;
 import com.hp.ov.sdk.dto.networking.switches.Switch;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
@@ -236,5 +239,31 @@ public class SwitchClient {
         LOGGER.info("SwitchClient : getPortStatistics : End");
 
         return switchPortStatistics;
+    }
+    
+    
+    
+    /**
+     * The module takes in a {@link List}&lt;{@link Port}&gt; object and updates the existing
+     * switch ports based on the resource identifier.
+     * 
+     * @param resourceId switch resource identifier as seen in HPE OneView.
+     * @param ports containing the switch ports details, used to update the switch ports.
+     * 
+     * @return {@link String} containing the result of the operation.
+     */
+    public String updatePorts(String resourceId, List<Port> ports) {
+        LOGGER.info("SwitchClient : updatePorts : Start");
+
+        String updateUri = UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId,
+                ResourceUris.SWITCHES_UPDATE_PORTS_URI);
+        
+        Request request = new Request(HttpMethodType.PUT, updateUri, ports);
+        
+        String response = baseClient.executeRequest(request, String.class);
+        
+        LOGGER.info("SwitchClient : updatePorts : End");
+
+        return response;
     }
 }
