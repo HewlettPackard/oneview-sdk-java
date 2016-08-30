@@ -52,7 +52,6 @@ public class ResourceUris {
     public static final String ENCLOSURE_GROUP_SCRIPT_URI = "script";
     public static final String ENCLOSURE_GROUP_URI = "/rest/enclosure-groups";
     public static final String ENVIRONMENT_CONFIGURATION_URI = "environmentalConfiguration";
-    public static final String FABRIC_URI = "/rest/fabrics";
     public static final String FC_NETWORK_URI = "/rest/fc-networks";
     public static final String FC_SANS_DEVICE_MANAGER = "device-managers";
     public static final String FC_SANS_DEVICE_MANAGER_URI = "/rest/fc-sans/device-managers";

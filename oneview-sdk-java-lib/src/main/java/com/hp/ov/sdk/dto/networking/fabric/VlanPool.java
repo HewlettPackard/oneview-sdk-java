@@ -13,62 +13,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.networking.fabric;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.hp.ov.sdk.dto.BaseModelResource;
+
 public class VlanPool extends BaseModelResource {
 
-    private static final long serialVersionUID = -9199586230195072499L;
+    private static final long serialVersionUID = 1L;
 
     private int start;
     private int length;
 
+    /**
+     * @return the start
+     */
     public int getStart() {
         return start;
     }
 
+    /**
+     * @param start the start to set
+     */
     public void setStart(int start) {
         this.start = start;
     }
 
+    /**
+     * @return the length
+     */
     public int getLength() {
         return length;
     }
 
+    /**
+     * @param length the length to set
+     */
     public void setLength(int length) {
         this.length = length;
     }
 
     @Override
-    public boolean canEqual(Object obj) {
-        return (obj instanceof VlanPool);
-    }
-
-    @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj instanceof VlanPool) {
-            VlanPool vlanPool = (VlanPool) obj;
-
-            return new EqualsBuilder()
-                    .appendSuper(super.equals(obj))
-                    .append(start, vlanPool.start)
-                    .append(length, vlanPool.length)
-                    .isEquals();
-        }
-        return false;
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .appendSuper(super.hashCode())
-                .append(start)
-                .append(length)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
- *  
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,9 +18,10 @@ package com.hp.ov.sdk.rest.client.networking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.networking.fabric.Fabric;
+import com.hp.ov.sdk.dto.networking.fabric.VlanPool;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -28,6 +29,9 @@ import com.hp.ov.sdk.util.UrlUtils;
 public class FabricClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FabricClient.class);
+
+    public static final String FABRIC_URI = "/rest/fabrics";
+    public static final String RESERVED_VLAN_RANGE_URI = "reserved-vlan-range";
 
     private final BaseClient baseClient;
 
@@ -46,7 +50,7 @@ public class FabricClient {
         LOGGER.info("FabricClient : getById : Start");
 
         Fabric fabric = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.FABRIC_URI, resourceId), Fabric.class);
+                UrlUtils.createUrl(FABRIC_URI, resourceId), Fabric.class);
 
         LOGGER.info("FabricClient : getById : End");
 
@@ -63,8 +67,7 @@ public class FabricClient {
     public ResourceCollection<Fabric> getAll() {
         LOGGER.info("FabricClient : getAll : Start");
 
-        ResourceCollection<Fabric> fabrics = baseClient.getResourceCollection(
-                ResourceUris.FABRIC_URI, Fabric.class);
+        ResourceCollection<Fabric> fabrics = baseClient.getResourceCollection(FABRIC_URI, Fabric.class);
 
         LOGGER.info("FabricClient : getAll : End");
 
@@ -84,11 +87,50 @@ public class FabricClient {
         LOGGER.info("FabricClient : getByName : Start");
 
         ResourceCollection<Fabric> fabrics = baseClient.getResourceCollection(
-                ResourceUris.FABRIC_URI, Fabric.class, UrlParameter.getFilterByNameParameter(name));
+                FABRIC_URI, Fabric.class, UrlParameter.getFilterByNameParameter(name));
 
         LOGGER.info("FabricClient : getByName : End");
 
         return fabrics;
+    }
+
+    /**
+     * Retrieves the {@link VlanPool} range for the fabric.
+     *
+     * @param resourceId fabric resource identifier as seen in HPE OneView.
+     *
+     * @return {@link VlanPool} object containing the details.
+     */
+    public VlanPool getReservedVlanRange(String resourceId) {
+        LOGGER.info("FabricClient : getReservedVlanRange : Start");
+
+        VlanPool vlanPoll = baseClient.getResource(
+                UrlUtils.createUrl(FABRIC_URI, resourceId, RESERVED_VLAN_RANGE_URI), VlanPool.class);
+
+        LOGGER.info("FabricClient : getReservedVlanRange : End");
+
+        return vlanPoll;
+    }
+
+    /**
+     * Updates a {@link VlanPool} range for the fabric.
+     *
+     * @param resourceId fabric resource identifier as seen in HPE OneView.
+     * @param vlanPoll object containing the range details.
+     * @param aSync flag to indicate whether the request should be processed
+     * synchronously or asynchronously.
+     *
+     * @return {@link TaskResourceV2} containing the task status for the process.
+     */
+    public TaskResourceV2 updateReservedVlanRange(String resourceId, VlanPool vlanPool, boolean aSync) {
+        LOGGER.info("FabricClient : updateReservedVlanRange : Start");
+
+        TaskResourceV2 taskResource = baseClient.updateResource(
+                UrlUtils.createUrl(FABRIC_URI, resourceId, RESERVED_VLAN_RANGE_URI), vlanPool, aSync);
+
+        LOGGER.info("FabricClient : updateReservedVlanRange : End");
+
+        return taskResource;
     }
 
 }

@@ -24,8 +24,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.networking.fabric.Fabric;
+import com.hp.ov.sdk.dto.networking.fabric.VlanPool;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
@@ -45,7 +45,7 @@ public class FabricClientTest {
     public void shouldGetFabric() {
         fabricClient.getById(ANY_FABRIC_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.FABRIC_URI + "/" + ANY_FABRIC_RESOURCE_ID;
+        String expectedUri = FabricClient.FABRIC_URI + "/" + ANY_FABRIC_RESOURCE_ID;
 
         then(baseClient).should().getResource(expectedUri, Fabric.class);
     }
@@ -54,15 +54,37 @@ public class FabricClientTest {
     public void shouldGetAllFabric() {
         fabricClient.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.FABRIC_URI, Fabric.class);
+        then(baseClient).should().getResourceCollection(FabricClient.FABRIC_URI, Fabric.class);
     }
 
     @Test
     public void shouldGetFabricCollectionByName() {
         fabricClient.getByName(ANY_FABRIC_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.FABRIC_URI,
+        then(baseClient).should().getResourceCollection(FabricClient.FABRIC_URI,
                 Fabric.class, UrlParameter.getFilterByNameParameter(ANY_FABRIC_RESOURCE_NAME));
+    }
+
+    @Test
+    public void shouldGetReservedVlanRange() {
+        fabricClient.getReservedVlanRange(ANY_FABRIC_RESOURCE_ID);
+
+        String expectedUri = FabricClient.FABRIC_URI + "/" + ANY_FABRIC_RESOURCE_ID + "/" + FabricClient.RESERVED_VLAN_RANGE_URI;
+
+        then(baseClient).should().getResource(expectedUri, VlanPool.class);
+    }
+
+    @Test
+    public void shouldUpdateReservedVlanRange() {
+        VlanPool vlanPool = new VlanPool();
+
+        fabricClient.updateReservedVlanRange(ANY_FABRIC_RESOURCE_ID, vlanPool, false);
+
+        String expectedUri = FabricClient.FABRIC_URI
+                + "/" + ANY_FABRIC_RESOURCE_ID
+                + "/" + FabricClient.RESERVED_VLAN_RANGE_URI;
+
+        then(baseClient).should().updateResource(expectedUri, vlanPool, false);
     }
 
 }
