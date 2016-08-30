@@ -24,7 +24,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.SupportDump;
@@ -51,7 +50,7 @@ public class LogicalEnclosureClientTest {
     public void shouldGetLogicalEnclosureById() {
         logicalEnclosureClient.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = LogicalEnclosureClient.LOGICAL_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
 
         then(baseClient).should().getResource(expectedUri, LogicalEnclosure.class);
     }
@@ -60,14 +59,14 @@ public class LogicalEnclosureClientTest {
     public void shouldGetAllLogicalEnclosure() {
         logicalEnclosureClient.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.LOGICAL_ENCLOSURE_URI, LogicalEnclosure.class);
+        then(baseClient).should().getResourceCollection(LogicalEnclosureClient.LOGICAL_ENCLOSURE_URI, LogicalEnclosure.class);
     }
 
     @Test
     public void shouldGetLogicalEnclosuresByName() {
         logicalEnclosureClient.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.LOGICAL_ENCLOSURE_URI,
+        then(baseClient).should().getResourceCollection(LogicalEnclosureClient.LOGICAL_ENCLOSURE_URI,
                 LogicalEnclosure.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
     }
 
@@ -75,7 +74,7 @@ public class LogicalEnclosureClientTest {
     public void shouldCreateLogicalEnclosure() {
         AddLogicalEnclosure logicalEnclosure = new AddLogicalEnclosure();
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.LOGICAL_ENCLOSURE_URI, logicalEnclosure);
+        Request request = new Request(HttpMethodType.POST, LogicalEnclosureClient.LOGICAL_ENCLOSURE_URI, logicalEnclosure);
 
         request.setTimeout(300000);
 
@@ -90,7 +89,7 @@ public class LogicalEnclosureClientTest {
 
         logicalEnclosureClient.update(ANY_RESOURCE_ID, logicalEnclosure, false);
 
-        String expectedUri = ResourceUris.LOGICAL_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = LogicalEnclosureClient.LOGICAL_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
         Request request = new Request(HttpMethodType.PUT, expectedUri, logicalEnclosure);
 
         request.setTimeout(300000);
@@ -104,7 +103,7 @@ public class LogicalEnclosureClientTest {
 
         logicalEnclosureClient.patch(ANY_RESOURCE_ID, patch, false);
 
-        String expectedUri = ResourceUris.LOGICAL_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = LogicalEnclosureClient.LOGICAL_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
         Request request = new Request(HttpMethodType.PATCH, expectedUri, patch);
 
         request.setTimeout(300000);
@@ -116,7 +115,7 @@ public class LogicalEnclosureClientTest {
     public void shouldDeleteLogicalEnclosure() {
         logicalEnclosureClient.delete(ANY_RESOURCE_ID, false);
 
-        String expectedUri = ResourceUris.LOGICAL_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = LogicalEnclosureClient.LOGICAL_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
         Request request = new Request(HttpMethodType.DELETE, expectedUri);
 
         request.setTimeout(300000);
@@ -128,9 +127,9 @@ public class LogicalEnclosureClientTest {
     public void shouldUpdateLogicalEnclosureFromGroup() {
         logicalEnclosureClient.updateFromGroup(ANY_RESOURCE_ID, false);
 
-        String expectedUri = ResourceUris.LOGICAL_ENCLOSURE_URI
+        String expectedUri = LogicalEnclosureClient.LOGICAL_ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_ENCLOSURE_UPDATE_FROM_GROUP_URI;
+                + "/" + LogicalEnclosureClient.UPDATE_FROM_GROUP_URI;
         Request request = new Request(HttpMethodType.PUT, expectedUri);
 
         request.setTimeout(300000);
@@ -142,9 +141,9 @@ public class LogicalEnclosureClientTest {
     public void shouldUpdateLogicalEnclosureConfiguration() {
         logicalEnclosureClient.updateConfiguration(ANY_RESOURCE_ID, false);
 
-        String expectedUri = ResourceUris.LOGICAL_ENCLOSURE_URI
+        String expectedUri = LogicalEnclosureClient.LOGICAL_ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_ENCLOSURE_CONFIGURATION_URI;
+                + "/" + LogicalEnclosureClient.CONFIGURATION_URI;
         Request request = new Request(HttpMethodType.PUT, expectedUri);
 
         request.setTimeout(300000);
@@ -156,9 +155,9 @@ public class LogicalEnclosureClientTest {
     public void shouldGetConfigurationScript() {
         logicalEnclosureClient.getConfigurationScript(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_ENCLOSURE_URI
+        String expectedUri = LogicalEnclosureClient.LOGICAL_ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_ENCLOSURE_SCRIPT_URI;
+                + "/" + LogicalEnclosureClient.SCRIPT_URI;
         Request request = new Request(HttpMethodType.GET, expectedUri);
 
         then(baseClient).should().executeRequest(request, String.class);
@@ -169,9 +168,9 @@ public class LogicalEnclosureClientTest {
         logicalEnclosureClient.updateConfigurationScript(ANY_RESOURCE_ID,
                 ANY_CONFIGURATION_SCRIPT, false);
 
-        String expectedUri = ResourceUris.LOGICAL_ENCLOSURE_URI
+        String expectedUri = LogicalEnclosureClient.LOGICAL_ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_ENCLOSURE_SCRIPT_URI;
+                + "/" + LogicalEnclosureClient.SCRIPT_URI;
 
         then(baseClient).should().updateResource(expectedUri, ANY_CONFIGURATION_SCRIPT, false);
     }
@@ -182,9 +181,9 @@ public class LogicalEnclosureClientTest {
 
         logicalEnclosureClient.createSupportDump(ANY_RESOURCE_ID, supportDump, false);
 
-        String expectedUri = ResourceUris.LOGICAL_ENCLOSURE_URI
+        String expectedUri = LogicalEnclosureClient.LOGICAL_ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_ENCLOSURE_SUPPORT_DUMP_URI;
+                + "/" + LogicalEnclosureClient.SUPPORT_DUMP_URI;
 
         Request expectedRequest = new Request(HttpMethodType.POST, expectedUri, supportDump);
 

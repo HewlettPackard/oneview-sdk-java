@@ -72,11 +72,6 @@ public class ResourceUris {
     public static final String INTERCONNECT_UPDATE_PORTS_URI = "update-ports";
     public static final String INTERCONNECT_RESET_PORT_PROTECTION_URI = "resetportprotection";
     public static final String LOGICAL_DOWNLINK_URI = "/rest/logical-downlinks";
-    public static final String LOGICAL_ENCLOSURE_URI = "/rest/logical-enclosures";
-    public static final String LOGICAL_ENCLOSURE_UPDATE_FROM_GROUP_URI = "updateFromGroup";
-    public static final String LOGICAL_ENCLOSURE_CONFIGURATION_URI = "configuration";
-    public static final String LOGICAL_ENCLOSURE_SCRIPT_URI = "script";
-    public static final String LOGICAL_ENCLOSURE_SUPPORT_DUMP_URI = "support-dumps";
     public static final String LOGICAL_INTERCONNECT_GROUPS_URI = "/rest/logical-interconnect-groups";
     public static final String LOGICAL_INTERCONNECT_URI = "/rest/logical-interconnects";
     public static final String LOGICAL_INTERCONNECT_FIRMWARE_URI = "firmware";

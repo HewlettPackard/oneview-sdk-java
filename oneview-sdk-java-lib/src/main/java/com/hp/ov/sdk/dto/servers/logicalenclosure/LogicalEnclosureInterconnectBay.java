@@ -15,29 +15,67 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto.servers.logicalenclosure;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class LogicalEnclosureInterconnectBay {
+import com.google.gson.annotations.Since;
+import com.google.gson.annotations.Until;
+
+public class LogicalEnclosureInterconnectBay implements Serializable {
+
+    private static final long serialVersionUID = 3078173735872737670L;
 
     private Integer bayNumber;
+    @Until(299)
     private InterconnectLicenseIntent licenseIntent;
+    @Since(300)
+    private Map<LicenseIntentName, InterconnectLicenseIntent> licenseIntents = new HashMap<>();
 
+    /**
+     * @return the bayNumber
+     */
     public Integer getBayNumber() {
         return bayNumber;
     }
 
+    /**
+     * @param bayNumber the bayNumber to set
+     */
     public void setBayNumber(Integer bayNumber) {
         this.bayNumber = bayNumber;
     }
 
+    /**
+     * @return the licenseIntent
+     */
     public InterconnectLicenseIntent getLicenseIntent() {
         return licenseIntent;
     }
 
+    /**
+     * @param licenseIntent the licenseIntent to set
+     */
     public void setLicenseIntent(InterconnectLicenseIntent licenseIntent) {
         this.licenseIntent = licenseIntent;
+    }
+
+    /**
+     * @return the licenseIntents
+     */
+    public Map<LicenseIntentName, InterconnectLicenseIntent> getLicenseIntents() {
+        return licenseIntents;
+    }
+
+    /**
+     * @param licenseIntents the licenseIntents to set
+     */
+    public void setLicenseIntents(Map<LicenseIntentName, InterconnectLicenseIntent> licenseIntents) {
+        this.licenseIntents = licenseIntents;
     }
 
     @Override
@@ -47,24 +85,11 @@ public class LogicalEnclosureInterconnectBay {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj instanceof LogicalEnclosureInterconnectBay) {
-            LogicalEnclosureInterconnectBay that = (LogicalEnclosureInterconnectBay) obj;
-
-            return new EqualsBuilder()
-                    .append(bayNumber, that.bayNumber)
-                    .append(licenseIntent, that.licenseIntent)
-                    .isEquals();
-        }
-        return false;
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(bayNumber)
-                .append(licenseIntent)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

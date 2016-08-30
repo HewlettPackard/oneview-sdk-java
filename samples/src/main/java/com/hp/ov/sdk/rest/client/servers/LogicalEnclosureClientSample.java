@@ -17,6 +17,9 @@ package com.hp.ov.sdk.rest.client.servers;
 
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.FirmwareUpdateOn;
 import com.hp.ov.sdk.dto.Patch;
@@ -39,6 +42,8 @@ import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
  * operations on logical enclosure resource
  */
 public class LogicalEnclosureClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogicalEnclosureClientSample.class);
 
     private final LogicalEnclosureClient logicalEnclosureClient;
     private final FirmwareDriverClient firmwareDriverClient;
@@ -65,22 +70,19 @@ public class LogicalEnclosureClientSample {
     private void getLogicalEnclosureById() {
         LogicalEnclosure logicalEnclosure = logicalEnclosureClient.getById(RESOURCE_ID);
 
-        System.out.println("LogicalEnclosureClientSample : getLogicalEnclosure : "
-                + "LogicalEnclosure object returned to client : " + logicalEnclosure.toJsonString());
+        LOGGER.info("Logical enclosure returned to client: {}", logicalEnclosure.toJsonString());
     }
 
     private void getAllLogicalEnclosures() {
         ResourceCollection<LogicalEnclosure> logicalEnclosures = logicalEnclosureClient.getAll();
 
-        System.out.println("LogicalEnclosureClientSample : getAllLogicalEnclosures : "
-                + "LogicalEnclosures returned to client (count) : " + logicalEnclosures.toJsonString());
+        LOGGER.info("Logical enclosures returned to client: {}", logicalEnclosures.toJsonString());
     }
 
     private void getLogicalEnclosureByName() {
         LogicalEnclosure logicalEnclosure = logicalEnclosureClient.getByName(RESOURCE_NAME).get(0);
 
-        System.out.println("LogicalEnclosureClientSample : getLogicalEnclosureByName : "
-                + "LogicalEnclosure object returned to client : " + logicalEnclosure.toJsonString());
+        LOGGER.info("Logical enclosure returned to client: {}", logicalEnclosure.toJsonString());
     }
 
     private void createLogicalEnclosure() {
@@ -88,8 +90,7 @@ public class LogicalEnclosureClientSample {
 
         TaskResourceV2 taskResource = this.logicalEnclosureClient.create(addLogicalEnclosure, false);
 
-        System.out.println("LogicalEnclosureClientSample : createLogicalEnclosure : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void updateLogicalEnclosure() {
@@ -100,8 +101,7 @@ public class LogicalEnclosureClientSample {
         TaskResourceV2 taskResource = this.logicalEnclosureClient.update(logicalEnclosure.getResourceId(),
                 logicalEnclosure, false);
 
-        System.out.println("LogicalEnclosureClientSample : updateLogicalEnclosure : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void patchLogicalEnclosure() {
@@ -118,8 +118,7 @@ public class LogicalEnclosureClientSample {
 
         TaskResourceV2 taskResource = this.logicalEnclosureClient.patch(logicalEnclosure.getResourceId(), patch, false);
 
-        System.out.println("LogicalEnclosureClientSample : patchLogicalEnclosure : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void deleteLogicalEnclosure() {
@@ -127,8 +126,7 @@ public class LogicalEnclosureClientSample {
 
         TaskResourceV2 taskResource = this.logicalEnclosureClient.delete(logicalEnclosure.getResourceId(), false);
 
-        System.out.println("LogicalEnclosureClientSample : deleteLogicalEnclosure : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void updateLogicalEnclosureFromGroup() {
@@ -136,8 +134,7 @@ public class LogicalEnclosureClientSample {
 
         TaskResourceV2 taskResource = this.logicalEnclosureClient.updateFromGroup(logicalEnclosure.getResourceId(), false);
 
-        System.out.println("LogicalEnclosureClientSample : updateLogicalEnclosureFromGroup : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void updateLogicalEnclosureConfiguration() {
@@ -146,8 +143,7 @@ public class LogicalEnclosureClientSample {
         TaskResourceV2 taskResource = this.logicalEnclosureClient.updateConfiguration(
                 logicalEnclosure.getResourceId(), false);
 
-        System.out.println("LogicalEnclosureClientSample : updateLogicalEnclosureConfiguration : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void getLogicalEnclosureConfigurationScript() {
@@ -156,8 +152,7 @@ public class LogicalEnclosureClientSample {
         String script = this.logicalEnclosureClient.getConfigurationScript(
                 logicalEnclosure.getResourceId());
 
-        System.out.println("LogicalEnclosureClientSample : getLogicalEnclosureConfigurationScript : " +
-                "Script returned to client : " + script);
+        LOGGER.info("Logical enclosure script returned to client: {}", script);
     }
 
     private void updateLogicalEnclosureConfigurationScript() {
@@ -166,8 +161,7 @@ public class LogicalEnclosureClientSample {
         TaskResourceV2 taskResource = this.logicalEnclosureClient.updateConfigurationScript(
                 logicalEnclosure.getResourceId(), "\"name=Enclosure_test_script\"", false);
 
-        System.out.println("LogicalEnclosureClientSample : updateLogicalEnclosureConfigurationScript : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void createLogicalEnclosureSupportDump() {
@@ -177,8 +171,7 @@ public class LogicalEnclosureClientSample {
         TaskResourceV2 taskResource = this.logicalEnclosureClient.createSupportDump(
                 logicalEnclosure.getResourceId(), supportDump, false);
 
-        System.out.println("LogicalEnclosureClientSample : createLogicalEnclosureSupportDump : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
      }
 
     private AddLogicalEnclosure buildAddLogicalEnclosure() {
