@@ -34,7 +34,6 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
@@ -80,7 +79,7 @@ public class HttpRestClientTest {
     @Before
     public void setUp() throws Exception {
         params = new RestParams();
-        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), ResourceUris.ENCLOSURE_URI));
+        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), "/rest/"));
         params.setSessionId("sessionID");
         params.setTrustManager(trustMgr);
         params.setHostnameVerifier(hostnameVerifier);

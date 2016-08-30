@@ -15,6 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.servers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
@@ -45,13 +48,15 @@ import com.hp.ov.sdk.util.JsonPrettyPrinter;
  */
 public class EnclosureClientSample {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(EnclosureClientSample.class);
+
     private final EnclosureClient enclosureClient;
     private final FirmwareDriverClient firmwareDriverClient;
     private final EnclosureGroupClient enclosureGroupClient;
 
     // test values - user input
     // ================================
-    public static final String RESOURCE_NAME = "Encl1";
+    public static final String RESOURCE_NAME = "0000A66101";
     public static final String RESOURCE_NAME_UPDATED = "Encl1_Updated";
 
     private static final String RESOURCE_ID = "09SGH100X6J1";
@@ -74,22 +79,19 @@ public class EnclosureClientSample {
     private void getEnclosureById() {
         Enclosure enclosure = enclosureClient.getById(RESOURCE_ID);
 
-        System.out.println("EnclosureClientSample : getEnclosureById : "
-                + "Enclosure object returned to client : " + enclosure.toJsonString());
+        LOGGER.info("Enclosure object returned to client: " + enclosure.toJsonString());
     }
 
     private void getAllEnclosures() {
         ResourceCollection<Enclosure> enclosures = enclosureClient.getAll();
 
-        System.out.println("EnclosureClientSample : getAllEnclosures : "
-                + "Enclosure returned to client (count) : " + enclosures.toJsonString());
+        LOGGER.info("Enclosures returned to client: " + enclosures.toJsonString());
     }
 
     private void getEnclosureByName() {
         Enclosure enclosure = enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-        System.out.println("EnclosureClientSample : getEnclosureByName : "
-                + "Enclosure object returned to client : " + enclosure.toJsonString());
+        LOGGER.info("Enclosure object returned to client: " + enclosure.toJsonString());
     }
 
     private void addEnclosure() {
@@ -97,8 +99,7 @@ public class EnclosureClientSample {
 
         TaskResourceV2 taskResource = this.enclosureClient.add(addEnclosure, false);
 
-        System.out.println("EnclosureClientSample : addEnclosure : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
 
     private void updateEnclosure() {
@@ -108,8 +109,7 @@ public class EnclosureClientSample {
 
         TaskResourceV2 taskResource = this.enclosureClient.update(enclosure.getResourceId(), enclosure, false);
 
-        System.out.println("EnclosureClientSample : updateEnclosure : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
 
     private void patchEnclosure() {
@@ -123,8 +123,7 @@ public class EnclosureClientSample {
 
         TaskResourceV2 taskResource = this.enclosureClient.patch(enclosure.getResourceId(), patch, false);
 
-        System.out.println("EnclosureClientSample : patchEnclosure : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
 
     private void removeEnclosure() {
@@ -132,8 +131,7 @@ public class EnclosureClientSample {
 
         TaskResourceV2 taskResource = this.enclosureClient.remove(enclosure.getResourceId(), false);
 
-        System.out.println("EnclosureClientSample : removeEnclosure : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
 
     private void updateEnclosureConfiguration() {
@@ -141,8 +139,7 @@ public class EnclosureClientSample {
 
         TaskResourceV2 taskResource = this.enclosureClient.updateConfiguration(enclosure.getResourceId(), false);
 
-        System.out.println("EnclosureClientSample : updateEnclosureConfiguration : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
 
     private void getEnclosureConfigurationScript() {
@@ -150,8 +147,7 @@ public class EnclosureClientSample {
 
         String script = this.enclosureClient.getConfigurationScript(enclosure.getResourceId());
 
-        System.out.println("EnclosureClientSample : getEnclosureConfigurationScript : "
-                + "Script returned to client : " + script);
+        LOGGER.info("Script returned to client: " + script);
     }
 
     private void updateEnclosureConfigurationScript() {
@@ -160,8 +156,7 @@ public class EnclosureClientSample {
         TaskResourceV2 taskResource = this.enclosureClient.updateConfigurationScript(enclosure.getResourceId(),
                 ENCLOSURE_CONFIGURATION_SCRIPT, false);
 
-        System.out.println("EnclosureClientSample : updateEnclosureConfigurationScript : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
 
     private void getEnclosureActiveOaSsoUrl() {
@@ -169,8 +164,7 @@ public class EnclosureClientSample {
 
         SsoUrlData ssoUrlData = this.enclosureClient.getActiveOaSsoUrl(enclosure.getResourceId());
 
-        System.out.println("EnclosureClientSample : getEnclosureActiveOaSsoUrl : "
-                + "SsoUrlData object returned to client : " + JsonPrettyPrinter.print(ssoUrlData));
+        LOGGER.info("SsoUrlData object returned to client: " + JsonPrettyPrinter.print(ssoUrlData));
     }
 
     private void getEnclosureStandbyOaSsoUrl() {
@@ -178,8 +172,7 @@ public class EnclosureClientSample {
 
         SsoUrlData ssoUrlData = this.enclosureClient.getStandbyOaSsoUrl(enclosure.getResourceId());
 
-        System.out.println("EnclosureClientSample : getEnclosureStandbyOaSsoUrl : "
-                + "SsoUrlData object returned to client : " + JsonPrettyPrinter.print(ssoUrlData));
+        LOGGER.info("SsoUrlData object returned to client: " + JsonPrettyPrinter.print(ssoUrlData));
     }
 
     private void updateEnclosureCompliance() {
@@ -187,8 +180,7 @@ public class EnclosureClientSample {
 
         TaskResourceV2 taskResource = this.enclosureClient.updateCompliance(enclosure.getResourceId(), false);
 
-        System.out.println("EnclosureClientSample : updateEnclosureCompliance : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
 
     private void updateEnclosureFwBaseline() {
@@ -199,8 +191,7 @@ public class EnclosureClientSample {
         TaskResourceV2 taskResource = this.enclosureClient.updateFwBaseline(
                 enclosure.getResourceId(), fwBaselineConfig, false);
 
-        System.out.println("EnclosureClientSample : updateEnclosureFwBaseline : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
 
     private void getEnclosureUtilization() {
@@ -208,8 +199,7 @@ public class EnclosureClientSample {
 
         UtilizationData utilizationData = this.enclosureClient.getUtilization(enclosure.getResourceId());
 
-        System.out.println("EnclosureClientSample : getEnclosureUtilization : "
-                + "UtilizationData object returned to client : " + JsonPrettyPrinter.print(utilizationData));
+        LOGGER.info("UtilizationData object returned to client: " + JsonPrettyPrinter.print(utilizationData));
     }
 
     private void getEnclosureEnvironmentalConfiguration() {
@@ -218,8 +208,7 @@ public class EnclosureClientSample {
         EnvironmentalConfiguration configuration = this.enclosureClient.getEnvironmentalConfiguration(
                 enclosure.getResourceId());
 
-        System.out.println("EnclosureClientSample : getEnclosureEnvironmentalConfiguration : "
-                + "EnvironmentalConfiguration object returned to client : " + JsonPrettyPrinter.print(configuration));
+        LOGGER.info("EnvironmentalConfiguration object returned to client: " + JsonPrettyPrinter.print(configuration));
     }
 
     private void updateEnclosureEnvironmentalConfiguration() {
@@ -230,8 +219,7 @@ public class EnclosureClientSample {
         EnvironmentalConfiguration environmental = this.enclosureClient.updateEnvironmentalConfiguration(
                 enclosure.getResourceId(), configuration);
 
-        System.out.println("EnclosureClientSample : updateEnclosureEnvironmentalConfiguration : " +
-                "EnvironmentalConfiguration object returned to client : " + JsonPrettyPrinter.print(environmental));
+        LOGGER.info("EnvironmentalConfiguration object returned to client: " + JsonPrettyPrinter.print(environmental));
     }
 
     private void updateEnclosureRefreshState() {
@@ -242,8 +230,7 @@ public class EnclosureClientSample {
         TaskResourceV2 taskResource = this.enclosureClient.updateRefreshState(
                 enclosure.getResourceId(), refreshStateConfig, false);
 
-        System.out.println("EnclosureClientSample : updateEnclosureRefreshState : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
 
     private AddEnclosure buildAddEnclosure() {
