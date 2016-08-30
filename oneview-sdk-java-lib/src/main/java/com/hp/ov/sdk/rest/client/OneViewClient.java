@@ -64,6 +64,7 @@ import com.hp.ov.sdk.rest.client.storage.FcSanDeviceManagerClient;
 import com.hp.ov.sdk.rest.client.storage.FcSanManagedSanClient;
 import com.hp.ov.sdk.rest.client.storage.FcSanProviderClient;
 import com.hp.ov.sdk.rest.client.storage.SasLogicalJbodAttachmentClient;
+import com.hp.ov.sdk.rest.client.storage.SasLogicalJbodClient;
 import com.hp.ov.sdk.rest.client.storage.StoragePoolClient;
 import com.hp.ov.sdk.rest.client.storage.StorageSystemClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeAttachmentClient;
@@ -112,6 +113,7 @@ public class OneViewClient {
     private SasLogicalInterconnectClient sasLogicalInterconnectClient;
     private SasLogicalInterconnectGroupClient sasLogicalInterconnectGroupClient;
     private SasLogicalJbodAttachmentClient sasLogicalJbodAttachmentClient;
+    private SasLogicalJbodClient sasLogicalJbodClient;
     private ServerHardwareClient serverHardwareClient;
     private ServerHardwareTypeClient serverHardwareTypeClient;
     private ServerProfileClient serverProfileClient;
@@ -270,6 +272,10 @@ public class OneViewClient {
 
     public synchronized SasLogicalJbodAttachmentClient sasLogicalJbodAttachment() {
         return this.getClient(this.sasLogicalJbodAttachmentClient, SasLogicalJbodAttachmentClient.class);
+    }
+
+    public synchronized SasLogicalJbodClient sasLogicalJbod() {
+        return this.getClient(this.sasLogicalJbodClient, SasLogicalJbodClient.class);
     }
 
     public synchronized ServerHardwareClient serverHardware() {

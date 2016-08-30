@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.storage.driveenclosures;
+package com.hp.ov.sdk.dto.storage;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.Location;
@@ -36,13 +35,14 @@ public class Drive extends BaseModelResource {
     private DeviceInterface deviceInterface;
     private Location driveLocation;
     private DriveMedia driveMedia;
-    private List<String> drivePaths = new ArrayList<String>();
+    private List<String> drivePaths = new ArrayList<>();
     private String firmwareVersion;
     private Integer linkRateInGbs;
     private String model;
     private RefreshState refreshState;
     private Integer rotationalRpms;
     private String serialNumber;
+    private String stateReason;
     private Integer temperature;
     private String wwid;
 
@@ -229,6 +229,20 @@ public class Drive extends BaseModelResource {
     }
 
     /**
+     * @return the stateReason
+     */
+    public String getStateReason() {
+        return stateReason;
+    }
+
+    /**
+     * @param stateReason the stateReason to set
+     */
+    public void setStateReason(String stateReason) {
+        this.stateReason = stateReason;
+    }
+
+    /**
      * @return the temperature
      */
     public Integer getTemperature() {
@@ -254,11 +268,6 @@ public class Drive extends BaseModelResource {
      */
     public void setWwid(String wwid) {
         this.wwid = wwid;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
     }
 
     @Override
