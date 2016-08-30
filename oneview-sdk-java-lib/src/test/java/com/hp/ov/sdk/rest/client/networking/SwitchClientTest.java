@@ -71,8 +71,8 @@ public class SwitchClientTest {
     public void shouldGetSwitchCollectionByName() {
         switchClient.getByName(ANY_SWITCH_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.SWITCHES_URI,
-                Switch.class, UrlParameter.getFilterByNameParameter(ANY_SWITCH_RESOURCE_NAME));
+        then(baseClient).should().getResourceCollection(ResourceUris.SWITCHES_URI, Switch.class,
+                UrlParameter.getFilterByNameParameter(ANY_SWITCH_RESOURCE_NAME));
     }
 
     @Test
@@ -118,8 +118,8 @@ public class SwitchClientTest {
     public void shouldGetSwitchEnvironmentalConfiguration() {
         switchClient.getEnvironmentalConfiguration(ANY_SWITCH_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID
-                + "/" + ResourceUris.ENVIRONMENT_CONFIGURATION_URI;
+        String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID + "/"
+                + ResourceUris.ENVIRONMENT_CONFIGURATION_URI;
 
         then(baseClient).should().getResource(expectedUri, EnvironmentalConfiguration.class);
     }
@@ -128,8 +128,8 @@ public class SwitchClientTest {
     public void shouldGetSwitchStatistics() {
         switchClient.getStatistics(ANY_SWITCH_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID
-                + "/" + ResourceUris.SWITCHES_STATISTICS_URI;
+        String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID + "/"
+                + ResourceUris.SWITCHES_STATISTICS_URI;
 
         then(baseClient).should().getResource(expectedUri, SwitchStatistics.class);
     }
@@ -138,25 +138,24 @@ public class SwitchClientTest {
     public void shouldGetSwitchPortStatistics() {
         switchClient.getPortStatistics(ANY_SWITCH_RESOURCE_ID, ANY_SWITCH_RESOURCE_PORT_NAME);
 
-        String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID
-                + "/" + ResourceUris.SWITCHES_STATISTICS_URI + "/" + ANY_SWITCH_RESOURCE_PORT_NAME;
+        String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID + "/"
+                + ResourceUris.SWITCHES_STATISTICS_URI + "/" + ANY_SWITCH_RESOURCE_PORT_NAME;
 
         then(baseClient).should().getResource(expectedUri, SwitchPortStatistics.class);
     }
-    
+
     @Test
     public void shouldUpdatePorts() {
         List<Port> ports = new ArrayList<>();
 
-        switchClient.updatePorts(ANY_SWITCH_RESOURCE_ID, ports);
+        switchClient.updatePorts(ANY_SWITCH_RESOURCE_ID, ports, false);
 
-        String expectedUri = ResourceUris.SWITCHES_URI
-                + "/" + ANY_SWITCH_RESOURCE_ID
-                + "/" + ResourceUris.SWITCHES_UPDATE_PORTS_URI;
-        
+        String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID + "/"
+                + ResourceUris.SWITCHES_UPDATE_PORTS_URI;
+
         Request request = new Request(HttpMethodType.PUT, expectedUri, ports);
+        request.setForceTaskReturn(true);
 
-        then(baseClient).should().executeRequest(request, String.class);
-        
+        then(baseClient).should().executeMonitorableRequest(request, false);
     }
 }

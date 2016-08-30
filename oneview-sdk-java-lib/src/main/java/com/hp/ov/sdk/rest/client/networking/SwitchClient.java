@@ -48,15 +48,16 @@ public class SwitchClient {
     /**
      * Retrieves the {@link Switch} details for the specified switch.
      *
-     * @param resourceId switch resource identifier as seen in HPE OneView.
+     * @param resourceId
+     *            switch resource identifier as seen in HPE OneView.
      *
      * @return {@link Switch} object containing the details.
      */
     public Switch getById(String resourceId) {
         LOGGER.info("SwitchClient : getById : Start");
 
-        Switch switchObj = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId), Switch.class);
+        Switch switchObj = baseClient.getResource(UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId),
+                Switch.class);
 
         LOGGER.info("SwitchClient : getById : End");
 
@@ -64,17 +65,17 @@ public class SwitchClient {
     }
 
     /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link Switch}&gt; containing details
-     * for all the available switches found under the current HPE OneView.
+     * Retrieves a {@link ResourceCollection}&lt;{@link Switch}&gt; containing
+     * details for all the available switches found under the current HPE
+     * OneView.
      *
-     * @return {@link ResourceCollection}&lt;{@link Switch}&gt; containing
-     * the details for all found switches.
+     * @return {@link ResourceCollection}&lt;{@link Switch}&gt; containing the
+     *         details for all found switches.
      */
     public ResourceCollection<Switch> getAll() {
         LOGGER.info("SwitchClient : getAll : Start");
 
-        ResourceCollection<Switch> switches = baseClient.getResourceCollection(
-                ResourceUris.SWITCHES_URI, Switch.class);
+        ResourceCollection<Switch> switches = baseClient.getResourceCollection(ResourceUris.SWITCHES_URI, Switch.class);
 
         LOGGER.info("SwitchClient : getAll : End");
 
@@ -82,19 +83,21 @@ public class SwitchClient {
     }
 
     /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link Switch}&gt; containing details
-     * for the available switches found under the current HPE OneView that match the name.
+     * Retrieves a {@link ResourceCollection}&lt;{@link Switch}&gt; containing
+     * details for the available switches found under the current HPE OneView
+     * that match the name.
      *
-     * @param name switch name as seen in HPE OneView.
+     * @param name
+     *            switch name as seen in HPE OneView.
      *
-     * @return {@link ResourceCollection}&lt;{@link Switch}&gt; containing
-     * the details for the found switches.
+     * @return {@link ResourceCollection}&lt;{@link Switch}&gt; containing the
+     *         details for the found switches.
      */
     public ResourceCollection<Switch> getByName(String name) {
         LOGGER.info("SwitchClient : getByName : Start");
 
-        ResourceCollection<Switch> switches = baseClient.getResourceCollection(
-                ResourceUris.SWITCHES_URI, Switch.class, UrlParameter.getFilterByNameParameter(name));
+        ResourceCollection<Switch> switches = baseClient.getResourceCollection(ResourceUris.SWITCHES_URI, Switch.class,
+                UrlParameter.getFilterByNameParameter(name));
 
         LOGGER.info("SwitchClient : getByName : End");
 
@@ -102,14 +105,17 @@ public class SwitchClient {
     }
 
     /**
-     * Adds a switch according to the provided {@link Switch} object.
-     * The request can be processed synchronously or asynchronously.
+     * Adds a switch according to the provided {@link Switch} object. The
+     * request can be processed synchronously or asynchronously.
      *
-     * @param switchObj object containing the switch details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param switchObj
+     *            object containing the switch details.
+     * @param aSync
+     *            flag to indicate whether the request should be processed
+     *            synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResourceV2} containing the task status for the
+     *         process.
      */
     public TaskResourceV2 add(Switch switchObj, boolean aSync) {
         LOGGER.info("SwitchClient : add : Start");
@@ -124,18 +130,22 @@ public class SwitchClient {
     /**
      * Updates a {@link Switch} identified by the given resource identifier.
      *
-     * @param resourceId switch resource identifier as seen in HPE OneView.
-     * @param switchObj object containing the switch details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param resourceId
+     *            switch resource identifier as seen in HPE OneView.
+     * @param switchObj
+     *            object containing the switch details.
+     * @param aSync
+     *            flag to indicate whether the request should be processed
+     *            synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResourceV2} containing the task status for the
+     *         process.
      */
     public TaskResourceV2 update(String resourceId, Switch switchObj, boolean aSync) {
         LOGGER.info("SwitchClient : update : Start");
 
-        TaskResourceV2 taskResource = this.baseClient.updateResource(
-                UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId), switchObj, aSync);
+        TaskResourceV2 taskResource = this.baseClient
+                .updateResource(UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId), switchObj, aSync);
 
         LOGGER.info("SwitchClient : update : End");
 
@@ -145,17 +155,20 @@ public class SwitchClient {
     /**
      * Removes the switch identified by the given resource identifier.
      *
-     * @param resourceId switch resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param resourceId
+     *            switch resource identifier as seen in HPE OneView.
+     * @param aSync
+     *            flag to indicate whether the request should be processed
+     *            synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResourceV2} containing the task status for the
+     *         process.
      */
     public TaskResourceV2 remove(String resourceId, boolean aSync) {
         LOGGER.info("SwitchClient : remove : Start");
 
-        TaskResourceV2 taskResource = baseClient.deleteResource(
-                UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId), aSync);
+        TaskResourceV2 taskResource = baseClient
+                .deleteResource(UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId), aSync);
 
         LOGGER.info("SwitchClient : remove : End");
 
@@ -165,11 +178,14 @@ public class SwitchClient {
     /**
      * Requests a refresh for the specified switch.
      *
-     * @param resourceId switch resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param resourceId
+     *            switch resource identifier as seen in HPE OneView.
+     * @param aSync
+     *            flag to indicate whether the request should be processed
+     *            synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResourceV2} containing the task status for the
+     *         process.
      */
     public TaskResourceV2 refresh(String resourceId, boolean aSync) {
         LOGGER.info("SwitchClient : refresh : Start");
@@ -185,16 +201,17 @@ public class SwitchClient {
     /**
      * Retrieves the environmental configuration for the specified switch.
      *
-     * @param resourceId switch resource identifier as seen in HPE OneView.
+     * @param resourceId
+     *            switch resource identifier as seen in HPE OneView.
      *
-     * @return {@link EnvironmentalConfiguration} object containing the the environment
-     * configuration for the switch.
+     * @return {@link EnvironmentalConfiguration} object containing the 
+     *         environment configuration for the switch.
      */
     public EnvironmentalConfiguration getEnvironmentalConfiguration(String resourceId) {
         LOGGER.info("SwitchClient : getEnvironmentalConfiguration : Start");
 
-        EnvironmentalConfiguration environmentalConfiguration = baseClient.getResource(UrlUtils.createUrl(
-                ResourceUris.SWITCHES_URI, resourceId, ResourceUris.ENVIRONMENT_CONFIGURATION_URI),
+        EnvironmentalConfiguration environmentalConfiguration = baseClient.getResource(
+                UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId, ResourceUris.ENVIRONMENT_CONFIGURATION_URI),
                 EnvironmentalConfiguration.class);
 
         LOGGER.info("SwitchClient : getEnvironmentalConfiguration : End");
@@ -205,15 +222,17 @@ public class SwitchClient {
     /**
      * Retrieves the statistics for the specified switch.
      *
-     * @param resourceId switch resource identifier as seen in HPE OneView.
+     * @param resourceId
+     *            switch resource identifier as seen in HPE OneView.
      *
-     * @return {@link SwitchStatistics} object containing the the statistics for the switch.
+     * @return {@link SwitchStatistics} object containing the the statistics for
+     *         the switch.
      */
     public SwitchStatistics getStatistics(String resourceId) {
         LOGGER.info("SwitchClient : getStatistics : Start");
 
-        SwitchStatistics switchStatistics = baseClient.getResource(UrlUtils.createUrl(
-                ResourceUris.SWITCHES_URI, resourceId, ResourceUris.SWITCHES_STATISTICS_URI),
+        SwitchStatistics switchStatistics = baseClient.getResource(
+                UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId, ResourceUris.SWITCHES_STATISTICS_URI),
                 SwitchStatistics.class);
 
         LOGGER.info("SwitchClient : getStatistics : End");
@@ -224,46 +243,54 @@ public class SwitchClient {
     /**
      * Retrieves the statistics for the specified switch port.
      *
-     * @param resourceId switch resource identifier as seen in HPE OneView.
-     * @param portName port name for which the statistics data should be retrieved.
+     * @param resourceId
+     *            switch resource identifier as seen in HPE OneView.
+     * @param portName
+     *            port name for which the statistics data should be retrieved.
      *
-     * @return {@link SwitchStatistics} object containing the the statistics for the switch port.
+     * @return {@link SwitchStatistics} object containing the the statistics for
+     *         the switch port.
      */
     public SwitchPortStatistics getPortStatistics(String resourceId, String portName) {
         LOGGER.info("SwitchClient : getPortStatistics : Start");
 
-        SwitchPortStatistics switchPortStatistics = baseClient.getResource(UrlUtils.createUrl(
-                ResourceUris.SWITCHES_URI, resourceId, ResourceUris.SWITCHES_STATISTICS_URI, portName),
-                SwitchPortStatistics.class);
+        SwitchPortStatistics switchPortStatistics = baseClient.getResource(UrlUtils.createUrl(ResourceUris.SWITCHES_URI,
+                resourceId, ResourceUris.SWITCHES_STATISTICS_URI, portName), SwitchPortStatistics.class);
 
         LOGGER.info("SwitchClient : getPortStatistics : End");
 
         return switchPortStatistics;
     }
-    
-    
-    
+
     /**
-     * The module takes in a {@link List}&lt;{@link Port}&gt; object and updates the existing
-     * switch ports based on the resource identifier.
+     * The module takes in a {@link List}&lt;{@link Port}&gt; object and updates
+     * the existing switch ports based on the resource identifier.
      * 
-     * @param resourceId switch resource identifier as seen in HPE OneView.
-     * @param ports containing the switch ports details, used to update the switch ports.
+     * @param resourceId
+     *            switch resource identifier as seen in HPE OneView.
+     * @param ports
+     *            containing the switch ports details, used to update the switch
+     *            ports.
+     * @param aSync
+     *            flag to indicate whether the request should be processed
+     *            synchronously or asynchronously.
      * 
-     * @return {@link String} containing the result of the operation.
+     * @return {@link TaskResourceV2} containing the task status for the
+     *         process.
      */
-    public String updatePorts(String resourceId, List<Port> ports) {
+    public TaskResourceV2 updatePorts(String resourceId, List<Port> ports, Boolean aSync) {
         LOGGER.info("SwitchClient : updatePorts : Start");
 
         String updateUri = UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId,
                 ResourceUris.SWITCHES_UPDATE_PORTS_URI);
-        
+
         Request request = new Request(HttpMethodType.PUT, updateUri, ports);
-        
-        String response = baseClient.executeRequest(request, String.class);
-        
+        request.setForceTaskReturn(true);
+
+        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+
         LOGGER.info("SwitchClient : updatePorts : End");
 
-        return response;
+        return taskResource;
     }
 }

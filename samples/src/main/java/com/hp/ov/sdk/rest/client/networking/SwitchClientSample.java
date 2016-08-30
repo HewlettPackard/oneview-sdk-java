@@ -39,7 +39,7 @@ import com.hp.ov.sdk.rest.client.OneViewClient;
 public class SwitchClientSample {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SwitchClientSample.class);
-    
+
     // These are variables to be defined by user
     // ================================
     private static final String SWITCH_RESOURCE_ID = "fbc7dffe-e020-4efc-b89a-9db5b4469da4";
@@ -63,13 +63,13 @@ public class SwitchClientSample {
 
     private void getAllSwitches() {
         ResourceCollection<Switch> switches = this.switchClient.getAll();
-        
+
         LOGGER.info("Switches returned to client: {}", switches.toJsonString());
     }
 
     private void getSwitchByName() {
         Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
-        
+
         LOGGER.info("Switch object returned to client: {}", aSwitch.toJsonString());
     }
 
@@ -77,7 +77,7 @@ public class SwitchClientSample {
         Switch aSwitch = this.buildSwitch();
 
         TaskResourceV2 taskResource = this.switchClient.add(aSwitch, false);
-        
+
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
@@ -85,7 +85,7 @@ public class SwitchClientSample {
         Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
         String resourceId = aSwitch.getResourceId();
 
-        //FIXME no changes due to problems after executing an update
+        // FIXME no changes due to problems after executing an update
 
         TaskResourceV2 taskResource = this.switchClient.update(resourceId, aSwitch, false);
 
@@ -104,51 +104,51 @@ public class SwitchClientSample {
         Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
 
         TaskResourceV2 taskResource = this.switchClient.refresh(aSwitch.getResourceId(), false);
-        
+
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void getSwitchEnvironmentalConfiguration() {
         Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
-        EnvironmentalConfiguration environmentalConfiguration = this.switchClient.getEnvironmentalConfiguration(
-                aSwitch.getResourceId());
-        
+        EnvironmentalConfiguration environmentalConfiguration = this.switchClient
+                .getEnvironmentalConfiguration(aSwitch.getResourceId());
+
         LOGGER.info("EnvironmentalConfiguration object returned to client: {}", environmentalConfiguration);
     }
 
     private void getSwitchStatistics() {
         Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
         SwitchStatistics switchStatistics = this.switchClient.getStatistics(aSwitch.getResourceId());
-        
+
         LOGGER.info("SwitchStatistics object returned to client: {}", switchStatistics);
     }
 
     private void getSwitchPortStatistics() {
         Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
-        SwitchPortStatistics switchPortStatistics = this.switchClient.getPortStatistics(
-                aSwitch.getResourceId(), SWITCH_PORT_NAME);
+        SwitchPortStatistics switchPortStatistics = this.switchClient.getPortStatistics(aSwitch.getResourceId(),
+                SWITCH_PORT_NAME);
 
         LOGGER.info("SwitchPortStatistics object returned to client: {}", switchPortStatistics);
     }
 
     private void updatePorts() {
         Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
-        
+
         List<Port> ports = new ArrayList<>();
-        
-        for(Port p : aSwitch.getPorts()){
-            if(p.getName().equals("1.1")){
+
+        for (Port p : aSwitch.getPorts()) {
+            if (p.getName().equals("1.1")) {
                 p.setEnabled(!p.getEnabled());
                 ports.add(p);
                 break;
             }
         }
-        
-        String response = this.switchClient.updatePorts(aSwitch.getResourceId(), ports);
-        
-        LOGGER.info("UpdatePorts object returned to client: {}", response);
+
+        TaskResourceV2 taskResource = this.switchClient.updatePorts(aSwitch.getResourceId(), ports, false);
+
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
-    
+
     private Switch buildSwitch() {
         Switch switchObj = new Switch();
         SwitchManagementConnection mgmt = new SwitchManagementConnection();
@@ -159,7 +159,7 @@ public class SwitchClientSample {
         properties.add(new ConnectionProperty("password", "dcs", ValueFormat.SecuritySensitive, ValueType.String));
 
         mgmt.setConnectionProperties(properties);
-        
+
         switchObj.setSwitchManagementConnection(mgmt);
         switchObj.setType(ResourceCategory.RC_SWITCH_V300);
 
@@ -174,22 +174,19 @@ public class SwitchClientSample {
         client.getSwitchByName();
 
         client.getSwitchEnvironmentalConfiguration();
-        
-        
-        /*methods available only in version 1.2*/
+
+        /* methods available only in version 1.2 */
         client.refreshSwitch();
         client.addSwitch();
         client.updateSwitch();
         client.removeSwitch();
 
-        /*methods available only in version 2.0*/
+        /* methods available only in version 2.0 */
         client.getSwitchStatistics();
         client.getSwitchPortStatistics();
-        
-        /*methods available only in version 3.0*/
+
+        /* methods available only in version 3.0 */
         client.updatePorts();
     }
-
-   
 
 }
