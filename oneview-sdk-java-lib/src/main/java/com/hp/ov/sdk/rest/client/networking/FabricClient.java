@@ -116,7 +116,7 @@ public class FabricClient {
      * Updates a {@link VlanPool} range for the fabric.
      *
      * @param resourceId fabric resource identifier as seen in HPE OneView.
-     * @param vlanPoll object containing the range details.
+     * @param vlanPool object containing the range details.
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
