@@ -18,16 +18,19 @@ package com.hp.ov.sdk.rest.client.storage;
 
 import static org.mockito.BDDMockito.then;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.EndpointResponse;
 import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.dto.fcsans.LocateSanResponse;
 import com.hp.ov.sdk.dto.fcsans.SanRequest;
 import com.hp.ov.sdk.dto.fcsans.SanResponse;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -39,6 +42,7 @@ public class FcSanManagedSanClientTest {
 
     private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_NAME = "random-Name";
+    private static final String ANY_WWN = "11:22:33:44:55:66:77:88";
 
     @Mock
     private BaseClient baseClient;
@@ -50,7 +54,7 @@ public class FcSanManagedSanClientTest {
     public void shouldGetFcSanManagedSanById() {
         client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.FC_SANS_MANAGED_SAN_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = FcSanManagedSanClient.FC_SANS_MANAGED_SAN_URI + "/" + ANY_RESOURCE_ID;
 
         then(baseClient).should().getResource(expectedUri, SanResponse.class);
     }
@@ -59,7 +63,7 @@ public class FcSanManagedSanClientTest {
     public void shouldGetAllFcSanManagedSan() {
         client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.FC_SANS_MANAGED_SAN_URI,
+        then(baseClient).should().getResourceCollection(FcSanManagedSanClient.FC_SANS_MANAGED_SAN_URI,
                 SanResponse.class);
     }
 
@@ -67,7 +71,7 @@ public class FcSanManagedSanClientTest {
     public void shouldGetFcSanManagedSanByName() {
         client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.FC_SANS_MANAGED_SAN_URI,
+        then(baseClient).should().getResourceCollection(FcSanManagedSanClient.FC_SANS_MANAGED_SAN_URI,
                 SanResponse.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
     }
 
@@ -77,7 +81,7 @@ public class FcSanManagedSanClientTest {
 
         client.update(ANY_RESOURCE_ID, sanRequest);
 
-        String expectedUri = ResourceUris.FC_SANS_MANAGED_SAN_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = FcSanManagedSanClient.FC_SANS_MANAGED_SAN_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, sanRequest);
 
         then(baseClient).should().executeRequest(expectedRequest, SanResponse.class);
@@ -87,9 +91,9 @@ public class FcSanManagedSanClientTest {
     public void shouldGetFcSanManagedSanEndpoints() {
         client.getEndpoints(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.FC_SANS_MANAGED_SAN_URI
+        String expectedUri = FcSanManagedSanClient.FC_SANS_MANAGED_SAN_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.FC_SANS_MANAGED_SAN_ENDPOINTS;
+                + "/" + FcSanManagedSanClient.FC_SANS_MANAGED_SAN_ENDPOINTS;
 
         then(baseClient).should().getResourceCollection(expectedUri, EndpointResponse.class);
     }
@@ -98,9 +102,9 @@ public class FcSanManagedSanClientTest {
     public void shouldCreateFcSanManagedSanIssuesReport() {
         client.createIssuesReport(ANY_RESOURCE_ID, false);
 
-        String expectedUri = ResourceUris.FC_SANS_MANAGED_SAN_URI
+        String expectedUri = FcSanManagedSanClient.FC_SANS_MANAGED_SAN_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.FC_SANS_MANAGED_SAN_ISSUES;
+                + "/" + FcSanManagedSanClient.FC_SANS_MANAGED_SAN_ISSUES;
         Request expectedRequest = new Request(HttpMethodType.POST, expectedUri);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
@@ -110,11 +114,23 @@ public class FcSanManagedSanClientTest {
     public void shouldCreateFcSanManagedSanEndpointsCsv() {
         client.createEndpointsCsv(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.FC_SANS_MANAGED_SAN_URI
+        String expectedUri = FcSanManagedSanClient.FC_SANS_MANAGED_SAN_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.FC_SANS_MANAGED_SAN_ENDPOINTS;
+                + "/" + FcSanManagedSanClient.FC_SANS_MANAGED_SAN_ENDPOINTS;
         Request expectedRequest = new Request(HttpMethodType.POST, expectedUri);
 
         then(baseClient).should().executeRequest(expectedRequest, EndpointsCsvFileResponse.class);
     }
+
+    @Test
+    public void shouldGetFcSanManagedSanWwnAssociations() {
+        client.getWwnAssociations(ANY_WWN);
+
+        String expectedUri = FcSanManagedSanClient.FC_SANS_MANAGED_SAN_URI
+                + "/" + FcSanManagedSanClient.FC_SANS_WWN_LOCATE_URI
+                + "/" + ANY_WWN;
+
+        then(baseClient).should().getResourceList(expectedUri, new TypeToken<List<LocateSanResponse>>(){});
+    }
+
 }

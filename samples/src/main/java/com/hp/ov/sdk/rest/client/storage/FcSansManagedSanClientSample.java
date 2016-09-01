@@ -15,6 +15,11 @@
  */
 package com.hp.ov.sdk.rest.client.storage;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.EndpointResponse;
 import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
@@ -22,6 +27,7 @@ import com.hp.ov.sdk.dto.FcIssueResponse;
 import com.hp.ov.sdk.dto.FcSansManagedSanTask;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.fcsans.LocateSanResponse;
 import com.hp.ov.sdk.dto.fcsans.SanPolicy;
 import com.hp.ov.sdk.dto.fcsans.SanRequest;
 import com.hp.ov.sdk.dto.fcsans.SanResponse;
@@ -36,12 +42,15 @@ import com.hp.ov.sdk.util.JsonPrettyPrinter;
  */
 public class FcSansManagedSanClientSample {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FcSansManagedSanClientSample.class);
+
     private final FcSanManagedSanClient fcSanManagedSanClient;
 
     // test values - user input
     // ================================
     private static final String RESOURCE_ID = "e9d79564-1244-4f0e-83a3-215dcb1f6b1f";
     private static final String RESOURCE_NAME = "SAN1_0";
+    private static final String WWN = "20:00:4A:2B:21:E0:00:00";
     // ================================
 
     private FcSansManagedSanClientSample() {
@@ -53,22 +62,19 @@ public class FcSansManagedSanClientSample {
     private void getFcSanManagedSanById() {
         SanResponse san = this.fcSanManagedSanClient.getById(RESOURCE_ID);
 
-        System.out.println("FcSanManagedSanClientSample : getFcSanManagedSanById : " +
-                "SanResponse object returned to client : " + san.toJsonString());
+        LOGGER.info("SanResponse object returned to client : " + san.toJsonString());
     }
 
     private void getAllFcSanManagedSans() {
         ResourceCollection<SanResponse> sans = this.fcSanManagedSanClient.getAll();
 
-        System.out.println("FcSanManagedSanClientSample : getAllFcSanManagedSans : " +
-                "DeviceManagers returned to client : " + sans.toJsonString());
+        LOGGER.info("DeviceManagers returned to client : " + sans.toJsonString());
     }
 
     private void getFcSanManagedSanByName() {
         SanResponse san = this.fcSanManagedSanClient.getByName(RESOURCE_NAME).get(0);
 
-        System.out.println("FcSanManagedSanClientSample : getFcSanManagedSanByName : " +
-                "SanResponse object returned to client : " + san.toJsonString());
+        LOGGER.info("SanResponse object returned to client : " + san.toJsonString());
     }
 
     private void updateFcSanManagedSan() {
@@ -88,28 +94,24 @@ public class FcSansManagedSanClientSample {
 
         SanResponse updatedSan = this.fcSanManagedSanClient.update(san.getResourceId(), sanRequest);
 
-        System.out.println("FcSanManagedSanClientSample : updateFcSanManagedSan : " +
-                "SanResponse object returned to client : " + updatedSan.toJsonString());
+        LOGGER.info("SanResponse object returned to client : " + updatedSan.toJsonString());
     }
 
     private void getFcSanManagedSanEndpoints() {
         SanResponse san = this.fcSanManagedSanClient.getByName(RESOURCE_NAME).get(0);
         ResourceCollection<EndpointResponse> endpoints = fcSanManagedSanClient.getEndpoints(san.getResourceId());
 
-        System.out.println("FcSanManagedSanClientSample : getFcSanManagedSanEndpoints : " +
-                "Endpoints returned to client : " + endpoints.toJsonString());
+        LOGGER.info("Endpoints returned to client : " + endpoints.toJsonString());
     }
 
     private void createFcSanManagedSanIssuesReport() {
         SanResponse san = this.fcSanManagedSanClient.getByName(RESOURCE_NAME).get(0);
         FcSansManagedSanTask task = this.fcSanManagedSanClient.createIssuesReport(san.getResourceId(), false);
 
-        System.out.println("FcSansManagedSanClientSample : createFcSanManagedSanIssuesReport : " +
-                "Task object returned to client : " + task.getTask().toJsonString());
+        LOGGER.info("Task object returned to client : " + task.getTask().toJsonString());
 
         for (FcIssueResponse issue : task.getIssues()) {
-            System.out.println("FcSansManagedSanClientSample : createFcSanManagedSanIssuesReport : " +
-                    "Issue returned to client : " + JsonPrettyPrinter.print(issue));
+            LOGGER.info("Issue returned to client : " + JsonPrettyPrinter.print(issue));
         }
     }
 
@@ -117,8 +119,13 @@ public class FcSansManagedSanClientSample {
         SanResponse san = this.fcSanManagedSanClient.getByName(RESOURCE_NAME).get(0);
         EndpointsCsvFileResponse csvFileResponse = fcSanManagedSanClient.createEndpointsCsv(san.getResourceId());
 
-        System.out.println("FcSanManagedSanClientSample : createFcSanManagedSanEndpointsCsv : " +
-                "EndpointsCsvFileResponse returned to client : " + JsonPrettyPrinter.print(csvFileResponse));
+        LOGGER.info("EndpointsCsvFileResponse returned to client : " + JsonPrettyPrinter.print(csvFileResponse));
+    }
+
+    private void getFcSanManagedSanWwnAssociations() {
+        List<LocateSanResponse> locateSanResponseCollection = fcSanManagedSanClient.getWwnAssociations(WWN);
+
+        LOGGER.info("LocateSanResponse object returned to client : " + JsonPrettyPrinter.print(locateSanResponseCollection));
     }
 
     public static void main(final String[] args) throws Exception {
@@ -133,5 +140,7 @@ public class FcSansManagedSanClientSample {
         client.createFcSanManagedSanIssuesReport();
 
         client.updateFcSanManagedSan();
+
+        client.getFcSanManagedSanWwnAssociations();
     }
 }

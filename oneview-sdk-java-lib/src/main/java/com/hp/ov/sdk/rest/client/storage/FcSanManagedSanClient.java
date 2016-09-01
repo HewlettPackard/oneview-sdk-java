@@ -15,17 +15,20 @@
  */
 package com.hp.ov.sdk.rest.client.storage;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.adaptors.FcIssueResponseAdaptor;
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.EndpointResponse;
 import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.dto.FcSansManagedSanTask;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.fcsans.LocateSanResponse;
 import com.hp.ov.sdk.dto.fcsans.SanRequest;
 import com.hp.ov.sdk.dto.fcsans.SanResponse;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -36,6 +39,11 @@ import com.hp.ov.sdk.util.UrlUtils;
 public class FcSanManagedSanClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FcSanManagedSanClient.class);
+
+    protected static final String FC_SANS_MANAGED_SAN_URI = "/rest/fc-sans/managed-sans";
+    protected static final String FC_SANS_MANAGED_SAN_ENDPOINTS = "endpoints";
+    protected static final String FC_SANS_MANAGED_SAN_ISSUES = "issues";
+    protected static final String FC_SANS_WWN_LOCATE_URI = "?locate=";
 
     private final BaseClient baseClient;
 
@@ -54,7 +62,7 @@ public class FcSanManagedSanClient {
         LOGGER.info("FcSanManagedSanClient : getById : Start");
 
         SanResponse san = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.FC_SANS_MANAGED_SAN_URI, resourceId), SanResponse.class);
+                UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, resourceId), SanResponse.class);
 
         LOGGER.info("FcSanManagedSanClient : getById : End");
 
@@ -71,8 +79,7 @@ public class FcSanManagedSanClient {
     public ResourceCollection<SanResponse> getAll() {
         LOGGER.info("FcSanManagedSanClient : getAll : Start");
 
-        ResourceCollection<SanResponse> sans = baseClient.getResourceCollection(
-                ResourceUris.FC_SANS_MANAGED_SAN_URI, SanResponse.class);
+        ResourceCollection<SanResponse> sans = baseClient.getResourceCollection(FC_SANS_MANAGED_SAN_URI, SanResponse.class);
 
         LOGGER.info("FcSanManagedSanClient : getAll : End");
 
@@ -92,7 +99,7 @@ public class FcSanManagedSanClient {
         LOGGER.info("FcSanManagedSanClient : getByName : Start");
 
         ResourceCollection<SanResponse> sans = baseClient.getResourceCollection(
-                ResourceUris.FC_SANS_MANAGED_SAN_URI, SanResponse.class,
+                FC_SANS_MANAGED_SAN_URI, SanResponse.class,
                 UrlParameter.getFilterByNameParameter(name));
 
         LOGGER.info("FcSanManagedSanClient : getByName : End");
@@ -112,7 +119,7 @@ public class FcSanManagedSanClient {
         LOGGER.info("FcSanManagedSanClient : update : Start");
 
         Request request = new Request(HttpMethodType.PUT,
-                UrlUtils.createUrl(ResourceUris.FC_SANS_MANAGED_SAN_URI, resourceId), sanRequest);
+                UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, resourceId), sanRequest);
 
         SanResponse updatedSan = baseClient.executeRequest(request, SanResponse.class);
 
@@ -133,9 +140,7 @@ public class FcSanManagedSanClient {
         LOGGER.info("FcSanManagedSanClient : getEndpoints : Start");
 
         ResourceCollection<EndpointResponse> sanEndpoints = baseClient.getResourceCollection(
-                UrlUtils.createUrl(ResourceUris.FC_SANS_MANAGED_SAN_URI, resourceId,
-                        ResourceUris.FC_SANS_MANAGED_SAN_ENDPOINTS),
-                EndpointResponse.class);
+                UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, resourceId, FC_SANS_MANAGED_SAN_ENDPOINTS), EndpointResponse.class);
 
         LOGGER.info("FcSanManagedSanClient : getEndpoints : End");
 
@@ -156,8 +161,8 @@ public class FcSanManagedSanClient {
         LOGGER.info("FcSanManagedSanClient : createIssuesReport : Start");
 
         Request request = new Request(HttpMethodType.POST,
-                UrlUtils.createUrl(ResourceUris.FC_SANS_MANAGED_SAN_URI, resourceId,
-                        ResourceUris.FC_SANS_MANAGED_SAN_ISSUES));
+                UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, resourceId,
+                        FC_SANS_MANAGED_SAN_ISSUES));
 
         TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
@@ -178,8 +183,7 @@ public class FcSanManagedSanClient {
         LOGGER.info("FcSanManagedSanClient : createEndpointsCsv : Start");
 
         Request request = new Request(HttpMethodType.POST,
-                UrlUtils.createUrl(ResourceUris.FC_SANS_MANAGED_SAN_URI, resourceId,
-                        ResourceUris.FC_SANS_MANAGED_SAN_ENDPOINTS));
+                UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, resourceId, FC_SANS_MANAGED_SAN_ENDPOINTS));
 
         EndpointsCsvFileResponse endpointsCsvFileResponse = this.baseClient.executeRequest(request,
                 EndpointsCsvFileResponse.class);
@@ -188,4 +192,25 @@ public class FcSanManagedSanClient {
 
         return endpointsCsvFileResponse;
     }
+
+
+    /**
+     * Retrieves a list of associations between provided WWNs and the SANs (if any) on which they reside
+     *
+     * @param wwn The WWN that may be associated with the SAN.
+     *
+     * @return A list of {@link LocateSanResponse} containing the details for all associations found.
+     */
+    public List<LocateSanResponse> getWwnAssociations(String wwn) {
+        LOGGER.info("FcSanManagedSanClient : getWwnAssociations : Start");
+
+        List<LocateSanResponse> sanResponse = baseClient.getResourceList(
+                UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, FC_SANS_WWN_LOCATE_URI, wwn),
+                new TypeToken<List<LocateSanResponse>>(){});
+
+        LOGGER.info("FcSanManagedSanClient : getWwnAssociations : End");
+
+        return sanResponse;
+    }
+
 }
