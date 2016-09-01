@@ -22,7 +22,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
@@ -36,12 +35,12 @@ public class LogicalEnclosure extends BaseModelResource {
     @Since(300)
     private DeploymentManagerSettings deploymentManagerSettings;
     private String enclosureGroupUri;
-    private Map<String, LogicalEnclosureContainedEnclosure> enclosures = new HashMap<String, LogicalEnclosureContainedEnclosure>();
-    private List<String> enclosureUris = new ArrayList<String>();
+    private Map<String, LogicalEnclosureContainedEnclosure> enclosures = new HashMap<>();
+    private List<String> enclosureUris = new ArrayList<>();
     private FirmwareLogicalEnclosure firmware;
     private IpAddressingMode ipAddressingMode;
-    private List<Object> ipv4Ranges = new ArrayList<Object>();
-    private List<String> logicalInterconnectUris = new ArrayList<String>();
+    private List<Object> ipv4Ranges = new ArrayList<>();
+    private List<String> logicalInterconnectUris = new ArrayList<>();
     private Object powerMode;
     @Since(300)
     private ScalingState scalingState;
@@ -201,50 +200,13 @@ public class LogicalEnclosure extends BaseModelResource {
     }
 
     @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .appendSuper(super.hashCode())
-                .append(deleteFailed)
-                .append(deploymentManagerSettings)
-                .append(enclosureGroupUri)
-                .append(enclosures)
-                .append(enclosureUris)
-                .append(firmware)
-                .append(ipAddressingMode)
-                .append(ipv4Ranges)
-                .append(logicalInterconnectUris)
-                .append(powerMode)
-                .append(scalingState)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    @Override
-    public boolean equals(final Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof LogicalEnclosure) == false) {
-            return false;
-        }
-        final LogicalEnclosure rhs = ((LogicalEnclosure) other);
-        return new EqualsBuilder()
-                .appendSuper(super.equals(other))
-                .append(deleteFailed, rhs.deleteFailed)
-                .append(deploymentManagerSettings, rhs.deploymentManagerSettings)
-                .append(enclosureGroupUri, rhs.enclosureGroupUri)
-                .append(enclosures, rhs.enclosures)
-                .append(enclosureUris, rhs.enclosureUris)
-                .append(firmware, rhs.firmware)
-                .append(ipAddressingMode, rhs.ipAddressingMode)
-                .append(ipv4Ranges, rhs.ipv4Ranges)
-                .append(logicalInterconnectUris, rhs.logicalInterconnectUris)
-                .append(powerMode, rhs.powerMode)
-                .append(scalingState, rhs.scalingState)
-                .isEquals();
-    }
 }
