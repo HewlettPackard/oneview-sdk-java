@@ -1,6 +1,6 @@
 /*
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
- *  
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,7 +19,6 @@ package com.hp.ov.sdk.rest.client.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
 import com.hp.ov.sdk.dto.HttpMethodType;
@@ -42,6 +41,20 @@ import com.hp.ov.sdk.util.UrlUtils;
 public class EnclosureClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EnclosureClient.class);
+
+    protected static final String ENCLOSURE_ACTIVE_OA_SSO_URI = "activeOaSsoUrl";
+    protected static final String ENCLOSURE_CONFIGURATION_URI = "configuration";
+    protected static final String ENCLOSURE_COMPLIANCE_URI = "compliance";
+    protected static final String ENCLOSURE_FW_BASELINE_URI = "enclosureFwBaseline";
+    protected static final String ENCLOSURE_SCRIPT_URI = "script";
+    protected static final String ENCLOSURE_STANDBY_OA_SSO_URI = "standbyOaSsoUrl";
+    protected static final String ENCLOSURE_OA_SSO_URI = "sso";
+    protected static final String ENCLOSURE_REFRESH_STATE_URI = "refreshState";
+    protected static final String ENCLOSURE_URI = "/rest/enclosures";
+    protected static final String ENCLOSURE_UTILIZATION_URI = "utilization";
+    protected static final String ENVIRONMENT_CONFIGURATION_URI = "environmentalConfiguration";
+
+
     private static final int TIMEOUT = 1200000; // in milliseconds
 
     private static final String ROLE_STANDBY = "?role=Standby";
@@ -64,7 +77,7 @@ public class EnclosureClient {
         LOGGER.info("EnclosureClient : getById : Start");
 
         Enclosure logicalEnclosure = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.ENCLOSURE_URI, resourceId), Enclosure.class);
+                UrlUtils.createUrl(ENCLOSURE_URI, resourceId), Enclosure.class);
 
         LOGGER.info("EnclosureClient : getById : End");
 
@@ -81,8 +94,7 @@ public class EnclosureClient {
     public ResourceCollection<Enclosure> getAll() {
         LOGGER.info("EnclosureClient : getAll : Start");
 
-        ResourceCollection<Enclosure> logicalEnclosures = baseClient.getResourceCollection(
-                ResourceUris.ENCLOSURE_URI, Enclosure.class);
+        ResourceCollection<Enclosure> logicalEnclosures = baseClient.getResourceCollection(ENCLOSURE_URI, Enclosure.class);
 
         LOGGER.info("EnclosureClient : getAll : End");
 
@@ -101,7 +113,7 @@ public class EnclosureClient {
         LOGGER.info("EnclosureClient : getByName : Start");
 
         ResourceCollection<Enclosure> logicalEnclosures = baseClient.getResourceCollection(
-                ResourceUris.ENCLOSURE_URI, Enclosure.class,
+                ENCLOSURE_URI, Enclosure.class,
                 UrlParameter.getFilterByNameParameter(name));
 
         LOGGER.info("EnclosureClient : getByName : End");
@@ -121,7 +133,7 @@ public class EnclosureClient {
     public TaskResourceV2 add(AddEnclosure addEnclosure, boolean aSync) {
         LOGGER.info("EnclosureClient : add : Start");
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.ENCLOSURE_URI, addEnclosure);
+        Request request = new Request(HttpMethodType.POST, ENCLOSURE_URI, addEnclosure);
 
         request.setTimeout(TIMEOUT);
 
@@ -146,7 +158,7 @@ public class EnclosureClient {
         LOGGER.info("EnclosureClient : update : Start");
 
         Request request = new Request(HttpMethodType.PUT,
-                UrlUtils.createUrl(ResourceUris.ENCLOSURE_URI, resourceId), enclosure);
+                UrlUtils.createUrl(ENCLOSURE_URI, resourceId), enclosure);
 
         request.setTimeout(TIMEOUT);
 
@@ -172,7 +184,7 @@ public class EnclosureClient {
         LOGGER.info("EnclosureClient : patch : Start");
 
         Request request = new Request(HttpMethodType.PATCH,
-                UrlUtils.createUrl(ResourceUris.ENCLOSURE_URI, resourceId), patch);
+                UrlUtils.createUrl(ENCLOSURE_URI, resourceId), patch);
 
         request.setTimeout(TIMEOUT);
 
@@ -200,7 +212,7 @@ public class EnclosureClient {
         LOGGER.info("EnclosureClient : remove : Start");
 
         Request request = new Request(HttpMethodType.DELETE,
-                UrlUtils.createUrl(ResourceUris.ENCLOSURE_URI, resourceId));
+                UrlUtils.createUrl(ENCLOSURE_URI, resourceId));
 
         request.setTimeout(TIMEOUT);
 
@@ -224,8 +236,7 @@ public class EnclosureClient {
     public TaskResourceV2 updateConfiguration(String resourceId, boolean aSync) {
         LOGGER.info("EnclosureClient : updateConfiguration : Start");
 
-        String updateUri = UrlUtils.createUrl(ResourceUris.ENCLOSURE_URI, resourceId,
-                ResourceUris.ENCLOSURE_CONFIGURATION_URI);
+        String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_CONFIGURATION_URI);
         Request request = new Request(HttpMethodType.PUT, updateUri);
 
         request.setTimeout(TIMEOUT);
@@ -248,8 +259,7 @@ public class EnclosureClient {
         LOGGER.info("EnclosureClient : getConfigurationScript : Start");
 
         Request request = new Request(HttpMethodType.GET,
-                UrlUtils.createUrl(ResourceUris.ENCLOSURE_URI, resourceId,
-                        ResourceUris.ENCLOSURE_SCRIPT_URI));
+                UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_SCRIPT_URI));
 
         String response = baseClient.executeRequest(request, String.class);
 
@@ -271,8 +281,7 @@ public class EnclosureClient {
     public TaskResourceV2 updateConfigurationScript(String resourceId, String scriptData, boolean aSync) {
         LOGGER.info("EnclosureClient : updateConfigurationScript : Start");
 
-        String updateUri = UrlUtils.createUrl(ResourceUris.ENCLOSURE_URI, resourceId,
-                ResourceUris.ENCLOSURE_SCRIPT_URI);
+        String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_SCRIPT_URI);
 
         TaskResourceV2 taskResource = this.baseClient.updateResource(updateUri, scriptData, aSync);
 
@@ -296,10 +305,10 @@ public class EnclosureClient {
 
         if (this.baseClient.getApiVersion().getValue() >= ApiVersion.V_200.getValue()) {
             oaSsoUrl = new StringBuilder()
-                    .append(ResourceUris.ENCLOSURE_OA_SSO_URI)
+                    .append(ENCLOSURE_OA_SSO_URI)
                     .append(ROLE_ACTIVE).toString();
         } else {
-            oaSsoUrl = ResourceUris.ENCLOSURE_ACTIVE_OA_SSO_URI;
+            oaSsoUrl = ENCLOSURE_ACTIVE_OA_SSO_URI;
         }
 
         SsoUrlData ssoUrlData = this.getOaSsoUrl(resourceId, oaSsoUrl);
@@ -324,10 +333,10 @@ public class EnclosureClient {
 
         if (this.baseClient.getApiVersion().getValue() >= ApiVersion.V_200.getValue()) {
             oaSsoUrl = new StringBuilder()
-                    .append(ResourceUris.ENCLOSURE_OA_SSO_URI)
+                    .append(ENCLOSURE_OA_SSO_URI)
                     .append(ROLE_STANDBY).toString();
         } else {
-            oaSsoUrl = ResourceUris.ENCLOSURE_STANDBY_OA_SSO_URI;
+            oaSsoUrl = ENCLOSURE_STANDBY_OA_SSO_URI;
         }
 
         SsoUrlData ssoUrlData = this.getOaSsoUrl(resourceId, oaSsoUrl);
@@ -341,7 +350,7 @@ public class EnclosureClient {
         LOGGER.info("EnclosureClient : getOaSsoUrl : Start");
 
         SsoUrlData ssoUrlData = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.ENCLOSURE_URI, resourceId, oaSsoUrl),
+                UrlUtils.createUrl(ENCLOSURE_URI, resourceId, oaSsoUrl),
                 SsoUrlData.class);
 
         LOGGER.info("EnclosureClient : getOaSsoUrl : End");
@@ -362,8 +371,7 @@ public class EnclosureClient {
     public TaskResourceV2 updateCompliance(String resourceId, boolean aSync) {
         LOGGER.info("EnclosureClient : updateCompliance : Start");
 
-        String updateUri = UrlUtils.createUrl(ResourceUris.ENCLOSURE_URI, resourceId,
-                ResourceUris.ENCLOSURE_COMPLIANCE_URI);
+        String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_COMPLIANCE_URI);
         Request request = new Request(HttpMethodType.PUT, updateUri);
 
         request.setTimeout(TIMEOUT);
@@ -391,8 +399,7 @@ public class EnclosureClient {
     public TaskResourceV2 updateFwBaseline(String resourceId, FwBaselineConfig fwBaselineConfig, boolean aSync) {
         LOGGER.info("EnclosureClient : updateFwBaseline : Start");
 
-        String updateUri = UrlUtils.createUrl(ResourceUris.ENCLOSURE_URI, resourceId,
-                ResourceUris.ENCLOSURE_FW_BASELINE_URI);
+        String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_FW_BASELINE_URI);
         Request request = new Request(HttpMethodType.PUT, updateUri, fwBaselineConfig);
 
         request.setTimeout(TIMEOUT);
@@ -416,8 +423,7 @@ public class EnclosureClient {
         LOGGER.info("EnclosureClient : getUtilization : Start");
 
         UtilizationData utilizationData = this.baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.ENCLOSURE_URI, resourceId,
-                        ResourceUris.ENCLOSURE_UTILIZATION_URI),
+                UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_UTILIZATION_URI),
                 UtilizationData.class);
 
         LOGGER.info("EnclosureClient : getUtilization : End");
@@ -437,8 +443,7 @@ public class EnclosureClient {
         LOGGER.info("EnclosureClient : getEnvironmentalConfiguration : Start");
 
         EnvironmentalConfiguration configuration = this.baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.ENCLOSURE_URI, resourceId,
-                        ResourceUris.ENVIRONMENT_CONFIGURATION_URI),
+                UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENVIRONMENT_CONFIGURATION_URI),
                 EnvironmentalConfiguration.class);
 
         LOGGER.info("EnclosureClient : getEnvironmentalConfiguration : End");
@@ -463,8 +468,7 @@ public class EnclosureClient {
 
         Request request = new Request(
                 HttpMethodType.PUT,
-                UrlUtils.createUrl(ResourceUris.ENCLOSURE_URI, resourceId,
-                        ResourceUris.ENVIRONMENT_CONFIGURATION_URI),
+                UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENVIRONMENT_CONFIGURATION_URI),
                 updateEnvironmentalConfiguration);
 
         EnvironmentalConfiguration configuration = baseClient.executeRequest(request,
@@ -488,8 +492,7 @@ public class EnclosureClient {
     public TaskResourceV2 updateRefreshState(String resourceId, RefreshStateConfig refreshStateConfig, boolean aSync) {
         LOGGER.info("EnclosureClient : updateRefreshState : Start");
 
-        String updateUri = UrlUtils.createUrl(ResourceUris.ENCLOSURE_URI, resourceId,
-                ResourceUris.ENCLOSURE_REFRESH_STATE_URI);
+        String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_REFRESH_STATE_URI);
         Request request = new Request(HttpMethodType.PUT, updateUri, refreshStateConfig);
 
         request.setTimeout(TIMEOUT);

@@ -39,16 +39,6 @@ public class ResourceUris {
     public static final String DATA_CENTER_URI = "/rest/datacenters";
     public static final String DATA_CENTER_VISUAL_CONTENT_URI = "visualContent";
     public static final String DEFAULT_CONNECTION_TEMPLATE_URI = "/rest/connection-templates/defaultConnectionTemplate";
-    public static final String ENCLOSURE_CONFIGURATION_URI = "configuration";
-    public static final String ENCLOSURE_COMPLIANCE_URI = "compliance";
-    public static final String ENCLOSURE_FW_BASELINE_URI = "enclosureFwBaseline";
-    public static final String ENCLOSURE_UTILIZATION_URI = "utilization";
-    public static final String ENCLOSURE_SCRIPT_URI = "script";
-    public static final String ENCLOSURE_ACTIVE_OA_SSO_URI = "activeOaSsoUrl";
-    public static final String ENCLOSURE_STANDBY_OA_SSO_URI = "standbyOaSsoUrl";
-    public static final String ENCLOSURE_OA_SSO_URI = "sso";
-    public static final String ENCLOSURE_REFRESH_STATE_URI = "refreshState";
-    public static final String ENCLOSURE_URI = "/rest/enclosures";
     public static final String ENCLOSURE_GROUP_SCRIPT_URI = "script";
     public static final String ENCLOSURE_GROUP_URI = "/rest/enclosure-groups";
     public static final String ENVIRONMENT_CONFIGURATION_URI = "environmentalConfiguration";
