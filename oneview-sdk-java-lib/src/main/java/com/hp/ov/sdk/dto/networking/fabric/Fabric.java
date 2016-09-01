@@ -19,7 +19,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.hp.ov.sdk.dto.BaseModelResource;
-import com.hp.ov.sdk.dto.VlanPool;
 
 public class Fabric extends BaseModelResource {
 
