@@ -19,7 +19,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.adaptors.RabbitMqClientCertAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.CaCert;
@@ -36,17 +36,16 @@ public class MessagingCertificateManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessagingCertificateManager.class);
 
-    private final RabbitMqClientCertAdaptor rabbitMqAdaptor;
+    private final ResourceAdaptor adaptor;
     private HttpRestClient httpClient = HttpRestClient.getClient();
 
     private static class MessagingCertificateManagerHolder {
         private static final MessagingCertificateManager INSTANCE = new MessagingCertificateManager(
-            new RabbitMqClientCertAdaptor());
+            new ResourceAdaptor());
     }
 
-    private MessagingCertificateManager(RabbitMqClientCertAdaptor rabbitMqAdaptor) {
-
-        this.rabbitMqAdaptor = rabbitMqAdaptor;
+    private MessagingCertificateManager(ResourceAdaptor resourceAdaptor) {
+        this.adaptor = resourceAdaptor;
     }
 
     public static MessagingCertificateManager getInstance() {
@@ -54,7 +53,6 @@ public class MessagingCertificateManager {
     }
 
     public RabbitMqClientCert getRabbitMqClientCertificateKeyPair(final RestParams params) {
-
         LOGGER.info("SCMBCertificatesImpl : getRabbitMqClientCertificate : Start");
         // set the additional params
         params.setType(HttpMethodType.GET);
@@ -67,7 +65,7 @@ public class MessagingCertificateManager {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.SCMB_CERTS, null);
         }
         // Call adaptor to convert to DTO
-        final RabbitMqClientCert clientCert = rabbitMqAdaptor.buildDto(returnObj);
+        final RabbitMqClientCert clientCert = adaptor.buildResourceObject(returnObj, RabbitMqClientCert.class);
         final String tempKeyData = clientCert.getBase64SSLKeyData().replace("-----BEGIN RSA PRIVATE KEY-----", "")
                 .replace("-----END RSA PRIVATE KEY-----", "").replaceAll(" ", "\\\n");
         LOGGER.info("SCMBCertificatesImpl : getRabbitMqClientCertificate : tempKeyData :" + tempKeyData);
@@ -86,7 +84,6 @@ public class MessagingCertificateManager {
     }
 
     public CaCert getCACertificate(final RestParams params) {
-
         LOGGER.info("SCMBCertificatesImpl : getCACertificate : Start");
         // set the additional params
         params.setType(HttpMethodType.GET);
@@ -109,8 +106,7 @@ public class MessagingCertificateManager {
 
     }
 
-    public String generateRabbitMqClientCert(final RestParams params, final RabbitMqClientCert rabbitMqClientCertDto,
-            final boolean aSync, final boolean useJsonRequest) {
+    public String generateRabbitMqClientCert(final RestParams params, final RabbitMqClientCert rabbitMqClientCertDto) {
         LOGGER.info("SCMBCertificatesImpl : generateRabbitMqClientCert : Start");
         // set the additional params
         if (rabbitMqClientCertDto == null) {
@@ -125,7 +121,7 @@ public class MessagingCertificateManager {
         // idea is : user can create json string and call the sdk api.
         // user can save time in creating network rabbitMqClientCertDto.
 
-        JSONObject jsonObject = rabbitMqAdaptor.buildJsonObjectFromDto(rabbitMqClientCertDto);
+        JSONObject jsonObject = adaptor.buildJsonRequest(rabbitMqClientCertDto, params.getApiVersion());
         String returnObj = httpClient.sendRequest(params, jsonObject);
 
         if (returnObj.equals("")) {

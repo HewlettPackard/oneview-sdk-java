@@ -18,7 +18,7 @@ package com.hp.ov.sdk.tasks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.adaptors.TaskAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -33,6 +33,12 @@ public class TaskServiceManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskServiceManager.class);
     private HttpRestClient httpClient = HttpRestClient.getClient();
+
+    private final ResourceAdaptor adaptor;
+
+    public TaskServiceManager() {
+        this.adaptor = new ResourceAdaptor();
+    }
 
     public TaskResourceV2 getTaskResource(final RestParams params, final String taskUri) {
         LOGGER.trace("TaskServiceManager : getTaskResource : Start");
@@ -52,7 +58,7 @@ public class TaskServiceManager {
         }
         // Call adaptor to convert to DTO
 
-        final TaskResourceV2 taskResourceV2 = TaskAdaptor.getInstance().buildDto(returnObj);
+        final TaskResourceV2 taskResourceV2 = adaptor.buildResourceObject(returnObj, TaskResourceV2.class);
 
         LOGGER.debug("TaskServiceManager : getTaskResource : taskstate :" + taskResourceV2.getTaskState());
         LOGGER.trace("TaskServiceManager : getTaskResource : End");

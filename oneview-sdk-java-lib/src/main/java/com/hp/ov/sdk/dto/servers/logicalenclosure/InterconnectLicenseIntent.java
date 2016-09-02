@@ -18,4 +18,5 @@ package com.hp.ov.sdk.dto.servers.logicalenclosure;
 public enum InterconnectLicenseIntent {
 
     Automatic, Yes, No
+
 }

@@ -18,7 +18,7 @@ package com.hp.ov.sdk.messaging.scmb.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.adaptors.ScmbAlertsMessageAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.dto.ScmbAlertsMessageDto;
 import com.hp.ov.sdk.messaging.scmb.listeners.ScmbListener;
 
@@ -27,18 +27,18 @@ public class ScmbAlertsHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ScmbAlertsHandler.class);
 
     private final ScmbListener scmbListener;
-    private final ScmbAlertsMessageAdaptor adaptor;
+    private final ResourceAdaptor adaptor;
 
     public ScmbAlertsHandler(ScmbListener scmbListener) {
         this.scmbListener = scmbListener;
 
-        this.adaptor = new ScmbAlertsMessageAdaptor();
+        this.adaptor = new ResourceAdaptor();
     }
 
     public void handleMessage(final String message) {
         LOGGER.debug("ScmbAlertsHandler : handleMessage : Message Received: " + message);
 
-        ScmbAlertsMessageDto alertsDto = adaptor.buildDto(message);
+        ScmbAlertsMessageDto alertsDto = adaptor.buildResourceObject(message, ScmbAlertsMessageDto.class);
 
         LOGGER.debug("ScmbAlertsHandler : handleMessage :  value from Dto : resourceUri: " + alertsDto.getResourceUri());
 

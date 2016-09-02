@@ -56,7 +56,7 @@ public class ObjectToJsonConverter {
         return (gson.toJson(inObj));
     }
 
-    public String convertObjectToJsonString(final Object inObj, double version) {
+    public String convertObjectToJsonString(final Object inObj, int version) {
         Gson gson = this.getGson(version);
 
         return (gson.toJson(inObj));
@@ -109,10 +109,16 @@ public class ObjectToJsonConverter {
     }
 
     private Gson getGson() {
-        return this.getGson(Double.MAX_VALUE);
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(StoragePool.class, new StoragePoolSerializationAdapter())
+                .registerTypeAdapter(PortTelemetry.class, new PortTelemetrySerializationAdapter())
+                .registerTypeAdapter(StorageCapabilities.class, new StorageCapabilitiesDeserializer())
+                .create();
+
+        return gson;
     }
 
-    private Gson getGson(double apiVersion) {
+    private Gson getGson(int apiVersion) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(StoragePool.class, new StoragePoolSerializationAdapter())
                 .registerTypeAdapter(PortTelemetry.class, new PortTelemetrySerializationAdapter())
