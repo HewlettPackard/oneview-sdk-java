@@ -15,9 +15,10 @@
  */
 package com.hp.ov.sdk.scmb.consumer;
 
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.SamplesConstants;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
-import com.hp.ov.sdk.certs.MessagingCertificateManager;
+import com.hp.ov.sdk.certs.MessagingCertificateClient;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -28,6 +29,7 @@ import com.hp.ov.sdk.messaging.scmb.services.ScmbAlertsHandler;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbConnectionManager;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbMessageExecutionQueue;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
@@ -41,15 +43,17 @@ public class ScmbClient {
 
     private final ScmbConnectionManager objectUnderTest;
 
-    private RestParams params;
-
     private ScmbClient() {
-        this.objectUnderTest = new ScmbConnectionManager(MessagingCertificateManager.getInstance());
+        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        MessagingCertificateClient messagingCertificateClient = oneViewClient.messagingCertificate();
+
+        this.objectUnderTest = new ScmbConnectionManager(messagingCertificateClient);
     }
 
     public void scmbProcessor() {
+        RestParams params = HPOneViewCredential.createRestParams();
+
         try {
-            RestParams params = HPOneViewCredential.createRestParams();
             HttpSslProperties httpSslProperties = HPOneViewCredential.createHttpSslProperties();
             BaseClient baseClient = new BaseClient(params, new ResourceAdaptor(),
                     HttpRestClient.getClient(), TaskMonitorManager.getInstance());
@@ -88,11 +92,9 @@ public class ScmbClient {
     }
 
     private void stopScmb() {
-        try {
-            // Get the basic REST parameters like hostname, username and password
-            RestParams params = HPOneViewCredential.createRestParams();
+        RestParams params = HPOneViewCredential.createRestParams();
 
-            // then stop scmb
+        try {
             objectUnderTest.stopScmb(params);
         } catch (final SDKResourceNotFoundException ex) {
             System.out.println("ScmbClient : stopScmb : resource not found : " + params.getHostname());

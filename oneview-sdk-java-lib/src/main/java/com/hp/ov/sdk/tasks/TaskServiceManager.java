@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.tasks;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +27,8 @@ import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
+import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.UrlUtils;
 
 public class TaskServiceManager {
 
@@ -43,24 +44,20 @@ public class TaskServiceManager {
     public TaskResourceV2 getTaskResource(final RestParams params, final String taskUri) {
         LOGGER.trace("TaskServiceManager : getTaskResource : Start");
 
-        // validate args
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
-        // set the additional params
-        params.setType(HttpMethodType.GET);
-        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), taskUri));
 
-        final String returnObj = httpClient.sendRequest(params);
-        LOGGER.debug("TaskServiceManager : getTaskResource : response from OV :" + returnObj);
-        if (null == returnObj || returnObj.equals("")) {
+        Request request = new Request(HttpMethodType.GET, taskUri);
+        String returnObj = httpClient.sendRequest(params, request);
+
+        if (StringUtils.isEmpty(returnObj)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.TASK_MONITOR, null);
         }
-        // Call adaptor to convert to DTO
 
         final TaskResourceV2 taskResourceV2 = adaptor.buildResourceObject(returnObj, TaskResourceV2.class);
 
-        LOGGER.debug("TaskServiceManager : getTaskResource : taskstate :" + taskResourceV2.getTaskState());
+        LOGGER.debug("TaskServiceManager : getTaskResource : task state:" + taskResourceV2.getTaskState());
         LOGGER.trace("TaskServiceManager : getTaskResource : End");
 
         return taskResourceV2;

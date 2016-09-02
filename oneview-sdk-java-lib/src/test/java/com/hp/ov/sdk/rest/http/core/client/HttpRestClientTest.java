@@ -6,8 +6,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -23,8 +21,6 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,7 +38,7 @@ import com.hp.ov.sdk.exceptions.SDKInternalServerErrorException;
 import com.hp.ov.sdk.exceptions.SDKMethodNotAllowed;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKUnauthorizedException;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({HttpClients.class, SSLContext.class, SSLConnectionSocketFactory.class})
@@ -79,7 +75,6 @@ public class HttpRestClientTest {
     @Before
     public void setUp() throws Exception {
         params = new RestParams();
-        params.setUrl(UrlUtils.createRestUrl(params.getHostname(), "/rest/"));
         params.setSessionId("sessionID");
         params.setTrustManager(trustMgr);
         params.setHostnameVerifier(hostnameVerifier);
@@ -115,86 +110,76 @@ public class HttpRestClientTest {
     @Test
     public void testSendRequestPost() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.POST);
         Mockito.when(responseStatus.getStatusCode()).thenReturn(201);
-        String result = restClient.sendRequest(params, "");
+        String result = restClient.sendRequest(params, new Request(HttpMethodType.POST, ""));
         assertNotNull(result);
     }
 
     public void testSendRequestPostNoBody() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.POST);
-        String result = restClient.sendRequest(params);
+        String result = restClient.sendRequest(params, new Request(HttpMethodType.POST, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestGet() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
-        String result = restClient.sendRequest(params);
+        String result = restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestPatch() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.PATCH);
         Mockito.when(responseStatus.getStatusCode()).thenReturn(202);
-        String result = restClient.sendRequest(params, "");
+        String result = restClient.sendRequest(params, new Request(HttpMethodType.PATCH, ""));
         assertNotNull(result);
     }
 
     public void testSendRequestPatchNoBody() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.PATCH);
-        String result = restClient.sendRequest(params);
+        String result = restClient.sendRequest(params, new Request(HttpMethodType.PATCH, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestPut() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.PUT);
-        String result = restClient.sendRequest(params, "");
+        String result = restClient.sendRequest(params, new Request(HttpMethodType.PUT, ""));
         assertNotNull(result);
     }
 
     public void testSendRequestPutNoBody() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.PUT);
-        String result = restClient.sendRequest(params);
+        String result = restClient.sendRequest(params, new Request(HttpMethodType.PUT, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestDelete() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.DELETE);
-        String result = restClient.sendRequest(params);
+        String result = restClient.sendRequest(params, new Request(HttpMethodType.DELETE, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestNotAuthoritativeResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(203);
 
-        String result = restClient.sendRequest(params);
+        String result = restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestNoContentResponse() throws Exception {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseEntity.getContent()).thenReturn(new ByteArrayInputStream("".getBytes()));
         Mockito.when(responseStatus.getStatusCode()).thenReturn(204);
 
-        String result = restClient.sendRequest(params);
+        String result = restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         assertNotNull(result);
         assertEquals("Return must be \"{}\"", "{}", result);
     }
@@ -202,398 +187,358 @@ public class HttpRestClientTest {
     @Test
     public void testSendRequestResetResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(205);
 
-        String result = restClient.sendRequest(params);
+        String result = restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestPartialResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(206);
 
-        String result = restClient.sendRequest(params);
+        String result = restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         assertNotNull(result);
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestMultiChoiceResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(300);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestMovedPermResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(301);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestMovedTempResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(302);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestSeeOtherResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(303);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestNotModifiedResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(304);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestUseProxyResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(305);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKBadRequestException.class)
     public void testSendRequestBadRequestResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(400);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKUnauthorizedException.class)
     public void testSendRequestUnauthorizedResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(401);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestPaymentRequiredResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(402);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKForbiddenException.class)
     public void testSendRequestForbiddenResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(403);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testSendRequestNotFoundResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(404);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKMethodNotAllowed.class)
     public void testSendRequestBadMethodResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(405);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestNotAcceptableResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(406);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestProxyAuthResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(407);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestClientTimeoutResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(408);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKInternalServerErrorException.class)
     public void testSendRequestConflictResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(409);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestGoneResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(410);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestLengthRequiredResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(411);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKInternalServerErrorException.class)
     public void testSendRequestPreconFailedResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(412);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestEntityTooLargeResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(413);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestUriTooLongResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(414);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKInternalServerErrorException.class)
     public void testSendRequestUnsupportedTypeResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(415);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKInternalServerErrorException.class)
     public void testSendRequestInternalErrorResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(500);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestNotImplementedResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(501);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestBadGatewayResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(502);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKInternalServerErrorException.class)
     public void testSendRequestUnavailableResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(503);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestGatewayTimoutResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(504);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestHttpVersionNotSupportedResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(505);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestNotReachableResponse() {
         restClient = HttpRestClient.getClient();
-        params.setType(HttpMethodType.GET);
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(999);
 
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(HttpMethodType.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKBadRequestException.class)
     public void testSendRequestInvalidRequestType() {
         restClient = HttpRestClient.getClient();
-        params.setType(null);
-        restClient.sendRequest(params);
+        restClient.sendRequest(params, new Request(null, ""));
         fail("Exception should have been raised");
-    }
-
-    @Test
-    public void testSendRequestJSONObject() {
-        restClient = HttpRestClient.getClient();
-        String result = restClient.sendRequest(params, new JSONObject());
-        assertNotNull(result);
-    }
-
-    @Test
-    public void testSendRequestJSONArray() {
-        restClient = HttpRestClient.getClient();
-        String result = restClient.sendRequest(params, new JSONArray());
-        assertNotNull(result);
     }
 
     @Test
     public void testSendRequestForceReturnTask() {
         restClient = HttpRestClient.getClient();
-        String result = restClient.sendRequest(params, new JSONObject(), true);
+        Request request = new Request(HttpMethodType.POST, "");
+
+        request.setForceTaskReturn(true);
+
+        String result = restClient.sendRequest(params, request);
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestStringBody() {
         restClient = HttpRestClient.getClient();
-        String result = restClient.sendRequest(params, "");
+        String result = restClient.sendRequest(params, new Request(HttpMethodType.POST, "", ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestWithUriParameters() {
         restClient = HttpRestClient.getClient();
-        Map<String, String> query = new HashMap<String, String>();
-        query.put("filter", "name='anyName'");
-        params.setQuery(query);
-        String result = restClient.sendRequest(params, "");
+
+        Request request = new Request(HttpMethodType.GET, "");
+
+        request.addQuery(new UrlParameter("filter", "name='anyName"));
+
+        String result = restClient.sendRequest(params, request);
         assertNotNull(result);
     }
 
     @Test (expected = SDKBadRequestException.class)
     public void testSendRequestWithBadUriParameters() {
         restClient = HttpRestClient.getClient();
-        Map<String, String> query = new HashMap<String, String>();
-        query.put("filter", "name='anyName'");
-        params.setUrl("http :");
-        params.setQuery(query);
-        String result = restClient.sendRequest(params, "");
+        Request request = new Request(HttpMethodType.GET, "http :");
+
+        request.addQuery(new UrlParameter("filter", "name='anyName"));
+
+        String result = restClient.sendRequest(params, request);
         assertNotNull(result);
     }
 }

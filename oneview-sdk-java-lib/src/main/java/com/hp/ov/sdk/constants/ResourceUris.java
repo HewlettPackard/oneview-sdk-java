@@ -33,7 +33,6 @@ public class ResourceUris {
     public static final String AVAILABLE_STORAGE_SYSTEMS = AVAILABLE_STORAGE_SYSTEM + "s";
     public static final String AVAILABLE_TARGETS = SERVER_PROFILE_URI + "/available-targets";
     public static final String BULK_ETHERNET_URI = "/rest/ethernet-networks/bulk";
-    public static final String CA_CERT_URI = "/rest/certificates/ca";
     public static final String CONNECTION_TEMPLATES = "/rest/connection-templates";
     public static final String CONNECTION_TEMPLATE_URI = "/rest/connection-templates";
     public static final String DATA_CENTER_URI = "/rest/datacenters";
@@ -91,8 +90,6 @@ public class ResourceUris {
     public static final String POWER_DEVICE_URI = "/rest/power-devices";
     public static final String POWER_STATE_URI = "powerState";
     public static final String PROFILE_PORTS_URI = SERVER_PROFILE_URI + "/profile-ports";
-    public static final String RABBIT_MQ_CLIENT_CERT = "/rest/certificates/client/rabbitmq";
-    public static final String RABBIT_MQ_CLIENT_CERT_KEYPAIR = "/rest/certificates/client/rabbitmq/keypair/default";
     public static final String RACK_DEVICE_TOPOLOGY = "deviceTopology";
     public static final String RACK_URI = "/rest/racks";
     public static final String SERVER_HARDWARE_BIOS_URI = "bios";
