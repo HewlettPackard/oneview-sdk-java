@@ -154,37 +154,12 @@ public class AddServer implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj instanceof AddServer) {
-            AddServer that = (AddServer) obj;
-
-            return new EqualsBuilder()
-                    .append(configurationState, that.configurationState)
-                    .append(force, that.force)
-                    .append(hostname, that.hostname)
-                    .append(licensingIntent, that.licensingIntent)
-                    .append(password, that.password)
-                    .append(restore, that.restore)
-                    .append(scopeUris, that.scopeUris)
-                    .append(username, that.username)
-                    .isEquals();
-        }
-        return false;
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(configurationState)
-                .append(force)
-                .append(hostname)
-                .append(licensingIntent)
-                .append(password)
-                .append(restore)
-                .append(scopeUris)
-                .append(username)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override

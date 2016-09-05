@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.serverhardware;
 
-public enum PhysicalServerMpState {
+public enum InetAddressType {
 
-    Ok, Reset, Resetting
+    DHCP, 
+    LinkLocal, 
+    LinkLocal_Required, 
+    Lookup, 
+    SLAAC, 
+    Static, 
+    Undefined
 
 }

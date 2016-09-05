@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -13,47 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.servers;
+package com.hp.ov.sdk.dto.servers.serverhardware;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class RemoteSupportSettings implements Serializable {
+public class PortMap implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -7989760359299407273L;
 
-    private String destination;
-    private String remoteSupportCurrentState;
+    private List<ServerFabricDevice> deviceSlots = new ArrayList<>();
 
     /**
-     * @return the destination
+     * @return the deviceSlots
      */
-    public String getDestination() {
-        return destination;
+    public List<ServerFabricDevice> getDeviceSlots() {
+        return deviceSlots;
     }
 
     /**
-     * @param destination the destination to set
+     * @param deviceSlots the deviceSlots to set
      */
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-
-    /**
-     * @return the remoteSupportCurrentState
-     */
-    public String getRemoteSupportCurrentState() {
-        return remoteSupportCurrentState;
-    }
-
-    /**
-     * @param remoteSupportCurrentState the remoteSupportCurrentState to set
-     */
-    public void setRemoteSupportCurrentState(String remoteSupportCurrentState) {
-        this.remoteSupportCurrentState = remoteSupportCurrentState;
+    public void setDeviceSlots(List<ServerFabricDevice> deviceSlots) {
+        this.deviceSlots = deviceSlots;
     }
 
     @Override
@@ -70,5 +57,4 @@ public class RemoteSupportSettings implements Serializable {
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
-
 }

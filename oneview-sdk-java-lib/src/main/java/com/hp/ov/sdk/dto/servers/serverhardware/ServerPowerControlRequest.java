@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.serverhardware;
 
 import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class ServerPowerControlRequest implements Serializable {
 
@@ -28,52 +29,60 @@ public class ServerPowerControlRequest implements Serializable {
     private Boolean powerRequestIssued;
     private PhysicalServerPowerState powerState;
 
+    /**
+     * @return the powerControl
+     */
     public PhysicalServerPowerControl getPowerControl() {
         return powerControl;
     }
 
-    public void setPowerControl(final PhysicalServerPowerControl powerControl) {
+    /**
+     * @param powerControl the powerControl to set
+     */
+    public void setPowerControl(PhysicalServerPowerControl powerControl) {
         this.powerControl = powerControl;
     }
 
+    /**
+     * @return the powerRequestIssued
+     */
     public Boolean getPowerRequestIssued() {
         return powerRequestIssued;
     }
 
-    public void setPowerRequestIssued(final Boolean powerRequestIssued) {
+    /**
+     * @param powerRequestIssued the powerRequestIssued to set
+     */
+    public void setPowerRequestIssued(Boolean powerRequestIssued) {
         this.powerRequestIssued = powerRequestIssued;
     }
 
+    /**
+     * @return the powerState
+     */
     public PhysicalServerPowerState getPowerState() {
         return powerState;
     }
 
-    public void setPowerState(final PhysicalServerPowerState powerState) {
+    /**
+     * @param powerState the powerState to set
+     */
+    public void setPowerState(PhysicalServerPowerState powerState) {
         this.powerState = powerState;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj instanceof ServerPowerControlRequest) {
-            ServerPowerControlRequest that = (ServerPowerControlRequest) obj;
-
-            return new EqualsBuilder()
-                    .append(powerControl, that.powerControl)
-                    .append(powerRequestIssued, that.powerRequestIssued)
-                    .append(powerState, that.powerState)
-                    .isEquals();
-        }
-        return false;
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(powerControl)
-                .append(powerRequestIssued)
-                .append(powerState)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

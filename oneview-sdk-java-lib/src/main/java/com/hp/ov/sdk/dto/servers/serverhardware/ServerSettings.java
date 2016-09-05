@@ -58,30 +58,17 @@ public class ServerSettings implements Serializable {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public final boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj instanceof ServerSettings) {
-            ServerSettings that = (ServerSettings) obj;
-
-            return new EqualsBuilder()
-                    .append(firmwareAndDriversInstallState, that.firmwareAndDriversInstallState)
-                    .append(hpSmartUpdateToolStatus, that.hpSmartUpdateToolStatus)
-                    .isEquals();
-        }
-        return false;
-    }
-
-    @Override
-    public final int hashCode() {
-        return new HashCodeBuilder()
-                .append(firmwareAndDriversInstallState)
-                .append(hpSmartUpdateToolStatus)
-                .toHashCode();
     }
 }

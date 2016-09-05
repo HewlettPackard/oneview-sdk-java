@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.serverhardware;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class ManagementHostInformation implements Serializable {
 
@@ -27,19 +31,46 @@ public class ManagementHostInformation implements Serializable {
     private String mpHostName;
     private List<ManagementIpAddress> mpIpAddresses = new ArrayList<>();
 
+    /**
+     * @return the mpHostName
+     */
     public String getMpHostName() {
         return mpHostName;
     }
 
+    /**
+     * @param mpHostName the mpHostName to set
+     */
     public void setMpHostName(String mpHostName) {
         this.mpHostName = mpHostName;
     }
 
+    /**
+     * @return the mpIpAddresses
+     */
     public List<ManagementIpAddress> getMpIpAddresses() {
         return mpIpAddresses;
     }
 
+    /**
+     * @param mpIpAddresses the mpIpAddresses to set
+     */
     public void setMpIpAddresses(List<ManagementIpAddress> mpIpAddresses) {
         this.mpIpAddresses = mpIpAddresses;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

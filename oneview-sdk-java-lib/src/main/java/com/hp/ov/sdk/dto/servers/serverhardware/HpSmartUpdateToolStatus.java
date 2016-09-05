@@ -118,34 +118,13 @@ public class HpSmartUpdateToolStatus implements Serializable {
     }
 
     @Override
-    public final boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj instanceof HpSmartUpdateToolStatus) {
-            HpSmartUpdateToolStatus that = (HpSmartUpdateToolStatus) obj;
-
-            return new EqualsBuilder()
-                    .append(hpSUTInstallState, that.hpSUTInstallState)
-                    .append(installState, that.installState)
-                    .append(lastOperationTime, that.lastOperationTime)
-                    .append(mode, that.mode)
-                    .append(serviceState, that.serviceState)
-                    .append(version, that.version)
-                    .isEquals();
-        }
-        return false;
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
-    public final int hashCode() {
-        return new HashCodeBuilder()
-                .append(hpSUTInstallState)
-                .append(installState)
-                .append(lastOperationTime)
-                .append(mode)
-                .append(serviceState)
-                .append(version)
-                .toHashCode();
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override

@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.serverhardware;
 
 import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class ManagementIpAddress implements Serializable {
 
@@ -25,19 +29,46 @@ public class ManagementIpAddress implements Serializable {
     private String address;
     private InetAddressType type;
 
+    /**
+     * @return the address
+     */
     public String getAddress() {
         return address;
     }
 
+    /**
+     * @param address the address to set
+     */
     public void setAddress(String address) {
         this.address = address;
     }
 
+    /**
+     * @return the type
+     */
     public InetAddressType getType() {
         return type;
     }
 
+    /**
+     * @param type the type to set
+     */
     public void setType(InetAddressType type) {
         this.type = type;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

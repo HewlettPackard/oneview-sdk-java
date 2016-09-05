@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.dto;
+package com.hp.ov.sdk.dto.servers.serverhardware;
 
-public enum InetAddressType {
-
-    DHCP, LinkLocal, LinkLocal_Required, Lookup, SLAAC, Static, Undefined
-
+public enum ServerFirmwareInventoryStatus {
+    Failed,
+    Supported,
+    Unsupported
 }

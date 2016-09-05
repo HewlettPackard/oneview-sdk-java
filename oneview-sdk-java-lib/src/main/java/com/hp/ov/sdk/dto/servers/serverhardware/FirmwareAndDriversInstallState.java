@@ -58,26 +58,13 @@ public class FirmwareAndDriversInstallState implements Serializable {
     }
 
     @Override
-    public final boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj instanceof FirmwareAndDriversInstallState) {
-            FirmwareAndDriversInstallState that = (FirmwareAndDriversInstallState) obj;
-
-            return new EqualsBuilder()
-                    .append(installState, that.installState)
-                    .append(installedStateTimestamp, that.installedStateTimestamp)
-                    .isEquals();
-        }
-        return false;
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
-    public final int hashCode() {
-        return new HashCodeBuilder()
-                .append(installState)
-                .append(installedStateTimestamp)
-                .toHashCode();
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override

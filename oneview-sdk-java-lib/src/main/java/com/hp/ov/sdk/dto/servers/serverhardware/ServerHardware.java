@@ -25,10 +25,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import com.google.gson.annotations.Since;
 import com.google.gson.annotations.Until;
 import com.hp.ov.sdk.dto.BaseModelResource;
-import com.hp.ov.sdk.dto.ManagementHostInformation;
-import com.hp.ov.sdk.dto.PhysicalServerMpState;
-import com.hp.ov.sdk.dto.PhysicalServerPowerState;
-import com.hp.ov.sdk.dto.PortMap;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.servers.LicensingIntent;
 import com.hp.ov.sdk.dto.servers.RemoteSupportSettings;
@@ -756,116 +752,13 @@ public class ServerHardware extends BaseModelResource {
     }
 
     @Override
-    public final boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj instanceof ServerHardware) {
-            ServerHardware that = (ServerHardware) obj;
-
-            return that.canEqual(this) && new EqualsBuilder()
-                    .appendSuper(super.equals(obj))
-                    .append(assetTag, that.assetTag)
-                    .append(formFactor, that.formFactor)
-                    .append(intelligentProvisioningVersion, that.intelligentProvisioningVersion)
-                    .append(licensingIntent, that.licensingIntent)
-                    .append(locationUri, that.locationUri)
-                    .append(memoryMb, that.memoryMb)
-                    .append(migrationState, that.migrationState)
-                    .append(model, that.model)
-                    .append(mpDnsName, that.mpDnsName)
-                    .append(mpFirmwareVersion, that.mpFirmwareVersion)
-                    .append(mpHostInfo, that.mpHostInfo)
-                    .append(mpIpAddress, that.mpIpAddress)
-                    .append(mpModel, that.mpModel)
-                    .append(mpState, that.mpState)
-                    .append(partNumber, that.partNumber)
-                    .append(portMap, that.portMap)
-                    .append(position, that.position)
-                    .append(powerLock, that.powerLock)
-                    .append(powerState, that.powerState)
-                    .append(processorCoreCount, that.processorCoreCount)
-                    .append(processorCount, that.processorCount)
-                    .append(processorSpeedMhz, that.processorSpeedMhz)
-                    .append(processorType, that.processorType)
-                    .append(profileNetworkSettingsState, that.profileNetworkSettingsState)
-                    .append(refreshState, that.refreshState)
-                    .append(remoteSupportSettings, that.remoteSupportSettings)
-                    .append(remoteSupportUri, that.remoteSupportUri)
-                    .append(romVersion, that.romVersion)
-                    .append(scopeUris, that.scopeUris)
-                    .append(serialNumber, that.serialNumber)
-                    .append(serverFirmwareInventoryUri, that.serverFirmwareInventoryUri)
-                    .append(serverGroupUri, that.serverGroupUri)
-                    .append(serverHardwareTypeUri, that.serverHardwareTypeUri)
-                    .append(serverProfileUri, that.serverProfileUri)
-                    .append(serverSettings, that.serverSettings)
-                    .append(shortModel, that.shortModel)
-                    .append(signature, that.signature)
-                    .append(stateReason, that.stateReason)
-                    .append(supportDataCollectionState, that.supportDataCollectionState)
-                    .append(supportDataCollectionType, that.supportDataCollectionType)
-                    .append(supportDataCollectionsUri, that.supportDataCollectionsUri)
-                    .append(supportState, that.supportState)
-                    .append(uuid, that.uuid)
-                    .append(uidState, that.uidState)
-                    .append(virtualSerialNumber, that.virtualSerialNumber)
-                    .append(virtualUuid, that.virtualUuid)
-                    .isEquals();
-        }
-        return false;
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
-    public final int hashCode() {
-        return new HashCodeBuilder()
-                .appendSuper(super.hashCode())
-                .append(assetTag)
-                .append(formFactor)
-                .append(intelligentProvisioningVersion)
-                .append(licensingIntent)
-                .append(locationUri)
-                .append(memoryMb)
-                .append(migrationState)
-                .append(model)
-                .append(mpDnsName)
-                .append(mpFirmwareVersion)
-                .append(mpHostInfo)
-                .append(mpIpAddress)
-                .append(mpModel)
-                .append(mpState)
-                .append(partNumber)
-                .append(portMap)
-                .append(position)
-                .append(powerLock)
-                .append(powerState)
-                .append(processorCoreCount)
-                .append(processorCount)
-                .append(processorSpeedMhz)
-                .append(processorType)
-                .append(profileNetworkSettingsState)
-                .append(refreshState)
-                .append(remoteSupportSettings)
-                .append(remoteSupportUri)
-                .append(romVersion)
-                .append(scopeUris)
-                .append(serialNumber)
-                .append(serverFirmwareInventoryUri)
-                .append(serverGroupUri)
-                .append(serverHardwareTypeUri)
-                .append(serverProfileUri)
-                .append(serverSettings)
-                .append(shortModel)
-                .append(signature)
-                .append(stateReason)
-                .append(supportDataCollectionState)
-                .append(supportDataCollectionType)
-                .append(supportDataCollectionsUri)
-                .append(supportState)
-                .append(uuid)
-                .append(uidState)
-                .append(virtualSerialNumber)
-                .append(virtualUuid)
-                .toHashCode();
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
