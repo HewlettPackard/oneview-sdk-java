@@ -46,13 +46,10 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +73,6 @@ public class HttpRestClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpRestClient.class);
 
-    private static final String CHAR_SET = "UTF-8";
     private static final String LOCATION_HEADER = "Location";
     private static final int TIMEOUT = 20000; // milliseconds
 
@@ -117,162 +113,10 @@ public class HttpRestClient {
      *  SDKBadRequestException on unsupported method (PUT, GET..)
      **/
     public String sendRequest(RestParams restParams, Request request) throws SDKBadRequestException {
-        return processRequestType(restParams, request);
-    }
-
-    /**
-     * Send the request to OV and read the response.
-     *
-     * @param restParams connection parameters.
-     *
-     * @return
-     *  A string representing the response data.
-     * @throws
-     *  SDKBadRequestException on unsupported method (PUT, GET..)
-     *
-     *  @deprecated use {@link HttpRestClient#sendRequest(RestParams, Request)} instead
-     **/
-    @Deprecated
-    public String sendRequest(RestParams restParams) throws SDKBadRequestException {
-        return processRequestType(restParams, null, false);
-    }
-
-    /**
-     * Send the request to OV and read the response.
-     *
-     * @param restParams connection parameters.
-     * @param jsonObject request body.
-     *
-     * @return
-     *  A string representing the response data.
-     * @throws
-     *  SDKBadRequestException on unsupported method (PUT, GET..)
-     *
-     *  @deprecated use {@link HttpRestClient#sendRequest(RestParams, Request)} instead
-     **/
-    @Deprecated
-    public String sendRequest(RestParams restParams, JSONObject jsonObject) throws SDKBadRequestException {
-         return processRequestType(restParams, jsonObject.toString(), false);
-    }
-
-    /**
-     * Send the request to OV and read the response.
-     *
-     * @param restParams connection parameters.
-     * @param jsonObject request body.
-     *
-     * @return
-     *  A string representing the response data.
-     * @throws
-     *  SDKBadRequestException on unsupported method (PUT, GET..)
-     *
-     *  @deprecated use {@link HttpRestClient#sendRequest(RestParams, Request)} instead
-     **/
-    @Deprecated
-    public String sendRequest(RestParams restParams, JSONArray jsonObject) throws SDKBadRequestException {
-         return processRequestType(restParams, jsonObject.toString(), false);
-    }
-
-    /**
-     * Send the request to OV and read the response.
-     *
-     * @param restParams connection parameters.
-     * @param jsonObject
-     *  request body.
-     * @param forceReturnTask
-     *  Forces the check for the Location header (task) even when the response code is not 202.
-     *
-     * @return
-     *  A string representing the response data.
-     * @throws
-     *  SDKBadRequestException on unsupported method (PUT, GET..)
-     *
-     *  @deprecated use {@link HttpRestClient#sendRequest(RestParams, Request)} instead
-     **/
-    @Deprecated
-    public String sendRequest(RestParams restParams, JSONObject jsonObject, boolean forceReturnTask)
-            throws SDKBadRequestException {
-        return processRequestType(restParams, jsonObject.toString(), forceReturnTask);
-    }
-
-    /**
-     * Send the request to OV and read the response.
-     *
-     * @param restParams connection parameters.
-     * @param requestBody request body.
-     *
-     * @return
-     *  A string representing the response data.
-     * @throws
-     *  SDKBadRequestException on unsupported method (PUT, GET..)
-     *
-     *  @deprecated use {@link HttpRestClient#sendRequest(RestParams, Request)} instead
-     **/
-    @Deprecated
-    public String sendRequest(RestParams restParams, String requestBody) throws SDKBadRequestException {
-        return processRequestType(restParams, requestBody, false);
-    }
-
-    /**
-     * Process the request type to be sent to HPE OneView.
-     *
-     * @param params
-     *  connection parameters.
-     * @param requestBody
-     *  request body.
-     * @param forceReturnTask
-     *  Forces the check for the Location header (task) even when the response code is not 202.
-     *
-     * @return
-     *  A string representing the response data.
-     * @throws SDKBadRequestException on unsupported method (PUT, GET..)
-     **/
-    private String processRequestType(final RestParams params,
-                                     final String requestBody,
-                                     final boolean forceReturnTask)
-                                     throws SDKBadRequestException {
-
-        LOGGER.debug("Using URL: " + params.getUrl());
-        LOGGER.debug("Rest params passed, params= " + params
-                     + "object = " + requestBody);
-
-        String response = "";
-
-        if (params.getType() == null) {
-            throw new SDKBadRequestException(SDKErrorEnum.badRequestError, null, null, null, SdkConstants.APPLIANCE,
-                    null);
-        }
-
-        switch (params.getType()) {
-        case POST:
-            response = sendPostRequest(params, requestBody, forceReturnTask);
-            break;
-        case GET:
-            response = sendGetRequest(params, requestBody, forceReturnTask);
-            break;
-        case PATCH:
-            response = sendPatchRequest(params, requestBody, forceReturnTask);
-            break;
-        case PUT:
-            response = sendPutRequest(params, requestBody, forceReturnTask);
-            break;
-        case DELETE:
-            response = sendDeleteRequest(params, forceReturnTask);
-            break;
-        default:
-            // Since request type is an ENUM, there is no way this will be executed
-            LOGGER.error("Request type not supported.");
-            throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
-                    null, null, null, SdkConstants.APPLIANCE, null);
-        }
-        return response;
-    }
-
-    private String processRequestType(RestParams params, Request request) throws SDKBadRequestException {
-        URI uri = buildURI(params, request);
+        URI uri = buildURI(restParams, request);
 
         LOGGER.debug("Using URL: " + uri.toString());
-        LOGGER.debug("Rest params passed, params = " + params + " object = " + request.getEntity());
+        LOGGER.debug("Rest params passed, params = " + restParams + " object = " + request.getEntity());
 
         if (request.getType() == null) {
             throw new SDKBadRequestException(SDKErrorEnum.badRequestError, null, null, null,
@@ -284,7 +128,7 @@ public class HttpRestClient {
         switch (request.getType()) {
             case POST:
                 HttpPost post = new HttpPost(uri);
-                fillRequestEntity(post, params, request);
+                fillRequestEntity(post, restParams, request);
                 requestBase = post;
                 break;
             case GET:
@@ -295,7 +139,7 @@ public class HttpRestClient {
                 HttpPatch patch = new HttpPatch(uri);
                 HttpEntity entity = EntityBuilder.create()
                         .setText(serializer.toJsonArray((Patch) request.getEntity(),
-                                params.getApiVersion()))
+                                restParams.getApiVersion()))
                         .setContentType(toApacheContentType(request.getContentType())).build();
 
                 patch.setEntity(entity);
@@ -304,7 +148,7 @@ public class HttpRestClient {
                 break;
             case PUT:
                 HttpPut put = new HttpPut(uri);
-                fillRequestEntity(put, params, request);
+                fillRequestEntity(put, restParams, request);
                 requestBase = put;
                 break;
             case DELETE:
@@ -320,9 +164,9 @@ public class HttpRestClient {
 
         if (requestBase != null) {
             requestBase.setConfig(createRequestTimeoutConfiguration());
-            setRequestHeaders(params, requestBase);
+            setRequestHeaders(restParams, requestBase);
 
-            return getResponse(requestBase, params, request.isForceTaskReturn());
+            return getResponse(requestBase, restParams, request.isForceTaskReturn());
         }
         LOGGER.error("could not create a valid request.");
         throw new SDKBadRequestException(SDKErrorEnum.badRequestError, null, null, null,
@@ -379,144 +223,6 @@ public class HttpRestClient {
     }
 
     /**
-     * Sends a DELETE request to HPE OneView.
-     *
-     * @param params
-     *  connection parameters.
-     * @param forceReturnTask
-     *  Forces the check for the Location header (task) even when the response code is not 202.
-     * @return
-     *  The response from HPE OneView
-     * @throws SDKBadRequestException
-     */
-    private String sendDeleteRequest(RestParams params, boolean forceReturnTask)
-            throws SDKBadRequestException {
-        HttpDelete delete = new HttpDelete(buildURI(params));
-        setRequestHeaders(params, delete);
-        delete.setHeader("Content-Type", "application/json; charset=UTF-8");
-        delete.setConfig(createRequestTimeoutConfiguration());
-        return getResponse(delete, params, forceReturnTask);
-    }
-
-    /**
-     * Sends a PUT request to HPE OneView.
-     *
-     * @param params
-     *  connection parameters.
-     * @param requestBody
-     *  The request body information
-     * @param forceReturnTask
-     *  Forces the check for the Location header (task) even when the response code is not 202.
-     * @return
-     *  The response from HPE OneView
-     * @throws SDKBadRequestException
-     */
-    private String sendPutRequest(RestParams params, String requestBody, boolean forceReturnTask)
-            throws SDKBadRequestException {
-        try {
-            HttpPut put = new HttpPut(buildURI(params));
-            if (requestBody == null) {
-                requestBody = "";
-            }
-            put.setEntity(new StringEntity(requestBody, CHAR_SET));
-            setRequestHeaders(params, put);
-            put.setHeader("Content-Type", "application/json; charset=UTF-8");
-            put.setConfig(createRequestTimeoutConfiguration());
-            return getResponse(put, params, forceReturnTask);
-        } catch (IllegalArgumentException e) {
-            throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
-                    null, null, null,
-                    SdkConstants.APPLIANCE, e);
-        }
-    }
-
-    /**
-     * Sends a GET request to HPE OneView.
-     *
-     * @param params
-     *  connection parameters.
-     * @param requestBody
-     *  The request body information
-     * @param forceReturnTask
-     *  Forces the check for the Location header (task) even when the response code is not 202.
-     * @return
-     *  The response from HPE OneView
-     * @throws SDKBadRequestException
-     */
-    private String sendGetRequest(RestParams params, String requestBody, boolean forceReturnTask)
-            throws SDKBadRequestException {
-        HttpGet get = new HttpGet(buildURI(params));
-        setRequestHeaders(params, get);
-        get.setHeader("Content-Type", "application/json; charset=UTF-8");
-        get.setConfig(createRequestTimeoutConfiguration());
-        return getResponse(get, params, forceReturnTask);
-    }
-
-    /**
-     * Sends a POST request to HPE OneView.
-     *
-     * @param params
-     *  connection parameters.
-     * @param requestBody
-     *  The request body information
-     * @param forceReturnTask
-     *  Forces the check for the Location header (task) even when the response code is not 202.
-     * @return
-     *  The response from HPE OneView
-     * @throws SDKBadRequestException
-     */
-    private String sendPostRequest(RestParams params, String requestBody, final boolean forceReturnTask)
-            throws SDKBadRequestException {
-        try {
-            HttpPost post = new HttpPost(buildURI(params));
-            if (requestBody == null) {
-                requestBody = "";
-            }
-            post.setEntity(new StringEntity(requestBody, CHAR_SET));
-            setRequestHeaders(params, post);
-            post.setHeader("Content-Type", "application/json; charset=UTF-8");
-            post.setConfig(createRequestTimeoutConfiguration());
-            return getResponse(post, params, forceReturnTask);
-        } catch (IllegalArgumentException e) {
-            throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
-                    null, null, null,
-                    SdkConstants.APPLIANCE, e);
-        }
-    }
-
-    /**
-     * Sends a PATCH request to HPE OneView.
-     *
-     * @param params
-     *  connection parameters.
-     * @param requestBody
-     *  The request body information
-     * @param forceReturnTask
-     *  Forces the check for the Location header (task) even when the response code is not 202.
-     * @return
-     *  The response from HPE OneView
-     * @throws SDKBadRequestException
-     */
-    private String sendPatchRequest(RestParams params, String requestBody, final boolean forceReturnTask)
-            throws SDKBadRequestException {
-        try {
-            HttpPatch patch = new HttpPatch(buildURI(params));
-            if (requestBody == null) {
-                requestBody = "";
-            }
-            patch.setEntity(new StringEntity(requestBody, CHAR_SET));
-            setRequestHeaders(params, patch);
-            patch.setHeader("Content-Type", "application/json; charset=UTF-8");
-            patch.setConfig(createRequestTimeoutConfiguration());
-            return getResponse(patch, params, forceReturnTask);
-        } catch (IllegalArgumentException e) {
-            throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
-                    null, null, null,
-                    SdkConstants.APPLIANCE, e);
-        }
-    }
-
-    /**
      * Creates the timeout configuration for the request.
      *
      * @return
@@ -544,29 +250,6 @@ public class HttpRestClient {
             URIBuilder uri = new URIBuilder(UrlUtils.createRestUrl(params.getHostname(), request.getUri()));
 
             for (Entry<String, String> entry : request.getQuery().entrySet()) {
-                uri.addParameter(entry.getKey(), entry.getValue());
-            }
-            return uri.build();
-        } catch (URISyntaxException e) {
-            throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
-                    null, null, null, SdkConstants.APPLIANCE, e);
-        }
-    }
-
-    /**
-     * Builds the URI used in the request.
-     *
-     * @param params
-     *  connection parameters.
-     * @return
-     *  The request URI
-     * @throws SDKBadRequestException
-     */
-    private URI buildURI(RestParams params) throws SDKBadRequestException {
-        try {
-            URIBuilder uri = new URIBuilder(params.getUrl());
-
-            for (Entry<String, String> entry : params.getQuery().entrySet()) {
                 uri.addParameter(entry.getKey(), entry.getValue());
             }
             return uri.build();
@@ -634,7 +317,7 @@ public class HttpRestClient {
 
                 Request taskRequest = new Request(HttpMethodType.GET, restUri);
 
-                return this.processRequestType(params, taskRequest);
+                return this.sendRequest(params, taskRequest);
             }
 
         } catch (IOException e) {

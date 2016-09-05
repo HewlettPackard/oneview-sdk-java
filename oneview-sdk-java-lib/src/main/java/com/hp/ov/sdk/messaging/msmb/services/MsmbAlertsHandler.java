@@ -18,7 +18,7 @@ package com.hp.ov.sdk.messaging.msmb.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.adaptors.MsmbAlertsMessageAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.dto.MsmbAlertsMessageDto;
 import com.hp.ov.sdk.messaging.msmb.listeners.MsmbListener;
 
@@ -26,19 +26,19 @@ public class MsmbAlertsHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MsmbAlertsHandler.class);
 
-    private final MsmbAlertsMessageAdaptor adaptor;
+    private final ResourceAdaptor adaptor;
     private final MsmbListener msmbListener;
 
     public MsmbAlertsHandler(final MsmbListener msmbListener) {
         this.msmbListener = msmbListener;
-        this.adaptor = new MsmbAlertsMessageAdaptor();
+        this.adaptor = new ResourceAdaptor();
     }
 
     public void handleMessage(final String message) {
         LOGGER.debug("MsmbAlertsHandler : handlMessage : Message Received: " + message);
 
         // call adaptor
-        final MsmbAlertsMessageDto alertsDto = adaptor.buildDto(message);
+        final MsmbAlertsMessageDto alertsDto = adaptor.buildResourceObject(message, MsmbAlertsMessageDto.class);
         // invoke listener
         msmbListener.handleMsmbMessage(alertsDto);
     }

@@ -107,7 +107,7 @@ public class TaskMonitorManager {
         }
     }
 
-    public TaskResourceV2 getTask(final RestParams params, final String taskUri) {
+    private TaskResourceV2 getTask(final RestParams params, final String taskUri) {
         return taskServiceManager.getTaskResource(params, taskUri);
     }
 

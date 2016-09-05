@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.certs.CertificateStoreManager;
-import com.hp.ov.sdk.certs.MessagingCertificateManager;
+import com.hp.ov.sdk.certs.MessagingCertificateClient;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.CaCert;
 import com.hp.ov.sdk.dto.RabbitMqClientCert;
@@ -48,9 +48,9 @@ public class ScmbConnectionManager {
     private final ConcurrentMap<String, ExecutorService> executorMap = new ConcurrentHashMap<String, ExecutorService>();
     private final ConcurrentMap<String, Thread> scmbProcessThreadQueue = new ConcurrentHashMap<String, Thread>();
 
-    private final MessagingCertificateManager messagingCertificate;
+    private final MessagingCertificateClient messagingCertificate;
 
-    public ScmbConnectionManager(MessagingCertificateManager messagingCertificate) {
+    public ScmbConnectionManager(MessagingCertificateClient messagingCertificate) {
         this.messagingCertificate = messagingCertificate;
     }
 
@@ -66,9 +66,9 @@ public class ScmbConnectionManager {
         // scmbConnection = map.get(params.getHostname());
         if (!map.containsKey(params.getHostname())) {
             // get client cert
-            final RabbitMqClientCert mqClientCert = messagingCertificate.getRabbitMqClientCertificateKeyPair(params);
+            final RabbitMqClientCert mqClientCert = messagingCertificate.getRabbitMqClientCertificateKeyPair();
             // get CA cert
-            CaCert caCert = messagingCertificate.getCACertificate(params);
+            CaCert caCert = messagingCertificate.getCACertificate();
             // get SSLContext
             SSLContext sslContext = CertificateStoreManager.getSslContext(mqClientCert, caCert);
             ConnectionFactory connectionFactory = RabbitMqClientConnectionFactory.getConnectionFactory(sslContext, params);

@@ -19,18 +19,19 @@ package com.hp.ov.sdk.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hp.ov.sdk.adaptors.FcIssueResponseAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 
 public class FcSansManagedSanTask {
 
     private final TaskResourceV2 task;
-    private final FcIssueResponseAdaptor adaptor;
+    private final ResourceAdaptor adaptor;
 
     public FcSansManagedSanTask(TaskResourceV2 task,
-            FcIssueResponseAdaptor adaptor) {
+            ResourceAdaptor adaptor) {
 
         this.task = task;
         this.adaptor = adaptor;
+
     }
 
     public TaskResourceV2 getTask() {
@@ -41,7 +42,7 @@ public class FcSansManagedSanTask {
         List<FcIssueResponse> issues = new ArrayList<>();
 
         for (String taskOutput : task.getTaskOutput()) {
-            issues.add(adaptor.buildDto(taskOutput));
+            issues.add(adaptor.buildResourceObject(taskOutput, FcIssueResponse.class));
         }
         return issues;
     }

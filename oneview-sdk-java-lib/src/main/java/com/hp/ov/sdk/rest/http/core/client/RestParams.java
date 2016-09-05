@@ -15,9 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.http.core.client;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.TrustManager;
 
@@ -26,9 +23,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
 public class RestParams {
 
@@ -40,10 +34,6 @@ public class RestParams {
     private String password = null;
     private String locale = null;
     private String domain = "LOCAL";
-
-    private Map<String, String> query = new HashMap<String, String>();
-    private String url = null;
-    private HttpMethodType type = HttpMethodType.GET;
 
     private String sessionId = null;
 
@@ -87,56 +77,12 @@ public class RestParams {
         this.sessionId = sessionId;
     }
 
-    /**
-     *
-     * @deprecated use {@link Request#Request(HttpMethodType, String)}
-     *
-     * @return the HttpMethodType
-     */
-    @Deprecated
-    public HttpMethodType getType() {
-        return type;
-    }
-
-    /**
-     *
-     * @param type the HttpMethodType to set
-     *
-     * @deprecated use {@link Request#Request(HttpMethodType, String)}
-     */
-    @Deprecated
-    public void setType(final HttpMethodType type) {
-        this.type = type;
-    }
-
     public String getDomain() {
         return domain;
     }
 
     public void setDomain(final String domain) {
         this.domain = domain;
-    }
-
-    /**
-     *
-     * @deprecated use {@link Request#Request(HttpMethodType, String)}
-     *
-     * @return the URL
-     */
-    @Deprecated
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     * @param url the URL to set
-     *
-     * @deprecated use {@link Request#Request(HttpMethodType, String)}
-     *
-     */
-    @Deprecated
-    public void setUrl(final String url) {
-        this.url = url;
     }
 
     public ApiVersion getApiVersion() {
@@ -186,28 +132,6 @@ public class RestParams {
 
     public void setLocale(final String locale) {
         this.locale = locale;
-    }
-
-    /**
-     *
-     * @deprecated use {@link Request#addQuery(UrlParameter)} instead
-     *
-     * @return Map containing the current queries
-     */
-    @Deprecated
-    public Map<String, String> getQuery() {
-        return query;
-    }
-
-    /**
-     *
-     * @param query the query Map to set
-     *
-     * @deprecated use {@link Request#addQuery(UrlParameter)} instead
-     */
-    @Deprecated
-    public void setQuery(final Map<String, String> query) {
-        this.query = query;
     }
 
     public String getHostname() {

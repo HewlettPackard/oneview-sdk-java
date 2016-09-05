@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.reflect.TypeToken;
-import com.hp.ov.sdk.adaptors.FcIssueResponseAdaptor;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.dto.EndpointResponse;
 import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.dto.FcSansManagedSanTask;
@@ -168,7 +168,7 @@ public class FcSanManagedSanClient {
 
         LOGGER.info("FcSanManagedSanClient : createIssuesReport : End");
 
-        return new FcSansManagedSanTask(taskResource, FcIssueResponseAdaptor.getInstance());
+        return new FcSansManagedSanTask(taskResource, new ResourceAdaptor());
     }
 
     /**

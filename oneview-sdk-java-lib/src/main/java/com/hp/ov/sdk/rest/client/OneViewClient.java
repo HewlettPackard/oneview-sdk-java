@@ -19,6 +19,7 @@ package com.hp.ov.sdk.rest.client;
 import java.lang.reflect.Constructor;
 
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
+import com.hp.ov.sdk.certs.MessagingCertificateClient;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKException;
 import com.hp.ov.sdk.rest.client.activity.AlertClient;
@@ -105,6 +106,7 @@ public class OneViewClient {
     private LogicalInterconnectGroupClient logicalInterconnectGroupClient;
     private LogicalSwitchClient logicalSwitchClient;
     private LogicalSwitchGroupClient logicalSwitchGroupClient;
+    private MessagingCertificateClient messagingCertificateClient;
     private NetworkSetClient networkSetClient;
     private PowerDeliveryDeviceClient powerDeliveryDeviceClient;
     private RackClient rackClient;
@@ -240,6 +242,10 @@ public class OneViewClient {
 
     public synchronized LogicalSwitchGroupClient logicalSwitchGroup() {
         return this.getClient(this.logicalSwitchGroupClient, LogicalSwitchGroupClient.class);
+    }
+
+    public synchronized MessagingCertificateClient messagingCertificate() {
+        return this.getClient(this.messagingCertificateClient, MessagingCertificateClient.class);
     }
 
     public synchronized NetworkSetClient networkSet() {
