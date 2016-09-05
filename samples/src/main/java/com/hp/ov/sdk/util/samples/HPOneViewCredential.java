@@ -63,10 +63,6 @@ public class HPOneViewCredential {
     public static HttpSslProperties createHttpSslProperties() {
         HttpSslProperties httpSslProperties = new HttpSslProperties();
 
-        httpSslProperties.setKeyStore(SamplesConstants.KEY_STORE_FILE);
-        httpSslProperties.setKeyStorePassword(SamplesConstants.KEY_STORE_PASSWORD);
-        httpSslProperties.setKeyStoreType(SamplesConstants.KEY_STORE_TYPE);
-
         httpSslProperties.setTrustStore(SamplesConstants.TRUST_STORE_FILE);
         httpSslProperties.setTrustStorePassword(SamplesConstants.TRUST_STORE_PASSWORD);
         httpSslProperties.setTrustStoreType(SamplesConstants.TRUST_STORE_TYPE);

@@ -20,18 +20,19 @@ Once the repository has been cloned from GitHub, you can build the SDK using Mav
 mvn clean install
 ```
 
-### Generate KeyStore and TrustStore to store SSL certificates ###
-To enable the SDK to establish a SSL connection between the client and the server, it is necessary to generate `KeyStore` and `TrustStore` files.
+### Generate TrustStore to store SSL server certificate ###
+To enable the SDK to establish a SSL connection between the client and the server, it is necessary to generate a `TrustStore` file containing the credentials of the OneView server.
 
 Below are the steps to perform this task:
 
 #### Fetch the authorization token from OneView using a REST client ####
 Example:
 ```sh
-curl -X POST -H "Content-Type:application/json" -d '{"userName":"{USERNAME}","password":"{PASSWORD}"}' \
+curl -X POST -H "X-Api-Version:{VERSION}" -H "Content-Type:application/json" \
+-d '{"userName":"{USERNAME}","password":"{PASSWORD}"}' \
 -k https://{HOST}/rest/login-sessions
 ```
-Replace `{USERNAME}`, `{PASSWORD}` and `{HOST}` with your OneView credentials and host information.
+Replace `{VERSION}`, `{USERNAME}`, `{PASSWORD}` and `{HOST}` respectively by the API version, OneView credentials and host information.
 
 #### Fetch server CA certificate ####
 Example:
@@ -41,22 +42,6 @@ openssl s_client -showcerts -host {HOST} -port 443
 Copy the server certificate content from `-----BEGIN CERTIFICATE-----` to `-----END CERTIFICATE-----` (inclusive).
 Paste the content into a file called `default-server.crt`.
 
-#### Fetch the SSL client certificates for RabbitMQ using a REST client ####
-Example:
-```sh
-curl -X GET -H "Auth:{AUTHORIZATION_TOKEN}" -H "X-Api-Version:200" -k https://{HOST}/rest/certificates/client/rabbitmq/keypair/default  
-```
-* Paste the content of `base64SSLCertData` into a file called `default-client.crt`
-* Paste the content of `base64SSLKeyData` into a file called `default-client.key`
-
-> Note: Remove the `\n` characters or replace them with an actual *new line*.
-
-If you receive a response containing the message `Certificate/Private key file is missing`, you will have to perform a request to the OneView to generate the certificates.
-Example:
-```sh
-curl -X POST -H "Auth:{AUTHORIZATION_TOKEN}" -H "X-Api-Version:200" -H "Content-Type:application/json" -d '{"commonName":"default","type":"RabbitMqClientCertV2"}' -k https://{HOST}/rest/certificates/client/rabbitmq
-```
-
 #### Generate `TrustStore` ####
 Example:
 ```sh
@@ -64,24 +49,24 @@ keytool -import -v -trustcacerts -alias myservercert -file default-server.crt -k
 ```
 > Note: Choose the *yes* option, when prompted to trust the certificate.
 
-#### Generate `KeyStore` ####
-Example:
-```sh
-openssl pkcs12 -export -name myclientcert -in default-client.crt -inkey default-client.key -out myclient.p12
-
-keytool -importkeystore -destkeystore KeyStore -srckeystore myclient.p12 -srcstoretype pkcs12 -alias myclientcert
-```
-
 ### Example programs ###
 The SDK comes with several sample programs inside the `samples` module. For each of the supported resource types, there is a corresponding sample file. To run one of them, we recommend the use of an IDE ([Eclipse](https://eclipse.org/downloads/) or [IntelliJ](https://www.jetbrains.com/idea/download/)).
 
-> Note: If you choose to use Eclipse IDE, you will need to generate the Eclipse IDE files (`\*.classpath`, `\*.project`, `\*.wtpmodules` and the `.settings` folder). You can generate these files using Maven Eclipse Plugin with the command `mvn clean eclipse:clean eclipse:eclipse`
+> Note: If you choose to use Eclipse IDE, you will need to generate the Eclipse IDE files (`\*.classpath`, `\*.project`, `\*.wtpmodules` and the `.settings` folder). You can generate these files using Maven Eclipse Plugin with the command `mvn clean eclipse:clean eclipse:eclipse`.
 
 The file `SamplesConstants.java` must be updated to contain the following information:
-* Path for both `KeyStore` and `TrustStore` files and their respective passwords
+* Path for the `TrustStore` file and its password
 * OneView credentials and host information
 
-> Note: Instead of changing the location of SSL files you can just place them inside the directory `samples/src/main/resources`
+> Note: Instead of changing the location of your SSL file you can just place it inside the directory `samples/src/main/resources`.
+
+#### Message Bus samples ####
+Before running the Message Bus samples, it is necessary to execute a HTTP POST request to the OneView server in order to generate the RabbitMQ certificate files.
+Below is an example that ilustrates how you can perform this:
+```sh
+curl -X POST -H "Auth:{AUTHORIZATION_TOKEN}" -H "X-Api-Version:{VERSION}" -H "Content-Type:application/json" \
+-d '{"commonName":"default","type":"RabbitMqClientCertV2"}' -k https://{HOST}/rest/certificates/client/rabbitmq
+```
 
 ## SDK Logging Configuration ##
 The OneView SDK for Java uses the Simple Logging Facade for Java (SLF4J) for logging. The SLF4J serves as a simple facade or abstraction for various logging frameworks, such as `java.util.logging`, `logback` and `log4j`. SLF4J allows the end-user to plug in the desired logging framework at deployment time.

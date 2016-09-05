@@ -28,7 +28,7 @@ public class RestParams {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(RestParams.class);
 
-    private ApiVersion apiVersion = ApiVersion.V_200;// default value
+    private ApiVersion apiVersion = ApiVersion.V_300;// default value
     private String hostname = null;
     private String userName = null;
     private String password = null;
