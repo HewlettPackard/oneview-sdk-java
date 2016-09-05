@@ -24,10 +24,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
-import com.hp.ov.sdk.dto.servers.serverprofiletemplate.ServerProfileTemplate;
 import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
+import com.hp.ov.sdk.dto.servers.serverprofiletemplate.ServerProfileTemplate;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
@@ -48,7 +47,7 @@ public class ServerProfileTemplateClientTest {
     public void shouldGetServerProfileTemplateById() {
         client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.SERVER_PROFILE_TEMPLATE_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = ServerProfileTemplateClient.SERVER_PROFILE_TEMPLATE_URI + "/" + ANY_RESOURCE_ID;
 
         then(baseClient).should().getResource(expectedUri, ServerProfileTemplate.class);
     }
@@ -58,14 +57,14 @@ public class ServerProfileTemplateClientTest {
         client.getAll();
 
         then(baseClient).should().getResourceCollection(
-                ResourceUris.SERVER_PROFILE_TEMPLATE_URI, ServerProfileTemplate.class);
+                ServerProfileTemplateClient.SERVER_PROFILE_TEMPLATE_URI, ServerProfileTemplate.class);
     }
 
     @Test
     public void shouldGetServerProfileTemplatesByName() {
         client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.SERVER_PROFILE_TEMPLATE_URI,
+        then(baseClient).should().getResourceCollection(ServerProfileTemplateClient.SERVER_PROFILE_TEMPLATE_URI,
                 ServerProfileTemplate.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
     }
 
@@ -76,7 +75,7 @@ public class ServerProfileTemplateClientTest {
         client.create(serverProfileTemplate, false);
 
         Request request = new Request(HttpMethodType.POST,
-                ResourceUris.SERVER_PROFILE_TEMPLATE_URI, serverProfileTemplate);
+                ServerProfileTemplateClient.SERVER_PROFILE_TEMPLATE_URI, serverProfileTemplate);
 
         request.setTimeout(1200000);
 
@@ -87,7 +86,7 @@ public class ServerProfileTemplateClientTest {
     public void shouldDeleteServerProfileTemplate() {
         client.delete(ANY_RESOURCE_ID, false);
 
-        String expectedUri = ResourceUris.SERVER_PROFILE_TEMPLATE_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = ServerProfileTemplateClient.SERVER_PROFILE_TEMPLATE_URI + "/" + ANY_RESOURCE_ID;
         Request request = new Request(HttpMethodType.DELETE, expectedUri);
 
         request.setTimeout(1200000);
@@ -101,7 +100,7 @@ public class ServerProfileTemplateClientTest {
 
         client.update(ANY_RESOURCE_ID, serverProfileTemplate, false);
 
-        String expectedUri = ResourceUris.SERVER_PROFILE_TEMPLATE_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = ServerProfileTemplateClient.SERVER_PROFILE_TEMPLATE_URI + "/" + ANY_RESOURCE_ID;
         Request request = new Request(HttpMethodType.PUT, expectedUri, serverProfileTemplate);
 
         request.setTimeout(1200000);
@@ -113,11 +112,28 @@ public class ServerProfileTemplateClientTest {
     public void shouldGetNewServerProfile() {
         client.getNewServerProfile(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.SERVER_PROFILE_TEMPLATE_URI
+        String expectedUri = ServerProfileTemplateClient.SERVER_PROFILE_TEMPLATE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.SERVER_PROFILE_TEMPLATE_NEW_PROFILE_URI;
+                + "/" + ServerProfileTemplateClient.SERVER_PROFILE_TEMPLATE_NEW_PROFILE_URI;
 
         then(baseClient).should().getResource(expectedUri, ServerProfile.class);
+    }
+
+
+    @Test
+    public void shouldGetServerProfileTemplateTransformation() {
+        client.getTransformation(ANY_RESOURCE_ID, ANY_RESOURCE_ID, ANY_RESOURCE_ID);
+
+        String expectedUri = ServerProfileTemplateClient.SERVER_PROFILE_TEMPLATE_URI
+                + "/" + ANY_RESOURCE_ID
+                + "/" + ServerProfileTemplateClient.SERVER_PROFILE_TEMPLATE_TRANSFORMATION_URI;
+
+        Request expectedRequest = new Request(HttpMethodType.GET, expectedUri);
+
+        expectedRequest.addQuery(new UrlParameter("serverHardwareTypeUri", ANY_RESOURCE_ID));
+        expectedRequest.addQuery(new UrlParameter("enclosureGroupUri", ANY_RESOURCE_ID));
+
+        then(baseClient).should().executeRequest(expectedRequest, ServerProfileTemplate.class);
     }
 
 }

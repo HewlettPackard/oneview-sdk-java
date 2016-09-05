@@ -92,8 +92,6 @@ public class ResourceUris {
     public static final String RACK_DEVICE_TOPOLOGY = "deviceTopology";
     public static final String RACK_URI = "/rest/racks";
     public static final String SERVER_HARDWARE_TYPE_URI = "/rest/server-hardware-types";
-    public static final String SERVER_PROFILE_TEMPLATE_URI = "/rest/server-profile-templates";
-    public static final String SERVER_PROFILE_TEMPLATE_NEW_PROFILE_URI = "new-profile";
     public static final String SERVER_PROFILE_COMPLIANCE_PREVIEW_URI = "compliance-preview";
     public static final String SERVER_PROFILE_COMPLIANCE_MESSAGES_URI = "messages";
     public static final String SERVER_PROFILE_COMPLIANCE_TRANSFORMATION_URI = "transformation";

@@ -20,6 +20,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -42,6 +45,8 @@ import com.hp.ov.sdk.dto.servers.serverprofiletemplate.LocalStorageSettingsTempl
 import com.hp.ov.sdk.dto.servers.serverprofiletemplate.ProfileConnectionTemplate;
 import com.hp.ov.sdk.dto.servers.serverprofiletemplate.ServerProfileTemplate;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
+import com.hp.ov.sdk.rest.client.server.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.server.ServerProfileClient;
 import com.hp.ov.sdk.rest.client.server.ServerProfileTemplateClient;
 
@@ -52,22 +57,27 @@ import com.hp.ov.sdk.rest.client.server.ServerProfileTemplateClient;
  */
 public class ServerProfileTemplateClientSample {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerProfileTemplateClientSample.class);
+
     private final ServerProfileTemplateClient serverProfileTemplateClient;
     private final ServerProfileClient serverProfileClient;
+    private final ServerHardwareClient serverHardwareClient;
+    private final EnclosureGroupClient enclosureGroupClient;
 
     // test values - user input
     // ================================
     private static final String SERVER_PROFILE_TEMPLATE_NAME = "server-profile-template";
     private static final String SERVER_PROFILE_TEMPLATE_NAME_UPDATED = SERVER_PROFILE_TEMPLATE_NAME + "_Updated";
     private static final String RESOURCE_ID = "0fa0d573-4e38-4ed6-9523-e04d9a18c977";
-    private static final String SERVER_HARDWARE_TYPE_URI = "/rest/server-hardware-types/F98A387B-07BE-4A2C-8A6A-0BAAFA586711";
-    private static final String ENCLOSURE_GROUP_URI = "/rest/enclosure-groups/c6871f53-c5e1-483f-a273-a30da743f6b1";
-    private static final String ETH_1_NETWORK_URI = "/rest/ethernet-networks/5b1ffd63-6787-4e5f-b409-3f86a998fbd6";
-    private static final String ETH_2_NETWORK_URI = "/rest/ethernet-networks/bdc00905-20f3-46a9-87dd-8020fc0b6bab";
-    private static final String FC_1_NETWORK_URI = "/rest/fc-networks/1f4a0491-2a41-4633-8362-377081dd0fcc";
-    private static final String FC_2_NETWORK_URI = "/rest/fc-networks/4e261a94-125a-4654-9b93-12ba22cf13e4";
+    private static final String SERVER_HARDWARE_TYPE_URI = "/rest/server-hardware-types/3FF68C4E-342D-46C8-A07C-72C04010E14B";
+    private static final String ENCLOSURE_GROUP_URI = "/rest/enclosure-groups/3cf684cd-dd6f-4176-8fcd-87b0405f7dc4";
+    private static final String ETH_1_NETWORK_URI = "/rest/ethernet-networks/893b2770-99e2-4f5e-922f-a432573d8395";
+    private static final String ETH_2_NETWORK_URI = "/rest/ethernet-networks/21155d38-3a3a-4199-9659-fc780d02332b";
+    private static final String FC_1_NETWORK_URI = "/rest/fc-networks/f0c5634d-a47b-4bb7-a4b3-18bd4e95ea07";
+    private static final String FC_2_NETWORK_URI = "/rest/fc-networks/346edfb2-a940-4d8a-9b4b-1e1bf542168f";
     private static final String STORAGE_VOLUME_URI = "/rest/storage-volumes/8CA32073-02F0-461C-A907-433EA0FAD8C5";
     private static final String SERVER_HARDWARE_URI = "/rest/server-hardware/37333036-3831-4753-4831-30355838524E";
+    private static final String ENCLOSURE_GROUP_NAME = "encl_group";
     // ================================
 
     private ServerProfileTemplateClientSample() {
@@ -75,28 +85,27 @@ public class ServerProfileTemplateClientSample {
 
         this.serverProfileTemplateClient = oneViewClient.serverProfileTemplate();
         this.serverProfileClient = oneViewClient.serverProfile();
+        this.serverHardwareClient = oneViewClient.serverHardware();
+        this.enclosureGroupClient = oneViewClient.enclosureGroup();
     }
 
     private void getServerProfileTemplateById() {
         ServerProfileTemplate serverProfileTemplate = serverProfileTemplateClient.getById(RESOURCE_ID);
 
-        System.out.println("ServerProfileTemplateClientSample : getServerProfileTemplateById : " +
-                "ServerProfileTemplate object returned to client : " + serverProfileTemplate.toJsonString());
+        LOGGER.info("Server Profile Template object returned to client: {}", serverProfileTemplate.toJsonString());
     }
 
     private void getAllServerProfileTemplates() {
         ResourceCollection<ServerProfileTemplate> serverProfileTemplates = serverProfileTemplateClient.getAll();
 
-        System.out.println("ServerProfileTemplateClientSample : getAllServerProfileTemplates : " +
-                "Server profile templates returned to client : " + serverProfileTemplates.toJsonString());
+        LOGGER.info("Server profile templates returned to client: {}", serverProfileTemplates.toJsonString());
     }
 
     private void getServerProfileTemplateByName() {
         ServerProfileTemplate serverProfileTemplate
                 = this.serverProfileTemplateClient.getByName(SERVER_PROFILE_TEMPLATE_NAME).get(0);
 
-        System.out.println("ServerProfileTemplateClientSample : getServerProfileTemplateByName : " +
-                "ServerProfileTemplate object returned to client : " + serverProfileTemplate.toJsonString());
+        LOGGER.info("Server Profile Template object returned to client: {}", serverProfileTemplate.toJsonString());
     }
 
     private void createServerProfileTemplate() {
@@ -104,8 +113,7 @@ public class ServerProfileTemplateClientSample {
 
         TaskResourceV2 taskResource = serverProfileTemplateClient.create(serverProfileTemplate, false);
 
-        System.out.println("ServerProfileTemplateClientSample : createServerProfileTemplate : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void deleteServerProfileTemplate() {
@@ -114,8 +122,7 @@ public class ServerProfileTemplateClientSample {
 
         TaskResourceV2 taskResource = serverProfileTemplateClient.delete(serverProfileTemplate.getResourceId(), false);
 
-        System.out.println("ServerProfileTemplateClientSample : deleteServerProfileTemplate : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void updateServerProfileTemplate() {
@@ -127,8 +134,7 @@ public class ServerProfileTemplateClientSample {
         TaskResourceV2 taskResource = serverProfileTemplateClient.update(serverProfileTemplate.getResourceId(),
                 serverProfileTemplate, false);
 
-        System.out.println("ServerProfileTemplateClientSample : updateServerProfileTemplate : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void getNewServerProfile() {
@@ -138,8 +144,7 @@ public class ServerProfileTemplateClientSample {
         ServerProfile serverProfile = serverProfileTemplateClient.getNewServerProfile(
                 serverProfileTemplate.getResourceId());
 
-        System.out.println("ServerProfileTemplateClientSample : getNewServerProfile : " +
-                "ServerProfile object returned to client : " + serverProfile.toJsonString());
+        LOGGER.info("Server Profile object returned to client: {}", serverProfile.toJsonString());
     }
 
     private void createServerProfileFromTemplate() {
@@ -154,8 +159,21 @@ public class ServerProfileTemplateClientSample {
 
         TaskResourceV2 taskResource = serverProfileClient.create(serverProfile, false);
 
-        System.out.println("ServerProfileTemplateClientSample : createServerProfileFromTemplate : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
+    }
+
+    private void getServerProfileTemplateTransformation() {
+        ServerProfileTemplate serverProfileTemplate = serverProfileTemplateClient
+                .getByName(SERVER_PROFILE_TEMPLATE_NAME).get(0);
+
+        String serverHardwareTypeUri = serverHardwareClient.getAll().get(0).getServerHardwareTypeUri();
+        String enclosureGroupUri = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0).getUri();
+
+        ServerProfileTemplate serverProfileTemplateUpdated = serverProfileTemplateClient
+                .getTransformation(serverProfileTemplate.getResourceId(), serverHardwareTypeUri, enclosureGroupUri);
+
+        LOGGER.info("Server Profile Template object returned to client: {}",
+                serverProfileTemplateUpdated.toJsonString());
     }
 
     private ServerProfileTemplate buildServerProfileTemplate() {
@@ -305,6 +323,7 @@ public class ServerProfileTemplateClientSample {
         client.getNewServerProfile();
         client.updateServerProfileTemplate();
         client.deleteServerProfileTemplate();
+        client.getServerProfileTemplateTransformation();
     }
 
 }

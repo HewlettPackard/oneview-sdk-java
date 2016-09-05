@@ -19,12 +19,11 @@ package com.hp.ov.sdk.rest.client.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.servers.serverprofiletemplate.ServerProfileTemplate;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
+import com.hp.ov.sdk.dto.servers.serverprofiletemplate.ServerProfileTemplate;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
@@ -33,6 +32,11 @@ import com.hp.ov.sdk.util.UrlUtils;
 public class ServerProfileTemplateClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerProfileTemplateClient.class);
+
+    protected static final String SERVER_PROFILE_TEMPLATE_URI = "/rest/server-profile-templates";
+    protected static final String SERVER_PROFILE_TEMPLATE_TRANSFORMATION_URI = "transformation";
+    protected static final String SERVER_PROFILE_TEMPLATE_NEW_PROFILE_URI = "new-profile";
+
     private static final int TIMEOUT = 1200000;
 
     private final BaseClient baseClient;
@@ -52,7 +56,7 @@ public class ServerProfileTemplateClient {
         LOGGER.info("ServerProfileTemplateClient : getById : Start");
 
         ServerProfileTemplate serverProfileTemplate = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.SERVER_PROFILE_TEMPLATE_URI, resourceId),
+                UrlUtils.createUrl(SERVER_PROFILE_TEMPLATE_URI, resourceId),
                 ServerProfileTemplate.class);
 
         LOGGER.info("ServerProfileTemplateClient : getById : End");
@@ -71,7 +75,7 @@ public class ServerProfileTemplateClient {
         LOGGER.info("ServerProfileTemplateClient : getAll : Start");
 
         ResourceCollection<ServerProfileTemplate> serverProfileTemplates = baseClient.getResourceCollection(
-                ResourceUris.SERVER_PROFILE_TEMPLATE_URI, ServerProfileTemplate.class);
+                SERVER_PROFILE_TEMPLATE_URI, ServerProfileTemplate.class);
 
         LOGGER.info("ServerProfileTemplateClient : getAll : End");
 
@@ -90,7 +94,7 @@ public class ServerProfileTemplateClient {
         LOGGER.info("ServerProfileTemplateClient : getByName : Start");
 
         ResourceCollection<ServerProfileTemplate> serverProfileTemplates = baseClient.getResourceCollection(
-                ResourceUris.SERVER_PROFILE_TEMPLATE_URI, ServerProfileTemplate.class,
+                SERVER_PROFILE_TEMPLATE_URI, ServerProfileTemplate.class,
                 UrlParameter.getFilterByNameParameter(name));
 
         LOGGER.info("ServerProfileTemplateClient : getByName : End");
@@ -112,7 +116,7 @@ public class ServerProfileTemplateClient {
         LOGGER.info("ServerProfileTemplateClient : create : Start");
 
         Request request = new Request(HttpMethodType.POST,
-                ResourceUris.SERVER_PROFILE_TEMPLATE_URI, serverProfileTemplate);
+                SERVER_PROFILE_TEMPLATE_URI, serverProfileTemplate);
 
         request.setTimeout(TIMEOUT);
 
@@ -136,7 +140,7 @@ public class ServerProfileTemplateClient {
         LOGGER.info("ServerProfileTemplateClient : delete : Start");
 
         Request request = new Request(HttpMethodType.DELETE,
-                UrlUtils.createUrl(ResourceUris.SERVER_PROFILE_TEMPLATE_URI, resourceId));
+                UrlUtils.createUrl(SERVER_PROFILE_TEMPLATE_URI, resourceId));
 
         request.setTimeout(TIMEOUT);
 
@@ -160,7 +164,7 @@ public class ServerProfileTemplateClient {
     public TaskResourceV2 update(String resourceId, ServerProfileTemplate serverProfileTemplate, boolean aSync) {
         LOGGER.info("ServerProfileTemplateClient : update : Start");
 
-        String resourceUri = UrlUtils.createUrl(ResourceUris.SERVER_PROFILE_TEMPLATE_URI, resourceId);
+        String resourceUri = UrlUtils.createUrl(SERVER_PROFILE_TEMPLATE_URI, resourceId);
         Request request = new Request(HttpMethodType.PUT, resourceUri, serverProfileTemplate);
 
         request.setTimeout(TIMEOUT);
@@ -184,13 +188,53 @@ public class ServerProfileTemplateClient {
         LOGGER.info("ServerProfileTemplateClient : getNewServerProfile : Start");
 
         ServerProfile serverProfile = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.SERVER_PROFILE_TEMPLATE_URI, resourceId,
-                        ResourceUris.SERVER_PROFILE_TEMPLATE_NEW_PROFILE_URI),
+                UrlUtils.createUrl(SERVER_PROFILE_TEMPLATE_URI, resourceId,
+                        SERVER_PROFILE_TEMPLATE_NEW_PROFILE_URI),
                 ServerProfile.class);
 
         LOGGER.info("ServerProfileTemplateClient : getNewServerProfile : End");
 
         return serverProfile;
+    }
+
+
+    /**
+     * Transforms an existing server profile template by supplying a new server
+     * hardware type and/or enclosure group. A profile will be returned with a
+     * new configuration based on the capabilities of the supplied server
+     * hardware type and/or enclosure group. All deployed connections will have
+     * their port assignment set to 'Auto'. Re-selection of the server hardware
+     * may also be required. The new profile can subsequently be used for the
+     * PUT https://{appl}/rest/server-profiles/{id} API but is not guaranteed to
+     * pass validation. Any incompatibilities will be flagged when the
+     * transformed server profile is submitted.
+     *
+     * @param resourceId
+     *            server profile template resource identifier as seen in HPE OneView.
+     * @param serverHardwareTypeUri
+     *            string specifying the server hardware type URI.
+     * @param enclosureGroupUri
+     *            string specifying the enclosure group URI.
+     *
+     * @return {@link ServerProfileTemplate} object containing the details.
+     */
+    public ServerProfileTemplate getTransformation(String resourceId, String serverHardwareTypeUri,
+            String enclosureGroupUri) {
+
+        LOGGER.info("ServerProfileTemplateClient : getTransformation : Start");
+
+        String uri = UrlUtils.createUrl(SERVER_PROFILE_TEMPLATE_URI, resourceId,
+                SERVER_PROFILE_TEMPLATE_TRANSFORMATION_URI);
+        Request request = new Request(HttpMethodType.GET, uri);
+
+        request.addQuery(new UrlParameter("serverHardwareTypeUri", serverHardwareTypeUri));
+        request.addQuery(new UrlParameter("enclosureGroupUri", enclosureGroupUri));
+
+        ServerProfileTemplate serverProfileTemplate = baseClient.executeRequest(request, ServerProfileTemplate.class);
+
+        LOGGER.info("ServerProfileTemplateClient : getTransformation : End");
+
+        return serverProfileTemplate;
     }
 
 }
