@@ -22,15 +22,11 @@ import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 public class SslPropertiesManager {
 
     public void loadSslProperties(HttpSslProperties httpSslProperties) {
-        this.setupSslProperty("javax.net.ssl.keyStore", httpSslProperties.getKeyStore());
         this.setupSslProperty("javax.net.ssl.trustStore", httpSslProperties.getTrustStore());
         this.setupSslProperty("javax.net.ssl.trustStorePassword", httpSslProperties.getTrustStorePassword());
-        this.setupSslProperty("javax.net.ssl.keyStorePassword", httpSslProperties.getKeyStorePassword());
         this.setupSslProperty("javax.net.ssl.trustStoreType", httpSslProperties.getTrustStoreType());
-        this.setupSslProperty("javax.net.ssl.keyStoreType", httpSslProperties.getKeyStoreType());
 
         System.setProperty("https.protocol", "TLSv1.2");
-        //System.setProperty("javax.net.debug", "all");
     }
 
     private void setupSslProperty(String sslProperty, String sslPropertyValue) {

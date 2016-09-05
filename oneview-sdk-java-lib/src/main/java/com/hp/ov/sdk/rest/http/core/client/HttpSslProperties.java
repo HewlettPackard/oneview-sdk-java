@@ -21,20 +21,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class HttpSslProperties {
 
-    private String keyStore = null;
     private String trustStore = null;
-    private String keyStorePassword = null;
     private String trustStorePassword = null;
-    private String keyStoreType = null;
     private String trustStoreType = null;
-
-    public String getKeyStore() {
-        return keyStore;
-    }
-
-    public void setKeyStore(final String keyStore) {
-        this.keyStore = keyStore;
-    }
 
     public String getTrustStore() {
         return trustStore;
@@ -44,28 +33,12 @@ public class HttpSslProperties {
         this.trustStore = trustStore;
     }
 
-    public String getKeyStorePassword() {
-        return keyStorePassword;
-    }
-
-    public void setKeyStorePassword(final String keyStorePassword) {
-        this.keyStorePassword = keyStorePassword;
-    }
-
     public String getTrustStorePassword() {
         return trustStorePassword;
     }
 
     public void setTrustStorePassword(final String trustStorePassword) {
         this.trustStorePassword = trustStorePassword;
-    }
-
-    public String getKeyStoreType() {
-        return keyStoreType;
-    }
-
-    public void setKeyStoreType(final String keyStoreType) {
-        this.keyStoreType = keyStoreType;
     }
 
     public String getTrustStoreType() {
