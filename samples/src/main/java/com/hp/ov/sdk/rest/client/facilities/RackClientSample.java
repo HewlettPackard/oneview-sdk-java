@@ -16,6 +16,9 @@
 
 package com.hp.ov.sdk.rest.client.facilities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -25,6 +28,8 @@ import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
 public class RackClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RackClientSample.class);
 
     // These are variables to be defined by user
     // ================================
@@ -43,22 +48,19 @@ public class RackClientSample {
     private void getRackById() {
         Rack rack = this.rackClient.getById(RACK_RESOURCE_ID);
 
-        System.out.println("RackClientSample : getRackById : " +
-                "Rack object returned to client : " + rack.toJsonString());
+        LOGGER.info("Rack object returned to client : " + rack.toJsonString());
     }
 
     private void getAllRacks() {
         ResourceCollection<Rack> racks = this.rackClient.getAll();
 
-        System.out.println("RackClientSample : getAllRacks : " +
-                "Racks returned to client : " + racks.toJsonString());
+        LOGGER.info("Racks returned to client : " + racks.toJsonString());
     }
 
     private void getRackByName() {
         Rack rack = this.rackClient.getByName(RACK_NAME).get(0);
 
-        System.out.println("RackClientSample : getRackByName : " +
-                "Rack object returned to client : " + rack.toJsonString());
+        LOGGER.info("Rack object returned to client : " + rack.toJsonString());
     }
 
     private void addRack() {
@@ -68,8 +70,7 @@ public class RackClientSample {
 
         Rack addedRack = this.rackClient.add(rack);
 
-        System.out.println("RackClientSample : addRack : " +
-                "Rack object returned to client : " + addedRack.toJsonString());
+        LOGGER.info("Rack object returned to client : " + addedRack.toJsonString());
     }
 
     private void updateRack() {
@@ -80,31 +81,27 @@ public class RackClientSample {
 
         Rack updatedRack = this.rackClient.update(resourceId, rack);
 
-        System.out.println("RackClientSample : updateRack : " +
-                "Rack object returned to client : " + updatedRack.toJsonString());
+        LOGGER.info("Rack object returned to client : " + updatedRack.toJsonString());
     }
 
     private void removeRack() {
         Rack rack = this.rackClient.getByName(RACK_NAME).get(0);
         String response = this.rackClient.remove(rack.getResourceId());
 
-        System.out.println("RackClientSample : removeRack : " +
-                "Response returned to client : " + response);
+        LOGGER.info("Response returned to client : " + response);
     }
 
     private void removeRackByFilter() {
         String filter = "name='" + RACK_NAME +"'";
         TaskResourceV2 task = this.rackClient.removeByFilter(filter, false);
 
-        System.out.println("RackClientSample : removeRackByFilter : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void getDeviceTopology() {
         TopologyInformation topologyInformation = this.rackClient.getDeviceTopology(RACK_RESOURCE_ID);
 
-        System.out.println("RackClientSample : getDeviceTopology : " +
-                "TopologyInformation object returned to client : " + JsonPrettyPrinter.print(topologyInformation));
+        LOGGER.info("TopologyInformation object returned to client : " + JsonPrettyPrinter.print(topologyInformation));
     }
 
     public static void main(String[] args) {

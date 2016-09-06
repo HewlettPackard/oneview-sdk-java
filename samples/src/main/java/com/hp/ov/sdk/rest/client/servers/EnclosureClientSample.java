@@ -60,7 +60,6 @@ public class EnclosureClientSample {
     public static final String RESOURCE_NAME_UPDATED = "Encl1_Updated";
 
     private static final String RESOURCE_ID = "09SGH100X6J1";
-    private static final String ENCLOSURE_GROUP_NAME = "Enclosure_Test";
     private static final String ENCLOSURE_CONFIGURATION_SCRIPT = "name=Enclosure_test_script";
     private static final String HOSTNAME = "172.18.1.11";
     private static final String USERNAME = "dcs";
@@ -234,7 +233,7 @@ public class EnclosureClientSample {
     }
 
     private AddEnclosure buildAddEnclosure() {
-        String enclosureGroupUri = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0).getUri();
+        String enclosureGroupUri = enclosureGroupClient.getByName(EnclosureGroupClientSample.ENCLOSURE_GROUP_NAME).get(0).getUri();
         AddEnclosure addEnclosure = new AddEnclosure();
 
         addEnclosure.setHostname(HOSTNAME);

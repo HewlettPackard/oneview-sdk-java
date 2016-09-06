@@ -16,6 +16,9 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -25,10 +28,13 @@ import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class FcNetworkClientSample {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FcNetworkClientSample.class);
+
     // These are variables to be defined by the user
     // ================================
     private static final String FC_NETWORK_RESOURCE_ID = "37a92c8f-a2ef-4817-85f4-80d27abb09e2";
-    private static final String FC_NETWORK_NAME = "FC_Network_A";
+    public static final String FC_NETWORK_NAME = "FC_Network_A";
+    public static final String FC_NETWORK_NAME_B = "FC_Network_B";
     private static final String FC_NETWORK_NAME_UPDATED = FC_NETWORK_NAME + "_Updated";
     // ================================
 
@@ -48,29 +54,25 @@ public class FcNetworkClientSample {
 
         TaskResourceV2 task = this.client.create(fcNetwork, false);
 
-        System.out.println("FcNetworkClientSample : createFcNetwork : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void getFcNetwork() {
         FcNetwork fcNetwork = client.getById(FC_NETWORK_RESOURCE_ID);
 
-        System.out.println("FcNetworkClientSample : getFcNetwork : " +
-                "FcNetwork object returned to client : " + fcNetwork);
+        LOGGER.info("FcNetwork object returned to client : " + fcNetwork.toJsonString());
     }
 
     private void getAllFcNetworks() {
         ResourceCollection<FcNetwork> fcNetworks = client.getAll();
 
-        System.out.println("FcNetworkClientSample : getAllFcNetworks : " +
-                "FcNetworks returned to client (count) : " + fcNetworks.getCount());
+        LOGGER.info("FcNetworks returned to client (count) : " + fcNetworks.getCount());
     }
 
     private void getFcNetworkByName() {
         FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME).get(0);
 
-        System.out.println("FcNetworkClientSample : getFcNetworkByName : " +
-                "FcNetwork object returned to client : " + fcNetwork);
+        LOGGER.info("FcNetwork object returned to client : " + fcNetwork.toJsonString());
     }
 
     private void updateFcNetwork() {
@@ -81,8 +83,7 @@ public class FcNetworkClientSample {
         TaskResourceV2 task = this.client.update(fcNetwork.getResourceId(),
                 fcNetwork, false);
 
-        System.out.println("FcNetworkClientSample : updateFcNetwork : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void deleteFcNetwork() {
@@ -90,8 +91,7 @@ public class FcNetworkClientSample {
 
         TaskResourceV2 task = this.client.delete(fcNetwork.getResourceId(), false);
 
-        System.out.println("FcNetworkClientSample : deleteFcNetwork : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     public static void main(String[] args) {

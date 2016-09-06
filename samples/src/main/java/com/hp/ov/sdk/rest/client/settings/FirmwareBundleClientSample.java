@@ -17,12 +17,17 @@ package com.hp.ov.sdk.rest.client.settings;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 
 public class FirmwareBundleClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FirmwareBundleClientSample.class);
 
     private final FirmwareBundleClient client;
 
@@ -42,8 +47,7 @@ public class FirmwareBundleClientSample {
 
         TaskResourceV2 task = this.client.add(firmwareBundleFile, false);
 
-        System.out.println("FirmwareBundleClientSample : addFirmwareBundle : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     public static void main(final String[] args) {

@@ -20,6 +20,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.InterconnectTypeName;
@@ -41,6 +44,8 @@ import com.hp.ov.sdk.util.samples.ResourceDtoUtilsWrapper;
  * library to perform GET/PUT/POST/DELETE operations on logical interconnect group resource
  */
 public class LogicalInterconnectGroupClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogicalInterconnectGroupClientSample.class);
 
     // test values - user input
     // ================================
@@ -77,33 +82,31 @@ public class LogicalInterconnectGroupClientSample {
     private void getLogicalInterconnectGroup() {
         LogicalInterconnectGroup logicalInterconnectGroup = client.getById(resourceId);
 
-        System.out.println("LogicalInterconnectGroupClientSample : getLogicalInterconnectGroup : " +
-                "LogicalInterconnectGroup object returned to client : " + logicalInterconnectGroup);
+        LOGGER.info("LogicalInterconnectGroup object returned to client : " + logicalInterconnectGroup);
     }
 
     private void getAllLogicalInterconnectGroups() {
         ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getAll();
 
-        System.out.println("LogicalInterconnectGroupClientSample : getAllLogicalInterconnectGroups : " +
-                "LogicalInterconnectGroups returned to client (count) : " + logicalInterconnectGroups.getCount());
+        LOGGER.info("LogicalInterconnectGroups returned to client (count) : " + logicalInterconnectGroups.getCount());
     }
 
     private void getLogicalInterconnectGroupByName() {
         ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getByName(resourceName);
 
-        System.out.println("LogicalInterconnectGroupClientSample : getLogicalInterconnectGroupByName : " +
-                "LogicalInterconnectGroup object returned to client : " + logicalInterconnectGroups.getMembers().get(0));
+        LOGGER.info("LogicalInterconnectGroup object returned to client : " + logicalInterconnectGroups.getMembers().get(0).toJsonString());
     }
 
     private void createLogicalInterconnectGroup() {
         LogicalInterconnectGroup logicalInterconnectGroup = this.buildTestLogicalInterconnectGroup();
         logicalInterconnectGroup.setName(resourceName);
+        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP);
+        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200);
         logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300);
 
         TaskResourceV2 task = this.client.create(logicalInterconnectGroup, false);
 
-        System.out.println("LogicalInterconnectGroupClientSample : createLogicalInterconnectGroup : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void updateLogicalInterconnectGroup() {
@@ -116,8 +119,7 @@ public class LogicalInterconnectGroupClientSample {
 
         TaskResourceV2 task = this.client.update(lig.getResourceId(), lig, false);
 
-        System.out.println("LogicalInterconnectGroupClientSample : updateLogicalInterconnectGroup : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void deleteLogicalInterconnectGroup() {
@@ -125,25 +127,22 @@ public class LogicalInterconnectGroupClientSample {
         LogicalInterconnectGroup lig = logicalInterconnectGroups.getMembers().get(0);
         TaskResourceV2 task = this.client.delete(lig.getResourceId(), false);
 
-        System.out.println("LogicalInterconnectGroupClientSample : deleteLogicalInterconnectGroup : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client : " + task);
     }
 
     private void getDefaultInterconnectSettings() {
         InterconnectSettingsV2 interconnectSettingsDto = client.getDefaultInterconnectSettings();
 
-        System.out.println("LogicalInterconnectGroupClientSample : getDefaultInterconnectSettings : " +
-                "InterconnectSettingsV2 object returned to client : " + interconnectSettingsDto);
+        LOGGER.info("InterconnectSettingsV2 object returned to client : " + interconnectSettingsDto.toJsonString());
     }
 
     private void getInterconnectSettings() {
         // To run getInterconnectSettings on OneView 1.2, you need settingID and resourceID of LIG
         // for OV 2.0 & 3.0, you just need the resourceID
-        //InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(resourceId, settingId);
-        InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(resourceId);
+        InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(resourceId, settingId);
+//        InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(resourceId);
 
-        System.out.println("LogicalInterconnectGroupClientSample : getInterconnectSettings : " +
-                "InterconnectSettingsV2 object returned to client : " + interconnectSettingsDto);
+        LOGGER.info("InterconnectSettingsV2 object returned to client : " + interconnectSettingsDto.toJsonString());
     }
 
     private LogicalInterconnectGroup buildTestLogicalInterconnectGroup() {
@@ -154,6 +153,8 @@ public class LogicalInterconnectGroupClientSample {
 
         LogicalInterconnectGroup dto = resourceDtoUtils.buildLogicalInterconnectGroupDto(resourceName, bayPermittedInterconnectMaps);
         dto.setEnclosureIndexes(Arrays.asList(1));
+        dto.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP);
+        dto.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200);
         dto.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300);
 
         for (InterconnectMapEntryTemplate entry : dto.getInterconnectMapTemplate().getInterconnectMapEntryTemplates()) {

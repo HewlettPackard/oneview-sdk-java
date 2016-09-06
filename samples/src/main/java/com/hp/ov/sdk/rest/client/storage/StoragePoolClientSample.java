@@ -15,6 +15,9 @@
  */
 package com.hp.ov.sdk.rest.client.storage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.AddStoragePool;
 import com.hp.ov.sdk.dto.RefreshState;
@@ -31,13 +34,14 @@ import com.hp.ov.sdk.rest.client.OneViewClient;
  */
 public class StoragePoolClientSample {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(StoragePoolClientSample.class);
+
     private final StoragePoolClient storagePoolClient;
     private final StorageSystemClient storageSystemClient;
 
     // These are variables to be defined by user
     // ================================
     public static final String STORAGE_POOL_NAME = "FST_CPG1";
-
     private static final String STORAGE_POOL_RESOURCE_ID = "7345EE57-7544-4092-9311-102E6AE30CDF";
     // ================================
 
@@ -51,15 +55,13 @@ public class StoragePoolClientSample {
     private void getStoragePoolById() {
         StoragePool storagePool = this.storagePoolClient.getById(STORAGE_POOL_RESOURCE_ID);
 
-        System.out.println("StoragePoolClientSample : getStoragePool : " +
-                "StoragePool object returned to client : " + storagePool.toJsonString());
+        LOGGER.info("StoragePool object returned to client : " + storagePool.toJsonString());
     }
 
     private void getAllStoragePools() {
         ResourceCollection<StoragePool> storagePools = this.storagePoolClient.getAll();
 
-        System.out.println("StoragePoolClientSample : getAllStoragePools : " +
-                "StoragePools returned to client : " + storagePools.toJsonString());
+        LOGGER.info("StoragePools returned to client : " + storagePools.toJsonString());
     }
 
     private void getStoragePoolByName() {
@@ -74,8 +76,7 @@ public class StoragePoolClientSample {
 
         TaskResourceV2 taskResource = storagePoolClient.add(addStoragePool, false);
 
-        System.out.println("StoragePoolClientSample : addStoragePool : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void updateStoragePool() {
@@ -85,16 +86,14 @@ public class StoragePoolClientSample {
 
         TaskResourceV2 taskResource = storagePoolClient.update(storagePool.getResourceId(), storagePool, false);
 
-        System.out.println("StoragePoolClientSample : updateStoragePool : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void removeStoragePool() {
         StoragePool storagePool = this.storagePoolClient.getByName(STORAGE_POOL_NAME, getStorageSystem().getUri()).get(0);
         TaskResourceV2 taskResource = this.storagePoolClient.remove(storagePool.getResourceId(), false);
 
-        System.out.println("StoragePoolClientSample : removeStoragePool : " +
-                "Task object returned to client : " + taskResource);
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private AddStoragePool buildAddStoragePool() {

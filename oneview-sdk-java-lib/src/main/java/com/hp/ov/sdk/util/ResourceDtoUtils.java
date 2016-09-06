@@ -286,9 +286,15 @@ public class ResourceDtoUtils {
         connection.setName(networkName);
         connection.setFunctionType(functionType);
         if (functionType.toString().equalsIgnoreCase("Ethernet")) {
-            connection.setNetworkUri(oneViewClient.ethernetNetwork().getByName(networkName).getUri());
+            ResourceCollection<Network> ethNetworks = oneViewClient.ethernetNetwork().getByName(networkName);
+            if (ethNetworks.getCount() > 0) {
+                connection.setNetworkUri(ethNetworks.get(0).getUri());
+            }
         } else if (functionType.toString().equalsIgnoreCase("FibreChannel")) {
-            connection.setNetworkUri(oneViewClient.fcNetwork().getByName(networkName).get(0).getUri());
+            ResourceCollection<FcNetwork> fcNetworks = oneViewClient.fcNetwork().getByName(networkName);
+            if (fcNetworks.getCount() > 0) {
+                connection.setNetworkUri(fcNetworks.get(0).getUri());
+            }
         }
         connection.setRequestedMbps(requestedMbps);
         connection.setAllocatedMbps(allocatedMbps);
