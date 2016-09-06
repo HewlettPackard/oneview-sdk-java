@@ -16,6 +16,9 @@
 
 package com.hp.ov.sdk.rest.client.facilities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -24,6 +27,8 @@ import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class UnmanagedDeviceClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UnmanagedDeviceClientSample.class);
 
     // These are variables to be defined by user
     // ================================
@@ -42,23 +47,20 @@ public class UnmanagedDeviceClientSample {
     private void getUnmanagedDevice() {
         UnmanagedDevice unmanagedDevice = this.unmanagedDeviceClient.getById(UNMANAGED_DEVICE_RESOURCE_ID);
 
-        System.out.println("UnmanagedDeviceClientSample : getUnmanagedDevice : " +
-                "UnmanagedDevice object returned to client : " + unmanagedDevice.toJsonString());
+        LOGGER.info("UnmanagedDevice object returned to client : " + unmanagedDevice.toJsonString());
     }
 
     private void getAllUnmanagedDevices() {
         ResourceCollection<UnmanagedDevice> unmanagedDevices = this.unmanagedDeviceClient.getAll();
 
-        System.out.println("UnmanagedDeviceClientSample : getAllUnmanagedDevices : " +
-                "UnmanagedDevices returned to client : " + unmanagedDevices.toJsonString());
+        LOGGER.info("UnmanagedDevices returned to client : " + unmanagedDevices.toJsonString());
     }
 
     private void getUnmanagedDeviceByName() {
         ResourceCollection<UnmanagedDevice> unmanagedDevices
                 = this.unmanagedDeviceClient.getByName(UNMANAGED_DEVICE_NAME);
 
-        System.out.println("UnmanagedDeviceClientSample : getUnmanagedDeviceByName : " +
-                "UnmanagedDevices returned to client : " + unmanagedDevices.toJsonString());
+        LOGGER.info("UnmanagedDevices returned to client : " + unmanagedDevices.toJsonString());
     }
 
     private void addUnmanagedDevice() {
@@ -72,8 +74,7 @@ public class UnmanagedDeviceClientSample {
 
         UnmanagedDevice addedUnmanagedDevice = this.unmanagedDeviceClient.add(unmanagedDevice);
 
-        System.out.println("UnmanagedDeviceClientSample : addUnmanagedDevice : " +
-                "UnmanagedDevice object returned to client : " + addedUnmanagedDevice.toJsonString());
+        LOGGER.info("UnmanagedDevice object returned to client : " + addedUnmanagedDevice.toJsonString());
     }
 
     private void updateUnmanagedDevice() {
@@ -84,24 +85,21 @@ public class UnmanagedDeviceClientSample {
 
         UnmanagedDevice updatedUnmanagedDevice = this.unmanagedDeviceClient.update(resourceId, unmanagedDevice);
 
-        System.out.println("UnmanagedDeviceClientSample : updateUnmanagedDevice : " +
-                "UnmanagedDevice object returned to client : " + updatedUnmanagedDevice.toJsonString());
+        LOGGER.info("UnmanagedDevice object returned to client : " + updatedUnmanagedDevice.toJsonString());
     }
 
     private void removeUnmanagedDevice() {
         UnmanagedDevice unmanagedDevice = this.unmanagedDeviceClient.getByName(UNMANAGED_DEVICE_NAME).get(0);
         String response = this.unmanagedDeviceClient.remove(unmanagedDevice.getResourceId());
 
-        System.out.println("UnmanagedDeviceClientSample : removeUnmanagedDevice : " +
-                "Response returned to client : " + response);
+        LOGGER.info("Response returned to client : " + response);
     }
 
     private void removeUnmanagedDeviceByFilter() {
         String filter = "name='" + UNMANAGED_DEVICE_NAME +"'";
         TaskResourceV2 task = this.unmanagedDeviceClient.removeByFilter(filter, false);
 
-        System.out.println("UnmanagedDeviceClientSample : removeUnmanagedDeviceByFilter : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void getEnvironmentalConfiguration() {
@@ -111,8 +109,7 @@ public class UnmanagedDeviceClientSample {
         EnvironmentalConfiguration environmentalConfiguration
                 = this.unmanagedDeviceClient.getEnvironmentalConfiguration(resourceId);
 
-        System.out.println("UnmanagedDeviceClientSample : getEnvironmentalConfiguration : " +
-                "EnvironmentalConfiguration object returned to client : " + environmentalConfiguration);
+        LOGGER.info("EnvironmentalConfiguration object returned to client : " + environmentalConfiguration);
     }
 
     public static void main(String[] args) {

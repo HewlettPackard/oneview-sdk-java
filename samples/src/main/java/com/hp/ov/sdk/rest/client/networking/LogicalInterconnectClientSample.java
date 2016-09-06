@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.InterconnectFibDataEntry;
 import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
@@ -51,6 +54,8 @@ import com.hp.ov.sdk.util.JsonPrettyPrinter;
  */
 public class LogicalInterconnectClientSample {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogicalInterconnectClientSample.class);
+
     private final LogicalInterconnectClient logicalInterconnectClient;
     private final FirmwareDriverClient firmwareDriverClient;
     private final OneViewClient oneViewClient;
@@ -58,8 +63,8 @@ public class LogicalInterconnectClientSample {
     // These are variables to be defined by user
     // ================================
     private static final String SPP_NAME = "Service Pack for ProLiant";
-    private static final String RESOURCE_NAME = "Encl1-LIG_PROD";
-    private static final String RESOURCE_ID = "f4a1ad7c-c282-4089-b57c-dd28052cde6a";
+    private static final String RESOURCE_NAME = "Encl1-LI";
+    private static final String RESOURCE_ID = "1a26f2cc-8d41-4617-8e1f-55c2900148b1";
     private static final String TELEMETRY_ID = "2770fdeb-5c49-499c-aef7-3eac45f2887e";
     private static final String ENCLOSURE_URI = "/rest/enclosures/09SGH100X6J1";
     private static final String NETWORK_NAME = "Prod_401";
@@ -78,22 +83,19 @@ public class LogicalInterconnectClientSample {
     private void getLogicalInterconnectById() {
         LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getById(RESOURCE_ID);
 
-        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectById : " +
-                "LogicalInterconnect object returned to client : " + logicalInterconnect.toJsonString());
+        LOGGER.info("LogicalInterconnect object returned to client : " + logicalInterconnect.toJsonString());
     }
 
     private void getLogicalInterconnectByName() {
         LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectByName : " +
-                "LogicalInterconnect object returned to client : " + logicalInterconnect.toJsonString());
+        LOGGER.info("LogicalInterconnect object returned to client : " + logicalInterconnect.toJsonString());
     }
 
     private void getAllLogicalInterconnects() {
         ResourceCollection<LogicalInterconnect> logicalInterconnects = logicalInterconnectClient.getAll();
 
-        System.out.println("LogicalInterconnectClientSample : getAllLogicalInterconnects : " +
-                "LogicalInterconnect returned to client : " + logicalInterconnects.toJsonString());
+        LOGGER.info("LogicalInterconnect returned to client : " + logicalInterconnects.toJsonString());
     }
 
     private void updateLogicalInterconnectSnmpConfiguration() {
@@ -104,8 +106,7 @@ public class LogicalInterconnectClientSample {
         TaskResourceV2 task = logicalInterconnectClient.updateSnmpConfiguration(logicalInterconnect.getResourceId(),
                 logicalInterconnect.getSnmpConfiguration(), false);
 
-        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectSnmpConfiguration : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void updateLogicalInterconnectCompliance() {
@@ -113,8 +114,7 @@ public class LogicalInterconnectClientSample {
 
         TaskResourceV2 task = logicalInterconnectClient.updateCompliance(logicalInterconnect.getResourceId(), false);
 
-        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectCompliance : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void updateLogicalInterconnectFirmware() {
@@ -129,8 +129,7 @@ public class LogicalInterconnectClientSample {
         TaskResourceV2 task = logicalInterconnectClient.updateFirmware(logicalInterconnect.getResourceId(),
                 liFirmware, false);
 
-        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectFirmware : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void getLogicalInterconnectFirmware() {
@@ -138,8 +137,7 @@ public class LogicalInterconnectClientSample {
 
         LiFirmware liFirmware = logicalInterconnectClient.getFirmware(logicalInterconnect.getResourceId());
 
-        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectFirmware : " +
-                "LiFirmware object returned to client : " + JsonPrettyPrinter.print(liFirmware));
+        LOGGER.info("LiFirmware object returned to client : " + JsonPrettyPrinter.print(liFirmware));
     }
 
     private void updateLogicalInterconnectFirmwareActive() {
@@ -152,8 +150,7 @@ public class LogicalInterconnectClientSample {
         TaskResourceV2 task = logicalInterconnectClient.updateFirmware(logicalInterconnect.getResourceId(),
                 liFirmware, false);
 
-        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectFirmwareActive : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private LiFirmware buildLiFirmwareActive(LiFirmware currentLiFirmware) {
@@ -193,8 +190,7 @@ public class LogicalInterconnectClientSample {
         TaskResourceV2 task = logicalInterconnectClient.updateFirmware(logicalInterconnect.getResourceId(),
                 liFirmware, false);
 
-        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectFirmwareUpdate : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void getLogicalInterconnectForwardingInformationBase() {
@@ -203,8 +199,7 @@ public class LogicalInterconnectClientSample {
         ResourceCollection<InterconnectFibDataEntry> fibData = logicalInterconnectClient.getForwardingInformationBase(
                 logicalInterconnect.getResourceId());
 
-        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectForwardingInformationBase : " +
-                "InterconnectFibData returned to client : " + fibData.toJsonString());
+        LOGGER.info("InterconnectFibData returned to client : " + fibData.toJsonString());
     }
 
     private void createLogicalInterconnectForwardingInformationBase() {
@@ -213,8 +208,7 @@ public class LogicalInterconnectClientSample {
         InterconnectFibDataInfo fibData = logicalInterconnectClient.createForwardingInformationBase(
                 logicalInterconnect.getResourceId());
 
-        System.out.println("LogicalInterconnectClientSample : createLogicalInterconnectForwardingInformationBase : " +
-                "InterconnectFibDataInfo object returned to client : " + JsonPrettyPrinter.print(fibData));
+        LOGGER.info("InterconnectFibDataInfo object returned to client : " + JsonPrettyPrinter.print(fibData));
     }
 
     private void getLogicalInterconnectSnmpConfiguration() {
@@ -223,8 +217,7 @@ public class LogicalInterconnectClientSample {
         SnmpConfiguration snmpConfiguration = logicalInterconnectClient.getSnmpConfiguration(
                 logicalInterconnect.getResourceId());
 
-        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectSnmpConfiguration : " +
-                "SnmpConfiguration object returned to client : " + snmpConfiguration.toJsonString());
+        LOGGER.info("SnmpConfiguration object returned to client : " + snmpConfiguration.toJsonString());
     }
 
     private void getLogicalInterconnectUnassignedUplinkPortsForPortMonitor() {
@@ -233,8 +226,7 @@ public class LogicalInterconnectClientSample {
         ResourceCollection<PortMonitorUplinkPort> uplinkPorts
                 = logicalInterconnectClient.getUnassignedUplinkPortsForPortMonitor(logicalInterconnect.getResourceId());
 
-        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectUnassignedUplinkPortsForPortMonitor : " +
-                "UplinkPorts returned to client : " + uplinkPorts.toJsonString());
+        LOGGER.info("UplinkPorts returned to client : " + uplinkPorts.toJsonString());
     }
 
     private void updateLogicalInterconnectConfiguration() {
@@ -242,8 +234,7 @@ public class LogicalInterconnectClientSample {
 
         TaskResourceV2 task = logicalInterconnectClient.updateConfiguration(logicalInterconnect.getResourceId(), false);
 
-        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectConfiguration : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void getLogicalInterconnectPortMonitorConfiguration() {
@@ -252,8 +243,7 @@ public class LogicalInterconnectClientSample {
         PortMonitor portMonitor = logicalInterconnectClient.getPortMonitorConfiguration(
                 logicalInterconnect.getResourceId());
 
-        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectPortMonitorConfiguration : " +
-                "PortMonitor object returned to client : " + portMonitor.toJsonString());
+        LOGGER.info("PortMonitor object returned to client : " + portMonitor.toJsonString());
     }
 
     private void updateLogicalInterconnectPortMonitorConfiguration() {
@@ -266,8 +256,7 @@ public class LogicalInterconnectClientSample {
         TaskResourceV2 task = logicalInterconnectClient.updatePortMonitorConfiguration(
                 logicalInterconnect.getResourceId(), portMonitor, false);
 
-        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectPortMonitorConfiguration : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void getLogicalInterconnectTelemetryConfiguration() {
@@ -276,8 +265,7 @@ public class LogicalInterconnectClientSample {
         TelemetryConfiguration telemetryConfiguration = logicalInterconnectClient.getTelemetryConfiguration(
                 logicalInterconnect.getResourceId(), TELEMETRY_ID);
 
-        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectTelemetryConfiguration : " +
-                "TelemetryConfiguration object returned to client : " + telemetryConfiguration.toJsonString());
+        LOGGER.info("TelemetryConfiguration object returned to client : " + telemetryConfiguration.toJsonString());
     }
 
     private void updateLogicalInterconnectTelemetryConfiguration() {
@@ -290,8 +278,7 @@ public class LogicalInterconnectClientSample {
         TelemetryConfiguration telemetryConfigurationUpdated = logicalInterconnectClient.updateTelemetryConfiguration(
                 logicalInterconnect.getResourceId(), TELEMETRY_ID, telemetryConfiguration);
 
-        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectTelemetryConfiguration : " +
-                "TelemetryConfiguration object returned to client : " + telemetryConfigurationUpdated.toJsonString());
+        LOGGER.info("TelemetryConfiguration object returned to client : " + telemetryConfigurationUpdated.toJsonString());
     }
 
     private void updateLogicalInterconnectTelemetryConfigurationV200() {
@@ -304,8 +291,7 @@ public class LogicalInterconnectClientSample {
         TaskResourceV2 task = logicalInterconnectClient.updateTelemetryConfigurationV200(
                 logicalInterconnect.getResourceId(), TELEMETRY_ID, telemetryConfiguration, false);
 
-        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectTelemetryConfigurationV200 : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void updateEthernetSettings() {
@@ -317,8 +303,7 @@ public class LogicalInterconnectClientSample {
         TaskResourceV2 task = logicalInterconnectClient.updateEthernetSettings(logicalInterconnect.getResourceId(),
                 ethSettingsDto, false);
 
-        System.out.println("LogicalInterconnectClientSample : updateEthernetSettings : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void createLogicalInterconnect() {
@@ -338,15 +323,13 @@ public class LogicalInterconnectClientSample {
 
         TaskResourceV2 task = logicalInterconnectClient.createInterconnect(location, false);
 
-        System.out.println("LogicalInterconnectClientSample : createLogicalInterconnect : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void deleteLogicalInterconnect() {
         TaskResourceV2 task = logicalInterconnectClient.deleteInterconnect(ENCLOSURE_URI, "1", false);
 
-        System.out.println("LogicalInterconnectClientSample : deleteLogicalInterconnect : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void updateLogicalInterconnectInternalNetworks() {
@@ -357,8 +340,7 @@ public class LogicalInterconnectClientSample {
         TaskResourceV2 task = logicalInterconnectClient.updateInternalNetworks(
                 logicalInterconnect.getResourceId(), Arrays.asList(networkUri), false);
 
-        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectInternalNetworks : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void getLogicalInterconnectInternalVlans() {
@@ -367,8 +349,7 @@ public class LogicalInterconnectClientSample {
         ResourceCollection<InternalVlanAssociation> vlans = logicalInterconnectClient.getInternalVlans(
                 logicalInterconnect.getResourceId());
 
-        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectInternalVlans : " +
-                "Internal Vlans returned to client : " + vlans.toJsonString());
+        LOGGER.info("Internal Vlans returned to client : " + vlans.toJsonString());
     }
 
     private void getLogicalInterconnectQosAggregatedConfiguration() {
@@ -377,8 +358,7 @@ public class LogicalInterconnectClientSample {
         QosAggregatedConfiguration qosConfiguration = logicalInterconnectClient.getQosAggregatedConfiguration(
                 logicalInterconnect.getResourceId());
 
-        System.out.println("LogicalInterconnectClientSample : getLogicalInterconnectQosAggregatedConfiguration : " +
-                "QosAggregatedConfiguration object returned to client : " + qosConfiguration.toJsonString());
+        LOGGER.info("QosAggregatedConfiguration object returned to client : " + qosConfiguration.toJsonString());
     }
 
     private void updateLogicalInterconnectQosAggregatedConfiguration() {
@@ -391,8 +371,7 @@ public class LogicalInterconnectClientSample {
         TaskResourceV2 task = logicalInterconnectClient.updateQosAggregatedConfiguration(
                 logicalInterconnect.getResourceId(), qosConfiguration, false);
 
-        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectQosAggregatedConfiguration : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void updateLogicalInterconnectSettings() {
@@ -407,8 +386,7 @@ public class LogicalInterconnectClientSample {
         TaskResourceV2 task = logicalInterconnectClient.updateSettings(
                 logicalInterconnect.getResourceId(), settings, false);
 
-        System.out.println("LogicalInterconnectClientSample : updateLogicalInterconnectSettings : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     public static void main(final String[] args) {

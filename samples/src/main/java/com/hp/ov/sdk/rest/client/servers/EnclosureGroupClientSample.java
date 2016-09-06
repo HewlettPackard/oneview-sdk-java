@@ -18,6 +18,9 @@ package com.hp.ov.sdk.rest.client.servers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -36,6 +39,8 @@ import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
  * operations on enclosure group resource
  */
 public class EnclosureGroupClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EnclosureGroupClientSample.class);
 
     private final EnclosureGroupClient enclosureGroupClient;
     private final LogicalInterconnectGroupClient interconnectGroupClient;
@@ -59,22 +64,19 @@ public class EnclosureGroupClientSample {
     private void getEnclosureGroup() {
         EnclosureGroup enclosureGroup = enclosureGroupClient.getById(ENCLOSURE_GROUP_RESOURCE_ID);
 
-        System.out.println("EnclosureGroupClient : getEnclosureGroup : " + "EnclosureGroup object returned to client : "
-                + enclosureGroup.toJsonString());
+        LOGGER.info("EnclosureGroup object returned to client : " + enclosureGroup.toJsonString());
     }
 
     private void getAllEnclosureGroups() {
         ResourceCollection<EnclosureGroup> enclosureGroups = enclosureGroupClient.getAll();
 
-        System.out.println("EnclosureGroupClient : getAllEnclosureGroups : "
-                + "EnclosureGroups returned to client (count) : " + enclosureGroups.toJsonString());
+        LOGGER.info("EnclosureGroups returned to client (count) : " + enclosureGroups.getCount());
     }
 
     private void getEnclosureGroupByName() {
         EnclosureGroup enclosureGroup = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0);
 
-        System.out.println("EnclosureGroupClient : getEnclosureGroupByName : "
-                + "EnclosureGroup object returned to client : " + enclosureGroup.toJsonString());
+        LOGGER.info("EnclosureGroup object returned to client : " + enclosureGroup.toJsonString());
     }
 
     private void createEnclosureGroup() {
@@ -82,8 +84,7 @@ public class EnclosureGroupClientSample {
 
         EnclosureGroup created = this.enclosureGroupClient.create(enclosureGroup);
 
-        System.out.println("EnclosureGroupClient : createEnclosureGroup : "
-                + "EnclosureGroup object returned to client : " + created.toJsonString());
+        LOGGER.info("EnclosureGroup object returned to client : " + created.toJsonString());
     }
 
     private void updateEnclosureGroup() {
@@ -93,8 +94,7 @@ public class EnclosureGroupClientSample {
 
         EnclosureGroup updated = this.enclosureGroupClient.update(enclosureGroup.getResourceId(), enclosureGroup);
 
-        System.out.println("EnclosureGroupClient : updateEnclosureGroup : "
-                + "EnclosureGroup object returned to client : " + updated.toJsonString());
+        LOGGER.info("EnclosureGroup object returned to client : " + updated.toJsonString());
     }
 
     private void deleteEnclosureGroup() {
@@ -102,8 +102,7 @@ public class EnclosureGroupClientSample {
 
         String response = this.enclosureGroupClient.delete(enclosureGroup.getResourceId());
 
-        System.out.println(
-                "EnclosureGroupClient : deleteEnclosureGroup : " + "Response returned to client : " + response);
+        LOGGER.info("Response returned to client : " + response);
     }
 
     private void getConfigurationScript() {
@@ -111,8 +110,7 @@ public class EnclosureGroupClientSample {
 
         String response = this.enclosureGroupClient.getConfigurationScript(enclosureGroup.getResourceId());
 
-        System.out.println("EnclosureGroupClient : getConfigurationScript : "
-                + "Configuration script returned to client : " + response);
+        LOGGER.info("Configuration script returned to client : " + response);
     }
 
     private void updateConfigurationScript() {
@@ -121,8 +119,7 @@ public class EnclosureGroupClientSample {
         String response = this.enclosureGroupClient.updateConfigurationScript(enclosureGroup.getResourceId(),
                 ENCLOSURE_SCRIPT_DATA);
 
-        System.out.println("EnclosureGroupClient : updateConfigurationScript : "
-                + "Configuration script returned to client : " + response);
+        LOGGER.info("Configuration script returned to client : " + response);
     }
 
     private EnclosureGroup buildEnclosureGroup() {

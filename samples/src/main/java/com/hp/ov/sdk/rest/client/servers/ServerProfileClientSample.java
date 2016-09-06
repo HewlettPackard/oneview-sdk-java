@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Optional;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.AvailableStorageSystem;
@@ -38,16 +41,18 @@ import com.hp.ov.sdk.dto.samples.ServerProfileValue;
 import com.hp.ov.sdk.dto.servers.AssignmentType;
 import com.hp.ov.sdk.dto.servers.Bios;
 import com.hp.ov.sdk.dto.servers.Boot;
-import com.hp.ov.sdk.dto.servers.serverprofile.BootControl;
 import com.hp.ov.sdk.dto.servers.Firmware;
 import com.hp.ov.sdk.dto.servers.FunctionType;
 import com.hp.ov.sdk.dto.servers.ProfileAffinity;
-import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
 import com.hp.ov.sdk.dto.servers.StorageTargetType;
+import com.hp.ov.sdk.dto.servers.serverprofile.BootControl;
+import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.networking.FcNetworkClientSample;
 import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.server.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.server.ServerProfileClient;
+import com.hp.ov.sdk.rest.client.storage.StorageVolumeClientSample;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
@@ -61,6 +66,8 @@ import com.hp.ov.sdk.util.samples.ResourceDtoUtilsWrapper;
  */
 public class ServerProfileClientSample {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerProfileClientSample.class);
+
     private final ServerProfileClient serverProfileClient;
     private final ServerHardwareClient serverHardwareClient;
     private final EnclosureGroupClient enclosureGroupClient;
@@ -72,10 +79,9 @@ public class ServerProfileClientSample {
     private static final String SERVER_PROFILE_NAME = "server-profile";
     private static final String SERVER_PROFILE_NAME_UPDATED = SERVER_PROFILE_NAME + "_Updated";
     private static final String BAY_NAME = "Encl1, bay 15";
-    private static final String ENCLOSURE_GROUP_NAME = "encl_group";
     private static final List<String> NETWORK_NAMES = Arrays.asList("Prod_401", "Prod_402");
-    private static final List<String> STORAGE_VOLUME_NAME = Arrays.asList("Volume101");
-    private static final List<String> FC_NETWORK_NAMES = Arrays.asList("FC_Network_A", "FC_Network_B");
+    private static final List<String> STORAGE_VOLUME_NAME = Arrays.asList(StorageVolumeClientSample.STORAGE_VOLUME_NAME);
+    private static final List<String> FC_NETWORK_NAMES = Arrays.asList(FcNetworkClientSample.FC_NETWORK_NAME, FcNetworkClientSample.FC_NETWORK_NAME_B);
     private static final Boolean USE_BAY_NAME_FOR_SERVER_HARDWARE_URI = false;
     // ================================
 
@@ -90,22 +96,19 @@ public class ServerProfileClientSample {
     private void getServerProfileById() {
         ServerProfile serverProfile = serverProfileClient.getById(RESOURCE_ID);
 
-        System.out.println("ServerProfileClientSample : getServerProfileById : " +
-                "ServerProfile object returned to client : " + serverProfile.toJsonString());
+        LOGGER.info("ServerProfile object returned to client : " + serverProfile.toJsonString());
     }
 
     private void getAllServerProfiles() {
         ResourceCollection<ServerProfile> serverProfiles = serverProfileClient.getAll();
 
-        System.out.println("ServerProfileClientSample : getAllServerProfiles : " +
-                "Server profiles returned to client : " + serverProfiles.toJsonString());
+        LOGGER.info("Server profiles returned to client : " + serverProfiles.toJsonString());
     }
 
     private void getServerProfileByName() {
         ServerProfile serverProfile = serverProfileClient.getByName(SERVER_PROFILE_NAME).get(0);
 
-        System.out.println("ServerProfileClientSample : getServerProfileByName : " +
-                "ServerProfile object returned to client : " + serverProfile.toJsonString());
+        LOGGER.info("ServerProfile object returned to client : " + serverProfile.toJsonString());
     }
 
     private void createServerProfile() {
@@ -113,8 +116,7 @@ public class ServerProfileClientSample {
 
         TaskResourceV2 taskResource = serverProfileClient.create(serverProfile, false);
 
-        System.out.println("ServerProfileClientSample : createServerProfile : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void deleteServerProfile() {
@@ -122,8 +124,7 @@ public class ServerProfileClientSample {
 
         TaskResourceV2 taskResource = serverProfileClient.delete(serverProfile.getResourceId(), false);
 
-        System.out.println("ServerProfileClientSample : deleteServerProfile : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void deleteServerProfileByFilter() {
@@ -131,8 +132,7 @@ public class ServerProfileClientSample {
 
         TaskResourceV2 taskResource = this.serverProfileClient.deleteByFilter(filter, false);
 
-        System.out.println("ServerProfileClientSample : deleteServerProfileByFilter : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void updateServerProfile() {
@@ -142,8 +142,7 @@ public class ServerProfileClientSample {
 
         TaskResourceV2 taskResource = serverProfileClient.update(serverProfile.getResourceId(), serverProfile, false);
 
-        System.out.println("ServerProfileClientSample : updateServerProfile : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void patchServerProfile() {
@@ -158,8 +157,7 @@ public class ServerProfileClientSample {
 
         TaskResourceV2 taskResource = serverProfileClient.patch(serverProfile.getResourceId(), patch, false);
 
-        System.out.println("ServerProfileClientSample : patchServerProfile : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void getServerProfileCompliancePreview() {
@@ -168,8 +166,7 @@ public class ServerProfileClientSample {
         ServerProfileCompliancePreview compliance = serverProfileClient.getCompliancePreview(
                 serverProfile.getResourceId());
 
-        System.out.println("ServerProfileClientSample : getServerProfileCompliancePreview : " +
-                "ServerProfileCompliancePreview object returned to client : " + JsonPrettyPrinter.print(compliance));
+        LOGGER.info("ServerProfileCompliancePreview object returned to client : " + JsonPrettyPrinter.print(compliance));
     }
 
     private void getServerProfileMessages() {
@@ -177,50 +174,42 @@ public class ServerProfileClientSample {
 
         ServerProfileHealth health = serverProfileClient.getMessages(serverProfile.getResourceId());
 
-        System.out.println("ServerProfileClientSample : getServerProfileCompliancePreview : " +
-                "ServerProfileCompliancePreview object returned to client : " + JsonPrettyPrinter.print(health));
+        LOGGER.info("ServerProfileCompliancePreview object returned to client : " + JsonPrettyPrinter.print(health));
     }
 
     private void getServerProfileTransformation() {
         ServerProfile serverProfile = this.serverProfileClient.getByName(SERVER_PROFILE_NAME).get(0);
 
-        String serverHardwareTypeUri = serverHardwareClient.getByName(BAY_NAME).get(0).getServerHardwareTypeUri();
-        String enclosureGroupUri = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0).getUri();
+        String enclosureGroupUri = enclosureGroupClient.getByName(EnclosureGroupClientSample.ENCLOSURE_GROUP_NAME).get(0).getUri();
 
         ServerProfile serverProfileUpdated = serverProfileClient.getTransformation(
-                serverProfile.getResourceId(), serverHardwareTypeUri, enclosureGroupUri);
+                serverProfile.getResourceId(), ServerHardwareTypeClientSample.SERVER_HARDWARE_TYPE_URI, enclosureGroupUri);
 
-        System.out.println("ServerProfileClientSample : getServerProfileTransformation : " +
-                "ServerProfile object returned to client : " + serverProfileUpdated.toJsonString());
+        LOGGER.info("ServerProfile object returned to client : " + serverProfileUpdated.toJsonString());
     }
 
     private void getAvailableNetworksForServerProfile() {
-        String serverHardwareTypeUri = serverHardwareClient.getByName(BAY_NAME).get(0).getServerHardwareTypeUri();
-        String enclosureGroupUri = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0).getUri();
+        String enclosureGroupUri = enclosureGroupClient.getByName(EnclosureGroupClientSample.ENCLOSURE_GROUP_NAME).get(0).getUri();
 
         AvailableNetworks availableNetworks = serverProfileClient.getAvailableNetworks(
-                serverHardwareTypeUri, enclosureGroupUri);
+                ServerHardwareTypeClientSample.SERVER_HARDWARE_TYPE_URI, enclosureGroupUri);
 
-        System.out.println("ServerProfileClientSample : getAvailableNetworksForServerProfile : " +
-                "AvailableNetworks object returned to client : " + JsonPrettyPrinter.print(availableNetworks));
+        LOGGER.info("AvailableNetworks object returned to client : " + JsonPrettyPrinter.print(availableNetworks));
     }
 
     private void getAvailableServersForServerProfile() {
         List<AvailableServers> availableServers = serverProfileClient.getAvailableServers();
 
-        System.out.println("ServerProfileClientSample : getAvailableServersForServerProfile : " +
-                "AvailableServers returned to client : " + JsonPrettyPrinter.print(availableServers));
+        LOGGER.info("AvailableServers returned to client : " + JsonPrettyPrinter.print(availableServers));
     }
 
     private void getAvailableServersForServerProfileUsingServerHardwareTypeAndEnclosureGroup() {
-        String enclosureGroupUri = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0).getUri();
-        String serverHardwareTypeUri = serverHardwareClient.getByName(BAY_NAME).get(0).getServerHardwareTypeUri();
+        String enclosureGroupUri = enclosureGroupClient.getByName(EnclosureGroupClientSample.ENCLOSURE_GROUP_NAME).get(0).getUri();
 
         List<AvailableServers> availableServers = serverProfileClient.getAvailableServers(
-                serverHardwareTypeUri, enclosureGroupUri);
+                ServerHardwareTypeClientSample.SERVER_HARDWARE_TYPE_URI, enclosureGroupUri);
 
-        System.out.println("ServerProfileClientSample : getAvailableServersForServerProfileUsingServerHardwareTypeAndEnclosureGroup : " +
-                "AvailableServers returned to client : " + JsonPrettyPrinter.print(availableServers));
+        LOGGER.info("AvailableServers returned to client : " + JsonPrettyPrinter.print(availableServers));
     }
 
     private void getAvailableServersForServerProfileUsingProfile() {
@@ -228,54 +217,46 @@ public class ServerProfileClientSample {
 
         List<AvailableServers> availableServers = serverProfileClient.getAvailableServers(serverProfile.getUri());
 
-        System.out.println("ServerProfileClientSample : getAvailableServersForServerProfileUsingProfile : " +
-                "AvailableServers returned to client : " + JsonPrettyPrinter.print(availableServers));
+        LOGGER.info("AvailableServers returned to client : " + JsonPrettyPrinter.print(availableServers));
     }
 
     private void getAvailableStorageSystemsForServerProfile() {
-        String enclosureGroupUri = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0).getUri();
-        String serverHardwareTypeUri = serverHardwareClient.getByName(BAY_NAME).get(0).getServerHardwareTypeUri();
+        String enclosureGroupUri = enclosureGroupClient.getByName(EnclosureGroupClientSample.ENCLOSURE_GROUP_NAME).get(0).getUri();
 
         ResourceCollection<AvailableStorageSystem> storageSystems = serverProfileClient.getAvailableStorageSystems(
-                serverHardwareTypeUri, enclosureGroupUri);
+                ServerHardwareTypeClientSample.SERVER_HARDWARE_TYPE_URI, enclosureGroupUri);
 
-        System.out.println("ServerProfileClientSample : getAvailableStorageSystemsForServerProfile : " +
-                "AvailableStorageSystem returned to client : " + storageSystems.toJsonString());
+        LOGGER.info("AvailableStorageSystem returned to client : " + storageSystems.toJsonString());
     }
 
     private void getAvailableStorageSystemForServerProfile() {
-        String enclosureGroupUri = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0).getUri();
-        String serverHardwareTypeUri = serverHardwareClient.getByName(BAY_NAME).get(0).getServerHardwareTypeUri();
+        String enclosureGroupUri = enclosureGroupClient.getByName(EnclosureGroupClientSample.ENCLOSURE_GROUP_NAME).get(0).getUri();
 
         AvailableStorageSystem storageSystem = serverProfileClient.getAvailableStorageSystems(
-                serverHardwareTypeUri, enclosureGroupUri).getMembers().get(0);
+                ServerHardwareTypeClientSample.SERVER_HARDWARE_TYPE_URI, enclosureGroupUri).getMembers().get(0);
 
         // Use just the {ID} not "/rest/storage-systems/{ID}"
         AvailableStorageSystem availableStorageSystem = serverProfileClient.getAvailableStorageSystem(
-                serverHardwareTypeUri,
+                ServerHardwareTypeClientSample.SERVER_HARDWARE_TYPE_URI,
                 enclosureGroupUri,
                 UrlUtils.getResourceIdFromUri(storageSystem.getStorageSystemUri()));
 
-        System.out.println("ServerProfileClientSample : getAvailableStorageSystemForServerProfile : " +
-                "AvailableStorageSystem object returned to client : " + JsonPrettyPrinter.print(availableStorageSystem));
+        LOGGER.info("AvailableStorageSystem object returned to client : " + JsonPrettyPrinter.print(availableStorageSystem));
     }
 
     private void getAvailableTargetsForServerProfile() {
         AvailableTargets targets = serverProfileClient.getAvailableTargets(
                 Optional.<String>absent(), Optional.<String>absent(), Optional.<String>absent());
 
-        System.out.println("ServerProfileClientSample : getAvailableTargetsForServerProfile : " +
-                "AvailableTargets object returned to client : " + targets.toJsonString());
+        LOGGER.info("AvailableTargets object returned to client : " + targets.toJsonString());
     }
 
     private void getProfilePortsForServerProfile() {
-        String enclosureGroupUri = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0).getUri();
-        String serverHardwareTypeUri = serverHardwareClient.getByName(BAY_NAME).get(0).getServerHardwareTypeUri();
+        String enclosureGroupUri = enclosureGroupClient.getByName(EnclosureGroupClientSample.ENCLOSURE_GROUP_NAME).get(0).getUri();
 
-        ProfilePorts profilePorts = serverProfileClient.getProfilePorts(serverHardwareTypeUri, enclosureGroupUri);
+        ProfilePorts profilePorts = serverProfileClient.getProfilePorts(ServerHardwareTypeClientSample.SERVER_HARDWARE_TYPE_URI, enclosureGroupUri);
 
-        System.out.println("ServerProfileClientSample : getProfilePortsForServerProfile : " +
-                "ProfilePorts object returned to client : " + JsonPrettyPrinter.print(profilePorts));
+        LOGGER.info("ProfilePorts object returned to client : " + JsonPrettyPrinter.print(profilePorts));
     }
 
     private ServerProfile buildServerProfile() {
@@ -337,7 +318,7 @@ public class ServerProfileClientSample {
         serverProfileValue.setBios(bios);
         serverProfileValue.setBoot(boot);
         serverProfileValue.setDescription("Template Example");
-        serverProfileValue.setEnclosureGroupName(ENCLOSURE_GROUP_NAME);
+        serverProfileValue.setEnclosureGroupName(EnclosureGroupClientSample.ENCLOSURE_GROUP_NAME);
         serverProfileValue.setFirmware(firmware);
         serverProfileValue.setLocalStorage(null);
         serverProfileValue.setMacType(AssignmentType.Virtual);
@@ -350,15 +331,16 @@ public class ServerProfileClientSample {
 
         ResourceDtoUtilsWrapper resourceDtoUtilsWrapper = new ResourceDtoUtilsWrapper(new ResourceDtoUtils(oneViewClient));
 
+//        return resourceDtoUtilsWrapper.buildServerProfile(ApiVersion.V_120, serverProfileValue);
         return resourceDtoUtilsWrapper.buildServerProfile(ApiVersion.V_201, serverProfileValue);
     }
 
     public static void main(final String[] args) {
         ServerProfileClientSample client = new ServerProfileClientSample();
 
+        client.getAllServerProfiles();
         client.createServerProfile();
         client.getServerProfileById();
-        client.getAllServerProfiles();
         client.getServerProfileByName();
         client.getAvailableNetworksForServerProfile();
 

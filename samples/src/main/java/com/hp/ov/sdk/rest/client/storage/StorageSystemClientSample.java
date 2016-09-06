@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -27,6 +30,7 @@ import com.hp.ov.sdk.dto.StorageSystem;
 import com.hp.ov.sdk.dto.StorageTargetPort;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.networking.FcNetworkClientSample;
 
 /*
  * StorageSystemClientSample is a sample program consume the storage server managed by HPE OneView.
@@ -35,20 +39,22 @@ import com.hp.ov.sdk.rest.client.OneViewClient;
  */
 public class StorageSystemClientSample {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(StorageSystemClientSample.class);
+
     private final OneViewClient oneViewClient;
     private final StorageSystemClient storageSystemClient;
 
     // These are variables to be defined by user
     // ================================
-    public static final String STORAGE_SYSTEM_NAME = "ThreePAR7200-4555";
+    public static final String STORAGE_SYSTEM_NAME = "ThreePAR7200-4166";
 
-    private static final String STORAGE_SYSTEM_RESOURCE_ID = "TXQ1010307";
+    private static final String STORAGE_SYSTEM_RESOURCE_ID = "TXQ1000307";
     private static final String TARGET_PORT_ID = "2788DF7C-23BE-4E42-B4EB-61C59246AEE7";
     private static final String USERNAME = "dcs";
     private static final String PASSWORD = "dcs";
-    private static final String IP_ADDRESS = "172.18.11.12";
-    private static final List<String> FC_NETWORK_A = Arrays.asList("FC_Network_A");
-    private static final List<String> FC_NETWORK_B = Arrays.asList("FC_Network_B");
+    private static final String IP_ADDRESS = "172.18.11.11";
+    private static final List<String> FC_NETWORK_A = Arrays.asList(FcNetworkClientSample.FC_NETWORK_NAME);
+    private static final List<String> FC_NETWORK_B = Arrays.asList(FcNetworkClientSample.FC_NETWORK_NAME_B);
     private static final String UNMANAGED_PORT_A = "0:1:1";
     private static final String UNMANAGED_PORT_B = "0:1:2";
     private static final String MANAGED_DOMAIN = "TestDomain";
@@ -63,22 +69,19 @@ public class StorageSystemClientSample {
     private void getStorageSystem() {
         StorageSystem storageSystem = this.storageSystemClient.getById(STORAGE_SYSTEM_RESOURCE_ID);
 
-        System.out.println("StorageSystemClientSample : getStorageSystem : " +
-                "StorageSystem object returned to client : " + storageSystem.toJsonString());
+        LOGGER.info("StorageSystem object returned to client : " + storageSystem.toJsonString());
     }
 
     private void getAllStorageSystems() {
         ResourceCollection<StorageSystem> storageSystems = this.storageSystemClient.getAll();
 
-        System.out.println("StorageSystemClientSample : getAllStorageSystems : " +
-                "StorageSystems returned to client : " + storageSystems.toJsonString());
+        LOGGER.info("StorageSystems returned to client : " + storageSystems.toJsonString());
     }
 
     private void getStorageSystemByName() {
         StorageSystem storageSystem = this.storageSystemClient.getByName(STORAGE_SYSTEM_NAME).get(0);
 
-        System.out.println("StorageSystemClientSample : getStorageSystemByName : " +
-                "StorageSystem object returned to client : " + storageSystem.toJsonString());
+        LOGGER.info("StorageSystem object returned to client : " + storageSystem.toJsonString());
     }
 
     private void addStorageSystem() {
@@ -86,8 +89,7 @@ public class StorageSystemClientSample {
 
         TaskResourceV2 taskResource = storageSystemClient.add(addStorageSystemCredentials, false);
 
-        System.out.println("StorageSystemClientSample : addStorageSystem : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void updateStorageSystem() {
@@ -97,16 +99,14 @@ public class StorageSystemClientSample {
         TaskResourceV2 taskResource = storageSystemClient.update(storageSystem.getResourceId(),
                 updatedStorageSystem, false);
 
-        System.out.println("StorageSystemClientSample : updateStorageSystem : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void removeStorageSystem() {
         StorageSystem storageSystem = this.storageSystemClient.getByName(STORAGE_SYSTEM_NAME).get(0);
         TaskResourceV2 taskResource = this.storageSystemClient.remove(storageSystem.getResourceId(), false);
 
-        System.out.println("StorageSystemClientSample : removeStorageSystem : " +
-                "Task object returned to client : " + taskResource);
+        LOGGER.info("Task object returned to client : " + taskResource);
     }
 
     private void getStorageSystemStoragePools() {
@@ -114,8 +114,7 @@ public class StorageSystemClientSample {
         ResourceCollection<StoragePool> storagePools = this.storageSystemClient.getStoragePools(
                 storageSystem.getResourceId());
 
-        System.out.println("StorageSystemClientSample : getStorageSystemStoragePools : " +
-                "StoragePools returned to client : " + storagePools.toJsonString());
+        LOGGER.info("StoragePools returned to client : " + storagePools.toJsonString());
     }
 
     private void getStorageSystemManagedPorts() {
@@ -123,8 +122,7 @@ public class StorageSystemClientSample {
         ResourceCollection<StorageTargetPort> storageTargetPorts
                 = this.storageSystemClient.getAllManagedPorts(storageSystem.getResourceId());
 
-        System.out.println("StorageSystemClientSample : getStorageSystemManagedPorts : " +
-                "StoragePools returned to client : " + storageTargetPorts.toJsonString());
+        LOGGER.info("StoragePools returned to client : " + storageTargetPorts.toJsonString());
     }
 
     private void getStorageSystemManagedPort() {
@@ -133,15 +131,13 @@ public class StorageSystemClientSample {
         StorageTargetPort storageTargetPort = storageSystemClient.getManagedPort(storageSystem.getResourceId(),
                 TARGET_PORT_ID);
 
-        System.out.println("StorageSystemClientSample : getStorageSystemManagedPort : " +
-                "StorageTargetPort object returned to client : " + storageTargetPort.toJsonString());
+        LOGGER.info("StorageTargetPort object returned to client : " + storageTargetPort.toJsonString());
     }
 
     private void getStorageSystemHostTypes() {
         List<String> hostTypes = storageSystemClient.getHostTypes();
 
-        System.out.println("StorageSystemClientSample : getStorageSystemHostTypes : " +
-                "Host types returned to client : " + Arrays.toString(hostTypes.toArray()));
+        LOGGER.info("Host types returned to client : " + Arrays.toString(hostTypes.toArray()));
     }
 
     private AddStorageSystemCredentials buildStorageSystem() {

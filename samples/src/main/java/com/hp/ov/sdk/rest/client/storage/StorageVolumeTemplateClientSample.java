@@ -15,6 +15,9 @@
  */
 package com.hp.ov.sdk.rest.client.storage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplate;
@@ -29,6 +32,8 @@ import com.hp.ov.sdk.rest.client.OneViewClient;
  * operations on storage volume template resource
  */
 public class StorageVolumeTemplateClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(StorageVolumeTemplateClientSample.class);
 
     // These are variables to be defined by user
     // ================================
@@ -55,23 +60,20 @@ public class StorageVolumeTemplateClientSample {
         StorageVolumeTemplate storageVolumeTemplate = this.storageVolumeTemplateClient.getById(
                 STORAGE_VOLUME_TEMPLATE_RESOURCE_ID);
 
-        System.out.println("StorageVolumeTemplateClientSample : getStorageVolumeTemplate : " +
-                "StorageVolumeTemplate object returned to client : " + storageVolumeTemplate.toJsonString());
+        LOGGER.info("StorageVolumeTemplate object returned to client : " + storageVolumeTemplate.toJsonString());
     }
 
     private void getAllStorageVolumeTemplates() {
         ResourceCollection<StorageVolumeTemplate> storageVolumeTemplates = this.storageVolumeTemplateClient.getAll();
 
-        System.out.println("StorageVolumeTemplateClientSample : getAllStorageVolumeTemplates : " +
-                "StorageVolumeTemplates returned to client : " + storageVolumeTemplates.toJsonString());
+        LOGGER.info("StorageVolumeTemplates returned to client : " + storageVolumeTemplates.toJsonString());
     }
 
     private void getStorageVolumeTemplateByName() {
         StorageVolumeTemplate storageVolumeTemplate = this.storageVolumeTemplateClient.getByName(
                 STORAGE_VOLUME_TEMPLATE_NAME).get(0);
 
-        System.out.println("StorageVolumeTemplateClientSample : getStorageVolumeTemplateByName : " +
-                "StorageVolumeTemplate object returned to client : " + storageVolumeTemplate.toJsonString());
+        LOGGER.info("StorageVolumeTemplate object returned to client : " + storageVolumeTemplate.toJsonString());
     }
 
     private void createStorageVolumeTemplate() {
@@ -79,8 +81,7 @@ public class StorageVolumeTemplateClientSample {
 
         StorageVolumeTemplate created = storageVolumeTemplateClient.create(storageVolumeTemplate);
 
-        System.out.println("StorageVolumeTemplateClientSample : createStorageVolumeTemplate : " +
-                "StorageVolumeTemplate object returned to client : " + created.toJsonString());
+        LOGGER.info("StorageVolumeTemplate object returned to client : " + created.toJsonString());
     }
 
     private void updateStorageVolumeTemplate() {
@@ -93,8 +94,7 @@ public class StorageVolumeTemplateClientSample {
         StorageVolumeTemplate updated = storageVolumeTemplateClient.update(storageVolumeTemplate.getResourceId(),
                 storageVolumeTemplate);
 
-        System.out.println("StorageVolumeTemplateClientSample : updateStorageVolumeTemplate : " +
-                "StorageVolumeTemplate object returned to client : " + updated.toJsonString());
+        LOGGER.info("StorageVolumeTemplate object returned to client : " + updated.toJsonString());
     }
 
     private void deleteStorageVolumeTemplate() {
@@ -103,16 +103,14 @@ public class StorageVolumeTemplateClientSample {
 
         String response = this.storageVolumeTemplateClient.delete(storageVolumeTemplate.getResourceId());
 
-        System.out.println("StorageVolumeTemplateClientSample : deleteStorageVolumeTemplate : " +
-                "Response returned to client : " + response);
+        LOGGER.info("Response returned to client : " + response);
     }
 
     private void getConnectableStorageVolumeTemplates() {
         ResourceCollection<ConnectableStorageVolumeTemplate> connectableVolumeTemplates
                 = this.storageVolumeTemplateClient.getConnectableVolumeTemplates();
 
-        System.out.println("StorageVolumeTemplateClientSample : getConnectableStorageVolumeTemplates : " +
-                "ConnectableStorageVolumeTemplate returned to client : " + connectableVolumeTemplates.toJsonString());
+        LOGGER.info("ConnectableStorageVolumeTemplate returned to client : " + connectableVolumeTemplates.toJsonString());
     }
 
     private StorageVolumeTemplate buildStorageVolumeTemplate() {

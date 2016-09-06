@@ -38,7 +38,9 @@ public class UrlParameter {
     }
 
     public static UrlParameter getFilterByNameParameter(String name) {
-        return new UrlParameter("filter", "name='" + name + "'");
+        // Commas are known to cause problems on filters, so we replace it with a "any char" value (_)
+        String nameWithoutCommas = name.replaceAll(",", "_");
+        return new UrlParameter("filter", "name matches '" + nameWithoutCommas + "'");
     }
 
     public static UrlParameter getCountParameter(int count) {

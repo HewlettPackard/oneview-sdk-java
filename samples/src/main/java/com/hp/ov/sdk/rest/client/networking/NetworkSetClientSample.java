@@ -18,6 +18,9 @@ package com.hp.ov.sdk.rest.client.networking;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -33,6 +36,8 @@ import com.hp.ov.sdk.util.UrlUtils;
  * operations network set resource
  */
 public class NetworkSetClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(NetworkSetClientSample.class);
 
     private ResourceDtoUtils resourceDtoUtils;
     private NetworkSetClient client;
@@ -54,35 +59,32 @@ public class NetworkSetClientSample {
     private void getNetworkSetById() {
         NetworkSet networkSet = client.getById(resourceId);
 
-        System.out.println("NetworkSetClientSample : getNetworkSet : " +
-                "NetworkSet object returned to client : " + networkSet);
+        LOGGER.info("NetworkSet object returned to client : " + networkSet.toJsonString());
     }
 
     private void getAllNetworkSet() {
 
         ResourceCollection<NetworkSet> networkSets = client.getAll();
 
-        System.out.println("networkSetClientSample : getAllNetworkSets : " +
-                "NetworkSets returned to client (count) : " + networkSets.getCount());
+        LOGGER.info("NetworkSets returned to client (count) : " + networkSets.getCount());
     }
 
     private void getNetworkSetByName() {
         NetworkSet networkSet = client.getByName(resourceName).get(0);
 
-        System.out.println("NetworkSetClientSample : getNetworkSetByName : " +
-                "NetworkSet object returned to client : " + networkSet);
+        LOGGER.info("NetworkSet object returned to client : " + networkSet.toJsonString());
     }
 
     private void createNetworkSet() {
         NetworkSet networkSet = resourceDtoUtils.buildNetworkSetDto(resourceName, networkNames);
 
         networkSet.setName(resourceName);
+        networkSet.setType(ResourceCategory.RC_NETWORKSET);
         networkSet.setType(ResourceCategory.RC_NETWORKSET_V300);
 
         TaskResourceV2 task = this.client.create(networkSet, false);
 
-        System.out.println("NetworkSetClientSample : createNetworkSet : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void updateNetworkSet() {
@@ -93,8 +95,7 @@ public class NetworkSetClientSample {
         TaskResourceV2 task = this.client.update(UrlUtils.getResourceIdFromUri(networkSet.getUri()),
                 networkSet, false);
 
-        System.out.println("NetworkSetClientSample : updateNetworkSet : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void deleteNetworkSet() {
@@ -102,8 +103,7 @@ public class NetworkSetClientSample {
 
         TaskResourceV2 task = this.client.delete(UrlUtils.getResourceIdFromUri(networkSet.getUri()), false);
 
-        System.out.println("NetworkSetClientSample : deleteNetworkSet : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     public static void main(final String[] args) {

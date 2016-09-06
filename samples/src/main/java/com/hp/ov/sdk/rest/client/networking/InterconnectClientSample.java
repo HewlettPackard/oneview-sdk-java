@@ -18,6 +18,9 @@ package com.hp.ov.sdk.rest.client.networking;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.NameServer;
 import com.hp.ov.sdk.dto.Patch;
@@ -39,6 +42,8 @@ import com.hp.ov.sdk.util.JsonPrettyPrinter;
  */
 public class InterconnectClientSample {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(InterconnectClientSample.class);
+
     private final InterconnectClient interconnectClient;
 
     public InterconnectClientSample() {
@@ -57,37 +62,34 @@ public class InterconnectClientSample {
     private void getInterconnectById() {
         Interconnect interconnect = this.interconnectClient.getById(RESOURCE_ID);
 
-        System.out.println("InterconnectClientSample : getInterconnectById : " +
-                "Interconnect object returned to client : " + interconnect.toJsonString());
+        LOGGER.info("Interconnect object returned to client : " + interconnect.toJsonString());
     }
 
     private void getAllInterconnects() {
         ResourceCollection<Interconnect> interconnects = this.interconnectClient.getAll();
 
-        System.out.println("InterconnectClientSample : getAllInterconnects : " +
-                "Interconnects returned to client : " + interconnects.toJsonString());
+        LOGGER.info("Interconnects returned to client : " + interconnects.toJsonString());
     }
 
     private void getInterconnectByName() {
         Interconnect interconnect = this.interconnectClient.getByName(RESOURCE_NAME).get(0);
 
-        System.out.println("InterconnectClientSample : getInterconnectByName : " +
-                "Interconnect object returned to client : " + interconnect.toJsonString());
+        LOGGER.info("Interconnect object returned to client : " + interconnect.toJsonString());
     }
 
     private void patchInterconnect() {
         Interconnect interconnect = this.interconnectClient.getByName(RESOURCE_NAME).get(0);
         Patch patch = new Patch();
 
-        // Interconnect patch supports the update of 'powerState', 'uidState' and 'deviceResetState'
+        // Interconnect patch supports the update of 'powerState', 'uidState'
+        // and 'deviceResetState'
         patch.setOp(PatchOperation.replace);
         patch.setPath("/powerState");
         patch.setValue("Off");
 
         TaskResourceV2 task = this.interconnectClient.patch(interconnect.getResourceId(), patch, false);
 
-        System.out.println("InterconnectClientSample : patchInterconnect : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void updateInterconnectPort() {
@@ -96,10 +98,9 @@ public class InterconnectClientSample {
 
         port.setEnabled(!port.getEnabled());
 
-        TaskResourceV2 task = interconnectClient.updatePort(interconnect.getResourceId(), port , false);
+        TaskResourceV2 task = interconnectClient.updatePort(interconnect.getResourceId(), port, false);
 
-        System.out.println("InterconnectClientSample : updateInterconnectPort : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void updateInterconnectPorts() {
@@ -110,10 +111,9 @@ public class InterconnectClientSample {
 
         List<Port> ports = Arrays.asList(port);
 
-        TaskResourceV2 task = interconnectClient.updatePorts(interconnect.getResourceId(), ports , false);
+        TaskResourceV2 task = interconnectClient.updatePorts(interconnect.getResourceId(), ports, false);
 
-        System.out.println("InterconnectClientSample : updateInterconnectPorts : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void resetInterconnectPortProtection() {
@@ -121,8 +121,7 @@ public class InterconnectClientSample {
 
         TaskResourceV2 task = interconnectClient.resetPortProtection(interconnect.getResourceId(), false);
 
-        System.out.println("InterconnectClientSample : resetInterconnectPortProtection : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void getInterconnectStatistics() {
@@ -130,28 +129,24 @@ public class InterconnectClientSample {
 
         InterconnectsStatistics statistics = this.interconnectClient.getStatistics(interconnect.getResourceId());
 
-        System.out.println("InterconnectClientSample : getInterconnectStatistics : " +
-                "InterconnectsStatistics object returned to client : " + JsonPrettyPrinter.print(statistics));
+        LOGGER.info("InterconnectsStatistics object returned to client : " + JsonPrettyPrinter.print(statistics));
     }
 
     private void getInterconnectPortStatistics() {
         Interconnect interconnect = this.interconnectClient.getByName(RESOURCE_NAME).get(0);
 
-        PortStatistics statistics = this.interconnectClient.getPortStatistics(
-                interconnect.getResourceId(), PORT_NAME);
+        PortStatistics statistics = this.interconnectClient.getPortStatistics(interconnect.getResourceId(), PORT_NAME);
 
-        System.out.println("InterconnectClientSample : getInterconnectPortStatistics : " +
-                "PortStatistics object returned to client : " + JsonPrettyPrinter.print(statistics));
+        LOGGER.info("PortStatistics object returned to client : " + JsonPrettyPrinter.print(statistics));
     }
 
     private void getInterconnectSubportStatistics() {
         Interconnect interconnect = this.interconnectClient.getByName(RESOURCE_NAME).get(0);
 
-        SubportStatistics statistics = this.interconnectClient.getSubportStatistics(
-                interconnect.getResourceId(), PORT_NAME, 1);
+        SubportStatistics statistics = this.interconnectClient.getSubportStatistics(interconnect.getResourceId(),
+                PORT_NAME, 1);
 
-        System.out.println("InterconnectClientSample : getInterconnectSubportStatistics : " +
-                "SubportStatistics object returned to client : " + JsonPrettyPrinter.print(statistics));
+        LOGGER.info("SubportStatistics object returned to client : " + JsonPrettyPrinter.print(statistics));
     }
 
     private void getInterconnectNamedServers() {
@@ -159,8 +154,7 @@ public class InterconnectClientSample {
 
         List<NameServer> namedServers = interconnectClient.getNamedServers(interconnect.getResourceId());
 
-        System.out.println("InterconnectClientSample : getInterconnectNamedServers : " +
-                "NamedServers returned to client : " + JsonPrettyPrinter.print(namedServers));
+        LOGGER.info("NamedServers returned to client : " + JsonPrettyPrinter.print(namedServers));
     }
 
     public static void main(final String[] args) {

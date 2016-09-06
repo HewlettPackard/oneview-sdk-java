@@ -30,6 +30,7 @@ public class ServerHardwareTypeClientSample {
     // ================================
     private static final String SERVER_HARDWARE_TYPE_RESOURCE_NAME = "BL460c Gen8 1";
     private static final String SERVER_HARDWARE_TYPE_RESOURCE_ID = "53E2C267-CEDC-4A0B-961E-10034F5B7098";
+    public static final String SERVER_HARDWARE_TYPE_URI = "/rest/server-hardware-types/653D52C0-1314-411B-BF76-831A21A06C8A";
     // ================================
 
     private final ServerHardwareTypeClient serverHardwareTypeClient;
