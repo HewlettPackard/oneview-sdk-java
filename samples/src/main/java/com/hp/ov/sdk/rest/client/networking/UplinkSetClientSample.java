@@ -38,9 +38,7 @@ import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureClient;
 import com.hp.ov.sdk.rest.client.servers.EnclosureClientSample;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 /*
  * UplinkSetClientSample is a sample program to assign/consume networks of HPE OneView to uplink ports of interconnect.
@@ -124,7 +122,6 @@ public class UplinkSetClientSample {
     }
 
     private UplinkSet buildUplinkSet() {
-        RestParams params = HPOneViewCredential.createCredentials();
         String resourceId = null;
         UplinkSet uplinkSetsDto = new UplinkSet();
 

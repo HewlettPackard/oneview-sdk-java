@@ -88,7 +88,8 @@ public class StorageVolumeTemplateClientSample {
         StorageVolumeTemplate storageVolumeTemplate = this.storageVolumeTemplateClient.getByName(
                 STORAGE_VOLUME_TEMPLATE_NAME).get(0);
 
-        storageVolumeTemplate.setType(ResourceCategory.RC_STORAGE_VOLUME_TEMPLATE_V200); //QXCR1001472124
+        storageVolumeTemplate.setType(ResourceCategory.RC_STORAGE_VOLUME_TEMPLATE);
+        storageVolumeTemplate.setType(ResourceCategory.RC_STORAGE_VOLUME_TEMPLATE_V200);
         storageVolumeTemplate.setName(STORAGE_VOLUME_TEMPLATE_NAME_UPDATED);
 
         StorageVolumeTemplate updated = storageVolumeTemplateClient.update(storageVolumeTemplate.getResourceId(),
