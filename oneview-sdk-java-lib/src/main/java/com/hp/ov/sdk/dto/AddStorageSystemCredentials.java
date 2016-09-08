@@ -19,9 +19,6 @@ import java.io.Serializable;
 
 public class AddStorageSystemCredentials implements Serializable {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = 1L;
 
     private String ip_hostname;

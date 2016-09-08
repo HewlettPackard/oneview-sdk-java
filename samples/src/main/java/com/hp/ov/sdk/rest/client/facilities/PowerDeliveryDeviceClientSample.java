@@ -58,20 +58,19 @@ public class PowerDeliveryDeviceClientSample {
     private void getPowerDeliveryDeviceById() {
         PowerDeliveryDevice powerDeliveryDevice = this.client.getById(RESOURCE_ID);
 
-        LOGGER.info("PowerDeliveryDevice object returned to client : " + powerDeliveryDevice.toJsonString());
+        LOGGER.info("PowerDeliveryDevice object returned to client: {}", powerDeliveryDevice.toJsonString());
     }
 
     private void getAllPowerDeliveryDevices() {
         ResourceCollection<PowerDeliveryDevice> powerDeliveryDevices = this.client.getAll();
 
-        LOGGER.info("PowerDeliveryDevices returned to client : " + powerDeliveryDevices.toJsonString());
+        LOGGER.info("PowerDeliveryDevices returned to client: {}", powerDeliveryDevices.toJsonString());
     }
 
     private void getPowerDeliveryDeviceByName() {
         PowerDeliveryDevice powerDeliveryDevice = this.client.getByName(RESOURCE_NAME).get(0);
 
-        System.out.println("PowerDeliveryDeviceClientSample : getPowerDeliveryDeviceByName : " +
-                "PowerDeliveryDevice object returned to client : " + powerDeliveryDevice.toJsonString());
+        LOGGER.info("PowerDeliveryDevice object returned to client: {}", powerDeliveryDevice.toJsonString());
     }
 
     private void addPowerDeliveryDevice() {
@@ -81,7 +80,7 @@ public class PowerDeliveryDeviceClientSample {
 
         PowerDeliveryDevice addedPowerDeliveryDevice = this.client.add(powerDeliveryDevice);
 
-        LOGGER.info("PowerDeliveryDevice object returned to client : " + addedPowerDeliveryDevice.toJsonString());
+        LOGGER.info("PowerDeliveryDevice object returned to client: {}", addedPowerDeliveryDevice.toJsonString());
     }
 
     private void addPowerDeliveryDeviceByDiscover() {
@@ -94,7 +93,7 @@ public class PowerDeliveryDeviceClientSample {
 
         TaskResourceV2 task = this.client.add(importPdd, false);
 
-        LOGGER.info("Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void updatePowerDeliveryDevice() {
@@ -106,22 +105,22 @@ public class PowerDeliveryDeviceClientSample {
         PowerDeliveryDevice updatedPowerDeliveryDevice = this.client.update(resourceId,
                 powerDeliveryDevice);
 
-        LOGGER.info("PowerDeliveryDevice object returned to client : " + updatedPowerDeliveryDevice.toJsonString());
+        LOGGER.info("PowerDeliveryDevice object returned to client: {}", updatedPowerDeliveryDevice.toJsonString());
     }
 
     private void removePowerDeliveryDevice() {
-        PowerDeliveryDevice powerDeliveryDevice = this.client.getByName(SAMPLE_RESOURCE_NAME).get(0);
+        PowerDeliveryDevice powerDeliveryDevice = this.client.getByName(SAMPLE_RESOURCE_NAME_UPDATED).get(0);
 
         TaskResourceV2 task = this.client.remove(powerDeliveryDevice.getResourceId(), false);
 
-        LOGGER.info("Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void removePowerDeliveryDeviceByFilter() {
         String filter = "name='" + SAMPLE_RESOURCE_NAME +"'";
         TaskResourceV2 task = this.client.removeByFilter(filter, false);
 
-        LOGGER.info("Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void removePowerDeliveryDeviceSynchronously() {
@@ -129,7 +128,7 @@ public class PowerDeliveryDeviceClientSample {
 
         String response = this.client.remove(powerDeliveryDevice.getResourceId());
 
-        LOGGER.info("Response returned to client : " + response);
+        LOGGER.info("Response returned to client: {}", response);
     }
 
     private void getPowerDeliveryDevicePowerState() {
@@ -137,7 +136,7 @@ public class PowerDeliveryDeviceClientSample {
 
         Power power = client.getPowerState(powerDeliveryDevice.getResourceId());
 
-        LOGGER.info("Power object returned to client : " + power);
+        LOGGER.info("Power object returned to client: {}", JsonPrettyPrinter.print(power));
     }
 
     private void updatePowerDeliveryDevicePowerState() {
@@ -148,7 +147,7 @@ public class PowerDeliveryDeviceClientSample {
 
         TaskResourceV2 task = this.client.updatePowerState(powerDeliveryDevice.getResourceId(), outletState, false);
 
-        LOGGER.info("Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void updatePowerDeliveryDeviceRefreshState() {
@@ -159,7 +158,7 @@ public class PowerDeliveryDeviceClientSample {
 
         TaskResourceV2 task = this.client.updateRefreshState(powerDeliveryDevice.getResourceId(), refreshState, false);
 
-        LOGGER.info("Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void getPowerDeliveryDeviceUidState() {
@@ -167,7 +166,7 @@ public class PowerDeliveryDeviceClientSample {
 
         Light light = client.getUidState(powerDeliveryDevice.getResourceId());
 
-        LOGGER.info("Light object returned to client : " + light);
+        LOGGER.info("Light object returned to client: {}", JsonPrettyPrinter.print(light));
     }
 
     private void updatePowerDeliveryDeviceUidState() {
@@ -178,7 +177,7 @@ public class PowerDeliveryDeviceClientSample {
 
         TaskResourceV2 task = this.client.updateUidState(powerDeliveryDevice.getResourceId(), outletStateState, false);
 
-        LOGGER.info("Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void getPowerDeliveryDeviceUtilization() {
@@ -186,16 +185,16 @@ public class PowerDeliveryDeviceClientSample {
 
         UtilizationData utilization = client.getUtilization(powerDeliveryDevice.getResourceId());
 
-        LOGGER.info("UtilizationData object returned to client : " + JsonPrettyPrinter.print(utilization));
+        LOGGER.info("UtilizationData object returned to client: {}", JsonPrettyPrinter.print(utilization));
     }
 
     public static void main(String[] args) {
         PowerDeliveryDeviceClientSample client = new PowerDeliveryDeviceClientSample();
 
-        client.getPowerDeliveryDeviceById();
-
         client.addPowerDeliveryDevice();
         client.addPowerDeliveryDeviceByDiscover();
+
+        client.getPowerDeliveryDeviceById();
 
         client.getAllPowerDeliveryDevices();
         client.getPowerDeliveryDeviceByName();

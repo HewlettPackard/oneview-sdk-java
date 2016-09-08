@@ -16,6 +16,9 @@
 
 package com.hp.ov.sdk.rest.client.settings;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -23,6 +26,8 @@ import com.hp.ov.sdk.dto.firmware.FwBaseline;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class FirmwareDriverClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FirmwareDriverClientSample.class);
 
     // These are variables to be defined by user
     // ================================
@@ -42,30 +47,26 @@ public class FirmwareDriverClientSample {
     private void getFirmwareDriverById() {
         FwBaseline firmwareDriver = this.client.getById(FIRMWARE_DRIVER_RESOURCE_ID);
 
-        System.out.println("FirmwareDriverClientSample : getFirmwareDriver : " +
-                "FwBaseline object returned to client : " + firmwareDriver.toJsonString());
+        LOGGER.info("Firmware driver returned to client: {}", firmwareDriver.toJsonString());
     }
 
     private void getAllFirmwareDrivers() {
         ResourceCollection<FwBaseline> firmwareDrivers = this.client.getAll();
 
-        System.out.println("FirmwareDriverClientSample : getAllFirmwareDrivers : " +
-                "FwBaselines returned to client : " + firmwareDrivers.toJsonString());
+        LOGGER.info("Firmware drivers returned to client: {}", firmwareDrivers.toJsonString());
     }
 
     private void getFirmwareDriverByName() {
         FwBaseline firmwareDriver = this.client.getByName(FIRMWARE_DRIVER_NAME).get(0);
 
-        System.out.println("FirmwareDriverClientSample : getFirmwareDriverByName : " +
-                "FwBaseline object returned to client : " + firmwareDriver.toJsonString());
+        LOGGER.info("Firmware driver returned to client: {}", firmwareDriver.toJsonString());
     }
 
     private void deleteFirmwareDriver() {
         FwBaseline firmwareDriver = this.client.getByName(FIRMWARE_DRIVER_NAME).get(0);
         TaskResourceV2 task = this.client.delete(firmwareDriver.getResourceId(), false);
 
-        System.out.println("FirmwareDriverClientSample : deleteFirmwareDriver : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     public static void main(String[] args) {

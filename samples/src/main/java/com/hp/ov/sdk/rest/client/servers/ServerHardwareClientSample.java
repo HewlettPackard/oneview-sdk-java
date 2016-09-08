@@ -51,19 +51,19 @@ import com.hp.ov.sdk.util.JsonPrettyPrinter;
  */
 public class ServerHardwareClientSample {
 
-    
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerHardwareClientSample.class);
 
-    
     private final ServerHardwareClient serverHardwareClient;
 
     // These are variables to be defined by user
     // ================================
-    private static final String SERVER_HARDWARE_RESOURCE_NAME = "172.18.6.9";
-    private static final String SERVER_HARDWARE_RESOURCE_ID = "37333036-3831-584D-5131-303030333037"; 
-    private static final String SERVER_HARDWARE_HOSTNAME = "172.18.6.9";
+    private static final String SERVER_HARDWARE_RESOURCE_NAME = "172.18.6.32";
+    private static final String SERVER_HARDWARE_RESOURCE_ID = "37333036-3831-584D-5131-303030333037";
+    private static final String SCOPE_RESOURCE_ID = "ebd97670-330d-4d2c-9f09-16c8e2ea63c5";
+    private static final String SERVER_HARDWARE_HOSTNAME = "172.18.6.32";
     private static final String SERVER_HARDWARE_USERNAME = "dcs";
     private static final String SERVER_HARDWARE_PASSWORD = "dcs";
+    private static final String UNMANAGED_DEVICE_HARDWARE = "172.18.6.15";
     // ================================
 
     private ServerHardwareClientSample() {
@@ -150,7 +150,7 @@ public class ServerHardwareClientSample {
     }
 
     private void updateServerHardwareEnvironmentConfiguration() {
-        ServerHardware serverHardware = serverHardwareClient.getByName("172.18.6.15").get(0);
+        ServerHardware serverHardware = serverHardwareClient.getByName(UNMANAGED_DEVICE_HARDWARE).get(0);
 
         EnvironmentalConfigurationUpdate request = new EnvironmentalConfigurationUpdate();
 
@@ -235,7 +235,7 @@ public class ServerHardwareClientSample {
         Patch patch = new Patch();
         patch.setOp(Patch.PatchOperation.add);
         patch.setPath("/scopeUris/-");
-        patch.setValue("/rest/scopes/64b35ee8-9ad8-48f7-9094-23ea08c857a2");
+        patch.setValue("/rest/scopes/" + SCOPE_RESOURCE_ID);
 
         TaskResourceV2 taskResource = serverHardwareClient.patch(serverHardware.getResourceId(), patch, false);
 

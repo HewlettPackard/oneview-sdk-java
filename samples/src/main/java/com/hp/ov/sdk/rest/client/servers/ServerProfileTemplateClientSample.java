@@ -179,7 +179,8 @@ public class ServerProfileTemplateClientSample {
         ServerProfileTemplate template = new ServerProfileTemplate();
 
         template.setName(SERVER_PROFILE_TEMPLATE_NAME);
-        template.setType(ResourceCategory.RC_SERVER_PROFILE_TEMPLATE);
+        template.setType(ResourceCategory.RC_SERVER_PROFILE_TEMPLATE); //v120 & v200
+        template.setType(ResourceCategory.RC_SERVER_PROFILE_TEMPLATE_V300); //v300
         template.setServerHardwareTypeUri(SERVER_HARDWARE_TYPE_URI);
         template.setEnclosureGroupUri(ENCLOSURE_GROUP_URI);
         template.setSerialNumberType(AssignmentType.Virtual);

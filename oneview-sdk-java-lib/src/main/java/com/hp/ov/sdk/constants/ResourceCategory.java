@@ -17,8 +17,6 @@ package com.hp.ov.sdk.constants;
 
 public class ResourceCategory {
 
-    public static final String RC_ADD_STORAGE_VOLUME = "AddStorageVolumeV2";
-    public static final String RC_ADD_STORAGE_VOLUME_200 = "AddStorageVolumeV3";
     public static final String RC_BULK_NETWORK = "bulk-ethernet-network";
     public static final String RC_ENCLOSURE_GROUP = "EnclosureGroupV2";
     public static final String RC_ENCLOSURE_GROUP_V200 = "EnclosureGroupV200";
@@ -34,6 +32,8 @@ public class ResourceCategory {
     public static final String RC_LOGICAL_SWITCH = "logical-switch";
     public static final String RC_LOGICAL_SWITCH_V300 = "logical-switchV300";
     public static final String RC_LOGICAL_INTERCONNECTS = "logical-interconnects";
+    public static final String RC_LOGICAL_INTERCONNECT_SETTINGS_V200 = "InterconnectSettingsV3";
+    public static final String RC_LOGICAL_INTERCONNECT_SETTINGS_V300 = "InterconnectSettingsV201";
     public static final String RC_LOGICALINTERCONNECTGROUP = "logical-interconnect-groupV2";
     public static final String RC_LOGICALINTERCONNECTGROUP_V200 = "logical-interconnect-groupV3";
     public static final String RC_LOGICALINTERCONNECTGROUP_V300 = "logical-interconnect-groupV300";
@@ -45,6 +45,7 @@ public class ResourceCategory {
     public static final String RC_SAS_LOGICAL_INTERCONNECT_GROUP = "sas-logical-interconnect-group";
     public static final String RC_SERVER_PROFILE = "ServerProfileV4";
     public static final String RC_SERVER_PROFILE_TEMPLATE = "ServerProfileTemplateV1";
+    public static final String RC_SERVER_PROFILE_TEMPLATE_V300 = "ServerProfileTemplateV2";
     public static final String RC_SERVER_PROFILE_V200 = "ServerProfileV5";
     public static final String RC_SERVER_PROFILE_V300 = "ServerProfileV6";
     public static final String RC_SERVERHARDWARE = "server-hardware";
@@ -58,7 +59,6 @@ public class ResourceCategory {
     public static final String RC_SWITCH_V300 = "switchV300";
     public static final String RC_UPLINKSET = "uplink-sets";
     public static final String RC_UPLINKS_SETS = "uplink-setV2";
-    public static final String RC_UPLINKS_SETSV200 = "uplink-setV3";
-   
-
+    public static final String RC_UPLINKS_SETS_V200 = "uplink-setV3";
+    public static final String RC_UPLINKS_SETS_V300 = "uplink-setV300";
 }

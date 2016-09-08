@@ -31,6 +31,7 @@ import com.hp.ov.sdk.dto.StorageTargetPort;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClientSample;
+import com.hp.ov.sdk.util.UrlUtils;
 
 /*
  * StorageSystemClientSample is a sample program consume the storage server managed by HPE OneView.
@@ -53,7 +54,7 @@ public class StorageSystemClientSample {
     private static final String USERNAME = "dcs";
     private static final String PASSWORD = "dcs";
     private static final String IP_ADDRESS = "172.18.11.11";
-    private static final List<String> FC_NETWORK_A = Arrays.asList(FcNetworkClientSample.FC_NETWORK_NAME);
+    private static final List<String> FC_NETWORK_A = Arrays.asList(FcNetworkClientSample.FC_NETWORK_NAME_A);
     private static final List<String> FC_NETWORK_B = Arrays.asList(FcNetworkClientSample.FC_NETWORK_NAME_B);
     private static final String UNMANAGED_PORT_A = "0:1:1";
     private static final String UNMANAGED_PORT_B = "0:1:2";
@@ -86,8 +87,16 @@ public class StorageSystemClientSample {
 
     private void addStorageSystem() {
         AddStorageSystemCredentials addStorageSystemCredentials = buildStorageSystem();
-
         TaskResourceV2 taskResource = storageSystemClient.add(addStorageSystemCredentials, false);
+
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
+
+        String storageSystemId = UrlUtils.getResourceIdFromUri(taskResource.getAssociatedResource().getResourceUri());
+        StorageSystem storageSystem = this.storageSystemClient.getById(storageSystemId);
+
+        storageSystem.setManagedDomain("TestDomain");
+
+        taskResource = this.storageSystemClient.update(storageSystemId, storageSystem, false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -212,8 +221,9 @@ public class StorageSystemClientSample {
     public static void main(final String[] args) throws Exception {
         StorageSystemClientSample sample = new StorageSystemClientSample();
 
-        sample.getStorageSystem();
         sample.addStorageSystem();
+
+        sample.getStorageSystem();
         sample.getAllStorageSystems();
         sample.getStorageSystemByName();
         sample.getStorageSystemManagedPorts();

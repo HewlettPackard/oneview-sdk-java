@@ -51,12 +51,13 @@ public class LogicalInterconnectGroupClientSample {
     // ================================
     public static final List<Integer> interconnectEntries = Arrays.asList(Integer.valueOf(1), Integer.valueOf(2));
 
-    public static final String resourceName = "LIG_PROD";
+    public static final String RESOURCE_NAME = "LIG_PROD";
 
+    private static final String RESOURCE_NAME_UPDATED = RESOURCE_NAME + "_Updated";
     private static final InterconnectTypeName permittedInterconnectType = InterconnectTypeName.HP_VC_FlexFabric_20_40_F8_Module;
     private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402", "Prod_403");
-    private static final List<String> logicalInterconnectGroupName_A = Arrays.asList("FC_Network_A");
-    private static final List<String> logicalInterconnectGroupName_B = Arrays.asList("FC_Network_B");
+    private static final List<String> logicalInterconnectGroupName_A = Arrays.asList(FcNetworkClientSample.FC_NETWORK_NAME_A);
+    private static final List<String> logicalInterconnectGroupName_B = Arrays.asList(FcNetworkClientSample.FC_NETWORK_NAME_B);
     private static final List<String> ethPort = Arrays.asList("X5", "X6");
     private static final List<String> fcPort = Arrays.asList("X2");
     private static final String ethUplinkSetType = "Ethernet";
@@ -64,8 +65,8 @@ public class LogicalInterconnectGroupClientSample {
     private static final String ethUplinkSetName = "EthernetUplinkSet";
     private static final String fcAUplinkSetName = "FCUplinkSetA";
     private static final String fcBUplinkSetName = "FCUplinkSetB";
-    private static final String resourceId = "710a4017-4523-4522-a61b-cde6aec37de8";
-    private static final String settingId = "dcd89c40-57b6-4551-9486-acc9090785fa";
+    private static final String RESOURCE_ID = "16765ce9-8e20-48c7-bd0b-428b2e6bcc83";
+    private static final String SETTING_ID = "dcd89c40-57b6-4551-9486-acc9090785fa";
     // ================================
 
     private final LogicalInterconnectGroupClient client;
@@ -80,7 +81,7 @@ public class LogicalInterconnectGroupClientSample {
     }
 
     private void getLogicalInterconnectGroup() {
-        LogicalInterconnectGroup logicalInterconnectGroup = client.getById(resourceId);
+        LogicalInterconnectGroup logicalInterconnectGroup = client.getById(RESOURCE_ID);
 
         LOGGER.info("LogicalInterconnectGroup object returned to client : " + logicalInterconnectGroup.toJsonString());
     }
@@ -92,17 +93,19 @@ public class LogicalInterconnectGroupClientSample {
     }
 
     private void getLogicalInterconnectGroupByName() {
-        ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getByName(resourceName);
+        ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getByName(RESOURCE_NAME);
 
-        LOGGER.info("LogicalInterconnectGroup object returned to client : " + logicalInterconnectGroups.getMembers().get(0).toJsonString());
+        LogicalInterconnectGroup logicalInterconnectGroup = logicalInterconnectGroups.getMembers().get(0);
+
+        LOGGER.info("LogicalInterconnectGroup object returned to client : " + logicalInterconnectGroup.toJsonString());
     }
 
     private void createLogicalInterconnectGroup() {
         LogicalInterconnectGroup logicalInterconnectGroup = this.buildTestLogicalInterconnectGroup();
-        logicalInterconnectGroup.setName(resourceName);
-        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP);
-        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200);
-        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300);
+        logicalInterconnectGroup.setName(RESOURCE_NAME);
+        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP); //v120
+        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200); //v200
+        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300); //v300
 
         TaskResourceV2 task = this.client.create(logicalInterconnectGroup, false);
 
@@ -110,9 +113,10 @@ public class LogicalInterconnectGroupClientSample {
     }
 
     private void updateLogicalInterconnectGroup() {
-        ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getByName(resourceName);
+        ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getByName(RESOURCE_NAME);
         LogicalInterconnectGroup lig = logicalInterconnectGroups.getMembers().get(0);
-        lig.setName(resourceName + "_Update");
+
+        lig.setName(RESOURCE_NAME_UPDATED);
 
         final List<UplinkSetGroup> uplinkSetDto = buildUplinkSetGroupDto();
         lig.setUplinkSets(uplinkSetDto);
@@ -123,7 +127,7 @@ public class LogicalInterconnectGroupClientSample {
     }
 
     private void deleteLogicalInterconnectGroup() {
-        ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getByName(resourceName);
+        ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getByName(RESOURCE_NAME_UPDATED);
         LogicalInterconnectGroup lig = logicalInterconnectGroups.getMembers().get(0);
         TaskResourceV2 task = this.client.delete(lig.getResourceId(), false);
 
@@ -133,16 +137,16 @@ public class LogicalInterconnectGroupClientSample {
     private void getDefaultInterconnectSettings() {
         InterconnectSettingsV2 interconnectSettingsDto = client.getDefaultInterconnectSettings();
 
-        LOGGER.info("InterconnectSettingsV2 object returned to client : " + interconnectSettingsDto.toJsonString());
+        LOGGER.info("Interconnect settings returned to client : " + interconnectSettingsDto.toJsonString());
     }
 
     private void getInterconnectSettings() {
         // To run getInterconnectSettings on OneView 1.2, you need settingID and resourceID of LIG
         // for OV 2.0 & 3.0, you just need the resourceID
-        InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(resourceId, settingId);
-//        InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(resourceId);
+//        InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(RESOURCE_ID, SETTING_ID);
+        InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(RESOURCE_ID);
 
-        LOGGER.info("InterconnectSettingsV2 object returned to client : " + interconnectSettingsDto.toJsonString());
+        LOGGER.info("Interconnect settings returned to client : " + interconnectSettingsDto.toJsonString());
     }
 
     private LogicalInterconnectGroup buildTestLogicalInterconnectGroup() {
@@ -151,21 +155,20 @@ public class LogicalInterconnectGroupClientSample {
         bayPermittedInterconnectMaps.put(interconnectEntries.get(0), permittedInterconnectType);
         bayPermittedInterconnectMaps.put(interconnectEntries.get(1), permittedInterconnectType);
 
-        LogicalInterconnectGroup dto = resourceDtoUtils.buildLogicalInterconnectGroupDto(resourceName, bayPermittedInterconnectMaps);
-        dto.setEnclosureIndexes(Arrays.asList(1));
-        dto.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP);
-        dto.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200);
-        dto.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300);
+        LogicalInterconnectGroup group = resourceDtoUtils.buildLogicalInterconnectGroupDto(RESOURCE_NAME, bayPermittedInterconnectMaps);
+        group.setEnclosureIndexes(Arrays.asList(1));
+        group.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP);
+        group.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200);
+        group.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300);
 
-        for (InterconnectMapEntryTemplate entry : dto.getInterconnectMapTemplate().getInterconnectMapEntryTemplates()) {
+        for (InterconnectMapEntryTemplate entry : group.getInterconnectMapTemplate().getInterconnectMapEntryTemplates()) {
             entry.setEnclosureIndex(1);
         }
-
-        return  dto;
+        return  group;
     }
 
     private List<UplinkSetGroup> buildUplinkSetGroupDto() {
-        List<UplinkSetGroup> uplinkSetGroupDto = new ArrayList<UplinkSetGroup>();
+        List<UplinkSetGroup> uplinkSetGroupDto;
 
         final HashMap<Integer, List<String>> ethBayPortMap = new HashMap<Integer, List<String>>();
         ethBayPortMap.put(1, ethPort);
@@ -178,21 +181,21 @@ public class LogicalInterconnectGroupClientSample {
         final List<UplinkSetValue> uplinkSetValues = new ArrayList<UplinkSetValue>();
         final UplinkSetValue ethUplinkSetValue = new UplinkSetValue();
         ethUplinkSetValue.setBayPortMap(ethBayPortMap);
-        ethUplinkSetValue.setLigName(resourceName);
+        ethUplinkSetValue.setLigName(RESOURCE_NAME);
         ethUplinkSetValue.setNetworkNames(networkNames);
         ethUplinkSetValue.setUplinkSetName(ethUplinkSetName);
         ethUplinkSetValue.setUplinkSetType(ethUplinkSetType);
 
         final UplinkSetValue fcAUplinkSetValue = new UplinkSetValue();
         fcAUplinkSetValue.setBayPortMap(fcBayPortMapA);
-        fcAUplinkSetValue.setLigName(resourceName);
+        fcAUplinkSetValue.setLigName(RESOURCE_NAME);
         fcAUplinkSetValue.setNetworkNames(logicalInterconnectGroupName_A);
         fcAUplinkSetValue.setUplinkSetName(fcAUplinkSetName);
         fcAUplinkSetValue.setUplinkSetType(fcUplinkSetType);
 
         final UplinkSetValue fcBUplinkSetValue = new UplinkSetValue();
         fcBUplinkSetValue.setBayPortMap(fcBayPortMapB);
-        fcBUplinkSetValue.setLigName(resourceName);
+        fcBUplinkSetValue.setLigName(RESOURCE_NAME);
         fcBUplinkSetValue.setNetworkNames(logicalInterconnectGroupName_B);
         fcBUplinkSetValue.setUplinkSetName(fcBUplinkSetName);
         fcBUplinkSetValue.setUplinkSetType(fcUplinkSetType);
@@ -201,8 +204,19 @@ public class LogicalInterconnectGroupClientSample {
         uplinkSetValues.add(fcAUplinkSetValue);
         uplinkSetValues.add(fcBUplinkSetValue);
 
-        ResourceDtoUtilsWrapper resourceDtoUtilsWrapper = new ResourceDtoUtilsWrapper(resourceDtoUtils);
-        uplinkSetGroupDto = resourceDtoUtilsWrapper.buildUplinkSetGroupDto(uplinkSetValues);
+        uplinkSetGroupDto = buildUplinkSetGroupDto(uplinkSetValues);
+
+        return uplinkSetGroupDto;
+    }
+
+    public List<UplinkSetGroup> buildUplinkSetGroupDto(final List<UplinkSetValue> uplinkSetValues) {
+        final List<UplinkSetGroup> uplinkSetGroupDto = new ArrayList<>();
+
+        for (UplinkSetValue uplinkSetValue : uplinkSetValues) {
+            uplinkSetGroupDto.add(resourceDtoUtils.buildUplinkSetDto(uplinkSetValue.getLigName(),
+                    uplinkSetValue.getUplinkSetName(), uplinkSetValue.getUplinkSetType(), uplinkSetValue.getBayPortMap(),
+                    uplinkSetValue.getNetworkNames()));
+        }
 
         return uplinkSetGroupDto;
     }

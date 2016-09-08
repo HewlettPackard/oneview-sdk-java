@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
+import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.InterconnectFibDataEntry;
 import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
 import com.hp.ov.sdk.dto.InternalVlanAssociation;
@@ -44,6 +45,8 @@ import com.hp.ov.sdk.dto.networking.logicalinterconnects.LogicalInterconnect;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.PhysicalInterconnectFirmware;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.PortMonitor;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.server.EnclosureClient;
+import com.hp.ov.sdk.rest.client.servers.EnclosureClientSample;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
@@ -58,6 +61,7 @@ public class LogicalInterconnectClientSample {
 
     private final LogicalInterconnectClient logicalInterconnectClient;
     private final FirmwareDriverClient firmwareDriverClient;
+    private final EnclosureClient enclosureClient;
     private final OneViewClient oneViewClient;
 
     // These are variables to be defined by user
@@ -66,7 +70,7 @@ public class LogicalInterconnectClientSample {
     private static final String RESOURCE_NAME = "Encl1-LI";
     private static final String RESOURCE_ID = "1a26f2cc-8d41-4617-8e1f-55c2900148b1";
     private static final String TELEMETRY_ID = "2770fdeb-5c49-499c-aef7-3eac45f2887e";
-    private static final String ENCLOSURE_URI = "/rest/enclosures/09SGH100X6J1";
+    private static final String BAY_NUMBER = "1";
     private static final String NETWORK_NAME = "Prod_401";
 
     private static final String INTERCONNECT_NAME_ONE = "Encl1, interconnect 1";
@@ -76,6 +80,7 @@ public class LogicalInterconnectClientSample {
     private LogicalInterconnectClientSample() {
         this.oneViewClient = OneViewClientSample.getOneViewClient();
 
+        this.enclosureClient = oneViewClient.enclosure();
         this.logicalInterconnectClient = oneViewClient.logicalInterconnect();
         this.firmwareDriverClient = oneViewClient.firmwareDriver();
     }
@@ -309,15 +314,17 @@ public class LogicalInterconnectClientSample {
     private void createLogicalInterconnect() {
         Location location = new Location();
 
+        String enclosureUri = this.enclosureClient.getByName(EnclosureClientSample.RESOURCE_NAME_UPDATED).get(0).getUri();
+
         // ENCLOSURE
         LocationEntry enclosureEntry = new LocationEntry();
         enclosureEntry.setType(LocationType.Enclosure);
-        enclosureEntry.setValue(ENCLOSURE_URI);
+        enclosureEntry.setValue(enclosureUri);
 
         // BAY
         LocationEntry bayEntry = new LocationEntry();
         bayEntry.setType(LocationType.Bay);
-        bayEntry.setValue("1");
+        bayEntry.setValue(BAY_NUMBER);
 
         location.setLocationEntries(Arrays.asList(enclosureEntry, bayEntry));
 
@@ -327,7 +334,9 @@ public class LogicalInterconnectClientSample {
     }
 
     private void deleteLogicalInterconnect() {
-        TaskResourceV2 task = logicalInterconnectClient.deleteInterconnect(ENCLOSURE_URI, "1", false);
+        String enclosureUri = this.enclosureClient.getByName(EnclosureClientSample.RESOURCE_NAME_UPDATED).get(0).getUri();
+
+        TaskResourceV2 task = logicalInterconnectClient.deleteInterconnect(enclosureUri, BAY_NUMBER, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -335,7 +344,7 @@ public class LogicalInterconnectClientSample {
     private void updateLogicalInterconnectInternalNetworks() {
         LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-        String networkUri = oneViewClient.ethernetNetwork().getByName(NETWORK_NAME).getUri();
+        String networkUri = oneViewClient.ethernetNetwork().getByName(NETWORK_NAME).get(0).getUri();
 
         TaskResourceV2 task = logicalInterconnectClient.updateInternalNetworks(
                 logicalInterconnect.getResourceId(), Arrays.asList(networkUri), false);
@@ -378,7 +387,8 @@ public class LogicalInterconnectClientSample {
         LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
         InterconnectSettingsV2 settings = new InterconnectSettingsV2();
-        settings.setType("InterconnectSettingsV3");
+        settings.setType(ResourceCategory.RC_LOGICAL_INTERCONNECT_SETTINGS_V200);
+        settings.setType(ResourceCategory.RC_LOGICAL_INTERCONNECT_SETTINGS_V300);
         settings.setEthernetSettings(logicalInterconnect.getEthernetSettings());
         settings.setFcoeSettings(logicalInterconnect.getFcoeSettings());
         settings.getEthernetSettings().setMacRefreshInterval(6);

@@ -44,9 +44,10 @@ public class NetworkSetClientSample {
 
     // test values - user input
     // ================================
-    private static final String resourceId = "58e65c0f-45e0-4003-bb8f-91922bf7cbf9";
-    private static final String resourceName = "NetworkSet_Prod";
-    private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402", "Prod_403", "Prod_404");
+    private static final String RESOURCE_ID = "46b89d3c-54b3-4948-96f8-c156182012da";
+    private static final String RESOURCE_NAME = "NetworkSet_Prod";
+    private static final String RESOURCE_NAME_UPDATED = RESOURCE_NAME + "_Updated";
+    private static final List<String> NETWORK_NAMES = Arrays.asList("Prod_401", "Prod_402", "Prod_403", "Prod_404");
     // ================================
 
     private NetworkSetClientSample() {
@@ -57,60 +58,59 @@ public class NetworkSetClientSample {
     }
 
     private void getNetworkSetById() {
-        NetworkSet networkSet = client.getById(resourceId);
+        NetworkSet networkSet = client.getById(RESOURCE_ID);
 
-        LOGGER.info("NetworkSet object returned to client : " + networkSet.toJsonString());
+        LOGGER.info("NetworkSet object returned to client: {}", networkSet.toJsonString());
     }
 
     private void getAllNetworkSet() {
-
         ResourceCollection<NetworkSet> networkSets = client.getAll();
 
-        LOGGER.info("NetworkSets returned to client (count) : " + networkSets.getCount());
+        LOGGER.info("NetworkSets returned to client: {}", networkSets.toJsonString());
     }
 
     private void getNetworkSetByName() {
-        NetworkSet networkSet = client.getByName(resourceName).get(0);
+        NetworkSet networkSet = client.getByName(RESOURCE_NAME).get(0);
 
-        LOGGER.info("NetworkSet object returned to client : " + networkSet.toJsonString());
+        LOGGER.info("NetworkSet object returned to client: {}", networkSet.toJsonString());
     }
 
     private void createNetworkSet() {
-        NetworkSet networkSet = resourceDtoUtils.buildNetworkSetDto(resourceName, networkNames);
+        NetworkSet networkSet = resourceDtoUtils.buildNetworkSetDto(RESOURCE_NAME, NETWORK_NAMES);
 
-        networkSet.setName(resourceName);
+        networkSet.setName(RESOURCE_NAME);
         networkSet.setType(ResourceCategory.RC_NETWORKSET);
         networkSet.setType(ResourceCategory.RC_NETWORKSET_V300);
 
         TaskResourceV2 task = this.client.create(networkSet, false);
 
-        LOGGER.info("Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void updateNetworkSet() {
-        NetworkSet networkSet = client.getByName(resourceName).get(0);
+        NetworkSet networkSet = client.getByName(RESOURCE_NAME).get(0);
 
-        networkSet.setName(resourceName + "_Updated");
+        networkSet.setName(RESOURCE_NAME_UPDATED);
 
-        TaskResourceV2 task = this.client.update(UrlUtils.getResourceIdFromUri(networkSet.getUri()),
-                networkSet, false);
+        TaskResourceV2 task = this.client.update(networkSet.getResourceId(), networkSet, false);
 
-        LOGGER.info("Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void deleteNetworkSet() {
-        NetworkSet networkSet = client.getByName(resourceName).get(0);
+        NetworkSet networkSet = client.getByName(RESOURCE_NAME_UPDATED).get(0);
 
-        TaskResourceV2 task = this.client.delete(UrlUtils.getResourceIdFromUri(networkSet.getUri()), false);
+        TaskResourceV2 task = this.client.delete(networkSet.getResourceId(), false);
 
-        LOGGER.info("Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     public static void main(final String[] args) {
         NetworkSetClientSample client = new NetworkSetClientSample();
 
-        client.getAllNetworkSet();
         client.createNetworkSet();
+
+        client.getAllNetworkSet();
         client.getNetworkSetById();
         client.getNetworkSetByName();
         client.updateNetworkSet();

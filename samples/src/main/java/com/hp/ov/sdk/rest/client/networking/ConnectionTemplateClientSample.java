@@ -15,6 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.networking;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.ethernet.Bandwidth;
@@ -27,6 +30,8 @@ import com.hp.ov.sdk.rest.client.OneViewClient;
  * operations on connection template resource
  */
 public class ConnectionTemplateClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionTemplateClientSample.class);
 
     private final ConnectionTemplateClient connectionTemplateClient;
 
@@ -47,29 +52,25 @@ public class ConnectionTemplateClientSample {
     private void getConnectionTemplate() {
         ConnectionTemplate connectionTemplate = this.connectionTemplateClient.getById(CONNECTION_TEMPLATE_RESOURCE_ID);
 
-        System.out.println("ConnectionTemplateClientSample : getConnectionTemplate : " +
-                "ConnectionTemplate object returned to client : " + connectionTemplate.toJsonString());
+        LOGGER.info("ConnectionTemplate object returned to client: {}", connectionTemplate.toJsonString());
     }
 
     private void getAllConnectionTemplates() {
         ResourceCollection<ConnectionTemplate> connectionTemplates = this.connectionTemplateClient.getAll();
 
-        System.out.println("ConnectionTemplateClientSample : getAllConnectionTemplates : " +
-                "ConnectionTemplates returned to client : " + connectionTemplates.toJsonString());
+        LOGGER.info("Connection templates returned to client: {}", connectionTemplates.toJsonString());
     }
 
     private void getConnectionTemplateByName() {
         ConnectionTemplate connectionTemplate = this.connectionTemplateClient.getByName(CONNECTION_TEMPLATE_RESOURCE_NAME).get(0);
 
-        System.out.println("ConnectionTemplateClientSample : getConnectionTemplateByName : " +
-                "ConnectionTemplate object returned to client : " + connectionTemplate.toJsonString());
+        LOGGER.info("ConnectionTemplate object returned to client: {}", connectionTemplate.toJsonString());
     }
 
     private void getDefaultConnectionTemplate() {
         ConnectionTemplate connectionTemplate = this.connectionTemplateClient.getDefaultConnectionTemplate();
 
-        System.out.println("ConnectionTemplateClientSample : getDefaultConnectionTemplate : " +
-                "ConnectionTemplate object returned to client : " + connectionTemplate.toJsonString());
+        LOGGER.info("Default connection template returned to client: {}", connectionTemplate.toJsonString());
     }
 
     private void updateConnectionTemplate() {
@@ -86,8 +87,7 @@ public class ConnectionTemplateClientSample {
 
         ConnectionTemplate updatedConnectionTemplate = this.connectionTemplateClient.update(resourceId, connectionTemplate);
 
-        System.out.println("ConnectionTemplateClientSample : updateConnectionTemplate : " +
-                "ConnectionTemplate object returned to client : " + updatedConnectionTemplate.toJsonString());
+        LOGGER.info("ConnectionTemplate object returned to client: {}", updatedConnectionTemplate.toJsonString());
     }
 
     public static void main(final String[] args) {

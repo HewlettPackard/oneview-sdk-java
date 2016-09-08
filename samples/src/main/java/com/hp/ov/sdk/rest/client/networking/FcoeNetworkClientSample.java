@@ -49,7 +49,8 @@ public class FcoeNetworkClientSample {
         FcoeNetwork fcoeNetwork = new FcoeNetwork();
 
         fcoeNetwork.setName(FCOE_NETWORK_NAME);
-        fcoeNetwork.setType(ResourceCategory.RC_FCOE_NETWORK);
+        fcoeNetwork.setType(ResourceCategory.RC_FCOE_NETWORK); //v200
+        fcoeNetwork.setType(ResourceCategory.RC_FCOE_NETWORK_V300); //v300
         fcoeNetwork.setVlanId(Integer.valueOf(400));
 
         TaskResourceV2 task = this.client.create(fcoeNetwork, false);

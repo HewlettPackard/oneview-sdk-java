@@ -19,15 +19,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.hp.ov.sdk.dto.servers.serverprofile.ProfileConnection;
-import com.hp.ov.sdk.dto.servers.SanStorage;
-import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
-import com.hp.ov.sdk.dto.servers.VolumeAttachment;
-import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.dto.samples.NetworkForServerProfile;
 import com.hp.ov.sdk.dto.samples.SanStorageForServerProfile.StorageVolume;
 import com.hp.ov.sdk.dto.samples.ServerProfileValue;
-import com.hp.ov.sdk.dto.samples.UplinkSetValue;
+import com.hp.ov.sdk.dto.servers.SanStorage;
+import com.hp.ov.sdk.dto.servers.VolumeAttachment;
+import com.hp.ov.sdk.dto.servers.serverprofile.ProfileConnection;
+import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 
@@ -37,18 +35,6 @@ public class ResourceDtoUtilsWrapper {
 
     public ResourceDtoUtilsWrapper(ResourceDtoUtils resourceDtoUtils) {
         this.resourceDtoUtils = resourceDtoUtils;
-    }
-
-    public List<UplinkSetGroup> buildUplinkSetGroupDto(final List<UplinkSetValue> uplinkSetValues) {
-        final List<UplinkSetGroup> uplinkSetGroupDto = new ArrayList<UplinkSetGroup>();
-
-        for (UplinkSetValue uplinkSetValue : uplinkSetValues) {
-            uplinkSetGroupDto.add(resourceDtoUtils.buildUplinkSetDto(uplinkSetValue.getLigName(),
-                    uplinkSetValue.getUplinkSetName(), uplinkSetValue.getUplinkSetType(), uplinkSetValue.getBayPortMap(),
-                    uplinkSetValue.getNetworkNames()));
-        }
-
-        return uplinkSetGroupDto;
     }
 
     public ServerProfile buildServerProfile(ApiVersion apiVersion, final ServerProfileValue serverProfileValue) {
