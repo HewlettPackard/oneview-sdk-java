@@ -16,6 +16,9 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -24,6 +27,8 @@ import com.hp.ov.sdk.dto.networking.fcoenetworks.FcoeNetwork;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class FcoeNetworkClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FcoeNetworkClientSample.class);
 
     // These are variables to be defined by the user
     // ================================
@@ -49,29 +54,25 @@ public class FcoeNetworkClientSample {
 
         TaskResourceV2 task = this.client.create(fcoeNetwork, false);
 
-        System.out.println("FcoeNetworkClientSample : createFcoeNetwork : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void getFcoeNetwork() {
         FcoeNetwork fcoeNetwork = client.getById(FCOE_NETWORK_RESOURCE_ID);
 
-        System.out.println("FcoeNetworkClientSample : getFcoeNetwork : " +
-                "FcoeNetwork object returned to client : " + fcoeNetwork);
+        LOGGER.info("FcoeNetwork object returned to client : " + fcoeNetwork.toJsonString());
     }
 
     private void getAllFcoeNetworks() {
         ResourceCollection<FcoeNetwork> fcoeNetworks = client.getAll();
 
-        System.out.println("FcoeNetworkClientSample : getAllFcoeNetworks : " +
-                "FcoeNetworks returned to client (count) : " + fcoeNetworks.getCount());
+        LOGGER.info("FcoeNetworks returned to client (count) : " + fcoeNetworks.getCount());
     }
 
     private void getFcoeNetworkByName() {
         FcoeNetwork fcoeNetwork = client.getByName(FCOE_NETWORK_NAME).get(0);
 
-        System.out.println("FcoeNetworkClientSample : getFcoeNetworkByName : " +
-                "FcoeNetwork object returned to client : " + fcoeNetwork);
+        LOGGER.info("FcoeNetwork object returned to client : " + fcoeNetwork.toJsonString());
     }
 
     private void updateFcoeNetwork() {
@@ -82,8 +83,7 @@ public class FcoeNetworkClientSample {
         TaskResourceV2 task = this.client.update(fcoeNetwork.getResourceId(),
                 fcoeNetwork, false);
 
-        System.out.println("FcoeNetworkClientSample : updateFcoeNetwork : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void deleteFcoeNetwork() {
@@ -91,8 +91,7 @@ public class FcoeNetworkClientSample {
 
         TaskResourceV2 task = this.client.delete(fcoeNetwork.getResourceId(), false);
 
-        System.out.println("FcoeNetworkClientSample : deleteFcoeNetwork : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     public static void main(String[] args) {

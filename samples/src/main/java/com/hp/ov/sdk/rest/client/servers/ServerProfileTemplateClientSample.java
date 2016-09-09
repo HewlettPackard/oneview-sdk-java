@@ -77,7 +77,6 @@ public class ServerProfileTemplateClientSample {
     private static final String FC_2_NETWORK_URI = "/rest/fc-networks/346edfb2-a940-4d8a-9b4b-1e1bf542168f";
     private static final String STORAGE_VOLUME_URI = "/rest/storage-volumes/8CA32073-02F0-461C-A907-433EA0FAD8C5";
     private static final String SERVER_HARDWARE_URI = "/rest/server-hardware/37333036-3831-4753-4831-30355838524E";
-    private static final String ENCLOSURE_GROUP_NAME = "encl_group";
     // ================================
 
     private ServerProfileTemplateClientSample() {
@@ -167,7 +166,7 @@ public class ServerProfileTemplateClientSample {
                 .getByName(SERVER_PROFILE_TEMPLATE_NAME).get(0);
 
         String serverHardwareTypeUri = serverHardwareClient.getAll().get(0).getServerHardwareTypeUri();
-        String enclosureGroupUri = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0).getUri();
+        String enclosureGroupUri = enclosureGroupClient.getByName(EnclosureGroupClientSample.ENCLOSURE_GROUP_NAME).get(0).getUri();
 
         ServerProfileTemplate serverProfileTemplateUpdated = serverProfileTemplateClient
                 .getTransformation(serverProfileTemplate.getResourceId(), serverHardwareTypeUri, enclosureGroupUri);

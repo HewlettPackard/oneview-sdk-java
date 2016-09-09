@@ -50,7 +50,6 @@ import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClientSample;
 import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
-import com.hp.ov.sdk.rest.client.server.ServerHardwareClient;
 import com.hp.ov.sdk.rest.client.server.ServerProfileClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeClientSample;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
@@ -69,13 +68,12 @@ public class ServerProfileClientSample {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerProfileClientSample.class);
 
     private final ServerProfileClient serverProfileClient;
-    private final ServerHardwareClient serverHardwareClient;
     private final EnclosureGroupClient enclosureGroupClient;
     private final OneViewClient oneViewClient;
 
     // test values - user input
     // ================================
-    private static final String RESOURCE_ID = "6e34a417-b64b-489f-8132-a3b17eeda285";
+    private static final String RESOURCE_ID = "dd27c36f-5666-446d-90e1-877a4eb9c3e8";
     private static final String SERVER_PROFILE_NAME = "server-profile";
     private static final String SERVER_PROFILE_NAME_UPDATED = SERVER_PROFILE_NAME + "_Updated";
     private static final String BAY_NAME = "Encl1, bay 15";
@@ -89,7 +87,6 @@ public class ServerProfileClientSample {
         oneViewClient = OneViewClientSample.getOneViewClient();
 
         serverProfileClient = oneViewClient.serverProfile();
-        serverHardwareClient = oneViewClient.serverHardware();
         enclosureGroupClient = oneViewClient.enclosureGroup();
     }
 
