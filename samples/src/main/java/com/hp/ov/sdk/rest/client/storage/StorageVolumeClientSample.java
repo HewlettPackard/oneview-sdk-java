@@ -102,7 +102,7 @@ public class StorageVolumeClientSample {
         StorageVolume storageVolume = this.storageVolumeClient.getByName(STORAGE_VOLUME_NAME_UPDATED).get(0);
         TaskResourceV2 taskResource = this.storageVolumeClient.delete(storageVolume.getResourceId(), false);
 
-        LOGGER.info("Task object returned to client : " + taskResource);
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void createPrivateStorageVolume() {
@@ -152,7 +152,7 @@ public class StorageVolumeClientSample {
         TaskResourceV2 taskResource = this.storageVolumeClient.deleteSnapshot(
                 storageVolume.getResourceId(), storageVolumeSnapshot.getResourceId(), false);
 
-        LOGGER.info("Task object returned to client : " + taskResource);
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void getExtraManagedStorageVolumePaths() {
@@ -172,7 +172,7 @@ public class StorageVolumeClientSample {
         TaskResourceV2 taskResource = this.storageVolumeClient.repairExtraManagedPath(
                 deleteExtraManagedStorageVolume, false);
 
-        LOGGER.info("Task object returned to client : " + taskResource);
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private StorageVolumeSnapshot buildStorageVolumeSnapshot() {

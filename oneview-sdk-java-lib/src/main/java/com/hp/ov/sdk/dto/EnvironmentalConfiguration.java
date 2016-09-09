@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.dto.generated;
+package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,6 +22,10 @@ import java.util.List;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import com.hp.ov.sdk.dto.generated.LicenseRequirement;
+import com.hp.ov.sdk.dto.generated.PowerCapType;
+import com.hp.ov.sdk.dto.generated.PsuList;
 
 public final class EnvironmentalConfiguration implements Serializable {
 
@@ -298,79 +302,17 @@ public final class EnvironmentalConfiguration implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        EnvironmentalConfiguration that = (EnvironmentalConfiguration) obj;
-
-        return new EqualsBuilder()
-                .append(calibratedMaxPower, that.calibratedMaxPower)
-                .append(capHistorySupported, that.capHistorySupported)
-                .append(height, that.height)
-                .append(historyBufferSize, that.historyBufferSize)
-                .append(historySampleIntervalSeconds, that.historySampleIntervalSeconds)
-                .append(idleMaxPower, that.idleMaxPower)
-                .append(licenseRequirement, that.licenseRequirement)
-                .append(powerCapType, that.powerCapType)
-                .append(powerHistorySupported, that.powerHistorySupported)
-                .append(psuList, that.psuList)
-                .append(rackId, that.rackId)
-                .append(rackModel, that.rackModel)
-                .append(rackName, that.rackName)
-                .append(rackUHeight, that.rackUHeight)
-                .append(relativeOrder, that.relativeOrder)
-                .append(thermalHistorySupported, that.thermalHistorySupported)
-                .append(uSlot, that.uSlot)
-                .append(utilizationHistorySupported, that.utilizationHistorySupported)
-                .isEquals();
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(calibratedMaxPower)
-                .append(capHistorySupported)
-                .append(height)
-                .append(historyBufferSize)
-                .append(historySampleIntervalSeconds)
-                .append(idleMaxPower)
-                .append(licenseRequirement)
-                .append(powerCapType)
-                .append(powerHistorySupported)
-                .append(psuList)
-                .append(rackId)
-                .append(rackModel)
-                .append(rackName)
-                .append(rackUHeight)
-                .append(relativeOrder)
-                .append(thermalHistorySupported)
-                .append(uSlot)
-                .append(utilizationHistorySupported)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("calibratedMaxPower", calibratedMaxPower)
-                .append("capHistorySupported", capHistorySupported)
-                .append("height", height)
-                .append("historyBufferSize", historyBufferSize)
-                .append("historySampleIntervalSeconds", historySampleIntervalSeconds)
-                .append("idleMaxPower", idleMaxPower)
-                .append("licenseRequirement", licenseRequirement)
-                .append("powerCapType", powerCapType)
-                .append("powerHistorySupported", powerHistorySupported)
-                .append("psuList", psuList)
-                .append("rackId", rackId)
-                .append("rackModel", rackModel)
-                .append("rackName", rackName)
-                .append("rackUHeight", rackUHeight)
-                .append("relativeOrder", relativeOrder)
-                .append("thermalHistorySupported", thermalHistorySupported)
-                .append("uSlot", uSlot)
-                .append("utilizationHistorySupported", utilizationHistorySupported)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
+
 }

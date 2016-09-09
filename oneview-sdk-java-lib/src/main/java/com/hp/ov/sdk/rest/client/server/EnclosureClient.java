@@ -19,6 +19,7 @@ package com.hp.ov.sdk.rest.client.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
 import com.hp.ov.sdk.dto.HttpMethodType;
@@ -28,7 +29,6 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.UtilizationData;
-import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.servers.enclosure.AddEnclosure;
 import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
 import com.hp.ov.sdk.rest.client.BaseClient;

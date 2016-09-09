@@ -25,6 +25,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
 import com.hp.ov.sdk.dto.HttpMethodType;
@@ -32,7 +33,6 @@ import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.UtilizationData;
-import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.servers.enclosure.AddEnclosure;
 import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
 import com.hp.ov.sdk.rest.client.BaseClient;
