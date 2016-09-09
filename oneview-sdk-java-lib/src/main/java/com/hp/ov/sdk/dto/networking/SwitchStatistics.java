@@ -82,4 +82,12 @@ public class SwitchStatistics implements Serializable {
         return ToStringBuilder.reflectionToString(this);
     }
 
+    public String toJsonString() {
+        return System.getProperty("line.separator")
+            + new GsonBuilder()
+                .setPrettyPrinting()
+                .disableHtmlEscaping()
+                .create().toJson(this);
+    }
+
 }

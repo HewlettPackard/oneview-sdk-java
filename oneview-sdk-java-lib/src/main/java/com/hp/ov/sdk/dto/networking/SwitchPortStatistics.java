@@ -24,6 +24,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.google.gson.GsonBuilder;
+
 public class SwitchPortStatistics implements Serializable {
 
     private static final long serialVersionUID = 2807817145727877275L;
@@ -168,6 +170,14 @@ public class SwitchPortStatistics implements Serializable {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
+    }
+
+    public String toJsonString() {
+        return System.getProperty("line.separator")
+            + new GsonBuilder()
+                .setPrettyPrinting()
+                .disableHtmlEscaping()
+                .create().toJson(this);
     }
 
 }
