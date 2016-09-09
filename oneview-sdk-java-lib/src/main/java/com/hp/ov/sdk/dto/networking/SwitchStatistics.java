@@ -24,6 +24,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.google.gson.GsonBuilder;
+
 public class SwitchStatistics implements Serializable {
 
     private static final long serialVersionUID = -7295293092877719173L;
@@ -67,37 +69,17 @@ public class SwitchStatistics implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        SwitchStatistics that = (SwitchStatistics) obj;
-
-        return new EqualsBuilder()
-                .append(genericPortStatistics, that.genericPortStatistics)
-                .append(moduleStatistics, that.moduleStatistics)
-                .append(switchId, that.switchId)
-                .append(type, that.type)
-                .isEquals();
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(genericPortStatistics)
-                .append(moduleStatistics)
-                .append(switchId)
-                .append(type)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("genericPortStatistics", genericPortStatistics)
-                .append("moduleStatistics", moduleStatistics)
-                .append("switchId", switchId)
-                .append("type", type)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
+
 }

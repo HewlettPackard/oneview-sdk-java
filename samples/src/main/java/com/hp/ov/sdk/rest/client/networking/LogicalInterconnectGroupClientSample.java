@@ -82,7 +82,7 @@ public class LogicalInterconnectGroupClientSample {
     private void getLogicalInterconnectGroup() {
         LogicalInterconnectGroup logicalInterconnectGroup = client.getById(resourceId);
 
-        LOGGER.info("LogicalInterconnectGroup object returned to client : " + logicalInterconnectGroup);
+        LOGGER.info("LogicalInterconnectGroup object returned to client : " + logicalInterconnectGroup.toJsonString());
     }
 
     private void getAllLogicalInterconnectGroups() {
@@ -127,7 +127,7 @@ public class LogicalInterconnectGroupClientSample {
         LogicalInterconnectGroup lig = logicalInterconnectGroups.getMembers().get(0);
         TaskResourceV2 task = this.client.delete(lig.getResourceId(), false);
 
-        LOGGER.info("Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void getDefaultInterconnectSettings() {

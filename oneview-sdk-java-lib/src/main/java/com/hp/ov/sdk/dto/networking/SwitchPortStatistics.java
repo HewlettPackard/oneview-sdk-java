@@ -24,8 +24,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.hp.ov.sdk.dto.networking.CapabilityType;
-
 public class SwitchPortStatistics implements Serializable {
 
     private static final long serialVersionUID = 2807817145727877275L;
@@ -159,67 +157,17 @@ public class SwitchPortStatistics implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        SwitchPortStatistics that = (SwitchPortStatistics) obj;
-
-        return new EqualsBuilder()
-                .append(capabilityType, that.capabilityType)
-                .append(ifInDiscards, that.ifInDiscards)
-                .append(ifInErrors, that.ifInErrors)
-                .append(ifInOctets, that.ifInOctets)
-                .append(ifInUcastPkts, that.ifInUcastPkts)
-                .append(ifOutDiscards, that.ifOutDiscards)
-                .append(ifOutErrors, that.ifOutErrors)
-                .append(ifOutOctets, that.ifOutOctets)
-                .append(ifOutUcastPkts, that.ifOutUcastPkts)
-                .append(interfaceIndexId, that.interfaceIndexId)
-                .append(portName, that.portName)
-                .append(portNumber, that.portNumber)
-                .append(type, that.type)
-                .append(vlanId, that.vlanId)
-                .isEquals();
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(capabilityType)
-                .append(ifInDiscards)
-                .append(ifInErrors)
-                .append(ifInOctets)
-                .append(ifInUcastPkts)
-                .append(ifOutDiscards)
-                .append(ifOutErrors)
-                .append(ifOutOctets)
-                .append(ifOutUcastPkts)
-                .append(interfaceIndexId)
-                .append(portName)
-                .append(portNumber)
-                .append(type)
-                .append(vlanId)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .append("capabilityType", capabilityType)
-                .append("ifInDiscards", ifInDiscards)
-                .append("ifInErrors", ifInErrors)
-                .append("ifInOctets", ifInOctets)
-                .append("ifInUcastPkts", ifInUcastPkts)
-                .append("ifOutDiscards", ifOutDiscards)
-                .append("ifOutErrors", ifOutErrors)
-                .append("ifOutOctets", ifOutOctets)
-                .append("ifOutUcastPkts", ifOutUcastPkts)
-                .append("interfaceIndexId", interfaceIndexId)
-                .append("portName", portName)
-                .append("portNumber", portNumber)
-                .append("type", type)
-                .append("vlanId", vlanId)
-                .toString();
+        return ToStringBuilder.reflectionToString(this);
     }
+
 }

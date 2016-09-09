@@ -23,10 +23,10 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
+import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.generated.ConnectionProperty;
-import com.hp.ov.sdk.dto.generated.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.generated.ValueFormat;
 import com.hp.ov.sdk.dto.generated.ValueType;
 import com.hp.ov.sdk.dto.networking.Port;
@@ -35,6 +35,7 @@ import com.hp.ov.sdk.dto.networking.SwitchStatistics;
 import com.hp.ov.sdk.dto.networking.switches.Switch;
 import com.hp.ov.sdk.dto.networking.switches.SwitchManagementConnection;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
 public class SwitchClientSample {
 
@@ -113,14 +114,14 @@ public class SwitchClientSample {
         EnvironmentalConfiguration environmentalConfiguration = this.switchClient
                 .getEnvironmentalConfiguration(aSwitch.getResourceId());
 
-        LOGGER.info("EnvironmentalConfiguration object returned to client: {}", environmentalConfiguration);
+        LOGGER.info("EnvironmentalConfiguration object returned to client: {}", JsonPrettyPrinter.print(environmentalConfiguration));
     }
 
     private void getSwitchStatistics() {
         Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
         SwitchStatistics switchStatistics = this.switchClient.getStatistics(aSwitch.getResourceId());
 
-        LOGGER.info("SwitchStatistics object returned to client: {}", switchStatistics);
+        LOGGER.info("SwitchStatistics object returned to client: {}", JsonPrettyPrinter.print(switchStatistics));
     }
 
     private void getSwitchPortStatistics() {
@@ -128,7 +129,7 @@ public class SwitchClientSample {
         SwitchPortStatistics switchPortStatistics = this.switchClient.getPortStatistics(aSwitch.getResourceId(),
                 SWITCH_PORT_NAME);
 
-        LOGGER.info("SwitchPortStatistics object returned to client: {}", switchPortStatistics);
+        LOGGER.info("SwitchPortStatistics object returned to client: {}", JsonPrettyPrinter.print(switchPortStatistics));
     }
 
     private void updatePorts() {
@@ -161,6 +162,7 @@ public class SwitchClientSample {
         mgmt.setConnectionProperties(properties);
 
         switchObj.setSwitchManagementConnection(mgmt);
+        switchObj.setType(ResourceCategory.RC_SWITCH);
         switchObj.setType(ResourceCategory.RC_SWITCH_V300);
 
         return switchObj;
