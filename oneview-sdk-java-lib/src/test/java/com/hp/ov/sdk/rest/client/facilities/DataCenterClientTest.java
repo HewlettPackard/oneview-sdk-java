@@ -120,7 +120,7 @@ public class DataCenterClientTest {
         String expectedUri = ResourceUris.DATA_CENTER_URI + "/" + ANY_DATA_CENTER_RESOURCE_ID
                 + "/" + ResourceUris.DATA_CENTER_VISUAL_CONTENT_URI;
 
-        then(baseClient).should().getResourceList(expectedUri, new TypeToken<List<VisualContent>>(){});
+        then(baseClient).should().getResourceList(expectedUri, VisualContent.class);
     }
 
 }

@@ -20,7 +20,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.dto.EndpointResponse;
 import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
@@ -193,7 +192,6 @@ public class FcSanManagedSanClient {
         return endpointsCsvFileResponse;
     }
 
-
     /**
      * Retrieves a list of associations between provided WWNs and the SANs (if any) on which they reside
      *
@@ -205,8 +203,7 @@ public class FcSanManagedSanClient {
         LOGGER.info("FcSanManagedSanClient : getWwnAssociations : Start");
 
         List<LocateSanResponse> sanResponse = baseClient.getResourceList(
-                UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, FC_SANS_WWN_LOCATE_URI, wwn),
-                new TypeToken<List<LocateSanResponse>>(){});
+                UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, FC_SANS_WWN_LOCATE_URI, wwn), LocateSanResponse.class);
 
         LOGGER.info("FcSanManagedSanClient : getWwnAssociations : End");
 

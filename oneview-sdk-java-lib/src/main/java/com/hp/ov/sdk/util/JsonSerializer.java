@@ -27,19 +27,19 @@ public class JsonSerializer {
     public String toJson(Object source, ApiVersion apiVersion) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
-        return converter.convertObjectToJsonString(source, apiVersion.getValue());
+        return converter.resourceToJson(source, apiVersion.getValue());
     }
 
     public String toJsonArray(List<?> source, ApiVersion apiVersion) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
-        return converter.convertObjectToJsonString(source, apiVersion.getValue());
+        return converter.resourceToJson(source, apiVersion.getValue());
     }
 
     public String toJsonArray(Patch source, ApiVersion apiVersion) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
-        return converter.convertObjectToJsonString(Arrays.asList(source), apiVersion.getValue());
+        return converter.resourceToJson(Arrays.asList(source), apiVersion.getValue());
     }
 
 }

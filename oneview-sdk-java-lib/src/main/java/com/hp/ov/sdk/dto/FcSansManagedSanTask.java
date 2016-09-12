@@ -42,7 +42,7 @@ public class FcSansManagedSanTask {
         List<FcIssueResponse> issues = new ArrayList<>();
 
         for (String taskOutput : task.getTaskOutput()) {
-            issues.add(adaptor.buildResourceObject(taskOutput, FcIssueResponse.class));
+            issues.add(adaptor.buildResource(taskOutput, FcIssueResponse.class));
         }
         return issues;
     }

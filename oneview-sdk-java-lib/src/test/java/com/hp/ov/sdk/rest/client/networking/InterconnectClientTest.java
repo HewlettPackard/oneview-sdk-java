@@ -175,8 +175,7 @@ public class InterconnectClientTest {
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.INTERCONNECT_NAME_SERVERS_URI;
 
-        then(baseClient).should().getResourceList(expectedUri,
-                new TypeToken<List<NameServer>>(){});
+        then(baseClient).should().getResourceList(expectedUri, NameServer.class);
     }
 
 }

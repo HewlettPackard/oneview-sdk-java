@@ -18,8 +18,6 @@ package com.hp.ov.sdk.rest.client.server;
 
 import static org.mockito.BDDMockito.then;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -27,7 +25,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.base.Optional;
-import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.AvailableStorageSystem;
 import com.hp.ov.sdk.dto.AvailableTargets;
@@ -203,8 +200,7 @@ public class ServerProfileClientTest {
     public void shouldGetAvailableServers() {
         client.getAvailableServers();
 
-        then(baseClient).should().getResourceList(ResourceUris.AVAILABLE_SERVERS_URI,
-                new TypeToken<List<AvailableServers>>() {});
+        then(baseClient).should().getResourceList(ResourceUris.AVAILABLE_SERVERS_URI, AvailableServers.class);
     }
 
     @Test
@@ -212,7 +208,7 @@ public class ServerProfileClientTest {
         client.getAvailableServers(ANY_HARDWARE_TYPE_URI, ANY_ENCLOSURE_GROUP_URI);
 
         then(baseClient).should().getResourceList(ResourceUris.AVAILABLE_SERVERS_URI,
-                new TypeToken<List<AvailableServers>>() {},
+                AvailableServers.class,
                 new UrlParameter("serverHardwareTypeUri", ANY_HARDWARE_TYPE_URI),
                 new UrlParameter("enclosureGroupUri", ANY_ENCLOSURE_GROUP_URI));
     }
@@ -222,7 +218,7 @@ public class ServerProfileClientTest {
         client.getAvailableServers(ANY_PROFILE_URI);
 
         then(baseClient).should().getResourceList(ResourceUris.AVAILABLE_SERVERS_URI,
-                new TypeToken<List<AvailableServers>>() {},
+                AvailableServers.class,
                 new UrlParameter("profileUri", ANY_PROFILE_URI));
     }
 

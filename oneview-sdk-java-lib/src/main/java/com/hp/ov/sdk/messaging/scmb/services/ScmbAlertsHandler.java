@@ -38,7 +38,7 @@ public class ScmbAlertsHandler {
     public void handleMessage(final String message) {
         LOGGER.debug("ScmbAlertsHandler : handleMessage : Message Received: " + message);
 
-        ScmbAlertsMessageDto alertsDto = adaptor.buildResourceObject(message, ScmbAlertsMessageDto.class);
+        ScmbAlertsMessageDto alertsDto = adaptor.buildResource(message, ScmbAlertsMessageDto.class);
 
         LOGGER.debug("ScmbAlertsHandler : handleMessage :  value from Dto : resourceUri: " + alertsDto.getResourceUri());
 

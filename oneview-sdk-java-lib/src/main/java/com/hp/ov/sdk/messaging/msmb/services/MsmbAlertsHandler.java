@@ -38,7 +38,7 @@ public class MsmbAlertsHandler {
         LOGGER.debug("MsmbAlertsHandler : handlMessage : Message Received: " + message);
 
         // call adaptor
-        final MsmbAlertsMessageDto alertsDto = adaptor.buildResourceObject(message, MsmbAlertsMessageDto.class);
+        final MsmbAlertsMessageDto alertsDto = adaptor.buildResource(message, MsmbAlertsMessageDto.class);
         // invoke listener
         msmbListener.handleMsmbMessage(alertsDto);
     }

@@ -21,7 +21,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.storage.Drive;
 import com.hp.ov.sdk.dto.storage.saslogicaljbod.SasLogicalJbod;
@@ -111,7 +110,7 @@ public class SasLogicalJbodClient {
         LOGGER.info("SasLogicalJbodClient : getDrives : Start");
 
         List<Drive> drives = baseClient.getResourceList(
-                UrlUtils.createUrl(SAS_LOGICAL_JBOD_URI, resourceId, DRIVES), new TypeToken<List<Drive>>() {});
+                UrlUtils.createUrl(SAS_LOGICAL_JBOD_URI, resourceId, DRIVES), Drive.class);
 
         LOGGER.info("SasLogicalJbodClient : getDrives : End");
 

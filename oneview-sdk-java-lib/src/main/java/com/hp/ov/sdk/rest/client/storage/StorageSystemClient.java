@@ -20,7 +20,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
 import com.hp.ov.sdk.dto.HttpMethodType;
@@ -243,8 +242,7 @@ public class StorageSystemClient {
     public List<String> getHostTypes() {
         LOGGER.info("StorageSystemClient : getHostTypes : Start");
 
-        List<String> hostTypes = baseClient.getResourceList(ResourceUris.STORAGE_SYSTEM_HOST_TYPES_URI,
-                new TypeToken<List<String>>() {});
+        List<String> hostTypes = baseClient.getResourceList(ResourceUris.STORAGE_SYSTEM_HOST_TYPES_URI, String.class);
 
         LOGGER.info("StorageSystemClient : getHostTypes : End");
 

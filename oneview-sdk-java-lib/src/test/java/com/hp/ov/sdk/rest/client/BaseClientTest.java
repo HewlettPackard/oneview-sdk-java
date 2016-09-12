@@ -20,12 +20,9 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -39,7 +36,6 @@ import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -135,7 +131,6 @@ public class BaseClientTest {
 
     @Test(expected = SDKNoResponseException.class)
     public void shouldThrowExceptionWhenServerReturnsNoResponseForCreateResource() {
-        given(adaptor.buildJsonRequest(anyObject(), any(ApiVersion.class))).willReturn(new JSONObject());
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn("");
 
         this.baseClient.createResource(ANY_URI_STRING, new Object(), false);
@@ -146,7 +141,7 @@ public class BaseClientTest {
         Object body = new Object();
 
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
-        given(adaptor.buildResourceObject(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
+        given(adaptor.buildResource(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), anyString(), anyInt())).willReturn(new TaskResourceV2());
 
         Request expectedRequest = new Request(HttpMethodType.POST, ANY_URI_STRING, body);
@@ -168,7 +163,6 @@ public class BaseClientTest {
 
     @Test(expected = SDKNoResponseException.class)
     public void shouldThrowExceptionWhenServerReturnsNoResponseForUpdateResource() {
-        given(adaptor.buildJsonRequest(anyObject(), any(ApiVersion.class))).willReturn(new JSONObject());
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn("");
 
         this.baseClient.createResource(ANY_URI_STRING, new Object(), false);
@@ -179,7 +173,7 @@ public class BaseClientTest {
         Object body = new Object();
 
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
-        given(adaptor.buildResourceObject(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
+        given(adaptor.buildResource(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), anyString(), anyInt())).willReturn(new TaskResourceV2());
 
         Request expectedRequest = new Request(HttpMethodType.PUT, ANY_URI_STRING, body);
@@ -201,7 +195,6 @@ public class BaseClientTest {
 
     @Test(expected = SDKNoResponseException.class)
     public void shouldThrowExceptionWhenServerReturnsNoResponseForPatchResource() {
-        given(adaptor.buildJsonArray(any(Patch.class), any(ApiVersion.class))).willReturn(new JSONArray());
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn("");
 
         this.baseClient.patchResource(ANY_URI_STRING, new Patch(), false);
@@ -213,7 +206,7 @@ public class BaseClientTest {
         patch.setOp(Patch.PatchOperation.replace);
 
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
-        given(adaptor.buildResourceObject(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
+        given(adaptor.buildResource(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), anyString(), anyInt())).willReturn(new TaskResourceV2());
 
         Request expectedRequest = new Request(HttpMethodType.PATCH, ANY_URI_STRING, patch);
@@ -238,7 +231,7 @@ public class BaseClientTest {
     @Test
     public void shouldDeleteResource() {
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
-        given(adaptor.buildResourceObject(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
+        given(adaptor.buildResource(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), anyString(), anyInt())).willReturn(new TaskResourceV2());
 
         Request expectedRequest = new Request(HttpMethodType.DELETE, ANY_URI_STRING);

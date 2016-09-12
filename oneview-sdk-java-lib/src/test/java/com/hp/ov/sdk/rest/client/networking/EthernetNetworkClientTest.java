@@ -18,15 +18,12 @@ package com.hp.ov.sdk.rest.client.networking;
 
 import static org.mockito.BDDMockito.then;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
@@ -114,7 +111,7 @@ public class EthernetNetworkClientTest {
         String expectedUri = ResourceUris.ETHERNET_URI + "/" + ANY_ETHERNET_RESOURCE_ID
                 + "/" + ResourceUris.ASSOCIATED_PROFILES;
 
-        then(baseClient).should().getResourceList(expectedUri, new TypeToken<List<String>>() {});
+        then(baseClient).should().getResourceList(expectedUri, String.class);
     }
 
     @Test
@@ -124,6 +121,6 @@ public class EthernetNetworkClientTest {
         String expectedUri = ResourceUris.ETHERNET_URI + "/" + ANY_ETHERNET_RESOURCE_ID
                 + "/" + ResourceUris.ASSOCIATED_UPLINK_GROUPS;
 
-        then(baseClient).should().getResourceList(expectedUri, new TypeToken<List<String>>() {});
+        then(baseClient).should().getResourceList(expectedUri, String.class);
     }
 }
