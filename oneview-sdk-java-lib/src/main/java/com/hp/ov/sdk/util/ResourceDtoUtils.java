@@ -361,10 +361,17 @@ public class ResourceDtoUtils {
         final ServerProfile serverProfileDto = new ServerProfile();
         serverProfileDto.setDescription("profile");
 
-        if (apiVersion.getValue() < ApiVersion.V_200.getValue()) {
-            serverProfileDto.setType(ResourceCategory.RC_SERVER_PROFILE);
-        } else {
-            serverProfileDto.setType(ResourceCategory.RC_SERVER_PROFILE_V200);
+        switch (apiVersion) {
+            case V_120:
+                serverProfileDto.setType(ResourceCategory.RC_SERVER_PROFILE);
+                break;
+            case V_200:
+            case V_201:
+                serverProfileDto.setType(ResourceCategory.RC_SERVER_PROFILE_V200);
+                break;
+            case V_300:
+                serverProfileDto.setType(ResourceCategory.RC_SERVER_PROFILE_V300);
+                break;
         }
 
         serverProfileDto.setName(profileName);

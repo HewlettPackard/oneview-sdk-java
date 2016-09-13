@@ -206,7 +206,7 @@ public class LogicalEnclosureClientSample {
         client.patchLogicalEnclosure();
         client.updateLogicalEnclosure();
 
-        client.createLogicalEnclosure(); // only in 3.0
-        client.deleteLogicalEnclosure(); // only in 3.0
+        client.createLogicalEnclosure(); // only in 3.0 with Synergy
+        client.deleteLogicalEnclosure(); // only in 3.0 with Synergy
     }
 }

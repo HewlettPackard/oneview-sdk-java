@@ -38,7 +38,6 @@ public class AddStorageVolume implements Serializable {
     private String storageSystemUri;
     private String templateUri;
     private String wwn;
-    private String type;
 
     public String getDescription() {
         return description;
@@ -118,14 +117,6 @@ public class AddStorageVolume implements Serializable {
 
     public void setWwn(final String wwn) {
         this.wwn = wwn;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(final String type) {
-        this.type = type;
     }
 
 }

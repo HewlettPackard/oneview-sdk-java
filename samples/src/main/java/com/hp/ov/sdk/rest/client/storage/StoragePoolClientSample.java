@@ -67,8 +67,7 @@ public class StoragePoolClientSample {
     private void getStoragePoolByName() {
         StoragePool storagePool = this.storagePoolClient.getByName(STORAGE_POOL_NAME, getStorageSystem().getUri()).get(0);
 
-        System.out.println("StoragePoolClientSample : getStoragePoolByName : " +
-                "StoragePool object returned to client : " + storagePool.toJsonString());
+        LOGGER.info("StoragePools returned to client : " + storagePool.toJsonString());
     }
 
     private void addStoragePool() {

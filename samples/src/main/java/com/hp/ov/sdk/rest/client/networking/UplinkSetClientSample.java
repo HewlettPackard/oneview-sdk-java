@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.Location;
@@ -47,6 +50,8 @@ import com.hp.ov.sdk.util.UrlUtils;
  */
 public class UplinkSetClientSample {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UplinkSetClientSample.class);
+
     private final UplinkSetClient uplinkSetClient;
     private final EnclosureClient enclosureClient;
     private final InterconnectClient interconnectClient;
@@ -74,22 +79,19 @@ public class UplinkSetClientSample {
     private void getUplinkSetById() {
         UplinkSet uplinkSet = uplinkSetClient.getById(RESOURCE_ID);
 
-        System.out.println("UplinkSetClientSample : getUplinkSetById : " +
-                "UplinkSet object returned to client : " + uplinkSet.toJsonString());
+        LOGGER.info("Uplink set returned to client: {}", uplinkSet.toJsonString());
     }
 
     private void getAllUplinkSets() {
         ResourceCollection<UplinkSet> uplinkSets = uplinkSetClient.getAll();
 
-        System.out.println("UplinkSetClientSample : getAllUplinkSets : " +
-                "UplinkSets returned to client : " + uplinkSets.toJsonString());
+        LOGGER.info("Uplink sets returned to client: {}", uplinkSets.toJsonString());
     }
 
     private void getUplinkSetByName() {
         UplinkSet uplinkSet = uplinkSetClient.getByName(RESOURCE_NAME).get(0);
 
-        System.out.println("UplinkSetClientSample : getUplinkSetByName : " +
-                "UplinkSet object returned to client : " + uplinkSet.toJsonString());
+        LOGGER.info("Uplink set returned to client: {}", uplinkSet.toJsonString());
     }
 
     private void createUplinkSet() {
@@ -97,8 +99,7 @@ public class UplinkSetClientSample {
 
         TaskResourceV2 task = this.uplinkSetClient.create(uplinkSet, false);
 
-        System.out.println("UplinkSetClientSample : createUplinkSet : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void updateUplinkSet() {
@@ -108,8 +109,7 @@ public class UplinkSetClientSample {
 
         TaskResourceV2 task = this.uplinkSetClient.update(uplinkSet.getResourceId(), uplinkSet, false);
 
-        System.out.println("UplinkSetClientSample : updateUplinkSet : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void deleteUplinkSet() {
@@ -117,8 +117,7 @@ public class UplinkSetClientSample {
 
         TaskResourceV2 task = this.uplinkSetClient.delete(uplinkSet.getResourceId(), false);
 
-        System.out.println("UplinkSetClientSample : deleteUplinkSet : " +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private UplinkSet buildUplinkSet() {
@@ -136,7 +135,8 @@ public class UplinkSetClientSample {
         }
 
         uplinkSetsDto.setType(ResourceCategory.RC_UPLINKS_SETS); //OV 1.2
-        uplinkSetsDto.setType(ResourceCategory.RC_UPLINKS_SETSV200); //OV 2.0
+        uplinkSetsDto.setType(ResourceCategory.RC_UPLINKS_SETS_V200); //OV 2.0
+        uplinkSetsDto.setType(ResourceCategory.RC_UPLINKS_SETS_V300); //OV 3.0
         uplinkSetsDto.setConnectionMode(ConnectionMode.Auto);
         uplinkSetsDto.setEthernetNetworkType(EthernetNetworkType.NotApplicable);
         uplinkSetsDto.setNetworkType(NetworkType.FibreChannel);

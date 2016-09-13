@@ -16,6 +16,9 @@
 
 package com.hp.ov.sdk.rest.client.servers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -25,6 +28,8 @@ import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.server.ServerHardwareTypeClient;
 
 public class ServerHardwareTypeClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerHardwareTypeClientSample.class);
 
     // These are variables to be defined by user
     // ================================
@@ -44,23 +49,20 @@ public class ServerHardwareTypeClientSample {
     private void getServerHardwareType() {
         ServerHardwareType serverHardwareType = serverHardwareTypeClient.getById(SERVER_HARDWARE_TYPE_RESOURCE_ID);
 
-        System.out.println("ServerHardwareTypeClient : getServerHardwareType : " +
-                "ServerHardwareType object returned to client : " + serverHardwareType.toJsonString());
+        LOGGER.info("Server hardware type returned to client: {}", serverHardwareType.toJsonString());
     }
 
     private void getAllServerHardwareTypes() {
         ResourceCollection<ServerHardwareType> serverHardwareTypes = serverHardwareTypeClient.getAll();
 
-        System.out.println("ServerHardwareTypeClient : getAllServerHardwareTypes : " +
-                "ServerHardwareTypes returned to client : " + serverHardwareTypes.toJsonString());
+        LOGGER.info("Server hardware types returned to client: {}", serverHardwareTypes.toJsonString());
     }
 
     private void getServerHardwareTypeByName() {
         ServerHardwareType serverHardwareType
                 = serverHardwareTypeClient.getByName(SERVER_HARDWARE_TYPE_RESOURCE_NAME).get(0);
 
-        System.out.println("ServerHardwareTypeClient : getServerHardwareTypeByName : " +
-                "ServerHardwareType object returned to client : " + serverHardwareType.toJsonString());
+        LOGGER.info("Server hardware type returned to client: {}", serverHardwareType.toJsonString());
     }
 
     private void updateServerHardwareType() {
@@ -73,8 +75,7 @@ public class ServerHardwareTypeClientSample {
 
         ServerHardwareType updated = this.serverHardwareTypeClient.update(serverHardwareType.getResourceId(), update);
 
-        System.out.println("ServerHardwareTypeClient : updateServerHardwareType : " +
-                "ServerHardwareType object returned to client : " + updated.toJsonString());
+        LOGGER.info("Server hardware type returned to client: {}", updated.toJsonString());
     }
 
     private void deleteServerHardwareType() {
@@ -83,8 +84,7 @@ public class ServerHardwareTypeClientSample {
 
         TaskResourceV2 taskResource = this.serverHardwareTypeClient.delete(serverHardwareType.getResourceId(), false);
 
-        System.out.println("ServerHardwareTypeClient : deleteServerHardwareType : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     public static void main(String[] args) {

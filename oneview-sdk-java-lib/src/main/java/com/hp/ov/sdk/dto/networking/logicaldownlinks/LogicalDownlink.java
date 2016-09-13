@@ -129,42 +129,12 @@ public class LogicalDownlink extends BaseModelResource {
     }
 
     @Override
-    public boolean canEqual(Object obj) {
-        return (obj instanceof LogicalDownlink);
-    }
-
-    @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj instanceof LogicalDownlink) {
-            LogicalDownlink that = (LogicalDownlink) obj;
-
-            return new EqualsBuilder()
-                    .appendSuper(super.equals(obj))
-                    .append(downlinkCapabilities, that.downlinkCapabilities)
-                    .append(downlinkPortCapability, that.downlinkPortCapability)
-                    .append(maxNetworks, that.maxNetworks)
-                    .append(maxSpeed, that.maxSpeed)
-                    .append(minNetworks, that.minNetworks)
-                    .append(networkUris, that.networkUris)
-                    .append(permittedSpeedRange, that.permittedSpeedRange)
-                    .isEquals();
-        }
-        return false;
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .appendSuper(super.hashCode())
-                .append(downlinkCapabilities)
-                .append(downlinkPortCapability)
-                .append(maxNetworks)
-                .append(maxSpeed)
-                .append(minNetworks)
-                .append(networkUris)
-                .append(permittedSpeedRange)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

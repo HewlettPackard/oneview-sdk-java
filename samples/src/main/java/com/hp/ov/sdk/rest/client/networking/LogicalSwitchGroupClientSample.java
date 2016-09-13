@@ -16,6 +16,9 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.Lists;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
@@ -31,6 +34,8 @@ import com.hp.ov.sdk.dto.networking.logicalswitchgroup.SwitchMapTemplate;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class LogicalSwitchGroupClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogicalSwitchGroupClientSample.class);
 
     // ================================
     // These are variables to be defined by user
@@ -54,29 +59,25 @@ public class LogicalSwitchGroupClientSample {
 
         TaskResourceV2 task = this.client.create(logicalSwitchGroup, false);
 
-        System.out.println("LogicalSwitchGroupClientSample : createLogicalSwitchGroup : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void getLogicalSwitchGroup() {
         LogicalSwitchGroup logicalSwitchGroup = client.getById(LOGICAL_SWITCH_GROUP_RESOURCE_ID);
 
-        System.out.println("LogicalSwitchGroupClientSample : getLogicalSwitchGroup : " +
-                "LogicalSwitchGroup object returned to client : " + logicalSwitchGroup);
+        LOGGER.info("Logical switch group returned to client: {}", logicalSwitchGroup.toJsonString());
     }
 
     private void getAllLogicalSwitchGroups() {
         ResourceCollection<LogicalSwitchGroup> logicalSwitchGroups = client.getAll();
 
-        System.out.println("LogicalSwitchGroupClientSample : getAllLogicalSwitchGroups : " +
-                "LogicalSwitchGroups returned to client (count) : " + logicalSwitchGroups.getCount());
+        LOGGER.info("Logical switch groups returned to client: {}", logicalSwitchGroups.toJsonString());
     }
 
     private void getLogicalSwitchGroupByName() {
         LogicalSwitchGroup logicalSwitchGroup = client.getByName(LOGICAL_SWITCH_GROUP_NAME).get(0);
 
-        System.out.println("LogicalSwitchGroupClientSample : getLogicalSwitchGroupByName : " +
-                "LogicalSwitchGroup object returned to client : " + logicalSwitchGroup);
+        LOGGER.info("Logical switch group returned to client: {}", logicalSwitchGroup.toJsonString());
     }
 
     private void updateLogicalSwitchGroup() {
@@ -86,8 +87,7 @@ public class LogicalSwitchGroupClientSample {
 
         TaskResourceV2 task = this.client.update(logicalSwitchGroup.getResourceId(), logicalSwitchGroup, false);
 
-        System.out.println("LogicalSwitchGroupClientSample : updateLogicalSwitchGroup : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void deleteLogicalSwitchGroup() {
@@ -95,8 +95,7 @@ public class LogicalSwitchGroupClientSample {
 
         TaskResourceV2 task = this.client.delete(logicalSwitchGroup.getResourceId(), false);
 
-        System.out.println("LogicalSwitchGroupClientSample : deleteLogicalSwitchGroup : " +
-                "Task object returned to client : " + task);
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private LogicalSwitchGroup buildLogicalSwitchGroup() {
@@ -139,8 +138,6 @@ public class LogicalSwitchGroupClientSample {
 
         switchMapTemplate.getSwitchMapEntryTemplates().add(switchMapEntryTemplate);
 
-        //logicalSwitchGroup.setName(logicalSwitchGroup.getName() + "_Updated");
-
         return logicalSwitchGroup;
     }
 
@@ -148,6 +145,7 @@ public class LogicalSwitchGroupClientSample {
         LogicalSwitchGroupClientSample sample = new LogicalSwitchGroupClientSample();
 
         sample.createLogicalSwitchGroup();
+
         sample.getLogicalSwitchGroup();
         sample.getLogicalSwitchGroupByName();
         sample.getAllLogicalSwitchGroups();

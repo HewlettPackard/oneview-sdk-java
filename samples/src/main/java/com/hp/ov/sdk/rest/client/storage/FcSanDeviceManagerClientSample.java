@@ -18,6 +18,9 @@ package com.hp.ov.sdk.rest.client.storage;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
 import com.hp.ov.sdk.dto.Property;
@@ -33,6 +36,8 @@ import com.hp.ov.sdk.rest.client.OneViewClient;
  * perform GET/PUT/POST/DELETE operations on san manager resource
  */
 public class FcSanDeviceManagerClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FcSanDeviceManagerClientSample.class);
 
     private final FcSanDeviceManagerClient fcSanDeviceManagerClient;
     private final FcSanProviderClient fcSanProviderClient;
@@ -63,22 +68,19 @@ public class FcSanDeviceManagerClientSample {
     private void getFcSanDeviceManagerById() {
         DeviceManagerResponse deviceManager = this.fcSanDeviceManagerClient.getById(RESOURCE_ID);
 
-        System.out.println("FcSanDeviceManagerClientSample : getFcSanDeviceManager : " +
-                "DeviceManagerResponse object returned to client : " + deviceManager.toJsonString());
+        LOGGER.info("DeviceManagerResponse object returned to client: {}", deviceManager.toJsonString());
     }
 
     private void getAllFcSanDeviceManagers() {
         ResourceCollection<DeviceManagerResponse> deviceManagers = this.fcSanDeviceManagerClient.getAll();
 
-        System.out.println("FcSanDeviceManagerClientSample : getAllFcSanDeviceManagers : " +
-                "DeviceManagers returned to client : " + deviceManagers.toJsonString());
+        LOGGER.info("DeviceManagers returned to client: {}", deviceManagers.toJsonString());
     }
 
     private void getFcSanDeviceManagerByName() {
         DeviceManagerResponse deviceManager = this.fcSanDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
 
-        System.out.println("FcSanDeviceManagerClientSample : getFcSanDeviceManagerByName : " +
-                "DeviceManagerResponse object returned to client : " + deviceManager.toJsonString());
+        LOGGER.info("DeviceManagerResponse object returned to client: {}", deviceManager.toJsonString());
     }
 
     private void addFcSanDeviceManager() {
@@ -88,8 +90,7 @@ public class FcSanDeviceManagerClientSample {
         TaskResourceV2 taskResource = fcSanDeviceManagerClient.add(sanProvider.getDeviceManagersUri(),
                 deviceManager, false);
 
-        System.out.println("FcSanDeviceManagerClientSample : addFcSanDeviceManager : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void updateFcSanDeviceManager() {
@@ -101,16 +102,14 @@ public class FcSanDeviceManagerClientSample {
         TaskResourceV2 taskResource = fcSanDeviceManagerClient.update(deviceManager.getResourceId(),
                 deviceManager, false);
 
-        System.out.println("FcSanDeviceManagerClientSample : updateFcSanDeviceManager : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void removeFcSanDeviceManager() {
         DeviceManagerResponse deviceManager = this.fcSanDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
         TaskResourceV2 taskResource = this.fcSanDeviceManagerClient.remove(deviceManager.getResourceId(), false);
 
-        System.out.println("FcSanDeviceManagerClientSample : removeFcSanDeviceManager : " +
-                "Task object returned to client : " + taskResource.toJsonString());
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private DeviceManagerResponse updateHostConnectionDetails(DeviceManagerResponse deviceManager) {
@@ -170,6 +169,7 @@ public class FcSanDeviceManagerClientSample {
         FcSanDeviceManagerClientSample client = new FcSanDeviceManagerClientSample();
 
         client.addFcSanDeviceManager();
+
         client.getFcSanDeviceManagerById();
         client.getAllFcSanDeviceManagers();
         client.getFcSanDeviceManagerByName();

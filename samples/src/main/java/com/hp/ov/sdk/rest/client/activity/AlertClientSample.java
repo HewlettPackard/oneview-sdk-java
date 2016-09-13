@@ -55,7 +55,7 @@ public class AlertClientSample {
     private void getAllAlerts() {
         ResourceCollection<AlertResource> alertResources = this.client.getAll();
 
-        LOGGER.info("Alerts returned to client: {}", alertResources.toJsonString());
+        LOGGER.info("Alerts returned to client (count): {}", alertResources.getCount());
     }
 
     private void updateAlert() {

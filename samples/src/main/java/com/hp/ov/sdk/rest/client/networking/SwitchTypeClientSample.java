@@ -16,12 +16,17 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class SwitchTypeClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SwitchTypeClientSample.class);
 
     // These are variables to be defined by the user
     // ================================
@@ -41,22 +46,19 @@ public class SwitchTypeClientSample {
     private void getSwitchType() {
         InterconnectType switchType = client.getById(SWITCH_TYPE_RESOURCE_ID);
 
-        System.out.println("SwitchTypeClientSample : getSwitchType : " +
-                "SwitchType object returned to client : " + switchType);
+        LOGGER.info("Switch type returned to client: {}", switchType.toJsonString());
     }
 
     private void getAllSwitchTypes() {
         ResourceCollection<InterconnectType> switchTypes = client.getAll();
 
-        System.out.println("SwitchTypeClientSample : getAllSwitchTypes : " +
-                "SwitchTypes returned to client (count) : " + switchTypes.getCount());
+        LOGGER.info("Switch types returned to client (count): {}", switchTypes.getCount());
     }
 
     private void getSwitchTypeByName() {
         InterconnectType switchType = client.getByName(SWITCH_TYPE_NAME).get(0);
 
-        System.out.println("SwitchTypeClientSample : getSwitchTypeByName : " +
-                "SwitchType object returned to client : " + switchType);
+        LOGGER.info("Switch type returned to client: {}", switchType.toJsonString());
     }
 
     public static void main(String[] args) {

@@ -213,13 +213,13 @@ public class EthernetNetworkClient {
      * @return {@link List}&lt;String&gt; of uplink sets in use by the specified ethernet network.
      */
     public List<String> getAssociatedUplinkGroups(String resourceId) {
-        LOGGER.info("NetworkClient : getNetworkAssociatedUplinkGroups : Start");
+        LOGGER.info("NetworkClient : getAssociatedUplinkGroups : Start");
 
         List<String> associatedUplinkGroups = baseClient.getResourceList(
                 UrlUtils.createUrl(ResourceUris.ETHERNET_URI, resourceId, ResourceUris.ASSOCIATED_UPLINK_GROUPS),
                 new TypeToken<List<String>>(){});
 
-        LOGGER.info("NetworkClient : getNetworkAssociatedUplinkGroups : End");
+        LOGGER.info("NetworkClient : getAssociatedUplinkGroups : End");
 
         return associatedUplinkGroups;
     }

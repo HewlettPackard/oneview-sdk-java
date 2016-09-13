@@ -28,6 +28,7 @@ import com.hp.ov.sdk.dto.facilities.datacenter.DataCenter;
 import com.hp.ov.sdk.dto.facilities.datacenter.DeratingType;
 import com.hp.ov.sdk.dto.facilities.datacenter.VisualContent;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
 public class DataCenterClientSample {
 
@@ -99,8 +100,7 @@ public class DataCenterClientSample {
         DataCenter dataCenter = this.dataCenterClient.getByName(DATA_CENTER_NAME).get(0);
         List<VisualContent> visualContent = this.dataCenterClient.getVisualContent(dataCenter.getResourceId());
 
-        System.out.println("DataCenterClientSample : getVisualContent : " +
-                "VisualContent list returned to client  (count) : " + visualContent.size());
+        LOGGER.info("Visual content list returned to client : " + JsonPrettyPrinter.print(visualContent));
     }
 
     private void removeDataCenter() {

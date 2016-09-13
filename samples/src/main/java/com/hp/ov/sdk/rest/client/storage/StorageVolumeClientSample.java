@@ -197,8 +197,6 @@ public class StorageVolumeClientSample {
         dto.setDescription("Volume description");
         dto.setStorageSystemUri(storageSystemUri);
         dto.setSnapshotPoolUri(storagePoolUri); //v200
-        dto.setType(ResourceCategory.RC_ADD_STORAGE_VOLUME); //v120
-        dto.setType(ResourceCategory.RC_ADD_STORAGE_VOLUME_200); //v200
 
         StorageVolumeProvisioningParameters provisioningParameters = new StorageVolumeProvisioningParameters();
 
@@ -223,8 +221,6 @@ public class StorageVolumeClientSample {
         dto.setDescription("Volume description");
         dto.setStorageSystemUri(storageSystemUri);
         dto.setSnapshotPoolUri(storagePoolUri); //v200
-        dto.setType(ResourceCategory.RC_ADD_STORAGE_VOLUME);
-        dto.setType(ResourceCategory.RC_ADD_STORAGE_VOLUME_200); //v200
 
         StorageVolumeProvisioningParameters provisioningParameters = new StorageVolumeProvisioningParameters();
         provisioningParameters.setProvisionType("Full");

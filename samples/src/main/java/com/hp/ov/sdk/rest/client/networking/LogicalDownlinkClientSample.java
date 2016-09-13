@@ -15,6 +15,9 @@
  */
 package com.hp.ov.sdk.rest.client.networking;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.logicaldownlinks.LogicalDownlink;
@@ -26,6 +29,8 @@ import com.hp.ov.sdk.rest.client.OneViewClient;
  * logical downlink resource
  */
 public class LogicalDownlinkClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogicalDownlinkClientSample.class);
 
     private final LogicalDownlinkClient logicalDownlinkClient;
 
@@ -44,36 +49,31 @@ public class LogicalDownlinkClientSample {
     private void getLogicalDownlinkById() {
         LogicalDownlink logicalDownlink = this.logicalDownlinkClient.getById(LOGICAL_DOWNLINK_RESOURCE_ID);
 
-        System.out.println("LogicalDownlinkClientSample : getLogicalDownlinkById : " +
-                "LogicalDownlink object returned to client : " + logicalDownlink.toJsonString());
+        LOGGER.info("Logical downlink returned to client: {}", logicalDownlink.toJsonString());
     }
 
     private void getAllLogicalDownlink() {
         ResourceCollection<LogicalDownlink> logicalDownlink = this.logicalDownlinkClient.getAll();
 
-        System.out.println("LogicalDownlinkClientSample : getAllLogicalDownlink : " +
-                "LogicalDownlink collection returned to client : " + logicalDownlink.toJsonString());
+        LOGGER.info("Logical downlink returned to client: {}", logicalDownlink.toJsonString());
     }
 
     private void getLogicalDownlinkByName() {
         LogicalDownlink logicalDownlink = this.logicalDownlinkClient.getByName(LOGICAL_DOWNLINK_RESOURCE_NAME).get(0);
 
-        System.out.println("LogicalDownlinkClientSample : getLogicalDownlinkByName : " +
-                "LogicalDownlink object returned to client : " + logicalDownlink.toJsonString());
+        LOGGER.info("Logical downlink returned to client: {}", logicalDownlink.toJsonString());
     }
 
     private void getLogicalDownlinkByIdWithoutEthernet() {
         LogicalDownlink logicalDownlink = this.logicalDownlinkClient.getByIdWithoutEthernet(LOGICAL_DOWNLINK_RESOURCE_ID);
 
-        System.out.println("LogicalDownlinkClientSample : getLogicalDownlinkByIdWithoutEthernet : " +
-                "LogicalDownlink object returned to client : " + logicalDownlink.toJsonString());
+        LOGGER.info("Logical downlink returned to client: {}", logicalDownlink.toJsonString());
     }
 
     private void getAllLogicalDownlinkWithoutEthernet() {
         ResourceCollection<LogicalDownlink> logicalDownlink = this.logicalDownlinkClient.getAllWithoutEthernet();
 
-        System.out.println("LogicalDownlinkClientSample : getAllLogicalDownlinkWithoutEthernet : " +
-                "LogicalDownlink collection returned to client : " + logicalDownlink.toJsonString());
+        LOGGER.info("Logical downlink returned to client: {}", logicalDownlink.toJsonString());
     }
 
     public static void main(String[] args) {

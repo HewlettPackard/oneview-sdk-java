@@ -56,7 +56,7 @@ public class EnclosureClientSample {
 
     // test values - user input
     // ================================
-    public static final String RESOURCE_NAME = "0000A66101";
+    public static final String RESOURCE_NAME = "Encl1";
     public static final String RESOURCE_NAME_UPDATED = "Encl1_Updated";
 
     private static final String RESOURCE_ID = "09SGH100X6J1";

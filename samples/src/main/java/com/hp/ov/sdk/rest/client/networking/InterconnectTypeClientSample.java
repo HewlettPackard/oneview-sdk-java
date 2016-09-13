@@ -15,6 +15,9 @@
  */
 package com.hp.ov.sdk.rest.client.networking;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.dto.InterconnectTypeName;
@@ -27,6 +30,8 @@ import com.hp.ov.sdk.rest.client.OneViewClient;
  * operations on interconnect type resource
  */
 public class InterconnectTypeClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(InterconnectTypeClientSample.class);
 
     private final InterconnectTypeClient interconnectTypeClient;
 
@@ -44,23 +49,20 @@ public class InterconnectTypeClientSample {
     private void getInterconnectType() {
         InterconnectType interconnectType = this.interconnectTypeClient.getById(INTERCONNECT_TYPE_RESOURCE_ID);
 
-        System.out.println("InterconnectTypeClientSample : getInterconnectType : " +
-                "InterconnectType object returned to client : " + interconnectType.toJsonString());
+        LOGGER.info("Interconnect type returned to client: {}", interconnectType.toJsonString());
     }
 
     private void getAllInterconnectTypes() {
         ResourceCollection<InterconnectType> interconnectTypes = this.interconnectTypeClient.getAll();
 
-        System.out.println("InterconnectTypeClientSample : getAllInterconnectTypes : " +
-                "InterconnectTypes returned to client : " + interconnectTypes.toJsonString());
+        LOGGER.info("Interconnect types returned to client: {}", interconnectTypes.toJsonString());
     }
 
     private void getInterconnectTypeByName() {
         InterconnectType interconnectType = this.interconnectTypeClient.getByName(
                 InterconnectTypeName.HP_VC_FlexFabric_20_40_F8_Module).get(0);
 
-        System.out.println("InterconnectTypeClientSample : getInterconnectTypeByName : " +
-                "InterconnectType object returned to client : " + interconnectType.toJsonString());
+        LOGGER.info("Interconnect type returned to client: {}", interconnectType.toJsonString());
     }
 
     public static void main(final String[] args) throws Exception {

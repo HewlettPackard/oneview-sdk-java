@@ -17,6 +17,9 @@ package com.hp.ov.sdk.rest.client.storage;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ExtraStorageVolume;
@@ -26,8 +29,11 @@ import com.hp.ov.sdk.dto.StorageVolumeAttachment;
 import com.hp.ov.sdk.dto.StorageVolumeAttachmentPath;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
 public class StorageVolumeAttachmentClientSample {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(StorageVolumeAttachmentClientSample.class);
 
     // These are variables to be defined by user
     // ================================
@@ -48,39 +54,36 @@ public class StorageVolumeAttachmentClientSample {
         StorageVolumeAttachment storageVolumeAttachment = this.storageVolumeAttachmentClient.getById(
                 STORAGE_VOLUME_ATTACHMENT_ID);
 
-        System.out.println("StorageVolumeAttachmentClient : getStorageVolumeAttachment : " +
-                "StorageVolumeAttachment object returned to client : " + storageVolumeAttachment.toJsonString());
+        LOGGER.info("Storage volume attachment returned to client: {}", storageVolumeAttachment.toJsonString());
     }
 
     private void getAllStorageVolumeAttachments() {
         ResourceCollection<StorageVolumeAttachment> storageVolumeAttachments = this.storageVolumeAttachmentClient.getAll();
 
-        System.out.println("StorageVolumeAttachmentClient : getAllStorageVolumeAttachments : " +
-                "StorageVolumeAttachments returned to client : " + storageVolumeAttachments.toJsonString());
+        LOGGER.info("Storage volume attachments returned to client: {}", storageVolumeAttachments.toJsonString());
     }
 
     private void getStorageVolumeAttachmentPath() {
         StorageVolumeAttachmentPath storageVolumeAttachmentPath = this.storageVolumeAttachmentClient.getAttachmentPath(
                 STORAGE_VOLUME_ATTACHMENT_ID, STORAGE_VOLUME_ATTACHMENT_PATH_ID);
 
-        System.out.println("StorageVolumeAttachmentClient : getStorageVolumeAttachmentPath : " +
-                "StorageVolumeAttachmentPath object returned to client : " + storageVolumeAttachmentPath.toJsonString());
+        LOGGER.info("Storage volume attachment path returned to client: {}", storageVolumeAttachmentPath.toJsonString());
     }
 
     private void getAllStorageVolumeAttachmentPaths() {
         List<StorageVolumeAttachmentPath> storageVolumeAttachmentPaths
                 = this.storageVolumeAttachmentClient.getAllAttachmentPaths(STORAGE_VOLUME_ATTACHMENT_ID);
 
-        System.out.println("StorageVolumeAttachmentClient : getAllStorageVolumeAttachmentPaths : " +
-                "StorageVolumeAttachmentPaths returned to client : " + storageVolumeAttachmentPaths);
+        LOGGER.info("Storage volume attachment paths returned to client: {}",
+                JsonPrettyPrinter.print(storageVolumeAttachmentPaths));
     }
 
     private void getExtraUnmanagedStorageVolumeAttachments() {
         ResourceCollection<ExtraStorageVolume> extraStorageVolumes
                 = this.storageVolumeAttachmentClient.getExtraUnmanagedAttachments();
 
-        System.out.println("StorageVolumeAttachmentClient : getExtraUnmanagedStorageVolumeAttachments : " +
-                "ExtraStorageVolumes object returned to client : " + extraStorageVolumes.toJsonString());
+        LOGGER.info("Extra unmanaged storage volume attachments returned to client: {}",
+                JsonPrettyPrinter.print(extraStorageVolumes));
     }
 
     private void repairExtraUnmanagedStorageVolumeAttachment() {
@@ -91,8 +94,7 @@ public class StorageVolumeAttachmentClientSample {
 
         TaskResourceV2 task = this.storageVolumeAttachmentClient.repairExtraUnmanagedAttachment(repair, false);
 
-        System.out.println("StorageVolumeAttachmentClient : repairExtraUnmanagedStorageVolumeAttachment :" +
-                "Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     public static void main(String[] args) {

@@ -79,7 +79,7 @@ public class ServerProfileClientSample {
     private static final String BAY_NAME = "Encl1, bay 15";
     private static final List<String> NETWORK_NAMES = Arrays.asList("Prod_401", "Prod_402");
     private static final List<String> STORAGE_VOLUME_NAME = Arrays.asList(StorageVolumeClientSample.STORAGE_VOLUME_NAME);
-    private static final List<String> FC_NETWORK_NAMES = Arrays.asList(FcNetworkClientSample.FC_NETWORK_NAME, FcNetworkClientSample.FC_NETWORK_NAME_B);
+    private static final List<String> FC_NETWORK_NAMES = Arrays.asList(FcNetworkClientSample.FC_NETWORK_NAME_A, FcNetworkClientSample.FC_NETWORK_NAME_B);
     private static final Boolean USE_BAY_NAME_FOR_SERVER_HARDWARE_URI = false;
     // ================================
 

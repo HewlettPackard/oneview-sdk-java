@@ -32,10 +32,11 @@ public class FcNetworkClientSample {
 
     // These are variables to be defined by the user
     // ================================
-    private static final String FC_NETWORK_RESOURCE_ID = "37a92c8f-a2ef-4817-85f4-80d27abb09e2";
-    public static final String FC_NETWORK_NAME = "FC_Network_A";
+    public static final String FC_NETWORK_NAME_A = "FC_Network_A";
     public static final String FC_NETWORK_NAME_B = "FC_Network_B";
-    private static final String FC_NETWORK_NAME_UPDATED = FC_NETWORK_NAME + "_Updated";
+
+    private static final String FC_NETWORK_RESOURCE_ID = "174a2e9c-7d43-4462-b221-958e323f75da";
+    private static final String FC_NETWORK_NAME_UPDATED = FC_NETWORK_NAME_A + "_Updated";
     // ================================
 
     private final FcNetworkClient client;
@@ -49,8 +50,9 @@ public class FcNetworkClientSample {
     private void createFcNetwork() {
         FcNetwork fcNetwork = new FcNetwork();
 
-        fcNetwork.setName(FC_NETWORK_NAME);
-        fcNetwork.setType(ResourceCategory.RC_FCNETWORK);
+        fcNetwork.setName(FC_NETWORK_NAME_A);
+        fcNetwork.setType(ResourceCategory.RC_FCNETWORK); //v200
+        fcNetwork.setType(ResourceCategory.RC_FCNETWORK_V300); //v300
 
         TaskResourceV2 task = this.client.create(fcNetwork, false);
 
@@ -70,13 +72,13 @@ public class FcNetworkClientSample {
     }
 
     private void getFcNetworkByName() {
-        FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME).get(0);
+        FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME_A).get(0);
 
         LOGGER.info("FcNetwork object returned to client : " + fcNetwork.toJsonString());
     }
 
     private void updateFcNetwork() {
-        FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME).get(0);
+        FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME_A).get(0);
 
         fcNetwork.setName(FC_NETWORK_NAME_UPDATED);
 
@@ -97,9 +99,10 @@ public class FcNetworkClientSample {
     public static void main(String[] args) {
         FcNetworkClientSample sample = new FcNetworkClientSample();
 
+        sample.createFcNetwork();
+
         sample.getAllFcNetworks();
         sample.getFcNetwork();
-        sample.createFcNetwork();
         sample.getFcNetworkByName();
         sample.updateFcNetwork();
         sample.deleteFcNetwork();
