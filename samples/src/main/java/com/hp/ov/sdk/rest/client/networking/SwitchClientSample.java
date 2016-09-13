@@ -114,14 +114,14 @@ public class SwitchClientSample {
         EnvironmentalConfiguration environmentalConfiguration = this.switchClient
                 .getEnvironmentalConfiguration(aSwitch.getResourceId());
 
-        LOGGER.info("EnvironmentalConfiguration object returned to client: {}", JsonPrettyPrinter.print(environmentalConfiguration));
+        LOGGER.info("EnvironmentalConfiguration object returned to client: {}", environmentalConfiguration.toJsonString());
     }
 
     private void getSwitchStatistics() {
         Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
         SwitchStatistics switchStatistics = this.switchClient.getStatistics(aSwitch.getResourceId());
 
-        LOGGER.info("SwitchStatistics object returned to client: {}", JsonPrettyPrinter.print(switchStatistics));
+        LOGGER.info("SwitchStatistics object returned to client: {}", switchStatistics.toJsonString());
     }
 
     private void getSwitchPortStatistics() {
@@ -129,7 +129,7 @@ public class SwitchClientSample {
         SwitchPortStatistics switchPortStatistics = this.switchClient.getPortStatistics(aSwitch.getResourceId(),
                 SWITCH_PORT_NAME);
 
-        LOGGER.info("SwitchPortStatistics object returned to client: {}", JsonPrettyPrinter.print(switchPortStatistics));
+        LOGGER.info("SwitchPortStatistics object returned to client: {}", switchPortStatistics.toJsonString());
     }
 
     private void updatePorts() {
