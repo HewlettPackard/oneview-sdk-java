@@ -147,13 +147,13 @@ public class SasLogicalInterconnectClientSample {
         sample.getSasLogicalInterconnectByName();
         sample.getAllSasLogicalInterconnects();
 
-        sample.getSasLogicalInterconnectFirmware();
-        sample.updateSasLogicalInterconnectFirmware();
-
-        sample.replaceSasLogicalInterconnectDriveEnclosure();
         sample.applySasLogicalInterconnectConfiguration();
         sample.updateSasLogicalInterconnectCompliance();
         sample.updateMultipleSasLogicalInterconnectCompliance();
+        sample.replaceSasLogicalInterconnectDriveEnclosure();
+
+        sample.getSasLogicalInterconnectFirmware();
+        sample.updateSasLogicalInterconnectFirmware();
     }
 
 }
