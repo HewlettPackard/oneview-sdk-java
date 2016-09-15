@@ -16,57 +16,39 @@
 
 package com.hp.ov.sdk.util.samples;
 
-import com.hp.ov.sdk.SamplesConstants;
-import com.hp.ov.sdk.adaptors.ResourceAdaptor;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
-import com.hp.ov.sdk.rest.client.settings.VersionClient;
-import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.hp.ov.sdk.exceptions.SDKPropertiesFileException;
 import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.tasks.TaskMonitorManager;
-import com.hp.ov.sdk.util.OneViewConnector;
+import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 
 public class HPOneViewCredential {
 
-    @Deprecated
-    public static RestParams createCredentials() {
-        RestParams params = createRestParams();
+    private static final Logger LOGGER = LoggerFactory.getLogger(HPOneViewCredential.class);
 
-        BaseClient baseClient = new BaseClient(params,
-                new ResourceAdaptor(),
-                HttpRestClient.getClient(),
-                TaskMonitorManager.getInstance());
+    private static final String ONEVIEW_JAVA_SDK_CONFIG_PROPERTIES_FILE = "oneview_java_sdk_config.properties";
 
-        OneViewConnector connector = new OneViewConnector(
-                params, createHttpSslProperties(),
-                new VersionClient(baseClient),
-                new LoginSessionClient(baseClient));
+    private SDKConfiguration sdkConfiguration;
 
-        connector.connect();
-
-        return params;
+    public HPOneViewCredential() {
+        try {
+            sdkConfiguration = new SDKConfiguration(ONEVIEW_JAVA_SDK_CONFIG_PROPERTIES_FILE);
+        } catch (SDKPropertiesFileException e) {
+            LOGGER.error("Error loading configuration file.", e);
+        }
     }
 
-    public static RestParams createRestParams() {
-        RestParams params = new RestParams();
-
-        params.setHostname(SamplesConstants.HOSTNAME);
-        params.setUserName(SamplesConstants.USERNAME);
-        params.setPassword(SamplesConstants.PASSWORD);
-        params.setApiVersion(SamplesConstants.VERSION);
-        params.setDomain(SamplesConstants.DOMAIN);
-
-        return params;
+    public RestParams createRestParams() {
+        return new RestParams(sdkConfiguration);
     }
 
-    public static HttpSslProperties createHttpSslProperties() {
-        HttpSslProperties httpSslProperties = new HttpSslProperties();
+    public HttpSslProperties createHttpSslProperties() {
+        return new HttpSslProperties(sdkConfiguration);
+    }
 
-        httpSslProperties.setTrustStore(SamplesConstants.TRUST_STORE_FILE);
-        httpSslProperties.setTrustStorePassword(SamplesConstants.TRUST_STORE_PASSWORD);
-        httpSslProperties.setTrustStoreType(SamplesConstants.TRUST_STORE_TYPE);
-
-        return httpSslProperties;
+    public SDKConfiguration getSdkConfiguration() {
+        return sdkConfiguration;
     }
 }

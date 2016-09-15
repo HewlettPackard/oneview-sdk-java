@@ -16,7 +16,6 @@
 package com.hp.ov.sdk.msmb.consumer;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.SamplesConstants;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.certs.MessagingCertificateClient;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -43,18 +42,23 @@ public class MsmbClient {
 
     private final MsmbConnectionManager objectUnderTest;
 
+    private OneViewClient oneViewClient;
+    private HPOneViewCredential credentials;
+
     private MsmbClient() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        this.oneViewClient = OneViewClientSample.getOneViewClient();
+        this.credentials = new HPOneViewCredential();
+
         MessagingCertificateClient messagingCertificateClient = oneViewClient.messagingCertificate();
 
         this.objectUnderTest = new MsmbConnectionManager(messagingCertificateClient);
     }
 
     public void msmbProcessor() {
-        RestParams params = HPOneViewCredential.createRestParams();
+        RestParams params = credentials.createRestParams();
 
         try {
-            HttpSslProperties httpSslProperties = HPOneViewCredential.createHttpSslProperties();
+            HttpSslProperties httpSslProperties = credentials.createHttpSslProperties();
             BaseClient baseClient = new BaseClient(params, new ResourceAdaptor(),
                     HttpRestClient.getClient(), TaskMonitorManager.getInstance());
 
@@ -73,7 +77,7 @@ public class MsmbClient {
 
             // then start scmb
             objectUnderTest.startMsmb(params);
-            objectUnderTest.processConsumer(params, SamplesConstants.MSMB_ALERTS_ROUTING_KEY, messageQueue);
+            objectUnderTest.processConsumer(params, credentials.getSdkConfiguration().getMessageBusAlertsRoutingKey(), messageQueue);
             // Optional: start next processor with different routing key
             // objectUnderTest.processConsumer(params, "scmb.interconnects.#", messageQueue);
         } catch (final SDKResourceNotFoundException ex) {
@@ -97,7 +101,7 @@ public class MsmbClient {
     }
 
     public void stopMsmb() {
-        RestParams params = HPOneViewCredential.createRestParams();
+        RestParams params = credentials.createRestParams();
 
         try {
             objectUnderTest.stopMsmb(params);
