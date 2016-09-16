@@ -25,7 +25,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.servers.enclosuregroup.EnclosureGroup;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.ContentType;
@@ -75,7 +75,7 @@ public class EnclosureGroupClientTest {
 
         enclosureGroupClient.create(enclosureGroup);
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.ENCLOSURE_GROUP_URI, enclosureGroup);
+        Request request = new Request(HttpMethod.POST, ResourceUris.ENCLOSURE_GROUP_URI, enclosureGroup);
 
         then(baseClient).should().executeRequest(request, EnclosureGroup.class);
     }
@@ -87,7 +87,7 @@ public class EnclosureGroupClientTest {
         enclosureGroupClient.update(ANY_ENCLOSURE_GROUP_RESOURCE_ID, enclosureGroup);
 
         String expectedUri = ResourceUris.ENCLOSURE_GROUP_URI + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.PUT, expectedUri, enclosureGroup);
+        Request request = new Request(HttpMethod.PUT, expectedUri, enclosureGroup);
 
         then(baseClient).should().executeRequest(request, EnclosureGroup.class);
     }
@@ -97,7 +97,7 @@ public class EnclosureGroupClientTest {
         enclosureGroupClient.delete(ANY_ENCLOSURE_GROUP_RESOURCE_ID);
 
         String expectedUri = ResourceUris.ENCLOSURE_GROUP_URI + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.DELETE, expectedUri);
+        Request request = new Request(HttpMethod.DELETE, expectedUri);
 
         then(baseClient).should().executeRequest(request, String.class);
     }
@@ -109,7 +109,7 @@ public class EnclosureGroupClientTest {
         String expectedUri = ResourceUris.ENCLOSURE_GROUP_URI
                 + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID
                 + "/" + ResourceUris.ENCLOSURE_GROUP_SCRIPT_URI;
-        Request request = new Request(HttpMethodType.GET, expectedUri);
+        Request request = new Request(HttpMethod.GET, expectedUri);
 
         then(baseClient).should().executeRequest(request, String.class);
     }
@@ -122,7 +122,7 @@ public class EnclosureGroupClientTest {
         String expectedUri = ResourceUris.ENCLOSURE_GROUP_URI
                 + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID
                 + "/" + ResourceUris.ENCLOSURE_GROUP_SCRIPT_URI;
-        Request request = new Request(HttpMethodType.PUT, expectedUri, ANY_ENCLOSURE_GROUP_CONFIGURATION_SCRIPT);
+        Request request = new Request(HttpMethod.PUT, expectedUri, ANY_ENCLOSURE_GROUP_CONFIGURATION_SCRIPT);
 
         request.setContentType(ContentType.TEXT_PLAIN);
 

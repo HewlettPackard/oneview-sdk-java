@@ -28,7 +28,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
 import com.hp.ov.sdk.dto.SsoUrlData;
@@ -84,7 +84,7 @@ public class EnclosureClientTest {
 
         enclosureClient.add(addEnclosure, false);
 
-        Request expectedRequest = new Request(HttpMethodType.POST,
+        Request expectedRequest = new Request(HttpMethod.POST,
                 EnclosureClient.ENCLOSURE_URI, addEnclosure);
 
         expectedRequest.setTimeout(1200000);
@@ -99,7 +99,7 @@ public class EnclosureClientTest {
         enclosureClient.update(ANY_RESOURCE_ID, enclosure, false);
 
         String expectedUri = EnclosureClient.ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, enclosure);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, enclosure);
 
         expectedRequest.setTimeout(1200000);
 
@@ -115,7 +115,7 @@ public class EnclosureClientTest {
         enclosureClient.patch(ANY_RESOURCE_ID, patch, false);
 
         String expectedUri = EnclosureClient.ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
-        Request expectedRequest = new Request(HttpMethodType.PATCH, expectedUri, patch);
+        Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri, patch);
 
         expectedRequest.setTimeout(1200000);
 
@@ -131,7 +131,7 @@ public class EnclosureClientTest {
         enclosureClient.patch(ANY_RESOURCE_ID, patch, false);
 
         String expectedUri = EnclosureClient.ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
-        Request expectedRequest = new Request(HttpMethodType.PATCH, expectedUri, patch);
+        Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri, patch);
 
         expectedRequest.setTimeout(1200000);
         expectedRequest.setContentType(ContentType.APPLICATION_JSON_PATCH);
@@ -144,7 +144,7 @@ public class EnclosureClientTest {
         enclosureClient.remove(ANY_RESOURCE_ID, false);
 
         String expectedUri = EnclosureClient.ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
-        Request expectedRequest = new Request(HttpMethodType.DELETE, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
         expectedRequest.setTimeout(1200000);
 
@@ -158,7 +158,7 @@ public class EnclosureClientTest {
         String expectedUri = EnclosureClient.ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + EnclosureClient.ENCLOSURE_CONFIGURATION_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
 
         expectedRequest.setTimeout(1200000);
 
@@ -172,7 +172,7 @@ public class EnclosureClientTest {
         String expectedUri = EnclosureClient.ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + EnclosureClient.ENCLOSURE_SCRIPT_URI;
-        Request expectedRequest = new Request(HttpMethodType.GET, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
         then(baseClient).should().executeRequest(expectedRequest, String.class);
     }
@@ -249,7 +249,7 @@ public class EnclosureClientTest {
         String expectedUri = EnclosureClient.ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + EnclosureClient.ENCLOSURE_COMPLIANCE_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
 
         expectedRequest.setTimeout(1200000);
 
@@ -265,7 +265,7 @@ public class EnclosureClientTest {
         String expectedUri = EnclosureClient.ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + EnclosureClient.ENCLOSURE_FW_BASELINE_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, fwBaselineConfig);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, fwBaselineConfig);
 
         expectedRequest.setTimeout(1200000);
 
@@ -305,7 +305,7 @@ public class EnclosureClientTest {
         String expectedUri = EnclosureClient.ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + EnclosureClient.ENVIRONMENT_CONFIGURATION_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri,
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri,
                 updateEnvironmentalConfiguration);
 
         then(baseClient).should().executeRequest(expectedRequest, EnvironmentalConfiguration.class);
@@ -320,7 +320,7 @@ public class EnclosureClientTest {
         String expectedUri = EnclosureClient.ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + EnclosureClient.ENCLOSURE_REFRESH_STATE_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, refreshStateConfig);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, refreshStateConfig);
 
         expectedRequest.setTimeout(1200000);
 

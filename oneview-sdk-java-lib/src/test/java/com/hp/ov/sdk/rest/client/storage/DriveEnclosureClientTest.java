@@ -24,7 +24,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.storage.driveenclosures.DriveEnclosure;
 import com.hp.ov.sdk.dto.storage.driveenclosures.DriveEnclosurePortMap;
@@ -90,7 +90,7 @@ public class DriveEnclosureClientTest {
         driveEnclosureClient.patch(ANY_RESOURCE_ID, patch, false);
 
         String expectedUri = DriveEnclosureClient.DRIVE_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
-        Request expectedRequest = new Request(HttpMethodType.PATCH, expectedUri, patch);
+        Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri, patch);
 
         expectedRequest.setContentType(ContentType.APPLICATION_JSON_PATCH);
         expectedRequest.setTimeout(1200000);
@@ -107,7 +107,7 @@ public class DriveEnclosureClientTest {
         String expectedUri = DriveEnclosureClient.DRIVE_ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + DriveEnclosureClient.REFRESH_STATE_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, refreshStateConfig);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, refreshStateConfig);
 
         expectedRequest.setTimeout(1200000);
 

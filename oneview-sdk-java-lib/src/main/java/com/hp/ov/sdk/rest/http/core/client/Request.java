@@ -24,13 +24,13 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
 public class Request {
 
-    private final HttpMethodType type;
+    private final HttpMethod type;
     private final String uri;
 
     private Map<String, String> query;
@@ -39,11 +39,11 @@ public class Request {
     private boolean forceTaskReturn;
     private int timeout;
 
-    public Request(HttpMethodType type, String uri) {
+    public Request(HttpMethod type, String uri) {
         this(type, uri, null);
     }
 
-    public Request(HttpMethodType type, String uri, Object entity) {
+    public Request(HttpMethod type, String uri, Object entity) {
         this.type = type;
         this.uri = uri;
 
@@ -53,7 +53,7 @@ public class Request {
         this.timeout = 60000;
     }
 
-    public HttpMethodType getType() {
+    public HttpMethod getType() {
         return type;
     }
 

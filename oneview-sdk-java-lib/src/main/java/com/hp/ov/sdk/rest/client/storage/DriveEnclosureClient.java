@@ -18,7 +18,7 @@ package com.hp.ov.sdk.rest.client.storage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -139,7 +139,7 @@ public class DriveEnclosureClient {
         String updateUri = UrlUtils.createUrl(DRIVE_ENCLOSURE_URI,
                 resourceId,
                 REFRESH_STATE_URI);
-        Request request = new Request(HttpMethodType.PUT, updateUri, refreshStateConfig);
+        Request request = new Request(HttpMethod.PUT, updateUri, refreshStateConfig);
 
         request.setTimeout(TIMEOUT);
 
@@ -164,7 +164,7 @@ public class DriveEnclosureClient {
     public TaskResourceV2 patch(String resourceId, Patch patch, boolean aSync) {
         LOGGER.info("DriveEnclosureClient : patch : Start");
 
-        Request request = new Request(HttpMethodType.PATCH,
+        Request request = new Request(HttpMethod.PATCH,
                 UrlUtils.createUrl(DRIVE_ENCLOSURE_URI, resourceId), patch);
 
         request.setTimeout(TIMEOUT);

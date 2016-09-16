@@ -28,7 +28,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.AddStoragePool;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -89,7 +89,7 @@ public class StoragePoolClientTest {
 
         storagePoolClient.add(storagePool, false);
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.STORAGE_POOL_URI, storagePool);
+        Request request = new Request(HttpMethod.POST, ResourceUris.STORAGE_POOL_URI, storagePool);
 
         request.setForceTaskReturn(true);
 
@@ -103,7 +103,7 @@ public class StoragePoolClientTest {
         storagePoolClient.update(ANY_STORAGE_POOL_RESOURCE_ID, storagePool, false);
 
         String expectedUri = ResourceUris.STORAGE_POOL_URI + "/" + ANY_STORAGE_POOL_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.PUT, expectedUri, storagePool);
+        Request request = new Request(HttpMethod.PUT, expectedUri, storagePool);
 
         request.setForceTaskReturn(true);
 
@@ -115,7 +115,7 @@ public class StoragePoolClientTest {
         storagePoolClient.remove(ANY_STORAGE_POOL_RESOURCE_ID, false);
 
         String expectedUri = ResourceUris.STORAGE_POOL_URI + "/" + ANY_STORAGE_POOL_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.DELETE, expectedUri);
+        Request request = new Request(HttpMethod.DELETE, expectedUri);
 
         request.setForceTaskReturn(true);
 

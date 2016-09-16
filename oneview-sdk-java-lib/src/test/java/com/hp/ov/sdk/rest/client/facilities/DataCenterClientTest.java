@@ -28,7 +28,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.facilities.datacenter.DataCenter;
 import com.hp.ov.sdk.dto.facilities.datacenter.VisualContent;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -77,7 +77,7 @@ public class DataCenterClientTest {
 
         dataCenterClient.add(dataCenter);
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.DATA_CENTER_URI, dataCenter);
+        Request request = new Request(HttpMethod.POST, ResourceUris.DATA_CENTER_URI, dataCenter);
 
         then(baseClient).should().executeRequest(request, DataCenter.class);
     }
@@ -89,7 +89,7 @@ public class DataCenterClientTest {
         dataCenterClient.update(ANY_DATA_CENTER_RESOURCE_ID, dataCenter);
 
         String expectedUri = ResourceUris.DATA_CENTER_URI + "/" + ANY_DATA_CENTER_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.PUT, expectedUri, dataCenter);
+        Request request = new Request(HttpMethod.PUT, expectedUri, dataCenter);
 
         then(baseClient).should().executeRequest(request, DataCenter.class);
     }
@@ -99,7 +99,7 @@ public class DataCenterClientTest {
         dataCenterClient.remove(ANY_DATA_CENTER_RESOURCE_ID);
 
         String expectedUri = ResourceUris.DATA_CENTER_URI + "/" + ANY_DATA_CENTER_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.DELETE, expectedUri);
+        Request request = new Request(HttpMethod.DELETE, expectedUri);
 
         then(baseClient).should().executeRequest(request, String.class);
     }

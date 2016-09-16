@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.StorageSystem;
@@ -113,7 +113,7 @@ public class StorageSystemClient {
     public TaskResourceV2 add(AddStorageSystemCredentials storageSystemCredentials, boolean aSync) {
         LOGGER.info("StorageSystemClient : add : Start");
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.STORAGE_SYSTEM_URI, storageSystemCredentials);
+        Request request = new Request(HttpMethod.POST, ResourceUris.STORAGE_SYSTEM_URI, storageSystemCredentials);
 
         request.setForceTaskReturn(true);
 
@@ -137,7 +137,7 @@ public class StorageSystemClient {
     public TaskResourceV2 update(String resourceId, StorageSystem storageSystem, boolean aSync) {
         LOGGER.info("StorageSystemClient : update : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ResourceUris.STORAGE_SYSTEM_URI, resourceId), storageSystem);
 
         request.setForceTaskReturn(true);
@@ -161,7 +161,7 @@ public class StorageSystemClient {
     public TaskResourceV2 remove(String resourceId, boolean aSync) {
         LOGGER.info("StorageSystemClient : remove : Start");
 
-        Request request = new Request(HttpMethodType.DELETE,
+        Request request = new Request(HttpMethod.DELETE,
                 UrlUtils.createUrl(ResourceUris.STORAGE_SYSTEM_URI, resourceId));
 
         request.setForceTaskReturn(true);

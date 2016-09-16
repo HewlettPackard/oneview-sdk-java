@@ -24,7 +24,7 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.dto.EndpointResponse;
 import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.dto.FcSansManagedSanTask;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.fcsans.LocateSanResponse;
@@ -117,7 +117,7 @@ public class FcSanManagedSanClient {
     public SanResponse update(String resourceId, SanRequest sanRequest) {
         LOGGER.info("FcSanManagedSanClient : update : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, resourceId), sanRequest);
 
         SanResponse updatedSan = baseClient.executeRequest(request, SanResponse.class);
@@ -159,7 +159,7 @@ public class FcSanManagedSanClient {
     public FcSansManagedSanTask createIssuesReport(String resourceId, boolean aSync) {
         LOGGER.info("FcSanManagedSanClient : createIssuesReport : Start");
 
-        Request request = new Request(HttpMethodType.POST,
+        Request request = new Request(HttpMethod.POST,
                 UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, resourceId,
                         FC_SANS_MANAGED_SAN_ISSUES));
 
@@ -181,7 +181,7 @@ public class FcSanManagedSanClient {
     public EndpointsCsvFileResponse createEndpointsCsv(String resourceId) {
         LOGGER.info("FcSanManagedSanClient : createEndpointsCsv : Start");
 
-        Request request = new Request(HttpMethodType.POST,
+        Request request = new Request(HttpMethod.POST,
                 UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, resourceId, FC_SANS_MANAGED_SAN_ENDPOINTS));
 
         EndpointsCsvFileResponse endpointsCsvFileResponse = this.baseClient.executeRequest(request,

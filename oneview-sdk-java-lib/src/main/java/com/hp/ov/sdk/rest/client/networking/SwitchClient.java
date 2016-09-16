@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.networking.Port;
@@ -190,7 +190,7 @@ public class SwitchClient {
     public TaskResourceV2 refresh(String resourceId, boolean aSync) {
         LOGGER.info("SwitchClient : refresh : Start");
 
-        Request request = new Request(HttpMethodType.PUT, UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId));
+        Request request = new Request(HttpMethod.PUT, UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId));
         TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("SwitchClient : refresh : End");
@@ -284,7 +284,7 @@ public class SwitchClient {
         String updateUri = UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId,
                 ResourceUris.SWITCHES_UPDATE_PORTS_URI);
 
-        Request request = new Request(HttpMethodType.PUT, updateUri, ports);
+        Request request = new Request(HttpMethod.PUT, updateUri, ports);
         request.setForceTaskReturn(true);
 
         TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);

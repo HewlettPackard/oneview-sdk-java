@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -62,7 +62,7 @@ public class BaseClient {
     public <T> T getResource(String uri, Class<T> returnType, UrlParameter... queries) {
         this.validateNotNullArguments(uri, returnType);
 
-        Request request = new Request(HttpMethodType.GET, uri);
+        Request request = new Request(HttpMethod.GET, uri);
 
         for (UrlParameter query : queries) {
             request.addQuery(query);
@@ -78,7 +78,7 @@ public class BaseClient {
     public <T> List<T> getResourceList(String uri, Class<T> resourceType, UrlParameter... queries) {
         this.validateNotNullArguments(uri, resourceType);
 
-        Request request = new Request(HttpMethodType.GET, uri);
+        Request request = new Request(HttpMethod.GET, uri);
 
         for (UrlParameter query : queries) {
             request.addQuery(query);
@@ -95,7 +95,7 @@ public class BaseClient {
             UrlParameter... queries) {
         this.validateNotNullArguments(uri, resourceType);
 
-        Request request = new Request(HttpMethodType.GET, uri);
+        Request request = new Request(HttpMethod.GET, uri);
 
         for (UrlParameter query : queries) {
             request.addQuery(query);
@@ -110,7 +110,7 @@ public class BaseClient {
     public TaskResourceV2 createResource(String uri, Object body, boolean aSync) {
         this.validateNotNullArguments(uri, body);
 
-        Request request = new Request(HttpMethodType.POST, uri, body);
+        Request request = new Request(HttpMethod.POST, uri, body);
 
         return this.executeMonitorableRequest(request, aSync);
     }
@@ -118,7 +118,7 @@ public class BaseClient {
     public TaskResourceV2 updateResource(String uri, Object body, boolean aSync) {
         this.validateNotNullArguments(uri, body);
 
-        Request request = new Request(HttpMethodType.PUT, uri, body);
+        Request request = new Request(HttpMethod.PUT, uri, body);
 
         return this.executeMonitorableRequest(request, aSync);
     }
@@ -126,7 +126,7 @@ public class BaseClient {
     public TaskResourceV2 patchResource(String uri, Patch patch, boolean aSync) {
         this.validateNotNullArguments(uri, patch);
 
-        Request request = new Request(HttpMethodType.PATCH, uri, patch);
+        Request request = new Request(HttpMethod.PATCH, uri, patch);
 
         return this.executeMonitorableRequest(request, aSync);
     }
@@ -134,7 +134,7 @@ public class BaseClient {
     public TaskResourceV2 deleteResource(String uri, boolean aSync, UrlParameter... queries) {
         this.validateNotNullArguments(uri);
 
-        Request request = new Request(HttpMethodType.DELETE, uri);
+        Request request = new Request(HttpMethod.DELETE, uri);
 
         for (UrlParameter query : queries) {
             request.addQuery(query);

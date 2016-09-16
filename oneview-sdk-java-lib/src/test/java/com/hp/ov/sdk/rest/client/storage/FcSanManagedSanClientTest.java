@@ -26,7 +26,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.dto.EndpointResponse;
 import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.fcsans.LocateSanResponse;
 import com.hp.ov.sdk.dto.fcsans.SanRequest;
 import com.hp.ov.sdk.dto.fcsans.SanResponse;
@@ -79,7 +79,7 @@ public class FcSanManagedSanClientTest {
         client.update(ANY_RESOURCE_ID, sanRequest);
 
         String expectedUri = FcSanManagedSanClient.FC_SANS_MANAGED_SAN_URI + "/" + ANY_RESOURCE_ID;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, sanRequest);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, sanRequest);
 
         then(baseClient).should().executeRequest(expectedRequest, SanResponse.class);
     }
@@ -102,7 +102,7 @@ public class FcSanManagedSanClientTest {
         String expectedUri = FcSanManagedSanClient.FC_SANS_MANAGED_SAN_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + FcSanManagedSanClient.FC_SANS_MANAGED_SAN_ISSUES;
-        Request expectedRequest = new Request(HttpMethodType.POST, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.POST, expectedUri);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
     }
@@ -114,7 +114,7 @@ public class FcSanManagedSanClientTest {
         String expectedUri = FcSanManagedSanClient.FC_SANS_MANAGED_SAN_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + FcSanManagedSanClient.FC_SANS_MANAGED_SAN_ENDPOINTS;
-        Request expectedRequest = new Request(HttpMethodType.POST, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.POST, expectedUri);
 
         then(baseClient).should().executeRequest(expectedRequest, EndpointsCsvFileResponse.class);
     }

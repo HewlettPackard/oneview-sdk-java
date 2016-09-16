@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.facilities.unmanageddevice.UnmanagedDevice;
@@ -105,7 +105,7 @@ public class UnmanagedDeviceClient {
     public UnmanagedDevice add(UnmanagedDevice unmanagedDevice) {
         LOGGER.info("UnmanagedDeviceClient : add : Start");
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.UNMANAGED_DEVICE_URI, unmanagedDevice);
+        Request request = new Request(HttpMethod.POST, ResourceUris.UNMANAGED_DEVICE_URI, unmanagedDevice);
         UnmanagedDevice createdUnmanagedDevice = this.baseClient.executeRequest(request, UnmanagedDevice.class);
 
         LOGGER.info("UnmanagedDeviceClient : add : End");
@@ -124,7 +124,7 @@ public class UnmanagedDeviceClient {
     public UnmanagedDevice update(String resourceId, UnmanagedDevice unmanagedDevice) {
         LOGGER.info("UnmanagedDeviceClient : update : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ResourceUris.UNMANAGED_DEVICE_URI, resourceId), unmanagedDevice);
         UnmanagedDevice updatedUnmanagedDevice = this.baseClient.executeRequest(request, UnmanagedDevice.class);
 
@@ -143,7 +143,7 @@ public class UnmanagedDeviceClient {
     public String remove(String resourceId) {
         LOGGER.info("UnmanagedDeviceClient : remove : Start");
 
-        Request request = new Request(HttpMethodType.DELETE,
+        Request request = new Request(HttpMethod.DELETE,
                 UrlUtils.createUrl(ResourceUris.UNMANAGED_DEVICE_URI, resourceId));
         String response = this.baseClient.executeRequest(request, String.class);
 

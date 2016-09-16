@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.ethernet.ConnectionTemplate;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -122,7 +122,7 @@ public class ConnectionTemplateClient {
     public ConnectionTemplate update(String resourceId, ConnectionTemplate connectionTemplate) {
         LOGGER.info("ConnectionTemplateClient : update : Start");
 
-        Request request = new Request(HttpMethodType.PUT, UrlUtils.createUrl(
+        Request request = new Request(HttpMethod.PUT, UrlUtils.createUrl(
                 ResourceUris.CONNECTION_TEMPLATE_URI, resourceId), connectionTemplate);
         ConnectionTemplate updatedConnectionTemplate = this.baseClient.executeRequest(request,
                 ConnectionTemplate.class);

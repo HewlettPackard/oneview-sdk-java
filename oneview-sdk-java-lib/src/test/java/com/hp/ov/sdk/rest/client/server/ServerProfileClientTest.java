@@ -28,7 +28,7 @@ import com.google.common.base.Optional;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.AvailableStorageSystem;
 import com.hp.ov.sdk.dto.AvailableTargets;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ServerProfileCompliancePreview;
 import com.hp.ov.sdk.dto.ServerProfileHealth;
@@ -87,7 +87,7 @@ public class ServerProfileClientTest {
 
         client.create(serverProfile, false);
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.SERVER_PROFILE_URI, serverProfile);
+        Request request = new Request(HttpMethod.POST, ResourceUris.SERVER_PROFILE_URI, serverProfile);
 
         request.setTimeout(1200000);
 
@@ -99,7 +99,7 @@ public class ServerProfileClientTest {
         client.delete(ANY_RESOURCE_ID, false);
 
         String expectedUri = ResourceUris.SERVER_PROFILE_URI + "/" + ANY_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.DELETE, expectedUri);
+        Request request = new Request(HttpMethod.DELETE, expectedUri);
 
         request.setTimeout(1200000);
 
@@ -110,7 +110,7 @@ public class ServerProfileClientTest {
     public void shouldDeleteServerProfileByFilter() {
         client.deleteByFilter(ANY_FILTER, false);
 
-        Request expectedRequest = new Request(HttpMethodType.DELETE, ResourceUris.SERVER_PROFILE_URI);
+        Request expectedRequest = new Request(HttpMethod.DELETE, ResourceUris.SERVER_PROFILE_URI);
 
         expectedRequest.addQuery(new UrlParameter("filter", ANY_FILTER));
         expectedRequest.setTimeout(1200000);
@@ -125,7 +125,7 @@ public class ServerProfileClientTest {
         client.update(ANY_RESOURCE_ID, serverProfile, false);
 
         String expectedUri = ResourceUris.SERVER_PROFILE_URI + "/" + ANY_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.PUT, expectedUri, serverProfile);
+        Request request = new Request(HttpMethod.PUT, expectedUri, serverProfile);
 
         request.setTimeout(1200000);
 
@@ -139,7 +139,7 @@ public class ServerProfileClientTest {
         client.patch(ANY_RESOURCE_ID, patch, false);
 
         String expectedUri = ResourceUris.SERVER_PROFILE_URI + "/" + ANY_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.PATCH, expectedUri, patch);
+        Request request = new Request(HttpMethod.PATCH, expectedUri, patch);
 
         request.setTimeout(1200000);
 
@@ -176,7 +176,7 @@ public class ServerProfileClientTest {
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.SERVER_PROFILE_COMPLIANCE_TRANSFORMATION_URI;
 
-        Request expectedRequest = new Request(HttpMethodType.GET, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
         expectedRequest.addQuery(new UrlParameter("serverHardwareTypeUri", ANY_HARDWARE_TYPE_URI));
         expectedRequest.addQuery(new UrlParameter("enclosureGroupUri", ANY_ENCLOSURE_GROUP_URI));
@@ -188,7 +188,7 @@ public class ServerProfileClientTest {
     public void shouldGetServerProfileAvailableNetworks() {
         client.getAvailableNetworks(ANY_HARDWARE_TYPE_URI, ANY_ENCLOSURE_GROUP_URI);
 
-        Request expectedRequest = new Request(HttpMethodType.GET, ResourceUris.AVAILABLE_NETWORKS_URI);
+        Request expectedRequest = new Request(HttpMethod.GET, ResourceUris.AVAILABLE_NETWORKS_URI);
 
         expectedRequest.addQuery(new UrlParameter("serverHardwareTypeUri", ANY_HARDWARE_TYPE_URI));
         expectedRequest.addQuery(new UrlParameter("enclosureGroupUri", ANY_ENCLOSURE_GROUP_URI));

@@ -26,7 +26,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.StorageSystem;
 import com.hp.ov.sdk.dto.StorageTargetPort;
@@ -77,7 +77,7 @@ public class StorageSystemClientTest {
 
         storageSystemClient.add(storageSystemCredentials, false);
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.STORAGE_SYSTEM_URI, storageSystemCredentials);
+        Request request = new Request(HttpMethod.POST, ResourceUris.STORAGE_SYSTEM_URI, storageSystemCredentials);
 
         request.setForceTaskReturn(true);
 
@@ -91,7 +91,7 @@ public class StorageSystemClientTest {
         storageSystemClient.update(ANY_STORAGE_SYSTEM_RESOURCE_ID, storageSystem, false);
 
         String expectedUri = ResourceUris.STORAGE_SYSTEM_URI + "/" + ANY_STORAGE_SYSTEM_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.PUT, expectedUri, storageSystem);
+        Request request = new Request(HttpMethod.PUT, expectedUri, storageSystem);
 
         request.setForceTaskReturn(true);
 
@@ -103,7 +103,7 @@ public class StorageSystemClientTest {
         storageSystemClient.remove(ANY_STORAGE_SYSTEM_RESOURCE_ID, false);
 
         String expectedUri = ResourceUris.STORAGE_SYSTEM_URI + "/" + ANY_STORAGE_SYSTEM_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.DELETE, expectedUri);
+        Request request = new Request(HttpMethod.DELETE, expectedUri);
 
         request.setForceTaskReturn(true);
 

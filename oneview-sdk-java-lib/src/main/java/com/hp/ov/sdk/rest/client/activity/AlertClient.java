@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.TaskState;
@@ -92,7 +92,7 @@ public class AlertClient {
     public AlertResource update(String resourceId, AlertUpdate alertUpdate) {
         LOGGER.info("AlertClient : update : Start");
 
-        Request request = new Request(HttpMethodType.PUT, UrlUtils.createUrl(ALERTS_URI, resourceId), alertUpdate);
+        Request request = new Request(HttpMethod.PUT, UrlUtils.createUrl(ALERTS_URI, resourceId), alertUpdate);
 
         AlertResource updatedAlert = this.baseClient.executeRequest(request, AlertResource.class);
 
@@ -111,7 +111,7 @@ public class AlertClient {
     public TaskResourceV2 delete(String resourceId) {
         LOGGER.info("DataCenterClient : delete : Start");
 
-        Request request = new Request(HttpMethodType.DELETE, UrlUtils.createUrl(ALERTS_URI, resourceId));
+        Request request = new Request(HttpMethod.DELETE, UrlUtils.createUrl(ALERTS_URI, resourceId));
 
         this.baseClient.executeRequest(request, String.class);
 
@@ -161,7 +161,7 @@ public class AlertClient {
     public TaskResourceV2 deleteAlertChangeLog(String changeLogId) {
         LOGGER.info("DataCenterClient : deleteAlertChangeLog : Start");
 
-        Request request = new Request(HttpMethodType.DELETE, UrlUtils.createUrl(ALERTS_CHANGELOG_URI, changeLogId));
+        Request request = new Request(HttpMethod.DELETE, UrlUtils.createUrl(ALERTS_CHANGELOG_URI, changeLogId));
 
         this.baseClient.executeRequest(request, String.class);
 

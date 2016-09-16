@@ -29,7 +29,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.NameServer;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.PortStatistics;
@@ -87,7 +87,7 @@ public class InterconnectClientTest {
         client.patch(ANY_RESOURCE_ID, patch, false);
 
         String expectedUri = ResourceUris.INTERCONNECT_URI + "/" + ANY_RESOURCE_ID;
-        Request expectedRequest = new Request(HttpMethodType.PATCH, expectedUri, patch);
+        Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri, patch);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
     }
@@ -125,7 +125,7 @@ public class InterconnectClientTest {
         String expectedUri = ResourceUris.INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.INTERCONNECT_RESET_PORT_PROTECTION_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
     }

@@ -25,7 +25,7 @@ import com.google.common.base.Optional;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.AvailableStorageSystem;
 import com.hp.ov.sdk.dto.AvailableTargets;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.ServerProfileCompliancePreview;
@@ -120,7 +120,7 @@ public class ServerProfileClient {
     public TaskResourceV2 create(ServerProfile serverProfile, boolean aSync) {
         LOGGER.info("ServerProfileClient : create : Start");
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.SERVER_PROFILE_URI, serverProfile);
+        Request request = new Request(HttpMethod.POST, ResourceUris.SERVER_PROFILE_URI, serverProfile);
 
         request.setTimeout(TIMEOUT);
 
@@ -143,7 +143,7 @@ public class ServerProfileClient {
     public TaskResourceV2 delete(String resourceId, boolean aSync) {
         LOGGER.info("ServerProfileClient : delete : Start");
 
-        Request request = new Request(HttpMethodType.DELETE,
+        Request request = new Request(HttpMethod.DELETE,
                 UrlUtils.createUrl(ResourceUris.SERVER_PROFILE_URI, resourceId));
 
         request.setTimeout(TIMEOUT);
@@ -168,7 +168,7 @@ public class ServerProfileClient {
     public TaskResourceV2 deleteByFilter(String filter, boolean aSync) {
         LOGGER.info("ServerProfileClient : deleteByFilter : Start");
 
-        Request request = new Request(HttpMethodType.DELETE, ResourceUris.SERVER_PROFILE_URI);
+        Request request = new Request(HttpMethod.DELETE, ResourceUris.SERVER_PROFILE_URI);
 
         request.addQuery(new UrlParameter("filter", filter));
         request.setTimeout(TIMEOUT);
@@ -194,7 +194,7 @@ public class ServerProfileClient {
         LOGGER.info("ServerProfileClient : update : Start");
 
         String resourceUri = UrlUtils.createUrl(ResourceUris.SERVER_PROFILE_URI, resourceId);
-        Request request = new Request(HttpMethodType.PUT, resourceUri, serverProfile);
+        Request request = new Request(HttpMethod.PUT, resourceUri, serverProfile);
 
         request.setTimeout(TIMEOUT);
 
@@ -226,7 +226,7 @@ public class ServerProfileClient {
         LOGGER.info("ServerProfileClient : patch : Start");
 
         String resourceUri = UrlUtils.createUrl(ResourceUris.SERVER_PROFILE_URI, resourceId);
-        Request request = new Request(HttpMethodType.PATCH, resourceUri, patch);
+        Request request = new Request(HttpMethod.PATCH, resourceUri, patch);
 
         request.setTimeout(TIMEOUT);
 
@@ -300,7 +300,7 @@ public class ServerProfileClient {
 
         String uri = UrlUtils.createUrl(ResourceUris.SERVER_PROFILE_URI, resourceId,
                 ResourceUris.SERVER_PROFILE_COMPLIANCE_TRANSFORMATION_URI);
-        Request request = new Request(HttpMethodType.GET, uri);
+        Request request = new Request(HttpMethod.GET, uri);
 
         request.addQuery(new UrlParameter("serverHardwareTypeUri", serverHardwareTypeUri));
         request.addQuery(new UrlParameter("enclosureGroupUri", enclosureGroupUri));
@@ -326,7 +326,7 @@ public class ServerProfileClient {
     public AvailableNetworks getAvailableNetworks(String serverHardwareTypeUri, String enclosureGroupUri) {
         LOGGER.info("ServerProfileClient : getAvailableNetworks : Start");
 
-        Request request = new Request(HttpMethodType.GET, ResourceUris.AVAILABLE_NETWORKS_URI);
+        Request request = new Request(HttpMethod.GET, ResourceUris.AVAILABLE_NETWORKS_URI);
 
         request.addQuery(new UrlParameter("serverHardwareTypeUri", serverHardwareTypeUri));
         request.addQuery(new UrlParameter("enclosureGroupUri", enclosureGroupUri));

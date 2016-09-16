@@ -26,7 +26,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.facilities.unmanageddevice.UnmanagedDevice;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
@@ -74,7 +74,7 @@ public class UnmanagedDeviceClientTest {
 
         unmanagedDeviceClient.add(unmanagedDevice);
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.UNMANAGED_DEVICE_URI, unmanagedDevice);
+        Request request = new Request(HttpMethod.POST, ResourceUris.UNMANAGED_DEVICE_URI, unmanagedDevice);
 
         then(baseClient).should().executeRequest(request, UnmanagedDevice.class);
     }
@@ -86,7 +86,7 @@ public class UnmanagedDeviceClientTest {
         unmanagedDeviceClient.update(ANY_UNMANAGED_DEVICE_RESOURCE_ID, unmanagedDevice);
 
         String expectedUri = ResourceUris.UNMANAGED_DEVICE_URI + "/" + ANY_UNMANAGED_DEVICE_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.PUT, expectedUri, unmanagedDevice);
+        Request request = new Request(HttpMethod.PUT, expectedUri, unmanagedDevice);
 
         then(baseClient).should().executeRequest(request, UnmanagedDevice.class);
     }
@@ -96,7 +96,7 @@ public class UnmanagedDeviceClientTest {
         unmanagedDeviceClient.remove(ANY_UNMANAGED_DEVICE_RESOURCE_ID);
 
         String expectedUri = ResourceUris.UNMANAGED_DEVICE_URI + "/" + ANY_UNMANAGED_DEVICE_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.DELETE, expectedUri);
+        Request request = new Request(HttpMethod.DELETE, expectedUri);
 
         then(baseClient).should().executeRequest(request, String.class);
     }

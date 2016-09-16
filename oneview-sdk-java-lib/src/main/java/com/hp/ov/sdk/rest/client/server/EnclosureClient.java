@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -133,7 +133,7 @@ public class EnclosureClient {
     public TaskResourceV2 add(AddEnclosure addEnclosure, boolean aSync) {
         LOGGER.info("EnclosureClient : add : Start");
 
-        Request request = new Request(HttpMethodType.POST, ENCLOSURE_URI, addEnclosure);
+        Request request = new Request(HttpMethod.POST, ENCLOSURE_URI, addEnclosure);
 
         request.setTimeout(TIMEOUT);
 
@@ -157,7 +157,7 @@ public class EnclosureClient {
     public TaskResourceV2 update(String resourceId, Enclosure enclosure, boolean aSync) {
         LOGGER.info("EnclosureClient : update : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ENCLOSURE_URI, resourceId), enclosure);
 
         request.setTimeout(TIMEOUT);
@@ -183,7 +183,7 @@ public class EnclosureClient {
     public TaskResourceV2 patch(String resourceId, Patch patch, boolean aSync) {
         LOGGER.info("EnclosureClient : patch : Start");
 
-        Request request = new Request(HttpMethodType.PATCH,
+        Request request = new Request(HttpMethod.PATCH,
                 UrlUtils.createUrl(ENCLOSURE_URI, resourceId), patch);
 
         request.setTimeout(TIMEOUT);
@@ -211,7 +211,7 @@ public class EnclosureClient {
     public TaskResourceV2 remove(String resourceId, boolean aSync) {
         LOGGER.info("EnclosureClient : remove : Start");
 
-        Request request = new Request(HttpMethodType.DELETE,
+        Request request = new Request(HttpMethod.DELETE,
                 UrlUtils.createUrl(ENCLOSURE_URI, resourceId));
 
         request.setTimeout(TIMEOUT);
@@ -237,7 +237,7 @@ public class EnclosureClient {
         LOGGER.info("EnclosureClient : updateConfiguration : Start");
 
         String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_CONFIGURATION_URI);
-        Request request = new Request(HttpMethodType.PUT, updateUri);
+        Request request = new Request(HttpMethod.PUT, updateUri);
 
         request.setTimeout(TIMEOUT);
 
@@ -258,7 +258,7 @@ public class EnclosureClient {
     public String getConfigurationScript(String resourceId) {
         LOGGER.info("EnclosureClient : getConfigurationScript : Start");
 
-        Request request = new Request(HttpMethodType.GET,
+        Request request = new Request(HttpMethod.GET,
                 UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_SCRIPT_URI));
 
         String response = baseClient.executeRequest(request, String.class);
@@ -372,7 +372,7 @@ public class EnclosureClient {
         LOGGER.info("EnclosureClient : updateCompliance : Start");
 
         String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_COMPLIANCE_URI);
-        Request request = new Request(HttpMethodType.PUT, updateUri);
+        Request request = new Request(HttpMethod.PUT, updateUri);
 
         request.setTimeout(TIMEOUT);
 
@@ -400,7 +400,7 @@ public class EnclosureClient {
         LOGGER.info("EnclosureClient : updateFwBaseline : Start");
 
         String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_FW_BASELINE_URI);
-        Request request = new Request(HttpMethodType.PUT, updateUri, fwBaselineConfig);
+        Request request = new Request(HttpMethod.PUT, updateUri, fwBaselineConfig);
 
         request.setTimeout(TIMEOUT);
 
@@ -467,7 +467,7 @@ public class EnclosureClient {
         LOGGER.info("EnclosureClient : updateEnvironmentalConfiguration : Start");
 
         Request request = new Request(
-                HttpMethodType.PUT,
+                HttpMethod.PUT,
                 UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENVIRONMENT_CONFIGURATION_URI),
                 updateEnvironmentalConfiguration);
 
@@ -493,7 +493,7 @@ public class EnclosureClient {
         LOGGER.info("EnclosureClient : updateRefreshState : Start");
 
         String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_REFRESH_STATE_URI);
-        Request request = new Request(HttpMethodType.PUT, updateUri, refreshStateConfig);
+        Request request = new Request(HttpMethod.PUT, updateUri, refreshStateConfig);
 
         request.setTimeout(TIMEOUT);
 

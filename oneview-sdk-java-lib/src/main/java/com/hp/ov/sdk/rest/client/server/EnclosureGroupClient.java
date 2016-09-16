@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.servers.enclosuregroup.EnclosureGroup;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -104,7 +104,7 @@ public class EnclosureGroupClient {
     public EnclosureGroup create(EnclosureGroup enclosureGroup) {
         LOGGER.info("EnclosureGroupClient : create : Start");
 
-        Request request = new Request(HttpMethodType.POST,
+        Request request = new Request(HttpMethod.POST,
                 ResourceUris.ENCLOSURE_GROUP_URI, enclosureGroup);
 
         EnclosureGroup enclosureGroupCreated = baseClient.executeRequest(request, EnclosureGroup.class);
@@ -125,7 +125,7 @@ public class EnclosureGroupClient {
     public EnclosureGroup update(String resourceId, EnclosureGroup enclosureGroup) {
         LOGGER.info("EnclosureGroupClient : update : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ResourceUris.ENCLOSURE_GROUP_URI, resourceId), enclosureGroup);
 
         EnclosureGroup enclosureGroupUpdated = baseClient.executeRequest(request, EnclosureGroup.class);
@@ -145,7 +145,7 @@ public class EnclosureGroupClient {
     public String delete(String resourceId) {
         LOGGER.info("EnclosureGroupClient : delete : Start");
 
-        Request request = new Request(HttpMethodType.DELETE,
+        Request request = new Request(HttpMethod.DELETE,
                 UrlUtils.createUrl(ResourceUris.ENCLOSURE_GROUP_URI, resourceId));
 
         String response = baseClient.executeRequest(request, String.class);
@@ -165,7 +165,7 @@ public class EnclosureGroupClient {
     public String getConfigurationScript(String resourceId) {
         LOGGER.info("EnclosureGroupClient : getConfigurationScript : Start");
 
-        Request request = new Request(HttpMethodType.GET,
+        Request request = new Request(HttpMethod.GET,
                 UrlUtils.createUrl(ResourceUris.ENCLOSURE_GROUP_URI, resourceId,
                         ResourceUris.ENCLOSURE_GROUP_SCRIPT_URI));
 
@@ -187,7 +187,7 @@ public class EnclosureGroupClient {
     public String updateConfigurationScript(String resourceId, String scriptData) {
         LOGGER.info("EnclosureGroupClient : updateConfigurationScript : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ResourceUris.ENCLOSURE_GROUP_URI, resourceId,
                         ResourceUris.ENCLOSURE_GROUP_SCRIPT_URI),
                 scriptData);

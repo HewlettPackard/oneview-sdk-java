@@ -28,7 +28,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ImportPdd;
 import com.hp.ov.sdk.dto.OutletState;
 import com.hp.ov.sdk.dto.PowerDeliveryDevice;
@@ -80,7 +80,7 @@ public class PowerDeliveryDeviceClientTest {
 
         powerDeliveryDeviceClient.add(powerDeliveryDevice);
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.POWER_DEVICE_URI, powerDeliveryDevice);
+        Request request = new Request(HttpMethod.POST, ResourceUris.POWER_DEVICE_URI, powerDeliveryDevice);
 
         then(baseClient).should().executeRequest(request, PowerDeliveryDevice.class);
     }
@@ -91,7 +91,7 @@ public class PowerDeliveryDeviceClientTest {
 
         powerDeliveryDeviceClient.add(importPdd, false);
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.POWER_DEVICE_DISCOVERY_URI, importPdd);
+        Request request = new Request(HttpMethod.POST, ResourceUris.POWER_DEVICE_DISCOVERY_URI, importPdd);
 
         request.setTimeout(1200000);
 
@@ -105,7 +105,7 @@ public class PowerDeliveryDeviceClientTest {
         powerDeliveryDeviceClient.update(ANY_RESOURCE_ID, powerDeliveryDevice);
 
         String expectedUri = ResourceUris.POWER_DEVICE_URI + "/" + ANY_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.PUT, expectedUri, powerDeliveryDevice);
+        Request request = new Request(HttpMethod.PUT, expectedUri, powerDeliveryDevice);
 
         then(baseClient).should().executeRequest(request, PowerDeliveryDevice.class);
     }
@@ -115,7 +115,7 @@ public class PowerDeliveryDeviceClientTest {
         powerDeliveryDeviceClient.remove(ANY_RESOURCE_ID, false);
 
         String expectedUri = ResourceUris.POWER_DEVICE_URI + "/" + ANY_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.DELETE, expectedUri);
+        Request request = new Request(HttpMethod.DELETE, expectedUri);
 
         request.setTimeout(1200000);
 
@@ -127,7 +127,7 @@ public class PowerDeliveryDeviceClientTest {
         powerDeliveryDeviceClient.removeByFilter(ANY_RESOURCE_NAME, false);
 
         UrlParameter filter = new UrlParameter("filter", ANY_RESOURCE_NAME);
-        Request request = new Request(HttpMethodType.DELETE, ResourceUris.POWER_DEVICE_URI);
+        Request request = new Request(HttpMethod.DELETE, ResourceUris.POWER_DEVICE_URI);
 
         request.setTimeout(1200000);
         request.addQuery(filter);
@@ -143,7 +143,7 @@ public class PowerDeliveryDeviceClientTest {
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.POWER_DEVICE_SYNCHRONOUS_URI;
 
-        Request expectedRequest = new Request(HttpMethodType.DELETE, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
         then(baseClient).should().executeRequest(expectedRequest, String.class);
     }
@@ -171,7 +171,7 @@ public class PowerDeliveryDeviceClientTest {
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.POWER_DEVICE_POWER_STATE_URI;
 
-        Request request = new Request(HttpMethodType.PUT, expectedUri, powerState);
+        Request request = new Request(HttpMethod.PUT, expectedUri, powerState);
 
         request.setTimeout(1200000);
 
@@ -187,7 +187,7 @@ public class PowerDeliveryDeviceClientTest {
         String expectedUri = ResourceUris.POWER_DEVICE_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.POWER_DEVICE_REFRESH_STATE_URI;
-        Request request = new Request(HttpMethodType.PUT, expectedUri, refreshState);
+        Request request = new Request(HttpMethod.PUT, expectedUri, refreshState);
 
         request.setTimeout(1200000);
 
@@ -217,7 +217,7 @@ public class PowerDeliveryDeviceClientTest {
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.POWER_DEVICE_UID_STATE_URI;
 
-        Request request = new Request(HttpMethodType.PUT, expectedUri, uidState);
+        Request request = new Request(HttpMethod.PUT, expectedUri, uidState);
 
         request.setTimeout(1200000);
 

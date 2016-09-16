@@ -31,7 +31,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.InterconnectFibDataEntry;
 import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
 import com.hp.ov.sdk.dto.InternalVlanAssociation;
@@ -102,7 +102,7 @@ public class LogicalInterconnectClientTest {
         String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_LOCATION_URI
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_INTERCONNECTS_URI;
-        Request expectedRequest = new Request(HttpMethodType.POST, expectedUri, location);
+        Request expectedRequest = new Request(HttpMethod.POST, expectedUri, location);
 
         expectedRequest.setTimeout(300000);
 
@@ -116,7 +116,7 @@ public class LogicalInterconnectClientTest {
         String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_LOCATION_URI
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_INTERCONNECTS_URI;
-        Request expectedRequest = new Request(HttpMethodType.DELETE, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
         expectedRequest.setTimeout(300000);
         expectedRequest.addQuery(new UrlParameter("location",
@@ -145,7 +145,7 @@ public class LogicalInterconnectClientTest {
         String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_SNMP_CONFIGURATION_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, snmpConfiguration);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, snmpConfiguration);
 
         expectedRequest.setTimeout(300000);
 
@@ -170,7 +170,7 @@ public class LogicalInterconnectClientTest {
         String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_FORWARDING_INFORMATION_BASE_URI;
-        Request expectedRequest = new Request(HttpMethodType.POST, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.POST, expectedUri);
 
         then(baseClient).should().executeRequest(expectedRequest, InterconnectFibDataInfo.class);
     }
@@ -195,7 +195,7 @@ public class LogicalInterconnectClientTest {
         String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_FIRMWARE_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, liFirmware);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, liFirmware);
 
         expectedRequest.setTimeout(300000);
 
@@ -222,7 +222,7 @@ public class LogicalInterconnectClientTest {
         String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_QOS_AGGREGATED_CONFIGURATION_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, configuration);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, configuration);
 
         expectedRequest.setTimeout(300000);
 
@@ -251,7 +251,7 @@ public class LogicalInterconnectClientTest {
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_TELEMETRY_CONFIGURATION_URI
                 + "/" + ANY_TELEMETRY_ID;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, configuration);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, configuration);
 
         then(baseClient).should().executeRequest(expectedRequest, TelemetryConfiguration.class);
     }
@@ -266,7 +266,7 @@ public class LogicalInterconnectClientTest {
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_TELEMETRY_CONFIGURATION_URI
                 + "/" + ANY_TELEMETRY_ID;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, configuration);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, configuration);
 
         expectedRequest.setTimeout(300000);
 
@@ -293,7 +293,7 @@ public class LogicalInterconnectClientTest {
         String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_PORT_MONITOR_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, portMonitor);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, portMonitor);
 
         expectedRequest.setTimeout(300000);
 
@@ -307,7 +307,7 @@ public class LogicalInterconnectClientTest {
         String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_CONFIGURATION_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
 
         expectedRequest.setTimeout(300000);
 
@@ -323,7 +323,7 @@ public class LogicalInterconnectClientTest {
         String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_SETTINGS_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, settings);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, settings);
 
         expectedRequest.setTimeout(300000);
 
@@ -339,7 +339,7 @@ public class LogicalInterconnectClientTest {
         String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_ETHERNET_SETTINGS_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, settings);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, settings);
 
         expectedRequest.setTimeout(300000);
 
@@ -353,7 +353,7 @@ public class LogicalInterconnectClientTest {
         String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_COMPLIANCE_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
 
         expectedRequest.setTimeout(300000);
 
@@ -369,7 +369,7 @@ public class LogicalInterconnectClientTest {
         String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ResourceUris.LOGICAL_INTERCONNECT_INTERNAL_NETWORKS_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, networkUris);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, networkUris);
 
         expectedRequest.setTimeout(300000);
 

@@ -54,7 +54,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
@@ -315,7 +315,7 @@ public class HttpRestClient {
                 String restUri = response.getFirstHeader(LOCATION_HEADER).getValue();
                 restUri = restUri.substring(restUri.indexOf("/rest"));
 
-                Request taskRequest = new Request(HttpMethodType.GET, restUri);
+                Request taskRequest = new Request(HttpMethod.GET, restUri);
 
                 return this.sendRequest(params, taskRequest);
             }

@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.servers.serverhardwaretype.ServerHardwareType;
@@ -106,7 +106,7 @@ public class ServerHardwareTypeClient {
     public ServerHardwareType update(String resourceId, ServerHardwareTypeUpdate serverHardwareTypeUpdate) {
         LOGGER.info("ServerHardwareTypeClient : update : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ResourceUris.SERVER_HARDWARE_TYPE_URI, resourceId), serverHardwareTypeUpdate);
 
         ServerHardwareType serverHardwareTypeUpdated = baseClient.executeRequest(request, ServerHardwareType.class);

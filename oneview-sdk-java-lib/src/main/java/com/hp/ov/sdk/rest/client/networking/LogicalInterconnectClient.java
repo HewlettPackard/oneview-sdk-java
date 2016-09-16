@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.InterconnectFibDataEntry;
 import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
 import com.hp.ov.sdk.dto.InternalVlanAssociation;
@@ -137,7 +137,7 @@ public class LogicalInterconnectClient {
                 ResourceUris.LOGICAL_INTERCONNECT_LOCATION_URI,
                 ResourceUris.LOGICAL_INTERCONNECT_INTERCONNECTS_URI);
 
-        Request request = new Request(HttpMethodType.POST, uri, location);
+        Request request = new Request(HttpMethod.POST, uri, location);
 
         request.setTimeout(TIMEOUT);
 
@@ -165,7 +165,7 @@ public class LogicalInterconnectClient {
                 ResourceUris.LOGICAL_INTERCONNECT_LOCATION_URI,
                 ResourceUris.LOGICAL_INTERCONNECT_INTERCONNECTS_URI);
 
-        Request request = new Request(HttpMethodType.DELETE, uri);
+        Request request = new Request(HttpMethod.DELETE, uri);
 
         request.setTimeout(TIMEOUT);
         request.addQuery(new UrlParameter("location", "Enclosure:" + enclosureUri + ",Bay:"+ bay));
@@ -216,7 +216,7 @@ public class LogicalInterconnectClient {
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI,
                 resourceId, ResourceUris.LOGICAL_INTERCONNECT_SNMP_CONFIGURATION_URI);
 
-        Request request = new Request(HttpMethodType.PUT, uri, snmpConfiguration);
+        Request request = new Request(HttpMethod.PUT, uri, snmpConfiguration);
 
         request.setTimeout(TIMEOUT);
 
@@ -262,7 +262,7 @@ public class LogicalInterconnectClient {
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
                 ResourceUris.LOGICAL_INTERCONNECT_FORWARDING_INFORMATION_BASE_URI);
-        Request request = new Request(HttpMethodType.POST, uri);
+        Request request = new Request(HttpMethod.POST, uri);
 
         InterconnectFibDataInfo forwardingInfo = baseClient.executeRequest(request,
                 InterconnectFibDataInfo.class);
@@ -311,7 +311,7 @@ public class LogicalInterconnectClient {
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
                 ResourceUris.LOGICAL_INTERCONNECT_FIRMWARE_URI);
-        Request request = new Request(HttpMethodType.PUT, uri, liFirmware);
+        Request request = new Request(HttpMethod.PUT, uri, liFirmware);
 
         request.setTimeout(TIMEOUT);
 
@@ -359,7 +359,7 @@ public class LogicalInterconnectClient {
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
                 ResourceUris.LOGICAL_INTERCONNECT_QOS_AGGREGATED_CONFIGURATION_URI);
-        Request request = new Request(HttpMethodType.PUT, uri, qosAggregatedConfiguration);
+        Request request = new Request(HttpMethod.PUT, uri, qosAggregatedConfiguration);
 
         request.setTimeout(TIMEOUT);
 
@@ -411,7 +411,7 @@ public class LogicalInterconnectClient {
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
                 ResourceUris.LOGICAL_INTERCONNECT_TELEMETRY_CONFIGURATION_URI, telemetryConfigurationId);
-        Request request = new Request(HttpMethodType.PUT, uri, telemetryConfiguration);
+        Request request = new Request(HttpMethod.PUT, uri, telemetryConfiguration);
 
         TelemetryConfiguration telemetryConfigurationUpdated = baseClient.executeRequest(
                 request, TelemetryConfiguration.class);
@@ -443,7 +443,7 @@ public class LogicalInterconnectClient {
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
                 ResourceUris.LOGICAL_INTERCONNECT_TELEMETRY_CONFIGURATION_URI, telemetryConfigurationId);
-        Request request = new Request(HttpMethodType.PUT, uri, telemetryConfiguration);
+        Request request = new Request(HttpMethod.PUT, uri, telemetryConfiguration);
 
         request.setTimeout(TIMEOUT);
 
@@ -489,7 +489,7 @@ public class LogicalInterconnectClient {
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
                 ResourceUris.LOGICAL_INTERCONNECT_PORT_MONITOR_URI);
-        Request request = new Request(HttpMethodType.PUT, uri, portMonitor);
+        Request request = new Request(HttpMethod.PUT, uri, portMonitor);
 
         request.setTimeout(TIMEOUT);
 
@@ -515,7 +515,7 @@ public class LogicalInterconnectClient {
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
                 ResourceUris.LOGICAL_INTERCONNECT_CONFIGURATION_URI);
-        Request request = new Request(HttpMethodType.PUT, uri);
+        Request request = new Request(HttpMethod.PUT, uri);
 
         request.setTimeout(TIMEOUT);
 
@@ -543,7 +543,7 @@ public class LogicalInterconnectClient {
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
                 ResourceUris.LOGICAL_INTERCONNECT_SETTINGS_URI);
-        Request request = new Request(HttpMethodType.PUT, uri, interconnectSettings);
+        Request request = new Request(HttpMethod.PUT, uri, interconnectSettings);
 
         request.setTimeout(TIMEOUT);
 
@@ -570,7 +570,7 @@ public class LogicalInterconnectClient {
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
                 ResourceUris.LOGICAL_INTERCONNECT_ETHERNET_SETTINGS_URI);
-        Request request = new Request(HttpMethodType.PUT, uri, ethernetSettings);
+        Request request = new Request(HttpMethod.PUT, uri, ethernetSettings);
 
         request.setTimeout(TIMEOUT);
 
@@ -598,7 +598,7 @@ public class LogicalInterconnectClient {
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
                 ResourceUris.LOGICAL_INTERCONNECT_COMPLIANCE_URI);
-        Request request = new Request(HttpMethodType.PUT, uri);
+        Request request = new Request(HttpMethod.PUT, uri);
 
         request.setTimeout(TIMEOUT);
 
@@ -625,7 +625,7 @@ public class LogicalInterconnectClient {
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
                 ResourceUris.LOGICAL_INTERCONNECT_INTERNAL_NETWORKS_URI);
-        Request request = new Request(HttpMethodType.PUT, uri, networkUris);
+        Request request = new Request(HttpMethod.PUT, uri, networkUris);
 
         request.setTimeout(TIMEOUT);
 

@@ -29,7 +29,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.ContentType;
@@ -53,7 +53,7 @@ public class FirmwareBundleClientTest {
 
         client.add(firmwareBundleFile, false);
 
-        Request expectedRequest = new Request(HttpMethodType.POST,
+        Request expectedRequest = new Request(HttpMethod.POST,
                 ResourceUris.FIRMWARE_BUNDLE_URI, firmwareBundleFile);
 
         expectedRequest.setContentType(ContentType.MULTIPART_FORM_DATA);
