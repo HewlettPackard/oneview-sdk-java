@@ -17,6 +17,8 @@
 package com.hp.ov.sdk.rest.client;
 
 import java.lang.reflect.Constructor;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.hp.ov.sdk.certs.MessagingCertificateClient;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
@@ -78,54 +80,7 @@ public class OneViewClient {
 
     private final BaseClient baseClient;
 
-    private AlertClient alertClient;
-    private ConnectionTemplateClient connectionTemplateClient;
-    private DataCenterClient dataCenterClient;
-    private DriveEnclosureClient driveEnclosureClient;
-    private EnclosureClient enclosureClient;
-    private EnclosureGroupClient enclosureGroupClient;
-    private EthernetNetworkClient ethernetNetworkClient;
-    private FabricClient fabricClient;
-    private FcNetworkClient fcNetworkClient;
-    private FcoeNetworkClient fcoeNetworkClient;
-    private FcSanDeviceManagerClient fcSanDeviceManagerClient;
-    private FcSanManagedSanClient fcSanManagedSanClient;
-    private FcSanProviderClient fcSanProviderClient;
-    private FirmwareBundleClient firmwareBundleClient;
-    private FirmwareDriverClient firmwareDriverClient;
-    private InterconnectClient interconnectClient;
-    private InterconnectLinkTopologyClient interconnectLinkTopologyClient;
-    private InterconnectTypeClient interconnectTypeClient;
-    private InternalLinkSetClient internalLinkSetClient;
-    private LogicalDownlinkClient logicalDownlinkClient;
-    private LogicalEnclosureClient logicalEnclosureClient;
-    private LogicalInterconnectClient logicalInterconnectClient;
-    private LogicalInterconnectGroupClient logicalInterconnectGroupClient;
-    private LogicalSwitchClient logicalSwitchClient;
-    private LogicalSwitchGroupClient logicalSwitchGroupClient;
-    private MessagingCertificateClient messagingCertificateClient;
-    private NetworkSetClient networkSetClient;
-    private PowerDeliveryDeviceClient powerDeliveryDeviceClient;
-    private RackClient rackClient;
-    private SasInterconnectClient sasInterconnectClient;
-    private SasInterconnectTypeClient sasInterconnectTypeClient;
-    private SasLogicalInterconnectClient sasLogicalInterconnectClient;
-    private SasLogicalInterconnectGroupClient sasLogicalInterconnectGroupClient;
-    private SasLogicalJbodAttachmentClient sasLogicalJbodAttachmentClient;
-    private SasLogicalJbodClient sasLogicalJbodClient;
-    private ServerHardwareClient serverHardwareClient;
-    private ServerHardwareTypeClient serverHardwareTypeClient;
-    private ServerProfileClient serverProfileClient;
-    private ServerProfileTemplateClient serverProfileTemplateClient;
-    private StoragePoolClient storagePoolClient;
-    private StorageSystemClient storageSystemClient;
-    private StorageVolumeAttachmentClient storageVolumeAttachmentClient;
-    private StorageVolumeClient storageVolumeClient;
-    private StorageVolumeTemplateClient storageVolumeTemplateClient;
-    private SwitchClient switchClient;
-    private SwitchTypeClient switchTypeClient;
-    private UnmanagedDeviceClient unmanagedDeviceClient;
-    private UplinkSetClient uplinkSetClient;
+    private final Map<Class<?>, Object> instances = new ConcurrentHashMap<>();
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
         this.baseClient = new BaseClient(params);
@@ -139,208 +94,216 @@ public class OneViewClient {
     }
 
     public synchronized AlertClient alert() {
-        return this.getClient(this.alertClient, AlertClient.class);
+        return this.getClient(AlertClient.class);
     }
 
     public synchronized ConnectionTemplateClient connectionTemplate() {
-        return this.getClient(this.connectionTemplateClient, ConnectionTemplateClient.class);
+        return this.getClient(ConnectionTemplateClient.class);
     }
 
     public synchronized DataCenterClient dataCenter() {
-        return this.getClient(this.dataCenterClient, DataCenterClient.class);
+        return this.getClient(DataCenterClient.class);
     }
 
     public synchronized DriveEnclosureClient driveEnclosure() {
-        return this.getClient(this.driveEnclosureClient, DriveEnclosureClient.class);
+        return this.getClient(DriveEnclosureClient.class);
     }
 
     public synchronized EnclosureClient enclosure() {
-        return this.getClient(this.enclosureClient, EnclosureClient.class);
+        return this.getClient(EnclosureClient.class);
     }
 
     public synchronized EnclosureGroupClient enclosureGroup() {
-        return this.getClient(this.enclosureGroupClient, EnclosureGroupClient.class);
+        return this.getClient(EnclosureGroupClient.class);
     }
 
     public synchronized EthernetNetworkClient ethernetNetwork() {
-        return this.getClient(this.ethernetNetworkClient, EthernetNetworkClient.class);
+        return this.getClient(EthernetNetworkClient.class);
     }
 
     public synchronized FabricClient fabric() {
-        return this.getClient(this.fabricClient, FabricClient.class);
+        return this.getClient(FabricClient.class);
     }
 
     public synchronized FcNetworkClient fcNetwork() {
-        return this.getClient(this.fcNetworkClient, FcNetworkClient.class);
+        return this.getClient(FcNetworkClient.class);
     }
 
     public synchronized FcoeNetworkClient fcoeNetwork() {
-        return this.getClient(this.fcoeNetworkClient, FcoeNetworkClient.class);
+        return this.getClient(FcoeNetworkClient.class);
     }
 
     public synchronized FcSanDeviceManagerClient fcSanDeviceManager() {
-        return this.getClient(this.fcSanDeviceManagerClient, FcSanDeviceManagerClient.class);
+        return this.getClient(FcSanDeviceManagerClient.class);
     }
 
     public synchronized FcSanManagedSanClient fcSanManagedSan() {
-        return this.getClient(this.fcSanManagedSanClient, FcSanManagedSanClient.class);
+        return this.getClient(FcSanManagedSanClient.class);
     }
 
     public synchronized FcSanProviderClient fcSanProvider() {
-        return this.getClient(this.fcSanProviderClient, FcSanProviderClient.class);
+        return this.getClient(FcSanProviderClient.class);
     }
 
     public synchronized FirmwareBundleClient firmwareBundle() {
-        return this.getClient(this.firmwareBundleClient, FirmwareBundleClient.class);
+        return this.getClient(FirmwareBundleClient.class);
     }
 
     public synchronized FirmwareDriverClient firmwareDriver() {
-        return this.getClient(this.firmwareDriverClient, FirmwareDriverClient.class);
+        return this.getClient(FirmwareDriverClient.class);
     }
 
     public synchronized InterconnectClient interconnect() {
-        return this.getClient(this.interconnectClient, InterconnectClient.class);
+        return this.getClient(InterconnectClient.class);
     }
 
     public synchronized InterconnectLinkTopologyClient interconnectLinkTopology() {
-        return this.getClient(this.interconnectLinkTopologyClient, InterconnectLinkTopologyClient.class);
+        return this.getClient(InterconnectLinkTopologyClient.class);
     }
 
     public synchronized InterconnectTypeClient interconnectType() {
-        return this.getClient(this.interconnectTypeClient, InterconnectTypeClient.class);
+        return this.getClient(InterconnectTypeClient.class);
     }
 
     public synchronized InternalLinkSetClient internalLinkSet() {
-        return this.getClient(this.internalLinkSetClient, InternalLinkSetClient.class);
+        return this.getClient(InternalLinkSetClient.class);
     }
 
     public synchronized LogicalDownlinkClient logicalDownlink() {
-        return this.getClient(this.logicalDownlinkClient, LogicalDownlinkClient.class);
+        return this.getClient(LogicalDownlinkClient.class);
     }
 
     public synchronized LogicalEnclosureClient logicalEnclosure() {
-        return this.getClient(this.logicalEnclosureClient, LogicalEnclosureClient.class);
+        return this.getClient(LogicalEnclosureClient.class);
     }
 
     public synchronized LogicalInterconnectClient logicalInterconnect() {
-        return this.getClient(this.logicalInterconnectClient, LogicalInterconnectClient.class);
+        return this.getClient(LogicalInterconnectClient.class);
     }
 
     public synchronized LogicalInterconnectGroupClient logicalInterconnectGroup() {
-        return this.getClient(this.logicalInterconnectGroupClient, LogicalInterconnectGroupClient.class);
+        return this.getClient(LogicalInterconnectGroupClient.class);
     }
 
     public synchronized LogicalSwitchClient logicalSwitch() {
-        return this.getClient(this.logicalSwitchClient, LogicalSwitchClient.class);
+        return this.getClient(LogicalSwitchClient.class);
     }
 
     public synchronized LogicalSwitchGroupClient logicalSwitchGroup() {
-        return this.getClient(this.logicalSwitchGroupClient, LogicalSwitchGroupClient.class);
+        return this.getClient(LogicalSwitchGroupClient.class);
     }
 
     public synchronized MessagingCertificateClient messagingCertificate() {
-        return this.getClient(this.messagingCertificateClient, MessagingCertificateClient.class);
+        return this.getClient(MessagingCertificateClient.class);
     }
 
     public synchronized NetworkSetClient networkSet() {
-        return this.getClient(this.networkSetClient, NetworkSetClient.class);
+        return this.getClient(NetworkSetClient.class);
     }
 
     public synchronized PowerDeliveryDeviceClient powerDeliveryDevice() {
-        return this.getClient(this.powerDeliveryDeviceClient, PowerDeliveryDeviceClient.class);
+        return this.getClient(PowerDeliveryDeviceClient.class);
     }
 
     public synchronized RackClient rack() {
-        return this.getClient(this.rackClient, RackClient.class);
+        return this.getClient(RackClient.class);
     }
 
     public synchronized SasInterconnectClient sasInterconnects() {
-        return this.getClient(this.sasInterconnectClient, SasInterconnectClient.class);
+        return this.getClient(SasInterconnectClient.class);
     }
 
     public synchronized SasInterconnectTypeClient sasInterconnectType() {
-        return this.getClient(this.sasInterconnectTypeClient, SasInterconnectTypeClient.class);
+        return this.getClient(SasInterconnectTypeClient.class);
     }
 
     public synchronized SasLogicalInterconnectClient sasLogicalInterconnect() {
-        return this.getClient(this.sasLogicalInterconnectClient, SasLogicalInterconnectClient.class);
+        return this.getClient(SasLogicalInterconnectClient.class);
     }
 
     public synchronized SasLogicalInterconnectGroupClient sasLogicalInterconnectGroup() {
-        return this.getClient(this.sasLogicalInterconnectGroupClient, SasLogicalInterconnectGroupClient.class);
+        return this.getClient(SasLogicalInterconnectGroupClient.class);
     }
 
     public synchronized SasLogicalJbodAttachmentClient sasLogicalJbodAttachment() {
-        return this.getClient(this.sasLogicalJbodAttachmentClient, SasLogicalJbodAttachmentClient.class);
+        return this.getClient(SasLogicalJbodAttachmentClient.class);
     }
 
     public synchronized SasLogicalJbodClient sasLogicalJbod() {
-        return this.getClient(this.sasLogicalJbodClient, SasLogicalJbodClient.class);
+        return this.getClient(SasLogicalJbodClient.class);
     }
 
     public synchronized ServerHardwareClient serverHardware() {
-        return this.getClient(this.serverHardwareClient, ServerHardwareClient.class);
+        return this.getClient(ServerHardwareClient.class);
     }
 
     public synchronized ServerHardwareTypeClient serverHardwareType() {
-        return this.getClient(this.serverHardwareTypeClient, ServerHardwareTypeClient.class);
+        return this.getClient(ServerHardwareTypeClient.class);
     }
 
     public synchronized ServerProfileClient serverProfile() {
-        return this.getClient(this.serverProfileClient, ServerProfileClient.class);
+        return this.getClient(ServerProfileClient.class);
     }
 
     public synchronized ServerProfileTemplateClient serverProfileTemplate() {
-        return this.getClient(this.serverProfileTemplateClient, ServerProfileTemplateClient.class);
+        return this.getClient(ServerProfileTemplateClient.class);
     }
 
     public synchronized StoragePoolClient storagePool() {
-        return this.getClient(this.storagePoolClient, StoragePoolClient.class);
+        return this.getClient(StoragePoolClient.class);
     }
 
     public synchronized StorageSystemClient storageSystem() {
-        return this.getClient(this.storageSystemClient, StorageSystemClient.class);
+        return this.getClient(StorageSystemClient.class);
     }
 
     public synchronized StorageVolumeClient storageVolume() {
-        return this.getClient(this.storageVolumeClient, StorageVolumeClient.class);
+        return this.getClient(StorageVolumeClient.class);
     }
 
     public synchronized StorageVolumeAttachmentClient storageVolumeAttachment() {
-        return this.getClient(this.storageVolumeAttachmentClient, StorageVolumeAttachmentClient.class);
+        return this.getClient(StorageVolumeAttachmentClient.class);
     }
 
     public synchronized StorageVolumeTemplateClient storageVolumeTemplate() {
-        return this.getClient(this.storageVolumeTemplateClient, StorageVolumeTemplateClient.class);
+        return this.getClient(StorageVolumeTemplateClient.class);
     }
 
     public synchronized SwitchClient switches() {
-        return this.getClient(this.switchClient, SwitchClient.class);
+        return this.getClient(SwitchClient.class);
     }
 
     public synchronized SwitchTypeClient switchType() {
-        return this.getClient(this.switchTypeClient, SwitchTypeClient.class);
+        return this.getClient(SwitchTypeClient.class);
     }
 
     public synchronized UnmanagedDeviceClient unmanagedDevice() {
-        return this.getClient(this.unmanagedDeviceClient, UnmanagedDeviceClient.class);
+        return this.getClient(UnmanagedDeviceClient.class);
     }
 
     public synchronized UplinkSetClient uplinkSet() {
-        return this.getClient(this.uplinkSetClient, UplinkSetClient.class);
+        return this.getClient(UplinkSetClient.class);
     }
 
-    private <T> T getClient(T client, Class<T> clientClass) {
-        if (client == null) {
-            try {
-                Constructor<T> constructor = clientClass.getConstructor(BaseClient.class);
+    private <T> T getClient(Class<T> clientClass) {
+        T instance = (T) this.instances.get(clientClass);
 
-                client = constructor.newInstance(this.baseClient);
-            } catch (ReflectiveOperationException e) {
-                throw new SDKException(SDKErrorEnum.internalServerError, null, null, null, null, e);
-            }
+        if (instance == null) {
+            instance = this.buildClient(clientClass);
+
+            this.instances.put(clientClass, instance);
         }
-        return client;
+        return instance;
+    }
+
+    private <T> T buildClient(Class<T> clientClass) {
+        try {
+            Constructor<T> constructor = clientClass.getConstructor(BaseClient.class);
+
+            return constructor.newInstance(this.baseClient);
+        } catch (ReflectiveOperationException e) {
+            throw new SDKException(SDKErrorEnum.internalServerError, null, null, null, null, e);
+        }
     }
 
 }
