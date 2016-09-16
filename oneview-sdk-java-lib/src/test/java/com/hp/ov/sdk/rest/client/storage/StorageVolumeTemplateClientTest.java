@@ -26,7 +26,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplate;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.StorageVolumeTemplate;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
@@ -75,7 +75,7 @@ public class StorageVolumeTemplateClientTest {
 
         storageVolumeTemplateClient.create(storageVolumeTemplate);
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.STORAGE_VOLUME_TEMPLATE_URI, storageVolumeTemplate);
+        Request request = new Request(HttpMethod.POST, ResourceUris.STORAGE_VOLUME_TEMPLATE_URI, storageVolumeTemplate);
 
         then(baseClient).should().executeRequest(request, StorageVolumeTemplate.class);
     }
@@ -87,7 +87,7 @@ public class StorageVolumeTemplateClientTest {
         storageVolumeTemplateClient.update(ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID, storageVolumeTemplate);
 
         String expectedUri = ResourceUris.STORAGE_VOLUME_TEMPLATE_URI + "/" + ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.PUT, expectedUri, storageVolumeTemplate);
+        Request request = new Request(HttpMethod.PUT, expectedUri, storageVolumeTemplate);
 
         then(baseClient).should().executeRequest(request, StorageVolumeTemplate.class);
     }
@@ -97,7 +97,7 @@ public class StorageVolumeTemplateClientTest {
         storageVolumeTemplateClient.delete(ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID);
 
         String expectedUri = ResourceUris.STORAGE_VOLUME_TEMPLATE_URI + "/" + ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.DELETE, expectedUri);
+        Request request = new Request(HttpMethod.DELETE, expectedUri);
 
         then(baseClient).should().executeRequest(request, String.class);
     }

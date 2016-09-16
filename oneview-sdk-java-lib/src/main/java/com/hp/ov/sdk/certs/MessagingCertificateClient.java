@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.dto.CaCert;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.RabbitMqClientCert;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -73,7 +73,7 @@ public class MessagingCertificateClient {
     public CaCert getCACertificate() {
         LOGGER.info("MessagingCertificateManager : getCACertificate : Start");
 
-        Request request = new Request(HttpMethodType.GET, CA_CERT_URI);
+        Request request = new Request(HttpMethod.GET, CA_CERT_URI);
 
         String certificate = this.baseClient.executeRequest(request, String.class);
         CaCert caCert = new CaCert(certificate.replaceAll("\"", "").replaceAll("\\\\n", "\\\n"));
@@ -87,7 +87,7 @@ public class MessagingCertificateClient {
     public TaskResourceV2 generateRabbitMqClientCert(RabbitMqClientCert rabbitMqClientCert) {
         LOGGER.info("MessagingCertificateManager : generateRabbitMqClientCert : Start");
 
-        Request request = new Request(HttpMethodType.POST, RABBIT_MQ_CLIENT_CERT, rabbitMqClientCert);
+        Request request = new Request(HttpMethod.POST, RABBIT_MQ_CLIENT_CERT, rabbitMqClientCert);
 
         TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, false);
 

@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplate;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeTemplate;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -105,7 +105,7 @@ public class StorageVolumeTemplateClient {
     public StorageVolumeTemplate create(StorageVolumeTemplate storageVolumeTemplate) {
         LOGGER.info("StorageVolumeTemplateClient : create : Start");
 
-        Request request = new Request(HttpMethodType.POST,
+        Request request = new Request(HttpMethod.POST,
                 ResourceUris.STORAGE_VOLUME_TEMPLATE_URI, storageVolumeTemplate);
 
         StorageVolumeTemplate storageVolumeTemplateCreated = baseClient.executeRequest(request,
@@ -127,7 +127,7 @@ public class StorageVolumeTemplateClient {
     public StorageVolumeTemplate update(String resourceId, StorageVolumeTemplate storageVolumeTemplate) {
         LOGGER.info("StorageVolumeTemplateClient : update : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ResourceUris.STORAGE_VOLUME_TEMPLATE_URI, resourceId), storageVolumeTemplate);
 
         StorageVolumeTemplate storageVolumeTemplateUpdated = this.baseClient.executeRequest(request,
@@ -149,7 +149,7 @@ public class StorageVolumeTemplateClient {
     public String delete(String resourceId) {
         LOGGER.info("StorageVolumeTemplateClient : delete : Start");
 
-        Request request = new Request(HttpMethodType.DELETE,
+        Request request = new Request(HttpMethod.DELETE,
                 UrlUtils.createUrl(ResourceUris.STORAGE_VOLUME_TEMPLATE_URI, resourceId));
 
         String response = baseClient.executeRequest(request, String.class);

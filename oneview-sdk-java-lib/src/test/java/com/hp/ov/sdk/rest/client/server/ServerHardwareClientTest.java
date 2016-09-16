@@ -32,7 +32,7 @@ import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.BiosSettings;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.IloSsoUrlResult;
 import com.hp.ov.sdk.dto.JavaRemoteConsoleUrlResult;
 import com.hp.ov.sdk.dto.Patch;
@@ -90,7 +90,7 @@ public class ServerHardwareClientTest {
 
         serverHardwareClient.add(addServer, false);
 
-        Request expectedRequest = new Request(HttpMethodType.POST, ServerHardwareClient.SERVER_HARDWARE_URI, addServer);
+        Request expectedRequest = new Request(HttpMethod.POST, ServerHardwareClient.SERVER_HARDWARE_URI, addServer);
 
         expectedRequest.setTimeout(240000);
 
@@ -102,7 +102,7 @@ public class ServerHardwareClientTest {
         serverHardwareClient.remove(ANY_SERVER_HARDWARE_RESOURCE_ID, false);
 
         String expectedUri = ServerHardwareClient.SERVER_HARDWARE_URI + "/" + ANY_SERVER_HARDWARE_RESOURCE_ID;
-        Request expectedRequest = new Request(HttpMethodType.DELETE, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
         expectedRequest.setTimeout(240000);
 
@@ -131,7 +131,7 @@ public class ServerHardwareClientTest {
         String expectedUri = ServerHardwareClient.SERVER_HARDWARE_URI
                 + "/" + ANY_SERVER_HARDWARE_RESOURCE_ID
                 + "/" + ServerHardwareClient.SERVER_HARDWARE_REFRESH_STATE_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, refreshStateRequest);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, refreshStateRequest);
 
         expectedRequest.setTimeout(240000);
 
@@ -170,7 +170,7 @@ public class ServerHardwareClientTest {
                 + "/" + ANY_SERVER_HARDWARE_RESOURCE_ID
                 + "/" + ServerHardwareClient.ENVIRONMENT_CONFIGURATION_URI;
 
-        Request request = new Request(HttpMethodType.PUT, expectedUri, update);
+        Request request = new Request(HttpMethod.PUT, expectedUri, update);
 
         then(baseClient).should().executeRequest(request, EnvironmentalConfiguration.class);
     }
@@ -183,7 +183,7 @@ public class ServerHardwareClientTest {
                 + "/" + ANY_SERVER_HARDWARE_RESOURCE_ID
                 + "/" + ServerHardwareClient.SERVER_HARDWARE_MP_FIRMWARE_URI;
 
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
 
         expectedRequest.setTimeout(240000);
 
@@ -273,7 +273,7 @@ public class ServerHardwareClientTest {
 
         String resourceUri = UrlUtils.createUrl(ServerHardwareClient.SERVER_HARDWARE_URI, ANY_SERVER_HARDWARE_RESOURCE_ID);
 
-        Request request = new Request(HttpMethodType.PATCH, resourceUri, patch);
+        Request request = new Request(HttpMethod.PATCH, resourceUri, patch);
         request.setTimeout(240000);
 
         then(baseClient).should().executeMonitorableRequest(request, false);

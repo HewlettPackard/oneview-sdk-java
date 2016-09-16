@@ -21,7 +21,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnect.ReplaceDriveEnclosure;
@@ -152,7 +152,7 @@ public class SasLogicalInterconnectClient {
     public TaskResourceV2 updateFirmware(String resourceId, SasLiFirmware sasLiFirmware, boolean aSync) {
         LOGGER.info("SasLogicalInterconnectClient : updateFirmware : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_URI, resourceId, FIRMWARE_URI),
                 sasLiFirmware);
 
@@ -182,7 +182,7 @@ public class SasLogicalInterconnectClient {
     public TaskResourceV2 replaceDriveEnclosure(String resourceId, ReplaceDriveEnclosure replace, boolean aSync) {
         LOGGER.info("SasLogicalInterconnectClient : replaceDriveEnclosure : Start");
 
-        Request request = new Request(HttpMethodType.POST,
+        Request request = new Request(HttpMethod.POST,
                 UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_URI, resourceId, REPLACE_DRIVE_ENCLOSURE_URI), replace);
 
         request.setTimeout(TIMEOUT);
@@ -207,7 +207,7 @@ public class SasLogicalInterconnectClient {
     public TaskResourceV2 applyConfiguration(String resourceId, boolean aSync) {
         LOGGER.info("SasLogicalInterconnectClient : applyConfiguration : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_URI, resourceId, CONFIGURATION_URI));
 
         request.setTimeout(TIMEOUT);
@@ -238,7 +238,7 @@ public class SasLogicalInterconnectClient {
     public TaskResourceV2 updateCompliance(SasLogicalInterconnect interconnect, boolean aSync) {
         LOGGER.info("SasLogicalInterconnectClient : updateCompliance : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_URI, interconnect.getResourceId(), COMPLIANCE_URI),
                 interconnect);
 
@@ -269,7 +269,7 @@ public class SasLogicalInterconnectClient {
     public TaskResourceV2 updateCompliance(List<String> sasLogicalInterconnectUris, boolean aSync) {
         LOGGER.info("SasLogicalInterconnectClient : updateCompliance : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_URI, COMPLIANCE_URI),
                 sasLogicalInterconnectUris);
 

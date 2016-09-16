@@ -25,7 +25,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.networking.ethernet.ConnectionTemplate;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
@@ -83,7 +83,7 @@ public class ConnectionTemplateClientTest {
         connectionTemplateClient.update(ANY_CONNECTION_TEMPLATE_RESOURCE_ID, connectionTemplate);
 
         String expectedUri = ResourceUris.CONNECTION_TEMPLATE_URI + "/" + ANY_CONNECTION_TEMPLATE_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.PUT, expectedUri, connectionTemplate);
+        Request request = new Request(HttpMethod.PUT, expectedUri, connectionTemplate);
 
         then(baseClient).should().executeRequest(request, ConnectionTemplate.class);
     }

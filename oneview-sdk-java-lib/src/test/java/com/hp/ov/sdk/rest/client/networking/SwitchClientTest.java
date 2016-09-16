@@ -29,7 +29,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.networking.Port;
 import com.hp.ov.sdk.dto.networking.SwitchPortStatistics;
 import com.hp.ov.sdk.dto.networking.SwitchStatistics;
@@ -109,7 +109,7 @@ public class SwitchClientTest {
         switchClient.refresh(ANY_SWITCH_RESOURCE_ID, false);
 
         String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.PUT, expectedUri);
+        Request request = new Request(HttpMethod.PUT, expectedUri);
 
         then(baseClient).should().executeMonitorableRequest(request, false);
     }
@@ -153,7 +153,7 @@ public class SwitchClientTest {
         String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID + "/"
                 + ResourceUris.SWITCHES_UPDATE_PORTS_URI;
 
-        Request request = new Request(HttpMethodType.PUT, expectedUri, ports);
+        Request request = new Request(HttpMethod.PUT, expectedUri, ports);
         request.setForceTaskReturn(true);
 
         then(baseClient).should().executeMonitorableRequest(request, false);

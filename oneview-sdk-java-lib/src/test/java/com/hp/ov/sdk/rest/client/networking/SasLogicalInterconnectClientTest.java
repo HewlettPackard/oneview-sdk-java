@@ -27,7 +27,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnect.ReplaceDriveEnclosure;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnect.SasLiFirmware;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnect.SasLogicalInterconnect;
@@ -97,7 +97,7 @@ public class SasLogicalInterconnectClientTest {
                 + "/" + ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID
                 + "/" + SasLogicalInterconnectClient.FIRMWARE_URI;
 
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, firmware);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, firmware);
 
         expectedRequest.setTimeout(900000);
         expectedRequest.setForceTaskReturn(true);
@@ -115,7 +115,7 @@ public class SasLogicalInterconnectClientTest {
                 + "/" + ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID
                 + "/" + SasLogicalInterconnectClient.REPLACE_DRIVE_ENCLOSURE_URI;
 
-        Request expectedRequest = new Request(HttpMethodType.POST, expectedUri, replace);
+        Request expectedRequest = new Request(HttpMethod.POST, expectedUri, replace);
 
         expectedRequest.setTimeout(900000);
         expectedRequest.setForceTaskReturn(true);
@@ -131,7 +131,7 @@ public class SasLogicalInterconnectClientTest {
                 + "/" + ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID
                 + "/" + SasLogicalInterconnectClient.CONFIGURATION_URI;
 
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
 
         expectedRequest.setTimeout(900000);
         expectedRequest.setForceTaskReturn(true);
@@ -152,7 +152,7 @@ public class SasLogicalInterconnectClientTest {
                 + "/" + ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID
                 + "/" + SasLogicalInterconnectClient.COMPLIANCE_URI;
 
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, interconnect);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, interconnect);
 
         expectedRequest.setTimeout(900000);
 
@@ -170,7 +170,7 @@ public class SasLogicalInterconnectClientTest {
         String expectedUri = SasLogicalInterconnectClient.SAS_LOGICAL_INTERCONNECT_URI
                 + "/" + SasLogicalInterconnectClient.COMPLIANCE_URI;
 
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, interconnectUris);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, interconnectUris);
 
         expectedRequest.setTimeout(900000);
 

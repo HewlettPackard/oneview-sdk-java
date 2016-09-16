@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.networking.logicalswitches.AddLogicalSwitch;
@@ -171,7 +171,7 @@ public class LogicalSwitchClient {
     public TaskResourceV2 refresh(String resourceId, boolean aSync) {
         LOGGER.info("LogicalSwitchClient : refresh : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ResourceUris.LOGICAL_SWITCHES_URI, resourceId,
                         ResourceUris.LOGICAL_SWITCHES_REFRESH_URI));
 

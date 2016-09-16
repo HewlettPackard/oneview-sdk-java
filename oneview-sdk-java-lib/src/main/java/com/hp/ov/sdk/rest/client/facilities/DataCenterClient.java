@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.facilities.datacenter.DataCenter;
@@ -107,7 +107,7 @@ public class DataCenterClient {
     public DataCenter add(DataCenter dataCenter) {
         LOGGER.info("DataCenterClient : add : Start");
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.DATA_CENTER_URI, dataCenter);
+        Request request = new Request(HttpMethod.POST, ResourceUris.DATA_CENTER_URI, dataCenter);
         DataCenter createdDataCenter = this.baseClient.executeRequest(request, DataCenter.class);
 
         LOGGER.info("DataCenterClient : add : End");
@@ -126,7 +126,7 @@ public class DataCenterClient {
     public DataCenter update(String resourceId, DataCenter dataCenter) {
         LOGGER.info("DataCenterClient : update : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ResourceUris.DATA_CENTER_URI, resourceId), dataCenter);
         DataCenter updatedDataCenter = this.baseClient.executeRequest(request, DataCenter.class);
 
@@ -145,7 +145,7 @@ public class DataCenterClient {
     public String remove(String resourceId) {
         LOGGER.info("DataCenterClient : remove : Start");
 
-        Request request = new Request(HttpMethodType.DELETE,
+        Request request = new Request(HttpMethod.DELETE,
                 UrlUtils.createUrl(ResourceUris.DATA_CENTER_URI, resourceId));
         String response = this.baseClient.executeRequest(request, String.class);
 

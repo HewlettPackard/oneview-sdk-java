@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.NameServer;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.PortStatistics;
@@ -120,7 +120,7 @@ public class InterconnectClient {
     public TaskResourceV2 patch(String resourceId, Patch patch, boolean aSync) {
         LOGGER.info("InterconnectClient : patch : Start");
 
-        Request request = new Request(HttpMethodType.PATCH,
+        Request request = new Request(HttpMethod.PATCH,
                 UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId), patch);
 
         TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
@@ -191,7 +191,7 @@ public class InterconnectClient {
 
         String uri = UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId,
                 ResourceUris.INTERCONNECT_RESET_PORT_PROTECTION_URI);
-        Request request = new Request(HttpMethodType.PUT, uri);
+        Request request = new Request(HttpMethod.PUT, uri);
 
         TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
 

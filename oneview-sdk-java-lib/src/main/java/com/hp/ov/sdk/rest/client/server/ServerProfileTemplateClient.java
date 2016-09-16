@@ -19,7 +19,7 @@ package com.hp.ov.sdk.rest.client.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
@@ -115,7 +115,7 @@ public class ServerProfileTemplateClient {
     public TaskResourceV2 create(ServerProfileTemplate serverProfileTemplate, boolean aSync) {
         LOGGER.info("ServerProfileTemplateClient : create : Start");
 
-        Request request = new Request(HttpMethodType.POST,
+        Request request = new Request(HttpMethod.POST,
                 SERVER_PROFILE_TEMPLATE_URI, serverProfileTemplate);
 
         request.setTimeout(TIMEOUT);
@@ -139,7 +139,7 @@ public class ServerProfileTemplateClient {
     public TaskResourceV2 delete(String resourceId, boolean aSync) {
         LOGGER.info("ServerProfileTemplateClient : delete : Start");
 
-        Request request = new Request(HttpMethodType.DELETE,
+        Request request = new Request(HttpMethod.DELETE,
                 UrlUtils.createUrl(SERVER_PROFILE_TEMPLATE_URI, resourceId));
 
         request.setTimeout(TIMEOUT);
@@ -165,7 +165,7 @@ public class ServerProfileTemplateClient {
         LOGGER.info("ServerProfileTemplateClient : update : Start");
 
         String resourceUri = UrlUtils.createUrl(SERVER_PROFILE_TEMPLATE_URI, resourceId);
-        Request request = new Request(HttpMethodType.PUT, resourceUri, serverProfileTemplate);
+        Request request = new Request(HttpMethod.PUT, resourceUri, serverProfileTemplate);
 
         request.setTimeout(TIMEOUT);
 
@@ -225,7 +225,7 @@ public class ServerProfileTemplateClient {
 
         String uri = UrlUtils.createUrl(SERVER_PROFILE_TEMPLATE_URI, resourceId,
                 SERVER_PROFILE_TEMPLATE_TRANSFORMATION_URI);
-        Request request = new Request(HttpMethodType.GET, uri);
+        Request request = new Request(HttpMethod.GET, uri);
 
         request.addQuery(new UrlParameter("serverHardwareTypeUri", serverHardwareTypeUri));
         request.addQuery(new UrlParameter("enclosureGroupUri", enclosureGroupUri));

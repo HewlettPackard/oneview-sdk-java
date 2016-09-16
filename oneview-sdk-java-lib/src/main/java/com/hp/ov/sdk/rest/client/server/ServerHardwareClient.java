@@ -25,7 +25,7 @@ import com.google.common.base.Optional;
 import com.hp.ov.sdk.dto.BiosSettings;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.IloSsoUrlResult;
 import com.hp.ov.sdk.dto.JavaRemoteConsoleUrlResult;
 import com.hp.ov.sdk.dto.Patch;
@@ -137,7 +137,7 @@ public class ServerHardwareClient {
     public TaskResourceV2 add(AddServer addServer, boolean aSync) {
         LOGGER.info("ServerHardwareClient : add : Start");
 
-        Request request = new Request(HttpMethodType.POST, SERVER_HARDWARE_URI, addServer);
+        Request request = new Request(HttpMethod.POST, SERVER_HARDWARE_URI, addServer);
 
         request.setTimeout(TIMEOUT);
 
@@ -160,7 +160,7 @@ public class ServerHardwareClient {
     public TaskResourceV2 remove(String resourceId, boolean aSync) {
         LOGGER.info("ServerHardwareClient : remove : Start");
 
-        Request request = new Request(HttpMethodType.DELETE,
+        Request request = new Request(HttpMethod.DELETE,
                 UrlUtils.createUrl(SERVER_HARDWARE_URI, resourceId));
 
         request.setTimeout(TIMEOUT);
@@ -213,7 +213,7 @@ public class ServerHardwareClient {
 
         String resourceUri = UrlUtils.createUrl(SERVER_HARDWARE_URI,
                 resourceId, SERVER_HARDWARE_REFRESH_STATE_URI);
-        Request request = new Request(HttpMethodType.PUT, resourceUri, refreshStateRequest);
+        Request request = new Request(HttpMethod.PUT, resourceUri, refreshStateRequest);
 
         request.setTimeout(TIMEOUT);
 
@@ -281,7 +281,7 @@ public class ServerHardwareClient {
 
         String requestUri = UrlUtils.createUrl(SERVER_HARDWARE_URI,
                 resourceId, ENVIRONMENT_CONFIGURATION_URI);
-        Request request = new Request(HttpMethodType.PUT, requestUri, environmentalConfigurationUpdate);
+        Request request = new Request(HttpMethod.PUT, requestUri, environmentalConfigurationUpdate);
 
         EnvironmentalConfiguration environmentalConfiguration = this.baseClient.executeRequest(request,
                 EnvironmentalConfiguration.class);
@@ -305,7 +305,7 @@ public class ServerHardwareClient {
 
         String requestUri = UrlUtils.createUrl(SERVER_HARDWARE_URI,
                 resourceId, SERVER_HARDWARE_MP_FIRMWARE_URI);
-        Request request = new Request(HttpMethodType.PUT, requestUri);
+        Request request = new Request(HttpMethod.PUT, requestUri);
 
         request.setTimeout(TIMEOUT);
 
@@ -502,7 +502,7 @@ public class ServerHardwareClient {
         LOGGER.info("ServerHardwareClient : patch : Start");
 
         String resourceUri = UrlUtils.createUrl(SERVER_HARDWARE_URI, resourceId);
-        Request request = new Request(HttpMethodType.PATCH, resourceUri, patch);
+        Request request = new Request(HttpMethod.PATCH, resourceUri, patch);
 
         request.setTimeout(TIMEOUT);
 

@@ -25,7 +25,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.rack.Rack;
 import com.hp.ov.sdk.dto.rack.TopologyInformation;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -74,7 +74,7 @@ public class RackClientTest {
 
         client.add(rack);
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.RACK_URI, rack);
+        Request request = new Request(HttpMethod.POST, ResourceUris.RACK_URI, rack);
 
         then(baseClient).should().executeRequest(request, Rack.class);
     }
@@ -86,7 +86,7 @@ public class RackClientTest {
         client.update(ANY_RESOURCE_ID, rack);
 
         String expectedUri = ResourceUris.RACK_URI + "/" + ANY_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.PUT, expectedUri, rack);
+        Request request = new Request(HttpMethod.PUT, expectedUri, rack);
 
         then(baseClient).should().executeRequest(request, Rack.class);
     }
@@ -96,7 +96,7 @@ public class RackClientTest {
         client.remove(ANY_RESOURCE_ID);
 
         String expectedUri = ResourceUris.RACK_URI + "/" + ANY_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.DELETE, expectedUri);
+        Request request = new Request(HttpMethod.DELETE, expectedUri);
 
         then(baseClient).should().executeRequest(request, String.class);
     }

@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -57,7 +57,7 @@ public class FirmwareBundleClient {
 
         validateFirmwareBundleFile(firmwareBundle);
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.FIRMWARE_BUNDLE_URI, firmwareBundle);
+        Request request = new Request(HttpMethod.POST, ResourceUris.FIRMWARE_BUNDLE_URI, firmwareBundle);
 
         request.setContentType(ContentType.MULTIPART_FORM_DATA);
         request.setTimeout(TIMEOUT);

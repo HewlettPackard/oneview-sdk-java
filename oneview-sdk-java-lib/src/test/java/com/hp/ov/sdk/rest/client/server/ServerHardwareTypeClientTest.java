@@ -25,7 +25,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.servers.serverhardwaretype.ServerHardwareType;
 import com.hp.ov.sdk.dto.servers.serverhardwaretype.ServerHardwareTypeUpdate;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -78,7 +78,7 @@ public class ServerHardwareTypeClientTest {
         serverHardwareTypeClient.update(ANY_SERVER_HARDWARE_TYPE_RESOURCE_ID, serverHardwareTypeUpdate);
 
         String expectedUri = ResourceUris.SERVER_HARDWARE_TYPE_URI + "/" + ANY_SERVER_HARDWARE_TYPE_RESOURCE_ID;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, serverHardwareTypeUpdate);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, serverHardwareTypeUpdate);
 
         then(baseClient).should().executeRequest(expectedRequest, ServerHardwareType.class);
     }

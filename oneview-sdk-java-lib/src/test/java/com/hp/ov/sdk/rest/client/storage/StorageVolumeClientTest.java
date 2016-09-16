@@ -29,7 +29,7 @@ import com.hp.ov.sdk.dto.AddStorageVolume;
 import com.hp.ov.sdk.dto.AttachableStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.StorageVolume;
 import com.hp.ov.sdk.dto.StorageVolumeSnapshot;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -89,7 +89,7 @@ public class StorageVolumeClientTest {
         storageVolumeClient.update(ANY_STORAGE_VOLUME_RESOURCE_ID, storageVolume);
 
         String expectedUri = ResourceUris.STORAGE_VOLUME_URI + "/" + ANY_STORAGE_VOLUME_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.PUT, expectedUri, storageVolume);
+        Request request = new Request(HttpMethod.PUT, expectedUri, storageVolume);
 
         then(baseClient).should().executeRequest(request, String.class);
     }

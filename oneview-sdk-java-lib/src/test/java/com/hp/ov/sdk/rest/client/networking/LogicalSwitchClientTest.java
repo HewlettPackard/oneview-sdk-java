@@ -25,7 +25,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.networking.logicalswitches.AddLogicalSwitch;
 import com.hp.ov.sdk.dto.networking.logicalswitches.LogicalSwitch;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -103,7 +103,7 @@ public class LogicalSwitchClientTest {
 
         String expectedUri = ResourceUris.LOGICAL_SWITCHES_URI + "/" + ANY_LOGICAL_SWITCH_RESOURCE_ID
                 + "/" + ResourceUris.LOGICAL_SWITCHES_REFRESH_URI;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
     }

@@ -18,7 +18,7 @@ package com.hp.ov.sdk.rest.client.networking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -114,7 +114,7 @@ public class SasInterconnectClient {
     public TaskResourceV2 patch(String resourceId, Patch patch, boolean aSync) {
         LOGGER.info("SasInterconnectClient : patch : Start");
 
-        Request request = new Request(HttpMethodType.PATCH,
+        Request request = new Request(HttpMethod.PATCH,
                 UrlUtils.createUrl(SAS_INTERCONNECT_URI, resourceId), patch);
         request.setTimeout(300000);
 
@@ -138,7 +138,7 @@ public class SasInterconnectClient {
     public TaskResourceV2 refreshState(String resourceId, SasInterConnectRefreshRequest requestBody, boolean aSync) {
         LOGGER.info("SasInterconnectClient : refreshState : Start");
 
-        Request request = new Request(HttpMethodType.PUT, UrlUtils.createUrl(
+        Request request = new Request(HttpMethod.PUT, UrlUtils.createUrl(
                 SAS_INTERCONNECT_URI,
                 resourceId,
                 SAS_INTERCONNECT_URI_REFRESH),

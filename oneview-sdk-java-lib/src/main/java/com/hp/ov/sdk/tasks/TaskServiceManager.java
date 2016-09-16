@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -48,7 +48,7 @@ public class TaskServiceManager {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
 
-        Request request = new Request(HttpMethodType.GET, taskUri);
+        Request request = new Request(HttpMethod.GET, taskUri);
         String returnObj = httpClient.sendRequest(params, request);
 
         if (StringUtils.isEmpty(returnObj)) {

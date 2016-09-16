@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Predicate;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.AddStoragePool;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -140,7 +140,7 @@ public class StoragePoolClient {
     public TaskResourceV2 add(AddStoragePool storagePool, boolean aSync) {
         LOGGER.info("StoragePoolClient : add : Start");
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.STORAGE_POOL_URI, storagePool);
+        Request request = new Request(HttpMethod.POST, ResourceUris.STORAGE_POOL_URI, storagePool);
 
         request.setForceTaskReturn(true);
 
@@ -164,7 +164,7 @@ public class StoragePoolClient {
     public TaskResourceV2 update(String resourceId, StoragePool storagePool, boolean aSync) {
         LOGGER.info("StoragePoolClient : update : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ResourceUris.STORAGE_POOL_URI, resourceId), storagePool);
 
         request.setForceTaskReturn(true);
@@ -188,7 +188,7 @@ public class StoragePoolClient {
     public TaskResourceV2 remove(String resourceId, boolean aSync) {
         LOGGER.info("StoragePoolClient : remove : Start");
 
-        Request request = new Request(HttpMethodType.DELETE,
+        Request request = new Request(HttpMethod.DELETE,
                 UrlUtils.createUrl(ResourceUris.STORAGE_POOL_URI, resourceId));
 
         request.setForceTaskReturn(true);

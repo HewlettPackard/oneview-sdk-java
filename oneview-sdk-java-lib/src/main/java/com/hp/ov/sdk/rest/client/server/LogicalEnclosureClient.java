@@ -18,7 +18,7 @@ package com.hp.ov.sdk.rest.client.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SupportDump;
@@ -115,7 +115,7 @@ public class LogicalEnclosureClient {
     public TaskResourceV2 create(AddLogicalEnclosure logicalEnclosure, boolean aSync) {
         LOGGER.info("LogicalEnclosureClient : create : Start");
 
-        Request request = new Request(HttpMethodType.POST, LOGICAL_ENCLOSURE_URI, logicalEnclosure);
+        Request request = new Request(HttpMethod.POST, LOGICAL_ENCLOSURE_URI, logicalEnclosure);
 
         request.setTimeout(TIMEOUT);
 
@@ -139,7 +139,7 @@ public class LogicalEnclosureClient {
     public TaskResourceV2 update(String resourceId, LogicalEnclosure logicalEnclosure, boolean aSync) {
         LOGGER.info("LogicalEnclosureClient : update : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId), logicalEnclosure);
 
         request.setTimeout(TIMEOUT);
@@ -165,7 +165,7 @@ public class LogicalEnclosureClient {
     public TaskResourceV2 patch(String resourceId, Patch patch, boolean aSync) {
         LOGGER.info("LogicalEnclosureClient : patch : Start");
 
-        Request request = new Request(HttpMethodType.PATCH,
+        Request request = new Request(HttpMethod.PATCH,
                 UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId), patch);
 
         request.setTimeout(TIMEOUT);
@@ -189,7 +189,7 @@ public class LogicalEnclosureClient {
     public TaskResourceV2 delete(String resourceId, boolean aSync) {
         LOGGER.info("LogicalEnclosureClient : delete : Start");
 
-        Request request = new Request(HttpMethodType.DELETE,
+        Request request = new Request(HttpMethod.DELETE,
                 UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId));
 
         request.setTimeout(TIMEOUT);
@@ -216,7 +216,7 @@ public class LogicalEnclosureClient {
         LOGGER.info("LogicalEnclosureClient : updateFromGroup : Start");
 
         String updateUri = UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId, UPDATE_FROM_GROUP_URI);
-        Request request = new Request(HttpMethodType.PUT, updateUri);
+        Request request = new Request(HttpMethod.PUT, updateUri);
 
         request.setTimeout(TIMEOUT);
 
@@ -241,7 +241,7 @@ public class LogicalEnclosureClient {
         LOGGER.info("LogicalEnclosureClient : updateConfiguration : Start");
 
         String updateUri = UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId, CONFIGURATION_URI);
-        Request request = new Request(HttpMethodType.PUT, updateUri);
+        Request request = new Request(HttpMethod.PUT, updateUri);
 
         request.setTimeout(TIMEOUT);
 
@@ -262,7 +262,7 @@ public class LogicalEnclosureClient {
     public String getConfigurationScript(String resourceId) {
         LOGGER.info("LogicalEnclosureClient : getConfigurationScript : Start");
 
-        Request request = new Request(HttpMethodType.GET,
+        Request request = new Request(HttpMethod.GET,
                 UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId, SCRIPT_URI));
 
         String response = baseClient.executeRequest(request, String.class);
@@ -311,7 +311,7 @@ public class LogicalEnclosureClient {
 
         String createUri = UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId, SUPPORT_DUMP_URI);
 
-        Request request = new Request(HttpMethodType.POST, createUri, supportDump);
+        Request request = new Request(HttpMethod.POST, createUri, supportDump);
 
         request.setTimeout(TIMEOUT);
 

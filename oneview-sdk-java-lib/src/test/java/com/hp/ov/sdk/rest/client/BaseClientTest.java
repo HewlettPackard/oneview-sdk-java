@@ -30,7 +30,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -81,7 +81,7 @@ public class BaseClientTest {
     public void shouldGetResource() {
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
 
-        Request request = new Request(HttpMethodType.GET, ANY_URI_STRING);
+        Request request = new Request(HttpMethod.GET, ANY_URI_STRING);
 
         this.baseClient.getResource(ANY_URI_STRING, Object.class);
 
@@ -109,7 +109,7 @@ public class BaseClientTest {
     public void shouldGetResourceCollection() {
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
 
-        Request request = new Request(HttpMethodType.GET, ANY_URI_STRING);
+        Request request = new Request(HttpMethod.GET, ANY_URI_STRING);
 
         request.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
 
@@ -144,7 +144,7 @@ public class BaseClientTest {
         given(adaptor.buildResource(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), anyString(), anyInt())).willReturn(new TaskResourceV2());
 
-        Request expectedRequest = new Request(HttpMethodType.POST, ANY_URI_STRING, body);
+        Request expectedRequest = new Request(HttpMethod.POST, ANY_URI_STRING, body);
 
         this.baseClient.createResource(ANY_URI_STRING, body, false);
 
@@ -176,7 +176,7 @@ public class BaseClientTest {
         given(adaptor.buildResource(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), anyString(), anyInt())).willReturn(new TaskResourceV2());
 
-        Request expectedRequest = new Request(HttpMethodType.PUT, ANY_URI_STRING, body);
+        Request expectedRequest = new Request(HttpMethod.PUT, ANY_URI_STRING, body);
 
         this.baseClient.updateResource(ANY_URI_STRING, body, false);
 
@@ -209,7 +209,7 @@ public class BaseClientTest {
         given(adaptor.buildResource(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), anyString(), anyInt())).willReturn(new TaskResourceV2());
 
-        Request expectedRequest = new Request(HttpMethodType.PATCH, ANY_URI_STRING, patch);
+        Request expectedRequest = new Request(HttpMethod.PATCH, ANY_URI_STRING, patch);
 
         this.baseClient.patchResource(ANY_URI_STRING, patch, false);
 
@@ -234,7 +234,7 @@ public class BaseClientTest {
         given(adaptor.buildResource(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
         given(taskMonitor.checkStatus(any(RestParams.class), anyString(), anyInt())).willReturn(new TaskResourceV2());
 
-        Request expectedRequest = new Request(HttpMethodType.DELETE, ANY_URI_STRING);
+        Request expectedRequest = new Request(HttpMethod.DELETE, ANY_URI_STRING);
 
         this.baseClient.deleteResource(ANY_URI_STRING, false);
 

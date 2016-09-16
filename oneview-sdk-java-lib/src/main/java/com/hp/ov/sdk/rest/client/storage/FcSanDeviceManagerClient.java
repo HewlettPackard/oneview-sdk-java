@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.TaskState;
@@ -113,7 +113,7 @@ public class FcSanDeviceManagerClient {
             DeviceManagerResponse deviceManager, boolean aSync) {
         LOGGER.info("FcSanDeviceManagerClient : add : Start");
 
-        Request request = new Request(HttpMethodType.POST, providerDeviceManagerUri, deviceManager);
+        Request request = new Request(HttpMethod.POST, providerDeviceManagerUri, deviceManager);
 
         request.setForceTaskReturn(true);
 
@@ -137,7 +137,7 @@ public class FcSanDeviceManagerClient {
     public TaskResourceV2 update(String resourceId, DeviceManagerResponse deviceManager, boolean aSync) {
         LOGGER.info("FcSanDeviceManagerClient : update : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ResourceUris.FC_SANS_DEVICE_MANAGER_URI, resourceId), deviceManager);
 
         request.setForceTaskReturn(true);
@@ -170,7 +170,7 @@ public class FcSanDeviceManagerClient {
         if (this.baseClient.getApiVersion().getValue() >= ApiVersion.V_300.getValue()) {
             taskResource = baseClient.deleteResource(requestUri, aSync);
         } else {
-            Request request = new Request(HttpMethodType.DELETE, requestUri);
+            Request request = new Request(HttpMethod.DELETE, requestUri);
 
             this.baseClient.executeRequest(request, String.class);
 

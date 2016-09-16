@@ -27,7 +27,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
@@ -77,7 +77,7 @@ public class FcSansDeviceManagerClientTest {
 
         this.client.add(ANY_PROVIDER_URI, deviceManager, false);
 
-        Request expectedRequest = new Request(HttpMethodType.POST, ANY_PROVIDER_URI, deviceManager);
+        Request expectedRequest = new Request(HttpMethod.POST, ANY_PROVIDER_URI, deviceManager);
 
         expectedRequest.setForceTaskReturn(true);
 
@@ -91,7 +91,7 @@ public class FcSansDeviceManagerClientTest {
         this.client.update(ANY_RESOURCE_ID, deviceManager, false);
 
         String expectedUri = ResourceUris.FC_SANS_DEVICE_MANAGER_URI + "/" + ANY_RESOURCE_ID;
-        Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, deviceManager);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, deviceManager);
 
         expectedRequest.setForceTaskReturn(true);
 
@@ -116,7 +116,7 @@ public class FcSansDeviceManagerClientTest {
         this.client.remove(ANY_RESOURCE_ID, false);
 
         String expectedUri = ResourceUris.FC_SANS_DEVICE_MANAGER_URI + "/" + ANY_RESOURCE_ID;
-        Request expectedRequest = new Request(HttpMethodType.DELETE, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
         then(baseClient).should().executeRequest(expectedRequest, String.class);
     }

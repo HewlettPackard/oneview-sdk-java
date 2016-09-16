@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.rack.Rack;
@@ -105,7 +105,7 @@ public class RackClient {
     public Rack add(Rack rack) {
         LOGGER.info("RackClient : add : Start");
 
-        Request request = new Request(HttpMethodType.POST, ResourceUris.RACK_URI, rack);
+        Request request = new Request(HttpMethod.POST, ResourceUris.RACK_URI, rack);
         Rack createdRack = this.baseClient.executeRequest(request, Rack.class);
 
         LOGGER.info("RackClient : add : End");
@@ -124,7 +124,7 @@ public class RackClient {
     public Rack update(String resourceId, Rack rack) {
         LOGGER.info("RackClient : update : Start");
 
-        Request request = new Request(HttpMethodType.PUT,
+        Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ResourceUris.RACK_URI, resourceId), rack);
         Rack updatedRack = this.baseClient.executeRequest(request, Rack.class);
 
@@ -143,7 +143,7 @@ public class RackClient {
     public String remove(String resourceId) {
         LOGGER.info("RackClient : remove : Start");
 
-        Request request = new Request(HttpMethodType.DELETE,
+        Request request = new Request(HttpMethod.DELETE,
                 UrlUtils.createUrl(ResourceUris.RACK_URI, resourceId));
         String response = this.baseClient.executeRequest(request, String.class);
 

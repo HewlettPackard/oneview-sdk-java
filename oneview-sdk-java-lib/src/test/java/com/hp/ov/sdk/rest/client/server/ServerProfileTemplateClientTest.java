@@ -24,7 +24,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
 import com.hp.ov.sdk.dto.servers.serverprofiletemplate.ServerProfileTemplate;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -74,7 +74,7 @@ public class ServerProfileTemplateClientTest {
 
         client.create(serverProfileTemplate, false);
 
-        Request request = new Request(HttpMethodType.POST,
+        Request request = new Request(HttpMethod.POST,
                 ServerProfileTemplateClient.SERVER_PROFILE_TEMPLATE_URI, serverProfileTemplate);
 
         request.setTimeout(1200000);
@@ -87,7 +87,7 @@ public class ServerProfileTemplateClientTest {
         client.delete(ANY_RESOURCE_ID, false);
 
         String expectedUri = ServerProfileTemplateClient.SERVER_PROFILE_TEMPLATE_URI + "/" + ANY_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.DELETE, expectedUri);
+        Request request = new Request(HttpMethod.DELETE, expectedUri);
 
         request.setTimeout(1200000);
 
@@ -101,7 +101,7 @@ public class ServerProfileTemplateClientTest {
         client.update(ANY_RESOURCE_ID, serverProfileTemplate, false);
 
         String expectedUri = ServerProfileTemplateClient.SERVER_PROFILE_TEMPLATE_URI + "/" + ANY_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.PUT, expectedUri, serverProfileTemplate);
+        Request request = new Request(HttpMethod.PUT, expectedUri, serverProfileTemplate);
 
         request.setTimeout(1200000);
 
@@ -128,7 +128,7 @@ public class ServerProfileTemplateClientTest {
                 + "/" + ANY_RESOURCE_ID
                 + "/" + ServerProfileTemplateClient.SERVER_PROFILE_TEMPLATE_TRANSFORMATION_URI;
 
-        Request expectedRequest = new Request(HttpMethodType.GET, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
         expectedRequest.addQuery(new UrlParameter("serverHardwareTypeUri", ANY_RESOURCE_ID));
         expectedRequest.addQuery(new UrlParameter("enclosureGroupUri", ANY_RESOURCE_ID));

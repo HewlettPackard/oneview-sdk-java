@@ -25,7 +25,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.base.Optional;
-import com.hp.ov.sdk.dto.HttpMethodType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.alerts.AlertResource;
 import com.hp.ov.sdk.dto.alerts.AlertUpdate;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -68,7 +68,7 @@ public class AlertClientTest {
         alertClient.update(ANY_ALERT_RESOURCE_ID, alertUpdate);
 
         String expectedUri = AlertClient.ALERTS_URI + "/" + ANY_ALERT_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.PUT, expectedUri, alertUpdate);
+        Request request = new Request(HttpMethod.PUT, expectedUri, alertUpdate);
 
         then(baseClient).should().executeRequest(request, AlertResource.class);
     }
@@ -78,7 +78,7 @@ public class AlertClientTest {
         alertClient.delete(ANY_ALERT_RESOURCE_ID);
 
         String expectedUri = AlertClient.ALERTS_URI + "/" + ANY_ALERT_RESOURCE_ID;
-        Request request = new Request(HttpMethodType.DELETE, expectedUri);
+        Request request = new Request(HttpMethod.DELETE, expectedUri);
 
         then(baseClient).should().executeRequest(request, String.class);
     }
@@ -104,7 +104,7 @@ public class AlertClientTest {
         alertClient.deleteAlertChangeLog(ANY_ALERT_CHANGE_LOG_ID);
 
         String expectedUri = AlertClient.ALERTS_CHANGELOG_URI + "/" + ANY_ALERT_CHANGE_LOG_ID;
-        Request request = new Request(HttpMethodType.DELETE, expectedUri);
+        Request request = new Request(HttpMethod.DELETE, expectedUri);
 
         then(baseClient).should().executeRequest(request, String.class);
     }
