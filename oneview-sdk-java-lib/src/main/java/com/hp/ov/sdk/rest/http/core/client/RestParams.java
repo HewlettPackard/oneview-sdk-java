@@ -28,12 +28,12 @@ public class RestParams {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(RestParams.class);
 
-    private ApiVersion apiVersion = ApiVersion.V_300;// default value
-    private String hostname = null;
-    private String userName = null;
-    private String password = null;
-    private String locale = null;
+    private ApiVersion apiVersion = ApiVersion.V_300;
     private String domain = "LOCAL";
+    private String hostname = null;
+    private String locale = null;
+    private String password = null;
+    private String userName = null;
 
     private String sessionId = null;
 
@@ -43,50 +43,35 @@ public class RestParams {
     private String exchange = "scmb";// default value
 
     private TrustManager trustManager = null;
-    private HostnameVerifier hostVerifier = null;
+    private HostnameVerifier hostnameVerifier = null;
 
-    public String getRoutingKey() {
-        return routingKey;
+    public RestParams() {
     }
 
-    public void setRoutingKey(final String routingKey) {
-        this.routingKey = routingKey;
+    public RestParams(SDKConfiguration sdkConfiguration) throws NumberFormatException {
+        this.apiVersion = sdkConfiguration.getOneViewApiVersion();
+        this.domain = sdkConfiguration.getOneViewDomain();
+        this.hostname = sdkConfiguration.getOneViewHostname();
+        this.userName = sdkConfiguration.getOneViewUserName();
+        this.password = sdkConfiguration.getOneViewPassword();
+
+        this.routingKey = sdkConfiguration.getMessageBusAlertsRoutingKey();
+        this.exchange = sdkConfiguration.getMessageBusExchangeName();
+        this.amqpPort = Integer.parseInt(sdkConfiguration.getRabbitMQPort());
     }
 
-    public String getExchange() {
-        return exchange;
-    }
-
-    public void setExchange(final String exchange) {
-        this.exchange = exchange;
-    }
-
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public int getAmqpPort() {
-        return amqpPort;
-    }
-
-    public void setAmqpPort(final int amqpPort) {
-        this.amqpPort = amqpPort;
-    }
-
-    public void setSessionId(final String sessionId) {
-        this.sessionId = sessionId;
-    }
-
-    public String getDomain() {
-        return domain;
-    }
-
-    public void setDomain(final String domain) {
-        this.domain = domain;
-    }
-
+    /**
+     * @return the apiVersion
+     */
     public ApiVersion getApiVersion() {
         return apiVersion;
+    }
+
+    /**
+     * @param apiVersion the apiVersion to set
+     */
+    public void setApiVersion(ApiVersion apiVersion) {
+        this.apiVersion = apiVersion;
     }
 
     /**
@@ -106,71 +91,153 @@ public class RestParams {
         }
     }
 
-    public void setApiVersion(final ApiVersion apiVersion) {
-        this.apiVersion = apiVersion;
+    /**
+     * @return the domain
+     */
+    public String getDomain() {
+        return domain;
     }
 
-    public String getUserName() {
-        return userName;
+    /**
+     * @param domain the domain to set
+     */
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 
-    public void setUserName(final String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(final String password) {
-        this.password = password;
-    }
-
-    public String getLocale() {
-        return locale;
-    }
-
-    public void setLocale(final String locale) {
-        this.locale = locale;
-    }
-
+    /**
+     * @return the hostname
+     */
     public String getHostname() {
         return hostname;
     }
 
-    public void setHostname(final String hostname) {
+    /**
+     * @param hostname the hostname to set
+     */
+    public void setHostname(String hostname) {
         this.hostname = hostname;
     }
 
-    /*
-     * @see java.lang.Object#hashCode()
+    /**
+     * @return the locale
      */
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    /*
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(final Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
-    }
-
-    /*
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+    public String getLocale() {
+        return locale;
     }
 
     /**
-     * Gets the current TrustManager.
-     * If using the system default, null is returned.
-     * @return the current TrustManager or null if default.
+     * @param locale the locale to set
+     */
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * @return the userName
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /**
+     * @return the sessionId
+     */
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    /**
+     * @param sessionId the sessionId to set
+     */
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    /**
+     * @return the amqpPort
+     */
+    public int getAmqpPort() {
+        return amqpPort;
+    }
+
+    /**
+     * @param amqpPort the amqpPort to set
+     */
+    public void setAmqpPort(int amqpPort) {
+        this.amqpPort = amqpPort;
+    }
+
+    /**
+     * @return the routingKey
+     */
+    public String getRoutingKey() {
+        return routingKey;
+    }
+
+    /**
+     * @param routingKey the routingKey to set
+     */
+    public void setRoutingKey(String routingKey) {
+        this.routingKey = routingKey;
+    }
+
+    /**
+     * @return the exchange
+     */
+    public String getExchange() {
+        return exchange;
+    }
+
+    /**
+     * @param exchange the exchange to set
+     */
+    public void setExchange(String exchange) {
+        this.exchange = exchange;
+    }
+
+    /**
+     * @return the hostVerifier
+     */
+    public HostnameVerifier getHostnameVerifier() {
+        return hostnameVerifier;
+    }
+
+    /**
+     * Sets a new HostnameVerifier for future connections.
+     *
+     * @param verifier {@link HostnameVerifier} hostname verifier.
+     *
+     * @return the old HostnameVerifier
      **/
+    public HostnameVerifier
+    setHostnameVerifier(final HostnameVerifier verifier) {
+       HostnameVerifier old = this.getHostnameVerifier();
+       this.hostnameVerifier = verifier;
+       return old;
+    }
+
     public TrustManager getTrustManager() {
        return this.trustManager;
     }
@@ -188,35 +255,27 @@ public class RestParams {
        return old;
     }
 
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
     /**
      * Is a non-default TrustManager to be used.
      * @return true if non-default, false otherwise
      **/
     public boolean hasTrustManager() {
        return getTrustManager() != null;
-    }
-
-    /**
-     * Gets the current HostnameVerifier.
-     * If using the system default, null is returned.
-     * @return the current HostnameVerifier or null if default.
-     **/
-    public HostnameVerifier getHostnameVerifier() {
-       return this.hostVerifier;
-    }
-
-    /**
-     * Sets a new HostnameVerifier for future connections.
-     *
-     * @param verifier {@link HostnameVerifier} hostname verifier.
-     *
-     * @return the old HostnameVerifier
-     **/
-    public HostnameVerifier
-    setHostnameVerifier(final HostnameVerifier verifier) {
-       HostnameVerifier old = getHostnameVerifier();
-       this.hostVerifier = verifier;
-       return old;
     }
 
     /**

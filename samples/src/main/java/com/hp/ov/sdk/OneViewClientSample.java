@@ -24,8 +24,9 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 public class OneViewClientSample {
 
     public static OneViewClient getOneViewClient() {
-        RestParams params = HPOneViewCredential.createRestParams();
-        HttpSslProperties httpSslProperties = HPOneViewCredential.createHttpSslProperties();
+        HPOneViewCredential credentials = new HPOneViewCredential();
+        RestParams params = credentials.createRestParams();
+        HttpSslProperties httpSslProperties = credentials.createHttpSslProperties();
 
         OneViewClient client = new OneViewClient(params, httpSslProperties);
 

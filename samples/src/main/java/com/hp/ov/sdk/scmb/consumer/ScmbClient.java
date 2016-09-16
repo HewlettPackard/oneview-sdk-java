@@ -16,7 +16,6 @@
 package com.hp.ov.sdk.scmb.consumer;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.SamplesConstants;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.certs.MessagingCertificateClient;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -43,18 +42,23 @@ public class ScmbClient {
 
     private final ScmbConnectionManager objectUnderTest;
 
+    private OneViewClient oneViewClient;
+    private HPOneViewCredential credentials;
+
     private ScmbClient() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        this.oneViewClient = OneViewClientSample.getOneViewClient();
+        this.credentials = new HPOneViewCredential();
+
         MessagingCertificateClient messagingCertificateClient = oneViewClient.messagingCertificate();
 
         this.objectUnderTest = new ScmbConnectionManager(messagingCertificateClient);
     }
 
     public void scmbProcessor() {
-        RestParams params = HPOneViewCredential.createRestParams();
+        RestParams params = credentials.createRestParams();
 
         try {
-            HttpSslProperties httpSslProperties = HPOneViewCredential.createHttpSslProperties();
+            HttpSslProperties httpSslProperties = credentials.createHttpSslProperties();
             BaseClient baseClient = new BaseClient(params, new ResourceAdaptor(),
                     HttpRestClient.getClient(), TaskMonitorManager.getInstance());
 
@@ -72,7 +76,7 @@ public class ScmbClient {
 
             // then start scmb
             objectUnderTest.startScmb(params);
-            objectUnderTest.processConsumer(params, SamplesConstants.SCMB_TASKS_ROUTING_KEY, messageQueue);
+            objectUnderTest.processConsumer(params, credentials.getSdkConfiguration().getMessageBusTaskRoutingKey(), messageQueue);
 
             // Optional:  Start next processor with different routing key
             // objectUnderTest.processConsumer(params, "scmb.interconnects.#");
@@ -92,7 +96,7 @@ public class ScmbClient {
     }
 
     private void stopScmb() {
-        RestParams params = HPOneViewCredential.createRestParams();
+        RestParams params = credentials.createRestParams();
 
         try {
             objectUnderTest.stopScmb(params);

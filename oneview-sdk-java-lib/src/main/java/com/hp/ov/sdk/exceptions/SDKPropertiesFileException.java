@@ -13,33 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.rest.http.core.client;
+package com.hp.ov.sdk.exceptions;
 
-public enum ApiVersion {
-    V_120 (120),
-    V_200 (200),
-    V_201 (201),
-    V_300 (300);
+import java.io.IOException;
 
-    private final int value;
+public class SDKPropertiesFileException extends RuntimeException {
 
-    private ApiVersion(final int value) {
-        this.value = value;
+    private static final long serialVersionUID = 1L;
+
+    public SDKPropertiesFileException(IOException e) {
+        super(e);
     }
 
-    public int getValue() {
-        return value;
+    public SDKPropertiesFileException(String message) {
+        super(message);
     }
 
-    public static ApiVersion fromStringValue(String value) throws NumberFormatException {
-        if (value != null) {
-            for (ApiVersion element : ApiVersion.values()) {
-                if (element.value == Integer.parseInt(value)) {
-                    return element;
-                }
-            }
-        }
-
-        return null;
-    }
 }

@@ -25,6 +25,12 @@ public class HttpSslProperties {
     private String trustStorePassword = null;
     private String trustStoreType = null;
 
+    public HttpSslProperties(SDKConfiguration sdkConfiguration) {
+        this.trustStore = sdkConfiguration.getTrustStoreFile();
+        this.trustStorePassword = sdkConfiguration.getTrustStorePassword();
+        this.trustStoreType = sdkConfiguration.getTrustStoreType();
+    }
+
     public String getTrustStore() {
         return trustStore;
     }
