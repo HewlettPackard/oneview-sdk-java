@@ -20,7 +20,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResourceV2;
@@ -197,7 +196,7 @@ public class EthernetNetworkClient {
 
         List<String> associatedProfiles = baseClient.getResourceList(
                 UrlUtils.createUrl(ResourceUris.ETHERNET_URI, resourceId, ResourceUris.ASSOCIATED_PROFILES),
-                new TypeToken<List<String>>(){});
+                String.class);
 
         LOGGER.info("NetworkClient : getAssociatedProfiles : End");
 
@@ -217,7 +216,7 @@ public class EthernetNetworkClient {
 
         List<String> associatedUplinkGroups = baseClient.getResourceList(
                 UrlUtils.createUrl(ResourceUris.ETHERNET_URI, resourceId, ResourceUris.ASSOCIATED_UPLINK_GROUPS),
-                new TypeToken<List<String>>(){});
+                String.class);
 
         LOGGER.info("NetworkClient : getAssociatedUplinkGroups : End");
 

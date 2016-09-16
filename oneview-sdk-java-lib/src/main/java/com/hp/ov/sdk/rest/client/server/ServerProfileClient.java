@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
-import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.AvailableStorageSystem;
 import com.hp.ov.sdk.dto.AvailableTargets;
@@ -352,7 +351,7 @@ public class ServerProfileClient {
         LOGGER.info("ServerProfileClient : getAvailableServers : Start");
 
         List<AvailableServers> servers = baseClient.getResourceList(ResourceUris.AVAILABLE_SERVERS_URI,
-                new TypeToken<List<AvailableServers>>() {});
+                AvailableServers.class);
 
         LOGGER.info("ServerProfileClient : getAvailableServers : End");
 
@@ -377,7 +376,7 @@ public class ServerProfileClient {
 
         List<AvailableServers> servers = baseClient.getResourceList(
                 ResourceUris.AVAILABLE_SERVERS_URI,
-                new TypeToken<List<AvailableServers>>() {},
+                AvailableServers.class,
                 new UrlParameter("serverHardwareTypeUri", serverHardwareTypeUri),
                 new UrlParameter("enclosureGroupUri", enclosureGroupUri));
 
@@ -401,7 +400,7 @@ public class ServerProfileClient {
         LOGGER.info("ServerProfileClient : getAvailableServers : Start");
 
         List<AvailableServers> servers = baseClient.getResourceList(ResourceUris.AVAILABLE_SERVERS_URI,
-                new TypeToken<List<AvailableServers>>() {}, new UrlParameter("profileUri", profileUri));
+                AvailableServers.class, new UrlParameter("profileUri", profileUri));
 
         LOGGER.info("ServerProfileClient : getAvailableServers : End");
 

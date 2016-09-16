@@ -18,15 +18,12 @@ package com.hp.ov.sdk.rest.client.storage;
 
 import static org.mockito.BDDMockito.then;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ExtraStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
@@ -86,7 +83,7 @@ public class StorageVolumeAttachmentClientTest {
                 + "/" + ANY_STORAGE_VOLUME_ATTACHMENT_RESOURCE_ID
                 + "/" + ResourceUris.STORAGE_VOLUME_ATTACHMENT_PATH_URI;
 
-        then(baseClient).should().getResourceList(expectedUri, new TypeToken<List<StorageVolumeAttachmentPath>>() {});
+        then(baseClient).should().getResourceList(expectedUri, StorageVolumeAttachmentPath.class);
     }
 
     @Test

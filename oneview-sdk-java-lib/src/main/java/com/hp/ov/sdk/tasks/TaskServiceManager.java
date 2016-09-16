@@ -55,7 +55,7 @@ public class TaskServiceManager {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, null, null, null, SdkConstants.TASK_MONITOR, null);
         }
 
-        final TaskResourceV2 taskResourceV2 = adaptor.buildResourceObject(returnObj, TaskResourceV2.class);
+        final TaskResourceV2 taskResourceV2 = adaptor.buildResource(returnObj, TaskResourceV2.class);
 
         LOGGER.debug("TaskServiceManager : getTaskResource : task state:" + taskResourceV2.getTaskState());
         LOGGER.trace("TaskServiceManager : getTaskResource : End");

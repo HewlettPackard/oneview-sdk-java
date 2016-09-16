@@ -21,7 +21,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.NameServer;
@@ -282,7 +281,7 @@ public class InterconnectClient {
         List<NameServer> nameServers = baseClient.getResourceList(
                 UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId,
                         ResourceUris.INTERCONNECT_NAME_SERVERS_URI),
-                new TypeToken<List<NameServer>>(){});
+                NameServer.class);
 
         LOGGER.info("InterconnectClient : getNamedServers : End");
 

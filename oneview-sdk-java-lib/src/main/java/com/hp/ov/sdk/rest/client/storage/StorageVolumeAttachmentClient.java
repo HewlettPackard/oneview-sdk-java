@@ -20,7 +20,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ExtraStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
@@ -118,7 +117,7 @@ public class StorageVolumeAttachmentClient {
         List<StorageVolumeAttachmentPath> storageVolumeAttachmentPaths = baseClient.getResourceList(
                 UrlUtils.createUrl(ResourceUris.STORAGE_VOLUME_ATTACHMENT_URI, attachmentId,
                         ResourceUris.STORAGE_VOLUME_ATTACHMENT_PATH_URI),
-                new TypeToken<List<StorageVolumeAttachmentPath>>() {});
+                StorageVolumeAttachmentPath.class);
 
         LOGGER.info("StorageVolumeAttachmentClient : getAllAttachmentPaths : End");
 

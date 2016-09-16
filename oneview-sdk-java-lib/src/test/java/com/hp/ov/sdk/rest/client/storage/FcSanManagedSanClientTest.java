@@ -18,15 +18,12 @@ package com.hp.ov.sdk.rest.client.storage;
 
 import static org.mockito.BDDMockito.then;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.EndpointResponse;
 import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.dto.HttpMethodType;
@@ -130,7 +127,7 @@ public class FcSanManagedSanClientTest {
                 + "/" + FcSanManagedSanClient.FC_SANS_WWN_LOCATE_URI
                 + "/" + ANY_WWN;
 
-        then(baseClient).should().getResourceList(expectedUri, new TypeToken<List<LocateSanResponse>>(){});
+        then(baseClient).should().getResourceList(expectedUri, LocateSanResponse.class);
     }
 
 }

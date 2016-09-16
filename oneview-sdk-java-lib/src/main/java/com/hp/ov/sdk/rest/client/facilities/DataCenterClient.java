@@ -20,7 +20,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.HttpMethodType;
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -191,7 +190,7 @@ public class DataCenterClient {
 
         List<VisualContent> visualContents = baseClient.getResourceList(UrlUtils.createUrl(
                 ResourceUris.DATA_CENTER_URI, resourceId, ResourceUris.DATA_CENTER_VISUAL_CONTENT_URI),
-                new TypeToken<List<VisualContent>>(){});
+                VisualContent.class);
 
         LOGGER.info("DataCenterClient : getVisualContent : End");
 

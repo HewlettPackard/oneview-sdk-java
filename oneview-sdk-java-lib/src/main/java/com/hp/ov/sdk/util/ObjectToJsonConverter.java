@@ -17,12 +17,17 @@ package com.hp.ov.sdk.util;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.reflect.TypeParameter;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 import com.hp.ov.sdk.adaptors.PortTelemetrySerializationAdapter;
 import com.hp.ov.sdk.adaptors.StorageCapabilitiesDeserializer;
 import com.hp.ov.sdk.adaptors.StoragePoolSerializationAdapter;
@@ -34,11 +39,18 @@ import com.hp.ov.sdk.dto.servers.serverhardwaretype.StorageCapabilities;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInternalException;
 
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
-
 public class ObjectToJsonConverter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ObjectToJsonConverter.class);
+
+    private static final Map<Class<?>, Object> GSON_TYPE_ADAPTERS = ImmutableMap.<Class<?>, Object>builder()
+            .put(StoragePool.class, new StoragePoolSerializationAdapter())
+            .put(PortTelemetry.class, new PortTelemetrySerializationAdapter())
+            .put(StorageCapabilities.class, new StorageCapabilitiesDeserializer())
+            .build();
+
+    private Gson gson;
+    private Gson versionedGson;
 
     private static final class ObjectToJsonConverterHolder {
         private static final ObjectToJsonConverter INSTANCE = new ObjectToJsonConverter();
@@ -50,83 +62,81 @@ public class ObjectToJsonConverter {
         return ObjectToJsonConverterHolder.INSTANCE;
     }
 
-    public String convertObjectToJsonString(final Object inObj) {
-        Gson gson = this.getGson();
-
-        return (gson.toJson(inObj));
+    public String resourceToJson(Object inputObject, int apiVersion) {
+        return this.versionedGson(apiVersion).toJson(inputObject);
     }
 
-    public String convertObjectToJsonString(final Object inObj, int version) {
-        Gson gson = this.getGson(version);
-
-        return (gson.toJson(inObj));
-    }
-
-    public <T> T convertJsonToObject(final String inStr, final Class<T> target) {
-        Gson gson = this.getGson();
-
-        T retObj = null;
+    public <T> T jsonToResource(final String jsonInput, final Class<T> resourceType) {
         try {
-            retObj = gson.fromJson(inStr, target);
-        } catch (final Exception e) {
-            throw new SDKInternalException(SDKErrorEnum.internalError, null, null, null,
-                    SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
-        }
-        LOGGER.debug("ObjectJsonConverter : convertObjectToJson: json to object =" + retObj.toString());
+            LOGGER.info("JSON successfully converted to a Resource of type {}", resourceType.getSimpleName());
 
-        return retObj;
-    }
-
-    public <T> ResourceCollection<T> convertJsonToResourceCollection(String jsonInput, Class<T> resourceClass) {
-        Gson gson = this.getGson();
-        Type type = ParameterizedTypeImpl.make(ResourceCollection.class, new Class<?>[] {resourceClass}, null);
-
-        try {
-            ResourceCollection<T> resourceCollection = gson.fromJson(jsonInput, type);
-
-            LOGGER.info("JSON successfully converted to resource collection of type {} with {} members",
-                    resourceClass.getSimpleName(), Integer.valueOf(resourceCollection.getCount()));
-
-            return resourceCollection;
-        } catch (final Exception e) {
+            return this.gson().fromJson(jsonInput, resourceType);
+        } catch (final JsonParseException e) {
             throw new SDKInternalException(SDKErrorEnum.internalError, null, null, null,
                     SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
         }
     }
 
-    public List<?> convertJsonToListObject(final String inStr, final Type mtype) {
-        Gson gson = this.getGson();
-        List<?> retObj = null;
-
+    public <T> ResourceCollection<T> jsonToResourceCollection(String jsonInput, Class<T> resourceType) {
         try {
-            retObj = gson.fromJson(inStr, mtype);
-        } catch (final Exception e) {
+            Type type = new TypeToken<ResourceCollection<T>>() {}
+                    .where(new TypeParameter<T>() {}, TypeToken.of(resourceType)).getType();
+
+            LOGGER.info("JSON successfully converted to a ResourceCollection of {}", resourceType.getSimpleName());
+
+            return this.gson().fromJson(jsonInput, type);
+        } catch (final JsonParseException e) {
             throw new SDKInternalException(SDKErrorEnum.internalError, null, null, null,
                     SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
         }
-        LOGGER.info("ObjectJsonConverter : convertObjectToJson: json to object =" + retObj.toString());
-        return retObj;
     }
 
-    private Gson getGson() {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(StoragePool.class, new StoragePoolSerializationAdapter())
-                .registerTypeAdapter(PortTelemetry.class, new PortTelemetrySerializationAdapter())
-                .registerTypeAdapter(StorageCapabilities.class, new StorageCapabilitiesDeserializer())
-                .create();
+    public <T> List<T> jsonToList(String jsonInput, Class<T> resourceType) {
+        try {
+            Type type = new TypeToken<List<T>>() {}
+                    .where(new TypeParameter<T>() {}, TypeToken.of(resourceType)).getType();
 
-        return gson;
+            LOGGER.info("JSON successfully converted to a List of {}", resourceType.getSimpleName());
+
+            return this.gson().fromJson(jsonInput, type);
+        } catch (final JsonParseException e) {
+            throw new SDKInternalException(SDKErrorEnum.internalError, null, null, null,
+                    SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
+        }
     }
 
-    private Gson getGson(int apiVersion) {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(StoragePool.class, new StoragePoolSerializationAdapter())
-                .registerTypeAdapter(PortTelemetry.class, new PortTelemetrySerializationAdapter())
-                .registerTypeAdapter(StorageCapabilities.class, new StorageCapabilitiesDeserializer())
-                .setVersion(apiVersion)
-                .create();
+    /**
+     * Process the JSON string received from OneView in order to remove/include unsupported characters.
+     *
+     * @param inputJson the JSON string received from OneView.
+     *
+     * @return string with some characters replaced and properly formatted to execute the deserialization process.
+     */
+    public String processJsonFromOneView(String inputJson) {
+        return this.gson().toJson(inputJson);
+    }
 
-        return gson;
+    private Gson gson() {
+        if (this.gson == null) {
+            this.gson = gsonBuilder().create();
+        }
+        return this.gson;
+    }
+
+    private Gson versionedGson(int apiVersion) {
+        if (this.versionedGson == null) {
+            this.versionedGson = gsonBuilder().setVersion(apiVersion).create();
+        }
+        return this.versionedGson;
+    }
+
+    private GsonBuilder gsonBuilder() {
+        GsonBuilder builder = new GsonBuilder();
+
+        for (Map.Entry<Class<?>, Object> adapter : GSON_TYPE_ADAPTERS.entrySet()) {
+            builder.registerTypeAdapter(adapter.getKey(), adapter.getValue());
+        }
+        return builder;
     }
 
 }

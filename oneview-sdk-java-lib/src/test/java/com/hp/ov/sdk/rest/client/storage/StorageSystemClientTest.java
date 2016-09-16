@@ -18,15 +18,12 @@ package com.hp.ov.sdk.rest.client.storage;
 
 import static org.mockito.BDDMockito.then;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
 import com.hp.ov.sdk.dto.HttpMethodType;
@@ -151,8 +148,7 @@ public class StorageSystemClientTest {
     public void shouldGetStorageSystemHostTypes() {
         storageSystemClient.getHostTypes();
 
-        then(baseClient).should().getResourceList(ResourceUris.STORAGE_SYSTEM_HOST_TYPES_URI,
-                new TypeToken<List<String>>() {});
+        then(baseClient).should().getResourceList(ResourceUris.STORAGE_SYSTEM_HOST_TYPES_URI, String.class);
     }
 
 }

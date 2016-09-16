@@ -70,13 +70,12 @@ public class BaseClient {
 
         String response = this.executeRequest(request);
 
-        T resource = adaptor.buildResourceObject(response, returnType);
+        T resource = adaptor.buildResource(response, returnType);
 
         return resource;
     }
 
-    public <T> List<T> getResourceList(String uri, TypeToken<List<T>> resourceType,
-            UrlParameter... queries) {
+    public <T> List<T> getResourceList(String uri, Class<T> resourceType, UrlParameter... queries) {
         this.validateNotNullArguments(uri, resourceType);
 
         Request request = new Request(HttpMethodType.GET, uri);
@@ -87,7 +86,7 @@ public class BaseClient {
 
         String response = this.executeRequest(request);
 
-        List<T> resource = adaptor.buildListOfResourceObject(response, resourceType.getType());
+        List<T> resource = adaptor.buildListOfResource(response, resourceType);
 
         return resource;
     }
@@ -151,13 +150,13 @@ public class BaseClient {
         if (String.class.equals(returnType)) {
             return (T) response;
         }
-        return adaptor.buildResourceObject(response, returnType);
+        return adaptor.buildResource(response, returnType);
     }
 
     public TaskResourceV2 executeMonitorableRequest(Request request, boolean aSync) {
         String response = this.executeRequest(request);
 
-        TaskResourceV2 taskResource = adaptor.buildResourceObject(response, TaskResourceV2.class);
+        TaskResourceV2 taskResource = adaptor.buildResource(response, TaskResourceV2.class);
 
         if (!aSync) {
             taskResource = monitor.checkStatus(params, taskResource.getUri(), request.getTimeout());

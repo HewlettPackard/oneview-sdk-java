@@ -15,62 +15,42 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
-import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hp.ov.sdk.util.StringUtil;
 
 public class ResourceAdaptor {
 
-    @SuppressWarnings("unchecked")
-    public <T> List<T> buildListOfResourceObject(String source, Type listAndResourceType) {
+    public <T> List<T> buildListOfResource(String source, Class<T> resourceType) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
         String sourceReplaced = this.applyReplacementsOnSource(source);
 
-        return (List<T>) converter.convertJsonToListObject(sourceReplaced, listAndResourceType);
+        return converter.jsonToList(sourceReplaced, resourceType);
     }
 
-    public <T> ResourceCollection<T> buildResourceCollection(String source, Class<T> resourceClass) {
+    public <T> ResourceCollection<T> buildResourceCollection(String source, Class<T> resourceType) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
         String sourceReplaced = this.applyReplacementsOnSource(source);
 
-        return converter.convertJsonToResourceCollection(sourceReplaced, resourceClass);
+        return converter.jsonToResourceCollection(sourceReplaced, resourceType);
     }
 
-    public <T> T buildResourceObject(String source, Class<T> resourceClass) {
+    public <T> T buildResource(String source, Class<T> resourceType) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
         String sourceReplaced = this.applyReplacementsOnSource(source);
 
-        return converter.convertJsonToObject(sourceReplaced, resourceClass);
-    }
-
-    public JSONObject buildJsonRequest(Object resourceObject, ApiVersion apiVersion) {
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-
-        return new JSONObject(converter.convertObjectToJsonString(resourceObject, apiVersion.getValue()));
-    }
-
-    public JSONArray buildJsonArray(Patch source, ApiVersion apiVersion) {
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-
-        return new JSONArray(converter.convertObjectToJsonString(Arrays.asList(source), apiVersion.getValue()));
+        return converter.jsonToResource(sourceReplaced, resourceType);
     }
 
     private String applyReplacementsOnSource(String source) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
-        String sourceAsJson = converter.convertObjectToJsonString(source);
+        String sourceAsJson = converter.processJsonFromOneView(source);
         String sourceReplacedQuotesAndBackSlash = StringUtil.replaceQuotesAndBackSlash(sourceAsJson);
         String sourceReplacedQuotesBackSlashWithQuote = StringUtil.replaceQuotesBackSlashWithQuote(
                 sourceReplacedQuotesAndBackSlash);
