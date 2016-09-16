@@ -35,7 +35,7 @@ import com.hp.ov.sdk.util.UrlUtils;
 public class SasLogicalInterconnectClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SasLogicalInterconnectClient.class);
-    private static final int TIMEOUT = 720000; // in milliseconds
+    private static final int TIMEOUT = 900000; // in milliseconds
 
     protected static final String SAS_LOGICAL_INTERCONNECT_URI = "/rest/sas-logical-interconnects";
     protected static final String FIRMWARE_URI = "firmware";

@@ -99,7 +99,7 @@ public class SasLogicalInterconnectClientTest {
 
         Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, firmware);
 
-        expectedRequest.setTimeout(720000);
+        expectedRequest.setTimeout(900000);
         expectedRequest.setForceTaskReturn(true);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
@@ -117,7 +117,7 @@ public class SasLogicalInterconnectClientTest {
 
         Request expectedRequest = new Request(HttpMethodType.POST, expectedUri, replace);
 
-        expectedRequest.setTimeout(720000);
+        expectedRequest.setTimeout(900000);
         expectedRequest.setForceTaskReturn(true);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
@@ -133,7 +133,7 @@ public class SasLogicalInterconnectClientTest {
 
         Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri);
 
-        expectedRequest.setTimeout(720000);
+        expectedRequest.setTimeout(900000);
         expectedRequest.setForceTaskReturn(true);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
@@ -154,7 +154,7 @@ public class SasLogicalInterconnectClientTest {
 
         Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, interconnect);
 
-        expectedRequest.setTimeout(720000);
+        expectedRequest.setTimeout(900000);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
     }
@@ -172,7 +172,7 @@ public class SasLogicalInterconnectClientTest {
 
         Request expectedRequest = new Request(HttpMethodType.PUT, expectedUri, interconnectUris);
 
-        expectedRequest.setTimeout(720000);
+        expectedRequest.setTimeout(900000);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
     }
