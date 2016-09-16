@@ -16,7 +16,6 @@
 package com.hp.ov.sdk.msmb.consumer;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.certs.MessagingCertificateClient;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
@@ -31,10 +30,8 @@ import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
-import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.OneViewConnector;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
@@ -59,8 +56,7 @@ public class MsmbClient {
 
         try {
             HttpSslProperties httpSslProperties = credentials.createHttpSslProperties();
-            BaseClient baseClient = new BaseClient(params, new ResourceAdaptor(),
-                    HttpRestClient.getClient(), TaskMonitorManager.getInstance());
+            BaseClient baseClient = new BaseClient(params);
 
             OneViewConnector connector = new OneViewConnector(params, httpSslProperties,
                     new VersionClient(baseClient), new LoginSessionClient(baseClient));

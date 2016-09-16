@@ -18,7 +18,6 @@ package com.hp.ov.sdk.rest.client;
 
 import java.lang.reflect.Constructor;
 
-import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.certs.MessagingCertificateClient;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKException;
@@ -71,10 +70,8 @@ import com.hp.ov.sdk.rest.client.storage.StorageSystemClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeAttachmentClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeTemplateClient;
-import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.tasks.TaskMonitorManager;
 import com.hp.ov.sdk.util.OneViewConnector;
 
 public class OneViewClient {
@@ -131,10 +128,7 @@ public class OneViewClient {
     private UplinkSetClient uplinkSetClient;
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
-        this.baseClient = new BaseClient(params,
-                new ResourceAdaptor(),
-                HttpRestClient.getClient(),
-                TaskMonitorManager.getInstance());
+        this.baseClient = new BaseClient(params);
 
         OneViewConnector connector = new OneViewConnector(
                 params, httpSslProperties,
