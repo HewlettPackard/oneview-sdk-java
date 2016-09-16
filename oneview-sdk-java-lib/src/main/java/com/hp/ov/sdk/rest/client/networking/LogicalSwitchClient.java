@@ -168,7 +168,7 @@ public class LogicalSwitchClient {
      *
      * @return {@link TaskResourceV2} containing the task status for the process.
      */
-    TaskResourceV2 refresh(String resourceId, boolean aSync) {
+    public TaskResourceV2 refresh(String resourceId, boolean aSync) {
         LOGGER.info("LogicalSwitchClient : refresh : Start");
 
         Request request = new Request(HttpMethodType.PUT,
