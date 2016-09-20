@@ -22,7 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.reflect.TypeToken;
+import com.google.common.base.Supplier;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
@@ -37,7 +37,7 @@ import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.tasks.TaskMonitorManager;
+import com.hp.ov.sdk.tasks.TaskMonitor;
 
 public class BaseClient {
 
@@ -46,14 +46,28 @@ public class BaseClient {
     private final RestParams params;
     private final ResourceAdaptor adaptor;
     private final HttpRestClient client;
-    private final TaskMonitorManager monitor;
+    private final Supplier<TaskMonitor> supplier;
 
-    public BaseClient(RestParams params, ResourceAdaptor adaptor, HttpRestClient client, TaskMonitorManager monitor) {
+    public BaseClient(RestParams params) {
+        this(params, new ResourceAdaptor(), HttpRestClient.getClient(), new Supplier<TaskMonitor>() {
+            @Override
+            public TaskMonitor get() {
+                return new TaskMonitor();
+            }
+        });
+    }
+
+    protected BaseClient(RestParams params,
+            ResourceAdaptor adaptor,
+            HttpRestClient client,
+            Supplier<TaskMonitor> supplier) {
+
         this.params = params;
         this.adaptor = adaptor;
         this.client = client;
-        this.monitor = monitor;
+        this.supplier = supplier;
     }
+
 
     public ApiVersion getApiVersion() {
         return this.params.getApiVersion();
@@ -159,7 +173,7 @@ public class BaseClient {
         TaskResourceV2 taskResource = adaptor.buildResource(response, TaskResourceV2.class);
 
         if (!aSync) {
-            taskResource = monitor.checkStatus(params, taskResource.getUri(), request.getTimeout());
+            taskResource = supplier.get().execute(this, taskResource, request.getTimeout());
         }
         return taskResource;
     }
