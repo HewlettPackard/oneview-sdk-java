@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
@@ -100,12 +100,12 @@ public class FcNetworkClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 create(FcNetwork fcNetwork, boolean aSync) {
+    public TaskResource create(FcNetwork fcNetwork, boolean aSync) {
         LOGGER.info("FcNetworkClient : create : Start");
 
-        TaskResourceV2 taskResource = baseClient.createResource(
+        TaskResource taskResource = baseClient.createResource(
                 ResourceUris.FC_NETWORK_URI, fcNetwork, aSync);
 
         LOGGER.info("FcNetworkClient : create : End");
@@ -121,12 +121,12 @@ public class FcNetworkClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 update(String resourceId, FcNetwork fcNetwork, boolean aSync) {
+    public TaskResource update(String resourceId, FcNetwork fcNetwork, boolean aSync) {
         LOGGER.info("FcNetworkClient : update : Start");
 
-        TaskResourceV2 taskResource = baseClient.updateResource(
+        TaskResource taskResource = baseClient.updateResource(
                 UrlUtils.createUrl(ResourceUris.FC_NETWORK_URI, resourceId), fcNetwork, aSync);
 
         LOGGER.info("FcNetworkClient : update : End");
@@ -141,12 +141,12 @@ public class FcNetworkClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 delete(String resourceId, boolean aSync) {
+    public TaskResource delete(String resourceId, boolean aSync) {
         LOGGER.info("FcNetworkClient : delete : Start");
 
-        TaskResourceV2 taskResource = baseClient.deleteResource(
+        TaskResource taskResource = baseClient.deleteResource(
                 UrlUtils.createUrl(ResourceUris.FC_NETWORK_URI, resourceId), aSync);
 
         LOGGER.info("FcNetworkClient : delete : End");

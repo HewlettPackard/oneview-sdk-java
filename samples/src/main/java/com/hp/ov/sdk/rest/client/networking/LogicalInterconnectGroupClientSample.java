@@ -27,7 +27,7 @@ import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.InterconnectTypeName;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
@@ -35,7 +35,6 @@ import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.dto.samples.UplinkSetValue;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
-import com.hp.ov.sdk.util.samples.ResourceDtoUtilsWrapper;
 
 /*
  * LogicalInterconnectGroupClientSample is a sample program, acts as a recipe for representing the available networks,
@@ -107,7 +106,7 @@ public class LogicalInterconnectGroupClientSample {
         logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200); //v200
         logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300); //v300
 
-        TaskResourceV2 task = this.client.create(logicalInterconnectGroup, false);
+        TaskResource task = this.client.create(logicalInterconnectGroup, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -121,7 +120,7 @@ public class LogicalInterconnectGroupClientSample {
         final List<UplinkSetGroup> uplinkSetDto = buildUplinkSetGroupDto();
         lig.setUplinkSets(uplinkSetDto);
 
-        TaskResourceV2 task = this.client.update(lig.getResourceId(), lig, false);
+        TaskResource task = this.client.update(lig.getResourceId(), lig, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -129,7 +128,7 @@ public class LogicalInterconnectGroupClientSample {
     private void deleteLogicalInterconnectGroup() {
         ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getByName(RESOURCE_NAME_UPDATED);
         LogicalInterconnectGroup lig = logicalInterconnectGroups.getMembers().get(0);
-        TaskResourceV2 task = this.client.delete(lig.getResourceId(), false);
+        TaskResource task = this.client.delete(lig.getResourceId(), false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }

@@ -28,7 +28,7 @@ import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
@@ -121,7 +121,7 @@ public class BaseClient {
         return resource;
     }
 
-    public TaskResourceV2 createResource(String uri, Object body, boolean aSync) {
+    public TaskResource createResource(String uri, Object body, boolean aSync) {
         this.validateNotNullArguments(uri, body);
 
         Request request = new Request(HttpMethod.POST, uri, body);
@@ -129,7 +129,7 @@ public class BaseClient {
         return this.executeMonitorableRequest(request, aSync);
     }
 
-    public TaskResourceV2 updateResource(String uri, Object body, boolean aSync) {
+    public TaskResource updateResource(String uri, Object body, boolean aSync) {
         this.validateNotNullArguments(uri, body);
 
         Request request = new Request(HttpMethod.PUT, uri, body);
@@ -137,7 +137,7 @@ public class BaseClient {
         return this.executeMonitorableRequest(request, aSync);
     }
 
-    public TaskResourceV2 patchResource(String uri, Patch patch, boolean aSync) {
+    public TaskResource patchResource(String uri, Patch patch, boolean aSync) {
         this.validateNotNullArguments(uri, patch);
 
         Request request = new Request(HttpMethod.PATCH, uri, patch);
@@ -145,7 +145,7 @@ public class BaseClient {
         return this.executeMonitorableRequest(request, aSync);
     }
 
-    public TaskResourceV2 deleteResource(String uri, boolean aSync, UrlParameter... queries) {
+    public TaskResource deleteResource(String uri, boolean aSync, UrlParameter... queries) {
         this.validateNotNullArguments(uri);
 
         Request request = new Request(HttpMethod.DELETE, uri);
@@ -167,10 +167,10 @@ public class BaseClient {
         return adaptor.buildResource(response, returnType);
     }
 
-    public TaskResourceV2 executeMonitorableRequest(Request request, boolean aSync) {
+    public TaskResource executeMonitorableRequest(Request request, boolean aSync) {
         String response = this.executeRequest(request);
 
-        TaskResourceV2 taskResource = adaptor.buildResource(response, TaskResourceV2.class);
+        TaskResource taskResource = adaptor.buildResource(response, TaskResource.class);
 
         if (!aSync) {
             taskResource = supplier.get().execute(this, taskResource, request.getTimeout());

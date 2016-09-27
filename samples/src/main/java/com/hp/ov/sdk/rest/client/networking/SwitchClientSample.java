@@ -25,7 +25,7 @@ import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.generated.ConnectionProperty;
 import com.hp.ov.sdk.dto.generated.ValueFormat;
 import com.hp.ov.sdk.dto.generated.ValueType;
@@ -35,7 +35,6 @@ import com.hp.ov.sdk.dto.networking.SwitchStatistics;
 import com.hp.ov.sdk.dto.networking.switches.Switch;
 import com.hp.ov.sdk.dto.networking.switches.SwitchManagementConnection;
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
 public class SwitchClientSample {
 
@@ -77,7 +76,7 @@ public class SwitchClientSample {
     private void addSwitch() {
         Switch aSwitch = this.buildSwitch();
 
-        TaskResourceV2 taskResource = this.switchClient.add(aSwitch, false);
+        TaskResource taskResource = this.switchClient.add(aSwitch, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -88,7 +87,7 @@ public class SwitchClientSample {
 
         // FIXME no changes due to problems after executing an update
 
-        TaskResourceV2 taskResource = this.switchClient.update(resourceId, aSwitch, false);
+        TaskResource taskResource = this.switchClient.update(resourceId, aSwitch, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -96,7 +95,7 @@ public class SwitchClientSample {
     private void removeSwitch() {
         Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
 
-        TaskResourceV2 taskResource = this.switchClient.remove(aSwitch.getResourceId(), false);
+        TaskResource taskResource = this.switchClient.remove(aSwitch.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -104,7 +103,7 @@ public class SwitchClientSample {
     private void refreshSwitch() {
         Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
 
-        TaskResourceV2 taskResource = this.switchClient.refresh(aSwitch.getResourceId(), false);
+        TaskResource taskResource = this.switchClient.refresh(aSwitch.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -145,7 +144,7 @@ public class SwitchClientSample {
             }
         }
 
-        TaskResourceV2 taskResource = this.switchClient.updatePorts(aSwitch.getResourceId(), ports, false);
+        TaskResource taskResource = this.switchClient.updatePorts(aSwitch.getResourceId(), ports, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }

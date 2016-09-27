@@ -27,7 +27,7 @@ import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolume;
 import com.hp.ov.sdk.dto.StorageVolumeSnapshot;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
@@ -108,12 +108,12 @@ public class StorageVolumeClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 create(AddStorageVolume addStorageVolume, boolean aSync) {
+    public TaskResource create(AddStorageVolume addStorageVolume, boolean aSync) {
         LOGGER.info("StorageVolumeClient : create : Start");
 
-        TaskResourceV2 taskResource = baseClient.createResource(
+        TaskResource taskResource = baseClient.createResource(
                 ResourceUris.STORAGE_VOLUME_URI, addStorageVolume, aSync);
 
         LOGGER.info("StorageVolumeClient : create : End");
@@ -149,12 +149,12 @@ public class StorageVolumeClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 delete(String resourceId, boolean aSync) {
+    public TaskResource delete(String resourceId, boolean aSync) {
         LOGGER.info("StorageVolumeClient : delete : Start");
 
-        TaskResourceV2 taskResource = baseClient.deleteResource(
+        TaskResource taskResource = baseClient.deleteResource(
                 UrlUtils.createUrl(ResourceUris.STORAGE_VOLUME_URI, resourceId), aSync);
 
         LOGGER.info("StorageVolumeClient : delete : End");
@@ -232,12 +232,12 @@ public class StorageVolumeClient {
      * the snapshot creation.
      * @param aSync flag input to process request asynchronously or synchronously.
      *
-     * @return {@link TaskResourceV2} which returns the task status for the process.
+     * @return {@link TaskResource} which returns the task status for the process.
      */
-    public TaskResourceV2 createSnapshot(String storageVolumeId, StorageVolumeSnapshot snapshot, boolean aSync) {
+    public TaskResource createSnapshot(String storageVolumeId, StorageVolumeSnapshot snapshot, boolean aSync) {
         LOGGER.info("StorageVolumeClient : createSnapshot : Start");
 
-        TaskResourceV2 taskResource = baseClient.createResource(
+        TaskResource taskResource = baseClient.createResource(
                 UrlUtils.createUrl(ResourceUris.STORAGE_VOLUME_URI, storageVolumeId,
                         ResourceUris.STORAGE_VOLUME_SNAPSHOTS_URI), snapshot, aSync);
 
@@ -253,12 +253,12 @@ public class StorageVolumeClient {
      * @param snapshotId resource identifier for the snapshot of the storage volume.
      * @param aSync flag input to process request asynchronously or synchronously.
      *
-     * @return {@link TaskResourceV2} which returns the task status for the process.
+     * @return {@link TaskResource} which returns the task status for the process.
      */
-    public TaskResourceV2 deleteSnapshot(String storageVolumeId, String snapshotId, boolean aSync) {
+    public TaskResource deleteSnapshot(String storageVolumeId, String snapshotId, boolean aSync) {
         LOGGER.info("StorageVolumeClient : deleteSnapshot : Start");
 
-        TaskResourceV2 taskResource = baseClient.deleteResource(
+        TaskResource taskResource = baseClient.deleteResource(
                 UrlUtils.createUrl(ResourceUris.STORAGE_VOLUME_URI, storageVolumeId,
                         ResourceUris.STORAGE_VOLUME_SNAPSHOTS_URI, snapshotId), aSync);
 
@@ -292,12 +292,12 @@ public class StorageVolumeClient {
      * @param repair information about the extra paths to delete.
      * @param aSync flag input to process request asynchronously or synchronously.
      *
-     * @return {@link TaskResourceV2} which returns the task status for the process.
+     * @return {@link TaskResource} which returns the task status for the process.
      */
-    public TaskResourceV2 repairExtraManagedPath(ExtraStorageVolumeRepair repair, boolean aSync) {
+    public TaskResource repairExtraManagedPath(ExtraStorageVolumeRepair repair, boolean aSync) {
         LOGGER.info("StorageVolumeClient : repairExtraManagedPath : Start");
 
-        TaskResourceV2 taskResource = baseClient.createResource(ResourceUris.STORAGE_VOLUME_REPAIR_URI, repair, aSync);
+        TaskResource taskResource = baseClient.createResource(ResourceUris.STORAGE_VOLUME_REPAIR_URI, repair, aSync);
 
         LOGGER.info("StorageVolumeClient : repairExtraManagedPath : End");
 

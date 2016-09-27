@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -108,12 +108,12 @@ public class EthernetNetworkClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 create(Network network, boolean aSync) {
+    public TaskResource create(Network network, boolean aSync) {
         LOGGER.info("NetworkClient : create : Start");
 
-        TaskResourceV2 taskResource = baseClient.createResource(ResourceUris.ETHERNET_URI, network, aSync);
+        TaskResource taskResource = baseClient.createResource(ResourceUris.ETHERNET_URI, network, aSync);
 
         LOGGER.info("NetworkClient : create : End");
 
@@ -128,12 +128,12 @@ public class EthernetNetworkClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 update(String resourceId, Network network, boolean aSync) {
+    public TaskResource update(String resourceId, Network network, boolean aSync) {
         LOGGER.info("NetworkClient : update : Start");
 
-        TaskResourceV2 taskResource = baseClient.updateResource(
+        TaskResource taskResource = baseClient.updateResource(
                 UrlUtils.createUrl(ResourceUris.ETHERNET_URI, resourceId), network, aSync);
 
         LOGGER.info("NetworkClient : update : End");
@@ -148,12 +148,12 @@ public class EthernetNetworkClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 delete(String resourceId, boolean aSync) {
+    public TaskResource delete(String resourceId, boolean aSync) {
         LOGGER.info("NetworkClient : delete : Start");
 
-        TaskResourceV2 taskResource = baseClient.deleteResource(
+        TaskResource taskResource = baseClient.deleteResource(
                 UrlUtils.createUrl(ResourceUris.ETHERNET_URI, resourceId), aSync);
 
         LOGGER.info("NetworkClient : delete : End");
@@ -171,12 +171,12 @@ public class EthernetNetworkClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 createInBulk(BulkEthernetNetwork bulkEthernet, boolean aSync) {
+    public TaskResource createInBulk(BulkEthernetNetwork bulkEthernet, boolean aSync) {
         LOGGER.info("NetworkClient : createInBulk : Start");
 
-        TaskResourceV2 taskResource = baseClient.createResource(
+        TaskResource taskResource = baseClient.createResource(
                 ResourceUris.BULK_ETHERNET_URI, bulkEthernet, aSync);
 
         LOGGER.info("NetworkClient : createInBulk : End");

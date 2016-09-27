@@ -24,7 +24,7 @@ import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.LocationType;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.EnclosureType;
 import com.hp.ov.sdk.dto.networking.LogicalLocation;
 import com.hp.ov.sdk.dto.networking.LogicalLocationEntry;
@@ -61,7 +61,7 @@ public class SasLogicalInterconnectGroupClientSample {
     private void createSasLogicalInterconnectGroup() {
         SasLogicalInterconnectGroup interconnectGroup = buildSasLogicalInterconnectGroup();
 
-        TaskResourceV2 task = this.client.create(interconnectGroup, false);
+        TaskResource task = this.client.create(interconnectGroup, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -89,7 +89,7 @@ public class SasLogicalInterconnectGroupClientSample {
 
         interconnectGroup.setName(SAS_LOGICAL_INTERCONNECT_GROUP_NAME_UPDATED);
 
-        TaskResourceV2 task = this.client.update(interconnectGroup.getResourceId(), interconnectGroup, false);
+        TaskResource task = this.client.update(interconnectGroup.getResourceId(), interconnectGroup, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -98,7 +98,7 @@ public class SasLogicalInterconnectGroupClientSample {
         SasLogicalInterconnectGroup interconnectGroup
                 = client.getByName(SAS_LOGICAL_INTERCONNECT_GROUP_NAME_UPDATED).get(0);
 
-        TaskResourceV2 task = this.client.delete(interconnectGroup.getResourceId(), false);
+        TaskResource task = this.client.delete(interconnectGroup.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }

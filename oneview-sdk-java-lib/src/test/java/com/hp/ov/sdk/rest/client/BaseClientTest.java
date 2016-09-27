@@ -19,7 +19,6 @@ package com.hp.ov.sdk.rest.client;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -32,11 +31,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.base.Supplier;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.Request;
@@ -143,7 +142,7 @@ public class BaseClientTest {
         Object body = new Object();
 
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
-        given(adaptor.buildResource(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
+        given(adaptor.buildResource(anyString(), eq(TaskResource.class))).willReturn(new TaskResource());
         given(supplier.get()).willReturn(mock(TaskMonitor.class));
 
         Request expectedRequest = new Request(HttpMethod.POST, ANY_URI_STRING, body);
@@ -175,7 +174,7 @@ public class BaseClientTest {
         Object body = new Object();
 
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
-        given(adaptor.buildResource(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
+        given(adaptor.buildResource(anyString(), eq(TaskResource.class))).willReturn(new TaskResource());
         given(supplier.get()).willReturn(mock(TaskMonitor.class));
 
         Request expectedRequest = new Request(HttpMethod.PUT, ANY_URI_STRING, body);
@@ -208,7 +207,7 @@ public class BaseClientTest {
         patch.setOp(Patch.PatchOperation.replace);
 
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
-        given(adaptor.buildResource(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
+        given(adaptor.buildResource(anyString(), eq(TaskResource.class))).willReturn(new TaskResource());
         given(supplier.get()).willReturn(mock(TaskMonitor.class));
 
         Request expectedRequest = new Request(HttpMethod.PATCH, ANY_URI_STRING, patch);
@@ -233,7 +232,7 @@ public class BaseClientTest {
     @Test
     public void shouldDeleteResource() {
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
-        given(adaptor.buildResource(anyString(), eq(TaskResourceV2.class))).willReturn(new TaskResourceV2());
+        given(adaptor.buildResource(anyString(), eq(TaskResource.class))).willReturn(new TaskResource());
         given(supplier.get()).willReturn(mock(TaskMonitor.class));
 
         Request expectedRequest = new Request(HttpMethod.DELETE, ANY_URI_STRING);

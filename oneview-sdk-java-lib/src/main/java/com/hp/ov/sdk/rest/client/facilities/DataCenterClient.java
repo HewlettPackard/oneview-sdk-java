@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.facilities.datacenter.DataCenter;
 import com.hp.ov.sdk.dto.facilities.datacenter.VisualContent;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -163,12 +163,12 @@ public class DataCenterClient {
      * @param filter A general filter/query string that narrows the list of resources.
      * @param aSync Flag input to process request asynchronously or synchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 removeByFilter(String filter, boolean aSync) {
+    public TaskResource removeByFilter(String filter, boolean aSync) {
         LOGGER.info("DataCenterClient : removeByFilter : Start");
 
-        TaskResourceV2 taskResource = baseClient.deleteResource(ResourceUris.DATA_CENTER_URI, aSync,
+        TaskResource taskResource = baseClient.deleteResource(ResourceUris.DATA_CENTER_URI, aSync,
                 new UrlParameter("filter", filter));
 
         LOGGER.info("DataCenterClient : removeByFilter : End");

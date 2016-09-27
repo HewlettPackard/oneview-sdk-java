@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.firmware.FwBaseline;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
@@ -100,12 +100,12 @@ public class FirmwareDriverClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 delete(String resourceId, boolean aSync) {
+    public TaskResource delete(String resourceId, boolean aSync) {
         LOGGER.info("FirmwareDriverClient : delete : Start");
 
-        TaskResourceV2 taskResource = baseClient.deleteResource(
+        TaskResource taskResource = baseClient.deleteResource(
                 UrlUtils.createUrl(ResourceUris.FIRMWARE_DRIVER_URI, resourceId), aSync);
 
         LOGGER.info("FirmwareDriverClient : delete : End");

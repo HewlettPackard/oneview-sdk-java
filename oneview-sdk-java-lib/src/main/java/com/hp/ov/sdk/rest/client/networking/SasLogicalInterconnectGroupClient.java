@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnectgroup.SasLogicalInterconnectGroup;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
@@ -105,12 +105,12 @@ public class SasLogicalInterconnectGroupClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 create(SasLogicalInterconnectGroup interconnectGroup, boolean aSync) {
+    public TaskResource create(SasLogicalInterconnectGroup interconnectGroup, boolean aSync) {
         LOGGER.info("SasLogicalInterconnectGroupClient : create : Start");
 
-        TaskResourceV2 taskResource = baseClient.createResource(
+        TaskResource taskResource = baseClient.createResource(
                 SAS_LOGICAL_INTERCONNECT_GROUP_URI, interconnectGroup, aSync);
 
         LOGGER.info("SasLogicalInterconnectGroupClient : create : End");
@@ -126,12 +126,12 @@ public class SasLogicalInterconnectGroupClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 update(String resourceId, SasLogicalInterconnectGroup interconnectGroup, boolean aSync) {
+    public TaskResource update(String resourceId, SasLogicalInterconnectGroup interconnectGroup, boolean aSync) {
         LOGGER.info("SasLogicalInterconnectGroupClient : update : Start");
 
-        TaskResourceV2 taskResource = baseClient.updateResource(
+        TaskResource taskResource = baseClient.updateResource(
                 UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_GROUP_URI, resourceId), interconnectGroup, aSync);
 
         LOGGER.info("SasLogicalInterconnectGroupClient : update : End");
@@ -146,12 +146,12 @@ public class SasLogicalInterconnectGroupClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 delete(String resourceId, boolean aSync) {
+    public TaskResource delete(String resourceId, boolean aSync) {
         LOGGER.info("SasLogicalInterconnectGroupClient : delete : Start");
 
-        TaskResourceV2 taskResource = baseClient.deleteResource(
+        TaskResource taskResource = baseClient.deleteResource(
                 UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_GROUP_URI, resourceId), aSync);
 
         LOGGER.info("SasLogicalInterconnectGroupClient : delete : End");

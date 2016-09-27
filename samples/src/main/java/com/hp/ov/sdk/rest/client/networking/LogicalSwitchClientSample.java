@@ -24,7 +24,7 @@ import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.generated.ConnectionProperty;
 import com.hp.ov.sdk.dto.generated.ValueFormat;
 import com.hp.ov.sdk.dto.generated.ValueType;
@@ -61,7 +61,7 @@ public class LogicalSwitchClientSample {
     private void createLogicalSwitch() {
         AddLogicalSwitch logicalSwitch = this.buildAddLogicalSwitch();
 
-        TaskResourceV2 taskResource = this.client.create(logicalSwitch, false);
+        TaskResource taskResource = this.client.create(logicalSwitch, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -88,7 +88,7 @@ public class LogicalSwitchClientSample {
         LogicalSwitch logicalSwitch = this.client.getByName(LOGICAL_SWITCH_NAME).get(0);
         AddLogicalSwitch addLogicalSwitch = this.buildUpdateAddLogicalSwitch(logicalSwitch);
 
-        TaskResourceV2 taskResource = this.client.update(logicalSwitch.getResourceId(), addLogicalSwitch, false);
+        TaskResource taskResource = this.client.update(logicalSwitch.getResourceId(), addLogicalSwitch, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -96,7 +96,7 @@ public class LogicalSwitchClientSample {
     private void deleteLogicalSwitch() {
         LogicalSwitch logicalSwitch = client.getByName(LOGICAL_SWITCH_NAME).get(0);
 
-        TaskResourceV2 taskResource = this.client.delete(logicalSwitch.getResourceId(), false);
+        TaskResource taskResource = this.client.delete(logicalSwitch.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -104,7 +104,7 @@ public class LogicalSwitchClientSample {
     private void refreshLogicalSwitch() {
         LogicalSwitch logicalSwitch = client.getByName(LOGICAL_SWITCH_NAME).get(0);
 
-        TaskResourceV2 taskResource = this.client.refresh(logicalSwitch.getResourceId(), false);
+        TaskResource taskResource = this.client.refresh(logicalSwitch.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }

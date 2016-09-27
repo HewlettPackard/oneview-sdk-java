@@ -29,7 +29,7 @@ import com.hp.ov.sdk.dto.RefreshStateConfig;
 import com.hp.ov.sdk.dto.RefreshStateConfig.RefreshForceOptions;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SsoUrlData;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.UtilizationData;
 import com.hp.ov.sdk.dto.servers.LicensingIntent;
 import com.hp.ov.sdk.dto.servers.enclosure.AddEnclosure;
@@ -96,7 +96,7 @@ public class EnclosureClientSample {
     private void addEnclosure() {
         AddEnclosure addEnclosure = buildAddEnclosure();
 
-        TaskResourceV2 taskResource = this.enclosureClient.add(addEnclosure, false);
+        TaskResource taskResource = this.enclosureClient.add(addEnclosure, false);
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
@@ -106,7 +106,7 @@ public class EnclosureClientSample {
 
         enclosure.setName(RESOURCE_NAME_UPDATED);
 
-        TaskResourceV2 taskResource = this.enclosureClient.update(enclosure.getResourceId(), enclosure, false);
+        TaskResource taskResource = this.enclosureClient.update(enclosure.getResourceId(), enclosure, false);
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
@@ -120,7 +120,7 @@ public class EnclosureClientSample {
         patch.setPath("/name");
         patch.setValue(RESOURCE_NAME_UPDATED);
 
-        TaskResourceV2 taskResource = this.enclosureClient.patch(enclosure.getResourceId(), patch, false);
+        TaskResource taskResource = this.enclosureClient.patch(enclosure.getResourceId(), patch, false);
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
@@ -128,7 +128,7 @@ public class EnclosureClientSample {
     private void removeEnclosure() {
         Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME_UPDATED).get(0);
 
-        TaskResourceV2 taskResource = this.enclosureClient.remove(enclosure.getResourceId(), false);
+        TaskResource taskResource = this.enclosureClient.remove(enclosure.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
@@ -136,7 +136,7 @@ public class EnclosureClientSample {
     private void updateEnclosureConfiguration() {
         Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-        TaskResourceV2 taskResource = this.enclosureClient.updateConfiguration(enclosure.getResourceId(), false);
+        TaskResource taskResource = this.enclosureClient.updateConfiguration(enclosure.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
@@ -152,7 +152,7 @@ public class EnclosureClientSample {
     private void updateEnclosureConfigurationScript() {
         Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-        TaskResourceV2 taskResource = this.enclosureClient.updateConfigurationScript(enclosure.getResourceId(),
+        TaskResource taskResource = this.enclosureClient.updateConfigurationScript(enclosure.getResourceId(),
                 ENCLOSURE_CONFIGURATION_SCRIPT, false);
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
@@ -177,7 +177,7 @@ public class EnclosureClientSample {
     private void updateEnclosureCompliance() {
         Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-        TaskResourceV2 taskResource = this.enclosureClient.updateCompliance(enclosure.getResourceId(), false);
+        TaskResource taskResource = this.enclosureClient.updateCompliance(enclosure.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
@@ -187,7 +187,7 @@ public class EnclosureClientSample {
 
         FwBaselineConfig fwBaselineConfig = buildFwBaselineConfig();
 
-        TaskResourceV2 taskResource = this.enclosureClient.updateFwBaseline(
+        TaskResource taskResource = this.enclosureClient.updateFwBaseline(
                 enclosure.getResourceId(), fwBaselineConfig, false);
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
@@ -226,7 +226,7 @@ public class EnclosureClientSample {
 
         RefreshStateConfig refreshStateConfig = buildRefreshStateConfig();
 
-        TaskResourceV2 taskResource = this.enclosureClient.updateRefreshState(
+        TaskResource taskResource = this.enclosureClient.updateRefreshState(
                 enclosure.getResourceId(), refreshStateConfig, false);
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());

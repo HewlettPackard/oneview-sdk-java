@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.EthernetNetworkType;
 import com.hp.ov.sdk.dto.networking.ethernet.Bandwidth;
 import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
@@ -67,7 +67,7 @@ public class EthernetNetworkClientSample {
         network.setPurpose(Purpose.General);
         network.setEthernetNetworkType(EthernetNetworkType.Tagged);
 
-        TaskResourceV2 task = this.client.create(network, false);
+        TaskResource task = this.client.create(network, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -95,7 +95,7 @@ public class EthernetNetworkClientSample {
 
         network.setName(ETHERNET_NETWORK_NAME_UPDATED);
 
-        TaskResourceV2 task = this.client.update(network.getResourceId(),
+        TaskResource task = this.client.update(network.getResourceId(),
                 network, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
@@ -104,7 +104,7 @@ public class EthernetNetworkClientSample {
     private void deleteEthernetNetwork() {
         Network network = client.getByName(ETHERNET_NETWORK_NAME_UPDATED).get(0);
 
-        TaskResourceV2 task = this.client.delete(network.getResourceId(), false);
+        TaskResource task = this.client.delete(network.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -141,7 +141,7 @@ public class EthernetNetworkClientSample {
 
         network.setBandwidth(bandwidth);
 
-        TaskResourceV2 task = this.client.createInBulk(network, false);
+        TaskResource task = this.client.createInBulk(network, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }

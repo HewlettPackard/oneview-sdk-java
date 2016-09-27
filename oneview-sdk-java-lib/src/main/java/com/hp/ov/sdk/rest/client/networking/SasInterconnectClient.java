@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.sasinterconnects.SasInterConnectRefreshRequest;
 import com.hp.ov.sdk.dto.networking.sasinterconnects.SasInterconnect;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -109,16 +109,16 @@ public class SasInterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 patch(String resourceId, Patch patch, boolean aSync) {
+    public TaskResource patch(String resourceId, Patch patch, boolean aSync) {
         LOGGER.info("SasInterconnectClient : patch : Start");
 
         Request request = new Request(HttpMethod.PATCH,
                 UrlUtils.createUrl(SAS_INTERCONNECT_URI, resourceId), patch);
         request.setTimeout(300000);
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("SasInterconnectClient : patch : End");
 
@@ -133,9 +133,9 @@ public class SasInterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 refreshState(String resourceId, SasInterConnectRefreshRequest requestBody, boolean aSync) {
+    public TaskResource refreshState(String resourceId, SasInterConnectRefreshRequest requestBody, boolean aSync) {
         LOGGER.info("SasInterconnectClient : refreshState : Start");
 
         Request request = new Request(HttpMethod.PUT, UrlUtils.createUrl(
@@ -147,7 +147,7 @@ public class SasInterconnectClient {
         request.setForceTaskReturn(true);
         request.setTimeout(120000);
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("SasInterconnectClient : refreshState : End");
 

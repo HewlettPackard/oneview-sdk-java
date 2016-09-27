@@ -17,8 +17,6 @@ package com.hp.ov.sdk.dto.networking.ethernet;
 
 import java.io.Serializable;
 
-import com.hp.ov.sdk.dto.JsonRequest;
-
 
 public class BulkEthernetNetwork implements Serializable {
 
@@ -31,8 +29,6 @@ public class BulkEthernetNetwork implements Serializable {
     private Boolean privateNetwork;
     private Purpose purpose;
     private String type;
-
-    private transient JsonRequest jsonRequest;
 
     public Bandwidth getBandwidth() {
         return bandwidth;
@@ -88,14 +84,6 @@ public class BulkEthernetNetwork implements Serializable {
 
     public void setType(final String type) {
         this.type = type;
-    }
-
-    public JsonRequest getJsonRequest() {
-        return jsonRequest;
-    }
-
-    public void setJsonRequest(final JsonRequest jsonRequest) {
-        this.jsonRequest = jsonRequest;
     }
 
 }

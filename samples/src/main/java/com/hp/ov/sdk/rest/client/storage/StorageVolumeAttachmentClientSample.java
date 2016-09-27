@@ -27,7 +27,7 @@ import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeAttachment;
 import com.hp.ov.sdk.dto.StorageVolumeAttachmentPath;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
@@ -92,7 +92,7 @@ public class StorageVolumeAttachmentClientSample {
         repair.setType("ExtraUnmanagedStorageVolumes");
         repair.setResourceUri(String.format("%s/%s", ResourceUris.SERVER_PROFILE_URI, SERVER_PROFILE_ID));
 
-        TaskResourceV2 task = this.storageVolumeAttachmentClient.repairExtraUnmanagedAttachment(repair, false);
+        TaskResource task = this.storageVolumeAttachmentClient.repairExtraUnmanagedAttachment(repair, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }

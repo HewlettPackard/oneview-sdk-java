@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -50,9 +50,9 @@ public class FirmwareBundleClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 add(File firmwareBundle, boolean aSync) {
+    public TaskResource add(File firmwareBundle, boolean aSync) {
         LOGGER.info("FirmwareBundleClient : add : Start");
 
         validateFirmwareBundleFile(firmwareBundle);
@@ -62,7 +62,7 @@ public class FirmwareBundleClient {
         request.setContentType(ContentType.MULTIPART_FORM_DATA);
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("FirmwareBundleClient : add : End");
 

@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.servers.serverhardwaretype.ServerHardwareType;
 import com.hp.ov.sdk.dto.servers.serverhardwaretype.ServerHardwareTypeUpdate;
 import com.hp.ov.sdk.rest.client.OneViewClient;
@@ -82,7 +82,7 @@ public class ServerHardwareTypeClientSample {
         ServerHardwareType serverHardwareType
                 = serverHardwareTypeClient.getByName(SERVER_HARDWARE_TYPE_RESOURCE_NAME).get(0);
 
-        TaskResourceV2 taskResource = this.serverHardwareTypeClient.delete(serverHardwareType.getResourceId(), false);
+        TaskResource taskResource = this.serverHardwareTypeClient.delete(serverHardwareType.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }

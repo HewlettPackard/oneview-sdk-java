@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.dto.CaCert;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.RabbitMqClientCert;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 
@@ -84,12 +84,12 @@ public class MessagingCertificateClient {
         return caCert;
     }
 
-    public TaskResourceV2 generateRabbitMqClientCert(RabbitMqClientCert rabbitMqClientCert) {
+    public TaskResource generateRabbitMqClientCert(RabbitMqClientCert rabbitMqClientCert) {
         LOGGER.info("MessagingCertificateManager : generateRabbitMqClientCert : Start");
 
         Request request = new Request(HttpMethod.POST, RABBIT_MQ_CLIENT_CERT, rabbitMqClientCert);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, false);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, false);
 
         LOGGER.info("MessagingCertificateManager : generateRabbitMqClientCert : End");
 

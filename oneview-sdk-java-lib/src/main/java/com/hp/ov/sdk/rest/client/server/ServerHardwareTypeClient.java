@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.servers.serverhardwaretype.ServerHardwareType;
 import com.hp.ov.sdk.dto.servers.serverhardwaretype.ServerHardwareTypeUpdate;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -125,10 +125,10 @@ public class ServerHardwareTypeClient {
      *
      * @return {@link String} containing the response.
      */
-    public TaskResourceV2 delete(String resourceId, boolean aSync) {
+    public TaskResource delete(String resourceId, boolean aSync) {
         LOGGER.info("ServerHardwareTypeClient : delete : Start");
 
-        TaskResourceV2 taskResource = baseClient.deleteResource(
+        TaskResource taskResource = baseClient.deleteResource(
                 UrlUtils.createUrl(ResourceUris.SERVER_HARDWARE_TYPE_URI, resourceId), aSync);
 
         LOGGER.info("ServerHardwareTypeClient : delete : End");

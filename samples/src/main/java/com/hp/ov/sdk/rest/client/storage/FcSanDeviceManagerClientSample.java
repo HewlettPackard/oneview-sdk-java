@@ -27,7 +27,7 @@ import com.hp.ov.sdk.dto.Property;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SanProviderResponse;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 /*
@@ -87,7 +87,7 @@ public class FcSanDeviceManagerClientSample {
         SanProviderResponse sanProvider = fcSanProviderClient.getByName(PROVIDER_NAME);
         DeviceManagerResponse deviceManager = this.buildDeviceManager(sanProvider);
 
-        TaskResourceV2 taskResource = fcSanDeviceManagerClient.add(sanProvider.getDeviceManagersUri(),
+        TaskResource taskResource = fcSanDeviceManagerClient.add(sanProvider.getDeviceManagersUri(),
                 deviceManager, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
@@ -99,7 +99,7 @@ public class FcSanDeviceManagerClientSample {
         deviceManager = updateHostConnectionDetails(deviceManager);
         deviceManager.setRefreshState(RefreshState.RefreshPending);
 
-        TaskResourceV2 taskResource = fcSanDeviceManagerClient.update(deviceManager.getResourceId(),
+        TaskResource taskResource = fcSanDeviceManagerClient.update(deviceManager.getResourceId(),
                 deviceManager, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
@@ -107,7 +107,7 @@ public class FcSanDeviceManagerClientSample {
 
     private void removeFcSanDeviceManager() {
         DeviceManagerResponse deviceManager = this.fcSanDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
-        TaskResourceV2 taskResource = this.fcSanDeviceManagerClient.remove(deviceManager.getResourceId(), false);
+        TaskResource taskResource = this.fcSanDeviceManagerClient.remove(deviceManager.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }

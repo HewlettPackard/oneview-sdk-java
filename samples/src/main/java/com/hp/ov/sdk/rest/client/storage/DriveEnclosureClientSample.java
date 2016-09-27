@@ -23,7 +23,7 @@ import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.storage.driveenclosures.DriveEnclosure;
 import com.hp.ov.sdk.dto.storage.driveenclosures.DriveEnclosurePortMap;
 import com.hp.ov.sdk.dto.storage.driveenclosures.DriveEnclosureRefreshRequest;
@@ -81,7 +81,7 @@ public class DriveEnclosureClientSample {
         patch.setPath("/powerState");
         patch.setValue("On");
 
-        TaskResourceV2 taskResource = this.driveEnclosureClient.patch(driveEnclosure.getResourceId(), patch, false);
+        TaskResource taskResource = this.driveEnclosureClient.patch(driveEnclosure.getResourceId(), patch, false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -92,7 +92,7 @@ public class DriveEnclosureClientSample {
         DriveEnclosureRefreshRequest refreshStateConfig = new DriveEnclosureRefreshRequest();
         refreshStateConfig.setRefreshState(RefreshState.RefreshPending);
 
-        TaskResourceV2 taskResource = this.driveEnclosureClient.updateRefreshState(
+        TaskResource taskResource = this.driveEnclosureClient.updateRefreshState(
                 driveEnclosure.getResourceId(), refreshStateConfig, false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());

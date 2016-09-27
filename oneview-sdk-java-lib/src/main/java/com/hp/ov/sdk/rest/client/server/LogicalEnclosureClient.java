@@ -22,7 +22,7 @@ import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SupportDump;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.servers.logicalenclosure.AddLogicalEnclosure;
 import com.hp.ov.sdk.dto.servers.logicalenclosure.LogicalEnclosure;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -110,16 +110,16 @@ public class LogicalEnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 create(AddLogicalEnclosure logicalEnclosure, boolean aSync) {
+    public TaskResource create(AddLogicalEnclosure logicalEnclosure, boolean aSync) {
         LOGGER.info("LogicalEnclosureClient : create : Start");
 
         Request request = new Request(HttpMethod.POST, LOGICAL_ENCLOSURE_URI, logicalEnclosure);
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalEnclosureClient : create : End");
 
@@ -134,9 +134,9 @@ public class LogicalEnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 update(String resourceId, LogicalEnclosure logicalEnclosure, boolean aSync) {
+    public TaskResource update(String resourceId, LogicalEnclosure logicalEnclosure, boolean aSync) {
         LOGGER.info("LogicalEnclosureClient : update : Start");
 
         Request request = new Request(HttpMethod.PUT,
@@ -144,7 +144,7 @@ public class LogicalEnclosureClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalEnclosureClient : update : End");
 
@@ -160,9 +160,9 @@ public class LogicalEnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 patch(String resourceId, Patch patch, boolean aSync) {
+    public TaskResource patch(String resourceId, Patch patch, boolean aSync) {
         LOGGER.info("LogicalEnclosureClient : patch : Start");
 
         Request request = new Request(HttpMethod.PATCH,
@@ -170,7 +170,7 @@ public class LogicalEnclosureClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalEnclosureClient : patch : End");
 
@@ -184,9 +184,9 @@ public class LogicalEnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 delete(String resourceId, boolean aSync) {
+    public TaskResource delete(String resourceId, boolean aSync) {
         LOGGER.info("LogicalEnclosureClient : delete : Start");
 
         Request request = new Request(HttpMethod.DELETE,
@@ -194,7 +194,7 @@ public class LogicalEnclosureClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalEnclosureClient : delete : End");
 
@@ -210,9 +210,9 @@ public class LogicalEnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateFromGroup(String resourceId, boolean aSync) {
+    public TaskResource updateFromGroup(String resourceId, boolean aSync) {
         LOGGER.info("LogicalEnclosureClient : updateFromGroup : Start");
 
         String updateUri = UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId, UPDATE_FROM_GROUP_URI);
@@ -220,7 +220,7 @@ public class LogicalEnclosureClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalEnclosureClient : updateFromGroup : End");
 
@@ -235,9 +235,9 @@ public class LogicalEnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateConfiguration(String resourceId, boolean aSync) {
+    public TaskResource updateConfiguration(String resourceId, boolean aSync) {
         LOGGER.info("LogicalEnclosureClient : updateConfiguration : Start");
 
         String updateUri = UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId, CONFIGURATION_URI);
@@ -245,7 +245,7 @@ public class LogicalEnclosureClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalEnclosureClient : updateConfiguration : End");
 
@@ -280,14 +280,14 @@ public class LogicalEnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateConfigurationScript(String resourceId, String scriptData, boolean aSync) {
+    public TaskResource updateConfigurationScript(String resourceId, String scriptData, boolean aSync) {
         LOGGER.info("LogicalEnclosureClient : updateConfigurationScript : Start");
 
         String updateUri = UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId, SCRIPT_URI);
 
-        TaskResourceV2 taskResource = this.baseClient.updateResource(updateUri, scriptData, aSync);
+        TaskResource taskResource = this.baseClient.updateResource(updateUri, scriptData, aSync);
 
         LOGGER.info("LogicalEnclosureClient : updateConfigurationScript : End");
 
@@ -304,9 +304,9 @@ public class LogicalEnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 createSupportDump(String resourceId, SupportDump supportDump, boolean aSync) {
+    public TaskResource createSupportDump(String resourceId, SupportDump supportDump, boolean aSync) {
         LOGGER.info("LogicalEnclosureClient : createSupportDump : Start");
 
         String createUri = UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId, SUPPORT_DUMP_URI);
@@ -315,7 +315,7 @@ public class LogicalEnclosureClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalEnclosureClient : createSupportDump : End");
 

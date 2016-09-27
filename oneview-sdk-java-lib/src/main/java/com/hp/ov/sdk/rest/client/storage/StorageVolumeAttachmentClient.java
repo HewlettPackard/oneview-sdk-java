@@ -26,7 +26,7 @@ import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeAttachment;
 import com.hp.ov.sdk.dto.StorageVolumeAttachmentPath;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -151,12 +151,12 @@ public class StorageVolumeAttachmentClient {
      * @param aSync flag to indicate whether the request should be processed
      *              asynchronously or synchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 repairExtraUnmanagedAttachment(ExtraStorageVolumeRepair repair, boolean aSync) {
+    public TaskResource repairExtraUnmanagedAttachment(ExtraStorageVolumeRepair repair, boolean aSync) {
         LOGGER.info("StorageVolumeAttachmentClient : repairExtraUnmanagedAttachment : Start");
 
-        TaskResourceV2 taskResource = baseClient.createResource(
+        TaskResource taskResource = baseClient.createResource(
                 ResourceUris.STORAGE_VOLUME_ATTACHMENT_REPAIR_URI, repair, aSync);
 
         LOGGER.info("StorageVolumeAttachmentClient : repairExtraUnmanagedAttachment : End");

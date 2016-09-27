@@ -18,7 +18,7 @@ package com.hp.ov.sdk.scmb.consumer;
 
 import com.hp.ov.sdk.dto.ScmbAlertsMessageDto;
 import com.hp.ov.sdk.dto.ScmbAlertsResource;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.alerts.AssociatedResource;
 import com.hp.ov.sdk.messaging.scmb.listeners.ScmbListener;
 
@@ -28,7 +28,7 @@ public class TaskMessageHandler implements ScmbListener {
     public void handleScmbMessage(ScmbAlertsMessageDto alertsDto) {
         ScmbAlertsResource resource = alertsDto.getResource();
 
-        TaskResourceV2 task = new TaskResourceV2();
+        TaskResource task = new TaskResource();
         AssociatedResource associatedResource = new AssociatedResource();
 
         associatedResource.setResourceUri(resource.getAssociatedResource().getResourceUri());

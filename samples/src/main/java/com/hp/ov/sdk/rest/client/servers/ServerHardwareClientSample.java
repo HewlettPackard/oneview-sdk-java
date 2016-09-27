@@ -29,7 +29,7 @@ import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.RefreshStateRequest;
 import com.hp.ov.sdk.dto.RemoteConsoleUrlResult;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.UtilizationData;
 import com.hp.ov.sdk.dto.servers.LicensingIntent;
 import com.hp.ov.sdk.dto.servers.serverhardware.AddServer;
@@ -93,7 +93,7 @@ public class ServerHardwareClientSample {
     private void addServerHardware() {
         AddServer addServer = this.buildServerHardware();
 
-        TaskResourceV2 taskResource = this.serverHardwareClient.add(addServer, false);
+        TaskResource taskResource = this.serverHardwareClient.add(addServer, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -101,7 +101,7 @@ public class ServerHardwareClientSample {
     private void removeServerHardware() {
         ServerHardware serverHardware = serverHardwareClient.getByName(SERVER_HARDWARE_RESOURCE_NAME).get(0);
 
-        TaskResourceV2 taskResource = this.serverHardwareClient.remove(serverHardware.getResourceId(), false);
+        TaskResource taskResource = this.serverHardwareClient.remove(serverHardware.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -111,7 +111,7 @@ public class ServerHardwareClientSample {
 
         ServerPowerControlRequest serverPowerControlRequest = buildServerPowerControlRequest();
 
-        TaskResourceV2 taskResource = serverHardwareClient.updatePowerState(serverHardware.getResourceId(),
+        TaskResource taskResource = serverHardwareClient.updatePowerState(serverHardware.getResourceId(),
                 serverPowerControlRequest, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
@@ -126,7 +126,7 @@ public class ServerHardwareClientSample {
         refreshStateRequest.setUsername(SERVER_HARDWARE_USERNAME);
         refreshStateRequest.setPassword(SERVER_HARDWARE_PASSWORD);
 
-        TaskResourceV2 taskResource = serverHardwareClient.updateRefreshState(serverHardware.getResourceId(),
+        TaskResource taskResource = serverHardwareClient.updateRefreshState(serverHardware.getResourceId(),
                 refreshStateRequest, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
@@ -165,7 +165,7 @@ public class ServerHardwareClientSample {
     private void updateServerHardwareMpFirmwareVersion() {
         ServerHardware serverHardware = serverHardwareClient.getByName(SERVER_HARDWARE_RESOURCE_NAME).get(0);
 
-        TaskResourceV2 taskResource = serverHardwareClient.updateMpFirmwareVersion(
+        TaskResource taskResource = serverHardwareClient.updateMpFirmwareVersion(
                 serverHardware.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
@@ -237,7 +237,7 @@ public class ServerHardwareClientSample {
         patch.setPath("/scopeUris/-");
         patch.setValue("/rest/scopes/" + SCOPE_RESOURCE_ID);
 
-        TaskResourceV2 taskResource = serverHardwareClient.patch(serverHardware.getResourceId(), patch, false);
+        TaskResource taskResource = serverHardwareClient.patch(serverHardware.getResourceId(), patch, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }

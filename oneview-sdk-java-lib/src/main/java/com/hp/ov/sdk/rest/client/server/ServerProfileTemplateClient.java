@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
 import com.hp.ov.sdk.dto.servers.serverprofiletemplate.ServerProfileTemplate;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -110,9 +110,9 @@ public class ServerProfileTemplateClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 create(ServerProfileTemplate serverProfileTemplate, boolean aSync) {
+    public TaskResource create(ServerProfileTemplate serverProfileTemplate, boolean aSync) {
         LOGGER.info("ServerProfileTemplateClient : create : Start");
 
         Request request = new Request(HttpMethod.POST,
@@ -120,7 +120,7 @@ public class ServerProfileTemplateClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("ServerProfileTemplateClient : create : End");
 
@@ -134,9 +134,9 @@ public class ServerProfileTemplateClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 delete(String resourceId, boolean aSync) {
+    public TaskResource delete(String resourceId, boolean aSync) {
         LOGGER.info("ServerProfileTemplateClient : delete : Start");
 
         Request request = new Request(HttpMethod.DELETE,
@@ -144,7 +144,7 @@ public class ServerProfileTemplateClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("ServerProfileTemplateClient : delete : End");
 
@@ -159,9 +159,9 @@ public class ServerProfileTemplateClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} which returns the task status for the process.
+     * @return {@link TaskResource} which returns the task status for the process.
      */
-    public TaskResourceV2 update(String resourceId, ServerProfileTemplate serverProfileTemplate, boolean aSync) {
+    public TaskResource update(String resourceId, ServerProfileTemplate serverProfileTemplate, boolean aSync) {
         LOGGER.info("ServerProfileTemplateClient : update : Start");
 
         String resourceUri = UrlUtils.createUrl(SERVER_PROFILE_TEMPLATE_URI, resourceId);
@@ -169,7 +169,7 @@ public class ServerProfileTemplateClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("ServerProfileTemplateClient : update : End");
 

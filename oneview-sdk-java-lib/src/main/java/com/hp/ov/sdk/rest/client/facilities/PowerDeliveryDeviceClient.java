@@ -27,7 +27,7 @@ import com.hp.ov.sdk.dto.Power;
 import com.hp.ov.sdk.dto.PowerDeliveryDevice;
 import com.hp.ov.sdk.dto.PowerDeliveryDeviceRefreshRequest;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.UtilizationData;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
@@ -135,16 +135,16 @@ public class PowerDeliveryDeviceClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 add(ImportPdd importPdd, boolean aSync) {
+    public TaskResource add(ImportPdd importPdd, boolean aSync) {
         LOGGER.info("PowerDeliveryDeviceClient : add : Start");
 
         Request request = new Request(HttpMethod.POST, ResourceUris.POWER_DEVICE_DISCOVERY_URI, importPdd);
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("PowerDeliveryDeviceClient : add : End");
 
@@ -179,9 +179,9 @@ public class PowerDeliveryDeviceClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 remove(String resourceId, boolean aSync) {
+    public TaskResource remove(String resourceId, boolean aSync) {
         LOGGER.info("PowerDeliveryDeviceClient : remove : Start");
 
         Request request = new Request(HttpMethod.DELETE,
@@ -189,7 +189,7 @@ public class PowerDeliveryDeviceClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("PowerDeliveryDeviceClient : remove : End");
 
@@ -205,9 +205,9 @@ public class PowerDeliveryDeviceClient {
      * @param filter A general filter/query string that narrows the list of resources.
      * @param aSync Flag input to process request asynchronously or synchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 removeByFilter(String filter, boolean aSync) {
+    public TaskResource removeByFilter(String filter, boolean aSync) {
         LOGGER.info("PowerDeliveryDeviceClient : removeByFilter : Start");
 
         Request request = new Request(HttpMethod.DELETE, ResourceUris.POWER_DEVICE_URI);
@@ -215,7 +215,7 @@ public class PowerDeliveryDeviceClient {
         request.setTimeout(TIMEOUT);
         request.addQuery(new UrlParameter("filter", filter));
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.trace("PowerDeliveryDeviceClient : removeByFilter : End");
 
@@ -273,9 +273,9 @@ public class PowerDeliveryDeviceClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updatePowerState(String resourceId, OutletState outletState, boolean aSync) {
+    public TaskResource updatePowerState(String resourceId, OutletState outletState, boolean aSync) {
         LOGGER.info("PowerDeliveryDeviceClient : updatePowerState : Start");
 
         Request request = new Request(HttpMethod.PUT,
@@ -285,7 +285,7 @@ public class PowerDeliveryDeviceClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("PowerDeliveryDeviceClient : updatePowerState : End");
 
@@ -300,9 +300,9 @@ public class PowerDeliveryDeviceClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateRefreshState(String resourceId,
+    public TaskResource updateRefreshState(String resourceId,
             PowerDeliveryDeviceRefreshRequest refreshState, boolean aSync) {
 
         LOGGER.info("PowerDeliveryDeviceClient : updateRefreshState : Start");
@@ -314,7 +314,7 @@ public class PowerDeliveryDeviceClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("PowerDeliveryDeviceClient : updateRefreshState : End");
 
@@ -352,9 +352,9 @@ public class PowerDeliveryDeviceClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateUidState(String resourceId, OutletState outletState, boolean aSync) {
+    public TaskResource updateUidState(String resourceId, OutletState outletState, boolean aSync) {
         LOGGER.info("PowerDeliveryDeviceClient : updateUidState : Start");
 
         Request request = new Request(HttpMethod.PUT,
@@ -364,7 +364,7 @@ public class PowerDeliveryDeviceClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("PowerDeliveryDeviceClient : updateUidState : End");
 
