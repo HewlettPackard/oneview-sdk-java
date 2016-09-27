@@ -27,7 +27,7 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.StorageSystem;
 import com.hp.ov.sdk.dto.StorageTargetPort;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
@@ -108,16 +108,16 @@ public class StorageSystemClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 add(AddStorageSystemCredentials storageSystemCredentials, boolean aSync) {
+    public TaskResource add(AddStorageSystemCredentials storageSystemCredentials, boolean aSync) {
         LOGGER.info("StorageSystemClient : add : Start");
 
         Request request = new Request(HttpMethod.POST, ResourceUris.STORAGE_SYSTEM_URI, storageSystemCredentials);
 
         request.setForceTaskReturn(true);
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("StorageSystemClient : add : End");
 
@@ -132,9 +132,9 @@ public class StorageSystemClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 update(String resourceId, StorageSystem storageSystem, boolean aSync) {
+    public TaskResource update(String resourceId, StorageSystem storageSystem, boolean aSync) {
         LOGGER.info("StorageSystemClient : update : Start");
 
         Request request = new Request(HttpMethod.PUT,
@@ -142,7 +142,7 @@ public class StorageSystemClient {
 
         request.setForceTaskReturn(true);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("StorageSystemClient : update : End");
 
@@ -156,9 +156,9 @@ public class StorageSystemClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 remove(String resourceId, boolean aSync) {
+    public TaskResource remove(String resourceId, boolean aSync) {
         LOGGER.info("StorageSystemClient : remove : Start");
 
         Request request = new Request(HttpMethod.DELETE,
@@ -166,7 +166,7 @@ public class StorageSystemClient {
 
         request.setForceTaskReturn(true);
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("StorageSystemClient : remove : End");
 

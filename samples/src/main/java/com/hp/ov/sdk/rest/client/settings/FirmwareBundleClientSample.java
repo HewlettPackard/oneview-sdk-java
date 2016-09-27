@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 
@@ -45,7 +45,7 @@ public class FirmwareBundleClientSample {
     private void addFirmwareBundle() {
         File firmwareBundleFile = new File(FIRMWARE_BUNDLE_FILE);
 
-        TaskResourceV2 task = this.client.add(firmwareBundleFile, false);
+        TaskResource task = this.client.add(firmwareBundleFile, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }

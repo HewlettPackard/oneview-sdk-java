@@ -28,7 +28,7 @@ import com.hp.ov.sdk.dto.Location;
 import com.hp.ov.sdk.dto.LocationEntry;
 import com.hp.ov.sdk.dto.LocationType;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.EthernetNetworkType;
 import com.hp.ov.sdk.dto.networking.NetworkType;
 import com.hp.ov.sdk.dto.networking.OpSpeed;
@@ -97,7 +97,7 @@ public class UplinkSetClientSample {
     private void createUplinkSet() {
         UplinkSet uplinkSet = buildUplinkSet();
 
-        TaskResourceV2 task = this.uplinkSetClient.create(uplinkSet, false);
+        TaskResource task = this.uplinkSetClient.create(uplinkSet, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -107,7 +107,7 @@ public class UplinkSetClientSample {
 
         uplinkSet.setName(RESOURCE_NAME_UPDATED);
 
-        TaskResourceV2 task = this.uplinkSetClient.update(uplinkSet.getResourceId(), uplinkSet, false);
+        TaskResource task = this.uplinkSetClient.update(uplinkSet.getResourceId(), uplinkSet, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -115,7 +115,7 @@ public class UplinkSetClientSample {
     private void deleteUplinkSet() {
         UplinkSet uplinkSet = uplinkSetClient.getByName(RESOURCE_NAME_UPDATED).get(0);
 
-        TaskResourceV2 task = this.uplinkSetClient.delete(uplinkSet.getResourceId(), false);
+        TaskResource task = this.uplinkSetClient.delete(uplinkSet.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }

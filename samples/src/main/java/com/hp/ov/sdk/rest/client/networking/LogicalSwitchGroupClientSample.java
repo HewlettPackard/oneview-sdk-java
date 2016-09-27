@@ -25,7 +25,7 @@ import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.dto.LocationType;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.LogicalLocation;
 import com.hp.ov.sdk.dto.networking.LogicalLocationEntry;
 import com.hp.ov.sdk.dto.networking.logicalswitchgroup.LogicalSwitchGroup;
@@ -57,7 +57,7 @@ public class LogicalSwitchGroupClientSample {
     private void createLogicalSwitchGroup() {
         LogicalSwitchGroup logicalSwitchGroup = this.buildLogicalSwitchGroup();
 
-        TaskResourceV2 task = this.client.create(logicalSwitchGroup, false);
+        TaskResource task = this.client.create(logicalSwitchGroup, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -85,7 +85,7 @@ public class LogicalSwitchGroupClientSample {
 
         logicalSwitchGroup = this.buildUpdateLogicalSwitchGroup(logicalSwitchGroup);
 
-        TaskResourceV2 task = this.client.update(logicalSwitchGroup.getResourceId(), logicalSwitchGroup, false);
+        TaskResource task = this.client.update(logicalSwitchGroup.getResourceId(), logicalSwitchGroup, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -93,7 +93,7 @@ public class LogicalSwitchGroupClientSample {
     private void deleteLogicalSwitchGroup() {
         LogicalSwitchGroup logicalSwitchGroup = client.getByName(LOGICAL_SWITCH_GROUP_NAME).get(0);
 
-        TaskResourceV2 task = this.client.delete(logicalSwitchGroup.getResourceId(), false);
+        TaskResource task = this.client.delete(logicalSwitchGroup.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }

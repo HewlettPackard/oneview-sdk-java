@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
@@ -54,7 +54,7 @@ public class FcNetworkClientSample {
         fcNetwork.setType(ResourceCategory.RC_FCNETWORK); //v200
         fcNetwork.setType(ResourceCategory.RC_FCNETWORK_V300); //v300
 
-        TaskResourceV2 task = this.client.create(fcNetwork, false);
+        TaskResource task = this.client.create(fcNetwork, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -82,7 +82,7 @@ public class FcNetworkClientSample {
 
         fcNetwork.setName(FC_NETWORK_NAME_UPDATED);
 
-        TaskResourceV2 task = this.client.update(fcNetwork.getResourceId(),
+        TaskResource task = this.client.update(fcNetwork.getResourceId(),
                 fcNetwork, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
@@ -91,7 +91,7 @@ public class FcNetworkClientSample {
     private void deleteFcNetwork() {
         FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME_UPDATED).get(0);
 
-        TaskResourceV2 task = this.client.delete(fcNetwork.getResourceId(), false);
+        TaskResource task = this.client.delete(fcNetwork.getResourceId(), false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }

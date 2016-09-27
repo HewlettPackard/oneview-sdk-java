@@ -34,7 +34,7 @@ import com.hp.ov.sdk.dto.PortMonitorUplinkPort;
 import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
 import com.hp.ov.sdk.dto.QosConfiguration.QosConfigType;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
@@ -108,7 +108,7 @@ public class LogicalInterconnectClientSample {
 
         logicalInterconnect.getSnmpConfiguration().setReadCommunity("private");
 
-        TaskResourceV2 task = logicalInterconnectClient.updateSnmpConfiguration(logicalInterconnect.getResourceId(),
+        TaskResource task = logicalInterconnectClient.updateSnmpConfiguration(logicalInterconnect.getResourceId(),
                 logicalInterconnect.getSnmpConfiguration(), false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
@@ -117,7 +117,7 @@ public class LogicalInterconnectClientSample {
     private void updateLogicalInterconnectCompliance() {
         LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-        TaskResourceV2 task = logicalInterconnectClient.updateCompliance(logicalInterconnect.getResourceId(), false);
+        TaskResource task = logicalInterconnectClient.updateCompliance(logicalInterconnect.getResourceId(), false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -131,7 +131,7 @@ public class LogicalInterconnectClientSample {
         liFirmware.setSppUri(firmwareDriverClient.getByName(SPP_NAME).get(0).getUri());
         liFirmware.setForce(true);
 
-        TaskResourceV2 task = logicalInterconnectClient.updateFirmware(logicalInterconnect.getResourceId(),
+        TaskResource task = logicalInterconnectClient.updateFirmware(logicalInterconnect.getResourceId(),
                 liFirmware, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
@@ -152,7 +152,7 @@ public class LogicalInterconnectClientSample {
 
         liFirmware = buildLiFirmwareActive(liFirmware);
 
-        TaskResourceV2 task = logicalInterconnectClient.updateFirmware(logicalInterconnect.getResourceId(),
+        TaskResource task = logicalInterconnectClient.updateFirmware(logicalInterconnect.getResourceId(),
                 liFirmware, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
@@ -192,7 +192,7 @@ public class LogicalInterconnectClientSample {
         liFirmware.setSppUri(firmwareDriverClient.getByName(SPP_NAME).get(0).getUri());
         liFirmware.setForce(true);
 
-        TaskResourceV2 task = logicalInterconnectClient.updateFirmware(logicalInterconnect.getResourceId(),
+        TaskResource task = logicalInterconnectClient.updateFirmware(logicalInterconnect.getResourceId(),
                 liFirmware, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
@@ -237,7 +237,7 @@ public class LogicalInterconnectClientSample {
     private void updateLogicalInterconnectConfiguration() {
         LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
 
-        TaskResourceV2 task = logicalInterconnectClient.updateConfiguration(logicalInterconnect.getResourceId(), false);
+        TaskResource task = logicalInterconnectClient.updateConfiguration(logicalInterconnect.getResourceId(), false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -258,7 +258,7 @@ public class LogicalInterconnectClientSample {
                 logicalInterconnect.getResourceId());
         portMonitor.setEnablePortMonitor(false);
 
-        TaskResourceV2 task = logicalInterconnectClient.updatePortMonitorConfiguration(
+        TaskResource task = logicalInterconnectClient.updatePortMonitorConfiguration(
                 logicalInterconnect.getResourceId(), portMonitor, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
@@ -293,7 +293,7 @@ public class LogicalInterconnectClientSample {
                 logicalInterconnect.getResourceId(), TELEMETRY_ID);
         telemetryConfiguration.setEnableTelemetry(!telemetryConfiguration.getEnableTelemetry());
 
-        TaskResourceV2 task = logicalInterconnectClient.updateTelemetryConfigurationV200(
+        TaskResource task = logicalInterconnectClient.updateTelemetryConfigurationV200(
                 logicalInterconnect.getResourceId(), TELEMETRY_ID, telemetryConfiguration, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
@@ -305,7 +305,7 @@ public class LogicalInterconnectClientSample {
         EthernetInterconnectSettingsV2 ethSettingsDto = logicalInterconnect.getEthernetSettings();
         ethSettingsDto.setEnablePauseFloodProtection(!ethSettingsDto.getEnablePauseFloodProtection());
 
-        TaskResourceV2 task = logicalInterconnectClient.updateEthernetSettings(logicalInterconnect.getResourceId(),
+        TaskResource task = logicalInterconnectClient.updateEthernetSettings(logicalInterconnect.getResourceId(),
                 ethSettingsDto, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
@@ -328,7 +328,7 @@ public class LogicalInterconnectClientSample {
 
         location.setLocationEntries(Arrays.asList(enclosureEntry, bayEntry));
 
-        TaskResourceV2 task = logicalInterconnectClient.createInterconnect(location, false);
+        TaskResource task = logicalInterconnectClient.createInterconnect(location, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -336,7 +336,7 @@ public class LogicalInterconnectClientSample {
     private void deleteLogicalInterconnect() {
         String enclosureUri = this.enclosureClient.getByName(EnclosureClientSample.RESOURCE_NAME_UPDATED).get(0).getUri();
 
-        TaskResourceV2 task = logicalInterconnectClient.deleteInterconnect(enclosureUri, BAY_NUMBER, false);
+        TaskResource task = logicalInterconnectClient.deleteInterconnect(enclosureUri, BAY_NUMBER, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -346,7 +346,7 @@ public class LogicalInterconnectClientSample {
 
         String networkUri = oneViewClient.ethernetNetwork().getByName(NETWORK_NAME).get(0).getUri();
 
-        TaskResourceV2 task = logicalInterconnectClient.updateInternalNetworks(
+        TaskResource task = logicalInterconnectClient.updateInternalNetworks(
                 logicalInterconnect.getResourceId(), Arrays.asList(networkUri), false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
@@ -377,7 +377,7 @@ public class LogicalInterconnectClientSample {
                 logicalInterconnect.getResourceId());
         qosConfiguration.getActiveQosConfig().setConfigType(QosConfigType.Passthrough);
 
-        TaskResourceV2 task = logicalInterconnectClient.updateQosAggregatedConfiguration(
+        TaskResource task = logicalInterconnectClient.updateQosAggregatedConfiguration(
                 logicalInterconnect.getResourceId(), qosConfiguration, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
@@ -393,7 +393,7 @@ public class LogicalInterconnectClientSample {
         settings.setFcoeSettings(logicalInterconnect.getFcoeSettings());
         settings.getEthernetSettings().setMacRefreshInterval(6);
 
-        TaskResourceV2 task = logicalInterconnectClient.updateSettings(
+        TaskResource task = logicalInterconnectClient.updateSettings(
                 logicalInterconnect.getResourceId(), settings, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());

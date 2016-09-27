@@ -23,10 +23,10 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 
 public class FcSansManagedSanTask {
 
-    private final TaskResourceV2 task;
+    private final TaskResource task;
     private final ResourceAdaptor adaptor;
 
-    public FcSansManagedSanTask(TaskResourceV2 task,
+    public FcSansManagedSanTask(TaskResource task,
             ResourceAdaptor adaptor) {
 
         this.task = task;
@@ -34,7 +34,7 @@ public class FcSansManagedSanTask {
 
     }
 
-    public TaskResourceV2 getTask() {
+    public TaskResource getTask() {
         return task;
     }
 

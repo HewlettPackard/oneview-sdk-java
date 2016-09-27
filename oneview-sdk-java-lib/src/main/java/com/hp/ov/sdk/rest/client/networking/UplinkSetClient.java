@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.uplinksets.UplinkSet;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
@@ -102,12 +102,12 @@ public class UplinkSetClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 create(UplinkSet uplinkSet, boolean aSync) {
+    public TaskResource create(UplinkSet uplinkSet, boolean aSync) {
         LOGGER.info("UplinkSetClient : create : Start");
 
-        TaskResourceV2 taskResource = baseClient.createResource(
+        TaskResource taskResource = baseClient.createResource(
                 ResourceUris.UPLINK_SETS_URI, uplinkSet, aSync);
 
         LOGGER.info("UplinkSetClient : create : End");
@@ -125,12 +125,12 @@ public class UplinkSetClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 update(String resourceId, UplinkSet uplinkSet, boolean aSync) {
+    public TaskResource update(String resourceId, UplinkSet uplinkSet, boolean aSync) {
         LOGGER.info("UplinkSetClient : update : Start");
 
-        TaskResourceV2 taskResource = baseClient.updateResource(
+        TaskResource taskResource = baseClient.updateResource(
                 UrlUtils.createUrl(ResourceUris.UPLINK_SETS_URI, resourceId), uplinkSet, aSync);
 
         LOGGER.info("UplinkSetClient : update : End");
@@ -147,12 +147,12 @@ public class UplinkSetClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 delete(String resourceId, boolean aSync) {
+    public TaskResource delete(String resourceId, boolean aSync) {
         LOGGER.info("UplinkSetClient : delete : Start");
 
-        TaskResourceV2 taskResource = baseClient.deleteResource(
+        TaskResource taskResource = baseClient.deleteResource(
                 UrlUtils.createUrl(ResourceUris.UPLINK_SETS_URI, resourceId), aSync);
 
         LOGGER.info("UplinkSetClient : delete : End");

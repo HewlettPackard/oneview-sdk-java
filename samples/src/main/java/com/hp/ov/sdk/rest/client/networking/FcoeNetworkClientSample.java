@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.fcoenetworks.FcoeNetwork;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
@@ -53,7 +53,7 @@ public class FcoeNetworkClientSample {
         fcoeNetwork.setType(ResourceCategory.RC_FCOE_NETWORK_V300); //v300
         fcoeNetwork.setVlanId(Integer.valueOf(400));
 
-        TaskResourceV2 task = this.client.create(fcoeNetwork, false);
+        TaskResource task = this.client.create(fcoeNetwork, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -81,7 +81,7 @@ public class FcoeNetworkClientSample {
 
         fcoeNetwork.setName(FCOE_NETWORK_NAME_UPDATED);
 
-        TaskResourceV2 task = this.client.update(fcoeNetwork.getResourceId(),
+        TaskResource task = this.client.update(fcoeNetwork.getResourceId(),
                 fcoeNetwork, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
@@ -90,7 +90,7 @@ public class FcoeNetworkClientSample {
     private void deleteFcoeNetwork() {
         FcoeNetwork fcoeNetwork = client.getByName(FCOE_NETWORK_NAME_UPDATED).get(0);
 
-        TaskResourceV2 task = this.client.delete(fcoeNetwork.getResourceId(), false);
+        TaskResource task = this.client.delete(fcoeNetwork.getResourceId(), false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }

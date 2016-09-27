@@ -24,7 +24,7 @@ import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.sasinterconnects.SasInterConnectRefreshRequest;
 import com.hp.ov.sdk.dto.networking.sasinterconnects.SasInterconnect;
 import com.hp.ov.sdk.rest.client.OneViewClient;
@@ -75,7 +75,7 @@ public class SasInterconnectClientSample {
         patch.setPath("/powerState");
         patch.setValue("On");
 
-        TaskResourceV2 task = this.client.patch(interconnect.getResourceId(), patch, false);
+        TaskResource task = this.client.patch(interconnect.getResourceId(), patch, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -86,7 +86,7 @@ public class SasInterconnectClientSample {
         SasInterConnectRefreshRequest requestBody = new SasInterConnectRefreshRequest();
         requestBody.setRefreshState(RefreshState.RefreshPending);
 
-        TaskResourceV2 task = this.client.refreshState(interconnect.getResourceId(), requestBody, false);
+        TaskResource task = this.client.refreshState(interconnect.getResourceId(), requestBody, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }

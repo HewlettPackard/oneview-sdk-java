@@ -32,7 +32,7 @@ import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.RefreshStateRequest;
 import com.hp.ov.sdk.dto.RemoteConsoleUrlResult;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.UtilizationData;
 import com.hp.ov.sdk.dto.servers.serverhardware.AddServer;
 import com.hp.ov.sdk.dto.servers.serverhardware.ServerFirmwareInventory;
@@ -132,16 +132,16 @@ public class ServerHardwareClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 add(AddServer addServer, boolean aSync) {
+    public TaskResource add(AddServer addServer, boolean aSync) {
         LOGGER.info("ServerHardwareClient : add : Start");
 
         Request request = new Request(HttpMethod.POST, SERVER_HARDWARE_URI, addServer);
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("ServerHardwareClient : add : End");
 
@@ -155,9 +155,9 @@ public class ServerHardwareClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 remove(String resourceId, boolean aSync) {
+    public TaskResource remove(String resourceId, boolean aSync) {
         LOGGER.info("ServerHardwareClient : remove : Start");
 
         Request request = new Request(HttpMethod.DELETE,
@@ -165,7 +165,7 @@ public class ServerHardwareClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("ServerHardwareClient : remove : End");
 
@@ -180,14 +180,14 @@ public class ServerHardwareClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} which returns the task status for the process.
+     * @return {@link TaskResource} which returns the task status for the process.
      */
-    public TaskResourceV2 updatePowerState(String resourceId,
+    public TaskResource updatePowerState(String resourceId,
             ServerPowerControlRequest serverPowerControlRequest, boolean aSync) {
 
         LOGGER.info("ServerHardwareClient : updatePowerState : Start");
 
-        TaskResourceV2 taskResource = this.baseClient.updateResource(
+        TaskResource taskResource = this.baseClient.updateResource(
                 UrlUtils.createUrl(SERVER_HARDWARE_URI, resourceId, POWER_STATE_URI),
                 serverPowerControlRequest, aSync);
 
@@ -204,9 +204,9 @@ public class ServerHardwareClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} which returns the task status for the process.
+     * @return {@link TaskResource} which returns the task status for the process.
      */
-    public TaskResourceV2 updateRefreshState(String resourceId,
+    public TaskResource updateRefreshState(String resourceId,
             RefreshStateRequest refreshStateRequest, boolean aSync) {
 
         LOGGER.info("ServerHardwareClient : updateRefreshState : Start");
@@ -217,7 +217,7 @@ public class ServerHardwareClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("ServerHardwareClient : updateRefreshState : End");
 
@@ -298,9 +298,9 @@ public class ServerHardwareClient {
      * @param resourceId server hardware resource identifier as seen in HPE OneView.
      * @param aSync flag input to process request asynchronously or synchronously.
      *
-     * @return {@link TaskResourceV2} which returns the task status for the process.
+     * @return {@link TaskResource} which returns the task status for the process.
      */
-    public TaskResourceV2 updateMpFirmwareVersion(String resourceId, boolean aSync) {
+    public TaskResource updateMpFirmwareVersion(String resourceId, boolean aSync) {
         LOGGER.info("ServerHardwareClient : updateMpFirmwareVersion : Start");
 
         String requestUri = UrlUtils.createUrl(SERVER_HARDWARE_URI,
@@ -309,7 +309,7 @@ public class ServerHardwareClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("ServerHardwareClient : updateMpFirmwareVersion : End");
 
@@ -496,9 +496,9 @@ public class ServerHardwareClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} which returns the task status for the process.
+     * @return {@link TaskResource} which returns the task status for the process.
      */
-    public TaskResourceV2 patch(String resourceId, Patch patch, boolean aSync) {
+    public TaskResource patch(String resourceId, Patch patch, boolean aSync) {
         LOGGER.info("ServerHardwareClient : patch : Start");
 
         String resourceUri = UrlUtils.createUrl(SERVER_HARDWARE_URI, resourceId);
@@ -506,7 +506,7 @@ public class ServerHardwareClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("ServerHardwareClient : patch : End");
 

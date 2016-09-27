@@ -22,7 +22,7 @@ import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.facilities.unmanageddevice.UnmanagedDevice;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
@@ -161,12 +161,12 @@ public class UnmanagedDeviceClient {
      * @param filter A general filter/query string that narrows the list of resources.
      * @param aSync Flag input to process request asynchronously or synchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 removeByFilter(String filter, boolean aSync) {
+    public TaskResource removeByFilter(String filter, boolean aSync) {
         LOGGER.info("UnmanagedDeviceClient : removeByFilter : Start");
 
-        TaskResourceV2 taskResource = baseClient.deleteResource(ResourceUris.UNMANAGED_DEVICE_URI, aSync,
+        TaskResource taskResource = baseClient.deleteResource(ResourceUris.UNMANAGED_DEVICE_URI, aSync,
                 new UrlParameter("filter", filter));
 
         LOGGER.info("UnmanagedDeviceClient : removeByFilter : End");

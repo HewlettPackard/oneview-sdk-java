@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ErrorMessage;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.TaskState;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
@@ -38,13 +38,13 @@ public class TaskMonitor {
     //TODO externalize this value to make it configurable
     private static final int TASK_MONITORING_INTERVAL = 5000; //milliseconds
 
-    public TaskResourceV2 execute(BaseClient client, TaskResourceV2 task, int timeoutInMilliseconds) {
+    public TaskResource execute(BaseClient client, TaskResource task, int timeoutInMilliseconds) {
         Calendar dateToLive = Calendar.getInstance();
 
         dateToLive.add(Calendar.MILLISECOND, timeoutInMilliseconds);
 
         while (dateToLive.after(Calendar.getInstance())) {
-            task = client.getResource(task.getUri(), TaskResourceV2.class);
+            task = client.getResource(task.getUri(), TaskResource.class);
 
             LOGGER.info("Task completed percentage {} and status {}", task.getPercentComplete(), task.getTaskState());
 

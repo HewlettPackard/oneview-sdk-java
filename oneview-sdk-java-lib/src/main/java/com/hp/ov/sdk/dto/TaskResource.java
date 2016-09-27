@@ -25,7 +25,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.hp.ov.sdk.dto.alerts.AssociatedResource;
 
-public class TaskResourceV2 extends BaseModelResource {
+public class TaskResource extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,9 +45,9 @@ public class TaskResourceV2 extends BaseModelResource {
     private String owner;
     private AssociatedResource associatedResource;
     private String associatedTaskUri;
-    private List<ErrorMessage> taskErrors = new ArrayList<ErrorMessage>();
-    private List<TaskProgress> progressUpdates = new ArrayList<TaskProgress>();
-    private List<String> taskOutput = new ArrayList<String>();
+    private List<ErrorMessage> taskErrors = new ArrayList<>();
+    private List<TaskProgress> progressUpdates = new ArrayList<>();
+    private List<String> taskOutput = new ArrayList<>();
 
     public String getTaskStatus() {
         return taskStatus;

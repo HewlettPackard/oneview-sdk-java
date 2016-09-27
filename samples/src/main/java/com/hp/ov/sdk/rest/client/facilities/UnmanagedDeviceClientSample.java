@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.facilities.unmanageddevice.UnmanagedDevice;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
@@ -97,7 +97,7 @@ public class UnmanagedDeviceClientSample {
 
     private void removeUnmanagedDeviceByFilter() {
         String filter = "name='" + UNMANAGED_DEVICE_NAME +"'";
-        TaskResourceV2 task = this.unmanagedDeviceClient.removeByFilter(filter, false);
+        TaskResource task = this.unmanagedDeviceClient.removeByFilter(filter, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }

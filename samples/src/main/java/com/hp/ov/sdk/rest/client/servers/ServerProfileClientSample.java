@@ -30,7 +30,7 @@ import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.ServerProfileCompliancePreview;
 import com.hp.ov.sdk.dto.ServerProfileHealth;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.generated.AvailableNetworks;
 import com.hp.ov.sdk.dto.generated.AvailableServers;
 import com.hp.ov.sdk.dto.generated.ProfilePorts;
@@ -111,7 +111,7 @@ public class ServerProfileClientSample {
     private void createServerProfile() {
         ServerProfile serverProfile = buildServerProfile();
 
-        TaskResourceV2 taskResource = serverProfileClient.create(serverProfile, false);
+        TaskResource taskResource = serverProfileClient.create(serverProfile, false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -119,7 +119,7 @@ public class ServerProfileClientSample {
     private void deleteServerProfile() {
         ServerProfile serverProfile = this.serverProfileClient.getByName(SERVER_PROFILE_NAME_UPDATED).get(0);
 
-        TaskResourceV2 taskResource = serverProfileClient.delete(serverProfile.getResourceId(), false);
+        TaskResource taskResource = serverProfileClient.delete(serverProfile.getResourceId(), false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -127,7 +127,7 @@ public class ServerProfileClientSample {
     private void deleteServerProfileByFilter() {
         String filter = "name='" + SERVER_PROFILE_NAME +"'";
 
-        TaskResourceV2 taskResource = this.serverProfileClient.deleteByFilter(filter, false);
+        TaskResource taskResource = this.serverProfileClient.deleteByFilter(filter, false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -137,7 +137,7 @@ public class ServerProfileClientSample {
 
         serverProfile.setName(SERVER_PROFILE_NAME_UPDATED);
 
-        TaskResourceV2 taskResource = serverProfileClient.update(serverProfile.getResourceId(), serverProfile, false);
+        TaskResource taskResource = serverProfileClient.update(serverProfile.getResourceId(), serverProfile, false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -152,7 +152,7 @@ public class ServerProfileClientSample {
         patch.setPath("/templateCompliance");
         patch.setValue("Compliant");
 
-        TaskResourceV2 taskResource = serverProfileClient.patch(serverProfile.getResourceId(), patch, false);
+        TaskResource taskResource = serverProfileClient.patch(serverProfile.getResourceId(), patch, false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }

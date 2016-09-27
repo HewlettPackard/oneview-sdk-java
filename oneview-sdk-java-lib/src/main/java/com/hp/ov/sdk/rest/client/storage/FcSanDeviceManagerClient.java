@@ -22,7 +22,7 @@ import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.TaskState;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
@@ -107,9 +107,9 @@ public class FcSanDeviceManagerClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 add(String providerDeviceManagerUri,
+    public TaskResource add(String providerDeviceManagerUri,
             DeviceManagerResponse deviceManager, boolean aSync) {
         LOGGER.info("FcSanDeviceManagerClient : add : Start");
 
@@ -117,7 +117,7 @@ public class FcSanDeviceManagerClient {
 
         request.setForceTaskReturn(true);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("FcSanDeviceManagerClient : add : End");
 
@@ -132,9 +132,9 @@ public class FcSanDeviceManagerClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 update(String resourceId, DeviceManagerResponse deviceManager, boolean aSync) {
+    public TaskResource update(String resourceId, DeviceManagerResponse deviceManager, boolean aSync) {
         LOGGER.info("FcSanDeviceManagerClient : update : Start");
 
         Request request = new Request(HttpMethod.PUT,
@@ -142,7 +142,7 @@ public class FcSanDeviceManagerClient {
 
         request.setForceTaskReturn(true);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("FcSanDeviceManagerClient : update : End");
 
@@ -156,14 +156,14 @@ public class FcSanDeviceManagerClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 remove(String resourceId, boolean aSync) {
+    public TaskResource remove(String resourceId, boolean aSync) {
         LOGGER.info("FcSanDeviceManagerClient : remove : Start");
 
         String requestUri = UrlUtils.createUrl(ResourceUris.FC_SANS_DEVICE_MANAGER_URI, resourceId);
 
-        TaskResourceV2 taskResource;
+        TaskResource taskResource;
 
         // OV 2.0 returns code 200 with no task and the string ""OK"" in the body
         // This IF should catch responses from OV 3.0+
@@ -174,7 +174,7 @@ public class FcSanDeviceManagerClient {
 
             this.baseClient.executeRequest(request, String.class);
 
-            taskResource = new TaskResourceV2();
+            taskResource = new TaskResource();
             taskResource.setComputedPercentComplete(Integer.valueOf(100));
             taskResource.setTaskState(TaskState.Completed);
         }

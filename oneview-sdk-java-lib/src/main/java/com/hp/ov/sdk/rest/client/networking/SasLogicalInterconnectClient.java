@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnect.ReplaceDriveEnclosure;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnect.SasLiFirmware;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnect.SasLogicalInterconnect;
@@ -147,9 +147,9 @@ public class SasLogicalInterconnectClient {
      * @param sasLiFirmware object containing the update to be made to the SAS logical interconnect.
      * @param aSync flag to indicate whether the request should be processed synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateFirmware(String resourceId, SasLiFirmware sasLiFirmware, boolean aSync) {
+    public TaskResource updateFirmware(String resourceId, SasLiFirmware sasLiFirmware, boolean aSync) {
         LOGGER.info("SasLogicalInterconnectClient : updateFirmware : Start");
 
         Request request = new Request(HttpMethod.PUT,
@@ -159,7 +159,7 @@ public class SasLogicalInterconnectClient {
         request.setTimeout(TIMEOUT);
         request.setForceTaskReturn(true);
 
-        TaskResourceV2 task = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource task = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("SasLogicalInterconnectClient : updateFirmware : End");
 
@@ -177,9 +177,9 @@ public class SasLogicalInterconnectClient {
      * @param replace specification of both the serial numbers of the original drive enclosure and its replacement.
      * @param aSync flag to indicate whether the request should be processed synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 replaceDriveEnclosure(String resourceId, ReplaceDriveEnclosure replace, boolean aSync) {
+    public TaskResource replaceDriveEnclosure(String resourceId, ReplaceDriveEnclosure replace, boolean aSync) {
         LOGGER.info("SasLogicalInterconnectClient : replaceDriveEnclosure : Start");
 
         Request request = new Request(HttpMethod.POST,
@@ -188,7 +188,7 @@ public class SasLogicalInterconnectClient {
         request.setTimeout(TIMEOUT);
         request.setForceTaskReturn(true);
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("SasLogicalInterconnectClient : replaceDriveEnclosure : End");
 
@@ -202,9 +202,9 @@ public class SasLogicalInterconnectClient {
      * @param resourceId resource identifier for SAS logical interconnect as seen in HPE OneView.
      * @param aSync flag to indicate whether the request should be processed synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 applyConfiguration(String resourceId, boolean aSync) {
+    public TaskResource applyConfiguration(String resourceId, boolean aSync) {
         LOGGER.info("SasLogicalInterconnectClient : applyConfiguration : Start");
 
         Request request = new Request(HttpMethod.PUT,
@@ -213,7 +213,7 @@ public class SasLogicalInterconnectClient {
         request.setTimeout(TIMEOUT);
         request.setForceTaskReturn(true);
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("SasLogicalInterconnectClient : applyConfiguration : End");
 
@@ -233,9 +233,9 @@ public class SasLogicalInterconnectClient {
      * @param interconnect {@link SasLogicalInterconnect} SAS logical interconnect.
      * @param aSync flag to indicate whether the request should be processed synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateCompliance(SasLogicalInterconnect interconnect, boolean aSync) {
+    public TaskResource updateCompliance(SasLogicalInterconnect interconnect, boolean aSync) {
         LOGGER.info("SasLogicalInterconnectClient : updateCompliance : Start");
 
         Request request = new Request(HttpMethod.PUT,
@@ -244,7 +244,7 @@ public class SasLogicalInterconnectClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 task = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource task = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("SasLogicalInterconnectClient : updateCompliance : End");
 
@@ -264,9 +264,9 @@ public class SasLogicalInterconnectClient {
      * @param sasLogicalInterconnectUris list containing the URIs of SAS logical interconnects as seen in HPE OneView.
      * @param aSync flag to indicate whether the request should be processed synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateCompliance(List<String> sasLogicalInterconnectUris, boolean aSync) {
+    public TaskResource updateCompliance(List<String> sasLogicalInterconnectUris, boolean aSync) {
         LOGGER.info("SasLogicalInterconnectClient : updateCompliance : Start");
 
         Request request = new Request(HttpMethod.PUT,
@@ -275,7 +275,7 @@ public class SasLogicalInterconnectClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 task = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource task = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("SasLogicalInterconnectClient : updateCompliance : End");
 

@@ -28,7 +28,7 @@ import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.PortStatistics;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SubportStatistics;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.InterconnectsStatistics;
 import com.hp.ov.sdk.dto.networking.Port;
 import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
@@ -87,7 +87,7 @@ public class InterconnectClientSample {
         patch.setPath("/powerState");
         patch.setValue("Off");
 
-        TaskResourceV2 task = this.interconnectClient.patch(interconnect.getResourceId(), patch, false);
+        TaskResource task = this.interconnectClient.patch(interconnect.getResourceId(), patch, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -98,7 +98,7 @@ public class InterconnectClientSample {
 
         port.setEnabled(!port.getEnabled());
 
-        TaskResourceV2 task = interconnectClient.updatePort(interconnect.getResourceId(), port, false);
+        TaskResource task = interconnectClient.updatePort(interconnect.getResourceId(), port, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -111,7 +111,7 @@ public class InterconnectClientSample {
 
         List<Port> ports = Arrays.asList(port);
 
-        TaskResourceV2 task = interconnectClient.updatePorts(interconnect.getResourceId(), ports, false);
+        TaskResource task = interconnectClient.updatePorts(interconnect.getResourceId(), ports, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -119,7 +119,7 @@ public class InterconnectClientSample {
     private void resetInterconnectPortProtection() {
         Interconnect interconnect = this.interconnectClient.getByName(RESOURCE_NAME).get(0);
 
-        TaskResourceV2 task = interconnectClient.resetPortProtection(interconnect.getResourceId(), false);
+        TaskResource task = interconnectClient.resetPortProtection(interconnect.getResourceId(), false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }

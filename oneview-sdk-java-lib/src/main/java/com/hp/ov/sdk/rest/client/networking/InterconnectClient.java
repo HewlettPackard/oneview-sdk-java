@@ -28,7 +28,7 @@ import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.PortStatistics;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SubportStatistics;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.InterconnectsStatistics;
 import com.hp.ov.sdk.dto.networking.Port;
 import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
@@ -115,15 +115,15 @@ public class InterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 patch(String resourceId, Patch patch, boolean aSync) {
+    public TaskResource patch(String resourceId, Patch patch, boolean aSync) {
         LOGGER.info("InterconnectClient : patch : Start");
 
         Request request = new Request(HttpMethod.PATCH,
                 UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId), patch);
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("InterconnectClient : patch : End");
 
@@ -139,12 +139,12 @@ public class InterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updatePort(String resourceId, Port port, boolean aSync) {
+    public TaskResource updatePort(String resourceId, Port port, boolean aSync) {
         LOGGER.info("InterconnectClient : updatePort : Start");
 
-        TaskResourceV2 taskResource = baseClient.updateResource(
+        TaskResource taskResource = baseClient.updateResource(
                 UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId, ResourceUris.INTERCONNECT_PORTS_URI),
                 port, aSync);
 
@@ -162,12 +162,12 @@ public class InterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updatePorts(String resourceId, List<Port> ports, boolean aSync) {
+    public TaskResource updatePorts(String resourceId, List<Port> ports, boolean aSync) {
         LOGGER.info("InterconnectClient : updatePorts : Start");
 
-        TaskResourceV2 taskResource = baseClient.updateResource(
+        TaskResource taskResource = baseClient.updateResource(
                 UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId,
                         ResourceUris.INTERCONNECT_UPDATE_PORTS_URI),
                 ports, aSync);
@@ -184,16 +184,16 @@ public class InterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 resetPortProtection(String resourceId, boolean aSync) {
+    public TaskResource resetPortProtection(String resourceId, boolean aSync) {
         LOGGER.info("InterconnectClient : resetPortProtection : Start");
 
         String uri = UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId,
                 ResourceUris.INTERCONNECT_RESET_PORT_PROTECTION_URI);
         Request request = new Request(HttpMethod.PUT, uri);
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("InterconnectClient : resetPortProtection : End");
 

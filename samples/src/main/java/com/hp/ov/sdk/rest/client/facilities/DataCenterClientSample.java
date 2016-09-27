@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.facilities.datacenter.DataCenter;
 import com.hp.ov.sdk.dto.facilities.datacenter.DeratingType;
 import com.hp.ov.sdk.dto.facilities.datacenter.VisualContent;
@@ -112,7 +112,7 @@ public class DataCenterClientSample {
 
     private void removeDataCenterByFilter() {
         String filter = "name='" + DATA_CENTER_NAME +"'";
-        TaskResourceV2 task = this.dataCenterClient.removeByFilter(filter, false);
+        TaskResource task = this.dataCenterClient.removeByFilter(filter, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }

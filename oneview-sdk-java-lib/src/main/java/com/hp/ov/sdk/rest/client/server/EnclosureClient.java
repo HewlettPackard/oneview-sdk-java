@@ -27,7 +27,7 @@ import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SsoUrlData;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.UtilizationData;
 import com.hp.ov.sdk.dto.servers.enclosure.AddEnclosure;
 import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
@@ -128,16 +128,16 @@ public class EnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 add(AddEnclosure addEnclosure, boolean aSync) {
+    public TaskResource add(AddEnclosure addEnclosure, boolean aSync) {
         LOGGER.info("EnclosureClient : add : Start");
 
         Request request = new Request(HttpMethod.POST, ENCLOSURE_URI, addEnclosure);
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("EnclosureClient : add : End");
 
@@ -152,9 +152,9 @@ public class EnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 update(String resourceId, Enclosure enclosure, boolean aSync) {
+    public TaskResource update(String resourceId, Enclosure enclosure, boolean aSync) {
         LOGGER.info("EnclosureClient : update : Start");
 
         Request request = new Request(HttpMethod.PUT,
@@ -162,7 +162,7 @@ public class EnclosureClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("EnclosureClient : update : End");
 
@@ -178,9 +178,9 @@ public class EnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 patch(String resourceId, Patch patch, boolean aSync) {
+    public TaskResource patch(String resourceId, Patch patch, boolean aSync) {
         LOGGER.info("EnclosureClient : patch : Start");
 
         Request request = new Request(HttpMethod.PATCH,
@@ -192,7 +192,7 @@ public class EnclosureClient {
             request.setContentType(ContentType.APPLICATION_JSON_PATCH);
         }
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("EnclosureClient : patch : End");
 
@@ -206,9 +206,9 @@ public class EnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 remove(String resourceId, boolean aSync) {
+    public TaskResource remove(String resourceId, boolean aSync) {
         LOGGER.info("EnclosureClient : remove : Start");
 
         Request request = new Request(HttpMethod.DELETE,
@@ -216,7 +216,7 @@ public class EnclosureClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("EnclosureClient : remove : End");
 
@@ -231,9 +231,9 @@ public class EnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateConfiguration(String resourceId, boolean aSync) {
+    public TaskResource updateConfiguration(String resourceId, boolean aSync) {
         LOGGER.info("EnclosureClient : updateConfiguration : Start");
 
         String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_CONFIGURATION_URI);
@@ -241,7 +241,7 @@ public class EnclosureClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("EnclosureClient : updateConfiguration : End");
 
@@ -276,14 +276,14 @@ public class EnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateConfigurationScript(String resourceId, String scriptData, boolean aSync) {
+    public TaskResource updateConfigurationScript(String resourceId, String scriptData, boolean aSync) {
         LOGGER.info("EnclosureClient : updateConfigurationScript : Start");
 
         String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_SCRIPT_URI);
 
-        TaskResourceV2 taskResource = this.baseClient.updateResource(updateUri, scriptData, aSync);
+        TaskResource taskResource = this.baseClient.updateResource(updateUri, scriptData, aSync);
 
         LOGGER.info("EnclosureClient : updateConfigurationScript : End");
 
@@ -366,9 +366,9 @@ public class EnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateCompliance(String resourceId, boolean aSync) {
+    public TaskResource updateCompliance(String resourceId, boolean aSync) {
         LOGGER.info("EnclosureClient : updateCompliance : Start");
 
         String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_COMPLIANCE_URI);
@@ -376,7 +376,7 @@ public class EnclosureClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("EnclosureClient : updateCompliance : End");
 
@@ -394,9 +394,9 @@ public class EnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateFwBaseline(String resourceId, FwBaselineConfig fwBaselineConfig, boolean aSync) {
+    public TaskResource updateFwBaseline(String resourceId, FwBaselineConfig fwBaselineConfig, boolean aSync) {
         LOGGER.info("EnclosureClient : updateFwBaseline : Start");
 
         String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_FW_BASELINE_URI);
@@ -404,7 +404,7 @@ public class EnclosureClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("EnclosureClient : updateFwBaseline : End");
 
@@ -487,9 +487,9 @@ public class EnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateRefreshState(String resourceId, RefreshStateConfig refreshStateConfig, boolean aSync) {
+    public TaskResource updateRefreshState(String resourceId, RefreshStateConfig refreshStateConfig, boolean aSync) {
         LOGGER.info("EnclosureClient : updateRefreshState : Start");
 
         String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_REFRESH_STATE_URI);
@@ -497,7 +497,7 @@ public class EnclosureClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("EnclosureClient : updateRefreshState : End");
 

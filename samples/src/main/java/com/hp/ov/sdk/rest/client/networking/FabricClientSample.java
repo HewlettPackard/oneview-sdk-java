@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.fabric.Fabric;
 import com.hp.ov.sdk.dto.networking.fabric.VlanPool;
 import com.hp.ov.sdk.rest.client.OneViewClient;
@@ -72,7 +72,7 @@ public class FabricClientSample {
 
         vlanRange.setStart(vlanRange.getStart() - 1);
 
-        TaskResourceV2 task = this.fabricClient.updateReservedVlanRange(FABRIC_RESOURCE_ID, vlanRange , false);
+        TaskResource task = this.fabricClient.updateReservedVlanRange(FABRIC_RESOURCE_ID, vlanRange , false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }

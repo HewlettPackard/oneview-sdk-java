@@ -31,7 +31,7 @@ import com.hp.ov.sdk.dto.Location;
 import com.hp.ov.sdk.dto.PortMonitorUplinkPort;
 import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
@@ -128,9 +128,9 @@ public class LogicalInterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 createInterconnect(Location location, boolean aSync) {
+    public TaskResource createInterconnect(Location location, boolean aSync) {
         LOGGER.info("LogicalInterconnectClient : create : Start");
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI,
@@ -141,7 +141,7 @@ public class LogicalInterconnectClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 task = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource task = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalInterconnectClient : create : End");
 
@@ -156,9 +156,9 @@ public class LogicalInterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 deleteInterconnect(String enclosureUri, String bay, boolean aSync) {
+    public TaskResource deleteInterconnect(String enclosureUri, String bay, boolean aSync) {
         LOGGER.info("LogicalInterconnectClient : delete : Start");
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI,
@@ -170,7 +170,7 @@ public class LogicalInterconnectClient {
         request.setTimeout(TIMEOUT);
         request.addQuery(new UrlParameter("location", "Enclosure:" + enclosureUri + ",Bay:"+ bay));
 
-        TaskResourceV2 task = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource task = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalInterconnectClient : delete : End");
 
@@ -207,9 +207,9 @@ public class LogicalInterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateSnmpConfiguration(String resourceId,
+    public TaskResource updateSnmpConfiguration(String resourceId,
             SnmpConfiguration snmpConfiguration, boolean aSync) {
         LOGGER.info("LogicalInterconnectClient : updateSnmpConfiguration : Start");
 
@@ -220,7 +220,7 @@ public class LogicalInterconnectClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 task = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource task = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalInterconnectClient : updateSnmpConfiguration : End");
 
@@ -304,9 +304,9 @@ public class LogicalInterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateFirmware(String resourceId, LiFirmware liFirmware, boolean aSync) {
+    public TaskResource updateFirmware(String resourceId, LiFirmware liFirmware, boolean aSync) {
         LOGGER.info("LogicalInterconnectClient : updateFirmware : Start");
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
@@ -315,7 +315,7 @@ public class LogicalInterconnectClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 task = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource task = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalInterconnectClient : updateFirmware : End");
 
@@ -351,9 +351,9 @@ public class LogicalInterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateQosAggregatedConfiguration(String resourceId,
+    public TaskResource updateQosAggregatedConfiguration(String resourceId,
             QosAggregatedConfiguration qosAggregatedConfiguration, boolean aSync) {
         LOGGER.info("LogicalInterconnectClient : updateQosAggregatedConfiguration : Start");
 
@@ -363,7 +363,7 @@ public class LogicalInterconnectClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 task = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource task = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalInterconnectClient : updateQosAggregatedConfiguration : End");
 
@@ -433,11 +433,11 @@ public class LogicalInterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      *
      * @since HPE OneView 2.0
      */
-    public TaskResourceV2 updateTelemetryConfigurationV200(String resourceId,
+    public TaskResource updateTelemetryConfigurationV200(String resourceId,
             String telemetryConfigurationId, TelemetryConfiguration telemetryConfiguration, boolean aSync) {
         LOGGER.info("LogicalInterconnectClient : updateTelemetryConfigurationV200 : Start");
 
@@ -447,7 +447,7 @@ public class LogicalInterconnectClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 task = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource task = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalInterconnectClient : updateTelemetryConfigurationV200 : End");
 
@@ -482,9 +482,9 @@ public class LogicalInterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updatePortMonitorConfiguration(String resourceId, PortMonitor portMonitor, boolean aSync) {
+    public TaskResource updatePortMonitorConfiguration(String resourceId, PortMonitor portMonitor, boolean aSync) {
         LOGGER.info("LogicalInterconnectClient : updatePortMonitorConfiguration : Start");
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
@@ -493,7 +493,7 @@ public class LogicalInterconnectClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 task = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource task = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalInterconnectClient : updatePortMonitorConfiguration : End");
 
@@ -508,9 +508,9 @@ public class LogicalInterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateConfiguration(String resourceId, boolean aSync) {
+    public TaskResource updateConfiguration(String resourceId, boolean aSync) {
         LOGGER.info("LogicalInterconnectClient : updateConfiguration : Start");
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
@@ -519,7 +519,7 @@ public class LogicalInterconnectClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 task = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource task = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalInterconnectClient : updateConfiguration : End");
 
@@ -535,9 +535,9 @@ public class LogicalInterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateSettings(String resourceId,
+    public TaskResource updateSettings(String resourceId,
             InterconnectSettingsV2 interconnectSettings, boolean aSync) {
         LOGGER.info("LogicalInterconnectClient : updateSettings : Start");
 
@@ -547,7 +547,7 @@ public class LogicalInterconnectClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 task = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource task = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalInterconnectClient : updateSettings : End");
 
@@ -562,9 +562,9 @@ public class LogicalInterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateEthernetSettings(String resourceId,
+    public TaskResource updateEthernetSettings(String resourceId,
             EthernetInterconnectSettingsV2 ethernetSettings, boolean aSync) {
         LOGGER.info("LogicalInterconnectClient : updateEthernetSettings : Start");
 
@@ -574,7 +574,7 @@ public class LogicalInterconnectClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 task = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource task = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalInterconnectClient : updateEthernetSettings : End");
 
@@ -591,9 +591,9 @@ public class LogicalInterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateCompliance(String resourceId, boolean aSync) {
+    public TaskResource updateCompliance(String resourceId, boolean aSync) {
         LOGGER.info("LogicalInterconnectClient : updateCompliance : Start");
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
@@ -602,7 +602,7 @@ public class LogicalInterconnectClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 task = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource task = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalInterconnectClient : updateCompliance : End");
 
@@ -618,9 +618,9 @@ public class LogicalInterconnectClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateInternalNetworks(String resourceId, List<String> networkUris, boolean aSync) {
+    public TaskResource updateInternalNetworks(String resourceId, List<String> networkUris, boolean aSync) {
         LOGGER.info("LogicalInterconnectClient : updateInternalNetworks : Start");
 
         String uri = UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_URI, resourceId,
@@ -629,7 +629,7 @@ public class LogicalInterconnectClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 task = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource task = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalInterconnectClient : updateInternalNetworks : End");
 

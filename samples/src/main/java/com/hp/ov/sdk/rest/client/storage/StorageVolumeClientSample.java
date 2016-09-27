@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.AddStorageVolume;
 import com.hp.ov.sdk.dto.AttachableStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolume;
@@ -28,7 +27,7 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolume;
 import com.hp.ov.sdk.dto.StorageVolumeProvisioningParameters;
 import com.hp.ov.sdk.dto.StorageVolumeSnapshot;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 /*
@@ -83,7 +82,7 @@ public class StorageVolumeClientSample {
     private void createStorageVolume() {
         AddStorageVolume addStorageVolume = buildStorageVolume();
 
-        TaskResourceV2 taskResource = storageVolumeClient.create(addStorageVolume, false);
+        TaskResource taskResource = storageVolumeClient.create(addStorageVolume, false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -100,7 +99,7 @@ public class StorageVolumeClientSample {
 
     private void deleteStorageVolume() {
         StorageVolume storageVolume = this.storageVolumeClient.getByName(STORAGE_VOLUME_NAME_UPDATED).get(0);
-        TaskResourceV2 taskResource = this.storageVolumeClient.delete(storageVolume.getResourceId(), false);
+        TaskResource taskResource = this.storageVolumeClient.delete(storageVolume.getResourceId(), false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -108,7 +107,7 @@ public class StorageVolumeClientSample {
     private void createPrivateStorageVolume() {
         AddStorageVolume addStorageVolume = buildPrivateStorageVolume();
 
-        TaskResourceV2 taskResource = storageVolumeClient.create(addStorageVolume, false);
+        TaskResource taskResource = storageVolumeClient.create(addStorageVolume, false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -138,7 +137,7 @@ public class StorageVolumeClientSample {
         StorageVolume storageVolume = this.storageVolumeClient.getByName(STORAGE_VOLUME_NAME).get(0);
         StorageVolumeSnapshot snapshot = buildStorageVolumeSnapshot();
 
-        TaskResourceV2 taskResource = storageVolumeClient.createSnapshot(
+        TaskResource taskResource = storageVolumeClient.createSnapshot(
                 storageVolume.getResourceId(), snapshot, false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
@@ -149,7 +148,7 @@ public class StorageVolumeClientSample {
         StorageVolumeSnapshot storageVolumeSnapshot = this.storageVolumeClient.getAllSnapshots(
                 storageVolume.getResourceId()).get(0);
 
-        TaskResourceV2 taskResource = this.storageVolumeClient.deleteSnapshot(
+        TaskResource taskResource = this.storageVolumeClient.deleteSnapshot(
                 storageVolume.getResourceId(), storageVolumeSnapshot.getResourceId(), false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
@@ -169,7 +168,7 @@ public class StorageVolumeClientSample {
         deleteExtraManagedStorageVolume.setType("ExtraManagedStorageVolumePaths");
         deleteExtraManagedStorageVolume.setResourceUri(storageVolume.getUri());
 
-        TaskResourceV2 taskResource = this.storageVolumeClient.repairExtraManagedPath(
+        TaskResource taskResource = this.storageVolumeClient.repairExtraManagedPath(
                 deleteExtraManagedStorageVolume, false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());

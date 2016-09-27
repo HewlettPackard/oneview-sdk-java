@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.servers.AssignmentType;
 import com.hp.ov.sdk.dto.servers.Bios;
 import com.hp.ov.sdk.dto.servers.Boot;
@@ -110,7 +110,7 @@ public class ServerProfileTemplateClientSample {
     private void createServerProfileTemplate() {
         ServerProfileTemplate serverProfileTemplate = buildServerProfileTemplate();
 
-        TaskResourceV2 taskResource = serverProfileTemplateClient.create(serverProfileTemplate, false);
+        TaskResource taskResource = serverProfileTemplateClient.create(serverProfileTemplate, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -119,7 +119,7 @@ public class ServerProfileTemplateClientSample {
         ServerProfileTemplate serverProfileTemplate
                 = this.serverProfileTemplateClient.getByName(SERVER_PROFILE_TEMPLATE_NAME_UPDATED).get(0);
 
-        TaskResourceV2 taskResource = serverProfileTemplateClient.delete(serverProfileTemplate.getResourceId(), false);
+        TaskResource taskResource = serverProfileTemplateClient.delete(serverProfileTemplate.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -130,7 +130,7 @@ public class ServerProfileTemplateClientSample {
 
         serverProfileTemplate.setName(SERVER_PROFILE_TEMPLATE_NAME_UPDATED);
 
-        TaskResourceV2 taskResource = serverProfileTemplateClient.update(serverProfileTemplate.getResourceId(),
+        TaskResource taskResource = serverProfileTemplateClient.update(serverProfileTemplate.getResourceId(),
                 serverProfileTemplate, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
@@ -156,7 +156,7 @@ public class ServerProfileTemplateClientSample {
         serverProfile.setName("ServerProfileFromTemplate");
         serverProfile.setServerHardwareUri(SERVER_HARDWARE_URI);
 
-        TaskResourceV2 taskResource = serverProfileClient.create(serverProfile, false);
+        TaskResource taskResource = serverProfileClient.create(serverProfile, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }

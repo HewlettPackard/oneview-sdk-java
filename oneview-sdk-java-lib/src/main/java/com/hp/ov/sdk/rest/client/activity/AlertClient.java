@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Optional;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.TaskState;
 import com.hp.ov.sdk.dto.alerts.AlertResource;
 import com.hp.ov.sdk.dto.alerts.AlertUpdate;
@@ -106,9 +106,9 @@ public class AlertClient {
      *
      * @param resourceId alert resource identifier as seen in HPE OneView.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 delete(String resourceId) {
+    public TaskResource delete(String resourceId) {
         LOGGER.info("DataCenterClient : delete : Start");
 
         Request request = new Request(HttpMethod.DELETE, UrlUtils.createUrl(ALERTS_URI, resourceId));
@@ -129,12 +129,12 @@ public class AlertClient {
      * @param filter A general filter/query string that narrows the list of resources.
      * @param aSync Flag input to process request asynchronously or synchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 deleteByFilter(Optional<String> filter, boolean aSync) {
+    public TaskResource deleteByFilter(Optional<String> filter, boolean aSync) {
         LOGGER.info("AlertClient : deleteByFilter : Start");
 
-        TaskResourceV2 taskResource;
+        TaskResource taskResource;
 
         if (filter.isPresent()) {
             taskResource = baseClient.deleteResource(ALERTS_URI, aSync,
@@ -156,9 +156,9 @@ public class AlertClient {
      *
      * @param changeLogId alert change log identifier as seen in HPE OneView.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 deleteAlertChangeLog(String changeLogId) {
+    public TaskResource deleteAlertChangeLog(String changeLogId) {
         LOGGER.info("DataCenterClient : deleteAlertChangeLog : Start");
 
         Request request = new Request(HttpMethod.DELETE, UrlUtils.createUrl(ALERTS_CHANGELOG_URI, changeLogId));
@@ -170,8 +170,8 @@ public class AlertClient {
         return this.buildCompleteTask("Delete alert change log.");
     }
 
-    private TaskResourceV2 buildCompleteTask(String name) {
-        TaskResourceV2 task = new TaskResourceV2();
+    private TaskResource buildCompleteTask(String name) {
+        TaskResource task = new TaskResource();
         String date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date());
 
         task.setName(name);

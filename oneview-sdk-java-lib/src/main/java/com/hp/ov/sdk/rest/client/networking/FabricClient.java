@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.fabric.Fabric;
 import com.hp.ov.sdk.dto.networking.fabric.VlanPool;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -120,12 +120,12 @@ public class FabricClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateReservedVlanRange(String resourceId, VlanPool vlanPool, boolean aSync) {
+    public TaskResource updateReservedVlanRange(String resourceId, VlanPool vlanPool, boolean aSync) {
         LOGGER.info("FabricClient : updateReservedVlanRange : Start");
 
-        TaskResourceV2 taskResource = baseClient.updateResource(
+        TaskResource taskResource = baseClient.updateResource(
                 UrlUtils.createUrl(FABRIC_URI, resourceId, RESERVED_VLAN_RANGE_URI), vlanPool, aSync);
 
         LOGGER.info("FabricClient : updateReservedVlanRange : End");

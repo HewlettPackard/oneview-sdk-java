@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.rack.Rack;
 import com.hp.ov.sdk.dto.rack.TopologyInformation;
 import com.hp.ov.sdk.rest.client.OneViewClient;
@@ -93,7 +93,7 @@ public class RackClientSample {
 
     private void removeRackByFilter() {
         String filter = "name='" + RACK_NAME +"'";
-        TaskResourceV2 task = this.rackClient.removeByFilter(filter, false);
+        TaskResource task = this.rackClient.removeByFilter(filter, false);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }

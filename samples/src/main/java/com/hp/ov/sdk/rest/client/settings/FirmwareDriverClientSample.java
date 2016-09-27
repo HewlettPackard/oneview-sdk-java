@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.firmware.FwBaseline;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
@@ -64,7 +64,7 @@ public class FirmwareDriverClientSample {
 
     private void deleteFirmwareDriver() {
         FwBaseline firmwareDriver = this.client.getByName(FIRMWARE_DRIVER_NAME).get(0);
-        TaskResourceV2 task = this.client.delete(firmwareDriver.getResourceId(), false);
+        TaskResource task = this.client.delete(firmwareDriver.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }

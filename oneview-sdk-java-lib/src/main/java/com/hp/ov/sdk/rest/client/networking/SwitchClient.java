@@ -25,7 +25,7 @@ import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.Port;
 import com.hp.ov.sdk.dto.networking.SwitchPortStatistics;
 import com.hp.ov.sdk.dto.networking.SwitchStatistics;
@@ -114,13 +114,13 @@ public class SwitchClient {
      *            flag to indicate whether the request should be processed
      *            synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the
+     * @return {@link TaskResource} containing the task status for the
      *         process.
      */
-    public TaskResourceV2 add(Switch switchObj, boolean aSync) {
+    public TaskResource add(Switch switchObj, boolean aSync) {
         LOGGER.info("SwitchClient : add : Start");
 
-        TaskResourceV2 taskResource = baseClient.createResource(ResourceUris.SWITCHES_URI, switchObj, aSync);
+        TaskResource taskResource = baseClient.createResource(ResourceUris.SWITCHES_URI, switchObj, aSync);
 
         LOGGER.info("SwitchClient : add : End");
 
@@ -138,13 +138,13 @@ public class SwitchClient {
      *            flag to indicate whether the request should be processed
      *            synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the
+     * @return {@link TaskResource} containing the task status for the
      *         process.
      */
-    public TaskResourceV2 update(String resourceId, Switch switchObj, boolean aSync) {
+    public TaskResource update(String resourceId, Switch switchObj, boolean aSync) {
         LOGGER.info("SwitchClient : update : Start");
 
-        TaskResourceV2 taskResource = this.baseClient
+        TaskResource taskResource = this.baseClient
                 .updateResource(UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId), switchObj, aSync);
 
         LOGGER.info("SwitchClient : update : End");
@@ -161,13 +161,13 @@ public class SwitchClient {
      *            flag to indicate whether the request should be processed
      *            synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the
+     * @return {@link TaskResource} containing the task status for the
      *         process.
      */
-    public TaskResourceV2 remove(String resourceId, boolean aSync) {
+    public TaskResource remove(String resourceId, boolean aSync) {
         LOGGER.info("SwitchClient : remove : Start");
 
-        TaskResourceV2 taskResource = baseClient
+        TaskResource taskResource = baseClient
                 .deleteResource(UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId), aSync);
 
         LOGGER.info("SwitchClient : remove : End");
@@ -184,14 +184,14 @@ public class SwitchClient {
      *            flag to indicate whether the request should be processed
      *            synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the
+     * @return {@link TaskResource} containing the task status for the
      *         process.
      */
-    public TaskResourceV2 refresh(String resourceId, boolean aSync) {
+    public TaskResource refresh(String resourceId, boolean aSync) {
         LOGGER.info("SwitchClient : refresh : Start");
 
         Request request = new Request(HttpMethod.PUT, UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId));
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("SwitchClient : refresh : End");
 
@@ -275,10 +275,10 @@ public class SwitchClient {
      *            flag to indicate whether the request should be processed
      *            synchronously or asynchronously.
      * 
-     * @return {@link TaskResourceV2} containing the task status for the
+     * @return {@link TaskResource} containing the task status for the
      *         process.
      */
-    public TaskResourceV2 updatePorts(String resourceId, List<Port> ports, Boolean aSync) {
+    public TaskResource updatePorts(String resourceId, List<Port> ports, Boolean aSync) {
         LOGGER.info("SwitchClient : updatePorts : Start");
 
         String updateUri = UrlUtils.createUrl(ResourceUris.SWITCHES_URI, resourceId,
@@ -287,7 +287,7 @@ public class SwitchClient {
         Request request = new Request(HttpMethod.PUT, updateUri, ports);
         request.setForceTaskReturn(true);
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("SwitchClient : updatePorts : End");
 

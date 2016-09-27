@@ -27,7 +27,7 @@ import com.hp.ov.sdk.dto.PowerDeliveryDevice;
 import com.hp.ov.sdk.dto.PowerDeliveryDeviceRefreshRequest;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.UtilizationData;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
@@ -91,7 +91,7 @@ public class PowerDeliveryDeviceClientSample {
         importPdd.setPassword(PASSWORD);
         importPdd.setForce(true);
 
-        TaskResourceV2 task = this.client.add(importPdd, false);
+        TaskResource task = this.client.add(importPdd, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -111,14 +111,14 @@ public class PowerDeliveryDeviceClientSample {
     private void removePowerDeliveryDevice() {
         PowerDeliveryDevice powerDeliveryDevice = this.client.getByName(SAMPLE_RESOURCE_NAME_UPDATED).get(0);
 
-        TaskResourceV2 task = this.client.remove(powerDeliveryDevice.getResourceId(), false);
+        TaskResource task = this.client.remove(powerDeliveryDevice.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void removePowerDeliveryDeviceByFilter() {
         String filter = "name='" + SAMPLE_RESOURCE_NAME +"'";
-        TaskResourceV2 task = this.client.removeByFilter(filter, false);
+        TaskResource task = this.client.removeByFilter(filter, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -145,7 +145,7 @@ public class PowerDeliveryDeviceClientSample {
 
         outletState.setPowerState(Power.On);
 
-        TaskResourceV2 task = this.client.updatePowerState(powerDeliveryDevice.getResourceId(), outletState, false);
+        TaskResource task = this.client.updatePowerState(powerDeliveryDevice.getResourceId(), outletState, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -156,7 +156,7 @@ public class PowerDeliveryDeviceClientSample {
 
         refreshState.setRefreshState(RefreshState.RefreshPending);
 
-        TaskResourceV2 task = this.client.updateRefreshState(powerDeliveryDevice.getResourceId(), refreshState, false);
+        TaskResource task = this.client.updateRefreshState(powerDeliveryDevice.getResourceId(), refreshState, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -175,7 +175,7 @@ public class PowerDeliveryDeviceClientSample {
 
         outletStateState.setUidState(Light.On);
 
-        TaskResourceV2 task = this.client.updateUidState(powerDeliveryDevice.getResourceId(), outletStateState, false);
+        TaskResource task = this.client.updateUidState(powerDeliveryDevice.getResourceId(), outletStateState, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }

@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.rack.Rack;
 import com.hp.ov.sdk.dto.rack.TopologyInformation;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -161,12 +161,12 @@ public class RackClient {
      * @param filter A general filter/query string that narrows the list of resources.
      * @param aSync Flag input to process request asynchronously or synchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 removeByFilter(String filter, boolean aSync) {
+    public TaskResource removeByFilter(String filter, boolean aSync) {
         LOGGER.info("RackClient : removeByFilter : Start");
 
-        TaskResourceV2 taskResource = baseClient.deleteResource(ResourceUris.RACK_URI, aSync,
+        TaskResource taskResource = baseClient.deleteResource(ResourceUris.RACK_URI, aSync,
                 new UrlParameter("filter", filter));
 
         LOGGER.info("RackClient : removeByFilter : End");

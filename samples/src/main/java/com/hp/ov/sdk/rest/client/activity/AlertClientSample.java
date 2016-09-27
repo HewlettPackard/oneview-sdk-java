@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Optional;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.alerts.AlertResource;
 import com.hp.ov.sdk.dto.alerts.AlertUpdate;
 import com.hp.ov.sdk.dto.alerts.AlertUrgency;
@@ -71,13 +71,13 @@ public class AlertClientSample {
     }
 
     private void deleteAlert() {
-        TaskResourceV2 taskResource = this.client.delete(ALERT_RESOURCE_ID);
+        TaskResource taskResource = this.client.delete(ALERT_RESOURCE_ID);
 
         LOGGER.info("Task returned to client: {}", taskResource.toJsonString());
     }
 
     private void deleteAlertChangeLog() {
-        TaskResourceV2 taskResource = this.client.deleteAlertChangeLog(ALERT_CHANGE_LOG_ID);
+        TaskResource taskResource = this.client.deleteAlertChangeLog(ALERT_CHANGE_LOG_ID);
 
         LOGGER.info("Task returned to client: {}", taskResource.toJsonString());
     }
@@ -85,7 +85,7 @@ public class AlertClientSample {
     private void deleteAlertsByFilter() {
         String filter = "urgency='" + AlertUrgency.Medium.toString() +"'"; // "urgency='Medium'"
 
-        TaskResourceV2 taskResource = this.client.deleteByFilter(Optional.of(filter), false);
+        TaskResource taskResource = this.client.deleteByFilter(Optional.of(filter), false);
 
         LOGGER.info("Task returned to client: {}", taskResource.toJsonString());
     }

@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.logicalswitches.AddLogicalSwitch;
 import com.hp.ov.sdk.dto.networking.logicalswitches.LogicalSwitch;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -104,12 +104,12 @@ public class LogicalSwitchClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 create(AddLogicalSwitch logicalSwitch, boolean aSync) {
+    public TaskResource create(AddLogicalSwitch logicalSwitch, boolean aSync) {
         LOGGER.info("LogicalSwitchClient : create : Start");
 
-        TaskResourceV2 taskResource = baseClient.createResource(
+        TaskResource taskResource = baseClient.createResource(
                 ResourceUris.LOGICAL_SWITCHES_URI, logicalSwitch, aSync);
 
         LOGGER.info("LogicalSwitchClient : create : End");
@@ -125,12 +125,12 @@ public class LogicalSwitchClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 update(String resourceId, AddLogicalSwitch logicalSwitch, boolean aSync) {
+    public TaskResource update(String resourceId, AddLogicalSwitch logicalSwitch, boolean aSync) {
         LOGGER.info("LogicalSwitchClient : update : Start");
 
-        TaskResourceV2 taskResource = baseClient.updateResource(
+        TaskResource taskResource = baseClient.updateResource(
                 UrlUtils.createUrl(ResourceUris.LOGICAL_SWITCHES_URI, resourceId), logicalSwitch, aSync);
 
         LOGGER.info("LogicalSwitchClient : update : End");
@@ -145,12 +145,12 @@ public class LogicalSwitchClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 delete(String resourceId, boolean aSync) {
+    public TaskResource delete(String resourceId, boolean aSync) {
         LOGGER.info("LogicalSwitchClient : delete : Start");
 
-        TaskResourceV2 taskResource = baseClient.deleteResource(
+        TaskResource taskResource = baseClient.deleteResource(
                 UrlUtils.createUrl(ResourceUris.LOGICAL_SWITCHES_URI, resourceId), aSync);
 
         LOGGER.info("LogicalSwitchClient : delete : End");
@@ -166,16 +166,16 @@ public class LogicalSwitchClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 refresh(String resourceId, boolean aSync) {
+    public TaskResource refresh(String resourceId, boolean aSync) {
         LOGGER.info("LogicalSwitchClient : refresh : Start");
 
         Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ResourceUris.LOGICAL_SWITCHES_URI, resourceId,
                         ResourceUris.LOGICAL_SWITCHES_REFRESH_URI));
 
-        TaskResourceV2 taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("LogicalSwitchClient : refresh : End");
 

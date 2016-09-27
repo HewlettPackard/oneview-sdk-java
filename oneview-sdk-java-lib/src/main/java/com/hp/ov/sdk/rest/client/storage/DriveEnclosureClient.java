@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.storage.driveenclosures.DriveEnclosure;
 import com.hp.ov.sdk.dto.storage.driveenclosures.DriveEnclosurePortMap;
 import com.hp.ov.sdk.dto.storage.driveenclosures.DriveEnclosureRefreshRequest;
@@ -131,9 +131,9 @@ public class DriveEnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 updateRefreshState(String resourceId, DriveEnclosureRefreshRequest refreshStateConfig, boolean aSync) {
+    public TaskResource updateRefreshState(String resourceId, DriveEnclosureRefreshRequest refreshStateConfig, boolean aSync) {
         LOGGER.info("DriveEnclosureClient : updateRefreshState : Start");
 
         String updateUri = UrlUtils.createUrl(DRIVE_ENCLOSURE_URI,
@@ -143,7 +143,7 @@ public class DriveEnclosureClient {
 
         request.setTimeout(TIMEOUT);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("DriveEnclosureClient : updateRefreshState : End");
 
@@ -159,9 +159,9 @@ public class DriveEnclosureClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 patch(String resourceId, Patch patch, boolean aSync) {
+    public TaskResource patch(String resourceId, Patch patch, boolean aSync) {
         LOGGER.info("DriveEnclosureClient : patch : Start");
 
         Request request = new Request(HttpMethod.PATCH,
@@ -170,7 +170,7 @@ public class DriveEnclosureClient {
         request.setTimeout(TIMEOUT);
         request.setContentType(ContentType.APPLICATION_JSON_PATCH);
 
-        TaskResourceV2 taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
         LOGGER.info("DriveEnclosureClient : patch : End");
 

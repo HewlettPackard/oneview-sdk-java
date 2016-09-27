@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.fcoenetworks.FcoeNetwork;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
@@ -100,12 +100,12 @@ public class FcoeNetworkClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 create(FcoeNetwork fcoeNetwork, boolean aSync) {
+    public TaskResource create(FcoeNetwork fcoeNetwork, boolean aSync) {
         LOGGER.info("FcoeNetworkClient : create : Start");
 
-        TaskResourceV2 taskResource = baseClient.createResource(ResourceUris.FCOE_NETWORK_URI, fcoeNetwork, aSync);
+        TaskResource taskResource = baseClient.createResource(ResourceUris.FCOE_NETWORK_URI, fcoeNetwork, aSync);
 
         LOGGER.info("FcoeNetworkClient : create : End");
 
@@ -120,12 +120,12 @@ public class FcoeNetworkClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 update(String resourceId, FcoeNetwork fcoeNetwork, boolean aSync) {
+    public TaskResource update(String resourceId, FcoeNetwork fcoeNetwork, boolean aSync) {
         LOGGER.info("FcoeNetworkClient : update : Start");
 
-        TaskResourceV2 taskResource = baseClient.updateResource(
+        TaskResource taskResource = baseClient.updateResource(
                 UrlUtils.createUrl(ResourceUris.FCOE_NETWORK_URI, resourceId), fcoeNetwork, aSync);
 
         LOGGER.info("FcoeNetworkClient : update : End");
@@ -140,12 +140,12 @@ public class FcoeNetworkClient {
      * @param aSync flag to indicate whether the request should be processed
      * synchronously or asynchronously.
      *
-     * @return {@link TaskResourceV2} containing the task status for the process.
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResourceV2 delete(String resourceId, boolean aSync) {
+    public TaskResource delete(String resourceId, boolean aSync) {
         LOGGER.info("FcoeNetworkClient : delete : Start");
 
-        TaskResourceV2 taskResource = baseClient.deleteResource(
+        TaskResource taskResource = baseClient.deleteResource(
                 UrlUtils.createUrl(ResourceUris.FCOE_NETWORK_URI, resourceId), aSync);
 
         LOGGER.info("FcoeNetworkClient : delete : End");

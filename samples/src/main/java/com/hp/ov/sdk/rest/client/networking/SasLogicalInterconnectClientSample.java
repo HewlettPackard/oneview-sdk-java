@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.Command;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnect.ReplaceDriveEnclosure;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnect.SasLiFirmware;
@@ -91,7 +91,7 @@ public class SasLogicalInterconnectClientSample {
         firmware.setForce(false);
         firmware.setSppUri(fwClient.getByName(FirmwareDriverClientSample.FIRMWARE_DRIVER_NAME).get(0).getUri());
 
-        TaskResourceV2 task = this.client.updateFirmware(interconnect.getResourceId(), firmware, false);
+        TaskResource task = this.client.updateFirmware(interconnect.getResourceId(), firmware, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -106,7 +106,7 @@ public class SasLogicalInterconnectClientSample {
         replace.setOldSerialNumber(driveEnclosureSerialNumber);
         replace.setNewSerialNumber(driveEnclosureSerialNumber);
 
-        TaskResourceV2 taskResource = client.replaceDriveEnclosure(interconnect.getResourceId(), replace, false);
+        TaskResource taskResource = client.replaceDriveEnclosure(interconnect.getResourceId(), replace, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -114,7 +114,7 @@ public class SasLogicalInterconnectClientSample {
     private void applySasLogicalInterconnectConfiguration() {
         SasLogicalInterconnect interconnect = client.getByName(SAS_LOGICAL_INTERCONNECT_NAME).get(0);
 
-        TaskResourceV2 taskResource = client.applyConfiguration(interconnect.getResourceId(), false);
+        TaskResource taskResource = client.applyConfiguration(interconnect.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -122,7 +122,7 @@ public class SasLogicalInterconnectClientSample {
     private void updateSasLogicalInterconnectCompliance() {
         SasLogicalInterconnect interconnect = client.getByName(SAS_LOGICAL_INTERCONNECT_NAME).get(0);
 
-        TaskResourceV2 taskResource = client.updateCompliance(interconnect, false);
+        TaskResource taskResource = client.updateCompliance(interconnect, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -135,7 +135,7 @@ public class SasLogicalInterconnectClientSample {
             uris.add(interconnect.getUri());
         }
 
-        TaskResourceV2 taskResource = client.updateCompliance(uris, false);
+        TaskResource taskResource = client.updateCompliance(uris, false);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }

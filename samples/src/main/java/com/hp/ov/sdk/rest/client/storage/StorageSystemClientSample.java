@@ -28,7 +28,7 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.StorageSystem;
 import com.hp.ov.sdk.dto.StorageTargetPort;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClientSample;
 import com.hp.ov.sdk.util.UrlUtils;
@@ -87,7 +87,7 @@ public class StorageSystemClientSample {
 
     private void addStorageSystem() {
         AddStorageSystemCredentials addStorageSystemCredentials = buildStorageSystem();
-        TaskResourceV2 taskResource = storageSystemClient.add(addStorageSystemCredentials, false);
+        TaskResource taskResource = storageSystemClient.add(addStorageSystemCredentials, false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
 
@@ -105,7 +105,7 @@ public class StorageSystemClientSample {
         StorageSystem storageSystem = this.storageSystemClient.getByName(STORAGE_SYSTEM_NAME).get(0);
         StorageSystem updatedStorageSystem = buildUpdateStorageSystem(storageSystem);
 
-        TaskResourceV2 taskResource = storageSystemClient.update(storageSystem.getResourceId(),
+        TaskResource taskResource = storageSystemClient.update(storageSystem.getResourceId(),
                 updatedStorageSystem, false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
@@ -113,7 +113,7 @@ public class StorageSystemClientSample {
 
     private void removeStorageSystem() {
         StorageSystem storageSystem = this.storageSystemClient.getByName(STORAGE_SYSTEM_NAME).get(0);
-        TaskResourceV2 taskResource = this.storageSystemClient.remove(storageSystem.getResourceId(), false);
+        TaskResource taskResource = this.storageSystemClient.remove(storageSystem.getResourceId(), false);
 
         LOGGER.info("Task object returned to client : " + taskResource);
     }

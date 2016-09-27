@@ -24,7 +24,7 @@ import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.StorageSystem;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 /*
@@ -73,7 +73,7 @@ public class StoragePoolClientSample {
     private void addStoragePool() {
         AddStoragePool addStoragePool = buildAddStoragePool();
 
-        TaskResourceV2 taskResource = storagePoolClient.add(addStoragePool, false);
+        TaskResource taskResource = storagePoolClient.add(addStoragePool, false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -83,14 +83,14 @@ public class StoragePoolClientSample {
 
         storagePool.setRefreshState(RefreshState.RefreshPending);
 
-        TaskResourceV2 taskResource = storagePoolClient.update(storagePool.getResourceId(), storagePool, false);
+        TaskResource taskResource = storagePoolClient.update(storagePool.getResourceId(), storagePool, false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void removeStoragePool() {
         StoragePool storagePool = this.storagePoolClient.getByName(STORAGE_POOL_NAME, getStorageSystem().getUri()).get(0);
-        TaskResourceV2 taskResource = this.storagePoolClient.remove(storagePool.getResourceId(), false);
+        TaskResource taskResource = this.storagePoolClient.remove(storagePool.getResourceId(), false);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }

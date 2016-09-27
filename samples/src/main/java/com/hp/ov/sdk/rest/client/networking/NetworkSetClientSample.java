@@ -24,11 +24,10 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.networkset.NetworkSet;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
-import com.hp.ov.sdk.util.UrlUtils;
 
 /*
  * NetworkSetClientSample is a sample program to consume a consolidated set of ethernet network
@@ -82,7 +81,7 @@ public class NetworkSetClientSample {
         networkSet.setType(ResourceCategory.RC_NETWORKSET);
         networkSet.setType(ResourceCategory.RC_NETWORKSET_V300);
 
-        TaskResourceV2 task = this.client.create(networkSet, false);
+        TaskResource task = this.client.create(networkSet, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -92,7 +91,7 @@ public class NetworkSetClientSample {
 
         networkSet.setName(RESOURCE_NAME_UPDATED);
 
-        TaskResourceV2 task = this.client.update(networkSet.getResourceId(), networkSet, false);
+        TaskResource task = this.client.update(networkSet.getResourceId(), networkSet, false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -100,7 +99,7 @@ public class NetworkSetClientSample {
     private void deleteNetworkSet() {
         NetworkSet networkSet = client.getByName(RESOURCE_NAME_UPDATED).get(0);
 
-        TaskResourceV2 task = this.client.delete(networkSet.getResourceId(), false);
+        TaskResource task = this.client.delete(networkSet.getResourceId(), false);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
