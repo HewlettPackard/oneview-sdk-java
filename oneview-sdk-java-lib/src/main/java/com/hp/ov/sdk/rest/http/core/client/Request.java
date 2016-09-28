@@ -31,7 +31,7 @@ import com.hp.ov.sdk.rest.http.core.UrlParameter;
 public class Request {
 
     private final HttpMethod type;
-    private final String uri;
+    private String uri;
 
     private Map<String, String> query;
     private Optional<Object> entity;
@@ -55,6 +55,10 @@ public class Request {
 
     public HttpMethod getType() {
         return type;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public String getUri() {

@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.adaptors;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -40,6 +41,14 @@ public class ResourceAdaptor {
     }
 
     public <T> T buildResource(String source, Class<T> resourceType) {
+        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
+
+        String sourceReplaced = this.applyReplacementsOnSource(source);
+
+        return converter.jsonToResource(sourceReplaced, resourceType);
+    }
+
+    public Object buildResource(String source, Type resourceType) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
         String sourceReplaced = this.applyReplacementsOnSource(source);

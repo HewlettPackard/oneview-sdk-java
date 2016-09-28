@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.rest.client.networking;
+package com.hp.ov.sdk.rest.client.common;
 
-import com.hp.ov.sdk.rest.client.common.CreatableResource;
-import com.hp.ov.sdk.rest.client.common.DeletableResource;
-import com.hp.ov.sdk.rest.client.common.SearchableResource;
-import com.hp.ov.sdk.rest.client.common.UpdatableResource;
-import com.hp.ov.sdk.rest.reflect.Api;
-import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
+import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 
-@Api("/rest/fc-networks")
-public interface FcNetworkClient extends
-        CreatableResource<FcNetwork>,
-        SearchableResource<FcNetwork>,
-        UpdatableResource<FcNetwork>,
-        DeletableResource {
+public interface DeletableResource {
+
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.DELETE)
+    TaskResourceV2 delete(@PathParam("resourceId") String resourceId);
+
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.DELETE)
+    TaskResourceV2 delete(@PathParam("resourceId") String resourceId, int taskTimeout);
 
 }

@@ -16,6 +16,7 @@
 
 package com.hp.ov.sdk.rest.client;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -67,7 +68,6 @@ public class BaseClient {
         this.client = client;
         this.supplier = supplier;
     }
-
 
     public ApiVersion getApiVersion() {
         return this.params.getApiVersion();
@@ -154,6 +154,17 @@ public class BaseClient {
             request.addQuery(query);
         }
         return this.executeMonitorableRequest(request, aSync);
+    }
+
+    public Object executeRequest(Request request, Type returnType) {
+        this.validateNotNullArguments(request, returnType);
+
+        String response = this.executeRequest(request);
+
+        if (String.class.equals(returnType)) {
+            return response;
+        }
+        return adaptor.buildResource(response, returnType);
     }
 
     public <T> T executeRequest(Request request, Class<T> returnType) {

@@ -35,7 +35,6 @@ public class FcNetworkClientSample {
     public static final String FC_NETWORK_NAME_A = "FC_Network_A";
     public static final String FC_NETWORK_NAME_B = "FC_Network_B";
 
-    private static final String FC_NETWORK_RESOURCE_ID = "174a2e9c-7d43-4462-b221-958e323f75da";
     private static final String FC_NETWORK_NAME_UPDATED = FC_NETWORK_NAME_A + "_Updated";
     // ================================
 
@@ -54,27 +53,29 @@ public class FcNetworkClientSample {
         fcNetwork.setType(ResourceCategory.RC_FCNETWORK); //v200
         fcNetwork.setType(ResourceCategory.RC_FCNETWORK_V300); //v300
 
-        TaskResource task = this.client.create(fcNetwork, false);
+        TaskResource task = this.client.create(fcNetwork);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void getFcNetwork() {
-        FcNetwork fcNetwork = client.getById(FC_NETWORK_RESOURCE_ID);
+        FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME_A).get(0);
 
-        LOGGER.info("FcNetwork object returned to client : " + fcNetwork.toJsonString());
+        fcNetwork = client.getById(fcNetwork.getResourceId());
+
+        LOGGER.info("FC network object returned to client : " + fcNetwork.toJsonString());
     }
 
     private void getAllFcNetworks() {
         ResourceCollection<FcNetwork> fcNetworks = client.getAll();
 
-        LOGGER.info("FcNetworks returned to client (count) : " + fcNetworks.getCount());
+        LOGGER.info("FC networks returned to client (count) : " + fcNetworks.getCount());
     }
 
     private void getFcNetworkByName() {
         FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME_A).get(0);
 
-        LOGGER.info("FcNetwork object returned to client : " + fcNetwork.toJsonString());
+        LOGGER.info("FC network object returned to client : " + fcNetwork.toJsonString());
     }
 
     private void updateFcNetwork() {
@@ -82,8 +83,7 @@ public class FcNetworkClientSample {
 
         fcNetwork.setName(FC_NETWORK_NAME_UPDATED);
 
-        TaskResource task = this.client.update(fcNetwork.getResourceId(),
-                fcNetwork, false);
+        TaskResource task = this.client.update(fcNetwork.getResourceId(), fcNetwork);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -91,7 +91,7 @@ public class FcNetworkClientSample {
     private void deleteFcNetwork() {
         FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME_UPDATED).get(0);
 
-        TaskResource task = this.client.delete(fcNetwork.getResourceId(), false);
+        TaskResource task = this.client.delete(fcNetwork.getResourceId());
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }

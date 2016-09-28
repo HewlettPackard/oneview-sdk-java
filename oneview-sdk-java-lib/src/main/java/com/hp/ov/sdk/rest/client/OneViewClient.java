@@ -20,7 +20,10 @@ import java.lang.reflect.Constructor;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.google.common.reflect.Reflection;
 import com.hp.ov.sdk.certs.MessagingCertificateClient;
+import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKException;
 import com.hp.ov.sdk.rest.client.activity.AlertClient;
@@ -31,7 +34,6 @@ import com.hp.ov.sdk.rest.client.facilities.UnmanagedDeviceClient;
 import com.hp.ov.sdk.rest.client.networking.ConnectionTemplateClient;
 import com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FabricClient;
-import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.InterconnectClient;
 import com.hp.ov.sdk.rest.client.networking.InterconnectLinkTopologyClient;
@@ -126,7 +128,8 @@ public class OneViewClient {
     }
 
     public synchronized FcNetworkClient fcNetwork() {
-        return this.getClient(FcNetworkClient.class);
+        return Reflection.newProxy(FcNetworkClient.class,
+                new ClientRequestHandler<>(this.baseClient, FcNetworkClient.class));
     }
 
     public synchronized FcoeNetworkClient fcoeNetwork() {

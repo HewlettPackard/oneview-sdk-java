@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.rest.client.networking;
+package com.hp.ov.sdk.rest.reflect;
 
-import com.hp.ov.sdk.rest.client.common.CreatableResource;
-import com.hp.ov.sdk.rest.client.common.DeletableResource;
-import com.hp.ov.sdk.rest.client.common.SearchableResource;
-import com.hp.ov.sdk.rest.client.common.UpdatableResource;
-import com.hp.ov.sdk.rest.reflect.Api;
-import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Api("/rest/fc-networks")
-public interface FcNetworkClient extends
-        CreatableResource<FcNetwork>,
-        SearchableResource<FcNetwork>,
-        UpdatableResource<FcNetwork>,
-        DeletableResource {
+import com.hp.ov.sdk.rest.http.core.ContentType;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.PARAMETER)
+public @interface BodyParam {
+
+    ContentType type() default ContentType.APPLICATION_JSON;
 
 }

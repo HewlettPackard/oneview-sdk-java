@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.rest.client.networking;
+package com.hp.ov.sdk.rest.client.common;
 
-import com.hp.ov.sdk.rest.client.common.CreatableResource;
-import com.hp.ov.sdk.rest.client.common.DeletableResource;
-import com.hp.ov.sdk.rest.client.common.SearchableResource;
-import com.hp.ov.sdk.rest.client.common.UpdatableResource;
-import com.hp.ov.sdk.rest.reflect.Api;
-import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
+import com.hp.ov.sdk.dto.ResourceCollection;
 
-@Api("/rest/fc-networks")
-public interface FcNetworkClient extends
-        CreatableResource<FcNetwork>,
-        SearchableResource<FcNetwork>,
-        UpdatableResource<FcNetwork>,
-        DeletableResource {
+public interface RetrievableResource<T> {
+
+    @Endpoint(uri = "/{resourceId}")
+    T getById(@PathParam("resourceId") String resourceId);
+
+    @Endpoint
+    ResourceCollection<T> getAll();
 
 }
