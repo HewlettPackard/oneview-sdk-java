@@ -25,15 +25,11 @@ public class ResourceUris {
     public static final String STORAGE_VOLUME_URI = "/rest/storage-volumes";
 
     public static final String APPLIANCE_VERSION = "/rest/version";
-    public static final String ASSOCIATED_PROFILES = "associatedProfiles";
-    public static final String ASSOCIATED_UPLINK_GROUPS = "associatedUplinkGroups";
     public static final String AVAILABLE_NETWORKS_URI = SERVER_PROFILE_URI + "/available-networks";
     public static final String AVAILABLE_SERVERS_URI = SERVER_PROFILE_URI + "/available-servers";
     public static final String AVAILABLE_STORAGE_SYSTEM = SERVER_PROFILE_URI + "/available-storage-system";
     public static final String AVAILABLE_STORAGE_SYSTEMS = AVAILABLE_STORAGE_SYSTEM + "s";
     public static final String AVAILABLE_TARGETS = SERVER_PROFILE_URI + "/available-targets";
-    public static final String BULK_ETHERNET_URI = "/rest/ethernet-networks/bulk";
-    public static final String CONNECTION_TEMPLATES = "/rest/connection-templates";
     public static final String CONNECTION_TEMPLATE_URI = "/rest/connection-templates";
     public static final String DATA_CENTER_URI = "/rest/datacenters";
     public static final String DATA_CENTER_VISUAL_CONTENT_URI = "visualContent";

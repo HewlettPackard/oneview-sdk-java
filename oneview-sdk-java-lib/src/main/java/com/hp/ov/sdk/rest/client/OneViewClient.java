@@ -22,8 +22,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.common.reflect.Reflection;
 import com.hp.ov.sdk.certs.MessagingCertificateClient;
-import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
-import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKException;
 import com.hp.ov.sdk.rest.client.activity.AlertClient;
@@ -34,6 +32,7 @@ import com.hp.ov.sdk.rest.client.facilities.UnmanagedDeviceClient;
 import com.hp.ov.sdk.rest.client.networking.ConnectionTemplateClient;
 import com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FabricClient;
+import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.InterconnectClient;
 import com.hp.ov.sdk.rest.client.networking.InterconnectLinkTopologyClient;
@@ -76,6 +75,7 @@ import com.hp.ov.sdk.rest.client.storage.StorageVolumeClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeTemplateClient;
 import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 import com.hp.ov.sdk.util.OneViewConnector;
 
 public class OneViewClient {
@@ -120,7 +120,8 @@ public class OneViewClient {
     }
 
     public synchronized EthernetNetworkClient ethernetNetwork() {
-        return this.getClient(EthernetNetworkClient.class);
+        return Reflection.newProxy(EthernetNetworkClient.class,
+                new ClientRequestHandler<>(this.baseClient, EthernetNetworkClient.class));
     }
 
     public synchronized FabricClient fabric() {

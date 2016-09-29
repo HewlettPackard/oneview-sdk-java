@@ -23,11 +23,13 @@ import com.hp.ov.sdk.rest.client.common.UpdatableResource;
 import com.hp.ov.sdk.rest.reflect.Api;
 import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
 
-@Api("/rest/fc-networks")
+@Api(FcNetworkClient.FC_NETWORK_URI)
 public interface FcNetworkClient extends
         CreatableResource<FcNetwork>,
         SearchableResource<FcNetwork>,
         UpdatableResource<FcNetwork>,
         DeletableResource {
+
+    String FC_NETWORK_URI = "/rest/fc-networks";
 
 }

@@ -38,7 +38,7 @@ public class FcNetworkClientTest {
 
     private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_NAME = "random-Name";
-    private static final String FC_NETWORK_URI = "/rest/fc-networks";
+
 
     private BaseClient baseClient = mock(BaseClient.class);
     private FcNetworkClient client = Reflection.newProxy(FcNetworkClient.class,
@@ -48,7 +48,7 @@ public class FcNetworkClientTest {
     public void shouldGetFcNetworkById() {
         client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = FC_NETWORK_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = FcNetworkClient.FC_NETWORK_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
         then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(FcNetwork.class).getType());
@@ -58,7 +58,7 @@ public class FcNetworkClientTest {
     public void shouldGetAllFcNetworks() {
         client.getAll();
 
-        Request expectedRequest = new Request(HttpMethod.GET, FC_NETWORK_URI);
+        Request expectedRequest = new Request(HttpMethod.GET, FcNetworkClient.FC_NETWORK_URI);
 
         then(baseClient).should().executeRequest(expectedRequest,
                 new TypeToken<ResourceCollection<FcNetwork>>() {}.getType());
@@ -68,7 +68,7 @@ public class FcNetworkClientTest {
     public void shouldGetFcNetworksByName() {
         client.getByName(ANY_RESOURCE_NAME);
 
-        Request expectedRequest = new Request(HttpMethod.GET, FC_NETWORK_URI);
+        Request expectedRequest = new Request(HttpMethod.GET, FcNetworkClient.FC_NETWORK_URI);
         expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
 
         then(baseClient).should().executeRequest(expectedRequest,
@@ -81,7 +81,7 @@ public class FcNetworkClientTest {
 
         client.create(fcNetwork);
 
-        Request expectedRequest = new Request(HttpMethod.POST, FC_NETWORK_URI);
+        Request expectedRequest = new Request(HttpMethod.POST, FcNetworkClient.FC_NETWORK_URI);
         expectedRequest.setEntity(fcNetwork);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
@@ -93,7 +93,7 @@ public class FcNetworkClientTest {
 
         client.update(ANY_RESOURCE_ID, fcNetwork);
 
-        String expectedUri = FC_NETWORK_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = FcNetworkClient.FC_NETWORK_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
         expectedRequest.setEntity(fcNetwork);
 
@@ -104,7 +104,7 @@ public class FcNetworkClientTest {
     public void shouldDeleteFcNetwork() {
         client.delete(ANY_RESOURCE_ID);
 
-        String expectedUri = FC_NETWORK_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = FcNetworkClient.FC_NETWORK_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest, false);

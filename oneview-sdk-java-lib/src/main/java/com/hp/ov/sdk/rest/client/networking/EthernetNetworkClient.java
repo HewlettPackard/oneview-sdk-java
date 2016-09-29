@@ -13,213 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.hp.ov.sdk.rest.client.networking;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResource;
+import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.CreatableResource;
+import com.hp.ov.sdk.rest.client.common.DeletableResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.client.common.UpdatableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class EthernetNetworkClient {
+@Api(EthernetNetworkClient.ETHERNET_URI)
+public interface EthernetNetworkClient extends
+        CreatableResource<Network>,
+        SearchableResource<Network>,
+        UpdatableResource<Network>,
+        DeletableResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EthernetNetworkClient.class);
+    String ETHERNET_URI = "/rest/ethernet-networks";
+    String BULK_ETHERNET_URI = "/rest/ethernet-networks/bulk";
+    String ASSOCIATED_PROFILES = "associatedProfiles";
+    String ASSOCIATED_UPLINK_GROUPS = "associatedUplinkGroups";
 
-    private final BaseClient baseClient;
+    @Endpoint(uri = "/bulk", method = HttpMethod.POST)
+    TaskResourceV2 createInBulk(@BodyParam BulkEthernetNetwork bulkEthernet);
 
-    public EthernetNetworkClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
+    @Endpoint(uri = "/bulk", method = HttpMethod.POST)
+    TaskResourceV2 createInBulk(@BodyParam BulkEthernetNetwork bulkEthernet, int taskTimeout);
 
-    /**
-     * Retrieves the {@link Network} details for the specified network.
-     *
-     * @param resourceId network resource identifier as seen in HPE OneView.
-     *
-     * @return {@link Network} object containing the details.
-     */
-    public Network getById(String resourceId) {
-        LOGGER.info("NetworkClient : getById : Start");
+    @Endpoint(uri = "/{resourceId}/associatedProfiles")
+    List<String> getAssociatedProfiles(@PathParam("resourceId") String resourceId);
 
-        Network network = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.ETHERNET_URI, resourceId),Network.class);
+    @Endpoint(uri = "/{resourceId}/associatedUplinkGroups")
+    List<String> getAssociatedUplinkGroups(@PathParam("resourceId") String resourceId);
 
-        LOGGER.info("NetworkClient : getById : End");
-
-        return network;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link Network}&gt; containing the details
-     * for all the available networks found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link Network}&gt; containing
-     * the details for all found networks.
-     */
-    public ResourceCollection<Network> getAll() {
-        LOGGER.info("NetworkClient : getAll : Start");
-
-        ResourceCollection<Network> networks = baseClient.getResourceCollection(
-                ResourceUris.ETHERNET_URI, Network.class);
-
-        LOGGER.info("NetworkClient : getAll : End");
-
-        return networks;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link Network}&gt; containing details
-     * for the available ethernet networks found under the current HPE OneView that match the name.
-     *
-     * @param name network name as seen in HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link Network}&gt; containing
-     * the details for the found ethernet networks.
-     */
-    public ResourceCollection<Network> getByName(String name) {
-        LOGGER.info("NetworkClient : getByName : Start");
-
-        ResourceCollection<Network> networks = baseClient.getResourceCollection(
-                ResourceUris.ETHERNET_URI, Network.class, UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("NetworkClient : getByName : End");
-
-        return networks;
-    }
-
-    /**
-     * Creates a network according to the provided {@link Network} object.
-     * The request can be processed synchronously or asynchronously.
-     *
-     * <b>ATTENTION:</b> if you use async mode equals to <code>true</code>
-     * and you set some connection template data, this information will not be used.
-     * Thus, we strongly recommend the value <code>false</code> for the async flag if
-     * you want to set bandwidth values.
-     *
-     * @param network object containing the network details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource create(Network network, boolean aSync) {
-        LOGGER.info("NetworkClient : create : Start");
-
-        TaskResource taskResource = baseClient.createResource(ResourceUris.ETHERNET_URI, network, aSync);
-
-        LOGGER.info("NetworkClient : create : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Updates a {@link Network} identified by the given resource identifier.
-     *
-     * @param resourceId network resource identifier as seen in HPE OneView.
-     * @param network object containing the network details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource update(String resourceId, Network network, boolean aSync) {
-        LOGGER.info("NetworkClient : update : Start");
-
-        TaskResource taskResource = baseClient.updateResource(
-                UrlUtils.createUrl(ResourceUris.ETHERNET_URI, resourceId), network, aSync);
-
-        LOGGER.info("NetworkClient : update : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Deletes the {@link Network} identified by the given resource identifier.
-     *
-     * @param resourceId network resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource delete(String resourceId, boolean aSync) {
-        LOGGER.info("NetworkClient : delete : Start");
-
-        TaskResource taskResource = baseClient.deleteResource(
-                UrlUtils.createUrl(ResourceUris.ETHERNET_URI, resourceId), aSync);
-
-        LOGGER.info("NetworkClient : delete : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Creates a set of ethernet networks when provided with the ethernet network details
-     * as a {@link BulkEthernetNetwork} object containing a VLAN identifier range.
-     *
-     * @param bulkEthernet object containing the bulk ethernet network details,
-     * used to create a set of ethernet networks according to the provided range with
-     * VLAN as suffix.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource createInBulk(BulkEthernetNetwork bulkEthernet, boolean aSync) {
-        LOGGER.info("NetworkClient : createInBulk : Start");
-
-        TaskResource taskResource = baseClient.createResource(
-                ResourceUris.BULK_ETHERNET_URI, bulkEthernet, aSync);
-
-        LOGGER.info("NetworkClient : createInBulk : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Returns a {@link List}&lt;String&gt; containing the profile URIs for the ethernet network.
-     *
-     * @param resourceId network resource identifier as seen in HPE OneView.
-     *
-     * @return list of profile URIs for the specified ethernet network.
-     */
-    public List<String> getAssociatedProfiles(String resourceId) {
-        LOGGER.info("NetworkClient : getAssociatedProfiles : Start");
-
-        List<String> associatedProfiles = baseClient.getResourceList(
-                UrlUtils.createUrl(ResourceUris.ETHERNET_URI, resourceId, ResourceUris.ASSOCIATED_PROFILES),
-                String.class);
-
-        LOGGER.info("NetworkClient : getAssociatedProfiles : End");
-
-        return associatedProfiles;
-    }
-
-    /**
-     * Returns a {@link List}&lt;String&gt; containing the uplink set URIs which are
-     * using the specified ethernet network.
-     *
-     * @param resourceId network resource identifier as seen in HPE OneView.
-     *
-     * @return {@link List}&lt;String&gt; of uplink sets in use by the specified ethernet network.
-     */
-    public List<String> getAssociatedUplinkGroups(String resourceId) {
-        LOGGER.info("NetworkClient : getAssociatedUplinkGroups : Start");
-
-        List<String> associatedUplinkGroups = baseClient.getResourceList(
-                UrlUtils.createUrl(ResourceUris.ETHERNET_URI, resourceId, ResourceUris.ASSOCIATED_UPLINK_GROUPS),
-                String.class);
-
-        LOGGER.info("NetworkClient : getAssociatedUplinkGroups : End");
-
-        return associatedUplinkGroups;
-    }
 }
