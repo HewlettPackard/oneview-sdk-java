@@ -31,13 +31,13 @@ import com.hp.ov.sdk.rest.http.core.UrlParameter;
 public class Request {
 
     private final HttpMethod type;
-    private String uri;
 
+    private String uri;
     private Map<String, String> query;
     private Optional<Object> entity;
     private ContentType contentType;
     private boolean forceTaskReturn;
-    private int timeout;
+    private int taskTimeoutMillis;
 
     public Request(HttpMethod type, String uri) {
         this(type, uri, null);
@@ -50,7 +50,7 @@ public class Request {
         this.entity = Optional.fromNullable(entity);
         this.contentType = ContentType.APPLICATION_JSON;
         this.forceTaskReturn = false;
-        this.timeout = 60000;
+        this.taskTimeoutMillis = -1;
     }
 
     public HttpMethod getType() {
@@ -117,44 +117,20 @@ public class Request {
     }
 
     public int getTimeout() {
-        return timeout;
+        return taskTimeoutMillis;
     }
 
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
+    public void setTimeout(int taskTimeoutMillis) {
+        this.taskTimeoutMillis = taskTimeoutMillis;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o instanceof Request) {
-            Request request = (Request) o;
-
-            return new EqualsBuilder()
-                    .append(forceTaskReturn, request.forceTaskReturn)
-                    .append(type, request.type)
-                    .append(uri, request.uri)
-                    .append(query, request.query)
-                    .append(entity, request.entity)
-                    .append(contentType, request.contentType)
-                    .append(timeout, request.timeout)
-                    .isEquals();
-
-        }
-        return false;
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(type)
-                .append(uri)
-                .append(query)
-                .append(entity)
-                .append(contentType)
-                .append(timeout)
-                .append(forceTaskReturn)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

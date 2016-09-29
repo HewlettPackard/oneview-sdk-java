@@ -38,43 +38,70 @@ public class TaskMonitor {
     //TODO externalize this value to make it configurable
     private static final int TASK_MONITORING_INTERVAL = 5000; //milliseconds
 
-    public TaskResource execute(BaseClient client, TaskResource task, int timeoutInMilliseconds) {
+    public TaskResource execute(BaseClient client, TaskResource task, int taskTimeoutMillis) {
+        TaskResource taskResult;
+
+        if (taskTimeoutMillis > 0) {
+            taskResult = this.checkTaskTimeout(client, task, taskTimeoutMillis);
+        } else {
+            taskResult = this.checkTaskPercentage(client, task);
+        }
+
+        if (task.getTaskState() == (TaskState.Error)) {
+            List<String> errorMessages = new ArrayList<>();
+            List<String> errorRecommendations = new ArrayList<>();
+
+            for (ErrorMessage errorMessage : task.getTaskErrors()) {
+                errorMessages.add(errorMessage.getMessage());
+                errorRecommendations.addAll(errorMessage.getRecommendedActions());
+            }
+            throw new SDKTasksException(SDKErrorEnum.tasksError, errorMessages.toArray(),
+                    null, errorRecommendations.toArray(), SdkConstants.TASK_MONITOR, null);
+        }
+        return taskResult;
+    }
+
+    private TaskResource checkTaskTimeout(BaseClient client, TaskResource task, int taskTimeoutMillis) {
         Calendar dateToLive = Calendar.getInstance();
 
-        dateToLive.add(Calendar.MILLISECOND, timeoutInMilliseconds);
+        dateToLive.add(Calendar.MILLISECOND, taskTimeoutMillis);
 
         while (dateToLive.after(Calendar.getInstance())) {
-            task = client.getResource(task.getUri(), TaskResource.class);
+            task = client.getResource(task.getUri(), TaskResourceV2.class);
 
             LOGGER.info("Task completed percentage {} and status {}", task.getPercentComplete(), task.getTaskState());
 
             if (task.getPercentComplete() == SdkConstants.PERCENTAGE_100) {
-                if (task.getTaskState() == (TaskState.Error)) {
-                    List<String> errorMessages = new ArrayList<>();
-                    List<String> errorRecommendations = new ArrayList<>();
-
-                    for (ErrorMessage errorMessage : task.getTaskErrors()) {
-                        errorMessages.add(errorMessage.getMessage());
-                        errorRecommendations.addAll(errorMessage.getRecommendedActions());
-                    }
-                    throw new SDKTasksException(SDKErrorEnum.tasksError, errorMessages.toArray(),
-                            null, errorRecommendations.toArray(), SdkConstants.TASK_MONITOR, null);
-                }
                 return task;
             }
-
-            try {
-                Thread.sleep(TASK_MONITORING_INTERVAL);
-            } catch (final InterruptedException e) {
-                LOGGER.warn("An interruption occurred while monitoring the task {}", task.getResourceId(), e);
-            }
+            this.waitTaskMonitorInterval(task);
         }
-
         LOGGER.warn("Task timeout exceeded: " + dateToLive.getTime() + " < " + Calendar.getInstance().getTime());
 
         throw new SDKTasksException(SDKErrorEnum.tasksError,
-                new String[] {"Task monitoring exceeded the timeout limit of " + timeoutInMilliseconds + " milliseconds."},
-                null, new String[] {"Increase the timeout."}, SdkConstants.TASK_MONITOR, null);
+                new String[] {"Task monitoring exceeded the timeout limit of " + taskTimeoutMillis + " milliseconds."},
+                null, new String[] {"Increase the task timeout."}, SdkConstants.TASK_MONITOR, null);
+    }
+
+    private TaskResource checkTaskPercentage(BaseClient client, TaskResource task) {
+        while (task.getPercentComplete() < SdkConstants.PERCENTAGE_100) {
+            task = client.getResource(task.getUri(), TaskResourceV2.class);
+
+            LOGGER.info("Task completed percentage {} and status {}", task.getPercentComplete(), task.getTaskState());
+
+            if (task.getPercentComplete() == SdkConstants.PERCENTAGE_100) break;
+
+            this.waitTaskMonitorInterval(task);
+        }
+        return task;
+    }
+
+    private void waitTaskMonitorInterval(TaskResourceV2 task) {
+        try {
+            Thread.sleep(TASK_MONITORING_INTERVAL);
+        } catch (final InterruptedException e) {
+            LOGGER.warn("An interruption occurred while monitoring the task {}", task.getResourceId(), e);
+        }
     }
 
 }

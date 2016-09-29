@@ -25,6 +25,7 @@ import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 
 public class ClientRequestHandler<T> extends AbstractInvocationHandler {
 
@@ -43,7 +44,7 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
         Request request = this.buildRequest(method, args);
 
         if (TaskResourceV2.class.equals(method.getReturnType())) {
-            return this.baseClient.executeMonitorableRequest(request, false); //TODO replace boolean value with timeout
+            return this.baseClient.executeMonitorableRequest(request);
         }
         return this.baseClient.executeRequest(request, this.token.method(method).getReturnType().getType());
     }
@@ -67,6 +68,12 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
             } else if (bodyParam != null) {
                 request.setEntity(args[i]);
                 request.setContentType(bodyParam.type());
+            }
+        }
+
+        if ((args.length > 0) && (args[args.length - 1].getClass().isArray())) {
+            for (RequestOption option : (RequestOption[]) args[args.length - 1]) {
+                option.apply(request);
             }
         }
         return request;

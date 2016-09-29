@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.rest.client.common;
+package com.hp.ov.sdk.rest.http.core.client;
 
-import com.hp.ov.sdk.rest.http.core.client.RequestOption;
-import com.hp.ov.sdk.rest.reflect.BodyParam;
-import com.hp.ov.sdk.rest.reflect.Endpoint;
-import com.hp.ov.sdk.rest.reflect.PathParam;
-import com.hp.ov.sdk.dto.TaskResourceV2;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+public class TaskTimeout implements RequestOption {
 
-public interface UpdatableResource<T> {
+    private final int taskTimeoutMillis;
 
-    @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
-    TaskResourceV2 update(@PathParam("resourceId") String resourceId, @BodyParam T resource, RequestOption... options);
+    public TaskTimeout(int taskTimeoutMillis) {
+        this.taskTimeoutMillis = taskTimeoutMillis;
+    }
 
+    public static TaskTimeout of(int taskTimeoutMillis) {
+        return new TaskTimeout(taskTimeoutMillis);
+    }
+
+    @Override
+    public void apply(Request request) {
+        request.setTimeout(this.taskTimeoutMillis);
+    }
 }

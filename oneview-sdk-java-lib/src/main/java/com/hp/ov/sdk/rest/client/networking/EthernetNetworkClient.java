@@ -26,6 +26,7 @@ import com.hp.ov.sdk.rest.client.common.DeletableResource;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.client.common.UpdatableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 import com.hp.ov.sdk.rest.reflect.Api;
 import com.hp.ov.sdk.rest.reflect.BodyParam;
 import com.hp.ov.sdk.rest.reflect.Endpoint;
@@ -39,20 +40,17 @@ public interface EthernetNetworkClient extends
         DeletableResource {
 
     String ETHERNET_URI = "/rest/ethernet-networks";
-    String BULK_ETHERNET_URI = "/rest/ethernet-networks/bulk";
-    String ASSOCIATED_PROFILES = "associatedProfiles";
-    String ASSOCIATED_UPLINK_GROUPS = "associatedUplinkGroups";
+    String BULK_ETHERNET_URI = "/bulk";
+    String ASSOCIATED_PROFILES = "/associatedProfiles";
+    String ASSOCIATED_UPLINK_GROUPS = "/associatedUplinkGroups";
 
-    @Endpoint(uri = "/bulk", method = HttpMethod.POST)
-    TaskResourceV2 createInBulk(@BodyParam BulkEthernetNetwork bulkEthernet);
+    @Endpoint(uri = BULK_ETHERNET_URI, method = HttpMethod.POST)
+    TaskResourceV2 createInBulk(@BodyParam BulkEthernetNetwork bulkEthernet, RequestOption ... options);
 
-    @Endpoint(uri = "/bulk", method = HttpMethod.POST)
-    TaskResourceV2 createInBulk(@BodyParam BulkEthernetNetwork bulkEthernet, int taskTimeout);
-
-    @Endpoint(uri = "/{resourceId}/associatedProfiles")
+    @Endpoint(uri = "/{resourceId}" + ASSOCIATED_PROFILES)
     List<String> getAssociatedProfiles(@PathParam("resourceId") String resourceId);
 
-    @Endpoint(uri = "/{resourceId}/associatedUplinkGroups")
+    @Endpoint(uri = "/{resourceId}" + ASSOCIATED_UPLINK_GROUPS)
     List<String> getAssociatedUplinkGroups(@PathParam("resourceId") String resourceId);
 
 }

@@ -84,7 +84,7 @@ public class FcNetworkClientTest {
         Request expectedRequest = new Request(HttpMethod.POST, FcNetworkClient.FC_NETWORK_URI);
         expectedRequest.setEntity(fcNetwork);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
@@ -97,7 +97,7 @@ public class FcNetworkClientTest {
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
         expectedRequest.setEntity(fcNetwork);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
@@ -107,7 +107,7 @@ public class FcNetworkClientTest {
         String expectedUri = FcNetworkClient.FC_NETWORK_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
 }

@@ -178,6 +178,17 @@ public class BaseClient {
         return adaptor.buildResource(response, returnType);
     }
 
+    public TaskResource executeMonitorableRequest(Request request) {
+        String response = this.executeRequest(request);
+
+        TaskResource taskResource = adaptor.buildResource(response, TaskResource.class);
+
+        taskResource = supplier.get().execute(this, taskResource, request.getTimeout());
+
+        return taskResource;
+    }
+
+    @Deprecated
     public TaskResource executeMonitorableRequest(Request request, boolean aSync) {
         String response = this.executeRequest(request);
 

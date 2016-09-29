@@ -178,7 +178,8 @@ public class OneViewClient {
     }
 
     public synchronized LogicalEnclosureClient logicalEnclosure() {
-        return this.getClient(LogicalEnclosureClient.class);
+        return Reflection.newProxy(LogicalEnclosureClient.class,
+                new ClientRequestHandler<>(this.baseClient, LogicalEnclosureClient.class));
     }
 
     public synchronized LogicalInterconnectClient logicalInterconnect() {

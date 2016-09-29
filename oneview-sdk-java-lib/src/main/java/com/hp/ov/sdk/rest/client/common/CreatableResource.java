@@ -16,17 +16,15 @@
 
 package com.hp.ov.sdk.rest.client.common;
 
-import com.hp.ov.sdk.rest.reflect.BodyParam;
-import com.hp.ov.sdk.rest.reflect.Endpoint;
 import com.hp.ov.sdk.dto.TaskResourceV2;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
 
 public interface CreatableResource<T> {
 
     @Endpoint(method = HttpMethod.POST)
-    TaskResourceV2 create(@BodyParam T resource);
-
-    @Endpoint(method = HttpMethod.POST)
-    TaskResourceV2 create(@BodyParam T resource, int taskTimeout);
+    TaskResourceV2 create(@BodyParam T resource, RequestOption... options);
 
 }
