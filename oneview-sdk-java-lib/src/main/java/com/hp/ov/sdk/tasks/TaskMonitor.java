@@ -67,7 +67,7 @@ public class TaskMonitor {
         dateToLive.add(Calendar.MILLISECOND, taskTimeoutMillis);
 
         while (dateToLive.after(Calendar.getInstance())) {
-            task = client.getResource(task.getUri(), TaskResourceV2.class);
+            task = client.getResource(task.getUri(), TaskResource.class);
 
             LOGGER.info("Task completed percentage {} and status {}", task.getPercentComplete(), task.getTaskState());
 
@@ -85,7 +85,7 @@ public class TaskMonitor {
 
     private TaskResource checkTaskPercentage(BaseClient client, TaskResource task) {
         while (task.getPercentComplete() < SdkConstants.PERCENTAGE_100) {
-            task = client.getResource(task.getUri(), TaskResourceV2.class);
+            task = client.getResource(task.getUri(), TaskResource.class);
 
             LOGGER.info("Task completed percentage {} and status {}", task.getPercentComplete(), task.getTaskState());
 
@@ -96,7 +96,7 @@ public class TaskMonitor {
         return task;
     }
 
-    private void waitTaskMonitorInterval(TaskResourceV2 task) {
+    private void waitTaskMonitorInterval(TaskResource task) {
         try {
             Thread.sleep(TASK_MONITORING_INTERVAL);
         } catch (final InterruptedException e) {

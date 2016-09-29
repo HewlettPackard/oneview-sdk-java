@@ -17,7 +17,7 @@
 package com.hp.ov.sdk.rest.client.common;
 
 import com.hp.ov.sdk.dto.Patch;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 import com.hp.ov.sdk.rest.reflect.BodyParam;
@@ -27,6 +27,6 @@ import com.hp.ov.sdk.rest.reflect.PathParam;
 public interface PatchableResource {
 
     @Endpoint(uri = "/{resourceId}", method = HttpMethod.PATCH)
-    TaskResourceV2 patch(@PathParam("resourceId") String resourceId, @BodyParam Patch patch, RequestOption ... options);
+    TaskResource patch(@PathParam("resourceId") String resourceId, @BodyParam Patch patch, RequestOption ... options);
 
 }

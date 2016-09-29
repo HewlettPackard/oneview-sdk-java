@@ -17,7 +17,7 @@
 package com.hp.ov.sdk.rest.client.server;
 
 import com.hp.ov.sdk.dto.SupportDump;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.servers.logicalenclosure.AddLogicalEnclosure;
 import com.hp.ov.sdk.dto.servers.logicalenclosure.LogicalEnclosure;
 import com.hp.ov.sdk.rest.client.common.CreatableResource;
@@ -47,20 +47,20 @@ public interface LogicalEnclosureClient extends
     String SUPPORT_DUMP_URI = "/support-dumps";
 
     @Endpoint(uri = "/{resourceId}" + UPDATE_FROM_GROUP_URI, method = HttpMethod.PUT)
-    TaskResourceV2 updateFromGroup(@PathParam("resourceId") String resourceId, RequestOption ... options);
+    TaskResource updateFromGroup(@PathParam("resourceId") String resourceId, RequestOption ... options);
 
     @Endpoint(uri = "/{resourceId}" + CONFIGURATION_URI, method = HttpMethod.PUT)
-    TaskResourceV2 updateConfiguration(@PathParam("resourceId") String resourceId, RequestOption ... options);
+    TaskResource updateConfiguration(@PathParam("resourceId") String resourceId, RequestOption ... options);
 
     @Endpoint(uri = "/{resourceId}" + SCRIPT_URI)
     String getConfigurationScript(@PathParam("resourceId") String resourceId);
 
     @Endpoint(uri = "/{resourceId}" + SCRIPT_URI, method = HttpMethod.PUT)
-    TaskResourceV2 updateConfigurationScript(@PathParam("resourceId") String resourceId,
+    TaskResource updateConfigurationScript(@PathParam("resourceId") String resourceId,
             @BodyParam String scriptData, RequestOption ... options);
 
     @Endpoint(uri = "/{resourceId}" + SUPPORT_DUMP_URI, method = HttpMethod.POST)
-    TaskResourceV2 createSupportDump(@PathParam("resourceId") String resourceId,
+    TaskResource createSupportDump(@PathParam("resourceId") String resourceId,
             @BodyParam SupportDump supportDump, RequestOption ... options);
 
 }

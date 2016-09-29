@@ -21,7 +21,7 @@ import java.lang.reflect.Parameter;
 
 import com.google.common.reflect.AbstractInvocationHandler;
 import com.google.common.reflect.TypeToken;
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
@@ -43,7 +43,7 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
     protected Object handleInvocation(Object proxy, Method method, Object[] args) throws Throwable {
         Request request = this.buildRequest(method, args);
 
-        if (TaskResourceV2.class.equals(method.getReturnType())) {
+        if (TaskResource.class.equals(method.getReturnType())) {
             return this.baseClient.executeMonitorableRequest(request);
         }
         return this.baseClient.executeRequest(request, this.token.method(method).getReturnType().getType());

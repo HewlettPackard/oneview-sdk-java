@@ -18,7 +18,7 @@ package com.hp.ov.sdk.rest.client.networking;
 
 import java.util.List;
 
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.rest.client.common.CreatableResource;
@@ -45,7 +45,7 @@ public interface EthernetNetworkClient extends
     String ASSOCIATED_UPLINK_GROUPS = "/associatedUplinkGroups";
 
     @Endpoint(uri = BULK_ETHERNET_URI, method = HttpMethod.POST)
-    TaskResourceV2 createInBulk(@BodyParam BulkEthernetNetwork bulkEthernet, RequestOption ... options);
+    TaskResource createInBulk(@BodyParam BulkEthernetNetwork bulkEthernet, RequestOption ... options);
 
     @Endpoint(uri = "/{resourceId}" + ASSOCIATED_PROFILES)
     List<String> getAssociatedProfiles(@PathParam("resourceId") String resourceId);

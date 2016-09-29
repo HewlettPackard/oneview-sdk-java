@@ -16,7 +16,7 @@
 
 package com.hp.ov.sdk.rest.client.common;
 
-import com.hp.ov.sdk.dto.TaskResourceV2;
+import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 import com.hp.ov.sdk.rest.reflect.Endpoint;
@@ -25,6 +25,6 @@ import com.hp.ov.sdk.rest.reflect.PathParam;
 public interface DeletableResource {
 
     @Endpoint(uri = "/{resourceId}", method = HttpMethod.DELETE)
-    TaskResourceV2 delete(@PathParam("resourceId") String resourceId, RequestOption... options);
+    TaskResource delete(@PathParam("resourceId") String resourceId, RequestOption... options);
 
 }
