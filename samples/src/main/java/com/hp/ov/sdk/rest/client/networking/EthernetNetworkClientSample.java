@@ -39,7 +39,6 @@ public class EthernetNetworkClientSample {
 
     // These are variables to be defined by the user
     // ================================
-    private static final String ETHERNET_NETWORK_RESOURCE_ID = "6415d1d3-318b-404a-8737-3ec07c1982c7";
     private static final String ETHERNET_NETWORK_NAME = "Ethernet-Network_SAMPLE";
     private static final String ETHERNET_NETWORK_NAME_UPDATED = ETHERNET_NETWORK_NAME + "_Updated";
     // ================================
@@ -67,13 +66,15 @@ public class EthernetNetworkClientSample {
         network.setPurpose(Purpose.General);
         network.setEthernetNetworkType(EthernetNetworkType.Tagged);
 
-        TaskResource task = this.client.create(network, false);
+        TaskResource task = this.client.create(network);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void getEthernetNetwork() {
-        Network network = client.getById(ETHERNET_NETWORK_RESOURCE_ID);
+        Network network = client.getByName(ETHERNET_NETWORK_NAME).get(0);
+
+        network = client.getById(network.getResourceId());
 
         LOGGER.info("Ethernet network returned to client: {}", network.toJsonString());
     }
@@ -96,7 +97,7 @@ public class EthernetNetworkClientSample {
         network.setName(ETHERNET_NETWORK_NAME_UPDATED);
 
         TaskResource task = this.client.update(network.getResourceId(),
-                network, false);
+                network);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -104,7 +105,7 @@ public class EthernetNetworkClientSample {
     private void deleteEthernetNetwork() {
         Network network = client.getByName(ETHERNET_NETWORK_NAME_UPDATED).get(0);
 
-        TaskResource task = this.client.delete(network.getResourceId(), false);
+        TaskResource task = this.client.delete(network.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -141,7 +142,7 @@ public class EthernetNetworkClientSample {
 
         network.setBandwidth(bandwidth);
 
-        TaskResource task = this.client.createInBulk(network, false);
+        TaskResource task = this.client.createInBulk(network);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }

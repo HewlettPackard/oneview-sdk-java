@@ -28,13 +28,14 @@ import com.hp.ov.sdk.dto.PatchFirmwareValue;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SupportDump;
 import com.hp.ov.sdk.dto.TaskResource;
-import com.hp.ov.sdk.dto.servers.enclosuregroup.EnclosureGroup;
 import com.hp.ov.sdk.dto.servers.logicalenclosure.AddLogicalEnclosure;
 import com.hp.ov.sdk.dto.servers.logicalenclosure.LogicalEnclosure;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.server.EnclosureClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.server.LogicalEnclosureClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
 
 /*
  * LogicalEnclosureClientSample is a sample program to consume the REST API of c7000 enclosure managed
@@ -48,10 +49,10 @@ public class LogicalEnclosureClientSample {
     private final LogicalEnclosureClient logicalEnclosureClient;
     private final FirmwareDriverClient firmwareDriverClient;
     private final EnclosureGroupClient enclosureGroupClient;
+    private final EnclosureClient enclosureClient;
 
     // test values - user input
     // ================================
-    private static final String RESOURCE_ID = "d5708093-b91d-42f2-8035-6c283a290adb";
     private static final String RESOURCE_NAME = "Encl1";
     private static final String RESOURCE_NAME_UPDATED = RESOURCE_NAME + "_Updated";
 
@@ -65,10 +66,13 @@ public class LogicalEnclosureClientSample {
         this.logicalEnclosureClient = oneViewClient.logicalEnclosure();
         this.firmwareDriverClient = oneViewClient.firmwareDriver();
         this.enclosureGroupClient = oneViewClient.enclosureGroup();
+        this.enclosureClient = oneViewClient.enclosure();
     }
 
     private void getLogicalEnclosureById() {
-        LogicalEnclosure logicalEnclosure = logicalEnclosureClient.getById(RESOURCE_ID);
+        LogicalEnclosure logicalEnclosure = logicalEnclosureClient.getByName(RESOURCE_NAME).get(0);
+
+        logicalEnclosure = logicalEnclosureClient.getById(logicalEnclosure.getResourceId());
 
         LOGGER.info("Logical enclosure returned to client: {}", logicalEnclosure.toJsonString());
     }
@@ -88,7 +92,8 @@ public class LogicalEnclosureClientSample {
     private void createLogicalEnclosure() {
         AddLogicalEnclosure addLogicalEnclosure = buildAddLogicalEnclosure();
 
-        TaskResource taskResource = this.logicalEnclosureClient.create(addLogicalEnclosure, false);
+        TaskResource taskResource = this.logicalEnclosureClient.create(addLogicalEnclosure,
+                TaskTimeout.of(300000));
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -99,7 +104,7 @@ public class LogicalEnclosureClientSample {
         logicalEnclosure.setName(RESOURCE_NAME_UPDATED);
 
         TaskResource taskResource = this.logicalEnclosureClient.update(logicalEnclosure.getResourceId(),
-                logicalEnclosure, false);
+                logicalEnclosure, TaskTimeout.of(300000));
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -116,7 +121,8 @@ public class LogicalEnclosureClientSample {
                 FirmwareUpdateOn.EnclosureOnly,
                 true));
 
-        TaskResource taskResource = this.logicalEnclosureClient.patch(logicalEnclosure.getResourceId(), patch, false);
+        TaskResource taskResource = this.logicalEnclosureClient.patch(logicalEnclosure.getResourceId(), patch,
+                TaskTimeout.of(300000));
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -124,7 +130,8 @@ public class LogicalEnclosureClientSample {
     private void deleteLogicalEnclosure() {
         LogicalEnclosure logicalEnclosure = logicalEnclosureClient.getByName(RESOURCE_NAME).get(0);
 
-        TaskResource taskResource = this.logicalEnclosureClient.delete(logicalEnclosure.getResourceId(), false);
+        TaskResource taskResource = this.logicalEnclosureClient.delete(logicalEnclosure.getResourceId(),
+                TaskTimeout.of(300000));
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -132,7 +139,7 @@ public class LogicalEnclosureClientSample {
     private void updateLogicalEnclosureFromGroup() {
         LogicalEnclosure logicalEnclosure = logicalEnclosureClient.getByName(RESOURCE_NAME).get(0);
 
-        TaskResource taskResource = this.logicalEnclosureClient.updateFromGroup(logicalEnclosure.getResourceId(), false);
+        TaskResource taskResource = this.logicalEnclosureClient.updateFromGroup(logicalEnclosure.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -141,7 +148,7 @@ public class LogicalEnclosureClientSample {
         LogicalEnclosure logicalEnclosure = logicalEnclosureClient.getByName(RESOURCE_NAME).get(0);
 
         TaskResource taskResource = this.logicalEnclosureClient.updateConfiguration(
-                logicalEnclosure.getResourceId(), false);
+                logicalEnclosure.getResourceId(), TaskTimeout.of(300000));
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -159,7 +166,7 @@ public class LogicalEnclosureClientSample {
         LogicalEnclosure logicalEnclosure = logicalEnclosureClient.getByName(RESOURCE_NAME).get(0);
 
         TaskResource taskResource = this.logicalEnclosureClient.updateConfigurationScript(
-                logicalEnclosure.getResourceId(), "\"name=Enclosure_test_script\"", false);
+                logicalEnclosure.getResourceId(), "\"name=Enclosure_test_script\"", TaskTimeout.of(300000));
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -169,21 +176,23 @@ public class LogicalEnclosureClientSample {
         SupportDump supportDump = new SupportDump("testDump01", true, false);
 
         TaskResource taskResource = this.logicalEnclosureClient.createSupportDump(
-                logicalEnclosure.getResourceId(), supportDump, false);
+                logicalEnclosure.getResourceId(), supportDump, TaskTimeout.of(300000));
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
      }
 
     private AddLogicalEnclosure buildAddLogicalEnclosure() {
-        EnclosureGroup enclosureGroup = enclosureGroupClient.getByName(
-                EnclosureGroupClientSample.ENCLOSURE_GROUP_NAME).get(0);
+        String enclosureGroupUri = enclosureGroupClient.getByName(
+                EnclosureGroupClientSample.ENCLOSURE_GROUP_NAME).get(0).getUri();
+        String enclosureUri = enclosureClient.getByName(EnclosureClientSample.RESOURCE_NAME).get(0).getUri();
+        String firmwareDriverUri = firmwareDriverClient.getByName(FIRMWARE_NAME).get(0).getUri();
+
         AddLogicalEnclosure addLogicalEnclosure = new AddLogicalEnclosure();
 
         addLogicalEnclosure.setName(RESOURCE_NAME);
-        addLogicalEnclosure.setEnclosureGroupUri(enclosureGroup.getUri());
-        addLogicalEnclosure.setEnclosureUris(Arrays.asList("/rest/enclosures/" + ENCLOSURE_ID));
-        addLogicalEnclosure.setFirmwareBaselineUri(
-                firmwareDriverClient.getByName(FIRMWARE_NAME).get(0).getUri());
+        addLogicalEnclosure.setEnclosureGroupUri(enclosureGroupUri);
+        addLogicalEnclosure.setEnclosureUris(Arrays.asList(enclosureUri));
+        addLogicalEnclosure.setFirmwareBaselineUri(firmwareDriverUri);
         addLogicalEnclosure.setForceInstallFirmware(false);
 
         return addLogicalEnclosure;

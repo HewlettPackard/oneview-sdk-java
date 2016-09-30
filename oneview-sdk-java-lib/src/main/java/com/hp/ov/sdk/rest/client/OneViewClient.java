@@ -20,6 +20,7 @@ import java.lang.reflect.Constructor;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.google.common.reflect.Reflection;
 import com.hp.ov.sdk.certs.MessagingCertificateClient;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKException;
@@ -74,6 +75,7 @@ import com.hp.ov.sdk.rest.client.storage.StorageVolumeClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeTemplateClient;
 import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 import com.hp.ov.sdk.util.OneViewConnector;
 
 public class OneViewClient {
@@ -118,7 +120,8 @@ public class OneViewClient {
     }
 
     public synchronized EthernetNetworkClient ethernetNetwork() {
-        return this.getClient(EthernetNetworkClient.class);
+        return Reflection.newProxy(EthernetNetworkClient.class,
+                new ClientRequestHandler<>(this.baseClient, EthernetNetworkClient.class));
     }
 
     public synchronized FabricClient fabric() {
@@ -126,7 +129,8 @@ public class OneViewClient {
     }
 
     public synchronized FcNetworkClient fcNetwork() {
-        return this.getClient(FcNetworkClient.class);
+        return Reflection.newProxy(FcNetworkClient.class,
+                new ClientRequestHandler<>(this.baseClient, FcNetworkClient.class));
     }
 
     public synchronized FcoeNetworkClient fcoeNetwork() {
@@ -174,7 +178,8 @@ public class OneViewClient {
     }
 
     public synchronized LogicalEnclosureClient logicalEnclosure() {
-        return this.getClient(LogicalEnclosureClient.class);
+        return Reflection.newProxy(LogicalEnclosureClient.class,
+                new ClientRequestHandler<>(this.baseClient, LogicalEnclosureClient.class));
     }
 
     public synchronized LogicalInterconnectClient logicalInterconnect() {

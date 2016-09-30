@@ -17,18 +17,28 @@
 package com.hp.ov.sdk.rest.client.networking;
 
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
+import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.ETHERNET_URI;
+import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.BULK_ETHERNET_URI;
+import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.ASSOCIATED_UPLINK_GROUPS;
+import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.ASSOCIATED_PROFILES;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EthernetNetworkClientTest {
@@ -36,91 +46,109 @@ public class EthernetNetworkClientTest {
     private static final String ANY_ETHERNET_RESOURCE_ID = "random-UUID";
     private static final String ANY_ETHERNET_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private EthernetNetworkClient ethClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private EthernetNetworkClient client = Reflection.newProxy(EthernetNetworkClient.class,
+            new ClientRequestHandler<>(baseClient, EthernetNetworkClient.class));
 
     @Test
-    public void shouldGetEthernetNetwork() {
-        ethClient.getById(ANY_ETHERNET_RESOURCE_ID);
+    public void shouldGetEthernetNetworkById() {
+        client.getById(ANY_ETHERNET_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.ETHERNET_URI + "/" + ANY_ETHERNET_RESOURCE_ID;
+        String expectedUri = ETHERNET_URI + "/" + ANY_ETHERNET_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, Network.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Network.class).getType());
     }
 
     @Test
     public void shouldGetAllEthernetNetwork() {
-        ethClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.ETHERNET_URI, Network.class);
+        Request expectedRequest = new Request(HttpMethod.GET, ETHERNET_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<Network>>() {}.getType());
     }
 
     @Test
     public void shouldGetEthernetNetworksByName() {
-        ethClient.getByName(ANY_ETHERNET_RESOURCE_NAME);
+        client.getByName(ANY_ETHERNET_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.ETHERNET_URI,
-                Network.class, UrlParameter.getFilterByNameParameter(ANY_ETHERNET_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, ETHERNET_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_ETHERNET_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<Network>>() {}.getType());
     }
 
     @Test
     public void shouldCreateEthernetNetwork() {
         Network network = new Network();
 
-        ethClient.create(network, false);
+        client.create(network);
 
-        then(baseClient).should().createResource(ResourceUris.ETHERNET_URI, network, false);
+        Request expectedRequest = new Request(HttpMethod.POST, ETHERNET_URI);
+        expectedRequest.setEntity(network);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateEthernetNetwork() {
         Network network = new Network();
 
-        ethClient.update(ANY_ETHERNET_RESOURCE_ID, network, false);
+        client.update(ANY_ETHERNET_RESOURCE_ID, network);
 
-        String expectedUri = ResourceUris.ETHERNET_URI + "/" + ANY_ETHERNET_RESOURCE_ID;
+        String expectedUri = ETHERNET_URI + "/" + ANY_ETHERNET_RESOURCE_ID;
 
-        then(baseClient).should().updateResource(expectedUri, network, false);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setEntity(network);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldDeleteEthernetNetwork() {
-        ethClient.delete(ANY_ETHERNET_RESOURCE_ID, false);
+        client.delete(ANY_ETHERNET_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.ETHERNET_URI + "/" + ANY_ETHERNET_RESOURCE_ID;
+        String expectedUri = ETHERNET_URI + "/" + ANY_ETHERNET_RESOURCE_ID;
 
-        then(baseClient).should().deleteResource(expectedUri, false);
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldCreateEthernetNetworkInBulk() {
         BulkEthernetNetwork bulk = new BulkEthernetNetwork();
 
-        ethClient.createInBulk(bulk, false);
+        client.createInBulk(bulk);
 
-        then(baseClient).should().createResource(ResourceUris.BULK_ETHERNET_URI, bulk, false);
+        String expectedUri = ETHERNET_URI + BULK_ETHERNET_URI;
+        Request expectedRequest = new Request(HttpMethod.POST, expectedUri);
+
+        expectedRequest.setEntity(bulk);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetEthernetNetworkAssociatedProfiles() {
-        ethClient.getAssociatedProfiles(ANY_ETHERNET_RESOURCE_ID);
+        client.getAssociatedProfiles(ANY_ETHERNET_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.ETHERNET_URI + "/" + ANY_ETHERNET_RESOURCE_ID
-                + "/" + ResourceUris.ASSOCIATED_PROFILES;
+        String expectedUri = ETHERNET_URI + "/" + ANY_ETHERNET_RESOURCE_ID + ASSOCIATED_PROFILES;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResourceList(expectedUri, String.class);
+        then(baseClient).should().executeRequest(expectedRequest, new TypeToken<List<String>>() {}.getType());
     }
 
     @Test
     public void shouldGetEthernetNetworkAssociatedUplinkGroups() {
-        ethClient.getAssociatedUplinkGroups(ANY_ETHERNET_RESOURCE_ID);
+        client.getAssociatedUplinkGroups(ANY_ETHERNET_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.ETHERNET_URI + "/" + ANY_ETHERNET_RESOURCE_ID
-                + "/" + ResourceUris.ASSOCIATED_UPLINK_GROUPS;
+        String expectedUri = ETHERNET_URI + "/" + ANY_ETHERNET_RESOURCE_ID + ASSOCIATED_UPLINK_GROUPS;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResourceList(expectedUri, String.class);
+        then(baseClient).should().executeRequest(expectedRequest, new TypeToken<List<String>>() {}.getType());
     }
 }

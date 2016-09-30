@@ -16,6 +16,7 @@
 
 package com.hp.ov.sdk.rest.client;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -68,11 +69,11 @@ public class BaseClient {
         this.supplier = supplier;
     }
 
-
     public ApiVersion getApiVersion() {
         return this.params.getApiVersion();
     }
 
+    @Deprecated
     public <T> T getResource(String uri, Class<T> returnType, UrlParameter... queries) {
         this.validateNotNullArguments(uri, returnType);
 
@@ -89,6 +90,7 @@ public class BaseClient {
         return resource;
     }
 
+    @Deprecated
     public <T> List<T> getResourceList(String uri, Class<T> resourceType, UrlParameter... queries) {
         this.validateNotNullArguments(uri, resourceType);
 
@@ -105,6 +107,7 @@ public class BaseClient {
         return resource;
     }
 
+    @Deprecated
     public <T> ResourceCollection<T> getResourceCollection(String uri, Class<T> resourceType,
             UrlParameter... queries) {
         this.validateNotNullArguments(uri, resourceType);
@@ -121,6 +124,7 @@ public class BaseClient {
         return resource;
     }
 
+    @Deprecated
     public TaskResource createResource(String uri, Object body, boolean aSync) {
         this.validateNotNullArguments(uri, body);
 
@@ -129,6 +133,7 @@ public class BaseClient {
         return this.executeMonitorableRequest(request, aSync);
     }
 
+    @Deprecated
     public TaskResource updateResource(String uri, Object body, boolean aSync) {
         this.validateNotNullArguments(uri, body);
 
@@ -137,6 +142,7 @@ public class BaseClient {
         return this.executeMonitorableRequest(request, aSync);
     }
 
+    @Deprecated
     public TaskResource patchResource(String uri, Patch patch, boolean aSync) {
         this.validateNotNullArguments(uri, patch);
 
@@ -145,6 +151,7 @@ public class BaseClient {
         return this.executeMonitorableRequest(request, aSync);
     }
 
+    @Deprecated
     public TaskResource deleteResource(String uri, boolean aSync, UrlParameter... queries) {
         this.validateNotNullArguments(uri);
 
@@ -156,6 +163,18 @@ public class BaseClient {
         return this.executeMonitorableRequest(request, aSync);
     }
 
+    public Object executeRequest(Request request, Type returnType) {
+        this.validateNotNullArguments(request, returnType);
+
+        String response = this.executeRequest(request);
+
+        if (String.class.equals(returnType)) {
+            return response;
+        }
+        return adaptor.buildResource(response, returnType);
+    }
+
+    @Deprecated
     public <T> T executeRequest(Request request, Class<T> returnType) {
         this.validateNotNullArguments(request, returnType);
 
@@ -167,6 +186,17 @@ public class BaseClient {
         return adaptor.buildResource(response, returnType);
     }
 
+    public TaskResource executeMonitorableRequest(Request request) {
+        String response = this.executeRequest(request);
+
+        TaskResource taskResource = adaptor.buildResource(response, TaskResource.class);
+
+        taskResource = supplier.get().execute(this, taskResource, request.getTimeout());
+
+        return taskResource;
+    }
+
+    @Deprecated
     public TaskResource executeMonitorableRequest(Request request, boolean aSync) {
         String response = this.executeRequest(request);
 

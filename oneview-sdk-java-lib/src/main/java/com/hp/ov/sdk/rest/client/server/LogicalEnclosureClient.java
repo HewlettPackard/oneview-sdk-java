@@ -1,6 +1,6 @@
 /*
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
- *  
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,312 +13,125 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.hp.ov.sdk.rest.client.server;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
 
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.dto.Patch;
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SupportDump;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.servers.logicalenclosure.AddLogicalEnclosure;
 import com.hp.ov.sdk.dto.servers.logicalenclosure.LogicalEnclosure;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.CreatableResource;
+import com.hp.ov.sdk.rest.client.common.DeletableResource;
+import com.hp.ov.sdk.rest.client.common.PatchableResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.client.common.UpdatableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class LogicalEnclosureClient {
+@Api(LogicalEnclosureClient.LOGICAL_ENCLOSURE_URI)
+public interface LogicalEnclosureClient extends
+        SearchableResource<LogicalEnclosure>,
+        CreatableResource<AddLogicalEnclosure>,
+        UpdatableResource<LogicalEnclosure>,
+        PatchableResource,
+        DeletableResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LogicalEnclosureClient.class);
-    private static final int TIMEOUT = 300000; // in milliseconds
-
-    protected static final String LOGICAL_ENCLOSURE_URI = "/rest/logical-enclosures";
-    protected static final String UPDATE_FROM_GROUP_URI = "updateFromGroup";
-    protected static final String CONFIGURATION_URI = "configuration";
-    protected static final String SCRIPT_URI = "script";
-    protected static final String SUPPORT_DUMP_URI = "support-dumps";
-
-    private final BaseClient baseClient;
-
-    public LogicalEnclosureClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link LogicalEnclosure} details for the specified logical enclosure.
-     *
-     * @param resourceId logical enclosure resource identifier as seen in HPE OneView.
-     *
-     * @return {@link LogicalEnclosure} object containing the details.
-     */
-    public LogicalEnclosure getById(String resourceId) {
-        LOGGER.info("LogicalEnclosureClient : getById : Start");
-
-        LogicalEnclosure logicalEnclosure = baseClient.getResource(
-                UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId), LogicalEnclosure.class);
-
-        LOGGER.info("LogicalEnclosureClient : getById : End");
-
-        return logicalEnclosure;
-    }
+    String LOGICAL_ENCLOSURE_URI = "/rest/logical-enclosures";
+    String UPDATE_FROM_GROUP_URI = "/updateFromGroup";
+    String CONFIGURATION_URI = "/configuration";
+    String SCRIPT_URI = "/script";
+    String SUPPORT_DUMP_URI = "/support-dumps";
 
     /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link LogicalEnclosure}&gt; containing the details
-     * for all the available logical enclosures found under the current HPE OneView.
+     * Updates the logical enclosure identified by the provided <code>resourceId</code>
+     * to make it consistent with the associated enclosure group when the logical enclosure is
+     * in an inconsistent state.
      *
-     * @return {@link ResourceCollection}&lt;{@link LogicalEnclosure}&gt; containing
-     * the details for all found logical enclosures.
+     * Since this operation can take some time to complete, it is possible to specify a timeout
+     * using the option {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout
+     * is specified, the default behavior is to wait until the update completes.
+     *
+     * @param resourceId resource identifier as seen in HPE OneView.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
+     *
+     * @return {@link TaskResource} task containing the result of this request.
      */
-    public ResourceCollection<LogicalEnclosure> getAll() {
-        LOGGER.info("LogicalEnclosureClient : getAll : Start");
-
-        ResourceCollection<LogicalEnclosure> logicalEnclosures = baseClient.getResourceCollection(
-                LOGICAL_ENCLOSURE_URI, LogicalEnclosure.class);
-
-        LOGGER.info("LogicalEnclosureClient : getAll : End");
-
-        return logicalEnclosures;
-    }
+    @Endpoint(uri = "/{resourceId}" + UPDATE_FROM_GROUP_URI, method = HttpMethod.PUT)
+    TaskResource updateFromGroup(@PathParam("resourceId") String resourceId, RequestOption ... options);
 
     /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link LogicalEnclosure}&gt; containing details
-     * for the available logical enclosures found under the current HPE OneView that match the name.
+     * Reapplies the logical enclosure configuration in the logical enclosure identified
+     * by the provided <code>resourceId</code>.
      *
-     * @param name logical enclosure name as seen in HPE OneView.
+     * Since this operation can take some time to complete, it is possible to specify a timeout
+     * using the option {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout
+     * is specified, the default behavior is to wait until the update completes.
      *
-     * @return {@link LogicalEnclosure} object containing the details.
+     * @param resourceId resource identifier as seen in HPE OneView.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
+     *
+     * @return {@link TaskResource} task containing the result of this request.
      */
-    public ResourceCollection<LogicalEnclosure> getByName(String name) {
-        LOGGER.info("LogicalEnclosureClient : getByName : Start");
-
-        ResourceCollection<LogicalEnclosure> logicalEnclosures = baseClient.getResourceCollection(
-                LOGICAL_ENCLOSURE_URI, LogicalEnclosure.class,
-                UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("LogicalEnclosureClient : getByName : End");
-
-        return logicalEnclosures;
-    }
+    @Endpoint(uri = "/{resourceId}" + CONFIGURATION_URI, method = HttpMethod.PUT)
+    TaskResource updateConfiguration(@PathParam("resourceId") String resourceId, RequestOption ... options);
 
     /**
-     * Creates a logical enclosure according to the provided {@link LogicalEnclosure} object.
+     * Retrieves the configuration script ({@link String}) of the logical enclosure
+     * identified by the provided <code>resourceId</code>.
      *
-     * @param logicalEnclosure object containing the logical enclosure details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param resourceId resource identifier as seen in HPE OneView.
      *
-     * @return {@link TaskResource} containing the task status for the process.
+     * @return {@link List} containing the URIs for the associated server profiles.
      */
-    public TaskResource create(AddLogicalEnclosure logicalEnclosure, boolean aSync) {
-        LOGGER.info("LogicalEnclosureClient : create : Start");
-
-        Request request = new Request(HttpMethod.POST, LOGICAL_ENCLOSURE_URI, logicalEnclosure);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("LogicalEnclosureClient : create : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + SCRIPT_URI)
+    String getConfigurationScript(@PathParam("resourceId") String resourceId);
 
     /**
-     * Updates a {@link LogicalEnclosure} identified by the given resource identifier.
+     * Updates the logical enclosure script identified by <code>resourceId</code> according
+     * to the provided script data.
      *
-     * @param resourceId logical enclosure resource identifier as seen in HPE OneView.
-     * @param logicalEnclosure object containing the logical enclosure details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * Since this operation can take some time to complete, it is possible to specify a timeout
+     * using the option {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout
+     * is specified, the default behavior is to wait until the update completes.
      *
-     * @return {@link TaskResource} containing the task status for the process.
+     * @param resourceId resource identifier as seen in HPE OneView.
+     * @param scriptData script data to be configured in the logical enclosure.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
+     *
+     * @return {@link TaskResource} task containing the result of this request.
      */
-    public TaskResource update(String resourceId, LogicalEnclosure logicalEnclosure, boolean aSync) {
-        LOGGER.info("LogicalEnclosureClient : update : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId), logicalEnclosure);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("LogicalEnclosureClient : update : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + SCRIPT_URI, method = HttpMethod.PUT)
+    TaskResource updateConfigurationScript(@PathParam("resourceId") String resourceId,
+            @BodyParam String scriptData, RequestOption ... options);
 
     /**
-     * Performs a PATCH request and updates the existing logical enclosure based
-     * on the resource identifier and the content of the {@link Patch} object.
+     * Creates a support dump according to the provided {@link SupportDump} object for
+     * the logical enclosure identified by the <code>resourceId</code>. A logical enclosure
+     * support dump includes content for logical interconnects associated with that
+     * logical enclosure and it also contains some appliance support dump content.
      *
-     * @param resourceId logical enclosure resource identifier as seen in HPE OneView.
-     * @param patch object containing the update to be made to existing logical enclosure.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * Since this operation can take some time to complete, it is possible to specify a timeout
+     * using the option {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout
+     * is specified, the default behavior is to wait until the create action completes.
      *
-     * @return {@link TaskResource} containing the task status for the process.
+     * @param resourceId resource identifier as seen in HPE OneView.
+     * @param supportDump object containing the details about how the support dump should be created.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
+     *
+     * @return {@link TaskResource} task containing the result of this request.
      */
-    public TaskResource patch(String resourceId, Patch patch, boolean aSync) {
-        LOGGER.info("LogicalEnclosureClient : patch : Start");
+    @Endpoint(uri = "/{resourceId}" + SUPPORT_DUMP_URI, method = HttpMethod.POST)
+    TaskResource createSupportDump(@PathParam("resourceId") String resourceId,
+            @BodyParam SupportDump supportDump, RequestOption ... options);
 
-        Request request = new Request(HttpMethod.PATCH,
-                UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId), patch);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("LogicalEnclosureClient : patch : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Deletes the {@link LogicalEnclosure} identified by the given resource identifier.
-     *
-     * @param resourceId logical enclosure resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource delete(String resourceId, boolean aSync) {
-        LOGGER.info("LogicalEnclosureClient : delete : Start");
-
-        Request request = new Request(HttpMethod.DELETE,
-                UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId));
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("LogicalEnclosureClient : delete : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Updates a {@link LogicalEnclosure} identified by the given resource identifier
-     * to be consistent with the enclosure group when the logical enclosure is in
-     * an inconsistent state.
-     *
-     * @param resourceId logical enclosure resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource updateFromGroup(String resourceId, boolean aSync) {
-        LOGGER.info("LogicalEnclosureClient : updateFromGroup : Start");
-
-        String updateUri = UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId, UPDATE_FROM_GROUP_URI);
-        Request request = new Request(HttpMethod.PUT, updateUri);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("LogicalEnclosureClient : updateFromGroup : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Reapplies the logical enclosure configuration in the logical enclosure
-     * identified by the given resource identifier.
-     *
-     * @param resourceId logical enclosure resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource updateConfiguration(String resourceId, boolean aSync) {
-        LOGGER.info("LogicalEnclosureClient : updateConfiguration : Start");
-
-        String updateUri = UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId, CONFIGURATION_URI);
-        Request request = new Request(HttpMethod.PUT, updateUri);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("LogicalEnclosureClient : updateConfiguration : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Retrieves the configuration script for the specified logical enclosure resource identifier.
-     *
-     * @param resourceId logical enclosure resource identifier as seen in HPE OneView.
-     *
-     * @return the configuration script for the specified logical enclosure.
-     */
-    public String getConfigurationScript(String resourceId) {
-        LOGGER.info("LogicalEnclosureClient : getConfigurationScript : Start");
-
-        Request request = new Request(HttpMethod.GET,
-                UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId, SCRIPT_URI));
-
-        String response = baseClient.executeRequest(request, String.class);
-
-        LOGGER.info("LogicalEnclosureClient : getConfigurationScript : End");
-
-        return response;
-    }
-
-    /**
-     * Updates the configuration script for the specified logical enclosure resource identifier.
-     * 
-     * @param resourceId logical enclosure resource identifier as seen in HPE OneView.
-     * @param scriptData script data to be updated for logical enclosure.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource updateConfigurationScript(String resourceId, String scriptData, boolean aSync) {
-        LOGGER.info("LogicalEnclosureClient : updateConfigurationScript : Start");
-
-        String updateUri = UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId, SCRIPT_URI);
-
-        TaskResource taskResource = this.baseClient.updateResource(updateUri, scriptData, aSync);
-
-        LOGGER.info("LogicalEnclosureClient : updateConfigurationScript : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Creates a support dump for the logical enclosure with the specified resource identifier.
-     * A logical enclosure support dump includes content for logical interconnects associated
-     * with that logical enclosure. By default, it also contains appliance support dump content.
-     *
-     * @param resourceId logical enclosure resource identifier as seen in HPE OneView.
-     * @param supportDump details to create the support dump.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource createSupportDump(String resourceId, SupportDump supportDump, boolean aSync) {
-        LOGGER.info("LogicalEnclosureClient : createSupportDump : Start");
-
-        String createUri = UrlUtils.createUrl(LOGICAL_ENCLOSURE_URI, resourceId, SUPPORT_DUMP_URI);
-
-        Request request = new Request(HttpMethod.POST, createUri, supportDump);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("LogicalEnclosureClient : createSupportDump : End");
-
-        return taskResource;
-    }
 }

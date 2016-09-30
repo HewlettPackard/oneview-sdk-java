@@ -66,6 +66,17 @@ public class ObjectToJsonConverter {
         return this.versionedGson(apiVersion).toJson(inputObject);
     }
 
+    public Object jsonToResource(final String jsonInput, Type resourceType) {
+        try {
+            LOGGER.info("JSON successfully converted to a Resource of type {}", resourceType);
+
+            return this.gson().fromJson(jsonInput, resourceType);
+        } catch (final JsonParseException e) {
+            throw new SDKInternalException(SDKErrorEnum.internalError, null, null, null,
+                    SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
+        }
+    }
+
     public <T> T jsonToResource(final String jsonInput, final Class<T> resourceType) {
         try {
             LOGGER.info("JSON successfully converted to a Resource of type {}", resourceType.getSimpleName());
