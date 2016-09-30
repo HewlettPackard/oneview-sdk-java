@@ -17,9 +17,10 @@
 package com.hp.ov.sdk.rest.reflect;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import java.util.List;
 
 import com.google.common.reflect.AbstractInvocationHandler;
+import com.google.common.reflect.Parameter;
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -50,21 +51,21 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
     }
 
     private Request buildRequest(Method method, Object[] args) {
-        Endpoint endpoint = method.getDeclaredAnnotation(Endpoint.class);
+        Endpoint endpoint = method.getAnnotation(Endpoint.class);
 
         Request request = new Request(endpoint.method(), this.baseUri + endpoint.uri());
 
-        this.fillRequestAccordingParams(request, method.getParameters(), args);
+        this.fillRequestAccordingParams(request, this.token.method(method).getParameters() , args);
         this.fillRequestAccordingOptions(request, args);
 
         return request;
     }
 
-    private void fillRequestAccordingParams(Request request, Parameter[] params, Object[] args) {
-        for (int i = 0; i < params.length; i++) {
-            PathParam pathParam = params[i].getAnnotation(PathParam.class);
-            QueryParam queryParam = params[i].getAnnotation(QueryParam.class);
-            BodyParam bodyParam = params[i].getAnnotation(BodyParam.class);
+    private void fillRequestAccordingParams(Request request, List<Parameter> params, Object[] args) {
+        for (int i = 0; i < params.size(); i++) {
+            PathParam pathParam = params.get(i).getAnnotation(PathParam.class);
+            QueryParam queryParam = params.get(i).getAnnotation(QueryParam.class);
+            BodyParam bodyParam = params.get(i).getAnnotation(BodyParam.class);
 
             if (pathParam != null) {
                 request.setUri(request.getUri().replaceFirst("\\{" + pathParam.value() + "\\}", args[i].toString()));
