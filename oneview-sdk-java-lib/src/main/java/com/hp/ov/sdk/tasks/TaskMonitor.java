@@ -41,7 +41,7 @@ public class TaskMonitor {
     public TaskResource execute(BaseClient client, TaskResource task, int taskTimeoutMillis) {
         TaskResource taskResult;
 
-        if (taskTimeoutMillis > 0) {
+        if (taskTimeoutMillis > SdkConstants.NO_TASK_TIMEOUT) {
             taskResult = this.checkTaskTimeout(client, task, taskTimeoutMillis);
         } else {
             taskResult = this.checkTaskPercentage(client, task);

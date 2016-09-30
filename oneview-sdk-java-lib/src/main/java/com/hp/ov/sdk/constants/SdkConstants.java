@@ -33,6 +33,7 @@ public class SdkConstants {
     public static final String MSMB_EXCHANGE_NAME = "msmb";
 
     public static final int PERCENTAGE_100 = 100;
+    public static final int NO_TASK_TIMEOUT = 0;
 
     public static final String RABBITMQ = "certificates-client-rabbitmq";
     public static final String SCMB_ALERTS_ROUTING_KEY = "scmb.alerts.#";

@@ -22,6 +22,18 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 
 public interface SearchableResource<T> extends RetrievableResource<T> {
 
+    /**
+     * Retrieves a paginated collection ({@link ResourceCollection}) containing the details for the
+     * available resources found under the current HPE OneView that match the <code>name</code> provided.
+     *
+     * <p>The filter applied in this case is as follows:
+     * <p>filter="name matches '<i>name</i>'"
+     *
+     * @param name name that should be used to filter the resources found in HPE OneView.
+     *
+     * @return {@link ResourceCollection} paginated collection containing the details for the
+     * available resources that match the filter.
+     */
     @Endpoint
     ResourceCollection<T> getByName(@QueryParam(key = "filter", value ="name matches '{name}'") String name);
 

@@ -24,6 +24,27 @@ import com.hp.ov.sdk.rest.reflect.PathParam;
 
 public interface DeletableResource {
 
+    /**
+     * Deletes the resource identified by the provided <code>resourceId</code>.
+     *
+     * <p>According to the resource type, the delete action can take some time to complete.
+     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
+     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
+     * the default behavior is to wait until the delete action completes. Below is an example that
+     * illustrates how the timeout can be specified:
+     *
+     * <pre>{@code
+     *     String resourceName = "someResourceName";
+     *     SomeResource resource = client.getByName(resourceName);
+     *     TaskResource task = client.delete(resource.getResourceId(), TaskTimeout.of(5000)); //5 secs
+     * }</pre>
+     *
+     * @param resourceId resource identifier as seen in HPE OneView.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
+     *
+     * @return {@link TaskResource} task containing the result of this request.
+     */
     @Endpoint(uri = "/{resourceId}", method = HttpMethod.DELETE)
     TaskResource delete(@PathParam("resourceId") String resourceId, RequestOption... options);
 

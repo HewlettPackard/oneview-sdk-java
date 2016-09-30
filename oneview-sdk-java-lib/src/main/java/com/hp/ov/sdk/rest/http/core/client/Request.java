@@ -24,6 +24,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
+import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
@@ -50,7 +51,7 @@ public class Request {
         this.entity = Optional.fromNullable(entity);
         this.contentType = ContentType.APPLICATION_JSON;
         this.forceTaskReturn = false;
-        this.taskTimeoutMillis = -1;
+        this.taskTimeoutMillis = SdkConstants.NO_TASK_TIMEOUT;
     }
 
     public HttpMethod getType() {

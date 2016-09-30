@@ -52,9 +52,15 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
     private Request buildRequest(Method method, Object[] args) {
         Endpoint endpoint = method.getDeclaredAnnotation(Endpoint.class);
 
-        Request request = new Request(endpoint.method(), baseUri + endpoint.uri());
-        Parameter[] params = method.getParameters();
+        Request request = new Request(endpoint.method(), this.baseUri + endpoint.uri());
 
+        this.fillRequestAccordingParams(request, method.getParameters(), args);
+        this.fillRequestAccordingOptions(request, args);
+
+        return request;
+    }
+
+    private void fillRequestAccordingParams(Request request, Parameter[] params, Object[] args) {
         for (int i = 0; i < params.length; i++) {
             PathParam pathParam = params[i].getAnnotation(PathParam.class);
             QueryParam queryParam = params[i].getAnnotation(QueryParam.class);
@@ -70,13 +76,18 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
                 request.setContentType(bodyParam.type());
             }
         }
+    }
 
-        if ((args.length > 0) && (args[args.length - 1].getClass().isArray())) {
+    private void fillRequestAccordingOptions(Request request, Object[] args) {
+        boolean isLastArgumentAnArray = (args != null)
+                && (args.length > 0)
+                && (args[args.length - 1].getClass().isArray());
+
+        if (isLastArgumentAnArray) {
             for (RequestOption option : (RequestOption[]) args[args.length - 1]) {
                 option.apply(request);
             }
         }
-        return request;
     }
 
 }

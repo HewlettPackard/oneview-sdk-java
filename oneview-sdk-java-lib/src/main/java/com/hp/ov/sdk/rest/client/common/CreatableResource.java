@@ -24,6 +24,27 @@ import com.hp.ov.sdk.rest.reflect.Endpoint;
 
 public interface CreatableResource<T> {
 
+    /**
+     * Creates a resource according to the provided <code>resource</code> object.
+     *
+     * <p>According to the resource type, the create action can take some time to complete.
+     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
+     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
+     * the default behavior is to wait until the create action completes. Below is an example that
+     * illustrates how the timeout can be specified:
+     *
+     * <pre>{@code
+     *     SomeClient client = oneViewClient.someClient();
+     *     SomeResource resource = new SomeResource();
+     *     TaskResource task = client.create(resource, TaskTimeout.of(5000)); //5 secs
+     * }</pre>
+     *
+     * @param resource object containing the details of the resource that should be created.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
+     *
+     * @return {@link TaskResource} task containing the result of this request.
+     */
     @Endpoint(method = HttpMethod.POST)
     TaskResource create(@BodyParam T resource, RequestOption... options);
 

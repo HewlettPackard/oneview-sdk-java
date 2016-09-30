@@ -22,9 +22,23 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 
 public interface RetrievableResource<T> {
 
+    /**
+     * Retrieves the resource identified by the given <code>resourceId</code>.
+     *
+     * @param resourceId resource identifier as seen in HPE OneView.
+     *
+     * @return object containing the details of the resource identified by <code>resourceId</code>.
+     */
     @Endpoint(uri = "/{resourceId}")
     T getById(@PathParam("resourceId") String resourceId);
 
+    /**
+     * Retrieves a paginated collection ({@link ResourceCollection}) containing the details for the
+     * available resources found under the current HPE OneView.
+     *
+     * @return {@link ResourceCollection} paginated collection containing the details for the
+     * available resources.
+     */
     @Endpoint
     ResourceCollection<T> getAll();
 

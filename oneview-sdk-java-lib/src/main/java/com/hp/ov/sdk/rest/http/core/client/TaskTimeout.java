@@ -16,6 +16,26 @@
 
 package com.hp.ov.sdk.rest.http.core.client;
 
+/**
+ * Some operations can be time consuming and return a {@link com.hp.ov.sdk.dto.TaskResource}
+ * as a response so the client can monitor the progress of the request. In this cases, it is
+ * possible to specify a timeout using an implementation of {@link RequestOption}
+ * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}.
+ *
+ * <p>Once a positive value for timeout has been configured, the returned task will be monitored
+ * until the timeout is reached. If the task does not finish during the specified time interval,
+ * an {@link com.hp.ov.sdk.exceptions.SDKTasksException} will be thrown. Otherwise, the resulting
+ * task is returned.
+ *
+ * <p>If no timeout is specified, the default behavior is to wait until the operation completes.
+ * Below is an example that illustrates how the timeout can be specified:
+ *
+ * <pre>{@code
+ *     SomeClient client = oneViewClient.someClient();
+ *     SomeResource resource = new SomeResource();
+ *     TaskResource task = client.create(resource, TaskTimeout.of(5000)); //5 secs
+ * }</pre>
+ */
 public class TaskTimeout implements RequestOption {
 
     private final int taskTimeoutMillis;

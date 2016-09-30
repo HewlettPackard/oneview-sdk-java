@@ -24,6 +24,7 @@ import com.hp.ov.sdk.util.StringUtil;
 
 public class ResourceAdaptor {
 
+    @Deprecated
     public <T> List<T> buildListOfResource(String source, Class<T> resourceType) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
@@ -32,6 +33,7 @@ public class ResourceAdaptor {
         return converter.jsonToList(sourceReplaced, resourceType);
     }
 
+    @Deprecated
     public <T> ResourceCollection<T> buildResourceCollection(String source, Class<T> resourceType) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
@@ -40,6 +42,7 @@ public class ResourceAdaptor {
         return converter.jsonToResourceCollection(sourceReplaced, resourceType);
     }
 
+    @Deprecated
     public <T> T buildResource(String source, Class<T> resourceType) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
