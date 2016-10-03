@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.rest.reflect;
+package com.hp.ov.sdk.rest.http.core;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.List;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.PARAMETER)
-public @interface QueryParam {
+public interface UrlQuery {
+
+    List<UrlParameter> parameters();
 
 }

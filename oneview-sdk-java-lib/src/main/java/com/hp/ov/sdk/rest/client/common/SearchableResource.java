@@ -16,9 +16,9 @@
 
 package com.hp.ov.sdk.rest.client.common;
 
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.rest.reflect.Endpoint;
 import com.hp.ov.sdk.rest.reflect.QueryParam;
-import com.hp.ov.sdk.dto.ResourceCollection;
 
 public interface SearchableResource<T> extends RetrievableResource<T> {
 
@@ -35,6 +35,6 @@ public interface SearchableResource<T> extends RetrievableResource<T> {
      * available resources that match the filter.
      */
     @Endpoint
-    ResourceCollection<T> getByName(@QueryParam(key = "filter", value ="name matches '{name}'") String name);
+    ResourceCollection<T> getByName(@QueryParam String name);
 
 }
