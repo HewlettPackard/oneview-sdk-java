@@ -15,20 +15,11 @@
  */
 package com.hp.ov.sdk.rest.client.server;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Optional;
 import com.hp.ov.sdk.dto.BiosSettings;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.IloSsoUrlResult;
 import com.hp.ov.sdk.dto.JavaRemoteConsoleUrlResult;
-import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.RefreshStateRequest;
 import com.hp.ov.sdk.dto.RemoteConsoleUrlResult;
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -38,191 +29,68 @@ import com.hp.ov.sdk.dto.servers.serverhardware.AddServer;
 import com.hp.ov.sdk.dto.servers.serverhardware.ServerFirmwareInventory;
 import com.hp.ov.sdk.dto.servers.serverhardware.ServerHardware;
 import com.hp.ov.sdk.dto.servers.serverhardware.ServerPowerControlRequest;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.AddableResource;
+import com.hp.ov.sdk.rest.client.common.PatchableResource;
+import com.hp.ov.sdk.rest.client.common.RemovableResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
+import com.hp.ov.sdk.rest.reflect.QueryParam;
 
-public class ServerHardwareClient {
+@Api(ServerHardwareClient.SERVER_HARDWARE_URI)
+public interface ServerHardwareClient extends
+        AddableResource<AddServer>,
+        SearchableResource<ServerHardware>,
+        RemovableResource,
+        PatchableResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServerHardwareClient.class);
-    
-    protected static final String SERVER_HARDWARE_URI = "/rest/server-hardware";
-    protected static final String SERVER_HARDWARE_REFRESH_STATE_URI = "refreshState";
-    protected static final String SERVER_HARDWARE_FIRMWARE_URI = "firmware";
-    protected static final String SERVER_HARDWARE_FIRMWARE = "/rest/server-hardware/*/firmware";
-    protected static final String POWER_STATE_URI = "powerState";
-    protected static final String SERVER_HARDWARE_BIOS_URI = "bios";
-    protected static final String ENVIRONMENT_CONFIGURATION_URI = "environmentalConfiguration";
-    protected static final String SERVER_HARDWARE_MP_FIRMWARE_URI = "mpFirmwareVersion";
-    protected static final String SERVER_HARDWARE_ILO_SSO_URI = "iloSsoUrl";
-    protected static final String SERVER_HARDWARE_JAVA_REMOTE_CONSOLE_URI = "javaRemoteConsoleUrl";
-    protected static final String SERVER_HARDWARE_REMOTE_CONSOLE_URI = "remoteConsoleUrl";
-    protected static final String SERVER_HARDWARE_UTILIZATION_URI = "utilization";
-    
-    private static final int TIMEOUT = 240000;
+    String SERVER_HARDWARE_URI = "/rest/server-hardware";
 
-    private final BaseClient baseClient;
-
-    public ServerHardwareClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link ServerHardware} details for the specified server hardware.
-     *
-     * @param resourceId server hardware resource identifier as seen in HPE OneView.
-     *
-     * @return {@link ServerHardware} object containing the details.
-     */
-    public ServerHardware getById(String resourceId) {
-        LOGGER.info("ServerHardwareClient : getById : Start");
-
-        ServerHardware serverHardware = baseClient.getResource(
-                UrlUtils.createUrl(SERVER_HARDWARE_URI, resourceId), ServerHardware.class);
-
-        LOGGER.info("ServerHardwareClient : getById : End");
-
-        return serverHardware;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link ServerHardware}&gt; containing the details
-     * for all the available server hardware found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link ServerHardware}&gt; containing
-     * the details for all found server hardware.
-     */
-    public ResourceCollection<ServerHardware> getAll() {
-        LOGGER.info("ServerHardwareClient : getAll : Start");
-
-        ResourceCollection<ServerHardware> serverHardware = baseClient.getResourceCollection(
-                SERVER_HARDWARE_URI, ServerHardware.class);
-
-        LOGGER.info("ServerHardwareClient : getAll : End");
-
-        return serverHardware;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link ServerHardware}&gt; containing details
-     * for the available server hardware found under the current HPE OneView that match the name.
-     *
-     * @param name server hardware name as seen in HPE OneView.
-     *
-     * @return {@link ServerHardware} object containing the details.
-     */
-    public ResourceCollection<ServerHardware> getByName(String name) {
-        LOGGER.info("ServerHardwareClient : getByName : Start");
-
-        ResourceCollection<ServerHardware> serverHardware = baseClient.getResourceCollection(
-                SERVER_HARDWARE_URI, ServerHardware.class,
-                UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("ServerHardwareClient : getByName : End");
-
-        return serverHardware;
-    }
-
-    /**
-     * Adds a server hardware according to the provided {@link AddServer} object.
-     * The request can be processed synchronously or asynchronously.
-     *
-     * @param addServer object containing the server hardware details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource add(AddServer addServer, boolean aSync) {
-        LOGGER.info("ServerHardwareClient : add : Start");
-
-        Request request = new Request(HttpMethod.POST, SERVER_HARDWARE_URI, addServer);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("ServerHardwareClient : add : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Removes the server hardware identified by the given resource identifier.
-     *
-     * @param resourceId server hardware resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource remove(String resourceId, boolean aSync) {
-        LOGGER.info("ServerHardwareClient : remove : Start");
-
-        Request request = new Request(HttpMethod.DELETE,
-                UrlUtils.createUrl(SERVER_HARDWARE_URI, resourceId));
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("ServerHardwareClient : remove : End");
-
-        return taskResource;
-    }
+    String SERVER_HARDWARE_REFRESH_STATE_URI = "/refreshState";
+    String SERVER_HARDWARE_FIRMWARE_URI = "/firmware";
+    String SERVER_HARDWARE_FIRMWARE = "/*/firmware";
+    String POWER_STATE_URI = "/powerState";
+    String SERVER_HARDWARE_BIOS_URI = "/bios";
+    String ENVIRONMENT_CONFIGURATION_URI = "/environmentalConfiguration";
+    String SERVER_HARDWARE_MP_FIRMWARE_URI = "/mpFirmwareVersion";
+    String SERVER_HARDWARE_ILO_SSO_URI = "/iloSsoUrl";
+    String SERVER_HARDWARE_JAVA_REMOTE_CONSOLE_URI = "/javaRemoteConsoleUrl";
+    String SERVER_HARDWARE_REMOTE_CONSOLE_URI = "/remoteConsoleUrl";
+    String SERVER_HARDWARE_UTILIZATION_URI = "/utilization";
 
     /**
      * Requests a power operation to change the power state of the physical server.
-     * 
+     *
      * @param resourceId server hardware resource identifier as seen in HPE OneView.
      * @param serverPowerControlRequest object containing the ServerPowerControlRequest details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} which returns the task status for the process.
      */
-    public TaskResource updatePowerState(String resourceId,
-            ServerPowerControlRequest serverPowerControlRequest, boolean aSync) {
-
-        LOGGER.info("ServerHardwareClient : updatePowerState : Start");
-
-        TaskResource taskResource = this.baseClient.updateResource(
-                UrlUtils.createUrl(SERVER_HARDWARE_URI, resourceId, POWER_STATE_URI),
-                serverPowerControlRequest, aSync);
-
-        LOGGER.info("ServerHardwareClient : updatePowerState : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + POWER_STATE_URI, method = HttpMethod.PUT)
+    TaskResource updatePowerState(@PathParam("resourceId") String resourceId,
+            @BodyParam ServerPowerControlRequest serverPowerControlRequest,
+            RequestOption ... options);
 
     /**
      * Refreshes the server hardware to fix configuration issues.
      *
      * @param resourceId server hardware resource identifier as seen in HPE OneView.
      * @param refreshStateRequest object containing the refresh state request details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} which returns the task status for the process.
      */
-    public TaskResource updateRefreshState(String resourceId,
-            RefreshStateRequest refreshStateRequest, boolean aSync) {
-
-        LOGGER.info("ServerHardwareClient : updateRefreshState : Start");
-
-        String resourceUri = UrlUtils.createUrl(SERVER_HARDWARE_URI,
-                resourceId, SERVER_HARDWARE_REFRESH_STATE_URI);
-        Request request = new Request(HttpMethod.PUT, resourceUri, refreshStateRequest);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("ServerHardwareClient : updateRefreshState : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + SERVER_HARDWARE_REFRESH_STATE_URI, method = HttpMethod.PUT)
+    TaskResource updateRefreshState(@PathParam("resourceId") String resourceId,
+            @BodyParam RefreshStateRequest refreshStateRequest,
+            RequestOption ... options);
 
     /**
      * Retrieves the list of BIOS/UEFI values currently set on the physical server.
@@ -231,18 +99,8 @@ public class ServerHardwareClient {
      *
      * @return {@link BiosSettings} containing the collection of bios settings state details.
      */
-    public BiosSettings getBios(String resourceId) {
-        LOGGER.info("ServerHardwareClient : getBios : Start");
-
-        BiosSettings biosSettings = baseClient.getResource(
-                UrlUtils.createUrl(SERVER_HARDWARE_URI,
-                        resourceId, SERVER_HARDWARE_BIOS_URI),
-                BiosSettings.class);
-
-        LOGGER.info("ServerHardwareClient : getBios : End");
-
-        return biosSettings;
-    }
+    @Endpoint(uri = "/{resourceId}" + SERVER_HARDWARE_BIOS_URI)
+    BiosSettings getBios(@PathParam("resourceId") String resourceId);
 
     /**
      * Retrieves the settings that describe the environmental configuration
@@ -253,18 +111,8 @@ public class ServerHardwareClient {
      *
      * @return {@link EnvironmentalConfiguration} containing the environmental configuration details.
      */
-    public EnvironmentalConfiguration getEnvironmentConfiguration(String resourceId) {
-        LOGGER.info("ServerHardwareClient : getEnvironmentConfiguration : Start");
-
-        EnvironmentalConfiguration environmentalConfiguration = baseClient.getResource(
-                UrlUtils.createUrl(SERVER_HARDWARE_URI,
-                        resourceId, ENVIRONMENT_CONFIGURATION_URI),
-                EnvironmentalConfiguration.class);
-
-        LOGGER.info("ServerHardwareClient : getEnvironmentConfiguration : End");
-
-        return environmentalConfiguration;
-    }
+    @Endpoint(uri = "/{resourceId}" + ENVIRONMENT_CONFIGURATION_URI)
+    EnvironmentalConfiguration getEnvironmentConfiguration(@PathParam("resourceId") String resourceId);
 
     /**
      * Updates the calibrated max power of an unmanaged or unsupported server hardware resource.
@@ -274,47 +122,22 @@ public class ServerHardwareClient {
      *
      * @return {@link EnvironmentalConfiguration} containing the environmental configuration details.
      */
-    public EnvironmentalConfiguration updateEnvironmentConfiguration(String resourceId,
-            EnvironmentalConfigurationUpdate environmentalConfigurationUpdate) {
-
-        LOGGER.info("ServerHardwareClient : updateEnvironmentConfiguration : Start");
-
-        String requestUri = UrlUtils.createUrl(SERVER_HARDWARE_URI,
-                resourceId, ENVIRONMENT_CONFIGURATION_URI);
-        Request request = new Request(HttpMethod.PUT, requestUri, environmentalConfigurationUpdate);
-
-        EnvironmentalConfiguration environmentalConfiguration = this.baseClient.executeRequest(request,
-                EnvironmentalConfiguration.class);
-
-        LOGGER.info("ServerHardwareClient : updateEnvironmentConfiguration : End");
-
-        return environmentalConfiguration;
-    }
+    @Endpoint(uri = "/{resourceId}" + ENVIRONMENT_CONFIGURATION_URI, method = HttpMethod.PUT)
+    EnvironmentalConfiguration updateEnvironmentConfiguration(@PathParam("resourceId") String resourceId,
+            @BodyParam EnvironmentalConfigurationUpdate environmentalConfigurationUpdate);
 
     /**
      * Updates the iLO firmware on a physical server to a minimum iLO  firmware version
      * required by HPE OneView to manage the server.
      *
      * @param resourceId server hardware resource identifier as seen in HPE OneView.
-     * @param aSync flag input to process request asynchronously or synchronously.
-     *
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      * @return {@link TaskResource} which returns the task status for the process.
      */
-    public TaskResource updateMpFirmwareVersion(String resourceId, boolean aSync) {
-        LOGGER.info("ServerHardwareClient : updateMpFirmwareVersion : Start");
-
-        String requestUri = UrlUtils.createUrl(SERVER_HARDWARE_URI,
-                resourceId, SERVER_HARDWARE_MP_FIRMWARE_URI);
-        Request request = new Request(HttpMethod.PUT, requestUri);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("ServerHardwareClient : updateMpFirmwareVersion : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + SERVER_HARDWARE_MP_FIRMWARE_URI, method = HttpMethod.PUT)
+    TaskResource updateMpFirmwareVersion(@PathParam("resourceId") String resourceId,
+            RequestOption ... options);
 
     /**
      * Retrieves the URL to launch a Single Sign-On (SSO) session for the iLO web interface.
@@ -323,18 +146,8 @@ public class ServerHardwareClient {
      *
      * @return {@link IloSsoUrlResult} containing the iLO SSO URL details.
      */
-    public IloSsoUrlResult getIloSsoUrl(String resourceId) {
-        LOGGER.info("ServerHardwareClient : getIloSsoUrl : Start");
-
-        IloSsoUrlResult iloSsoUrlResult = baseClient.getResource(
-                UrlUtils.createUrl(SERVER_HARDWARE_URI,
-                        resourceId, SERVER_HARDWARE_ILO_SSO_URI),
-                IloSsoUrlResult.class);
-
-        LOGGER.info("ServerHardwareClient : getIloSsoUrl : End");
-
-        return iloSsoUrlResult;
-    }
+    @Endpoint(uri = "/{resourceId}" + SERVER_HARDWARE_ILO_SSO_URI)
+    IloSsoUrlResult getIloSsoUrl(@PathParam("resourceId") String resourceId);
 
     /**
      * This module aids in generating a Single Sign-On (SSO) session for the iLO
@@ -348,18 +161,8 @@ public class ServerHardwareClient {
      *
      * @return {@link JavaRemoteConsoleUrlResult} containing the Java remote console URL details.
      */
-    public JavaRemoteConsoleUrlResult getJavaRemoteConsoleUrl(String resourceId) {
-        LOGGER.info("ServerHardwareClient : getJavaRemoteConsoleUrl : Start");
-
-        JavaRemoteConsoleUrlResult javaRemoteConsoleUrlResult = baseClient.getResource(
-                UrlUtils.createUrl(SERVER_HARDWARE_URI,
-                        resourceId, SERVER_HARDWARE_JAVA_REMOTE_CONSOLE_URI),
-                JavaRemoteConsoleUrlResult.class);
-
-        LOGGER.info("ServerHardwareClient : getJavaRemoteConsoleUrl : End");
-
-        return javaRemoteConsoleUrlResult;
-    }
+    @Endpoint(uri = "/{resourceId}" + SERVER_HARDWARE_JAVA_REMOTE_CONSOLE_URI)
+    JavaRemoteConsoleUrlResult getJavaRemoteConsoleUrl(@PathParam("resourceId") String resourceId);
 
      /**
      * Generates a Single Sign-On (SSO) session for the iLO Integrated Remote
@@ -373,18 +176,8 @@ public class ServerHardwareClient {
      *
      * @return {@link RemoteConsoleUrlResult} containing the remote console URL details.
      */
-    public RemoteConsoleUrlResult getRemoteConsoleUrl(String resourceId) {
-        LOGGER.info("ServerHardwareClient : getRemoteConsoleUrl : Start");
-
-        RemoteConsoleUrlResult remoteConsoleUrlResult = baseClient.getResource(
-                UrlUtils.createUrl(SERVER_HARDWARE_URI,
-                        resourceId, SERVER_HARDWARE_REMOTE_CONSOLE_URI),
-                RemoteConsoleUrlResult.class);
-
-        LOGGER.info("ServerHardwareClient : getRemoteConsoleUrl : End");
-
-        return remoteConsoleUrlResult;
-    }
+    @Endpoint(uri = "/{resourceId}" + SERVER_HARDWARE_REMOTE_CONSOLE_URI)
+    RemoteConsoleUrlResult getRemoteConsoleUrl(@PathParam("resourceId") String resourceId);
 
     /**
      * Retrieves the {@link UtilizationData} details for the specified server hardware.
@@ -393,124 +186,30 @@ public class ServerHardwareClient {
      *
      * @return {@link UtilizationData} object containing the details.
      */
-    public UtilizationData getUtilization(String resourceId) {
-        LOGGER.info("ServerHardwareClient : getUtilization : Start");
+    @Endpoint(uri = "/{resourceId}" + SERVER_HARDWARE_UTILIZATION_URI)
+    UtilizationData getUtilization(@PathParam("resourceId") String resourceId);
 
-        UtilizationData utilizationData = baseClient.getResource(
-                UrlUtils.createUrl(SERVER_HARDWARE_URI,
-                        resourceId, SERVER_HARDWARE_UTILIZATION_URI),
-                UtilizationData.class);
-
-        LOGGER.info("ServerHardwareClient : getUtilization : End");
-
-        return utilizationData;
-    }
-    
     /**
      * Retrieves the {@link ServerFirmwareInventory} details for the specified server hardware.
-     * 
-     * @param componentName component name as seen in HPE OneView.
-     * @param componentLocation component location as seen in HPE OneView.
-     * @param componentVersion component version as seen in HPE OneView.
-     * @param serverName server hardware name as seen in HPE OneView.
-     * @param serverModel server hardware model as seen in HPE OneView.
-     * 
+     *
+     * @param filter used specify some filters that will be applied to narrow the results.
+     *
      * @return {@link ResourceCollection}&lt;{@link ServerFirmwareInventory}&gt; containing
      * the details for all found server hardware.
      */
-    public ResourceCollection<ServerFirmwareInventory> getServerFirmwareInventoryByFilter(Optional<String> componentName,
-            Optional<String> componentLocation, Optional<String> componentVersion, Optional<String> serverName, Optional<String> serverModel) {
-
-        LOGGER.info("ServerHardwareClient : getServerFirmwareInventoryByFilter : Start");
-
-        List<UrlParameter> parameters = new ArrayList<>();
-
-        if (componentName.isPresent()) {
-            parameters.add(new UrlParameter("filter", "components.componentName='" + componentName.get() + "'"));
-        }
-        if (componentLocation.isPresent()) {
-            parameters.add(new UrlParameter("filter", "components.componentLocation='" + componentLocation.get() + "'"));
-        }
-        if (componentVersion.isPresent()) {
-            parameters.add(new UrlParameter("filter", "components.componentVersion='" + componentVersion.get() + "'"));
-        }
-        if (serverName.isPresent()) {
-            parameters.add(new UrlParameter("filter", "serverName='" + serverName.get() + "'"));
-        }
-        if (serverModel.isPresent()) {
-            parameters.add(new UrlParameter("filter", "serverModel='" + serverModel.get() + "'"));
-        }
-                
-        ResourceCollection<ServerFirmwareInventory> serverFirmwareInventory = baseClient.getResourceCollection(
-                SERVER_HARDWARE_FIRMWARE, ServerFirmwareInventory.class,
-                parameters.toArray(new UrlParameter[parameters.size()]) );
-               
-        LOGGER.info("ServerHardwareClient : getServerFirmwareInventoryByFilter : End");
-
-        return serverFirmwareInventory;
-    }
-    
+    @Endpoint(uri = SERVER_HARDWARE_FIRMWARE)
+    ResourceCollection<ServerFirmwareInventory> getServerFirmwareInventoryByFilter(
+            @QueryParam() FirmwareInventoryFilter filter);
 
     /**
      * Retrieves the {@link ServerFirmwareInventory} details for the specified server hardware.
      *
      * @param resourceId server hardware resource identifier as seen in HPE OneView.
-     * 
+     *
      * @return {@link ServerFirmwareInventory} object containing the details.
-     * 
+     *
      */
-    public ServerFirmwareInventory getServerFirmwareInventory(String resourceId){
-        LOGGER.info("ServerHardwareClient : getServerFirmwareInventory : Start");
-        
-        ServerFirmwareInventory serverFirmwareInventory = baseClient.getResource(
-                UrlUtils.createUrl(SERVER_HARDWARE_URI,
-                        resourceId, SERVER_HARDWARE_FIRMWARE_URI),
-                ServerFirmwareInventory.class);
-        
-        LOGGER.info("ServerHardwareClient : getServerFirmwareInventory : End");
-        
-        return serverFirmwareInventory;
-    }
-    
-    
-    
-    /**
-     * Use the PATCH to update the scope uri.
-     *
-     * <br>Ex:
-     * <br>To update the scope uri from the server hardware:
-     * <br>Operation: add 
-     * <br>Path: /scopeUris
-     * <br>Value: scopeUri
-     *
-     * <br>Operation: remove
-     * <br>Path: /scopeUris
-     * <br>Value:  
-     *
-     * <br>Operation: replace
-     * <br>Path: /scopeUris
-     * <br>Value: a list of scopeUris
-     *
-     * @param resourceId server hardware resource identifier as seen in HPE OneView.
-     * @param patch object containing the patch details, used to update a scope uri.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} which returns the task status for the process.
-     */
-    public TaskResource patch(String resourceId, Patch patch, boolean aSync) {
-        LOGGER.info("ServerHardwareClient : patch : Start");
-
-        String resourceUri = UrlUtils.createUrl(SERVER_HARDWARE_URI, resourceId);
-        Request request = new Request(HttpMethod.PATCH, resourceUri, patch);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("ServerHardwareClient : patch : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + SERVER_HARDWARE_FIRMWARE_URI)
+    ServerFirmwareInventory getServerFirmwareInventory(@PathParam("resourceId") String resourceId);
 
 }

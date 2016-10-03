@@ -16,7 +16,7 @@
 
 package com.hp.ov.sdk.rest.client.server;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +32,7 @@ public class FirmwareInventoryFilter implements UrlQuery {
     private static final String SERVER_NAME = "serverName";
     private static final String SERVER_MODEL = "serverModel";
 
-    private Map<String, UrlParameter> filters = new HashMap<>();
+    private Map<String, UrlParameter> filters = new LinkedHashMap<>();
 
     public FirmwareInventoryFilter setComponentName(String componentName) {
         this.filters.put(COMPONENT_NAME,
