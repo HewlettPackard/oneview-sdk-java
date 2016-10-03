@@ -16,237 +16,62 @@
 
 package com.hp.ov.sdk.rest.client.server;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.UtilizationData;
 import com.hp.ov.sdk.dto.servers.enclosure.AddEnclosure;
 import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.ContentType;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.AddableResource;
+import com.hp.ov.sdk.rest.client.common.PatchableResource;
+import com.hp.ov.sdk.rest.client.common.RemovableResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.client.common.UpdatableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class EnclosureClient {
+@Api(EnclosureClient.ENCLOSURE_URI)
+public interface EnclosureClient extends
+        AddableResource<AddEnclosure>,
+        SearchableResource<Enclosure>,
+        UpdatableResource<Enclosure>,
+        RemovableResource,
+        PatchableResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EnclosureClient.class);
+    String ENCLOSURE_ACTIVE_OA_SSO_URI = "/activeOaSsoUrl";
+    String ENCLOSURE_CONFIGURATION_URI = "/configuration";
+    String ENCLOSURE_COMPLIANCE_URI = "/compliance";
+    String ENCLOSURE_FW_BASELINE_URI = "/enclosureFwBaseline";
+    String ENCLOSURE_SCRIPT_URI = "/script";
+    String ENCLOSURE_STANDBY_OA_SSO_URI = "/standbyOaSsoUrl";
+    String ENCLOSURE_OA_SSO_URI = "/sso";
+    String ENCLOSURE_REFRESH_STATE_URI = "/refreshState";
+    String ENCLOSURE_URI = "/rest/enclosures";
+    String ENCLOSURE_UTILIZATION_URI = "/utilization";
+    String ENVIRONMENT_CONFIGURATION_URI = "/environmentalConfiguration";
 
-    protected static final String ENCLOSURE_ACTIVE_OA_SSO_URI = "activeOaSsoUrl";
-    protected static final String ENCLOSURE_CONFIGURATION_URI = "configuration";
-    protected static final String ENCLOSURE_COMPLIANCE_URI = "compliance";
-    protected static final String ENCLOSURE_FW_BASELINE_URI = "enclosureFwBaseline";
-    protected static final String ENCLOSURE_SCRIPT_URI = "script";
-    protected static final String ENCLOSURE_STANDBY_OA_SSO_URI = "standbyOaSsoUrl";
-    protected static final String ENCLOSURE_OA_SSO_URI = "sso";
-    protected static final String ENCLOSURE_REFRESH_STATE_URI = "refreshState";
-    protected static final String ENCLOSURE_URI = "/rest/enclosures";
-    protected static final String ENCLOSURE_UTILIZATION_URI = "utilization";
-    protected static final String ENVIRONMENT_CONFIGURATION_URI = "environmentalConfiguration";
-
-
-    private static final int TIMEOUT = 1200000; // in milliseconds
-
-    private static final String ROLE_STANDBY = "?role=Standby";
-    private static final String ROLE_ACTIVE = "?role=Active";
-
-    private final BaseClient baseClient;
-
-    public EnclosureClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link Enclosure} details for the specified enclosure.
-     *
-     * @param resourceId enclosure resource identifier as seen in HPE OneView.
-     *
-     * @return {@link Enclosure} object containing the details.
-     */
-    public Enclosure getById(String resourceId) {
-        LOGGER.info("EnclosureClient : getById : Start");
-
-        Enclosure logicalEnclosure = baseClient.getResource(
-                UrlUtils.createUrl(ENCLOSURE_URI, resourceId), Enclosure.class);
-
-        LOGGER.info("EnclosureClient : getById : End");
-
-        return logicalEnclosure;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link Enclosure}&gt; containing the details
-     * for all the available enclosures found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link Enclosure}&gt; containing
-     * the details for all found enclosures.
-     */
-    public ResourceCollection<Enclosure> getAll() {
-        LOGGER.info("EnclosureClient : getAll : Start");
-
-        ResourceCollection<Enclosure> logicalEnclosures = baseClient.getResourceCollection(ENCLOSURE_URI, Enclosure.class);
-
-        LOGGER.info("EnclosureClient : getAll : End");
-
-        return logicalEnclosures;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link Enclosure}&gt; containing details
-     * for the available enclosures found under the current HPE OneView that match the name.
-     *
-     * @param name enclosure name as seen in HPE OneView.
-     *
-     * @return {@link Enclosure} object containing the details.
-     */
-    public ResourceCollection<Enclosure> getByName(String name) {
-        LOGGER.info("EnclosureClient : getByName : Start");
-
-        ResourceCollection<Enclosure> logicalEnclosures = baseClient.getResourceCollection(
-                ENCLOSURE_URI, Enclosure.class,
-                UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("EnclosureClient : getByName : End");
-
-        return logicalEnclosures;
-    }
-
-    /**
-     * Creates a enclosure according to the provided {@link Enclosure} object.
-     *
-     * @param addEnclosure object containing the enclosure details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource add(AddEnclosure addEnclosure, boolean aSync) {
-        LOGGER.info("EnclosureClient : add : Start");
-
-        Request request = new Request(HttpMethod.POST, ENCLOSURE_URI, addEnclosure);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("EnclosureClient : add : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Updates a {@link Enclosure} identified by the given resource identifier.
-     *
-     * @param resourceId enclosure resource identifier as seen in HPE OneView.
-     * @param enclosure object containing the enclosure details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource update(String resourceId, Enclosure enclosure, boolean aSync) {
-        LOGGER.info("EnclosureClient : update : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(ENCLOSURE_URI, resourceId), enclosure);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("EnclosureClient : update : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Performs a PATCH request and updates the existing enclosure based
-     * on the resource identifier and the content of the {@link Patch} object.
-     *
-     * @param resourceId enclosure resource identifier as seen in HPE OneView.
-     * @param patch object containing the update to be made to existing enclosure.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource patch(String resourceId, Patch patch, boolean aSync) {
-        LOGGER.info("EnclosureClient : patch : Start");
-
-        Request request = new Request(HttpMethod.PATCH,
-                UrlUtils.createUrl(ENCLOSURE_URI, resourceId), patch);
-
-        request.setTimeout(TIMEOUT);
-
-        if (this.baseClient.getApiVersion().getValue() >= ApiVersion.V_300.getValue()) {
-            request.setContentType(ContentType.APPLICATION_JSON_PATCH);
-        }
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("EnclosureClient : patch : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Removes the {@link Enclosure} identified by the given resource identifier.
-     *
-     * @param resourceId enclosure resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource remove(String resourceId, boolean aSync) {
-        LOGGER.info("EnclosureClient : remove : Start");
-
-        Request request = new Request(HttpMethod.DELETE,
-                UrlUtils.createUrl(ENCLOSURE_URI, resourceId));
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("EnclosureClient : remove : End");
-
-        return taskResource;
-    }
+    String ROLE_STANDBY = "?role=Standby";
+    String ROLE_ACTIVE = "?role=Active";
 
     /**
      * Reapplies the enclosure configuration in the enclosure
      * identified by the given resource identifier.
      *
      * @param resourceId enclosure resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                 some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource updateConfiguration(String resourceId, boolean aSync) {
-        LOGGER.info("EnclosureClient : updateConfiguration : Start");
-
-        String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_CONFIGURATION_URI);
-        Request request = new Request(HttpMethod.PUT, updateUri);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("EnclosureClient : updateConfiguration : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + ENCLOSURE_CONFIGURATION_URI, method = HttpMethod.PUT)
+    public TaskResource updateConfiguration(@PathParam("resourceId") String resourceId, RequestOption ... options);
 
     /**
      * Retrieves the configuration script for the specified enclosure resource identifier.
@@ -255,40 +80,22 @@ public class EnclosureClient {
      *
      * @return the configuration script for the specified enclosure.
      */
-    public String getConfigurationScript(String resourceId) {
-        LOGGER.info("EnclosureClient : getConfigurationScript : Start");
-
-        Request request = new Request(HttpMethod.GET,
-                UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_SCRIPT_URI));
-
-        String response = baseClient.executeRequest(request, String.class);
-
-        LOGGER.info("EnclosureClient : getConfigurationScript : End");
-
-        return response;
-    }
+    @Endpoint(uri = "/{resourceId}" + ENCLOSURE_SCRIPT_URI)
+    public String getConfigurationScript(@PathParam("resourceId") String resourceId);
 
     /**
      * Updates the configuration script for the specified enclosure resource identifier.
      *
      * @param resourceId enclosure resource identifier as seen in HPE OneView.
      * @param scriptData script data to be updated for enclosure.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                 some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource updateConfigurationScript(String resourceId, String scriptData, boolean aSync) {
-        LOGGER.info("EnclosureClient : updateConfigurationScript : Start");
-
-        String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_SCRIPT_URI);
-
-        TaskResource taskResource = this.baseClient.updateResource(updateUri, scriptData, aSync);
-
-        LOGGER.info("EnclosureClient : updateConfigurationScript : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + ENCLOSURE_SCRIPT_URI, method = HttpMethod.PUT)
+    public TaskResource updateConfigurationScript(@PathParam("resourceId") String resourceId
+            , @BodyParam String scriptData, RequestOption ... options);
 
     /**
      * Retrieves data that can be used to construct a single sign-on URL
@@ -298,25 +105,19 @@ public class EnclosureClient {
      *
      * @return {@link SsoUrlData} the data used for single sign URL.
      */
-    public SsoUrlData getActiveOaSsoUrl(String resourceId) {
-        LOGGER.info("EnclosureClient : getActiveOaSsoUrl : Start");
+    @Endpoint(uri = "/{resourceId}" + ENCLOSURE_OA_SSO_URI + ROLE_ACTIVE)
+    public SsoUrlData getActiveOaSsoUrl(@PathParam("resourceId") String resourceId);
 
-        String oaSsoUrl;
-
-        if (this.baseClient.getApiVersion().getValue() >= ApiVersion.V_200.getValue()) {
-            oaSsoUrl = new StringBuilder()
-                    .append(ENCLOSURE_OA_SSO_URI)
-                    .append(ROLE_ACTIVE).toString();
-        } else {
-            oaSsoUrl = ENCLOSURE_ACTIVE_OA_SSO_URI;
-        }
-
-        SsoUrlData ssoUrlData = this.getOaSsoUrl(resourceId, oaSsoUrl);
-
-        LOGGER.info("EnclosureClient : getActiveOaSsoUrl : End");
-
-        return ssoUrlData;
-    }
+    /**
+     * Retrieves data that can be used to construct a single sign-on URL
+     * for an onboard administrator. Available when using API version 120.
+     *
+     * @param resourceId enclosure resource identifier as seen in HPE OneView.
+     *
+     * @return {@link SsoUrlData} the data used for single sign URL.
+     */
+    @Endpoint(uri = "/{resourceId}" + ENCLOSURE_ACTIVE_OA_SSO_URI)
+    public SsoUrlData getActiveOaSsoUrl_V120(@PathParam("resourceId") String resourceId);
 
     /**
      * Retrieves data that can be used to construct a single sign-on URL
@@ -326,62 +127,32 @@ public class EnclosureClient {
      *
      * @return {@link SsoUrlData} the data used for single sign URL.
      */
-    public SsoUrlData getStandbyOaSsoUrl(String resourceId) {
-        LOGGER.info("EnclosureClient : getStandbyOaSsoUrl : Start");
+    @Endpoint(uri = "/{resourceId}" + ENCLOSURE_OA_SSO_URI + ROLE_STANDBY)
+    public SsoUrlData getStandbyOaSsoUrl(@PathParam("resourceId") String resourceId);
 
-        String oaSsoUrl;
-
-        if (this.baseClient.getApiVersion().getValue() >= ApiVersion.V_200.getValue()) {
-            oaSsoUrl = new StringBuilder()
-                    .append(ENCLOSURE_OA_SSO_URI)
-                    .append(ROLE_STANDBY).toString();
-        } else {
-            oaSsoUrl = ENCLOSURE_STANDBY_OA_SSO_URI;
-        }
-
-        SsoUrlData ssoUrlData = this.getOaSsoUrl(resourceId, oaSsoUrl);
-
-        LOGGER.info("EnclosureClient : getStandbyOaSsoUrl : End");
-
-        return ssoUrlData;
-    }
-
-    private SsoUrlData getOaSsoUrl(String resourceId, String oaSsoUrl) {
-        LOGGER.info("EnclosureClient : getOaSsoUrl : Start");
-
-        SsoUrlData ssoUrlData = baseClient.getResource(
-                UrlUtils.createUrl(ENCLOSURE_URI, resourceId, oaSsoUrl),
-                SsoUrlData.class);
-
-        LOGGER.info("EnclosureClient : getOaSsoUrl : End");
-
-        return ssoUrlData;
-    }
+    /**
+     * Retrieves data that can be used to construct a single sign-on URL
+     * for an onboard administrator. Available when using API version 120.
+     *
+     * @param resourceId enclosure resource identifier as seen in HPE OneView.
+     *
+     * @return {@link SsoUrlData} the data used for single sign URL.
+     */
+    @Endpoint(uri = "/{resourceId}" + ENCLOSURE_STANDBY_OA_SSO_URI)
+    public SsoUrlData getStandbyOaSsoUrl_V120(@PathParam("resourceId") String resourceId);
 
     /**
      * Updates the enclosure configuration with that of the enclosure group script.
      * <b>This is not applicable if the enclosure is monitored.</b>
      *
      * @param resourceId enclosure resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                 some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource updateCompliance(String resourceId, boolean aSync) {
-        LOGGER.info("EnclosureClient : updateCompliance : Start");
-
-        String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_COMPLIANCE_URI);
-        Request request = new Request(HttpMethod.PUT, updateUri);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("EnclosureClient : updateCompliance : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + ENCLOSURE_COMPLIANCE_URI, method = HttpMethod.PUT)
+    public TaskResource updateCompliance(@PathParam("resourceId") String resourceId, RequestOption ... options);
 
     /**
      * Applies the firmware baseline to the enclosure. This method can be used to
@@ -391,25 +162,14 @@ public class EnclosureClient {
      *
      * @param resourceId enclosure resource identifier as seen in HPE OneView.
      * @param fwBaselineConfig the firmware baseline to be applied to the enclosure.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                 some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource updateFwBaseline(String resourceId, FwBaselineConfig fwBaselineConfig, boolean aSync) {
-        LOGGER.info("EnclosureClient : updateFwBaseline : Start");
-
-        String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_FW_BASELINE_URI);
-        Request request = new Request(HttpMethod.PUT, updateUri, fwBaselineConfig);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("EnclosureClient : updateFwBaseline : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + ENCLOSURE_FW_BASELINE_URI, method = HttpMethod.PUT)
+    public TaskResource updateFwBaseline(@PathParam("resourceId") String resourceId,
+            @BodyParam FwBaselineConfig fwBaselineConfig, RequestOption ... options);
 
     /**
      * Retrieves historical utilization data for the specified enclosure.
@@ -419,17 +179,8 @@ public class EnclosureClient {
      * @return {@link UtilizationData} containing resource data utilization
      * such as power and cpu.
      */
-    public UtilizationData getUtilization(String resourceId) {
-        LOGGER.info("EnclosureClient : getUtilization : Start");
-
-        UtilizationData utilizationData = this.baseClient.getResource(
-                UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_UTILIZATION_URI),
-                UtilizationData.class);
-
-        LOGGER.info("EnclosureClient : getUtilization : End");
-
-        return utilizationData;
-    }
+    @Endpoint(uri = "/{resourceId}" + ENCLOSURE_UTILIZATION_URI)
+    public UtilizationData getUtilization(@PathParam("resourceId") String resourceId);
 
     /**
      * Retrieves the environmental configuration of the enclosure identified
@@ -439,17 +190,8 @@ public class EnclosureClient {
      *
      * @return {@link EnvironmentalConfiguration} for the specified enclosure.
      */
-    public EnvironmentalConfiguration getEnvironmentalConfiguration(String resourceId) {
-        LOGGER.info("EnclosureClient : getEnvironmentalConfiguration : Start");
-
-        EnvironmentalConfiguration configuration = this.baseClient.getResource(
-                UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENVIRONMENT_CONFIGURATION_URI),
-                EnvironmentalConfiguration.class);
-
-        LOGGER.info("EnclosureClient : getEnvironmentalConfiguration : End");
-
-        return configuration;
-    }
+    @Endpoint(uri = "/{resourceId}" + ENVIRONMENT_CONFIGURATION_URI)
+    public EnvironmentalConfiguration getEnvironmentalConfiguration(@PathParam("resourceId") String resourceId);
 
     /**
      * Updates the environmental configuration of the enclosure identified
@@ -461,47 +203,22 @@ public class EnclosureClient {
      *
      * @return {@link EnvironmentalConfiguration} for the specified enclosure.
      */
-    public EnvironmentalConfiguration updateEnvironmentalConfiguration(String resourceId,
-            EnvironmentalConfigurationUpdate updateEnvironmentalConfiguration) {
-
-        LOGGER.info("EnclosureClient : updateEnvironmentalConfiguration : Start");
-
-        Request request = new Request(
-                HttpMethod.PUT,
-                UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENVIRONMENT_CONFIGURATION_URI),
-                updateEnvironmentalConfiguration);
-
-        EnvironmentalConfiguration configuration = baseClient.executeRequest(request,
-                EnvironmentalConfiguration.class);
-
-        LOGGER.info("EnclosureClient : updateEnvironmentalConfiguration : End");
-
-        return configuration;
-    }
+    @Endpoint(uri = "/{resourceId}" + ENVIRONMENT_CONFIGURATION_URI, method = HttpMethod.PUT)
+    public EnvironmentalConfiguration updateEnvironmentalConfiguration(@PathParam("resourceId") String resourceId,
+            @BodyParam EnvironmentalConfigurationUpdate updateEnvironmentalConfiguration);
 
     /**
      * Refresh the enclosure to fix any configuration issue.
      *
      * @param resourceId enclosure resource identifier as seen in HPE OneView.
      * @param refreshStateConfig refresh state details to fix configuration issues.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                 some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource updateRefreshState(String resourceId, RefreshStateConfig refreshStateConfig, boolean aSync) {
-        LOGGER.info("EnclosureClient : updateRefreshState : Start");
-
-        String updateUri = UrlUtils.createUrl(ENCLOSURE_URI, resourceId, ENCLOSURE_REFRESH_STATE_URI);
-        Request request = new Request(HttpMethod.PUT, updateUri, refreshStateConfig);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("EnclosureClient : updateRefreshState : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + ENCLOSURE_REFRESH_STATE_URI, method = HttpMethod.PUT)
+    public TaskResource updateRefreshState(@PathParam("resourceId") String resourceId,
+            @BodyParam RefreshStateConfig refreshStateConfig, RequestOption ... options);
 
 }
