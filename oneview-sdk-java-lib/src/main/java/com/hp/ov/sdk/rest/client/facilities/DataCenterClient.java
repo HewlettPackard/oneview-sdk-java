@@ -17,142 +17,100 @@ package com.hp.ov.sdk.rest.client.facilities;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.facilities.datacenter.DataCenter;
 import com.hp.ov.sdk.dto.facilities.datacenter.VisualContent;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.UrlQuery;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
+import com.hp.ov.sdk.rest.reflect.QueryParam;
 
-public class DataCenterClient {
+@Api(DataCenterClient.DATA_CENTER_URI)
+public interface DataCenterClient extends
+        SearchableResource<DataCenter> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DataCenterClient.class);
-
-    private final BaseClient baseClient;
-
-    public DataCenterClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link DataCenter} details for the specified data center.
-     *
-     * @param resourceId data center resource identifier as seen in HPE OneView.
-     *
-     * @return {@link DataCenter} object containing the details.
-     */
-    public DataCenter getById(String resourceId) {
-        LOGGER.info("DataCenterClient : getById : Start");
-
-        DataCenter dataCenter = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.DATA_CENTER_URI, resourceId), DataCenter.class);
-
-        LOGGER.info("DataCenterClient : getById : End");
-
-        return dataCenter;
-    }
+    String DATA_CENTER_URI = "/rest/datacenters";
+    String DATA_CENTER_VISUAL_CONTENT_URI = "/visualContent";
 
     /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link DataCenter}&gt; containing details
-     * for all the available data centers found under the current HPE OneView.
+     * Adds a resource according to the provided <code>resource</code> object.
      *
-     * @return {@link ResourceCollection}&lt;{@link DataCenter}&gt; containing
-     * the details for all found data centers.
+     * <p>According to the resource type, the add action can take some time to complete.
+     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
+     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
+     * the default behavior is to wait until the add action completes. Below is an example that
+     * illustrates how the timeout can be specified:
+     *
+     * <pre>{@code
+     *     SomeClient client = oneViewClient.someClient();
+     *     SomeResource resource = new SomeResource();
+     *     TaskResource task = client.add(resource, TaskTimeout.of(5000)); //5 secs
+     * }</pre>
+     *
+     * @param resource object containing the details of the resource that should be added.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
+     *
+     * @return {@link DataCenter} object containing the result of this request.
      */
-    public ResourceCollection<DataCenter> getAll() {
-        LOGGER.info("DataCenterClient : getAll : Start");
-
-        ResourceCollection<DataCenter> dataCenters = baseClient.getResourceCollection(
-                ResourceUris.DATA_CENTER_URI, DataCenter.class);
-
-        LOGGER.info("DataCenterClient : getAll : End");
-
-        return dataCenters;
-    }
+    @Endpoint(method = HttpMethod.POST)
+    DataCenter add(@BodyParam DataCenter resource, RequestOption... options);
 
     /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link DataCenter}&gt; containing details
-     * for the available data centers found under the current HPE OneView that match the name.
+     * Updates the resource identified by <code>resourceId</code> according to the
+     * provided <code>resource</code> object.
      *
-     * @param name data center name as seen in HPE OneView.
+     * <p>According to the resource type, the update action can take some time to complete.
+     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
+     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
+     * the default behavior is to wait until the update action completes. Below is an example that
+     * illustrates how the timeout can be specified:
      *
-     * @return {@link ResourceCollection}&lt;{@link DataCenter}&gt; containing
-     * the details for the found data centers.
+     * <pre>{@code
+     *     SomeClient client = oneViewClient.someClient();
+     *     SomeResource resource = client.getByName("resourceName");
+     *     //do some changes to the resource
+     *     TaskResource task = client.update(resource.getResourceId(), resource, TaskTimeout.of(5000)); //5 secs
+     * }</pre>
+     *
+     * @param resourceId resource identifier as seen in HPE OneView.
+     * @param resource object containing the details of the resource that should be created.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
+     *
+     * @return {@link DataCenter} object containing the result of this request.
      */
-    public ResourceCollection<DataCenter> getByName(String name) {
-        LOGGER.info("DataCenterClient : getByName : Start");
-
-        ResourceCollection<DataCenter> dataCenters = baseClient.getResourceCollection(
-                ResourceUris.DATA_CENTER_URI, DataCenter.class, UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("DataCenterClient : getByName : End");
-
-        return dataCenters;
-    }
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
+    DataCenter update(@PathParam("resourceId") String resourceId, @BodyParam DataCenter resource, RequestOption... options);
 
     /**
-     * Adds a data center according to the provided {@link DataCenter} object.
+     * Removes the resource identified by the provided <code>resourceId</code>.
      *
-     * @param dataCenter object containing the data center details.
+     * <p>According to the resource type, the remove action can take some time to complete.
+     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
+     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
+     * the default behavior is to wait until the remove action completes. Below is an example that
+     * illustrates how the timeout can be specified:
      *
-     * @return {@link DataCenter} containing the added data center.
+     * <pre>{@code
+     *     String resourceName = "someResourceName";
+     *     SomeResource resource = client.getByName(resourceName);
+     *     TaskResource task = client.remove(resource.getResourceId(), TaskTimeout.of(5000)); //5 secs
+     * }</pre>
+     *
+     * @param resourceId resource identifier as seen in HPE OneView.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
+     *
+     * @return {@link String} containing the result of this request.
      */
-    public DataCenter add(DataCenter dataCenter) {
-        LOGGER.info("DataCenterClient : add : Start");
-
-        Request request = new Request(HttpMethod.POST, ResourceUris.DATA_CENTER_URI, dataCenter);
-        DataCenter createdDataCenter = this.baseClient.executeRequest(request, DataCenter.class);
-
-        LOGGER.info("DataCenterClient : add : End");
-
-        return createdDataCenter;
-    }
-
-    /**
-     * Updates a {@link DataCenter} identified by the given resource identifier.
-     *
-     * @param resourceId data center resource identifier as seen in HPE OneView.
-     * @param dataCenter object containing the data center details.
-     *
-     * @return {@link DataCenter} containing the data center updated.
-     */
-    public DataCenter update(String resourceId, DataCenter dataCenter) {
-        LOGGER.info("DataCenterClient : update : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(ResourceUris.DATA_CENTER_URI, resourceId), dataCenter);
-        DataCenter updatedDataCenter = this.baseClient.executeRequest(request, DataCenter.class);
-
-        LOGGER.info("DataCenterClient : update : End");
-
-        return updatedDataCenter;
-    }
-
-    /**
-     * Removes the {@link DataCenter} identified by the given resource identifier.
-     *
-     * @param resourceId data center resource identifier as seen in HPE OneView.
-     *
-     * @return String value containing the result of the process.
-     */
-    public String remove(String resourceId) {
-        LOGGER.info("DataCenterClient : remove : Start");
-
-        Request request = new Request(HttpMethod.DELETE,
-                UrlUtils.createUrl(ResourceUris.DATA_CENTER_URI, resourceId));
-        String response = this.baseClient.executeRequest(request, String.class);
-
-        LOGGER.info("DataCenterClient : remove : End");
-
-        return response;
-    }
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.DELETE)
+    String remove(@PathParam("resourceId") String resourceId, RequestOption... options);
 
     /**
      * Removes the {@link DataCenter}(s) matching the filter. A filter is required
@@ -161,20 +119,13 @@ public class DataCenterClient {
      * synchronously, based on the aSync flag input.
      *
      * @param filter A general filter/query string that narrows the list of resources.
-     * @param aSync Flag input to process request asynchronously or synchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                 some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource removeByFilter(String filter, boolean aSync) {
-        LOGGER.info("DataCenterClient : removeByFilter : Start");
-
-        TaskResource taskResource = baseClient.deleteResource(ResourceUris.DATA_CENTER_URI, aSync,
-                new UrlParameter("filter", filter));
-
-        LOGGER.info("DataCenterClient : removeByFilter : End");
-
-        return taskResource;
-    }
+    @Endpoint(method = HttpMethod.DELETE)
+    public TaskResource removeByFilter(@QueryParam UrlQuery filter, RequestOption ... options);
 
     /**
      * Retrieves a {@link List}&lt;{@link VisualContent}&gt; describing each rack
@@ -185,16 +136,7 @@ public class DataCenterClient {
      * @return {@link List}&lt;{@link VisualContent}&gt; containing the details of each rack
      * within the data center.
      */
-    public List<VisualContent> getVisualContent(String resourceId) {
-        LOGGER.info("DataCenterClient : getVisualContent : Start");
-
-        List<VisualContent> visualContents = baseClient.getResourceList(UrlUtils.createUrl(
-                ResourceUris.DATA_CENTER_URI, resourceId, ResourceUris.DATA_CENTER_VISUAL_CONTENT_URI),
-                VisualContent.class);
-
-        LOGGER.info("DataCenterClient : getVisualContent : End");
-
-        return visualContents;
-    }
+    @Endpoint(uri = "/{resourceId}" + DATA_CENTER_VISUAL_CONTENT_URI)
+    public List<VisualContent> getVisualContent(@PathParam("resourceId") String resourceId);
 
 }

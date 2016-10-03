@@ -27,6 +27,7 @@ import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.facilities.datacenter.DataCenter;
 import com.hp.ov.sdk.dto.facilities.datacenter.DeratingType;
 import com.hp.ov.sdk.dto.facilities.datacenter.VisualContent;
+import com.hp.ov.sdk.rest.client.GenericFilter;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
@@ -111,8 +112,9 @@ public class DataCenterClientSample {
     }
 
     private void removeDataCenterByFilter() {
-        String filter = "name='" + DATA_CENTER_NAME +"'";
-        TaskResource task = this.dataCenterClient.removeByFilter(filter, false);
+        GenericFilter filter = new GenericFilter();
+        filter.setFilter("'name' = '" + DATA_CENTER_NAME + "'");
+        TaskResource task = this.dataCenterClient.removeByFilter(filter);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
