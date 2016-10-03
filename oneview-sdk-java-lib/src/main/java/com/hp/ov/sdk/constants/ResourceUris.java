@@ -79,8 +79,6 @@ public class ResourceUris {
     public static final String POWER_DEVICE_SYNCHRONOUS_URI = "synchronous";
     public static final String POWER_DEVICE_URI = "/rest/power-devices";
     public static final String PROFILE_PORTS_URI = SERVER_PROFILE_URI + "/profile-ports";
-    public static final String RACK_DEVICE_TOPOLOGY = "deviceTopology";
-    public static final String RACK_URI = "/rest/racks";
     public static final String SERVER_HARDWARE_TYPE_URI = "/rest/server-hardware-types";
     public static final String SERVER_PROFILE_COMPLIANCE_PREVIEW_URI = "compliance-preview";
     public static final String SERVER_PROFILE_COMPLIANCE_MESSAGES_URI = "messages";
