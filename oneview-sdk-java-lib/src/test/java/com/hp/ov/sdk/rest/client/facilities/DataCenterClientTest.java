@@ -16,59 +16,69 @@
 
 package com.hp.ov.sdk.rest.client.facilities;
 
+import static com.hp.ov.sdk.rest.client.facilities.DataCenterClient.DATA_CENTER_URI;
+import static com.hp.ov.sdk.rest.client.facilities.DataCenterClient.DATA_CENTER_VISUAL_CONTENT_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.facilities.datacenter.DataCenter;
 import com.hp.ov.sdk.dto.facilities.datacenter.VisualContent;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.client.GenericFilter;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DataCenterClientTest {
 
-    private static final String ANY_DATA_CENTER_RESOURCE_ID = "random-UUID";
-    private static final String ANY_DATA_CENTER_RESOURCE_NAME = "random-Name";
+    private static final String ANY_RESOURCE_ID = "random-UUID";
+    private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private DataCenterClient dataCenterClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private DataCenterClient dataCenterClient = Reflection.newProxy(DataCenterClient.class,
+            new ClientRequestHandler<>(baseClient, DataCenterClient.class));
 
     @Test
     public void shouldGetDataCenter() {
-        dataCenterClient.getById(ANY_DATA_CENTER_RESOURCE_ID);
+        dataCenterClient.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.DATA_CENTER_URI + "/" + ANY_DATA_CENTER_RESOURCE_ID;
+        String expectedUri = DATA_CENTER_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, DataCenter.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(DataCenter.class).getType());
     }
 
     @Test
     public void shouldGetAllDataCenter() {
         dataCenterClient.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.DATA_CENTER_URI, DataCenter.class);
+        Request expectedRequest = new Request(HttpMethod.GET, DATA_CENTER_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<DataCenter>>() {}.getType());
     }
 
     @Test
     public void shouldGetDataCenterCollectionByName() {
-        dataCenterClient.getByName(ANY_DATA_CENTER_RESOURCE_NAME);
+        dataCenterClient.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.DATA_CENTER_URI,
-                DataCenter.class, UrlParameter.getFilterByNameParameter(ANY_DATA_CENTER_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, DATA_CENTER_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<DataCenter>>() {}.getType());
     }
 
     @Test
@@ -77,50 +87,66 @@ public class DataCenterClientTest {
 
         dataCenterClient.add(dataCenter);
 
-        Request request = new Request(HttpMethod.POST, ResourceUris.DATA_CENTER_URI, dataCenter);
+        Request expectedRequest = new Request(HttpMethod.POST, DATA_CENTER_URI);
+        expectedRequest.setEntity(dataCenter);
 
-        then(baseClient).should().executeRequest(request, DataCenter.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(DataCenter.class).getType());
     }
 
     @Test
     public void shouldUpdateDataCenter() {
         DataCenter dataCenter = new DataCenter();
 
-        dataCenterClient.update(ANY_DATA_CENTER_RESOURCE_ID, dataCenter);
+        dataCenterClient.update(ANY_RESOURCE_ID, dataCenter);
 
-        String expectedUri = ResourceUris.DATA_CENTER_URI + "/" + ANY_DATA_CENTER_RESOURCE_ID;
-        Request request = new Request(HttpMethod.PUT, expectedUri, dataCenter);
+        String expectedUri = DATA_CENTER_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setEntity(dataCenter);
 
-        then(baseClient).should().executeRequest(request, DataCenter.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(DataCenter.class).getType());
     }
 
     @Test
     public void shouldRemoveDataCenter() {
-        dataCenterClient.remove(ANY_DATA_CENTER_RESOURCE_ID);
+        dataCenterClient.remove(ANY_RESOURCE_ID, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.DATA_CENTER_URI + "/" + ANY_DATA_CENTER_RESOURCE_ID;
-        Request request = new Request(HttpMethod.DELETE, expectedUri);
+        String expectedUri = DATA_CENTER_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().executeRequest(request, String.class);
+        expectedRequest.setTimeout(321);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(String.class).getType());
     }
 
     @Test
     public void shouldRemoveDataCenterByFilter() {
-        dataCenterClient.removeByFilter(ANY_DATA_CENTER_RESOURCE_NAME, false);
 
-        UrlParameter filter = new UrlParameter("filter", ANY_DATA_CENTER_RESOURCE_NAME);
+        GenericFilter filter = new GenericFilter();
+        filter.setFilter("'name' = '" + ANY_RESOURCE_NAME + "'");
+        dataCenterClient.removeByFilter(filter, TaskTimeout.of(321));
 
-        then(baseClient).should().deleteResource(ResourceUris.DATA_CENTER_URI, false, filter);
+        String expectedUri = DATA_CENTER_URI;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
+
+        expectedRequest.addQuery(new UrlParameter("filter", filter.parameters().get(0).getValue()));
+
+        expectedRequest.setTimeout(321);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetDataCenterVisualContent() {
-        dataCenterClient.getVisualContent(ANY_DATA_CENTER_RESOURCE_ID);
+        dataCenterClient.getVisualContent(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.DATA_CENTER_URI + "/" + ANY_DATA_CENTER_RESOURCE_ID
-                + "/" + ResourceUris.DATA_CENTER_VISUAL_CONTENT_URI;
+        String expectedUri = DATA_CENTER_URI
+                + "/" + ANY_RESOURCE_ID
+                + DATA_CENTER_VISUAL_CONTENT_URI;
 
-        then(baseClient).should().getResourceList(expectedUri, VisualContent.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<List<VisualContent>>() {}.getType());
     }
 
 }

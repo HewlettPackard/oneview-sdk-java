@@ -104,7 +104,8 @@ public class OneViewClient {
     }
 
     public synchronized DataCenterClient dataCenter() {
-        return this.getClient(DataCenterClient.class);
+        return Reflection.newProxy(DataCenterClient.class,
+                new ClientRequestHandler<>(this.baseClient, DataCenterClient.class));
     }
 
     public synchronized DriveEnclosureClient driveEnclosure() {
