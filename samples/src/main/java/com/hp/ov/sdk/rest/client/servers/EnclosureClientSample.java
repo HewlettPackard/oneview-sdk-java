@@ -96,7 +96,7 @@ public class EnclosureClientSample {
     private void addEnclosure() {
         AddEnclosure addEnclosure = buildAddEnclosure();
 
-        TaskResource taskResource = this.enclosureClient.add(addEnclosure, false);
+        TaskResource taskResource = this.enclosureClient.add(addEnclosure);
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
@@ -106,7 +106,7 @@ public class EnclosureClientSample {
 
         enclosure.setName(RESOURCE_NAME_UPDATED);
 
-        TaskResource taskResource = this.enclosureClient.update(enclosure.getResourceId(), enclosure, false);
+        TaskResource taskResource = this.enclosureClient.update(enclosure.getResourceId(), enclosure);
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
@@ -120,15 +120,15 @@ public class EnclosureClientSample {
         patch.setPath("/name");
         patch.setValue(RESOURCE_NAME_UPDATED);
 
-        TaskResource taskResource = this.enclosureClient.patch(enclosure.getResourceId(), patch, false);
+        TaskResource taskResource = this.enclosureClient.patch(enclosure.getResourceId(), patch);
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
 
     private void removeEnclosure() {
-        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME_UPDATED).get(0);
+        Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-        TaskResource taskResource = this.enclosureClient.remove(enclosure.getResourceId(), false);
+        TaskResource taskResource = this.enclosureClient.remove(enclosure.getResourceId());
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
@@ -136,7 +136,7 @@ public class EnclosureClientSample {
     private void updateEnclosureConfiguration() {
         Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-        TaskResource taskResource = this.enclosureClient.updateConfiguration(enclosure.getResourceId(), false);
+        TaskResource taskResource = this.enclosureClient.updateConfiguration(enclosure.getResourceId());
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
@@ -153,7 +153,7 @@ public class EnclosureClientSample {
         Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
         TaskResource taskResource = this.enclosureClient.updateConfigurationScript(enclosure.getResourceId(),
-                ENCLOSURE_CONFIGURATION_SCRIPT, false);
+                ENCLOSURE_CONFIGURATION_SCRIPT);
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
@@ -177,7 +177,7 @@ public class EnclosureClientSample {
     private void updateEnclosureCompliance() {
         Enclosure enclosure = this.enclosureClient.getByName(RESOURCE_NAME).get(0);
 
-        TaskResource taskResource = this.enclosureClient.updateCompliance(enclosure.getResourceId(), false);
+        TaskResource taskResource = this.enclosureClient.updateCompliance(enclosure.getResourceId());
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
@@ -188,7 +188,7 @@ public class EnclosureClientSample {
         FwBaselineConfig fwBaselineConfig = buildFwBaselineConfig();
 
         TaskResource taskResource = this.enclosureClient.updateFwBaseline(
-                enclosure.getResourceId(), fwBaselineConfig, false);
+                enclosure.getResourceId(), fwBaselineConfig);
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
@@ -227,7 +227,7 @@ public class EnclosureClientSample {
         RefreshStateConfig refreshStateConfig = buildRefreshStateConfig();
 
         TaskResource taskResource = this.enclosureClient.updateRefreshState(
-                enclosure.getResourceId(), refreshStateConfig, false);
+                enclosure.getResourceId(), refreshStateConfig);
 
         LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }

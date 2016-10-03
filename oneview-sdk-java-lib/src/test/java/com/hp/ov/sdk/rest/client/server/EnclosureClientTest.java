@@ -16,30 +16,46 @@
 
 package com.hp.ov.sdk.rest.client.server;
 
+import static com.hp.ov.sdk.rest.client.server.EnclosureClient.ENCLOSURE_ACTIVE_OA_SSO_URI;
+import static com.hp.ov.sdk.rest.client.server.EnclosureClient.ENCLOSURE_COMPLIANCE_URI;
+import static com.hp.ov.sdk.rest.client.server.EnclosureClient.ENCLOSURE_CONFIGURATION_URI;
+import static com.hp.ov.sdk.rest.client.server.EnclosureClient.ENCLOSURE_FW_BASELINE_URI;
+import static com.hp.ov.sdk.rest.client.server.EnclosureClient.ENCLOSURE_OA_SSO_URI;
+import static com.hp.ov.sdk.rest.client.server.EnclosureClient.ENCLOSURE_REFRESH_STATE_URI;
+import static com.hp.ov.sdk.rest.client.server.EnclosureClient.ENCLOSURE_SCRIPT_URI;
+import static com.hp.ov.sdk.rest.client.server.EnclosureClient.ENCLOSURE_STANDBY_OA_SSO_URI;
+import static com.hp.ov.sdk.rest.client.server.EnclosureClient.ENCLOSURE_URI;
+import static com.hp.ov.sdk.rest.client.server.EnclosureClient.ENCLOSURE_UTILIZATION_URI;
+import static com.hp.ov.sdk.rest.client.server.EnclosureClient.ENVIRONMENT_CONFIGURATION_URI;
+import static com.hp.ov.sdk.rest.client.server.EnclosureClient.ROLE_ACTIVE;
+import static com.hp.ov.sdk.rest.client.server.EnclosureClient.ROLE_STANDBY;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
 import com.hp.ov.sdk.dto.FwBaselineConfig;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.RefreshStateConfig;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.UtilizationData;
 import com.hp.ov.sdk.dto.servers.enclosure.AddEnclosure;
 import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
 import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.ContentType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EnclosureClientTest {
@@ -48,62 +64,65 @@ public class EnclosureClientTest {
     private static final String ANY_RESOURCE_NAME = "random-Name";
     private static final String ANY_CONFIGURATION_SCRIPT = "random-Script";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private EnclosureClient enclosureClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private EnclosureClient enclosureClient = Reflection.newProxy(EnclosureClient.class,
+            new ClientRequestHandler<>(baseClient, EnclosureClient.class));
 
     @Test
     public void shouldGetEnclosureById() {
         enclosureClient.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, Enclosure.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Enclosure.class).getType());
     }
 
     @Test
-    public void shouldGetAllEnclosureGroup() {
+    public void shouldGetAllEnclosure() {
         enclosureClient.getAll();
 
-        then(baseClient).should().getResourceCollection(EnclosureClient.ENCLOSURE_URI, Enclosure.class);
+        Request expectedRequest = new Request(HttpMethod.GET, ENCLOSURE_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<Enclosure>>() {}.getType());
     }
 
     @Test
-    public void shouldGetEnclosureGroupsByName() {
+    public void shouldGetEnclosureByName() {
         enclosureClient.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(EnclosureClient.ENCLOSURE_URI,
-                Enclosure.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, ENCLOSURE_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<Enclosure>>() {}.getType());
     }
 
     @Test
     public void shouldAddEnclosure() {
         AddEnclosure addEnclosure = new AddEnclosure();
 
-        enclosureClient.add(addEnclosure, false);
+        enclosureClient.add(addEnclosure);
 
-        Request expectedRequest = new Request(HttpMethod.POST,
-                EnclosureClient.ENCLOSURE_URI, addEnclosure);
+        Request expectedRequest = new Request(HttpMethod.POST, ENCLOSURE_URI);
+        expectedRequest.setEntity(addEnclosure);
 
-        expectedRequest.setTimeout(1200000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateEnclosure() {
         Enclosure enclosure = new Enclosure();
 
-        enclosureClient.update(ANY_RESOURCE_ID, enclosure, false);
+        enclosureClient.update(ANY_RESOURCE_ID, enclosure);
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
-        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, enclosure);
+        String expectedUri = ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
 
-        expectedRequest.setTimeout(1200000);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setEntity(enclosure);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
@@ -112,14 +131,14 @@ public class EnclosureClientTest {
 
         Patch patch = new Patch();
 
-        enclosureClient.patch(ANY_RESOURCE_ID, patch, false);
+        enclosureClient.patch(ANY_RESOURCE_ID, patch, TaskTimeout.of(123));
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri, patch);
 
-        expectedRequest.setTimeout(1200000);
+        expectedRequest.setTimeout(123);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
@@ -128,77 +147,76 @@ public class EnclosureClientTest {
 
         Patch patch = new Patch();
 
-        enclosureClient.patch(ANY_RESOURCE_ID, patch, false);
+        enclosureClient.patch(ANY_RESOURCE_ID, patch, TaskTimeout.of(123));
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri, patch);
 
-        expectedRequest.setTimeout(1200000);
-        expectedRequest.setContentType(ContentType.APPLICATION_JSON_PATCH);
+        expectedRequest.setTimeout(123);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldRemoveEnclosure() {
-        enclosureClient.remove(ANY_RESOURCE_ID, false);
+        enclosureClient.remove(ANY_RESOURCE_ID, TaskTimeout.of(321));
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        expectedRequest.setTimeout(1200000);
+        expectedRequest.setTimeout(321);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateEnclosureConfiguration() {
-        enclosureClient.updateConfiguration(ANY_RESOURCE_ID, false);
+        enclosureClient.updateConfiguration(ANY_RESOURCE_ID);
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI
+        String expectedUri = ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + EnclosureClient.ENCLOSURE_CONFIGURATION_URI;
+                + ENCLOSURE_CONFIGURATION_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
 
-        expectedRequest.setTimeout(1200000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetEnclosureConfigurationScript() {
         enclosureClient.getConfigurationScript(ANY_RESOURCE_ID);
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI
+        String expectedUri = ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + EnclosureClient.ENCLOSURE_SCRIPT_URI;
+                + ENCLOSURE_SCRIPT_URI;
         Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().executeRequest(expectedRequest, String.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(String.class).getType());
     }
 
     @Test
     public void shouldUpdateEnclosureConfigurationScript() {
-        enclosureClient.updateConfigurationScript(ANY_RESOURCE_ID, ANY_CONFIGURATION_SCRIPT, false);
+        enclosureClient.updateConfigurationScript(ANY_RESOURCE_ID, ANY_CONFIGURATION_SCRIPT);
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI
+        String expectedUri = ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + EnclosureClient.ENCLOSURE_SCRIPT_URI;
+                + ENCLOSURE_SCRIPT_URI;
 
-        then(baseClient).should().updateResource(expectedUri, ANY_CONFIGURATION_SCRIPT, false);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, ANY_CONFIGURATION_SCRIPT);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetEnclosureActiveOaSsoUrlV120() {
-        given(this.baseClient.getApiVersion()).willReturn(ApiVersion.V_120);
+        enclosureClient.getActiveOaSsoUrl_V120(ANY_RESOURCE_ID);
 
-        enclosureClient.getActiveOaSsoUrl(ANY_RESOURCE_ID);
-
-        String expectedUri = EnclosureClient.ENCLOSURE_URI
+        String expectedUri = ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + EnclosureClient.ENCLOSURE_ACTIVE_OA_SSO_URI;
+                + ENCLOSURE_ACTIVE_OA_SSO_URI;
 
-        then(baseClient).should().getResource(expectedUri, SsoUrlData.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(SsoUrlData.class).getType());
     }
 
     @Test
@@ -207,25 +225,29 @@ public class EnclosureClientTest {
 
         enclosureClient.getActiveOaSsoUrl(ANY_RESOURCE_ID);
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI
+        String expectedUri = ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + EnclosureClient.ENCLOSURE_OA_SSO_URI
-                + "?role=Active";
+                + ENCLOSURE_OA_SSO_URI
+                + ROLE_ACTIVE;
 
-        then(baseClient).should().getResource(expectedUri, SsoUrlData.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(SsoUrlData.class).getType());
     }
 
     @Test
     public void shouldGetEnclosureStandbyOaSsoUrlV120() {
         given(this.baseClient.getApiVersion()).willReturn(ApiVersion.V_120);
 
-        enclosureClient.getStandbyOaSsoUrl(ANY_RESOURCE_ID);
+        enclosureClient.getStandbyOaSsoUrl_V120(ANY_RESOURCE_ID);
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI
+        String expectedUri = ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + EnclosureClient.ENCLOSURE_STANDBY_OA_SSO_URI;
+                + ENCLOSURE_STANDBY_OA_SSO_URI;
 
-        then(baseClient).should().getResource(expectedUri, SsoUrlData.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(SsoUrlData.class).getType());
     }
 
     @Test
@@ -234,64 +256,70 @@ public class EnclosureClientTest {
 
         enclosureClient.getStandbyOaSsoUrl(ANY_RESOURCE_ID);
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI
+        String expectedUri = ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + EnclosureClient.ENCLOSURE_OA_SSO_URI
-                + "?role=Standby";
+                + ENCLOSURE_OA_SSO_URI
+                + ROLE_STANDBY;
 
-        then(baseClient).should().getResource(expectedUri, SsoUrlData.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(SsoUrlData.class).getType());
     }
 
     @Test
     public void shouldUpdateEnclosureCompliance() {
-        enclosureClient.updateCompliance(ANY_RESOURCE_ID, false);
+        enclosureClient.updateCompliance(ANY_RESOURCE_ID, TaskTimeout.of(321));
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI
+        String expectedUri = ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + EnclosureClient.ENCLOSURE_COMPLIANCE_URI;
+                + ENCLOSURE_COMPLIANCE_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
 
-        expectedRequest.setTimeout(1200000);
+        expectedRequest.setTimeout(321);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateEnclosureFwBaseline() {
         FwBaselineConfig fwBaselineConfig = new FwBaselineConfig();
 
-        enclosureClient.updateFwBaseline(ANY_RESOURCE_ID, fwBaselineConfig, false);
+        enclosureClient.updateFwBaseline(ANY_RESOURCE_ID, fwBaselineConfig, TaskTimeout.of(321));
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI
+        String expectedUri = ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + EnclosureClient.ENCLOSURE_FW_BASELINE_URI;
+                + ENCLOSURE_FW_BASELINE_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, fwBaselineConfig);
 
-        expectedRequest.setTimeout(1200000);
+        expectedRequest.setTimeout(321);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetEnclosureUtilization() {
         enclosureClient.getUtilization(ANY_RESOURCE_ID);
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI
+        String expectedUri = ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + EnclosureClient.ENCLOSURE_UTILIZATION_URI;
+                + ENCLOSURE_UTILIZATION_URI;
 
-        then(baseClient).should().getResource(expectedUri, UtilizationData.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(UtilizationData.class).getType());
     }
 
     @Test
     public void shouldGetEnclosureEnvironmentalConfiguration() {
         enclosureClient.getEnvironmentalConfiguration(ANY_RESOURCE_ID);
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI
+        String expectedUri = ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + EnclosureClient.ENVIRONMENT_CONFIGURATION_URI;
+                + ENVIRONMENT_CONFIGURATION_URI;
 
-        then(baseClient).should().getResource(expectedUri, EnvironmentalConfiguration.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(EnvironmentalConfiguration.class).getType());
     }
 
     @Test
@@ -302,29 +330,27 @@ public class EnclosureClientTest {
         enclosureClient.updateEnvironmentalConfiguration(ANY_RESOURCE_ID,
                 updateEnvironmentalConfiguration);
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI
+        String expectedUri = ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + EnclosureClient.ENVIRONMENT_CONFIGURATION_URI;
+                + ENVIRONMENT_CONFIGURATION_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri,
                 updateEnvironmentalConfiguration);
 
-        then(baseClient).should().executeRequest(expectedRequest, EnvironmentalConfiguration.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(EnvironmentalConfiguration.class).getType());
     }
 
     @Test
     public void shouldUpdateEnclosureRefreshState() {
         RefreshStateConfig refreshStateConfig = new RefreshStateConfig();
 
-        enclosureClient.updateRefreshState(ANY_RESOURCE_ID, refreshStateConfig, false);
+        enclosureClient.updateRefreshState(ANY_RESOURCE_ID, refreshStateConfig);
 
-        String expectedUri = EnclosureClient.ENCLOSURE_URI
+        String expectedUri = ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + EnclosureClient.ENCLOSURE_REFRESH_STATE_URI;
+                + ENCLOSURE_REFRESH_STATE_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, refreshStateConfig);
 
-        expectedRequest.setTimeout(1200000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
 }
