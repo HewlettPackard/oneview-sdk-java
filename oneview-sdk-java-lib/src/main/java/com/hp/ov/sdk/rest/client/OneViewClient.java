@@ -203,7 +203,8 @@ public class OneViewClient {
     }
 
     public synchronized NetworkSetClient networkSet() {
-        return this.getClient(NetworkSetClient.class);
+        return Reflection.newProxy(NetworkSetClient.class,
+                new ClientRequestHandler<>(this.baseClient, NetworkSetClient.class));
     }
 
     public synchronized PowerDeliveryDeviceClient powerDeliveryDevice() {

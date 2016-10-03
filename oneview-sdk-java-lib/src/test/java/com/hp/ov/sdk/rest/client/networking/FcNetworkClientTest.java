@@ -39,7 +39,6 @@ public class FcNetworkClientTest {
     private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_NAME = "random-Name";
 
-
     private BaseClient baseClient = mock(BaseClient.class);
     private FcNetworkClient client = Reflection.newProxy(FcNetworkClient.class,
             new ClientRequestHandler<>(baseClient, FcNetworkClient.class));

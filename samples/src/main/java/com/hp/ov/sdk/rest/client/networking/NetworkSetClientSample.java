@@ -43,7 +43,6 @@ public class NetworkSetClientSample {
 
     // test values - user input
     // ================================
-    private static final String RESOURCE_ID = "46b89d3c-54b3-4948-96f8-c156182012da";
     private static final String RESOURCE_NAME = "NetworkSet_Prod";
     private static final String RESOURCE_NAME_UPDATED = RESOURCE_NAME + "_Updated";
     private static final List<String> NETWORK_NAMES = Arrays.asList("Prod_401", "Prod_402", "Prod_403", "Prod_404");
@@ -57,7 +56,9 @@ public class NetworkSetClientSample {
     }
 
     private void getNetworkSetById() {
-        NetworkSet networkSet = client.getById(RESOURCE_ID);
+        NetworkSet networkSet = client.getByName(RESOURCE_NAME).get(0);
+
+        networkSet = client.getById(networkSet.getResourceId());
 
         LOGGER.info("NetworkSet object returned to client: {}", networkSet.toJsonString());
     }
@@ -81,7 +82,7 @@ public class NetworkSetClientSample {
         networkSet.setType(ResourceCategory.RC_NETWORKSET);
         networkSet.setType(ResourceCategory.RC_NETWORKSET_V300);
 
-        TaskResource task = this.client.create(networkSet, false);
+        TaskResource task = this.client.create(networkSet);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -91,7 +92,7 @@ public class NetworkSetClientSample {
 
         networkSet.setName(RESOURCE_NAME_UPDATED);
 
-        TaskResource task = this.client.update(networkSet.getResourceId(), networkSet, false);
+        TaskResource task = this.client.update(networkSet.getResourceId(), networkSet);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -99,7 +100,7 @@ public class NetworkSetClientSample {
     private void deleteNetworkSet() {
         NetworkSet networkSet = client.getByName(RESOURCE_NAME_UPDATED).get(0);
 
-        TaskResource task = this.client.delete(networkSet.getResourceId(), false);
+        TaskResource task = this.client.delete(networkSet.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }

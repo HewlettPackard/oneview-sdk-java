@@ -16,18 +16,23 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.networking.NetworkSetClient.NETWORK_SET_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.networkset.NetworkSet;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NetworkSetClientTest {
@@ -35,63 +40,74 @@ public class NetworkSetClientTest {
     private static final String ANY_NETWORK_SET_RESOURCE_ID = "random-UUID";
     private static final String ANY_NETWORK_SET_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private NetworkSetClient networkSetClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private NetworkSetClient client = Reflection.newProxy(NetworkSetClient.class,
+            new ClientRequestHandler<>(baseClient, NetworkSetClient.class));
 
     @Test
     public void shouldGetNetworkSet() {
-        networkSetClient.getById(ANY_NETWORK_SET_RESOURCE_ID);
+        client.getById(ANY_NETWORK_SET_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.NETWORK_SETS_URI + "/" + ANY_NETWORK_SET_RESOURCE_ID;
+        String expectedUri = NETWORK_SET_URI + "/" + ANY_NETWORK_SET_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, NetworkSet.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(NetworkSet.class).getType());
     }
 
     @Test
     public void shouldGetAllNetworkSet() {
-        networkSetClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.NETWORK_SETS_URI, NetworkSet.class);
+        Request expectedRequest = new Request(HttpMethod.GET, NETWORK_SET_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<NetworkSet>>() {}.getType());
     }
 
     @Test
     public void shouldGetNetworkSetsByName() {
-        networkSetClient.getByName(ANY_NETWORK_SET_RESOURCE_NAME);
+        client.getByName(ANY_NETWORK_SET_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.NETWORK_SETS_URI,
-                NetworkSet.class, UrlParameter.getFilterByNameParameter(ANY_NETWORK_SET_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, NETWORK_SET_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_NETWORK_SET_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<NetworkSet>>() {}.getType());
     }
 
     @Test
     public void shouldCreateNetworkSet() {
         NetworkSet networkSet = new NetworkSet();
 
-        networkSetClient.create(networkSet, false);
+        client.create(networkSet);
 
-        then(baseClient).should().createResource(ResourceUris.NETWORK_SETS_URI, networkSet, false);
+        Request expectedRequest = new Request(HttpMethod.POST, NETWORK_SET_URI);
+        expectedRequest.setEntity(networkSet);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateNetworkSet() {
         NetworkSet networkSet = new NetworkSet();
 
-        networkSetClient.update(ANY_NETWORK_SET_RESOURCE_ID, networkSet, false);
+        client.update(ANY_NETWORK_SET_RESOURCE_ID, networkSet);
 
-        String expectedUri = ResourceUris.NETWORK_SETS_URI + "/" + ANY_NETWORK_SET_RESOURCE_ID;
+        String expectedUri = NETWORK_SET_URI + "/" + ANY_NETWORK_SET_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setEntity(networkSet);
 
-        then(baseClient).should().updateResource(expectedUri, networkSet, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldDeleteNetworkSet() {
-        networkSetClient.delete(ANY_NETWORK_SET_RESOURCE_ID, false);
+        client.delete(ANY_NETWORK_SET_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.NETWORK_SETS_URI + "/" + ANY_NETWORK_SET_RESOURCE_ID;
+        String expectedUri = NETWORK_SET_URI + "/" + ANY_NETWORK_SET_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().deleteResource(expectedUri, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
 }
