@@ -242,7 +242,8 @@ public class OneViewClient {
     }
 
     public synchronized ServerHardwareClient serverHardware() {
-        return this.getClient(ServerHardwareClient.class);
+        return Reflection.newProxy(ServerHardwareClient.class,
+                new ClientRequestHandler<>(this.baseClient, ServerHardwareClient.class));
     }
 
     public synchronized ServerHardwareTypeClient serverHardwareType() {

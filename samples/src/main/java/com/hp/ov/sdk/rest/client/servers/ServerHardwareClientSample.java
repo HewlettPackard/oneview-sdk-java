@@ -18,7 +18,6 @@ package com.hp.ov.sdk.rest.client.servers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Optional;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.BiosSettings;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
@@ -40,6 +39,7 @@ import com.hp.ov.sdk.dto.servers.serverhardware.ServerFirmwareInventory;
 import com.hp.ov.sdk.dto.servers.serverhardware.ServerHardware;
 import com.hp.ov.sdk.dto.servers.serverhardware.ServerPowerControlRequest;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.server.FirmwareInventoryFilter;
 import com.hp.ov.sdk.rest.client.server.ServerHardwareClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
@@ -93,7 +93,7 @@ public class ServerHardwareClientSample {
     private void addServerHardware() {
         AddServer addServer = this.buildServerHardware();
 
-        TaskResource taskResource = this.serverHardwareClient.add(addServer, false);
+        TaskResource taskResource = this.serverHardwareClient.add(addServer);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -101,7 +101,7 @@ public class ServerHardwareClientSample {
     private void removeServerHardware() {
         ServerHardware serverHardware = serverHardwareClient.getByName(SERVER_HARDWARE_RESOURCE_NAME).get(0);
 
-        TaskResource taskResource = this.serverHardwareClient.remove(serverHardware.getResourceId(), false);
+        TaskResource taskResource = this.serverHardwareClient.remove(serverHardware.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -112,7 +112,7 @@ public class ServerHardwareClientSample {
         ServerPowerControlRequest serverPowerControlRequest = buildServerPowerControlRequest();
 
         TaskResource taskResource = serverHardwareClient.updatePowerState(serverHardware.getResourceId(),
-                serverPowerControlRequest, false);
+                serverPowerControlRequest);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -127,7 +127,7 @@ public class ServerHardwareClientSample {
         refreshStateRequest.setPassword(SERVER_HARDWARE_PASSWORD);
 
         TaskResource taskResource = serverHardwareClient.updateRefreshState(serverHardware.getResourceId(),
-                refreshStateRequest, false);
+                refreshStateRequest);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -166,7 +166,7 @@ public class ServerHardwareClientSample {
         ServerHardware serverHardware = serverHardwareClient.getByName(SERVER_HARDWARE_RESOURCE_NAME).get(0);
 
         TaskResource taskResource = serverHardwareClient.updateMpFirmwareVersion(
-                serverHardware.getResourceId(), false);
+                serverHardware.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -184,7 +184,7 @@ public class ServerHardwareClientSample {
 
         JavaRemoteConsoleUrlResult javaRemoteConsoleUrl = serverHardwareClient.getJavaRemoteConsoleUrl(
                 serverHardware.getResourceId());
-        
+
         LOGGER.info("Java Remote Console Url Result object returned to client: {}", JsonPrettyPrinter.print(javaRemoteConsoleUrl));
     }
 
@@ -193,7 +193,7 @@ public class ServerHardwareClientSample {
 
         RemoteConsoleUrlResult remoteConsoleUrl = serverHardwareClient.getRemoteConsoleUrl(
                 serverHardware.getResourceId());
-        
+
         LOGGER.info("Remote Console Url Result object returned to client: {}", JsonPrettyPrinter.print(remoteConsoleUrl));
     }
 
@@ -201,34 +201,33 @@ public class ServerHardwareClientSample {
         ServerHardware serverHardware = serverHardwareClient.getByName(SERVER_HARDWARE_RESOURCE_NAME).get(0);
 
         UtilizationData utilization = serverHardwareClient.getUtilization(serverHardware.getResourceId());
-        
+
         LOGGER.info("Utilization Data object returned to client: {}", JsonPrettyPrinter.print(utilization));
     }
 
     private void getServerFirmwareInventoryByFilter() {
-        String componentName = "System ROM";
-        String componentLocation = "System Board";
-        String componentVersion = "P70 09/30/2010";
-        String serverName = "172.18.6.9";
-        String serverModel = "ProLiant DL380p Gen8";
+        FirmwareInventoryFilter filter = new FirmwareInventoryFilter();
+        filter.setComponentLocation("System Board");
+        filter.setComponentName("System ROM");
+        filter.setComponentVersion("P70 09/30/2010");
+        filter.setServerModel("ProLiant DL380p Gen8");
+        filter.setServerName("172.18.6.8");
 
         ResourceCollection<ServerFirmwareInventory> serverFirmwareInventory = serverHardwareClient
-                .getServerFirmwareInventoryByFilter(Optional.fromNullable(componentName),
-                        Optional.fromNullable(componentLocation), Optional.fromNullable(componentVersion),
-                        Optional.fromNullable(serverName), Optional.fromNullable(serverModel));
+                .getServerFirmwareInventoryByFilter(filter);
 
         LOGGER.info("Server Firmware Inventory object returned to client: {}", serverFirmwareInventory.toJsonString());
     }
-    
-    
+
+
     private void getServerFirmwareInventory() {
         ServerHardware serverHardware = this.serverHardwareClient.getByName(SERVER_HARDWARE_RESOURCE_NAME).get(0);
-        
-        ServerFirmwareInventory serverFirmwareInventory = serverHardwareClient.getServerFirmwareInventory(serverHardware.getResourceId());     
+
+        ServerFirmwareInventory serverFirmwareInventory = serverHardwareClient.getServerFirmwareInventory(serverHardware.getResourceId());
 
         LOGGER.info("Server Firmware Inventory object returned to client: {}", serverFirmwareInventory.toJsonString());
     }
-    
+
     private void patchServerHardware() {
         ServerHardware serverHardware = this.serverHardwareClient.getByName(SERVER_HARDWARE_RESOURCE_NAME).get(0);
 
@@ -237,12 +236,12 @@ public class ServerHardwareClientSample {
         patch.setPath("/scopeUris/-");
         patch.setValue("/rest/scopes/" + SCOPE_RESOURCE_ID);
 
-        TaskResource taskResource = serverHardwareClient.patch(serverHardware.getResourceId(), patch, false);
+        TaskResource taskResource = serverHardwareClient.patch(serverHardware.getResourceId(), patch);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
-    
-    
+
+
     private ServerPowerControlRequest buildServerPowerControlRequest() {
         ServerPowerControlRequest serverPowerControlRequest = new ServerPowerControlRequest();
 

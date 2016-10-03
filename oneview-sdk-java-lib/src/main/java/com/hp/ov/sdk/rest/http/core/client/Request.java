@@ -16,17 +16,17 @@
 
 package com.hp.ov.sdk.rest.http.core.client;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableList;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.ContentType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
 public class Request {
@@ -34,7 +34,7 @@ public class Request {
     private final HttpMethod type;
 
     private String uri;
-    private Map<String, String> query;
+    private List<UrlParameter> query;
     private Optional<Object> entity;
     private ContentType contentType;
     private boolean forceTaskReturn;
@@ -67,17 +67,18 @@ public class Request {
     }
 
     public Request addQuery(UrlParameter query) {
-        this.queryMap().put(query.getKey(), query.getValue());
+        this.queryMap().add(query);
+
         return this;
     }
 
-    public Map<String, String> getQuery() {
-        return ImmutableMap.copyOf(this.queryMap());
+    public List<UrlParameter> getQuery() {
+        return ImmutableList.copyOf(this.queryMap());
     }
 
-    private Map<String, String> queryMap() {
+    private List<UrlParameter> queryMap() {
         if (query == null) {
-            query = new LinkedHashMap();
+            query = new ArrayList<>();
         }
         return query;
     }
