@@ -214,7 +214,8 @@ public class OneViewClient {
     }
 
     public synchronized RackClient rack() {
-        return this.getClient(RackClient.class);
+        return Reflection.newProxy(RackClient.class,
+                new ClientRequestHandler<>(this.baseClient, RackClient.class));
     }
 
     public synchronized SasInterconnectClient sasInterconnects() {

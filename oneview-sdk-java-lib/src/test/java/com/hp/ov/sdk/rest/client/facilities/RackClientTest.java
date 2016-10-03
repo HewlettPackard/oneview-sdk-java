@@ -16,21 +16,27 @@
 
 package com.hp.ov.sdk.rest.client.facilities;
 
+import static com.hp.ov.sdk.rest.client.facilities.RackClient.RACK_DEVICE_TOPOLOGY;
+import static com.hp.ov.sdk.rest.client.facilities.RackClient.RACK_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.rack.Rack;
 import com.hp.ov.sdk.dto.rack.TopologyInformation;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.client.GenericFilter;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RackClientTest {
@@ -38,34 +44,39 @@ public class RackClientTest {
     private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private RackClient client;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private RackClient client = Reflection.newProxy(RackClient.class,
+            new ClientRequestHandler<>(baseClient, RackClient.class));
 
     @Test
     public void shouldGetRack() {
         client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.RACK_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = RACK_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, Rack.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Rack.class).getType());
     }
 
     @Test
     public void shouldGetAllRacks() {
         client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.RACK_URI, Rack.class);
+        Request expectedRequest = new Request(HttpMethod.GET, RACK_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<Rack>>() {}.getType());
     }
 
     @Test
     public void shouldGetRackCollectionByName() {
         client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.RACK_URI,
-                Rack.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, RACK_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+new TypeToken<ResourceCollection<Rack>>() {}.getType());
     }
 
     @Test
@@ -74,9 +85,10 @@ public class RackClientTest {
 
         client.add(rack);
 
-        Request request = new Request(HttpMethod.POST, ResourceUris.RACK_URI, rack);
+        Request expectedRequest = new Request(HttpMethod.POST, RACK_URI);
+        expectedRequest.setEntity(rack);
 
-        then(baseClient).should().executeRequest(request, Rack.class);
+then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Rack.class).getType());
     }
 
     @Test
@@ -85,38 +97,53 @@ public class RackClientTest {
 
         client.update(ANY_RESOURCE_ID, rack);
 
-        String expectedUri = ResourceUris.RACK_URI + "/" + ANY_RESOURCE_ID;
-        Request request = new Request(HttpMethod.PUT, expectedUri, rack);
+        String expectedUri = RACK_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setEntity(rack);
 
-        then(baseClient).should().executeRequest(request, Rack.class);
+then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Rack.class).getType());
     }
 
     @Test
     public void shouldRemoveRack() {
-        client.remove(ANY_RESOURCE_ID);
+        client.remove(ANY_RESOURCE_ID, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.RACK_URI + "/" + ANY_RESOURCE_ID;
-        Request request = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().executeRequest(request, String.class);
+        String expectedUri = RACK_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
+
+        expectedRequest.setTimeout(321);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(String.class).getType());
     }
 
     @Test
     public void shouldRemoveRackByFilter() {
-        client.removeByFilter(ANY_RESOURCE_NAME, false);
+        GenericFilter filter = new GenericFilter();
+        filter.setFilter("'name' = '" + ANY_RESOURCE_NAME + "'");
+        client.removeByFilter(filter, TaskTimeout.of(321));
 
-        UrlParameter filter = new UrlParameter("filter", ANY_RESOURCE_NAME);
+        String expectedUri = RACK_URI;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().deleteResource(ResourceUris.RACK_URI, false, filter);
+        expectedRequest.addQuery(new UrlParameter("filter", filter.parameters().get(0).getValue()));
+
+        expectedRequest.setTimeout(321);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetRackDeviceTopology() {
         client.getDeviceTopology(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.RACK_URI + "/" + ANY_RESOURCE_ID + "/" + ResourceUris.RACK_DEVICE_TOPOLOGY;
+        String expectedUri = RACK_URI
+                + "/" + ANY_RESOURCE_ID
+                + RACK_DEVICE_TOPOLOGY;
 
-        then(baseClient).should().getResource(expectedUri, TopologyInformation.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(TopologyInformation.class).getType());
     }
 
 }

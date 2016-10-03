@@ -1,6 +1,6 @@
 /*
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
- *  
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,142 +15,100 @@
  */
 package com.hp.ov.sdk.rest.client.facilities;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.rack.Rack;
 import com.hp.ov.sdk.dto.rack.TopologyInformation;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.UrlQuery;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
+import com.hp.ov.sdk.rest.reflect.QueryParam;
 
-public class RackClient {
+@Api(RackClient.RACK_URI)
+public interface RackClient extends
+        SearchableResource<Rack> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RackClient.class);
-
-    private final BaseClient baseClient;
-
-    public RackClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link Rack} details for the specified rack.
-     *
-     * @param resourceId rack resource identifier as seen in HPE OneView.
-     *
-     * @return {@link Rack} object containing the details.
-     */
-    public Rack getById(String resourceId) {
-        LOGGER.info("RackClient : getById : Start");
-
-        Rack rack = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.RACK_URI, resourceId), Rack.class);
-
-        LOGGER.info("RackClient : getById : End");
-
-        return rack;
-    }
+    String RACK_DEVICE_TOPOLOGY = "/deviceTopology";
+    String RACK_URI = "/rest/racks";
 
     /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link Rack}&gt; containing details
-     * for all the available racks found under the current HPE OneView.
+     * Adds a resource according to the provided <code>resource</code> object.
      *
-     * @return {@link ResourceCollection}&lt;{@link Rack}&gt; containing
-     * the details for all found racks.
+     * <p>According to the resource type, the add action can take some time to complete.
+     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
+     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
+     * the default behavior is to wait until the add action completes. Below is an example that
+     * illustrates how the timeout can be specified:
+     *
+     * <pre>{@code
+     *     SomeClient client = oneViewClient.someClient();
+     *     SomeResource resource = new SomeResource();
+     *     TaskResource task = client.add(resource, TaskTimeout.of(5000)); //5 secs
+     * }</pre>
+     *
+     * @param resource object containing the details of the resource that should be added.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
+     *
+     * @return {@link TaskResource} task containing the result of this request.
      */
-    public ResourceCollection<Rack> getAll() {
-        LOGGER.info("RackClient : getAll : Start");
-
-        ResourceCollection<Rack> racks = baseClient.getResourceCollection(
-                ResourceUris.RACK_URI, Rack.class);
-
-        LOGGER.info("RackClient : getAll : End");
-
-        return racks;
-    }
+    @Endpoint(method = HttpMethod.POST)
+    Rack add(@BodyParam Rack resource, RequestOption... options);
 
     /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link Rack}&gt; containing details
-     * for the available racks found under the current HPE OneView that match the name.
+     * Updates the resource identified by <code>resourceId</code> according to the
+     * provided <code>resource</code> object.
      *
-     * @param name rack name as seen in HPE OneView.
+     * <p>According to the resource type, the update action can take some time to complete.
+     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
+     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
+     * the default behavior is to wait until the update action completes. Below is an example that
+     * illustrates how the timeout can be specified:
      *
-     * @return {@link ResourceCollection}&lt;{@link Rack}&gt; containing
-     * the details for the found racks.
+     * <pre>{@code
+     *     SomeClient client = oneViewClient.someClient();
+     *     SomeResource resource = client.getByName("resourceName");
+     *     //do some changes to the resource
+     *     TaskResource task = client.update(resource.getResourceId(), resource, TaskTimeout.of(5000)); //5 secs
+     * }</pre>
+     *
+     * @param resourceId resource identifier as seen in HPE OneView.
+     * @param resource object containing the details of the resource that should be created.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
+     *
+     * @return {@link Rack} object containing the result of this request.
      */
-    public ResourceCollection<Rack> getByName(String name) {
-        LOGGER.info("RackClient : getByName : Start");
-
-        ResourceCollection<Rack> racks = baseClient.getResourceCollection(
-                ResourceUris.RACK_URI, Rack.class, UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("RackClient : getByName : End");
-
-        return racks;
-    }
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
+    Rack update(@PathParam("resourceId") String resourceId, @BodyParam Rack resource, RequestOption... options);
 
     /**
-     * Adds a rack according to the provided {@link Rack} object.
+     * Removes the resource identified by the provided <code>resourceId</code>.
      *
-     * @param rack object containing the rack details.
+     * <p>According to the resource type, the remove action can take some time to complete.
+     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
+     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
+     * the default behavior is to wait until the remove action completes. Below is an example that
+     * illustrates how the timeout can be specified:
      *
-     * @return {@link Rack} containing the added rack.
+     * <pre>{@code
+     *     String resourceName = "someResourceName";
+     *     SomeResource resource = client.getByName(resourceName);
+     *     TaskResource task = client.remove(resource.getResourceId(), TaskTimeout.of(5000)); //5 secs
+     * }</pre>
+     *
+     * @param resourceId resource identifier as seen in HPE OneView.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
+     *
+     * @return {@link String} containing the result of this request.
      */
-    public Rack add(Rack rack) {
-        LOGGER.info("RackClient : add : Start");
-
-        Request request = new Request(HttpMethod.POST, ResourceUris.RACK_URI, rack);
-        Rack createdRack = this.baseClient.executeRequest(request, Rack.class);
-
-        LOGGER.info("RackClient : add : End");
-
-        return createdRack;
-    }
-
-    /**
-     * Updates a {@link Rack} identified by the given resource identifier.
-     *
-     * @param resourceId rack resource identifier as seen in HPE OneView.
-     * @param rack object containing the rack details.
-     *
-     * @return {@link Rack} containing the rack updated.
-     */
-    public Rack update(String resourceId, Rack rack) {
-        LOGGER.info("RackClient : update : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(ResourceUris.RACK_URI, resourceId), rack);
-        Rack updatedRack = this.baseClient.executeRequest(request, Rack.class);
-
-        LOGGER.info("RackClient : update : End");
-
-        return updatedRack;
-    }
-
-    /**
-     * Removes the {@link Rack} identified by the given resource identifier.
-     *
-     * @param resourceId rack resource identifier as seen in HPE OneView.
-     *
-     * @return String value containing the result of the process.
-     */
-    public String remove(String resourceId) {
-        LOGGER.info("RackClient : remove : Start");
-
-        Request request = new Request(HttpMethod.DELETE,
-                UrlUtils.createUrl(ResourceUris.RACK_URI, resourceId));
-        String response = this.baseClient.executeRequest(request, String.class);
-
-        LOGGER.info("RackClient : remove : End");
-
-        return response;
-    }
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.DELETE)
+    String remove(@PathParam("resourceId") String resourceId, RequestOption... options);
 
     /**
      * Removes the {@link Rack}(s) matching the filter. A filter is required
@@ -159,20 +117,13 @@ public class RackClient {
      * synchronously, based on the aSync flag input.
      *
      * @param filter A general filter/query string that narrows the list of resources.
-     * @param aSync Flag input to process request asynchronously or synchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                 some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource removeByFilter(String filter, boolean aSync) {
-        LOGGER.info("RackClient : removeByFilter : Start");
-
-        TaskResource taskResource = baseClient.deleteResource(ResourceUris.RACK_URI, aSync,
-                new UrlParameter("filter", filter));
-
-        LOGGER.info("RackClient : removeByFilter : End");
-
-        return taskResource;
-    }
+    @Endpoint(method = HttpMethod.DELETE)
+    public TaskResource removeByFilter(@QueryParam UrlQuery filter, RequestOption ... options);
 
     /**
      * Retrieves the topology information for the rack resource specified by
@@ -182,16 +133,7 @@ public class RackClient {
      *
      * @return {@link TopologyInformation} containing the topology information for the rack.
      */
-    public TopologyInformation getDeviceTopology(String resourceId) {
-        LOGGER.info("RackClient : getDeviceTopology : Start");
-
-        TopologyInformation topologyInformation = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.RACK_URI, resourceId, ResourceUris.RACK_DEVICE_TOPOLOGY),
-                TopologyInformation.class);
-
-        LOGGER.info("RackClient : getDeviceTopology : End");
-
-        return topologyInformation;
-    }
+    @Endpoint(uri = "/{resourceId}" + RACK_DEVICE_TOPOLOGY)
+    public TopologyInformation getDeviceTopology(@PathParam("resourceId") String resourceId);
 
 }
