@@ -22,7 +22,6 @@ public class ResourceUris {
      */
     public static final String SERVER_PROFILE_URI = "/rest/server-profiles";
     public static final String STORAGE_VOLUME_ATTACHMENT_URI = "/rest/storage-volume-attachments";
-    public static final String STORAGE_VOLUME_URI = "/rest/storage-volumes";
 
     public static final String APPLIANCE_VERSION = "/rest/version";
     public static final String AVAILABLE_NETWORKS_URI = SERVER_PROFILE_URI + "/available-networks";
@@ -41,7 +40,6 @@ public class ResourceUris {
     public static final String FCOE_NETWORK_URI = "/rest/fcoe-networks";
     public static final String FIRMWARE_BUNDLE_URI = "/rest/firmware-bundles";
     public static final String FIRMWARE_DRIVER_URI = "/rest/firmware-drivers";
-    public static final String ETHERNET_URI = "/rest/ethernet-networks";
     public static final String INTERCONNECT_TYPE_URI = "/rest/interconnect-types";
     public static final String INTERCONNECT_URI = "/rest/interconnects";
     public static final String INTERCONNECT_PORTS_URI = "ports";
@@ -93,9 +91,6 @@ public class ResourceUris {
     public static final String STORAGE_SYSTEM_HOST_TYPES_URI = STORAGE_SYSTEM_URI + "/host-types";
     public static final String STORAGE_VOLUME_ATTACHMENT_PATH_URI = "paths";
     public static final String STORAGE_VOLUME_ATTACHMENT_REPAIR_URI = STORAGE_VOLUME_ATTACHMENT_URI + "/repair";
-    public static final String STORAGE_VOLUME_ATTACHABLE_URI = STORAGE_VOLUME_URI + "/attachable-volumes";
-    public static final String STORAGE_VOLUME_REPAIR_URI = STORAGE_VOLUME_URI + "/repair";
-    public static final String STORAGE_VOLUME_SNAPSHOTS_URI = "snapshots";
     public static final String STORAGE_VOLUME_TEMPLATE_URI = "/rest/storage-volume-templates";
     public static final String STORAGE_VOLUME_TEMPLATE_CONNECTABLE_URI = "connectable-volume-templates";
     public static final String SWITCH_TYPE_URI = "/rest/switch-types";

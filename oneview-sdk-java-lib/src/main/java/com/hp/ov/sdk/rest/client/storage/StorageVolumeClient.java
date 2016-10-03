@@ -15,111 +15,35 @@
  */
 package com.hp.ov.sdk.rest.client.storage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.AddStorageVolume;
 import com.hp.ov.sdk.dto.AttachableStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolume;
 import com.hp.ov.sdk.dto.StorageVolumeSnapshot;
 import com.hp.ov.sdk.dto.TaskResource;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.CreatableResource;
+import com.hp.ov.sdk.rest.client.common.DeletableResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class StorageVolumeClient {
+@Api(StorageVolumeClient.STORAGE_VOLUME_URI)
+public interface StorageVolumeClient extends
+        SearchableResource<StorageVolume>,
+        CreatableResource<AddStorageVolume>,
+        DeletableResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StorageVolumeClient.class);
-
-    private final BaseClient baseClient;
-
-    public StorageVolumeClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link StorageVolume} details for the specified storage volume.
-     *
-     * @param resourceId storage volume resource identifier as seen in HPE OneView.
-     *
-     * @return {@link StorageVolume} object containing the details.
-     */
-    public StorageVolume getById(String resourceId) {
-        LOGGER.info("StorageVolumeClient : getById : Start");
-
-        StorageVolume storageVolume = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.STORAGE_VOLUME_URI, resourceId), StorageVolume.class);
-
-        LOGGER.info("StorageVolumeClient : getById : End");
-
-        return storageVolume;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link StorageVolume}&gt; containing details
-     * for all the available storage volumes found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link StorageVolume}&gt; containing
-     * the details for all found storage volumes.
-     */
-    public ResourceCollection<StorageVolume> getAll() {
-        LOGGER.info("StorageVolumeClient : getAll : Start");
-
-        ResourceCollection<StorageVolume> storageVolumes = baseClient.getResourceCollection(
-                ResourceUris.STORAGE_VOLUME_URI, StorageVolume.class);
-
-        LOGGER.info("StorageVolumeClient : getAll : End");
-
-        return storageVolumes;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link StorageVolume}&gt; containing details
-     * for the available storage volumes found under the current HPE OneView that match the name.
-     *
-     * @param name storage volume name as seen in HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link StorageVolume}&gt; containing
-     * the details for the found storage volumes.
-     */
-    public ResourceCollection<StorageVolume> getByName(String name) {
-        LOGGER.info("StorageVolumeClient : getByName : Start");
-
-        ResourceCollection<StorageVolume> storageVolumes = baseClient.getResourceCollection(
-                ResourceUris.STORAGE_VOLUME_URI, StorageVolume.class,
-                UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("StorageVolumeClient : getByName : End");
-
-        return storageVolumes;
-    }
-
-    /**
-     * Creates a storage volume according to the provided {@link AddStorageVolume} object.
-     * The request can be processed synchronously or asynchronously.
-     *
-     * @param addStorageVolume object containing the storage volume details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource create(AddStorageVolume addStorageVolume, boolean aSync) {
-        LOGGER.info("StorageVolumeClient : create : Start");
-
-        TaskResource taskResource = baseClient.createResource(
-                ResourceUris.STORAGE_VOLUME_URI, addStorageVolume, aSync);
-
-        LOGGER.info("StorageVolumeClient : create : End");
-
-        return taskResource;
-    }
+    String STORAGE_VOLUME_URI = "/rest/storage-volumes";
+    String ATTACHABLE_URI = "/attachable-volumes";
+    String REPAIR_URI = "/repair";
+    String REPAIR_FILTER_URI = "/repair?alertFixType=ExtraManagedStorageVolumePaths";
+    String SNAPSHOTS_URI = "/snapshots";
 
     /**
      * Updates a {@link StorageVolume} identified by the given resource identifier.
@@ -129,38 +53,8 @@ public class StorageVolumeClient {
      *
      * @return {@link String} containing the result of the operation.
      */
-    public String update(String resourceId, StorageVolume storageVolume) {
-        LOGGER.info("StorageVolumeClient : update : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(ResourceUris.STORAGE_VOLUME_URI, resourceId), storageVolume);
-
-        String response = baseClient.executeRequest(request, String.class);
-
-        LOGGER.info("StorageVolumeClient : update : End");
-
-        return response;
-    }
-
-    /**
-     * Deletes the {@link StorageVolume} identified by the given resource identifier.
-     *
-     * @param resourceId storage volume resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource delete(String resourceId, boolean aSync) {
-        LOGGER.info("StorageVolumeClient : delete : Start");
-
-        TaskResource taskResource = baseClient.deleteResource(
-                UrlUtils.createUrl(ResourceUris.STORAGE_VOLUME_URI, resourceId), aSync);
-
-        LOGGER.info("StorageVolumeClient : delete : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
+    String update(@PathParam("resourceId") String resourceId, @BodyParam StorageVolume storageVolume);
 
     /**
      * Retrieves a {@link ResourceCollection}&lt;{@link AttachableStorageVolume}&gt; containing details
@@ -170,102 +64,59 @@ public class StorageVolumeClient {
      * @return {@link ResourceCollection}&lt;{@link AttachableStorageVolume}&gt; containing
      * the details for all found attachable storage volumes.
      */
-    public ResourceCollection<AttachableStorageVolume> getAttachableVolumes() {
-        LOGGER.info("StorageVolumeClient : getAttachableVolumes : Start");
-
-        ResourceCollection<AttachableStorageVolume> attachableStorageVolumes = baseClient.getResourceCollection(
-                ResourceUris.STORAGE_VOLUME_ATTACHABLE_URI, AttachableStorageVolume.class);
-
-        LOGGER.info("StorageVolumeClient : getAttachableVolumes : End");
-
-        return attachableStorageVolumes;
-    }
+    @Endpoint(uri = ATTACHABLE_URI)
+    ResourceCollection<AttachableStorageVolume> getAttachableVolumes();
 
     /**
      * Retrieves the {@link StorageVolumeSnapshot} details for the specified storage volume snapshot.
      *
-     * @param storageVolumeId resource identifier for a storage volume as seen in HPE OneView.
+     * @param resourceId resource identifier for a storage volume as seen in HPE OneView.
      * @param snapshotId resource identifier for the snapshot of the storage volume.
      *
      * @return {@link StorageVolumeSnapshot} or <code>null</code> in case the parameter snapshotId
      * does not match any existing storage volume snapshot.
      */
-    public StorageVolumeSnapshot getSnapshot(String storageVolumeId, String snapshotId) {
-        LOGGER.info("StorageVolumeClient : getSnapshot : Start");
-
-        StorageVolumeSnapshot storageVolumeSnapshot = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.STORAGE_VOLUME_URI, storageVolumeId,
-                        ResourceUris.STORAGE_VOLUME_SNAPSHOTS_URI, snapshotId),
-                StorageVolumeSnapshot.class);
-
-        LOGGER.info("StorageVolumeClient : getSnapshot : End");
-
-        return storageVolumeSnapshot;
-    }
+    @Endpoint(uri = "/{resourceId}" + SNAPSHOTS_URI + "/{snapshotId}")
+    StorageVolumeSnapshot getSnapshot(@PathParam("resourceId") String resourceId,
+            @PathParam("snapshotId") String snapshotId);
 
     /**
      * Returns all the snapshots available for an existing storage volume.
      *
-     * @param storageVolumeId resource identifier for the storage volume as seen in HPE OneView.
+     * @param resourceId resource identifier for the storage volume as seen in HPE OneView.
      *
      * @return {@link ResourceCollection}&lt;{@link StorageVolumeSnapshot}&gt; containing
      * the details for all found storage volume snapshots.
      */
-    public ResourceCollection<StorageVolumeSnapshot> getAllSnapshots(String storageVolumeId) {
-        LOGGER.info("StorageVolumeClient : getAllSnapshots : Start");
-
-        ResourceCollection<StorageVolumeSnapshot> storageVolumeSnapshots = baseClient.getResourceCollection(
-                UrlUtils.createUrl(ResourceUris.STORAGE_VOLUME_URI, storageVolumeId,
-                        ResourceUris.STORAGE_VOLUME_SNAPSHOTS_URI),
-                StorageVolumeSnapshot.class);
-
-        LOGGER.info("StorageVolumeClient : getAllSnapshots : End");
-
-        return storageVolumeSnapshots;
-    }
+    @Endpoint(uri = "/{resourceId}" + SNAPSHOTS_URI)
+    ResourceCollection<StorageVolumeSnapshot> getAllSnapshots(@PathParam("resourceId") String resourceId);
 
     /**
      * Creates a snapshot for the storage volume specified by the resource identifier.
      *
-     * @param storageVolumeId resource identifier for a storage volume as seen in HPE OneView.
+     * @param resourceId resource identifier for a storage volume as seen in HPE OneView.
      * @param snapshot {@link StorageVolumeSnapshot} object containing the data to be used during
      * the snapshot creation.
-     * @param aSync flag input to process request asynchronously or synchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify some request options.
      *
      * @return {@link TaskResource} which returns the task status for the process.
      */
-    public TaskResource createSnapshot(String storageVolumeId, StorageVolumeSnapshot snapshot, boolean aSync) {
-        LOGGER.info("StorageVolumeClient : createSnapshot : Start");
-
-        TaskResource taskResource = baseClient.createResource(
-                UrlUtils.createUrl(ResourceUris.STORAGE_VOLUME_URI, storageVolumeId,
-                        ResourceUris.STORAGE_VOLUME_SNAPSHOTS_URI), snapshot, aSync);
-
-        LOGGER.info("StorageVolumeClient : createSnapshot : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + SNAPSHOTS_URI, method = HttpMethod.POST)
+    TaskResource createSnapshot(@PathParam("resourceId") String resourceId,
+            @BodyParam StorageVolumeSnapshot snapshot, RequestOption ... options);
 
     /**
      * Deletes a storage volume snapshot from HPE OneView and storage system.
      *
      * @param storageVolumeId resource identifier for a storage volume as seen in HPE OneView.
      * @param snapshotId resource identifier for the snapshot of the storage volume.
-     * @param aSync flag input to process request asynchronously or synchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify some request options.
      *
      * @return {@link TaskResource} which returns the task status for the process.
      */
-    public TaskResource deleteSnapshot(String storageVolumeId, String snapshotId, boolean aSync) {
-        LOGGER.info("StorageVolumeClient : deleteSnapshot : Start");
-
-        TaskResource taskResource = baseClient.deleteResource(
-                UrlUtils.createUrl(ResourceUris.STORAGE_VOLUME_URI, storageVolumeId,
-                        ResourceUris.STORAGE_VOLUME_SNAPSHOTS_URI, snapshotId), aSync);
-
-        LOGGER.info("StorageVolumeClient : deleteSnapshot : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + SNAPSHOTS_URI + "/{snapshotId}", method = HttpMethod.DELETE)
+    TaskResource deleteSnapshot(@PathParam("resourceId") String storageVolumeId,
+            @PathParam("snapshotId") String snapshotId, RequestOption ... options);
 
     /**
      * Returns the list of extra managed storage volume paths.
@@ -273,35 +124,18 @@ public class StorageVolumeClient {
      * @return {@link ResourceCollection}&lt;{@link ExtraStorageVolume}&gt; containing
      * the details for all found extra storage volumes.
      */
-    public ResourceCollection<ExtraStorageVolume> getExtraManagedPaths() {
-        LOGGER.info("StorageVolumeClient : getExtraManagedPaths : Start");
-
-        ResourceCollection<ExtraStorageVolume> extraAccessList = baseClient.getResourceCollection(
-                ResourceUris.STORAGE_VOLUME_REPAIR_URI,
-                ExtraStorageVolume.class,
-                new UrlParameter("alertFixType", "ExtraManagedStorageVolumePaths"));
-
-        LOGGER.info("StorageVolumeClient : getExtraManagedPaths : End");
-
-        return extraAccessList;
-    }
+    @Endpoint(uri = REPAIR_FILTER_URI)
+    ResourceCollection<ExtraStorageVolume> getExtraManagedPaths();
 
     /**
      * Removes extra presentations from a specified storage volume on the storage system.
      *
      * @param repair information about the extra paths to delete.
-     * @param aSync flag input to process request asynchronously or synchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify some request options.
      *
      * @return {@link TaskResource} which returns the task status for the process.
      */
-    public TaskResource repairExtraManagedPath(ExtraStorageVolumeRepair repair, boolean aSync) {
-        LOGGER.info("StorageVolumeClient : repairExtraManagedPath : Start");
-
-        TaskResource taskResource = baseClient.createResource(ResourceUris.STORAGE_VOLUME_REPAIR_URI, repair, aSync);
-
-        LOGGER.info("StorageVolumeClient : repairExtraManagedPath : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = REPAIR_URI, method = HttpMethod.POST)
+    TaskResource repairExtraManagedPath(@BodyParam ExtraStorageVolumeRepair repair, RequestOption ... options);
 
 }

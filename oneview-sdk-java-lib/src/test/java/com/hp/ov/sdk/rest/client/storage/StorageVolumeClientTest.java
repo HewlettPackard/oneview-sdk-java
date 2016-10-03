@@ -16,25 +16,32 @@
 
 package com.hp.ov.sdk.rest.client.storage;
 
+import static com.hp.ov.sdk.rest.client.storage.StorageVolumeClient.ATTACHABLE_URI;
+import static com.hp.ov.sdk.rest.client.storage.StorageVolumeClient.REPAIR_FILTER_URI;
+import static com.hp.ov.sdk.rest.client.storage.StorageVolumeClient.REPAIR_URI;
+import static com.hp.ov.sdk.rest.client.storage.StorageVolumeClient.SNAPSHOTS_URI;
+import static com.hp.ov.sdk.rest.client.storage.StorageVolumeClient.STORAGE_VOLUME_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.AddStorageVolume;
 import com.hp.ov.sdk.dto.AttachableStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolume;
 import com.hp.ov.sdk.dto.StorageVolumeSnapshot;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StorageVolumeClientTest {
@@ -43,136 +50,159 @@ public class StorageVolumeClientTest {
     private static final String ANY_STORAGE_VOLUME_RESOURCE_NAME = "random-Name";
     private static final String ANY_SNAPSHOT_RESOURCE_ID = "random-UUID";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private StorageVolumeClient storageVolumeClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private StorageVolumeClient client = Reflection.newProxy(StorageVolumeClient.class,
+            new ClientRequestHandler<>(baseClient, StorageVolumeClient.class));
 
     @Test
     public void shouldGetStorageVolumeById() {
-        storageVolumeClient.getById(ANY_STORAGE_VOLUME_RESOURCE_ID);
+        client.getById(ANY_STORAGE_VOLUME_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.STORAGE_VOLUME_URI + "/" + ANY_STORAGE_VOLUME_RESOURCE_ID;
+        String expectedUri = STORAGE_VOLUME_URI + "/" + ANY_STORAGE_VOLUME_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, StorageVolume.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(StorageVolume.class).getType());
     }
 
     @Test
     public void shouldGetAllStorageVolumes() {
-        storageVolumeClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.STORAGE_VOLUME_URI, StorageVolume.class);
+        Request expectedRequest = new Request(HttpMethod.GET, STORAGE_VOLUME_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<StorageVolume>>() {}.getType());
     }
 
     @Test
     public void shouldGetStorageVolumeCollectionByName() {
-        storageVolumeClient.getByName(ANY_STORAGE_VOLUME_RESOURCE_NAME);
+        client.getByName(ANY_STORAGE_VOLUME_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.STORAGE_VOLUME_URI,
-                StorageVolume.class, UrlParameter.getFilterByNameParameter(ANY_STORAGE_VOLUME_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, STORAGE_VOLUME_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_STORAGE_VOLUME_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<StorageVolume>>() {}.getType());
     }
 
     @Test
     public void shouldCreateStorageVolume() {
         AddStorageVolume addStorageVolume = new AddStorageVolume();
 
-        storageVolumeClient.create(addStorageVolume, false);
+        client.create(addStorageVolume);
 
-        then(baseClient).should().createResource(ResourceUris.STORAGE_VOLUME_URI, addStorageVolume, false);
+        Request expectedRequest = new Request(HttpMethod.POST, STORAGE_VOLUME_URI);
+        expectedRequest.setEntity(addStorageVolume);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateStorageVolume() {
         StorageVolume storageVolume = new StorageVolume();
 
-        storageVolumeClient.update(ANY_STORAGE_VOLUME_RESOURCE_ID, storageVolume);
+        client.update(ANY_STORAGE_VOLUME_RESOURCE_ID, storageVolume);
 
-        String expectedUri = ResourceUris.STORAGE_VOLUME_URI + "/" + ANY_STORAGE_VOLUME_RESOURCE_ID;
-        Request request = new Request(HttpMethod.PUT, expectedUri, storageVolume);
+        String expectedUri = STORAGE_VOLUME_URI + "/" + ANY_STORAGE_VOLUME_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, storageVolume);
 
-        then(baseClient).should().executeRequest(request, String.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(String.class).getType());
     }
 
     @Test
     public void shouldDeleteStorageVolume() {
-        storageVolumeClient.delete(ANY_STORAGE_VOLUME_RESOURCE_ID, false);
+        client.delete(ANY_STORAGE_VOLUME_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.STORAGE_VOLUME_URI + "/" + ANY_STORAGE_VOLUME_RESOURCE_ID;
+        String expectedUri = STORAGE_VOLUME_URI + "/" + ANY_STORAGE_VOLUME_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().deleteResource(expectedUri, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetAttachableVolumes() {
-        storageVolumeClient.getAttachableVolumes();
+        client.getAttachableVolumes();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.STORAGE_VOLUME_ATTACHABLE_URI,
-                AttachableStorageVolume.class);
+        String expectedUri = STORAGE_VOLUME_URI + ATTACHABLE_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<AttachableStorageVolume>>() {}.getType());
     }
 
     @Test
     public void shouldGetSnapshotById() {
-        storageVolumeClient.getSnapshot(ANY_STORAGE_VOLUME_RESOURCE_ID, ANY_SNAPSHOT_RESOURCE_ID);
+        client.getSnapshot(ANY_STORAGE_VOLUME_RESOURCE_ID, ANY_SNAPSHOT_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.STORAGE_VOLUME_URI
+        String expectedUri = STORAGE_VOLUME_URI
                 + "/" + ANY_STORAGE_VOLUME_RESOURCE_ID
-                + "/" + ResourceUris.STORAGE_VOLUME_SNAPSHOTS_URI
+                + SNAPSHOTS_URI
                 + "/" + ANY_SNAPSHOT_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, StorageVolumeSnapshot.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(StorageVolumeSnapshot.class).getType());
     }
 
     @Test
     public void shouldGetAllSnapshots() {
-        storageVolumeClient.getAllSnapshots(ANY_STORAGE_VOLUME_RESOURCE_ID);
+        client.getAllSnapshots(ANY_STORAGE_VOLUME_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.STORAGE_VOLUME_URI
+        String expectedUri = STORAGE_VOLUME_URI
                 + "/" + ANY_STORAGE_VOLUME_RESOURCE_ID
-                + "/" + ResourceUris.STORAGE_VOLUME_SNAPSHOTS_URI;
+                + SNAPSHOTS_URI;
 
-        then(baseClient).should().getResourceCollection(expectedUri, StorageVolumeSnapshot.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<StorageVolumeSnapshot>>() {}.getType());
     }
 
     @Test
     public void shouldCreateSnapshot() {
         StorageVolumeSnapshot storageVolumeSnapshot = new StorageVolumeSnapshot();
 
-        storageVolumeClient.createSnapshot(ANY_STORAGE_VOLUME_RESOURCE_ID, storageVolumeSnapshot, false);
+        client.createSnapshot(ANY_STORAGE_VOLUME_RESOURCE_ID, storageVolumeSnapshot);
 
-        String expectedUri = ResourceUris.STORAGE_VOLUME_URI
-                + "/" + ANY_STORAGE_VOLUME_RESOURCE_ID
-                + "/" + ResourceUris.STORAGE_VOLUME_SNAPSHOTS_URI;
+        String expectedUri = STORAGE_VOLUME_URI + "/" + ANY_STORAGE_VOLUME_RESOURCE_ID + SNAPSHOTS_URI;
+        Request expectedRequest = new Request(HttpMethod.POST, expectedUri, storageVolumeSnapshot);
 
-        then(baseClient).should().createResource(expectedUri, storageVolumeSnapshot, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldDeleteSnapshot() {
-        storageVolumeClient.deleteSnapshot(ANY_STORAGE_VOLUME_RESOURCE_ID, ANY_SNAPSHOT_RESOURCE_ID, false);
+        client.deleteSnapshot(ANY_STORAGE_VOLUME_RESOURCE_ID, ANY_SNAPSHOT_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.STORAGE_VOLUME_URI
+        String expectedUri = STORAGE_VOLUME_URI
                 + "/" + ANY_STORAGE_VOLUME_RESOURCE_ID
-                + "/" + ResourceUris.STORAGE_VOLUME_SNAPSHOTS_URI
+                + SNAPSHOTS_URI
                 + "/" + ANY_SNAPSHOT_RESOURCE_ID;
 
-        then(baseClient).should().deleteResource(expectedUri, false);
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetExtraManagedPaths() {
-        storageVolumeClient.getExtraManagedPaths();
+        client.getExtraManagedPaths();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.STORAGE_VOLUME_REPAIR_URI,
-                ExtraStorageVolume.class, new UrlParameter("alertFixType", "ExtraManagedStorageVolumePaths"));
+        String expectedUri = STORAGE_VOLUME_URI + REPAIR_FILTER_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<ExtraStorageVolume>>() {}.getType());
     }
 
     @Test
     public void shouldRepairExtraManagedPaths() {
         ExtraStorageVolumeRepair repair = new ExtraStorageVolumeRepair();
 
-        storageVolumeClient.repairExtraManagedPath(repair, false);
+        client.repairExtraManagedPath(repair);
 
-        then(baseClient).should().createResource(ResourceUris.STORAGE_VOLUME_REPAIR_URI, repair, false);
+        String expectedUri = STORAGE_VOLUME_URI + REPAIR_URI;
+        Request expectedRequest = new Request(HttpMethod.POST, expectedUri, repair);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 }
