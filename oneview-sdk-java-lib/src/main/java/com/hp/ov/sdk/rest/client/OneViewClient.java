@@ -266,7 +266,8 @@ public class OneViewClient {
     }
 
     public synchronized StorageVolumeClient storageVolume() {
-        return this.getClient(StorageVolumeClient.class);
+        return Reflection.newProxy(StorageVolumeClient.class,
+                new ClientRequestHandler<>(this.baseClient, StorageVolumeClient.class));
     }
 
     public synchronized StorageVolumeAttachmentClient storageVolumeAttachment() {
