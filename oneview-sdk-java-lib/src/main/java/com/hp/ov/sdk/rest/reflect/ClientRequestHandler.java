@@ -25,10 +25,13 @@ import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.UrlQuery;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 
 public class ClientRequestHandler<T> extends AbstractInvocationHandler {
+
+    private static final String GET_BY_NAME_METHOD = "getByName";
 
     private final BaseClient baseClient;
     private final String baseUri;
@@ -55,9 +58,12 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
 
         Request request = new Request(endpoint.method(), this.baseUri + endpoint.uri());
 
-        this.fillRequestAccordingParams(request, this.token.method(method).getParameters() , args);
-        this.fillRequestAccordingOptions(request, args);
-
+        if (GET_BY_NAME_METHOD.equals(method.getName()) && (args.length == 1)) {
+            request.addQuery(UrlParameter.getFilterByNameParameter((String) args[0]));
+        } else {
+            this.fillRequestAccordingParams(request, this.token.method(method).getParameters(), args);
+            this.fillRequestAccordingOptions(request, args);
+        }
         return request;
     }
 
@@ -70,8 +76,11 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
             if (pathParam != null) {
                 request.setUri(request.getUri().replaceFirst("\\{" + pathParam.value() + "\\}", args[i].toString()));
             } else if (queryParam != null) {
-                request.addQuery(new UrlParameter(queryParam.key(),
-                        queryParam.value().replaceFirst("\\{.*?\\}", args[i].toString())));
+                UrlQuery query = (UrlQuery) args[i];
+
+                for (UrlParameter parameter : query.parameters()) {
+                    request.addQuery(parameter);
+                }
             } else if (bodyParam != null) {
                 request.setEntity(args[i]);
                 request.setContentType(bodyParam.type());

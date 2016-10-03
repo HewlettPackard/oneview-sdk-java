@@ -68,7 +68,6 @@ public class Request {
 
     public Request addQuery(UrlParameter query) {
         this.queryMap().put(query.getKey(), query.getValue());
-
         return this;
     }
 
