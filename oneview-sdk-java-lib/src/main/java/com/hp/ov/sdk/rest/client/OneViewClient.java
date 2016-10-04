@@ -289,7 +289,8 @@ public class OneViewClient {
     }
 
     public synchronized UnmanagedDeviceClient unmanagedDevice() {
-        return this.getClient(UnmanagedDeviceClient.class);
+        return Reflection.newProxy(UnmanagedDeviceClient.class,
+                new ClientRequestHandler<>(this.baseClient, UnmanagedDeviceClient.class));
     }
 
     public synchronized UplinkSetClient uplinkSet() {

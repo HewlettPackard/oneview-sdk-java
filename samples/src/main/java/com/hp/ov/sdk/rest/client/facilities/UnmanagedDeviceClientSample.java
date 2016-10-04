@@ -24,6 +24,7 @@ import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.facilities.unmanageddevice.UnmanagedDevice;
+import com.hp.ov.sdk.rest.client.GenericFilter;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class UnmanagedDeviceClientSample {
@@ -96,8 +97,9 @@ public class UnmanagedDeviceClientSample {
     }
 
     private void removeUnmanagedDeviceByFilter() {
-        String filter = "name='" + UNMANAGED_DEVICE_NAME +"'";
-        TaskResource task = this.unmanagedDeviceClient.removeByFilter(filter, false);
+        GenericFilter filter = new GenericFilter();
+        filter.setFilter("'name' = '" + UNMANAGED_DEVICE_NAME + "'");
+        TaskResource task = this.unmanagedDeviceClient.removeByFilter(filter);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -109,7 +111,7 @@ public class UnmanagedDeviceClientSample {
         EnvironmentalConfiguration environmentalConfiguration
                 = this.unmanagedDeviceClient.getEnvironmentalConfiguration(resourceId);
 
-        LOGGER.info("EnvironmentalConfiguration object returned to client : " + environmentalConfiguration);
+        LOGGER.info("EnvironmentalConfiguration object returned to client : " + environmentalConfiguration.toJsonString());
     }
 
     public static void main(String[] args) {
