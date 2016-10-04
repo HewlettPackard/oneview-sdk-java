@@ -137,7 +137,8 @@ public class OneViewClient {
     }
 
     public synchronized FcoeNetworkClient fcoeNetwork() {
-        return this.getClient(FcoeNetworkClient.class);
+        return Reflection.newProxy(FcoeNetworkClient.class,
+                new ClientRequestHandler<>(this.baseClient, FcoeNetworkClient.class));
     }
 
     public synchronized FcSanDeviceManagerClient fcSanDeviceManager() {
