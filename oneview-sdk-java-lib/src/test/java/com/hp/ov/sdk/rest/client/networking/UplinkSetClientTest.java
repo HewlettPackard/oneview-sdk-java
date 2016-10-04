@@ -16,18 +16,23 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.networking.UplinkSetClient.UPLINK_SETS_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.uplinksets.UplinkSet;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UplinkSetClientTest {
@@ -35,63 +40,73 @@ public class UplinkSetClientTest {
     private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private UplinkSetClient uplinkSetClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private UplinkSetClient client = Reflection.newProxy(UplinkSetClient.class,
+            new ClientRequestHandler<>(baseClient, UplinkSetClient.class));
 
     @Test
     public void shouldGetUplinkSetById() {
-        uplinkSetClient.getById(ANY_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.UPLINK_SETS_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = UPLINK_SETS_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, UplinkSet.class);
+        then(baseClient).should().executeRequest(expectedRequest,
+                TypeToken.of(UplinkSet.class).getType());
     }
 
     @Test
     public void shouldGetAllUplinkSets() {
-        uplinkSetClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.UPLINK_SETS_URI, UplinkSet.class);
+        Request expectedRequest = new Request(HttpMethod.GET, UPLINK_SETS_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<UplinkSet>>() {}.getType());
     }
 
     @Test
     public void shouldGetUplinkSetByName() {
-        uplinkSetClient.getByName(ANY_RESOURCE_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.UPLINK_SETS_URI,
-                UplinkSet.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, UPLINK_SETS_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<UplinkSet>>() {}.getType());
     }
 
     @Test
     public void shouldCreateUplinkSet() {
         UplinkSet uplinkSet = new UplinkSet();
 
-        uplinkSetClient.create(uplinkSet, false);
+        client.create(uplinkSet);
 
-        then(baseClient).should().createResource(ResourceUris.UPLINK_SETS_URI, uplinkSet, false);
+        Request expectedRequest = new Request(HttpMethod.POST, UPLINK_SETS_URI, uplinkSet);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateUplinkSet() {
         UplinkSet uplinkSet = new UplinkSet();
 
-        uplinkSetClient.update(ANY_RESOURCE_ID, uplinkSet, false);
+        client.update(ANY_RESOURCE_ID, uplinkSet);
 
-        String expectedUri = ResourceUris.UPLINK_SETS_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = UPLINK_SETS_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, uplinkSet);
 
-        then(baseClient).should().updateResource(expectedUri, uplinkSet, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldDeleteUplinkSet() {
-        uplinkSetClient.delete(ANY_RESOURCE_ID, false);
+        client.delete(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.UPLINK_SETS_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = UPLINK_SETS_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().deleteResource(expectedUri, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
     
 }

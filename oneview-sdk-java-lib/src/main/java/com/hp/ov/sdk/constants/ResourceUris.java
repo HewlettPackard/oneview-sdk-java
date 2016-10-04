@@ -87,7 +87,6 @@ public class ResourceUris {
     public static final String SWITCHES_URI = "/rest/switches";
     public static final String SWITCHES_UPDATE_PORTS_URI = "update-ports";
     public static final String TASK_URI = "/rest/tasks";
-    public static final String UPLINK_SETS_URI = "/rest/uplink-sets";
     public static final String WITHOUT_ETHERNET = "withoutEthernet";
 
 }

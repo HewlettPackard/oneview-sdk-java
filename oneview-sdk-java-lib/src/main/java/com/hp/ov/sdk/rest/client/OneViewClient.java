@@ -300,7 +300,8 @@ public class OneViewClient {
     }
 
     public synchronized UplinkSetClient uplinkSet() {
-        return this.getClient(UplinkSetClient.class);
+        return Reflection.newProxy(UplinkSetClient.class,
+                new ClientRequestHandler<>(this.baseClient, UplinkSetClient.class));
     }
 
     private <T> T getClient(Class<T> clientClass) {
