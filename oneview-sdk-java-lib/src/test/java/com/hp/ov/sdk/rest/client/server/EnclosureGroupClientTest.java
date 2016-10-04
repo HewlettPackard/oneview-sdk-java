@@ -16,25 +16,22 @@
 
 package com.hp.ov.sdk.rest.client.server;
 
+import static com.hp.ov.sdk.rest.client.server.EnclosureGroupClient.ENCLOSURE_GROUP_SCRIPT_URI;
+import static com.hp.ov.sdk.rest.client.server.EnclosureGroupClient.ENCLOSURE_GROUP_URI;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
-import static com.hp.ov.sdk.rest.client.server.EnclosureGroupClient.ENCLOSURE_GROUP_URI;
-import static com.hp.ov.sdk.rest.client.server.EnclosureGroupClient.ENCLOSURE_GROUP_SCRIPT_URI;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.servers.enclosuregroup.EnclosureGroup;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.ContentType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;

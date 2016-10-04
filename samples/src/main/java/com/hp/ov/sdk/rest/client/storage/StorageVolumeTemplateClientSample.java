@@ -37,7 +37,6 @@ public class StorageVolumeTemplateClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String STORAGE_VOLUME_TEMPLATE_RESOURCE_ID = "b8f7fc3a-9ba1-4747-9352-58835addc28b";
     private static final String STORAGE_VOLUME_TEMPLATE_NAME = "Storage_Volume_Template_Sample";
     private static final String STORAGE_VOLUME_TEMPLATE_NAME_UPDATED = STORAGE_VOLUME_TEMPLATE_NAME + "_Updated";
     private static final String STORAGE_VOLUME_TEMPLATE_CAPACITY = "235834383322";
@@ -57,10 +56,11 @@ public class StorageVolumeTemplateClientSample {
     }
 
     private void getStorageVolumeTemplateById() {
-        StorageVolumeTemplate storageVolumeTemplate = this.storageVolumeTemplateClient.getById(
-                STORAGE_VOLUME_TEMPLATE_RESOURCE_ID);
+        StorageVolumeTemplate template = this.storageVolumeTemplateClient.getByName(STORAGE_VOLUME_TEMPLATE_NAME).get(0);
 
-        LOGGER.info("StorageVolumeTemplate object returned to client : " + storageVolumeTemplate.toJsonString());
+        template = this.storageVolumeTemplateClient.getById(template.getResourceId());
+
+        LOGGER.info("StorageVolumeTemplate object returned to client : " + template.toJsonString());
     }
 
     private void getAllStorageVolumeTemplates() {
@@ -145,8 +145,9 @@ public class StorageVolumeTemplateClientSample {
     public static void main(final String[] args) throws Exception {
         StorageVolumeTemplateClientSample client = new StorageVolumeTemplateClientSample();
 
-        client.getStorageVolumeTemplateById();
         client.createStorageVolumeTemplate();
+
+        client.getStorageVolumeTemplateById();
         client.getAllStorageVolumeTemplates();
         client.getStorageVolumeTemplateByName();
         client.getConnectableStorageVolumeTemplates();

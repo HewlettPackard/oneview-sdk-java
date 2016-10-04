@@ -279,7 +279,8 @@ public class OneViewClient {
     }
 
     public synchronized StorageVolumeTemplateClient storageVolumeTemplate() {
-        return this.getClient(StorageVolumeTemplateClient.class);
+        return Reflection.newProxy(StorageVolumeTemplateClient.class,
+                new ClientRequestHandler<>(this.baseClient, StorageVolumeTemplateClient.class));
     }
 
     public synchronized SwitchClient switches() {

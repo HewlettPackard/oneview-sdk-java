@@ -16,22 +16,25 @@
 
 package com.hp.ov.sdk.rest.client.storage;
 
+import static com.hp.ov.sdk.rest.client.storage.StorageVolumeTemplateClient.STORAGE_VOLUME_TEMPLATE_CONNECTABLE_URI;
+import static com.hp.ov.sdk.rest.client.storage.StorageVolumeTemplateClient.STORAGE_VOLUME_TEMPLATE_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplate;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeTemplate;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StorageVolumeTemplateClientTest {
@@ -39,75 +42,84 @@ public class StorageVolumeTemplateClientTest {
     private static final String ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID = "random-UUID";
     private static final String ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private StorageVolumeTemplateClient storageVolumeTemplateClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private StorageVolumeTemplateClient client = Reflection.newProxy(StorageVolumeTemplateClient.class,
+            new ClientRequestHandler<>(baseClient, StorageVolumeTemplateClient.class));
 
     @Test
     public void shouldGetStorageVolumeTemplateById() {
-        storageVolumeTemplateClient.getById(ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID);
+        client.getById(ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.STORAGE_VOLUME_TEMPLATE_URI + "/" + ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID;
+        String expectedUri = STORAGE_VOLUME_TEMPLATE_URI + "/" + ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, StorageVolumeTemplate.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(StorageVolumeTemplate.class).getType());
     }
 
     @Test
     public void shouldGetAllStorageVolumeTemplates() {
-        storageVolumeTemplateClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.STORAGE_VOLUME_TEMPLATE_URI, StorageVolumeTemplate.class);
+        Request expectedRequest = new Request(HttpMethod.GET, STORAGE_VOLUME_TEMPLATE_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<StorageVolumeTemplate>>() {}.getType());
     }
 
     @Test
     public void shouldGetStorageVolumeTemplateCollectionByName() {
-        storageVolumeTemplateClient.getByName(ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_NAME);
+        client.getByName(ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.STORAGE_VOLUME_TEMPLATE_URI,
-                StorageVolumeTemplate.class, UrlParameter.getFilterByNameParameter(ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, STORAGE_VOLUME_TEMPLATE_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<StorageVolumeTemplate>>() {}.getType());
     }
 
     @Test
     public void shouldCreateStorageVolumeTemplate() {
         StorageVolumeTemplate storageVolumeTemplate = new StorageVolumeTemplate();
 
-        storageVolumeTemplateClient.create(storageVolumeTemplate);
+        client.create(storageVolumeTemplate);
 
-        Request request = new Request(HttpMethod.POST, ResourceUris.STORAGE_VOLUME_TEMPLATE_URI, storageVolumeTemplate);
+        Request request = new Request(HttpMethod.POST, STORAGE_VOLUME_TEMPLATE_URI, storageVolumeTemplate);
 
-        then(baseClient).should().executeRequest(request, StorageVolumeTemplate.class);
+        then(baseClient).should().executeRequest(request,
+                TypeToken.of(StorageVolumeTemplate.class).getType());
     }
 
     @Test
     public void shouldUpdateStorageVolumeTemplate() {
         StorageVolumeTemplate storageVolumeTemplate = new StorageVolumeTemplate();
 
-        storageVolumeTemplateClient.update(ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID, storageVolumeTemplate);
+        client.update(ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID, storageVolumeTemplate);
 
-        String expectedUri = ResourceUris.STORAGE_VOLUME_TEMPLATE_URI + "/" + ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID;
+        String expectedUri = STORAGE_VOLUME_TEMPLATE_URI + "/" + ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID;
         Request request = new Request(HttpMethod.PUT, expectedUri, storageVolumeTemplate);
 
-        then(baseClient).should().executeRequest(request, StorageVolumeTemplate.class);
+        then(baseClient).should().executeRequest(request,
+                TypeToken.of(StorageVolumeTemplate.class).getType());
     }
 
     @Test
     public void shouldDeleteStorageVolumeTemplate() {
-        storageVolumeTemplateClient.delete(ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID);
+        client.delete(ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.STORAGE_VOLUME_TEMPLATE_URI + "/" + ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID;
+        String expectedUri = STORAGE_VOLUME_TEMPLATE_URI + "/" + ANY_STORAGE_VOLUME_TEMPLATE_RESOURCE_ID;
         Request request = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().executeRequest(request, String.class);
+        then(baseClient).should().executeRequest(request, TypeToken.of(String.class).getType());
     }
 
     @Test
     public void shouldGetConnectableStorageVolumeTemplates() {
-        storageVolumeTemplateClient.getConnectableVolumeTemplates();
+        client.getConnectableVolumeTemplates();
 
-        then(baseClient).should().getResourceCollection(
-                UrlUtils.createUrl(ResourceUris.STORAGE_VOLUME_TEMPLATE_URI,
-                        ResourceUris.STORAGE_VOLUME_TEMPLATE_CONNECTABLE_URI), ConnectableStorageVolumeTemplate.class);
+        String expectedUri = STORAGE_VOLUME_TEMPLATE_URI + STORAGE_VOLUME_TEMPLATE_CONNECTABLE_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<ConnectableStorageVolumeTemplate>>() {}.getType());
     }
 }
