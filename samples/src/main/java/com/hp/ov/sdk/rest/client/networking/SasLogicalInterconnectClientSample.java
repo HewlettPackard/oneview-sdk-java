@@ -41,7 +41,6 @@ public class SasLogicalInterconnectClientSample {
 
     // These are variables to be defined by the user
     // ================================
-    private static final String SAS_LOGICAL_INTERCONNECT_RESOURCE_ID = "51a8c498-8cda-4ad7-90b1-b7117323961c";
     private static final String SAS_LOGICAL_INTERCONNECT_NAME
             = "test-logical-enclosure-SAS-Logical-Interconnect-Group-Sample-1";
     // ================================
@@ -57,7 +56,9 @@ public class SasLogicalInterconnectClientSample {
     }
 
     private void getSasLogicalInterconnectById() {
-        SasLogicalInterconnect interconnect = client.getById(SAS_LOGICAL_INTERCONNECT_RESOURCE_ID);
+        SasLogicalInterconnect interconnect = client.getByName(SAS_LOGICAL_INTERCONNECT_NAME).get(0);
+
+        interconnect = client.getById(interconnect.getResourceId());
 
         LOGGER.info("SAS logical interconnect returned to client: {}", interconnect.toJsonString());
     }
@@ -91,7 +92,7 @@ public class SasLogicalInterconnectClientSample {
         firmware.setForce(false);
         firmware.setSppUri(fwClient.getByName(FirmwareDriverClientSample.FIRMWARE_DRIVER_NAME).get(0).getUri());
 
-        TaskResource task = this.client.updateFirmware(interconnect.getResourceId(), firmware, false);
+        TaskResource task = this.client.updateFirmware(interconnect.getResourceId(), firmware);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -106,7 +107,7 @@ public class SasLogicalInterconnectClientSample {
         replace.setOldSerialNumber(driveEnclosureSerialNumber);
         replace.setNewSerialNumber(driveEnclosureSerialNumber);
 
-        TaskResource taskResource = client.replaceDriveEnclosure(interconnect.getResourceId(), replace, false);
+        TaskResource taskResource = client.replaceDriveEnclosure(interconnect.getResourceId(), replace);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -114,7 +115,7 @@ public class SasLogicalInterconnectClientSample {
     private void applySasLogicalInterconnectConfiguration() {
         SasLogicalInterconnect interconnect = client.getByName(SAS_LOGICAL_INTERCONNECT_NAME).get(0);
 
-        TaskResource taskResource = client.applyConfiguration(interconnect.getResourceId(), false);
+        TaskResource taskResource = client.applyConfiguration(interconnect.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -122,7 +123,7 @@ public class SasLogicalInterconnectClientSample {
     private void updateSasLogicalInterconnectCompliance() {
         SasLogicalInterconnect interconnect = client.getByName(SAS_LOGICAL_INTERCONNECT_NAME).get(0);
 
-        TaskResource taskResource = client.updateCompliance(interconnect, false);
+        TaskResource taskResource = client.updateCompliance(interconnect.getResourceId(), interconnect);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -135,7 +136,7 @@ public class SasLogicalInterconnectClientSample {
             uris.add(interconnect.getUri());
         }
 
-        TaskResource taskResource = client.updateCompliance(uris, false);
+        TaskResource taskResource = client.updateCompliance(uris);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
