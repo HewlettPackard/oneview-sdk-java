@@ -63,9 +63,6 @@ public class ResourceUris {
     public static final String LOGICAL_INTERCONNECT_INTERNAL_NETWORKS_URI = "internalNetworks";
     public static final String LOGICAL_INTERCONNECT_INTERNAL_VLANS_URI = "internalVlans";
     public static final String LOGICAL_INTERCONNECT_UNASSIGNED_UPLINK_PORTS_URI = "unassignedUplinkPortsForPortMonitor";
-    public static final String LOGICAL_SWITCH_GROUPS_URI = "/rest/logical-switch-groups";
-    public static final String LOGICAL_SWITCHES_REFRESH_URI = "refresh";
-    public static final String LOGICAL_SWITCHES_URI = "/rest/logical-switches";
     public static final String LOGIN_SESSIONS = "/rest/login-sessions";
     public static final String MANAGED_PORTS_STORAGE_SYSTEM_URI = "managedPorts";
     public static final String POWER_DEVICE_DISCOVERY_URI = "/rest/power-devices/discover";

@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.generated.ConnectionProperty;
@@ -43,7 +42,6 @@ public class LogicalSwitchClientSample {
 
     // These are variables to be defined by the user
     // ================================
-    private static final String LOGICAL_SWITCH_RESOURCE_ID = "272c526f-25ee-4850-b77e-9212ea25fa71";
     private static final String LOGICAL_SWITCH_NAME = "Logical-Switch_SAMPLE";
     private static final String LOGICAL_SWITCH_MANAGEMENT_HOST = "172.18.16.1";
     // ================================
@@ -61,13 +59,15 @@ public class LogicalSwitchClientSample {
     private void createLogicalSwitch() {
         AddLogicalSwitch logicalSwitch = this.buildAddLogicalSwitch();
 
-        TaskResource taskResource = this.client.create(logicalSwitch, false);
+        TaskResource taskResource = this.client.create(logicalSwitch);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void getLogicalSwitch() {
-        LogicalSwitch logicalSwitch = client.getById(LOGICAL_SWITCH_RESOURCE_ID);
+        LogicalSwitch logicalSwitch = this.client.getByName(LOGICAL_SWITCH_NAME).get(0);
+
+        logicalSwitch = client.getById(logicalSwitch.getResourceId());
 
         LOGGER.info("Logical switch returned to client: {}", logicalSwitch.toJsonString());
     }
@@ -88,7 +88,7 @@ public class LogicalSwitchClientSample {
         LogicalSwitch logicalSwitch = this.client.getByName(LOGICAL_SWITCH_NAME).get(0);
         AddLogicalSwitch addLogicalSwitch = this.buildUpdateAddLogicalSwitch(logicalSwitch);
 
-        TaskResource taskResource = this.client.update(logicalSwitch.getResourceId(), addLogicalSwitch, false);
+        TaskResource taskResource = this.client.update(logicalSwitch.getResourceId(), addLogicalSwitch);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -96,7 +96,7 @@ public class LogicalSwitchClientSample {
     private void deleteLogicalSwitch() {
         LogicalSwitch logicalSwitch = client.getByName(LOGICAL_SWITCH_NAME).get(0);
 
-        TaskResource taskResource = this.client.delete(logicalSwitch.getResourceId(), false);
+        TaskResource taskResource = this.client.delete(logicalSwitch.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -104,7 +104,7 @@ public class LogicalSwitchClientSample {
     private void refreshLogicalSwitch() {
         LogicalSwitch logicalSwitch = client.getByName(LOGICAL_SWITCH_NAME).get(0);
 
-        TaskResource taskResource = this.client.refresh(logicalSwitch.getResourceId(), false);
+        TaskResource taskResource = this.client.refresh(logicalSwitch.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -126,8 +126,7 @@ public class LogicalSwitchClientSample {
         switchCredentialConfiguration.setSnmpV1Configuration(snmpV1Configuration);
 
         logicalSwitch.setSwitchCredentialConfiguration(Lists.newArrayList(switchCredentialConfiguration));
-        logicalSwitch.setLogicalSwitchGroupUri(ResourceUris.LOGICAL_SWITCH_GROUPS_URI + "/"
-                + logicalSwitchGroup.getResourceId());
+        logicalSwitch.setLogicalSwitchGroupUri(logicalSwitchGroup.getUri());
 
         logicalSwitch.setType(ResourceCategory.RC_LOGICAL_SWITCH);
         logicalSwitch.setType(ResourceCategory.RC_LOGICAL_SWITCH_V300);

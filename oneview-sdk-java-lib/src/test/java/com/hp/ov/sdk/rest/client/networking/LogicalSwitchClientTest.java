@@ -16,21 +16,25 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.networking.LogicalSwitchClient.LOGICAL_SWITCHES_REFRESH_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalSwitchClient.LOGICAL_SWITCHES_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.logicalswitches.AddLogicalSwitch;
 import com.hp.ov.sdk.dto.networking.logicalswitches.LogicalSwitch;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LogicalSwitchClientTest {
@@ -38,74 +42,84 @@ public class LogicalSwitchClientTest {
     private static final String ANY_LOGICAL_SWITCH_RESOURCE_ID = "random-UUID";
     private static final String ANY_LOGICAL_SWITCH_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private LogicalSwitchClient switchClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private LogicalSwitchClient client = Reflection.newProxy(LogicalSwitchClient.class,
+            new ClientRequestHandler<>(baseClient, LogicalSwitchClient.class));
 
     @Test
-    public void shouldGetLogicalSwitch() {
-        switchClient.getById(ANY_LOGICAL_SWITCH_RESOURCE_ID);
+    public void shouldGetLogicalSwitchById() {
+        client.getById(ANY_LOGICAL_SWITCH_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_SWITCHES_URI + "/" + ANY_LOGICAL_SWITCH_RESOURCE_ID;
+        String expectedUri = LOGICAL_SWITCHES_URI + "/" + ANY_LOGICAL_SWITCH_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, LogicalSwitch.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(LogicalSwitch.class).getType());
     }
 
     @Test
     public void shouldGetAllLogicalSwitch() {
-        switchClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.LOGICAL_SWITCHES_URI, LogicalSwitch.class);
+        Request expectedRequest = new Request(HttpMethod.GET, LOGICAL_SWITCHES_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<LogicalSwitch>>() {}.getType());
     }
 
     @Test
     public void shouldGetLogicalSwitchesByName() {
-        switchClient.getByName(ANY_LOGICAL_SWITCH_RESOURCE_NAME);
+        client.getByName(ANY_LOGICAL_SWITCH_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.LOGICAL_SWITCHES_URI,
-                LogicalSwitch.class, UrlParameter.getFilterByNameParameter(ANY_LOGICAL_SWITCH_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, LOGICAL_SWITCHES_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_LOGICAL_SWITCH_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<LogicalSwitch>>() {}.getType());
     }
 
     @Test
     public void shouldCreateLogicalSwitch() {
         AddLogicalSwitch logicalSwitch = new AddLogicalSwitch();
 
-        switchClient.create(logicalSwitch, false);
+        client.create(logicalSwitch);
 
-        then(baseClient).should().createResource(ResourceUris.LOGICAL_SWITCHES_URI, logicalSwitch, false);
+        Request expectedRequest = new Request(HttpMethod.POST, LOGICAL_SWITCHES_URI, logicalSwitch);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateLogicalSwitch() {
         AddLogicalSwitch logicalSwitch = new AddLogicalSwitch();
 
-        switchClient.update(ANY_LOGICAL_SWITCH_RESOURCE_ID, logicalSwitch, false);
+        client.update(ANY_LOGICAL_SWITCH_RESOURCE_ID, logicalSwitch);
 
-        String expectedUri = ResourceUris.LOGICAL_SWITCHES_URI + "/" + ANY_LOGICAL_SWITCH_RESOURCE_ID;
+        String expectedUri = LOGICAL_SWITCHES_URI + "/" + ANY_LOGICAL_SWITCH_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, logicalSwitch);
 
-        then(baseClient).should().updateResource(expectedUri, logicalSwitch, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldDeleteLogicalSwitch() {
-        switchClient.delete(ANY_LOGICAL_SWITCH_RESOURCE_ID, false);
+        client.delete(ANY_LOGICAL_SWITCH_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_SWITCHES_URI + "/" + ANY_LOGICAL_SWITCH_RESOURCE_ID;
+        String expectedUri = LOGICAL_SWITCHES_URI + "/" + ANY_LOGICAL_SWITCH_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().deleteResource(expectedUri, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldRefreshLogicalSwitch() {
-        switchClient.refresh(ANY_LOGICAL_SWITCH_RESOURCE_ID, false);
+        client.refresh(ANY_LOGICAL_SWITCH_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_SWITCHES_URI + "/" + ANY_LOGICAL_SWITCH_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_SWITCHES_REFRESH_URI;
+        String expectedUri = LOGICAL_SWITCHES_URI
+                + "/" + ANY_LOGICAL_SWITCH_RESOURCE_ID
+                + LOGICAL_SWITCHES_REFRESH_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
 }

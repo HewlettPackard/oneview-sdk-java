@@ -16,170 +16,40 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.logicalswitches.AddLogicalSwitch;
 import com.hp.ov.sdk.dto.networking.logicalswitches.LogicalSwitch;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.CreatableResource;
+import com.hp.ov.sdk.rest.client.common.DeletableResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.client.common.UpdatableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class LogicalSwitchClient {
+@Api(LogicalSwitchClient.LOGICAL_SWITCHES_URI)
+public interface LogicalSwitchClient extends
+        SearchableResource<LogicalSwitch>,
+        CreatableResource<AddLogicalSwitch>,
+        UpdatableResource<AddLogicalSwitch>,
+        DeletableResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LogicalSwitchClient.class);
-
-    private final BaseClient baseClient;
-
-    public LogicalSwitchClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link LogicalSwitch} details for the specified logical switch.
-     *
-     * @param resourceId logical switch resource identifier as seen in HPE OneView.
-     *
-     * @return {@link LogicalSwitch} object containing the details.
-     */
-    public LogicalSwitch getById(String resourceId) {
-        LOGGER.info("LogicalSwitchClient : getById : Start");
-
-        LogicalSwitch logicalSwitch = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.LOGICAL_SWITCHES_URI, resourceId), LogicalSwitch.class);
-
-        LOGGER.info("LogicalSwitchClient : getById : End");
-
-        return logicalSwitch;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link LogicalSwitch}&gt; containing the details
-     * for all the available logical switches found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link LogicalSwitch}&gt; containing
-     * the details for all found logical switches.
-     */
-    public ResourceCollection<LogicalSwitch> getAll() {
-        LOGGER.info("LogicalSwitchClient : getAll : Start");
-
-        ResourceCollection<LogicalSwitch> logicalSwitches = baseClient.getResourceCollection(
-                ResourceUris.LOGICAL_SWITCHES_URI, LogicalSwitch.class);
-
-        LOGGER.info("LogicalSwitchClient : getAll : End");
-
-        return logicalSwitches;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link LogicalSwitch}&gt; containing details
-     * for the available logical switches found under the current HPE OneView that match the name.
-     *
-     * @param name logical switch name as seen in HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link LogicalSwitch}&gt; containing
-     * the details for the found logical switches.
-     */
-    public ResourceCollection<LogicalSwitch> getByName(String name) {
-        LOGGER.info("LogicalSwitchClient : getByName : Start");
-
-        ResourceCollection<LogicalSwitch> logicalSwitches = baseClient.getResourceCollection(
-                ResourceUris.LOGICAL_SWITCHES_URI, LogicalSwitch.class, UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("LogicalSwitchClient : getByName : End");
-
-        return logicalSwitches;
-    }
-
-    /**
-     * Creates a logical switch according to the provided {@link AddLogicalSwitch} object.
-     * The request can be processed synchronously or asynchronously.
-     *
-     * @param logicalSwitch object containing the logical switch details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource create(AddLogicalSwitch logicalSwitch, boolean aSync) {
-        LOGGER.info("LogicalSwitchClient : create : Start");
-
-        TaskResource taskResource = baseClient.createResource(
-                ResourceUris.LOGICAL_SWITCHES_URI, logicalSwitch, aSync);
-
-        LOGGER.info("LogicalSwitchClient : create : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Updates a {@link LogicalSwitch} identified by the given resource identifier.
-     *
-     * @param resourceId logical switch resource identifier as seen in HPE OneView.
-     * @param logicalSwitch object containing the logical switch details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource update(String resourceId, AddLogicalSwitch logicalSwitch, boolean aSync) {
-        LOGGER.info("LogicalSwitchClient : update : Start");
-
-        TaskResource taskResource = baseClient.updateResource(
-                UrlUtils.createUrl(ResourceUris.LOGICAL_SWITCHES_URI, resourceId), logicalSwitch, aSync);
-
-        LOGGER.info("LogicalSwitchClient : update : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Deletes the {@link LogicalSwitch} identified by the given resource identifier.
-     *
-     * @param resourceId logical switch resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource delete(String resourceId, boolean aSync) {
-        LOGGER.info("LogicalSwitchClient : delete : Start");
-
-        TaskResource taskResource = baseClient.deleteResource(
-                UrlUtils.createUrl(ResourceUris.LOGICAL_SWITCHES_URI, resourceId), aSync);
-
-        LOGGER.info("LogicalSwitchClient : delete : End");
-
-        return taskResource;
-    }
+    String LOGICAL_SWITCHES_URI = "/rest/logical-switches";
+    String LOGICAL_SWITCHES_REFRESH_URI = "/refresh";
 
     /**
      * Executes a refresh action for a logical switch identified by the provided
      * resource identifier. The request can be processed asynchronously or synchronously.
      *
      * @param resourceId logical switch identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource refresh(String resourceId, boolean aSync) {
-        LOGGER.info("LogicalSwitchClient : refresh : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(ResourceUris.LOGICAL_SWITCHES_URI, resourceId,
-                        ResourceUris.LOGICAL_SWITCHES_REFRESH_URI));
-
-        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("LogicalSwitchClient : refresh : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + LOGICAL_SWITCHES_REFRESH_URI, method = HttpMethod.PUT)
+    TaskResource refresh(@PathParam("resourceId") String resourceId, RequestOption ... options);
 
 }

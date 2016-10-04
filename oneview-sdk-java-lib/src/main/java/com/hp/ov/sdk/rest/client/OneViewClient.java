@@ -195,11 +195,13 @@ public class OneViewClient {
     }
 
     public synchronized LogicalSwitchClient logicalSwitch() {
-        return this.getClient(LogicalSwitchClient.class);
+        return Reflection.newProxy(LogicalSwitchClient.class,
+                new ClientRequestHandler<>(this.baseClient, LogicalSwitchClient.class));
     }
 
     public synchronized LogicalSwitchGroupClient logicalSwitchGroup() {
-        return this.getClient(LogicalSwitchGroupClient.class);
+        return Reflection.newProxy(LogicalSwitchGroupClient.class,
+                new ClientRequestHandler<>(this.baseClient, LogicalSwitchGroupClient.class));
     }
 
     public synchronized MessagingCertificateClient messagingCertificate() {

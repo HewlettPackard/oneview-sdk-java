@@ -39,8 +39,6 @@ public class LogicalSwitchGroupClientSample {
 
     // ================================
     // These are variables to be defined by user
-    private static final String LOGICAL_SWITCH_GROUP_RESOURCE_ID = "b231a2fe-5fc8-43de-997b-324b7a1fbcca";
-
     protected static final String LOGICAL_SWITCH_GROUP_NAME = "Logical-Switch-Group_SAMPLE";
     // ================================
 
@@ -57,13 +55,15 @@ public class LogicalSwitchGroupClientSample {
     private void createLogicalSwitchGroup() {
         LogicalSwitchGroup logicalSwitchGroup = this.buildLogicalSwitchGroup();
 
-        TaskResource task = this.client.create(logicalSwitchGroup, false);
+        TaskResource task = this.client.create(logicalSwitchGroup);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void getLogicalSwitchGroup() {
-        LogicalSwitchGroup logicalSwitchGroup = client.getById(LOGICAL_SWITCH_GROUP_RESOURCE_ID);
+        LogicalSwitchGroup logicalSwitchGroup = client.getByName(LOGICAL_SWITCH_GROUP_NAME).get(0);
+
+        logicalSwitchGroup = client.getById(logicalSwitchGroup.getResourceId());
 
         LOGGER.info("Logical switch group returned to client: {}", logicalSwitchGroup.toJsonString());
     }
@@ -85,7 +85,7 @@ public class LogicalSwitchGroupClientSample {
 
         logicalSwitchGroup = this.buildUpdateLogicalSwitchGroup(logicalSwitchGroup);
 
-        TaskResource task = this.client.update(logicalSwitchGroup.getResourceId(), logicalSwitchGroup, false);
+        TaskResource task = this.client.update(logicalSwitchGroup.getResourceId(), logicalSwitchGroup);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -93,7 +93,7 @@ public class LogicalSwitchGroupClientSample {
     private void deleteLogicalSwitchGroup() {
         LogicalSwitchGroup logicalSwitchGroup = client.getByName(LOGICAL_SWITCH_GROUP_NAME).get(0);
 
-        TaskResource task = this.client.delete(logicalSwitchGroup.getResourceId(), false);
+        TaskResource task = this.client.delete(logicalSwitchGroup.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
