@@ -118,7 +118,8 @@ public class OneViewClient {
     }
 
     public synchronized EnclosureGroupClient enclosureGroup() {
-        return this.getClient(EnclosureGroupClient.class);
+        return Reflection.newProxy(EnclosureGroupClient.class,
+                new ClientRequestHandler<>(this.baseClient, EnclosureGroupClient.class));
     }
 
     public synchronized EthernetNetworkClient ethernetNetwork() {

@@ -49,7 +49,6 @@ public class EnclosureGroupClientSample {
     // ================================
     public static final String ENCLOSURE_GROUP_NAME = "Enclosure_Sample";
 
-    private static final String ENCLOSURE_GROUP_RESOURCE_ID = "1ac77207-e5e0-432f-a6bb-3d6d7b7b247f";
     private static final String ENCLOSURE_GROUP_NAME_UPDATED = ENCLOSURE_GROUP_NAME + "_Updated";
     private static final String ENCLOSURE_SCRIPT_DATA = "name=Enclosure_test";
     // ================================
@@ -62,7 +61,9 @@ public class EnclosureGroupClientSample {
     }
 
     private void getEnclosureGroup() {
-        EnclosureGroup enclosureGroup = enclosureGroupClient.getById(ENCLOSURE_GROUP_RESOURCE_ID);
+        EnclosureGroup enclosureGroup = enclosureGroupClient.getByName(ENCLOSURE_GROUP_NAME).get(0);
+
+        enclosureGroup = enclosureGroupClient.getById(enclosureGroup.getResourceId());
 
         LOGGER.info("EnclosureGroup object returned to client : " + enclosureGroup.toJsonString());
     }
@@ -156,8 +157,9 @@ public class EnclosureGroupClientSample {
     public static void main(final String[] args) throws Exception {
         EnclosureGroupClientSample sample = new EnclosureGroupClientSample();
 
-        sample.getEnclosureGroup();
         sample.createEnclosureGroup();
+
+        sample.getEnclosureGroup();
         sample.getAllEnclosureGroups();
         sample.getEnclosureGroupByName();
         sample.getConfigurationScript();
