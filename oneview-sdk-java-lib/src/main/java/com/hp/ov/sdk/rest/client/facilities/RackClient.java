@@ -54,7 +54,7 @@ public interface RackClient extends
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
      *
-     * @return {@link TaskResource} task containing the result of this request.
+     * @return {@link Rack} object containing the result of this request.
      */
     @Endpoint(method = HttpMethod.POST)
     Rack add(@BodyParam Rack resource, RequestOption... options);

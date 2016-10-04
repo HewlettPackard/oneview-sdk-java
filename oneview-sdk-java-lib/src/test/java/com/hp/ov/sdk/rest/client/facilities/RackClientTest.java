@@ -76,7 +76,7 @@ public class RackClientTest {
         expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
 
         then(baseClient).should().executeRequest(expectedRequest,
-new TypeToken<ResourceCollection<Rack>>() {}.getType());
+                new TypeToken<ResourceCollection<Rack>>() {}.getType());
     }
 
     @Test
@@ -88,7 +88,7 @@ new TypeToken<ResourceCollection<Rack>>() {}.getType());
         Request expectedRequest = new Request(HttpMethod.POST, RACK_URI);
         expectedRequest.setEntity(rack);
 
-then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Rack.class).getType());
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Rack.class).getType());
     }
 
     @Test
@@ -101,7 +101,7 @@ then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Rack.clas
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
         expectedRequest.setEntity(rack);
 
-then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Rack.class).getType());
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Rack.class).getType());
     }
 
     @Test

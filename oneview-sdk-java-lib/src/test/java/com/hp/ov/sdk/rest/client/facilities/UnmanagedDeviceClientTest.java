@@ -16,108 +16,132 @@
 
 package com.hp.ov.sdk.rest.client.facilities;
 
+import static com.hp.ov.sdk.rest.client.facilities.UnmanagedDeviceClient.ENVIRONMENT_CONFIGURATION_URI;
+import static com.hp.ov.sdk.rest.client.facilities.UnmanagedDeviceClient.UNMANAGED_DEVICE_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.facilities.unmanageddevice.UnmanagedDevice;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.client.GenericFilter;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UnmanagedDeviceClientTest {
 
-    private static final String ANY_UNMANAGED_DEVICE_RESOURCE_ID = "random-UUID";
-    private static final String ANY_UNMANAGED_DEVICE_RESOURCE_NAME = "random-Name";
+    private static final String ANY_RESOURCE_ID = "random-UUID";
+    private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private UnmanagedDeviceClient unmanagedDeviceClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private UnmanagedDeviceClient client = Reflection.newProxy(UnmanagedDeviceClient.class,
+            new ClientRequestHandler<>(baseClient, UnmanagedDeviceClient.class));
 
     @Test
     public void shouldGetUnmanagedDevice() {
-        unmanagedDeviceClient.getById(ANY_UNMANAGED_DEVICE_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.UNMANAGED_DEVICE_URI + "/" + ANY_UNMANAGED_DEVICE_RESOURCE_ID;
+        String expectedUri = UNMANAGED_DEVICE_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, UnmanagedDevice.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(UnmanagedDevice.class).getType());
     }
 
     @Test
     public void shouldGetAllUnmanagedDevice() {
-        unmanagedDeviceClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.UNMANAGED_DEVICE_URI, UnmanagedDevice.class);
+        Request expectedRequest = new Request(HttpMethod.GET, UNMANAGED_DEVICE_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<UnmanagedDevice>>() {}.getType());
     }
 
     @Test
     public void shouldGetUnmanagedDeviceCollectionByName() {
-        unmanagedDeviceClient.getByName(ANY_UNMANAGED_DEVICE_RESOURCE_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.UNMANAGED_DEVICE_URI,
-                UnmanagedDevice.class, UrlParameter.getFilterByNameParameter(ANY_UNMANAGED_DEVICE_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, UNMANAGED_DEVICE_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<UnmanagedDevice>>() {}.getType());
     }
 
     @Test
     public void shouldAddUnmanagedDevice() {
         UnmanagedDevice unmanagedDevice = new UnmanagedDevice();
 
-        unmanagedDeviceClient.add(unmanagedDevice);
+        client.add(unmanagedDevice);
 
-        Request request = new Request(HttpMethod.POST, ResourceUris.UNMANAGED_DEVICE_URI, unmanagedDevice);
+        Request expectedRequest = new Request(HttpMethod.POST, UNMANAGED_DEVICE_URI);
+        expectedRequest.setEntity(unmanagedDevice);
 
-        then(baseClient).should().executeRequest(request, UnmanagedDevice.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(UnmanagedDevice.class).getType());
     }
 
     @Test
     public void shouldUpdateUnmanagedDevice() {
         UnmanagedDevice unmanagedDevice = new UnmanagedDevice();
 
-        unmanagedDeviceClient.update(ANY_UNMANAGED_DEVICE_RESOURCE_ID, unmanagedDevice);
+        client.update(ANY_RESOURCE_ID, unmanagedDevice);
 
-        String expectedUri = ResourceUris.UNMANAGED_DEVICE_URI + "/" + ANY_UNMANAGED_DEVICE_RESOURCE_ID;
-        Request request = new Request(HttpMethod.PUT, expectedUri, unmanagedDevice);
+        String expectedUri = UNMANAGED_DEVICE_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, unmanagedDevice);
 
-        then(baseClient).should().executeRequest(request, UnmanagedDevice.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(UnmanagedDevice.class).getType());
     }
 
     @Test
     public void shouldRemoveUnmanagedDevice() {
-        unmanagedDeviceClient.remove(ANY_UNMANAGED_DEVICE_RESOURCE_ID);
+        client.remove(ANY_RESOURCE_ID, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.UNMANAGED_DEVICE_URI + "/" + ANY_UNMANAGED_DEVICE_RESOURCE_ID;
-        Request request = new Request(HttpMethod.DELETE, expectedUri);
+        String expectedUri = UNMANAGED_DEVICE_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().executeRequest(request, String.class);
+        expectedRequest.setTimeout(321);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(String.class).getType());
     }
 
     @Test
     public void shouldRemoveUnmanagedDeviceByFilter() {
-        unmanagedDeviceClient.removeByFilter(ANY_UNMANAGED_DEVICE_RESOURCE_NAME, false);
+        GenericFilter filter = new GenericFilter();
+        filter.setFilter("'name' = '" + ANY_RESOURCE_NAME + "'");
+        client.removeByFilter(filter, TaskTimeout.of(321));
 
-        UrlParameter filter = new UrlParameter("filter", ANY_UNMANAGED_DEVICE_RESOURCE_NAME);
+        String expectedUri = UNMANAGED_DEVICE_URI;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().deleteResource(ResourceUris.UNMANAGED_DEVICE_URI, false, filter);
+        expectedRequest.addQuery(new UrlParameter("filter", filter.parameters().get(0).getValue()));
+
+        expectedRequest.setTimeout(321);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetUnmanagedDeviceEnvironmentalConfiguration() {
-        unmanagedDeviceClient.getEnvironmentalConfiguration(ANY_UNMANAGED_DEVICE_RESOURCE_ID);
+        client.getEnvironmentalConfiguration(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.UNMANAGED_DEVICE_URI + "/" + ANY_UNMANAGED_DEVICE_RESOURCE_ID
-                + "/" + ResourceUris.ENVIRONMENT_CONFIGURATION_URI;
+        String expectedUri = UNMANAGED_DEVICE_URI
+                + "/" + ANY_RESOURCE_ID
+                + ENVIRONMENT_CONFIGURATION_URI;
 
-        then(baseClient).should().getResource(expectedUri, EnvironmentalConfiguration.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(EnvironmentalConfiguration.class).getType());
     }
 
 }
