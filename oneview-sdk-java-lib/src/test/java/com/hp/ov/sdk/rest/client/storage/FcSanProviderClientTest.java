@@ -16,59 +16,78 @@
 
 package com.hp.ov.sdk.rest.client.storage;
 
-import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.eq;
-import static org.mockito.BDDMockito.given;
+import static com.hp.ov.sdk.rest.client.storage.FcSanProviderClient.FC_SANS_PROVIDER_DEVICE_MANAGER_URI;
+import static com.hp.ov.sdk.rest.client.storage.FcSanProviderClient.FC_SANS_PROVIDER_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.collect.Lists;
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.DeviceManagerResponse;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SanProviderResponse;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FcSanProviderClientTest {
 
+    private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private FcSanProviderClient client;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private FcSanProviderClient client = Reflection.newProxy(FcSanProviderClient.class,
+            new ClientRequestHandler<>(baseClient, FcSanProviderClient.class));
 
     @Test
-    public void shouldGetAllFcSanDeviceManager() {
-        client.getAll();
+    public void shouldGetFcSanProviderById() {
+        client.getById(ANY_RESOURCE_ID);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.FC_SANS_PROVIDER_URI,
-                SanProviderResponse.class);
+        String expectedUri = FC_SANS_PROVIDER_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(SanProviderResponse.class).getType());
     }
 
     @Test
-    public void shouldGetFcSanDeviceManagerByName() {
-        ResourceCollection<SanProviderResponse> collection = new ResourceCollection<>();
-        SanProviderResponse sanProvider = new SanProviderResponse();
+    public void shouldGetAllFcSanProviders() {
+        client.getAll();
 
-        sanProvider.setDisplayName(ANY_RESOURCE_NAME);
-        collection.setMembers(Lists.newArrayList(sanProvider));
+        Request expectedRequest = new Request(HttpMethod.GET, FC_SANS_PROVIDER_URI);
 
-        given(baseClient.getResourceCollection(anyString(), eq(SanProviderResponse.class))).willReturn(collection);
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<SanProviderResponse>>() {}.getType());
+    }
 
-        SanProviderResponse sanProviderResponse = client.getByName(ANY_RESOURCE_NAME);
+    @Test
+    public void shouldGetFcSanProviderByName() {
+        client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.FC_SANS_PROVIDER_URI,
-                SanProviderResponse.class);
-        assertThat(sanProviderResponse, sameInstance(sanProvider));
+        Request expectedRequest = new Request(HttpMethod.GET, FC_SANS_PROVIDER_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<SanProviderResponse>>() {}.getType());
+    }
+
+    @Test
+    public void shouldAddFcSanDeviceManager() {
+        DeviceManagerResponse deviceManager = new DeviceManagerResponse();
+        this.client.addSanManager(ANY_RESOURCE_ID, deviceManager);
+
+        String expectedUri = FC_SANS_PROVIDER_URI
+                + "/" + ANY_RESOURCE_ID
+                + FC_SANS_PROVIDER_DEVICE_MANAGER_URI;
+        Request expectedRequest = new Request(HttpMethod.POST, expectedUri, deviceManager);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
 }

@@ -146,7 +146,8 @@ public class OneViewClient {
     }
 
     public synchronized FcSanDeviceManagerClient fcSanDeviceManager() {
-        return this.getClient(FcSanDeviceManagerClient.class);
+        return Reflection.newProxy(FcSanDeviceManagerClient.class,
+                new ClientRequestHandler<>(this.baseClient, FcSanDeviceManagerClient.class));
     }
 
     public synchronized FcSanManagedSanClient fcSanManagedSan() {
@@ -155,7 +156,8 @@ public class OneViewClient {
     }
 
     public synchronized FcSanProviderClient fcSanProvider() {
-        return this.getClient(FcSanProviderClient.class);
+        return Reflection.newProxy(FcSanProviderClient.class,
+                new ClientRequestHandler<>(this.baseClient, FcSanProviderClient.class));
     }
 
     public synchronized FirmwareBundleClient firmwareBundle() {

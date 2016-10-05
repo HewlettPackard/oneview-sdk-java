@@ -30,9 +30,6 @@ public class ResourceUris {
     public static final String AVAILABLE_STORAGE_SYSTEMS = AVAILABLE_STORAGE_SYSTEM + "s";
     public static final String AVAILABLE_TARGETS = SERVER_PROFILE_URI + "/available-targets";
     public static final String ENVIRONMENT_CONFIGURATION_URI = "environmentalConfiguration";
-    public static final String FC_SANS_DEVICE_MANAGER = "device-managers";
-    public static final String FC_SANS_DEVICE_MANAGER_URI = "/rest/fc-sans/device-managers";
-    public static final String FC_SANS_PROVIDER_URI = "/rest/fc-sans/providers";
     public static final String FIRMWARE_BUNDLE_URI = "/rest/firmware-bundles";
     public static final String FIRMWARE_DRIVER_URI = "/rest/firmware-drivers";
     public static final String INTERCONNECT_URI = "/rest/interconnects";
