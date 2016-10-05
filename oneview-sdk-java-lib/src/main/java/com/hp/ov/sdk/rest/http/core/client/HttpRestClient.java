@@ -137,10 +137,20 @@ public class HttpRestClient {
                 break;
             case PATCH:
                 HttpPatch patch = new HttpPatch(uri);
-                HttpEntity entity = EntityBuilder.create()
-                        .setText(serializer.toJsonArray((Patch) request.getEntity(),
-                                restParams.getApiVersion()))
-                        .setContentType(toApacheContentType(request.getContentType())).build();
+                HttpEntity entity = null;
+
+                // Switches uses empty patch requests (refresh)
+                if (Patch.class.isInstance(request.getEntity())) {
+                    entity = EntityBuilder.create()
+                            .setText(serializer.toJsonArray((Patch) request.getEntity(),
+                                    restParams.getApiVersion()))
+                            .setContentType(toApacheContentType(request.getContentType())).build();
+                } else {
+                    entity = EntityBuilder.create()
+                            .setText(serializer.toJson(request.getEntity(),
+                                    restParams.getApiVersion()))
+                            .setContentType(toApacheContentType(request.getContentType())).build();
+                }
 
                 patch.setEntity(entity);
 
@@ -166,7 +176,7 @@ public class HttpRestClient {
             requestBase.setConfig(createRequestTimeoutConfiguration());
             setRequestHeaders(restParams, requestBase);
 
-            return getResponse(requestBase, restParams, request.isForceTaskReturn());
+            return getResponse(requestBase, restParams, request.isForceReturnTask());
         }
         LOGGER.error("could not create a valid request.");
         throw new SDKBadRequestException(SDKErrorEnum.badRequestError, null, null, null,

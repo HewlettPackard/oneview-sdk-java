@@ -35,6 +35,7 @@ import com.hp.ov.sdk.dto.networking.SwitchStatistics;
 import com.hp.ov.sdk.dto.networking.switches.Switch;
 import com.hp.ov.sdk.dto.networking.switches.SwitchManagementConnection;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
 
 public class SwitchClientSample {
 
@@ -76,7 +77,7 @@ public class SwitchClientSample {
     private void addSwitch() {
         Switch aSwitch = this.buildSwitch();
 
-        TaskResource taskResource = this.switchClient.add(aSwitch, false);
+        TaskResource taskResource = this.switchClient.add(aSwitch);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -85,9 +86,37 @@ public class SwitchClientSample {
         Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
         String resourceId = aSwitch.getResourceId();
 
+
+        SwitchManagementConnection switchManagementConnection = new SwitchManagementConnection();
+        List<ConnectionProperty> connectionProperties = new ArrayList<>();
+
+        ConnectionProperty e = new ConnectionProperty();
+        e.setPropertyName("hostname");
+        e.setValue(SWITCH_NAME);
+        e.setValueFormat(ValueFormat.Unknown);
+        e.setValueType(ValueType.String);
+        connectionProperties.add(e);
+
+        ConnectionProperty e1 = new ConnectionProperty();
+        e.setPropertyName("password");
+        e.setValue("dcs");
+        e.setValueFormat(ValueFormat.SecuritySensitive);
+        e.setValueType(ValueType.String);
+        connectionProperties.add(e1);
+
+        ConnectionProperty e2 = new ConnectionProperty();
+        e.setPropertyName("userName");
+        e.setValue("dcs");
+        e.setValueFormat(ValueFormat.Unknown);
+        e.setValueType(ValueType.String);
+        connectionProperties.add(e2);
+
+        switchManagementConnection.setConnectionProperties(connectionProperties );
+        aSwitch.setSwitchManagementConnection(switchManagementConnection );
+
         // FIXME no changes due to problems after executing an update
 
-        TaskResource taskResource = this.switchClient.update(resourceId, aSwitch, false);
+        TaskResource taskResource = this.switchClient.update(resourceId, aSwitch);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -95,7 +124,7 @@ public class SwitchClientSample {
     private void removeSwitch() {
         Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
 
-        TaskResource taskResource = this.switchClient.remove(aSwitch.getResourceId(), false);
+        TaskResource taskResource = this.switchClient.remove(aSwitch.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -103,7 +132,7 @@ public class SwitchClientSample {
     private void refreshSwitch() {
         Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
 
-        TaskResource taskResource = this.switchClient.refresh(aSwitch.getResourceId(), false);
+        TaskResource taskResource = this.switchClient.refresh(aSwitch.getResourceId(), TaskTimeout.of(60000));
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -117,14 +146,14 @@ public class SwitchClientSample {
     }
 
     private void getSwitchStatistics() {
-        Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
+        Switch aSwitch = this.switchClient.getById(SWITCH_RESOURCE_ID);
         SwitchStatistics switchStatistics = this.switchClient.getStatistics(aSwitch.getResourceId());
 
         LOGGER.info("SwitchStatistics object returned to client: {}", switchStatistics.toJsonString());
     }
 
     private void getSwitchPortStatistics() {
-        Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
+        Switch aSwitch = this.switchClient.getById(SWITCH_RESOURCE_ID);
         SwitchPortStatistics switchPortStatistics = this.switchClient.getPortStatistics(aSwitch.getResourceId(),
                 SWITCH_PORT_NAME);
 
@@ -132,7 +161,7 @@ public class SwitchClientSample {
     }
 
     private void updatePorts() {
-        Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
+        Switch aSwitch = this.switchClient.getById(SWITCH_RESOURCE_ID);
 
         List<Port> ports = new ArrayList<>();
 
@@ -144,7 +173,7 @@ public class SwitchClientSample {
             }
         }
 
-        TaskResource taskResource = this.switchClient.updatePorts(aSwitch.getResourceId(), ports, false);
+        TaskResource taskResource = this.switchClient.updatePorts(aSwitch.getResourceId(), ports);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -162,7 +191,6 @@ public class SwitchClientSample {
 
         switchObj.setSwitchManagementConnection(mgmt);
         switchObj.setType(ResourceCategory.RC_SWITCH);
-        switchObj.setType(ResourceCategory.RC_SWITCH_V300);
 
         return switchObj;
     }

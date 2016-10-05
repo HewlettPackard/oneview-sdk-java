@@ -16,146 +16,179 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.networking.SwitchClient.SWITCHES_ENVIRONMENT_CONFIGURATION_URI;
+import static com.hp.ov.sdk.rest.client.networking.SwitchClient.SWITCHES_REFRESH_URI;
+import static com.hp.ov.sdk.rest.client.networking.SwitchClient.SWITCHES_STATISTICS_URI;
+import static com.hp.ov.sdk.rest.client.networking.SwitchClient.SWITCHES_UPDATE_PORTS_URI;
+import static com.hp.ov.sdk.rest.client.networking.SwitchClient.SWITCHES_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.Port;
 import com.hp.ov.sdk.dto.networking.SwitchPortStatistics;
 import com.hp.ov.sdk.dto.networking.SwitchStatistics;
 import com.hp.ov.sdk.dto.networking.switches.Switch;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.ContentType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SwitchClientTest {
 
-    private static final String ANY_SWITCH_RESOURCE_ID = "random-UUID";
-    private static final String ANY_SWITCH_RESOURCE_NAME = "random-Name";
-    private static final String ANY_SWITCH_RESOURCE_PORT_NAME = "random-Port-Name";
+    private static final String ANY_RESOURCE_ID = "random-UUID";
+    private static final String ANY_RESOURCE_NAME = "random-Name";
+    private static final String ANY_PORT_NAME = "random-port-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private SwitchClient switchClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private SwitchClient client = Reflection.newProxy(SwitchClient.class,
+            new ClientRequestHandler<>(baseClient, SwitchClient.class));
 
     @Test
     public void shouldGetSwitch() {
-        switchClient.getById(ANY_SWITCH_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID;
+        String expectedUri = SWITCHES_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, Switch.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Switch.class).getType());
     }
 
     @Test
     public void shouldGetAllSwitch() {
-        switchClient.getAll();
+        client.getAll();
+        Request expectedRequest = new Request(HttpMethod.GET, SWITCHES_URI);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.SWITCHES_URI, Switch.class);
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<Switch>>() {}.getType());
     }
 
     @Test
     public void shouldGetSwitchCollectionByName() {
-        switchClient.getByName(ANY_SWITCH_RESOURCE_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.SWITCHES_URI, Switch.class,
-                UrlParameter.getFilterByNameParameter(ANY_SWITCH_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, SWITCHES_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<Switch>>() {}.getType());
     }
 
     @Test
     public void shouldAddSwitch() {
         Switch switchObj = new Switch();
 
-        switchClient.add(switchObj, false);
+        client.add(switchObj);
 
-        then(baseClient).should().createResource(ResourceUris.SWITCHES_URI, switchObj, false);
+        Request expectedRequest = new Request(HttpMethod.POST, SWITCHES_URI);
+        expectedRequest.setEntity(switchObj);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateSwitch() {
         Switch switchObj = new Switch();
 
-        switchClient.update(ANY_SWITCH_RESOURCE_ID, switchObj, false);
+        client.update(ANY_RESOURCE_ID, switchObj);
 
-        String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID;
+        String expectedUri = SWITCHES_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setEntity(switchObj);
 
-        then(baseClient).should().updateResource(expectedUri, switchObj, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldRemoveSwitch() {
-        switchClient.remove(ANY_SWITCH_RESOURCE_ID, false);
+        client.remove(ANY_RESOURCE_ID, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID;
+        String expectedUri = SWITCHES_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().deleteResource(expectedUri, false);
+        expectedRequest.setTimeout(321);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldRefreshSwitch() {
-        switchClient.refresh(ANY_SWITCH_RESOURCE_ID, false);
+        client.refresh(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID;
-        Request request = new Request(HttpMethod.PUT, expectedUri);
+        String expectedUri = SWITCHES_URI
+                + "/" + ANY_RESOURCE_ID
+                + SWITCHES_REFRESH_URI;
+        Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri);
+        expectedRequest.setEntity(ClientRequestHandler.EMPTY_OBJECT);
+        expectedRequest.setContentType(ContentType.APPLICATION_JSON_PATCH);
 
-        then(baseClient).should().executeMonitorableRequest(request, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetSwitchEnvironmentalConfiguration() {
-        switchClient.getEnvironmentalConfiguration(ANY_SWITCH_RESOURCE_ID);
+        client.getEnvironmentalConfiguration(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID + "/"
-                + ResourceUris.ENVIRONMENT_CONFIGURATION_URI;
+        String expectedUri = SWITCHES_URI
+                + "/" + ANY_RESOURCE_ID
+                + SWITCHES_ENVIRONMENT_CONFIGURATION_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, EnvironmentalConfiguration.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(EnvironmentalConfiguration.class).getType());
     }
 
     @Test
     public void shouldGetSwitchStatistics() {
-        switchClient.getStatistics(ANY_SWITCH_RESOURCE_ID);
+        client.getStatistics(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID + "/"
-                + ResourceUris.SWITCHES_STATISTICS_URI;
+        String expectedUri = SWITCHES_URI
+                + "/" + ANY_RESOURCE_ID
+                + SWITCHES_STATISTICS_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, SwitchStatistics.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(SwitchStatistics.class).getType());
     }
 
     @Test
     public void shouldGetSwitchPortStatistics() {
-        switchClient.getPortStatistics(ANY_SWITCH_RESOURCE_ID, ANY_SWITCH_RESOURCE_PORT_NAME);
+        client.getPortStatistics(ANY_RESOURCE_ID, ANY_PORT_NAME);
 
-        String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID + "/"
-                + ResourceUris.SWITCHES_STATISTICS_URI + "/" + ANY_SWITCH_RESOURCE_PORT_NAME;
+        String expectedUri = SWITCHES_URI
+                + "/" + ANY_RESOURCE_ID
+                + SWITCHES_STATISTICS_URI
+                + "/" + ANY_PORT_NAME;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, SwitchPortStatistics.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(SwitchPortStatistics.class).getType());
     }
 
     @Test
     public void shouldUpdatePorts() {
         List<Port> ports = new ArrayList<>();
 
-        switchClient.updatePorts(ANY_SWITCH_RESOURCE_ID, ports, false);
+        client.updatePorts(ANY_RESOURCE_ID, ports);
 
-        String expectedUri = ResourceUris.SWITCHES_URI + "/" + ANY_SWITCH_RESOURCE_ID + "/"
-                + ResourceUris.SWITCHES_UPDATE_PORTS_URI;
+        String expectedUri = SWITCHES_URI
+                + "/" + ANY_RESOURCE_ID
+                + SWITCHES_UPDATE_PORTS_URI;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setEntity(ports);
+        expectedRequest.setForceReturnTask(true);
 
-        Request request = new Request(HttpMethod.PUT, expectedUri, ports);
-        request.setForceTaskReturn(true);
-
-        then(baseClient).should().executeMonitorableRequest(request, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 }

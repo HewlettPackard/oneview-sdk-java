@@ -91,7 +91,7 @@ public class StoragePoolClientTest {
 
         Request request = new Request(HttpMethod.POST, ResourceUris.STORAGE_POOL_URI, storagePool);
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
 
         then(baseClient).should().executeMonitorableRequest(request, false);
     }
@@ -105,7 +105,7 @@ public class StoragePoolClientTest {
         String expectedUri = ResourceUris.STORAGE_POOL_URI + "/" + ANY_STORAGE_POOL_RESOURCE_ID;
         Request request = new Request(HttpMethod.PUT, expectedUri, storagePool);
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
 
         then(baseClient).should().executeMonitorableRequest(request, false);
     }
@@ -117,7 +117,7 @@ public class StoragePoolClientTest {
         String expectedUri = ResourceUris.STORAGE_POOL_URI + "/" + ANY_STORAGE_POOL_RESOURCE_ID;
         Request request = new Request(HttpMethod.DELETE, expectedUri);
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
 
         then(baseClient).should().executeMonitorableRequest(request, false);
     }

@@ -90,7 +90,7 @@ public class SasInterconnectClientTest {
                 + "/" + ANY_RESOURCE_ID
                 + "/" + SasInterconnectClient.SAS_INTERCONNECT_URI_REFRESH;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, requestBody);
-        expectedRequest.setForceTaskReturn(true);
+        expectedRequest.setForceReturnTask(true);
         expectedRequest.setTimeout(120000);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest, false);

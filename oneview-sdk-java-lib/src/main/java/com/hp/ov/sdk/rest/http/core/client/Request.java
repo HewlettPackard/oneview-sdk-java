@@ -37,7 +37,7 @@ public class Request {
     private List<UrlParameter> query;
     private Optional<Object> entity;
     private ContentType contentType;
-    private boolean forceTaskReturn;
+    private boolean forceReturnTask;
     private int taskTimeoutMillis;
 
     public Request(HttpMethod type, String uri) {
@@ -50,7 +50,7 @@ public class Request {
 
         this.entity = Optional.fromNullable(entity);
         this.contentType = ContentType.APPLICATION_JSON;
-        this.forceTaskReturn = false;
+        this.forceReturnTask = false;
         this.taskTimeoutMillis = SdkConstants.NO_TASK_TIMEOUT;
     }
 
@@ -109,12 +109,12 @@ public class Request {
         this.contentType = contentType;
     }
 
-    public boolean isForceTaskReturn() {
-        return forceTaskReturn;
+    public boolean isForceReturnTask() {
+        return forceReturnTask;
     }
 
-    public void setForceTaskReturn(boolean forceTaskReturn) {
-        this.forceTaskReturn = forceTaskReturn;
+    public void setForceReturnTask(boolean forceReturnTask) {
+        this.forceReturnTask = forceReturnTask;
     }
 
     public int getTimeout() {

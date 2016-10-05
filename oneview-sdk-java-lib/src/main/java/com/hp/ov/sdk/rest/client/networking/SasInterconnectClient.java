@@ -144,7 +144,7 @@ public class SasInterconnectClient {
                 SAS_INTERCONNECT_URI_REFRESH),
                 requestBody);
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
         request.setTimeout(120000);
 
         TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);

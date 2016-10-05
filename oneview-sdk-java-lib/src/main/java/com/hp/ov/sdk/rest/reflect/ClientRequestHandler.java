@@ -24,12 +24,16 @@ import com.google.common.reflect.Parameter;
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.ContentType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.UrlQuery;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 
 public class ClientRequestHandler<T> extends AbstractInvocationHandler {
+
+    public static Object EMPTY_OBJECT = new Object();
 
     private static final String GET_BY_NAME_METHOD = "getByName";
 
@@ -57,6 +61,7 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
         Endpoint endpoint = method.getAnnotation(Endpoint.class);
 
         Request request = new Request(endpoint.method(), this.baseUri + endpoint.uri());
+        request.setForceReturnTask(endpoint.forceReturnTask());
 
         if (GET_BY_NAME_METHOD.equals(method.getName()) && (args.length == 1)) {
             request.addQuery(UrlParameter.getFilterByNameParameter((String) args[0]));
@@ -81,9 +86,15 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
                 for (UrlParameter parameter : query.parameters()) {
                     request.addQuery(parameter);
                 }
-            } else if (bodyParam != null) {
-                request.setEntity(args[i]);
-                request.setContentType(bodyParam.type());
+            } else {
+                if (bodyParam != null) {
+                    request.setEntity(args[i]);
+                    request.setContentType(bodyParam.type());
+                } else if(request.getType() == HttpMethod.PATCH && request.getEntity() == null) {
+                    // Switch refresh request uses empty patch object
+                    request.setEntity(EMPTY_OBJECT);
+                    request.setContentType(ContentType.APPLICATION_JSON_PATCH);
+                }
             }
         }
     }

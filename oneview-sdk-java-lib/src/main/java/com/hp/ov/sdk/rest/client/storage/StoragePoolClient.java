@@ -142,7 +142,7 @@ public class StoragePoolClient {
 
         Request request = new Request(HttpMethod.POST, ResourceUris.STORAGE_POOL_URI, storagePool);
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
 
         TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
@@ -167,7 +167,7 @@ public class StoragePoolClient {
         Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ResourceUris.STORAGE_POOL_URI, resourceId), storagePool);
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
 
         TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
@@ -191,7 +191,7 @@ public class StoragePoolClient {
         Request request = new Request(HttpMethod.DELETE,
                 UrlUtils.createUrl(ResourceUris.STORAGE_POOL_URI, resourceId));
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
 
         TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 

@@ -506,7 +506,7 @@ public class HttpRestClientTest {
         restClient = HttpRestClient.getClient();
         Request request = new Request(HttpMethod.POST, "");
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
 
         String result = restClient.sendRequest(params, request);
         assertNotNull(result);

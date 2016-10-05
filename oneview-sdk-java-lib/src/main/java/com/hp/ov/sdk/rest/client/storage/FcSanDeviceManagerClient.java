@@ -115,7 +115,7 @@ public class FcSanDeviceManagerClient {
 
         Request request = new Request(HttpMethod.POST, providerDeviceManagerUri, deviceManager);
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
 
         TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
@@ -140,7 +140,7 @@ public class FcSanDeviceManagerClient {
         Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ResourceUris.FC_SANS_DEVICE_MANAGER_URI, resourceId), deviceManager);
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
 
         TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 

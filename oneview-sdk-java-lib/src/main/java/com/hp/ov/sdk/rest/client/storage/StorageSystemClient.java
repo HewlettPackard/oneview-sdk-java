@@ -115,7 +115,7 @@ public class StorageSystemClient {
 
         Request request = new Request(HttpMethod.POST, ResourceUris.STORAGE_SYSTEM_URI, storageSystemCredentials);
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
 
         TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
@@ -140,7 +140,7 @@ public class StorageSystemClient {
         Request request = new Request(HttpMethod.PUT,
                 UrlUtils.createUrl(ResourceUris.STORAGE_SYSTEM_URI, resourceId), storageSystem);
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
 
         TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
 
@@ -164,7 +164,7 @@ public class StorageSystemClient {
         Request request = new Request(HttpMethod.DELETE,
                 UrlUtils.createUrl(ResourceUris.STORAGE_SYSTEM_URI, resourceId));
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
 
         TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
 
