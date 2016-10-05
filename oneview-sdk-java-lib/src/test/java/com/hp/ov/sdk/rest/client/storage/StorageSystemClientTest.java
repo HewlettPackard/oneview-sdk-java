@@ -16,139 +16,162 @@
 
 package com.hp.ov.sdk.rest.client.storage;
 
+import static com.hp.ov.sdk.rest.client.storage.StorageSystemClient.STORAGE_POOL_STORAGE_SYSTEM_URI;
+import static com.hp.ov.sdk.rest.client.storage.StorageSystemClient.STORAGE_SYSTEM_HOST_TYPES_URI;
+import static com.hp.ov.sdk.rest.client.storage.StorageSystemClient.STORAGE_SYSTEM_MANAGED_PORTS_URI;
+import static com.hp.ov.sdk.rest.client.storage.StorageSystemClient.STORAGE_SYSTEM_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.StorageSystem;
 import com.hp.ov.sdk.dto.StorageTargetPort;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StorageSystemClientTest {
 
-    private static final String ANY_STORAGE_SYSTEM_RESOURCE_ID = "random-UUID";
-    private static final String ANY_STORAGE_SYSTEM_MANAGED_PORT_ID = "random-UUID";
-    private static final String ANY_STORAGE_SYSTEM_RESOURCE_NAME = "random-Name";
+    private static final String ANY_RESOURCE_ID = "random-UUID";
+    private static final String ANY_RESOURCE_NAME = "random-Name";
+    private static final String ANY_PORT_ID = "random-port-id";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private StorageSystemClient storageSystemClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private StorageSystemClient client = Reflection.newProxy(StorageSystemClient.class,
+            new ClientRequestHandler<>(baseClient, StorageSystemClient.class));
 
     @Test
     public void shouldGetStorageSystem() {
-        storageSystemClient.getById(ANY_STORAGE_SYSTEM_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.STORAGE_SYSTEM_URI + "/" + ANY_STORAGE_SYSTEM_RESOURCE_ID;
+        String expectedUri = STORAGE_SYSTEM_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, StorageSystem.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(StorageSystem.class).getType());
     }
 
     @Test
     public void shouldGetAllStorageSystem() {
-        storageSystemClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.STORAGE_SYSTEM_URI, StorageSystem.class);
+        Request expectedRequest = new Request(HttpMethod.GET, STORAGE_SYSTEM_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<StorageSystem>>() {}.getType());
     }
 
     @Test
     public void shouldGetStorageSystemCollectionByName() {
-        storageSystemClient.getByName(ANY_STORAGE_SYSTEM_RESOURCE_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.STORAGE_SYSTEM_URI,
-                StorageSystem.class, UrlParameter.getFilterByNameParameter(ANY_STORAGE_SYSTEM_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, STORAGE_SYSTEM_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<StorageSystem>>() {}.getType());
     }
 
     @Test
     public void shouldAddStorageSystem() {
         AddStorageSystemCredentials storageSystemCredentials = new AddStorageSystemCredentials();
 
-        storageSystemClient.add(storageSystemCredentials, false);
+        client.add(storageSystemCredentials);
 
-        Request request = new Request(HttpMethod.POST, ResourceUris.STORAGE_SYSTEM_URI, storageSystemCredentials);
+        Request expectedRequest = new Request(HttpMethod.POST, STORAGE_SYSTEM_URI, storageSystemCredentials);
+        expectedRequest.setEntity(storageSystemCredentials);
 
-        request.setForceReturnTask(true);
-
-        then(baseClient).should().executeMonitorableRequest(request, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateStorageSystem() {
         StorageSystem storageSystem = new StorageSystem();
 
-        storageSystemClient.update(ANY_STORAGE_SYSTEM_RESOURCE_ID, storageSystem, false);
+        client.update(ANY_RESOURCE_ID, storageSystem);
 
-        String expectedUri = ResourceUris.STORAGE_SYSTEM_URI + "/" + ANY_STORAGE_SYSTEM_RESOURCE_ID;
-        Request request = new Request(HttpMethod.PUT, expectedUri, storageSystem);
+        String expectedUri = STORAGE_SYSTEM_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setEntity(storageSystem);
 
-        request.setForceReturnTask(true);
-
-        then(baseClient).should().executeMonitorableRequest(request, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldRemoveStorageSystem() {
-        storageSystemClient.remove(ANY_STORAGE_SYSTEM_RESOURCE_ID, false);
+        client.remove(ANY_RESOURCE_ID, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.STORAGE_SYSTEM_URI + "/" + ANY_STORAGE_SYSTEM_RESOURCE_ID;
-        Request request = new Request(HttpMethod.DELETE, expectedUri);
+        String expectedUri = STORAGE_SYSTEM_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        request.setForceReturnTask(true);
+        expectedRequest.setTimeout(321);
 
-        then(baseClient).should().executeMonitorableRequest(request, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetStorageSystemPools() {
-        storageSystemClient.getStoragePools(ANY_STORAGE_SYSTEM_RESOURCE_ID);
+        client.getStoragePools(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.STORAGE_SYSTEM_URI
-                + "/" + ANY_STORAGE_SYSTEM_RESOURCE_ID
-                + "/" + ResourceUris.STORAGE_POOL_STORAGE_SYSTEM_URI;
+        String expectedUri = STORAGE_SYSTEM_URI
+                + "/" + ANY_RESOURCE_ID
+                + STORAGE_POOL_STORAGE_SYSTEM_URI;
 
-        then(baseClient).should().getResourceCollection(expectedUri, StoragePool.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<StoragePool>>() {}.getType());
     }
 
     @Test
     public void shouldGetStorageSystemAllManagedPorts() {
-        storageSystemClient.getAllManagedPorts(ANY_STORAGE_SYSTEM_RESOURCE_ID);
+        client.getAllManagedPorts(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.STORAGE_SYSTEM_URI
-                + "/" + ANY_STORAGE_SYSTEM_RESOURCE_ID
-                + "/" + ResourceUris.MANAGED_PORTS_STORAGE_SYSTEM_URI;
+        String expectedUri = STORAGE_SYSTEM_URI
+                + "/" + ANY_RESOURCE_ID
+                + STORAGE_SYSTEM_MANAGED_PORTS_URI;
 
-        then(baseClient).should().getResourceCollection(expectedUri, StorageTargetPort.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<StorageTargetPort>>() {}.getType());
     }
 
     @Test
     public void shouldGetStorageSystemManagedPort() {
-        storageSystemClient.getManagedPort(ANY_STORAGE_SYSTEM_RESOURCE_ID, ANY_STORAGE_SYSTEM_MANAGED_PORT_ID);
+        client.getManagedPort(ANY_RESOURCE_ID, ANY_PORT_ID);
 
-        String expectedUri = ResourceUris.STORAGE_SYSTEM_URI
-                + "/" + ANY_STORAGE_SYSTEM_RESOURCE_ID
-                + "/" + ResourceUris.MANAGED_PORTS_STORAGE_SYSTEM_URI
-                + "/" + ANY_STORAGE_SYSTEM_MANAGED_PORT_ID;
+        String expectedUri = STORAGE_SYSTEM_URI
+                + "/" + ANY_RESOURCE_ID
+                + STORAGE_SYSTEM_MANAGED_PORTS_URI
+                + "/" + ANY_PORT_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, StorageTargetPort.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(StorageTargetPort.class).getType());
     }
 
     @Test
     public void shouldGetStorageSystemHostTypes() {
-        storageSystemClient.getHostTypes();
+        client.getHostTypes();
 
-        then(baseClient).should().getResourceList(ResourceUris.STORAGE_SYSTEM_HOST_TYPES_URI, String.class);
+        String expectedUri = STORAGE_SYSTEM_URI + STORAGE_SYSTEM_HOST_TYPES_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<List<String>>() {}.getType());
     }
 
 }

@@ -59,7 +59,6 @@ public class ResourceUris {
     public static final String LOGICAL_INTERCONNECT_INTERNAL_VLANS_URI = "internalVlans";
     public static final String LOGICAL_INTERCONNECT_UNASSIGNED_UPLINK_PORTS_URI = "unassignedUplinkPortsForPortMonitor";
     public static final String LOGIN_SESSIONS = "/rest/login-sessions";
-    public static final String MANAGED_PORTS_STORAGE_SYSTEM_URI = "managedPorts";
     public static final String POWER_DEVICE_DISCOVERY_URI = "/rest/power-devices/discover";
     public static final String POWER_DEVICE_POWER_STATE_URI = "powerState";
     public static final String POWER_DEVICE_REFRESH_STATE_URI = "refreshState";
@@ -72,10 +71,7 @@ public class ResourceUris {
     public static final String SERVER_PROFILE_COMPLIANCE_PREVIEW_URI = "compliance-preview";
     public static final String SERVER_PROFILE_COMPLIANCE_MESSAGES_URI = "messages";
     public static final String SERVER_PROFILE_COMPLIANCE_TRANSFORMATION_URI = "transformation";
-    public static final String STORAGE_POOL_STORAGE_SYSTEM_URI = "storage-pools";
     public static final String STORAGE_POOL_URI = "/rest/storage-pools";
-    public static final String STORAGE_SYSTEM_URI = "/rest/storage-systems";
-    public static final String STORAGE_SYSTEM_HOST_TYPES_URI = STORAGE_SYSTEM_URI + "/host-types";
     public static final String STORAGE_VOLUME_ATTACHMENT_PATH_URI = "paths";
     public static final String STORAGE_VOLUME_ATTACHMENT_REPAIR_URI = STORAGE_VOLUME_ATTACHMENT_URI + "/repair";
     public static final String TASK_URI = "/rest/tasks";
