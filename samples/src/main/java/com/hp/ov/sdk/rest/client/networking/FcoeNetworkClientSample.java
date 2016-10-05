@@ -32,7 +32,6 @@ public class FcoeNetworkClientSample {
 
     // These are variables to be defined by the user
     // ================================
-    private static final String FCOE_NETWORK_RESOURCE_ID = "24e0a30a-bf7b-47db-ae3f-738844323db5";
     private static final String FCOE_NETWORK_NAME = "FCoE-Network_SAMPLE";
     private static final String FCOE_NETWORK_NAME_UPDATED = FCOE_NETWORK_NAME + "_Updated";
     // ================================
@@ -53,13 +52,15 @@ public class FcoeNetworkClientSample {
         fcoeNetwork.setType(ResourceCategory.RC_FCOE_NETWORK_V300); //v300
         fcoeNetwork.setVlanId(Integer.valueOf(400));
 
-        TaskResource task = this.client.create(fcoeNetwork, false);
+        TaskResource task = this.client.create(fcoeNetwork);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void getFcoeNetwork() {
-        FcoeNetwork fcoeNetwork = client.getById(FCOE_NETWORK_RESOURCE_ID);
+        FcoeNetwork fcoeNetwork = client.getByName(FCOE_NETWORK_NAME).get(0);
+
+        fcoeNetwork = client.getById(fcoeNetwork.getResourceId());
 
         LOGGER.info("FcoeNetwork object returned to client : " + fcoeNetwork.toJsonString());
     }
@@ -81,8 +82,7 @@ public class FcoeNetworkClientSample {
 
         fcoeNetwork.setName(FCOE_NETWORK_NAME_UPDATED);
 
-        TaskResource task = this.client.update(fcoeNetwork.getResourceId(),
-                fcoeNetwork, false);
+        TaskResource task = this.client.update(fcoeNetwork.getResourceId(), fcoeNetwork);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -90,7 +90,7 @@ public class FcoeNetworkClientSample {
     private void deleteFcoeNetwork() {
         FcoeNetwork fcoeNetwork = client.getByName(FCOE_NETWORK_NAME_UPDATED).get(0);
 
-        TaskResource task = this.client.delete(fcoeNetwork.getResourceId(), false);
+        TaskResource task = this.client.delete(fcoeNetwork.getResourceId());
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }

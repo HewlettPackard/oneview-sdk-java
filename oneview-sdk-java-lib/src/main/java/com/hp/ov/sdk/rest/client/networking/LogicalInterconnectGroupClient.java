@@ -15,157 +15,26 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.networking;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.CreatableResource;
+import com.hp.ov.sdk.rest.client.common.DeletableResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.client.common.UpdatableResource;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class LogicalInterconnectGroupClient {
+@Api(LogicalInterconnectGroupClient.LOGICAL_INTERCONNECT_GROUPS_URI)
+public interface LogicalInterconnectGroupClient extends
+        SearchableResource<LogicalInterconnectGroup>,
+        CreatableResource<LogicalInterconnectGroup>,
+        UpdatableResource<LogicalInterconnectGroup>,
+        DeletableResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LogicalInterconnectGroupClient.class);
-
-    private final BaseClient baseClient;
-
-    public LogicalInterconnectGroupClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * The module aids in fetching the logical interconnect group details for the
-     * specified logical interconnect group resource identifier.
-     *
-     * @param resourceId
-     *            The resource identifier for logical interconnect group as seen in HPE OneView.
-     * @return {@link LogicalInterconnectGroup} containing the logical interconnect group details.
-     */
-    public LogicalInterconnectGroup getById(String resourceId) {
-        LOGGER.info("LogicalInterconnectGroupClient : getById : Start");
-
-        LogicalInterconnectGroup lig = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId), LogicalInterconnectGroup.class);
-
-        LOGGER.info("LogicalInterconnectGroupClient : getById : End");
-
-        return lig;
-    }
-
-    /**
-     * The module aids in fetching the logical interconnect group details for all the
-     * logical interconnect groups found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link LogicalInterconnectGroup}&gt; containing
-     * the details for all found logical interconnect groups.
-     */
-    public ResourceCollection<LogicalInterconnectGroup> getAll() {
-        LOGGER.info("LogicalInterconnectGroupClient : getAll : Start");
-
-        ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = baseClient.getResourceCollection(
-                ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, LogicalInterconnectGroup.class);
-
-        LOGGER.info("LogicalInterconnectGroupClient : getAll : End");
-
-        return logicalInterconnectGroups;
-    }
-
-    /**
-     * The module aids in fetching the logical interconnect group details for the
-     * logical interconnect group name as specified in HPE OneView.
-     *
-     * @param name
-     *            The name is the logical interconnect group name as seen in HPE OneView.
-     * @return {@link ResourceCollection}&lt;{@link LogicalInterconnectGroup}&gt; containing the logical
-     * interconnect group details.
-     */
-    public ResourceCollection<LogicalInterconnectGroup> getByName(String name) {
-        LOGGER.info("LogicalInterconnectGroupClient : getByName : Start");
-
-        ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = baseClient.getResourceCollection(
-                ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, LogicalInterconnectGroup.class, UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("LogicalInterconnectGroupClient : getByName : End");
-
-        return logicalInterconnectGroups;
-    }
-
-    /**
-     * The module aids in creation of logical interconnect group when provided
-     * with the logical interconnect group details as LogicalInterconnectGroups
-     * object. It can process the request asynchronously or synchronously,
-     * based on the flag input.
-     *
-     * @param logicalInterconnectGroupDto
-     *            Object containing the logical interconnect group details,
-     *            used to create a logical interconnect group.
-     * @param aSync
-     *            Flag input to process request asynchronously or synchronously.
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource create(LogicalInterconnectGroup logicalInterconnectGroupDto, boolean aSync) {
-        LOGGER.info("LogicalInterconnectGroupClient : create : Start");
-
-        TaskResource taskResource = baseClient.createResource(
-                ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, logicalInterconnectGroupDto, aSync);
-
-        LOGGER.info("LogicalInterconnectGroupClient : create : End");
-
-        return taskResource;
-    }
-
-    /**
-     * The module takes in a list of UplinkSet object and updates the
-     * existing logical interconnect group based on the resource identifier.
-     * It can process the request asynchronously or synchronously,
-     * based on the flag input.
-     *
-     * @param resourceId
-     *            The resource identifier for logical interconnect group as seen in HPE OneView.
-     * @param logicalInterconnectGroupDto
-     *            Object containing the logical interconnect group details,
-     *            used to update a logical interconnect group.
-     * @param aSync
-     *            Flag input to process request asynchronously or synchronously.
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource update(String resourceId, LogicalInterconnectGroup logicalInterconnectGroupDto, boolean aSync) {
-        LOGGER.info("LogicalInterconnectGroupClient : update : Start");
-
-        TaskResource taskResource = baseClient.updateResource(
-                UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId), logicalInterconnectGroupDto, aSync);
-
-        LOGGER.info("LogicalInterconnectGroupClient : update : End");
-
-        return taskResource;
-    }
-
-    /**
-     * The module aids in deleting a logical interconnect group for the specified
-     * logical interconnect group resource identifier. It can process the request
-     * asynchronously or synchronously, based on the flag input.
-     *
-     * @param resourceId
-     *            The resource identifier for logical interconnect group as seen in HPE OneView.
-     * @param aSync
-     *            Flag input to process request asynchronously or synchronously.
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource delete(String resourceId, boolean aSync) {
-        LOGGER.info("LogicalInterconnectGroupClient : delete : Start");
-
-        TaskResource taskResource = baseClient.deleteResource(
-                UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId), aSync);
-
-        LOGGER.info("LogicalInterconnectGroupClient : delete : End");
-
-        return taskResource;
-    }
+    String LOGICAL_INTERCONNECT_GROUPS_URI = "/rest/logical-interconnect-groups";
+    String LOGICAL_INTERCONNECT_GROUPS_DEFAULT_SETTINGS_URI = "/defaultSettings";
+    String LOGICAL_INTERCONNECT_GROUPS_SETTINGS_URI = "/settings";
 
     /**
      * The module aids in fetching the default interconnect settings details for
@@ -173,16 +42,8 @@ public class LogicalInterconnectGroupClient {
      *
      * @return {@link InterconnectSettingsV2} containing the interconnect setting details.
      */
-    public InterconnectSettingsV2 getDefaultInterconnectSettings() {
-        LOGGER.info("LogicalInterconnectGroupClient : getDefaultInterconnectSettings : Start");
-
-        InterconnectSettingsV2 settings = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, SdkConstants.DEFAULT_SETTINGS), InterconnectSettingsV2.class);
-
-        LOGGER.info("LogicalInterconnectGroupClient : getDefaultInterconnectSettings : End");
-
-        return settings;
-    }
+    @Endpoint(uri = LOGICAL_INTERCONNECT_GROUPS_DEFAULT_SETTINGS_URI)
+    InterconnectSettingsV2 getDefaultInterconnectSettings();
 
     /**
      * The module aids in fetching the interconnect settings details for the
@@ -194,16 +55,8 @@ public class LogicalInterconnectGroupClient {
      *
      * @since HPE OneView 2.0
      */
-    public InterconnectSettingsV2 getInterconnectSettings(final String resourceId) {
-        LOGGER.info("LogicalInterconnectGroupClient : getInterconnectSettings : Start");
-
-        InterconnectSettingsV2 settings = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId, SdkConstants.SETTINGS), InterconnectSettingsV2.class);
-
-        LOGGER.info("LogicalInterconnectGroupClient : getInterconnectSettings : End");
-
-        return settings;
-    }
+    @Endpoint(uri = "/{resourceId}" + LOGICAL_INTERCONNECT_GROUPS_SETTINGS_URI)
+    InterconnectSettingsV2 getInterconnectSettings(@PathParam("resourceId") String resourceId);
 
     /**
      * The module aids in fetching the interconnect settings details for the
@@ -211,19 +64,12 @@ public class LogicalInterconnectGroupClient {
      *
      * @param resourceId
      *            The resource identifier for logical interconnect group as seen in HPE OneView.
-     * @param settingId
-     *            The settingId for logical interconnect group as seen in HPE OneView.
+     * @param settingsId
+     *            The settingsId for logical interconnect group as seen in HPE OneView.
      * @return {@link InterconnectSettingsV2} containing the interconnect setting details.
      */
-    public InterconnectSettingsV2 getInterconnectSettings(String resourceId, String settingId) {
-        LOGGER.info("LogicalInterconnectGroupClient : getInterconnectSettings : Start");
-
-        InterconnectSettingsV2 settings = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.LOGICAL_INTERCONNECT_GROUPS_URI, resourceId, SdkConstants.SETTINGS, settingId), InterconnectSettingsV2.class);
-
-        LOGGER.info("LogicalInterconnectGroupClient : getInterconnectSettings : End");
-
-        return settings;
-    }
+    @Endpoint(uri = "/{resourceId}" + LOGICAL_INTERCONNECT_GROUPS_SETTINGS_URI + "/{settingsId}")
+    InterconnectSettingsV2 getInterconnectSettings_V120(@PathParam("resourceId") String resourceId,
+            @PathParam("settingsId") String settingsId);
 
 }

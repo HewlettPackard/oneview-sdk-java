@@ -16,24 +16,33 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.networking.SasLogicalInterconnectClient.COMPLIANCE_URI;
+import static com.hp.ov.sdk.rest.client.networking.SasLogicalInterconnectClient.CONFIGURATION_URI;
+import static com.hp.ov.sdk.rest.client.networking.SasLogicalInterconnectClient.FIRMWARE_URI;
+import static com.hp.ov.sdk.rest.client.networking.SasLogicalInterconnectClient.REPLACE_DRIVE_ENCLOSURE_URI;
+import static com.hp.ov.sdk.rest.client.networking.SasLogicalInterconnectClient.SAS_LOGICAL_INTERCONNECT_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.collect.Lists;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnect.ReplaceDriveEnclosure;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnect.SasLiFirmware;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnect.SasLogicalInterconnect;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SasLogicalInterconnectClientTest {
@@ -41,139 +50,131 @@ public class SasLogicalInterconnectClientTest {
     private static final String ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID = "random-UUID";
     private static final String ANY_SAS_LOGICAL_INTERCONNECT_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private SasLogicalInterconnectClient sasLogicalInterconnectClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private SasLogicalInterconnectClient client = Reflection.newProxy(SasLogicalInterconnectClient.class,
+            new ClientRequestHandler<>(baseClient, SasLogicalInterconnectClient.class));
 
     @Test
     public void shouldGetSasLogicalInterconnectById() {
-        sasLogicalInterconnectClient.getById(ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID);
+        client.getById(ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID);
 
-        String expectedUri = SasLogicalInterconnectClient.SAS_LOGICAL_INTERCONNECT_URI
-                + "/" + ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID;
+        String expectedUri = SAS_LOGICAL_INTERCONNECT_URI + "/" + ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, SasLogicalInterconnect.class);
+        then(baseClient).should().executeRequest(expectedRequest,
+                TypeToken.of(SasLogicalInterconnect.class).getType());
     }
 
     @Test
     public void shouldGetAllSasLogicalInterconnects() {
-        sasLogicalInterconnectClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(
-                SasLogicalInterconnectClient.SAS_LOGICAL_INTERCONNECT_URI,
-                SasLogicalInterconnect.class);
+        Request expectedRequest = new Request(HttpMethod.GET, SAS_LOGICAL_INTERCONNECT_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<SasLogicalInterconnect>>() {}.getType());
     }
 
     @Test
     public void shouldGetSasLogicalInterconnectsByName() {
-        sasLogicalInterconnectClient.getByName(ANY_SAS_LOGICAL_INTERCONNECT_NAME);
+        client.getByName(ANY_SAS_LOGICAL_INTERCONNECT_NAME);
 
-        then(baseClient).should().getResourceCollection(
-                SasLogicalInterconnectClient.SAS_LOGICAL_INTERCONNECT_URI,
-                SasLogicalInterconnect.class,
-                UrlParameter.getFilterByNameParameter(ANY_SAS_LOGICAL_INTERCONNECT_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, SAS_LOGICAL_INTERCONNECT_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_SAS_LOGICAL_INTERCONNECT_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<SasLogicalInterconnect>>() {}.getType());
     }
 
     @Test
     public void shouldGetSasLogicalInterconnectFirmware() {
-        sasLogicalInterconnectClient.getFirmware(ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID);
+        client.getFirmware(ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID);
 
-        String expectedUri = SasLogicalInterconnectClient.SAS_LOGICAL_INTERCONNECT_URI
+        String expectedUri = SAS_LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID
-                + "/" + SasLogicalInterconnectClient.FIRMWARE_URI;
+                + FIRMWARE_URI;
 
-        then(baseClient).should().getResource(expectedUri, SasLiFirmware.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(SasLiFirmware.class).getType());
     }
 
     @Test
     public void shouldUpdateSasLogicalInterconnectFirmware() {
         SasLiFirmware firmware = new SasLiFirmware();
-        sasLogicalInterconnectClient.updateFirmware(ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID,
-                firmware, false);
+        client.updateFirmware(ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID, firmware);
 
-        String expectedUri = SasLogicalInterconnectClient.SAS_LOGICAL_INTERCONNECT_URI
+        String expectedUri = SAS_LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID
-                + "/" + SasLogicalInterconnectClient.FIRMWARE_URI;
+                + FIRMWARE_URI;
 
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, firmware);
 
-        expectedRequest.setTimeout(900000);
-        expectedRequest.setForceTaskReturn(true);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldReplaceSasLogicalInterconnectDriveEnclosure() {
         ReplaceDriveEnclosure replace = new ReplaceDriveEnclosure();
-        sasLogicalInterconnectClient.replaceDriveEnclosure(ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID,
-                replace, false);
+        client.replaceDriveEnclosure(ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID, replace, TaskTimeout.of(900000));
 
-        String expectedUri = SasLogicalInterconnectClient.SAS_LOGICAL_INTERCONNECT_URI
+        String expectedUri = SAS_LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID
-                + "/" + SasLogicalInterconnectClient.REPLACE_DRIVE_ENCLOSURE_URI;
+                + REPLACE_DRIVE_ENCLOSURE_URI;
 
         Request expectedRequest = new Request(HttpMethod.POST, expectedUri, replace);
 
         expectedRequest.setTimeout(900000);
-        expectedRequest.setForceTaskReturn(true);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldApplySasLogicalInterconnectConfiguration() {
-        sasLogicalInterconnectClient.applyConfiguration(ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID, false);
+        client.applyConfiguration(ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID, TaskTimeout.of(900000));
 
-        String expectedUri = SasLogicalInterconnectClient.SAS_LOGICAL_INTERCONNECT_URI
+        String expectedUri = SAS_LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID
-                + "/" + SasLogicalInterconnectClient.CONFIGURATION_URI;
+                + CONFIGURATION_URI;
 
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
-
         expectedRequest.setTimeout(900000);
-        expectedRequest.setForceTaskReturn(true);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateSasLogicalInterconnectCompliance() {
         SasLogicalInterconnect interconnect = new SasLogicalInterconnect();
 
-        interconnect.setUri(SasLogicalInterconnectClient.SAS_LOGICAL_INTERCONNECT_URI
-                + "/" + ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID);
+        interconnect.setUri(SAS_LOGICAL_INTERCONNECT_URI + "/" + ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID);
 
-        sasLogicalInterconnectClient.updateCompliance(interconnect, false);
+        client.updateCompliance(ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID, interconnect, TaskTimeout.of(900000));
 
-        String expectedUri = SasLogicalInterconnectClient.SAS_LOGICAL_INTERCONNECT_URI
+        String expectedUri = SAS_LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID
-                + "/" + SasLogicalInterconnectClient.COMPLIANCE_URI;
+                + COMPLIANCE_URI;
 
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, interconnect);
-
         expectedRequest.setTimeout(900000);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateSasLogicalInterconnectsCompliance() {
-        String interconnectUri = SasLogicalInterconnectClient.SAS_LOGICAL_INTERCONNECT_URI
-                + "/" + ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID;
+        String interconnectUri = SAS_LOGICAL_INTERCONNECT_URI + "/" + ANY_SAS_LOGICAL_INTERCONNECT_RESOURCE_ID;
         List<String> interconnectUris = Lists.newArrayList(interconnectUri);
 
-        sasLogicalInterconnectClient.updateCompliance(interconnectUris, false);
+        client.updateCompliance(interconnectUris, TaskTimeout.of(900000));
 
-        String expectedUri = SasLogicalInterconnectClient.SAS_LOGICAL_INTERCONNECT_URI
-                + "/" + SasLogicalInterconnectClient.COMPLIANCE_URI;
+        String expectedUri = SAS_LOGICAL_INTERCONNECT_URI + COMPLIANCE_URI;
 
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, interconnectUris);
 
         expectedRequest.setTimeout(900000);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
+
 }

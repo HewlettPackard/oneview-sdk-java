@@ -16,18 +16,24 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.networking.FcoeNetworkClient.FCOE_NETWORK_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.fcoenetworks.FcoeNetwork;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FcoeNetworkClientTest {
@@ -35,63 +41,73 @@ public class FcoeNetworkClientTest {
     private static final String ANY_FCOE_RESOURCE_ID = "random-UUID";
     private static final String ANY_FCOE_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private FcoeNetworkClient fcoeClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private FcoeNetworkClient client = Reflection.newProxy(FcoeNetworkClient.class,
+            new ClientRequestHandler<>(baseClient, FcoeNetworkClient.class));
 
     @Test
-    public void shouldGetFcoeNetwork() {
-        fcoeClient.getById(ANY_FCOE_RESOURCE_ID);
+    public void shouldGetFcoeNetworkById() {
+        client.getById(ANY_FCOE_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.FCOE_NETWORK_URI + "/" + ANY_FCOE_RESOURCE_ID;
+        String expectedUri = FCOE_NETWORK_URI + "/" + ANY_FCOE_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, FcoeNetwork.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(FcoeNetwork.class).getType());
     }
 
     @Test
     public void shouldGetAllFcoeNetwork() {
-        fcoeClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.FCOE_NETWORK_URI, FcoeNetwork.class);
+        Request expectedRequest = new Request(HttpMethod.GET, FCOE_NETWORK_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<FcoeNetwork>>() {}.getType());
     }
 
     @Test
     public void shouldGetFcoeNetworksByName() {
-        fcoeClient.getByName(ANY_FCOE_RESOURCE_NAME);
+        client.getByName(ANY_FCOE_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.FCOE_NETWORK_URI,
-                FcoeNetwork.class, UrlParameter.getFilterByNameParameter(ANY_FCOE_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, FCOE_NETWORK_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_FCOE_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<FcoeNetwork>>() {}.getType());
     }
 
     @Test
     public void shouldCreateFcoeNetwork() {
         FcoeNetwork fcoeNetwork = new FcoeNetwork();
 
-        fcoeClient.create(fcoeNetwork, false);
+        client.create(fcoeNetwork, TaskTimeout.of(123));
 
-        then(baseClient).should().createResource(ResourceUris.FCOE_NETWORK_URI, fcoeNetwork, false);
+        Request expectedRequest = new Request(HttpMethod.POST, FCOE_NETWORK_URI, fcoeNetwork);
+        expectedRequest.setTimeout(123);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateFcoeNetwork() {
         FcoeNetwork fcoeNetwork = new FcoeNetwork();
 
-        fcoeClient.update(ANY_FCOE_RESOURCE_ID, fcoeNetwork, false);
+        client.update(ANY_FCOE_RESOURCE_ID, fcoeNetwork);
 
-        String expectedUri = ResourceUris.FCOE_NETWORK_URI + "/" + ANY_FCOE_RESOURCE_ID;
+        String expectedUri = FCOE_NETWORK_URI + "/" + ANY_FCOE_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, fcoeNetwork);
 
-        then(baseClient).should().updateResource(expectedUri, fcoeNetwork, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldDeleteFcoeNetwork() {
-        fcoeClient.delete(ANY_FCOE_RESOURCE_ID, false);
+        client.delete(ANY_FCOE_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.FCOE_NETWORK_URI + "/" + ANY_FCOE_RESOURCE_ID;
+        String expectedUri = FCOE_NETWORK_URI + "/" + ANY_FCOE_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().deleteResource(expectedUri, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
 }

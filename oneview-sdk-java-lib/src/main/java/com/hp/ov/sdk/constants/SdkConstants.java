@@ -24,28 +24,21 @@ public class SdkConstants {
     public static final String APPLIANCE = "appliance";
 
     public static final String CERTS = "appliance-certificates";
-    public static final String DEFAULT_SETTINGS = "defaultSettings";
     public static final String ETHERNET = "Ethernet";
     public static final String FIBRE_CHANNEL = "FibreChannel";
     public static final String FIRMWARE_BUNDLE = "firmware-bundles";
     public static final String HTTPS = "https://";
-    public static final String MSMB_ALERTS_ROUTING_KEY = "msmb.#";
     public static final String MSMB_EXCHANGE_NAME = "msmb";
 
     public static final int PERCENTAGE_100 = 100;
     public static final int NO_TASK_TIMEOUT = 0;
 
-    public static final String RABBITMQ = "certificates-client-rabbitmq";
-    public static final String SCMB_ALERTS_ROUTING_KEY = "scmb.alerts.#";
-    public static final String SCMB_CERTS = "rabbit-mq-certificates";
     public static final String SCMB_CONNECTION = "scmb connection";
     public static final String SCMB_EXCHANGE_NAME = "scmb";
     public static final String SERVER_HARDWARE = "server-hardware";
     public static final String SERVER_PROFILE = "server-profile";
     public static final String SERVER_PROFILES = SERVER_PROFILE + "s";
-    public static final String SETTINGS = "settings";
     public static final String SSL_VERSION = "TLSv1.2";
-    public static final String SWITCH_TYPES = "switch-types";
     public static final String UPLINKSET = "uplink-set";
 
     public static final String JSON_TO_OBJECT_CONVERSION = "Json-to-object";

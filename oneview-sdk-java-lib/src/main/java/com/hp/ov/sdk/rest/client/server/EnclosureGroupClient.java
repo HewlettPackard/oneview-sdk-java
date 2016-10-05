@@ -15,84 +15,21 @@
  */
 package com.hp.ov.sdk.rest.client.server;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.servers.enclosuregroup.EnclosureGroup;
-import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.http.core.ContentType;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class EnclosureGroupClient {
+@Api(EnclosureGroupClient.ENCLOSURE_GROUP_URI)
+public interface EnclosureGroupClient extends
+        SearchableResource<EnclosureGroup> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EnclosureGroupClient.class);
-
-    private final BaseClient baseClient;
-
-    public EnclosureGroupClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link EnclosureGroup} details for the specified enclosure group.
-     *
-     * @param resourceId enclosure group resource identifier as seen in HPE OneView.
-     *
-     * @return {@link EnclosureGroup} object containing the details.
-     */
-    public EnclosureGroup getById(String resourceId) {
-        LOGGER.info("EnclosureGroupClient : getById : Start");
-
-        EnclosureGroup enclosureGroup = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.ENCLOSURE_GROUP_URI, resourceId), EnclosureGroup.class);
-
-        LOGGER.info("EnclosureGroupClient : getById : End");
-
-        return enclosureGroup;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link EnclosureGroup}&gt; containing the details
-     * for all the available enclosure groups found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link EnclosureGroup}&gt; containing
-     * the details for all found enclosure groups.
-     */
-    public ResourceCollection<EnclosureGroup> getAll() {
-        LOGGER.info("EnclosureGroupClient : getAll : Start");
-
-        ResourceCollection<EnclosureGroup> enclosureGroups = baseClient.getResourceCollection(
-                ResourceUris.ENCLOSURE_GROUP_URI, EnclosureGroup.class);
-
-        LOGGER.info("EnclosureGroupClient : getAll : End");
-
-        return enclosureGroups;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link EnclosureGroup}&gt; containing details
-     * for the available enclosure groups found under the current HPE OneView that match the name.
-     *
-     * @param name enclosure group name as seen in HPE OneView.
-     *
-     * @return {@link EnclosureGroup} object containing the details.
-     */
-    public ResourceCollection<EnclosureGroup> getByName(String name) {
-        LOGGER.info("EnclosureGroupClient : getByName : Start");
-
-        ResourceCollection<EnclosureGroup> enclosureGroups = baseClient.getResourceCollection(
-                ResourceUris.ENCLOSURE_GROUP_URI, EnclosureGroup.class,
-                UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("EnclosureGroupClient : getByName : End");
-
-        return enclosureGroups;
-    }
+    String ENCLOSURE_GROUP_URI = "/rest/enclosure-groups";
+    String ENCLOSURE_GROUP_SCRIPT_URI = "/script";
 
     /**
      * Creates a enclosure group according to the provided {@link EnclosureGroup} object.
@@ -101,18 +38,8 @@ public class EnclosureGroupClient {
      *
      * @return {@link EnclosureGroup} containing the created enclosure group.
      */
-    public EnclosureGroup create(EnclosureGroup enclosureGroup) {
-        LOGGER.info("EnclosureGroupClient : create : Start");
-
-        Request request = new Request(HttpMethod.POST,
-                ResourceUris.ENCLOSURE_GROUP_URI, enclosureGroup);
-
-        EnclosureGroup enclosureGroupCreated = baseClient.executeRequest(request, EnclosureGroup.class);
-
-        LOGGER.info("EnclosureGroupClient : create : End");
-
-        return enclosureGroupCreated;
-    }
+    @Endpoint(method = HttpMethod.POST)
+    EnclosureGroup create(@BodyParam EnclosureGroup enclosureGroup);
 
     /**
      * Updates a {@link EnclosureGroup} identified by the given resource identifier.
@@ -122,18 +49,8 @@ public class EnclosureGroupClient {
      *
      * @return {@link EnclosureGroup} containing the updated enclosure group.
      */
-    public EnclosureGroup update(String resourceId, EnclosureGroup enclosureGroup) {
-        LOGGER.info("EnclosureGroupClient : update : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(ResourceUris.ENCLOSURE_GROUP_URI, resourceId), enclosureGroup);
-
-        EnclosureGroup enclosureGroupUpdated = baseClient.executeRequest(request, EnclosureGroup.class);
-
-        LOGGER.info("EnclosureGroupClient : update : End");
-
-        return enclosureGroupUpdated;
-    }
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
+    EnclosureGroup update(@PathParam("resourceId") String resourceId, @BodyParam EnclosureGroup enclosureGroup);
 
     /**
      * Deletes the {@link EnclosureGroup} identified by the given resource identifier.
@@ -142,18 +59,8 @@ public class EnclosureGroupClient {
      *
      * @return {@link String} containing the response.
      */
-    public String delete(String resourceId) {
-        LOGGER.info("EnclosureGroupClient : delete : Start");
-
-        Request request = new Request(HttpMethod.DELETE,
-                UrlUtils.createUrl(ResourceUris.ENCLOSURE_GROUP_URI, resourceId));
-
-        String response = baseClient.executeRequest(request, String.class);
-
-        LOGGER.info("EnclosureGroupClient : delete : End");
-
-        return response;
-    }
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.DELETE)
+    String delete(@PathParam("resourceId") String resourceId);
 
     /**
      * Retrieves the configuration script for the specified enclosure group resource identifier.
@@ -162,19 +69,8 @@ public class EnclosureGroupClient {
      *
      * @return the configuration script for the specified enclosure group.
      */
-    public String getConfigurationScript(String resourceId) {
-        LOGGER.info("EnclosureGroupClient : getConfigurationScript : Start");
-
-        Request request = new Request(HttpMethod.GET,
-                UrlUtils.createUrl(ResourceUris.ENCLOSURE_GROUP_URI, resourceId,
-                        ResourceUris.ENCLOSURE_GROUP_SCRIPT_URI));
-
-        String response = baseClient.executeRequest(request, String.class);
-
-        LOGGER.info("EnclosureGroupClient : getConfigurationScript : End");
-
-        return response;
-    }
+    @Endpoint(uri = "/{resourceId}" + ENCLOSURE_GROUP_SCRIPT_URI)
+    String getConfigurationScript(@PathParam("resourceId") String resourceId);
 
     /**
      * Updates the configuration script for the specified enclosure group resource identifier.
@@ -184,27 +80,8 @@ public class EnclosureGroupClient {
      *
      * @return the configuration script for the specified enclosure group.
      */
-    public String updateConfigurationScript(String resourceId, String scriptData) {
-        LOGGER.info("EnclosureGroupClient : updateConfigurationScript : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(ResourceUris.ENCLOSURE_GROUP_URI, resourceId,
-                        ResourceUris.ENCLOSURE_GROUP_SCRIPT_URI),
-                scriptData);
-
-        request.setContentType(ContentType.TEXT_PLAIN);
-
-        /*
-        in this particular request, even though the documentation states that the content type
-        must ba application/json, it is necessary to change the content type to text/plain
-        otherwise the request fails!
-         */
-
-        String response = baseClient.executeRequest(request, String.class);
-
-        LOGGER.info("EnclosureGroupClient : updateConfigurationScript : End");
-
-        return response;
-    }
+    @Endpoint(uri = "/{resourceId}" + ENCLOSURE_GROUP_SCRIPT_URI, method = HttpMethod.PUT)
+    String updateConfigurationScript(@PathParam("resourceId") String resourceId,
+            @BodyParam(type = ContentType.TEXT_PLAIN) String scriptData);
 
 }

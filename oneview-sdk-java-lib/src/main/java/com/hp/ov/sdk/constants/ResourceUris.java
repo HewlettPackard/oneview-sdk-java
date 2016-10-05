@@ -31,13 +31,10 @@ public class ResourceUris {
     public static final String AVAILABLE_TARGETS = SERVER_PROFILE_URI + "/available-targets";
     public static final String CONNECTION_TEMPLATE_URI = "/rest/connection-templates";
     public static final String DEFAULT_CONNECTION_TEMPLATE_URI = "/rest/connection-templates/defaultConnectionTemplate";
-    public static final String ENCLOSURE_GROUP_SCRIPT_URI = "script";
-    public static final String ENCLOSURE_GROUP_URI = "/rest/enclosure-groups";
     public static final String ENVIRONMENT_CONFIGURATION_URI = "environmentalConfiguration";
     public static final String FC_SANS_DEVICE_MANAGER = "device-managers";
     public static final String FC_SANS_DEVICE_MANAGER_URI = "/rest/fc-sans/device-managers";
     public static final String FC_SANS_PROVIDER_URI = "/rest/fc-sans/providers";
-    public static final String FCOE_NETWORK_URI = "/rest/fcoe-networks";
     public static final String FIRMWARE_BUNDLE_URI = "/rest/firmware-bundles";
     public static final String FIRMWARE_DRIVER_URI = "/rest/firmware-drivers";
     public static final String INTERCONNECT_TYPE_URI = "/rest/interconnect-types";
@@ -49,7 +46,6 @@ public class ResourceUris {
     public static final String INTERCONNECT_UPDATE_PORTS_URI = "update-ports";
     public static final String INTERCONNECT_RESET_PORT_PROTECTION_URI = "resetportprotection";
     public static final String LOGICAL_DOWNLINK_URI = "/rest/logical-downlinks";
-    public static final String LOGICAL_INTERCONNECT_GROUPS_URI = "/rest/logical-interconnect-groups";
     public static final String LOGICAL_INTERCONNECT_URI = "/rest/logical-interconnects";
     public static final String LOGICAL_INTERCONNECT_FIRMWARE_URI = "firmware";
     public static final String LOGICAL_INTERCONNECT_LOCATION_URI = "locations";
@@ -66,9 +62,6 @@ public class ResourceUris {
     public static final String LOGICAL_INTERCONNECT_INTERNAL_NETWORKS_URI = "internalNetworks";
     public static final String LOGICAL_INTERCONNECT_INTERNAL_VLANS_URI = "internalVlans";
     public static final String LOGICAL_INTERCONNECT_UNASSIGNED_UPLINK_PORTS_URI = "unassignedUplinkPortsForPortMonitor";
-    public static final String LOGICAL_SWITCH_GROUPS_URI = "/rest/logical-switch-groups";
-    public static final String LOGICAL_SWITCHES_REFRESH_URI = "refresh";
-    public static final String LOGICAL_SWITCHES_URI = "/rest/logical-switches";
     public static final String LOGIN_SESSIONS = "/rest/login-sessions";
     public static final String MANAGED_PORTS_STORAGE_SYSTEM_URI = "managedPorts";
     public static final String POWER_DEVICE_DISCOVERY_URI = "/rest/power-devices/discover";
@@ -89,14 +82,11 @@ public class ResourceUris {
     public static final String STORAGE_SYSTEM_HOST_TYPES_URI = STORAGE_SYSTEM_URI + "/host-types";
     public static final String STORAGE_VOLUME_ATTACHMENT_PATH_URI = "paths";
     public static final String STORAGE_VOLUME_ATTACHMENT_REPAIR_URI = STORAGE_VOLUME_ATTACHMENT_URI + "/repair";
-    public static final String STORAGE_VOLUME_TEMPLATE_URI = "/rest/storage-volume-templates";
-    public static final String STORAGE_VOLUME_TEMPLATE_CONNECTABLE_URI = "connectable-volume-templates";
     public static final String SWITCH_TYPE_URI = "/rest/switch-types";
     public static final String SWITCHES_STATISTICS_URI = "statistics";
     public static final String SWITCHES_URI = "/rest/switches";
     public static final String SWITCHES_UPDATE_PORTS_URI = "update-ports";
     public static final String TASK_URI = "/rest/tasks";
-    public static final String UPLINK_SETS_URI = "/rest/uplink-sets";
     public static final String WITHOUT_ETHERNET = "withoutEthernet";
 
 }

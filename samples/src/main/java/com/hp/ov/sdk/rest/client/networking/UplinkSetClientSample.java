@@ -59,7 +59,6 @@ public class UplinkSetClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String RESOURCE_ID = "04120653-c369-4fae-8cbb-0b1787bdc009";
     private static final String RESOURCE_NAME = "Uplink-Sample";
     private static final String RESOURCE_NAME_UPDATED = RESOURCE_NAME + "_Updated";
 
@@ -77,7 +76,9 @@ public class UplinkSetClientSample {
     }
 
     private void getUplinkSetById() {
-        UplinkSet uplinkSet = uplinkSetClient.getById(RESOURCE_ID);
+        UplinkSet uplinkSet = uplinkSetClient.getByName(RESOURCE_NAME).get(0);
+
+        uplinkSet = uplinkSetClient.getById(uplinkSet.getResourceId());
 
         LOGGER.info("Uplink set returned to client: {}", uplinkSet.toJsonString());
     }
@@ -97,7 +98,7 @@ public class UplinkSetClientSample {
     private void createUplinkSet() {
         UplinkSet uplinkSet = buildUplinkSet();
 
-        TaskResource task = this.uplinkSetClient.create(uplinkSet, false);
+        TaskResource task = this.uplinkSetClient.create(uplinkSet);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -107,7 +108,7 @@ public class UplinkSetClientSample {
 
         uplinkSet.setName(RESOURCE_NAME_UPDATED);
 
-        TaskResource task = this.uplinkSetClient.update(uplinkSet.getResourceId(), uplinkSet, false);
+        TaskResource task = this.uplinkSetClient.update(uplinkSet.getResourceId(), uplinkSet);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -115,7 +116,7 @@ public class UplinkSetClientSample {
     private void deleteUplinkSet() {
         UplinkSet uplinkSet = uplinkSetClient.getByName(RESOURCE_NAME_UPDATED).get(0);
 
-        TaskResource task = this.uplinkSetClient.delete(uplinkSet.getResourceId(), false);
+        TaskResource task = this.uplinkSetClient.delete(uplinkSet.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -195,9 +196,10 @@ public class UplinkSetClientSample {
     public static void main(final String[] args) {
         UplinkSetClientSample client = new UplinkSetClientSample();
 
+        client.createUplinkSet();
+
         client.getUplinkSetById();
         client.getAllUplinkSets();
-        client.createUplinkSet();
         client.getUplinkSetByName();
         client.updateUplinkSet();
         client.deleteUplinkSet();

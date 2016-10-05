@@ -64,7 +64,6 @@ public class LogicalInterconnectGroupClientSample {
     private static final String ethUplinkSetName = "EthernetUplinkSet";
     private static final String fcAUplinkSetName = "FCUplinkSetA";
     private static final String fcBUplinkSetName = "FCUplinkSetB";
-    private static final String RESOURCE_ID = "16765ce9-8e20-48c7-bd0b-428b2e6bcc83";
     private static final String SETTING_ID = "dcd89c40-57b6-4551-9486-acc9090785fa";
     // ================================
 
@@ -80,7 +79,9 @@ public class LogicalInterconnectGroupClientSample {
     }
 
     private void getLogicalInterconnectGroup() {
-        LogicalInterconnectGroup logicalInterconnectGroup = client.getById(RESOURCE_ID);
+        LogicalInterconnectGroup logicalInterconnectGroup = client.getByName(RESOURCE_NAME).get(0);
+
+        logicalInterconnectGroup = client.getById(logicalInterconnectGroup.getResourceId());
 
         LOGGER.info("LogicalInterconnectGroup object returned to client : " + logicalInterconnectGroup.toJsonString());
     }
@@ -106,29 +107,29 @@ public class LogicalInterconnectGroupClientSample {
         logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200); //v200
         logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300); //v300
 
-        TaskResource task = this.client.create(logicalInterconnectGroup, false);
+        TaskResource task = this.client.create(logicalInterconnectGroup);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void updateLogicalInterconnectGroup() {
         ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getByName(RESOURCE_NAME);
-        LogicalInterconnectGroup lig = logicalInterconnectGroups.getMembers().get(0);
+        LogicalInterconnectGroup logicalInterconnectGroup = logicalInterconnectGroups.getMembers().get(0);
 
-        lig.setName(RESOURCE_NAME_UPDATED);
+        logicalInterconnectGroup.setName(RESOURCE_NAME_UPDATED);
 
         final List<UplinkSetGroup> uplinkSetDto = buildUplinkSetGroupDto();
-        lig.setUplinkSets(uplinkSetDto);
+        logicalInterconnectGroup.setUplinkSets(uplinkSetDto);
 
-        TaskResource task = this.client.update(lig.getResourceId(), lig, false);
+        TaskResource task = this.client.update(logicalInterconnectGroup.getResourceId(), logicalInterconnectGroup);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void deleteLogicalInterconnectGroup() {
         ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getByName(RESOURCE_NAME_UPDATED);
-        LogicalInterconnectGroup lig = logicalInterconnectGroups.getMembers().get(0);
-        TaskResource task = this.client.delete(lig.getResourceId(), false);
+        LogicalInterconnectGroup logicalInterconnectGroup = logicalInterconnectGroups.getMembers().get(0);
+        TaskResource task = this.client.delete(logicalInterconnectGroup.getResourceId());
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -140,10 +141,14 @@ public class LogicalInterconnectGroupClientSample {
     }
 
     private void getInterconnectSettings() {
+        LogicalInterconnectGroup logicalInterconnectGroup = client.getByName(RESOURCE_NAME).get(0);
+
         // To run getInterconnectSettings on OneView 1.2, you need settingID and resourceID of LIG
         // for OV 2.0 & 3.0, you just need the resourceID
-//        InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(RESOURCE_ID, SETTING_ID);
-        InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(RESOURCE_ID);
+        // InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(
+        //         logicalInterconnectGroup.getResourceId(), SETTING_ID);
+        InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(
+                logicalInterconnectGroup.getResourceId());
 
         LOGGER.info("Interconnect settings returned to client : " + interconnectSettingsDto.toJsonString());
     }
@@ -223,8 +228,9 @@ public class LogicalInterconnectGroupClientSample {
     public static void main(final String[] args) throws Exception {
         LogicalInterconnectGroupClientSample client = new LogicalInterconnectGroupClientSample();
 
-        client.getAllLogicalInterconnectGroups();
         client.createLogicalInterconnectGroup();
+
+        client.getAllLogicalInterconnectGroups();
         client.getLogicalInterconnectGroup();
         client.getLogicalInterconnectGroupByName();
         client.getDefaultInterconnectSettings();

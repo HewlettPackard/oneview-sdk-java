@@ -18,97 +18,26 @@ package com.hp.ov.sdk.rest.client.networking;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnect.ReplaceDriveEnclosure;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnect.SasLiFirmware;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnect.SasLogicalInterconnect;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class SasLogicalInterconnectClient {
+@Api(SasLogicalInterconnectClient.SAS_LOGICAL_INTERCONNECT_URI)
+public interface SasLogicalInterconnectClient extends SearchableResource<SasLogicalInterconnect> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SasLogicalInterconnectClient.class);
-    private static final int TIMEOUT = 900000; // in milliseconds
-
-    protected static final String SAS_LOGICAL_INTERCONNECT_URI = "/rest/sas-logical-interconnects";
-    protected static final String FIRMWARE_URI = "firmware";
-    protected static final String REPLACE_DRIVE_ENCLOSURE_URI = "replaceDriveEnclosure";
-    protected static final String CONFIGURATION_URI = "configuration";
-    protected static final String COMPLIANCE_URI = "compliance";
-
-    private final BaseClient baseClient;
-
-    public SasLogicalInterconnectClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * The module aids in fetching the SAS logical interconnect details for the specified
-     * SAS logical interconnect resource identifier.
-     *
-     * @param resourceId resource identifier for SAS logical interconnect as seen in HPE OneView.
-     *
-     * @return {@link SasLogicalInterconnect} containing the SAS logical interconnect details.
-     */
-    public SasLogicalInterconnect getById(String resourceId) {
-        LOGGER.info("SasLogicalInterconnectClient : getById : Start");
-
-        SasLogicalInterconnect interconnect = baseClient.getResource(
-                UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_URI, resourceId),
-                SasLogicalInterconnect.class);
-
-        LOGGER.info("SasLogicalInterconnectClient : getById : End");
-
-        return interconnect;
-    }
-
-    /**
-     * The module aids in fetching the SAS logical interconnect details for all the
-     * SAS logical interconnects found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link SasLogicalInterconnect}&gt; containing
-     * the details for all found SAS logical interconnects.
-     */
-    public ResourceCollection<SasLogicalInterconnect> getAll() {
-        LOGGER.info("SasLogicalInterconnectClient : getAll : Start");
-
-        ResourceCollection<SasLogicalInterconnect> interconnects = baseClient.getResourceCollection(
-                SAS_LOGICAL_INTERCONNECT_URI,
-                SasLogicalInterconnect.class);
-
-        LOGGER.info("SasLogicalInterconnectClient : getAll : End");
-
-        return interconnects;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link SasLogicalInterconnect}&gt; containing details
-     * for the available SAS logical interconnects found under the current HPE OneView that match the name.
-     *
-     * @param name SAS logical interconnect name as seen in HPE OneView.
-     *
-     * @return {@link List}&lt;{@link SasLogicalInterconnect}&gt; containing
-     * the details for all found SAS logical interconnects.
-     */
-    public ResourceCollection<SasLogicalInterconnect> getByName(final String name) {
-        LOGGER.info("SasLogicalInterconnectClient : getByName : Start");
-
-        ResourceCollection<SasLogicalInterconnect> interconnects = baseClient.getResourceCollection(
-                SAS_LOGICAL_INTERCONNECT_URI,
-                SasLogicalInterconnect.class,
-                UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("SasLogicalInterconnectClient : getByName : End");
-
-        return interconnects;
-    }
+    String SAS_LOGICAL_INTERCONNECT_URI = "/rest/sas-logical-interconnects";
+    String FIRMWARE_URI = "/firmware";
+    String REPLACE_DRIVE_ENCLOSURE_URI = "/replaceDriveEnclosure";
+    String CONFIGURATION_URI = "/configuration";
+    String COMPLIANCE_URI = "/compliance";
 
     /**
      * The module aids in fetching the SAS logical interconnect firmware for the specified
@@ -118,17 +47,8 @@ public class SasLogicalInterconnectClient {
      *
      * @return {@link SasLiFirmware} containing the SAS logical interconnect LI firmware details.
      */
-    public SasLiFirmware getFirmware(String resourceId) {
-        LOGGER.info("SasLogicalInterconnectClient : getFirmware : Start");
-
-        SasLiFirmware firmware = baseClient.getResource(
-                UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_URI, resourceId, FIRMWARE_URI),
-                SasLiFirmware.class);
-
-        LOGGER.info("SasLogicalInterconnectClient : getFirmware : End");
-
-        return firmware;
-    }
+    @Endpoint(uri = "/{resourceId}" + FIRMWARE_URI)
+    SasLiFirmware getFirmware(@PathParam("resourceId") String resourceId);
 
     /**
      * The method installs firmware to the member interconnects of a SAS logical interconnect.
@@ -145,26 +65,14 @@ public class SasLogicalInterconnectClient {
      *
      * @param resourceId resource identifier for SAS logical interconnect as seen in HPE OneView.
      * @param sasLiFirmware object containing the update to be made to the SAS logical interconnect.
-     * @param aSync flag to indicate whether the request should be processed synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource updateFirmware(String resourceId, SasLiFirmware sasLiFirmware, boolean aSync) {
-        LOGGER.info("SasLogicalInterconnectClient : updateFirmware : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_URI, resourceId, FIRMWARE_URI),
-                sasLiFirmware);
-
-        request.setTimeout(TIMEOUT);
-        request.setForceTaskReturn(true);
-
-        TaskResource task = baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("SasLogicalInterconnectClient : updateFirmware : End");
-
-        return task;
-    }
+    @Endpoint(uri = "/{resourceId}" + FIRMWARE_URI, method = HttpMethod.PUT)
+    TaskResource updateFirmware(@PathParam("resourceId") String resourceId,
+            @BodyParam SasLiFirmware sasLiFirmware, RequestOption ... options);
 
     /**
      * Initiates the replacement operation that enables the new drive enclosure to take over
@@ -175,50 +83,27 @@ public class SasLogicalInterconnectClient {
      *
      * @param resourceId resource identifier for SAS logical interconnect as seen in HPE OneView.
      * @param replace specification of both the serial numbers of the original drive enclosure and its replacement.
-     * @param aSync flag to indicate whether the request should be processed synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource replaceDriveEnclosure(String resourceId, ReplaceDriveEnclosure replace, boolean aSync) {
-        LOGGER.info("SasLogicalInterconnectClient : replaceDriveEnclosure : Start");
-
-        Request request = new Request(HttpMethod.POST,
-                UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_URI, resourceId, REPLACE_DRIVE_ENCLOSURE_URI), replace);
-
-        request.setTimeout(TIMEOUT);
-        request.setForceTaskReturn(true);
-
-        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("SasLogicalInterconnectClient : replaceDriveEnclosure : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + REPLACE_DRIVE_ENCLOSURE_URI, method = HttpMethod.POST)
+    TaskResource replaceDriveEnclosure(@PathParam("resourceId") String resourceId,
+            @BodyParam ReplaceDriveEnclosure replace, RequestOption ... options);
 
     /**
      * Asynchronously applies or re-applies the SAS logical interconnect configuration to all
      * managed SAS interconnects of a SAS logical interconnect.
      *
      * @param resourceId resource identifier for SAS logical interconnect as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource applyConfiguration(String resourceId, boolean aSync) {
-        LOGGER.info("SasLogicalInterconnectClient : applyConfiguration : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_URI, resourceId, CONFIGURATION_URI));
-
-        request.setTimeout(TIMEOUT);
-        request.setForceTaskReturn(true);
-
-        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("SasLogicalInterconnectClient : applyConfiguration : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + CONFIGURATION_URI, method = HttpMethod.PUT)
+    TaskResource applyConfiguration(@PathParam("resourceId") String resourceId, RequestOption ... options);
 
     /**
      * Returns a SAS logical interconnect to a consistent state. The current SAS logical interconnect
@@ -231,25 +116,14 @@ public class SasLogicalInterconnectClient {
      * and/or adding new interconnects for management.
      *
      * @param interconnect {@link SasLogicalInterconnect} SAS logical interconnect.
-     * @param aSync flag to indicate whether the request should be processed synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource updateCompliance(SasLogicalInterconnect interconnect, boolean aSync) {
-        LOGGER.info("SasLogicalInterconnectClient : updateCompliance : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_URI, interconnect.getResourceId(), COMPLIANCE_URI),
-                interconnect);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource task = baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("SasLogicalInterconnectClient : updateCompliance : End");
-
-        return task;
-    }
+    @Endpoint(uri = "/{resourceId}" + COMPLIANCE_URI, method = HttpMethod.PUT)
+    TaskResource updateCompliance(@PathParam("resourceId") String resourceId,
+            @BodyParam SasLogicalInterconnect interconnect, RequestOption ... options);
 
     /**
      * Returns all the SAS logical interconnects to a consistent state. The SAS logical interconnects
@@ -262,24 +136,12 @@ public class SasLogicalInterconnectClient {
      * and/or adding new interconnects for management.
      *
      * @param sasLogicalInterconnectUris list containing the URIs of SAS logical interconnects as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource updateCompliance(List<String> sasLogicalInterconnectUris, boolean aSync) {
-        LOGGER.info("SasLogicalInterconnectClient : updateCompliance : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_URI, COMPLIANCE_URI),
-                sasLogicalInterconnectUris);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource task = baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("SasLogicalInterconnectClient : updateCompliance : End");
-
-        return task;
-    }
+    @Endpoint(uri = COMPLIANCE_URI, method = HttpMethod.PUT)
+    TaskResource updateCompliance(@BodyParam List<String> sasLogicalInterconnectUris, RequestOption ... options);
 
 }

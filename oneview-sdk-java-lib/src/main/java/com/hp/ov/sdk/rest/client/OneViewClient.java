@@ -118,7 +118,8 @@ public class OneViewClient {
     }
 
     public synchronized EnclosureGroupClient enclosureGroup() {
-        return this.getClient(EnclosureGroupClient.class);
+        return Reflection.newProxy(EnclosureGroupClient.class,
+                new ClientRequestHandler<>(this.baseClient, EnclosureGroupClient.class));
     }
 
     public synchronized EthernetNetworkClient ethernetNetwork() {
@@ -136,7 +137,8 @@ public class OneViewClient {
     }
 
     public synchronized FcoeNetworkClient fcoeNetwork() {
-        return this.getClient(FcoeNetworkClient.class);
+        return Reflection.newProxy(FcoeNetworkClient.class,
+                new ClientRequestHandler<>(this.baseClient, FcoeNetworkClient.class));
     }
 
     public synchronized FcSanDeviceManagerClient fcSanDeviceManager() {
@@ -189,15 +191,18 @@ public class OneViewClient {
     }
 
     public synchronized LogicalInterconnectGroupClient logicalInterconnectGroup() {
-        return this.getClient(LogicalInterconnectGroupClient.class);
+        return Reflection.newProxy(LogicalInterconnectGroupClient.class,
+                new ClientRequestHandler<>(this.baseClient, LogicalInterconnectGroupClient.class));
     }
 
     public synchronized LogicalSwitchClient logicalSwitch() {
-        return this.getClient(LogicalSwitchClient.class);
+        return Reflection.newProxy(LogicalSwitchClient.class,
+                new ClientRequestHandler<>(this.baseClient, LogicalSwitchClient.class));
     }
 
     public synchronized LogicalSwitchGroupClient logicalSwitchGroup() {
-        return this.getClient(LogicalSwitchGroupClient.class);
+        return Reflection.newProxy(LogicalSwitchGroupClient.class,
+                new ClientRequestHandler<>(this.baseClient, LogicalSwitchGroupClient.class));
     }
 
     public synchronized MessagingCertificateClient messagingCertificate() {
@@ -227,7 +232,8 @@ public class OneViewClient {
     }
 
     public synchronized SasLogicalInterconnectClient sasLogicalInterconnect() {
-        return this.getClient(SasLogicalInterconnectClient.class);
+        return Reflection.newProxy(SasLogicalInterconnectClient.class,
+                new ClientRequestHandler<>(this.baseClient, SasLogicalInterconnectClient.class));
     }
 
     public synchronized SasLogicalInterconnectGroupClient sasLogicalInterconnectGroup() {
@@ -277,7 +283,8 @@ public class OneViewClient {
     }
 
     public synchronized StorageVolumeTemplateClient storageVolumeTemplate() {
-        return this.getClient(StorageVolumeTemplateClient.class);
+        return Reflection.newProxy(StorageVolumeTemplateClient.class,
+                new ClientRequestHandler<>(this.baseClient, StorageVolumeTemplateClient.class));
     }
 
     public synchronized SwitchClient switches() {
@@ -294,7 +301,8 @@ public class OneViewClient {
     }
 
     public synchronized UplinkSetClient uplinkSet() {
-        return this.getClient(UplinkSetClient.class);
+        return Reflection.newProxy(UplinkSetClient.class,
+                new ClientRequestHandler<>(this.baseClient, UplinkSetClient.class));
     }
 
     private <T> T getClient(Class<T> clientClass) {

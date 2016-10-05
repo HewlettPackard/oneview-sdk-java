@@ -16,18 +16,23 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.networking.LogicalSwitchGroupClient.LOGICAL_SWITCH_GROUPS_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.logicalswitchgroup.LogicalSwitchGroup;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LogicalSwitchGroupClientTest {
@@ -35,64 +40,72 @@ public class LogicalSwitchGroupClientTest {
     private static final String ANY_LOGICAL_SWITCH_GROUP_RESOURCE_ID = "random-UUID";
     private static final String ANY_LOGICAL_SWITCH_GROUP_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private LogicalSwitchGroupClient groupClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private LogicalSwitchGroupClient client = Reflection.newProxy(LogicalSwitchGroupClient.class,
+            new ClientRequestHandler<>(baseClient, LogicalSwitchGroupClient.class));
 
     @Test
-    public void shouldGetLogicalSwitchGroup() {
-        groupClient.getById(ANY_LOGICAL_SWITCH_GROUP_RESOURCE_ID);
+    public void shouldGetLogicalSwitchGroupById() {
+        client.getById(ANY_LOGICAL_SWITCH_GROUP_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_SWITCH_GROUPS_URI + "/" + ANY_LOGICAL_SWITCH_GROUP_RESOURCE_ID;
+        String expectedUri = LOGICAL_SWITCH_GROUPS_URI + "/" + ANY_LOGICAL_SWITCH_GROUP_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, LogicalSwitchGroup.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(LogicalSwitchGroup.class).getType());
     }
 
     @Test
     public void shouldGetAllLogicalSwitchGroup() {
-        groupClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.LOGICAL_SWITCH_GROUPS_URI,
-                LogicalSwitchGroup.class);
+        Request expectedRequest = new Request(HttpMethod.GET, LOGICAL_SWITCH_GROUPS_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<LogicalSwitchGroup>>() {}.getType());
     }
 
     @Test
     public void shouldGetLogicalSwitchGroupsByName() {
-        groupClient.getByName(ANY_LOGICAL_SWITCH_GROUP_RESOURCE_NAME);
+        client.getByName(ANY_LOGICAL_SWITCH_GROUP_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.LOGICAL_SWITCH_GROUPS_URI,
-                LogicalSwitchGroup.class, UrlParameter.getFilterByNameParameter(ANY_LOGICAL_SWITCH_GROUP_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, LOGICAL_SWITCH_GROUPS_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_LOGICAL_SWITCH_GROUP_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<LogicalSwitchGroup>>() {}.getType());
     }
 
     @Test
     public void shouldCreateLogicalSwitchGroup() {
         LogicalSwitchGroup logicalSwitchGroup = new LogicalSwitchGroup();
 
-        groupClient.create(logicalSwitchGroup, false);
+        client.create(logicalSwitchGroup);
 
-        then(baseClient).should().createResource(ResourceUris.LOGICAL_SWITCH_GROUPS_URI, logicalSwitchGroup, false);
+        Request expectedRequest = new Request(HttpMethod.POST, LOGICAL_SWITCH_GROUPS_URI, logicalSwitchGroup);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateLogicalSwitchGroup() {
         LogicalSwitchGroup logicalSwitchGroup = new LogicalSwitchGroup();
 
-        groupClient.update(ANY_LOGICAL_SWITCH_GROUP_RESOURCE_ID, logicalSwitchGroup, false);
+        client.update(ANY_LOGICAL_SWITCH_GROUP_RESOURCE_ID, logicalSwitchGroup);
 
-        String expectedUri = ResourceUris.LOGICAL_SWITCH_GROUPS_URI + "/" + ANY_LOGICAL_SWITCH_GROUP_RESOURCE_ID;
+        String expectedUri = LOGICAL_SWITCH_GROUPS_URI + "/" + ANY_LOGICAL_SWITCH_GROUP_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, logicalSwitchGroup);
 
-        then(baseClient).should().updateResource(expectedUri, logicalSwitchGroup, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldDeleteLogicalSwitchGroup() {
-        groupClient.delete(ANY_LOGICAL_SWITCH_GROUP_RESOURCE_ID, false);
+        client.delete(ANY_LOGICAL_SWITCH_GROUP_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_SWITCH_GROUPS_URI + "/" + ANY_LOGICAL_SWITCH_GROUP_RESOURCE_ID;
+        String expectedUri = LOGICAL_SWITCH_GROUPS_URI + "/" + ANY_LOGICAL_SWITCH_GROUP_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().deleteResource(expectedUri, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
 }

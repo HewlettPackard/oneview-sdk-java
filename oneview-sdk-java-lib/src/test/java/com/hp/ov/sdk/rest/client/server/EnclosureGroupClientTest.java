@@ -16,21 +16,25 @@
 
 package com.hp.ov.sdk.rest.client.server;
 
+import static com.hp.ov.sdk.rest.client.server.EnclosureGroupClient.ENCLOSURE_GROUP_SCRIPT_URI;
+import static com.hp.ov.sdk.rest.client.server.EnclosureGroupClient.ENCLOSURE_GROUP_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.servers.enclosuregroup.EnclosureGroup;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.ContentType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EnclosureGroupClientTest {
@@ -39,93 +43,94 @@ public class EnclosureGroupClientTest {
     private static final String ANY_ENCLOSURE_GROUP_RESOURCE_NAME = "random-Name";
     private static final String ANY_ENCLOSURE_GROUP_CONFIGURATION_SCRIPT = "random-Script";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private EnclosureGroupClient enclosureGroupClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private EnclosureGroupClient client = Reflection.newProxy(EnclosureGroupClient.class,
+            new ClientRequestHandler<>(baseClient, EnclosureGroupClient.class));
 
     @Test
-    public void shouldGetEnclosureGroup() {
-        enclosureGroupClient.getById(ANY_ENCLOSURE_GROUP_RESOURCE_ID);
+    public void shouldGetEnclosureGroupById() {
+        client.getById(ANY_ENCLOSURE_GROUP_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.ENCLOSURE_GROUP_URI + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID;
+        String expectedUri = ENCLOSURE_GROUP_URI + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, EnclosureGroup.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(EnclosureGroup.class).getType());
     }
 
     @Test
     public void shouldGetAllEnclosureGroup() {
-        enclosureGroupClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.ENCLOSURE_GROUP_URI, EnclosureGroup.class);
+        Request expectedRequest = new Request(HttpMethod.GET, ENCLOSURE_GROUP_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<EnclosureGroup>>() {}.getType());
     }
 
     @Test
     public void shouldGetEnclosureGroupsByName() {
-        enclosureGroupClient.getByName(ANY_ENCLOSURE_GROUP_RESOURCE_NAME);
+        client.getByName(ANY_ENCLOSURE_GROUP_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.ENCLOSURE_GROUP_URI,
-                EnclosureGroup.class, UrlParameter.getFilterByNameParameter(ANY_ENCLOSURE_GROUP_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, ENCLOSURE_GROUP_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_ENCLOSURE_GROUP_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<EnclosureGroup>>() {}.getType());
     }
 
     @Test
     public void shouldCreateEnclosureGroup() {
         EnclosureGroup enclosureGroup = new EnclosureGroup();
 
-        enclosureGroupClient.create(enclosureGroup);
+        client.create(enclosureGroup);
 
-        Request request = new Request(HttpMethod.POST, ResourceUris.ENCLOSURE_GROUP_URI, enclosureGroup);
+        Request request = new Request(HttpMethod.POST, ENCLOSURE_GROUP_URI, enclosureGroup);
 
-        then(baseClient).should().executeRequest(request, EnclosureGroup.class);
+        then(baseClient).should().executeRequest(request, TypeToken.of(EnclosureGroup.class).getType());
     }
 
     @Test
     public void shouldUpdateEnclosureGroup() {
         EnclosureGroup enclosureGroup = new EnclosureGroup();
 
-        enclosureGroupClient.update(ANY_ENCLOSURE_GROUP_RESOURCE_ID, enclosureGroup);
+        client.update(ANY_ENCLOSURE_GROUP_RESOURCE_ID, enclosureGroup);
 
-        String expectedUri = ResourceUris.ENCLOSURE_GROUP_URI + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID;
+        String expectedUri = ENCLOSURE_GROUP_URI + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID;
         Request request = new Request(HttpMethod.PUT, expectedUri, enclosureGroup);
 
-        then(baseClient).should().executeRequest(request, EnclosureGroup.class);
+        then(baseClient).should().executeRequest(request, TypeToken.of(EnclosureGroup.class).getType());
     }
 
     @Test
     public void shouldDeleteEnclosureGroup() {
-        enclosureGroupClient.delete(ANY_ENCLOSURE_GROUP_RESOURCE_ID);
+        client.delete(ANY_ENCLOSURE_GROUP_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.ENCLOSURE_GROUP_URI + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID;
+        String expectedUri = ENCLOSURE_GROUP_URI + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID;
         Request request = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().executeRequest(request, String.class);
+        then(baseClient).should().executeRequest(request, TypeToken.of(String.class).getType());
     }
 
     @Test
     public void shouldGetConfigurationScript() {
-        enclosureGroupClient.getConfigurationScript(ANY_ENCLOSURE_GROUP_RESOURCE_ID);
+        client.getConfigurationScript(ANY_ENCLOSURE_GROUP_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.ENCLOSURE_GROUP_URI
-                + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID
-                + "/" + ResourceUris.ENCLOSURE_GROUP_SCRIPT_URI;
+        String expectedUri = ENCLOSURE_GROUP_URI + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID + ENCLOSURE_GROUP_SCRIPT_URI;
         Request request = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().executeRequest(request, String.class);
+        then(baseClient).should().executeRequest(request, TypeToken.of(String.class).getType());
     }
 
     @Test
     public void shouldUpdateConfigurationScript() {
-        enclosureGroupClient.updateConfigurationScript(ANY_ENCLOSURE_GROUP_RESOURCE_ID,
+        client.updateConfigurationScript(ANY_ENCLOSURE_GROUP_RESOURCE_ID,
                 ANY_ENCLOSURE_GROUP_CONFIGURATION_SCRIPT);
 
-        String expectedUri = ResourceUris.ENCLOSURE_GROUP_URI
-                + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID
-                + "/" + ResourceUris.ENCLOSURE_GROUP_SCRIPT_URI;
+        String expectedUri = ENCLOSURE_GROUP_URI + "/" + ANY_ENCLOSURE_GROUP_RESOURCE_ID + ENCLOSURE_GROUP_SCRIPT_URI;
         Request request = new Request(HttpMethod.PUT, expectedUri, ANY_ENCLOSURE_GROUP_CONFIGURATION_SCRIPT);
 
         request.setContentType(ContentType.TEXT_PLAIN);
 
-        then(baseClient).should().executeRequest(request, String.class);
+        then(baseClient).should().executeRequest(request, TypeToken.of(String.class).getType());
     }
 }

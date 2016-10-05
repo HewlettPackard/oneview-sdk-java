@@ -37,32 +37,4 @@ public final class UrlUtils {
         return SdkConstants.HTTPS + hostname + uri;
     }
 
-    public static String createRestUrl(final String hostname, final String uri, final String resourceId) {
-        return SdkConstants.HTTPS + hostname + uri + "/" + resourceId;
-    }
-
-    public static String createRestUrl(final String hostname, final String uri, final String resourceId,
-        final String subElement) {
-
-        return SdkConstants.HTTPS + hostname + uri + "/" + resourceId + "/" + subElement;
-    }
-
-    public static String createRestUrl(final String hostname, final String uri, final String resourceId,
-        final String subElement, final String targetId) {
-
-        return SdkConstants.HTTPS + hostname + uri + "/" + resourceId + "/" + subElement + "/" + targetId;
-    }
-
-    public static String createRestUrl(String hostname, String uri, String resourceId, String subElement,
-            String targetId, String subElement2, int targetId2) {
-        return SdkConstants.HTTPS
-                + hostname
-                + uri + "/"
-                + resourceId + "/"
-                + subElement + "/"
-                + targetId + "/"
-                + subElement2 + "/"
-                + targetId2;
-    }
-
 }
