@@ -65,7 +65,7 @@ public class StoragePoolClientSample {
     }
 
     private void getStoragePoolByName() {
-        StoragePool storagePool = this.storagePoolClient.getByName(STORAGE_POOL_NAME, getStorageSystem().getUri()).get(0);
+        StoragePool storagePool = this.storagePoolClient.getByName(STORAGE_POOL_NAME).get(0);
 
         LOGGER.info("StoragePools returned to client : " + storagePool.toJsonString());
     }
@@ -73,24 +73,24 @@ public class StoragePoolClientSample {
     private void addStoragePool() {
         AddStoragePool addStoragePool = buildAddStoragePool();
 
-        TaskResource taskResource = storagePoolClient.add(addStoragePool, false);
+        TaskResource taskResource = storagePoolClient.add(addStoragePool);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void updateStoragePool() {
-        StoragePool storagePool = this.storagePoolClient.getByName(STORAGE_POOL_NAME, getStorageSystem().getUri()).get(0);
+        StoragePool storagePool = this.storagePoolClient.getByName(STORAGE_POOL_NAME).get(0);
 
         storagePool.setRefreshState(RefreshState.RefreshPending);
 
-        TaskResource taskResource = storagePoolClient.update(storagePool.getResourceId(), storagePool, false);
+        TaskResource taskResource = storagePoolClient.update(storagePool.getResourceId(), storagePool);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void removeStoragePool() {
-        StoragePool storagePool = this.storagePoolClient.getByName(STORAGE_POOL_NAME, getStorageSystem().getUri()).get(0);
-        TaskResource taskResource = this.storagePoolClient.remove(storagePool.getResourceId(), false);
+        StoragePool storagePool = this.storagePoolClient.getByName(STORAGE_POOL_NAME).get(0);
+        TaskResource taskResource = this.storagePoolClient.remove(storagePool.getResourceId());
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }

@@ -15,13 +15,17 @@
  */
 package com.hp.ov.sdk.rest.client.storage;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Predicate;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplate;
 import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.StorageVolumeTemplate;
 import com.hp.ov.sdk.dto.TemplateProvisioningData;
 import com.hp.ov.sdk.rest.client.OneViewClient;
@@ -116,8 +120,13 @@ public class StorageVolumeTemplateClientSample {
 
     private StorageVolumeTemplate buildStorageVolumeTemplate() {
         String storageSystemUri = storageSystemClient.getByName(StorageSystemClientSample.STORAGE_SYSTEM_NAME).get(0).getUri();
-        String storagePoolUri = storagePoolClient.getByName(StoragePoolClientSample.STORAGE_POOL_NAME,
-                storageSystemUri).get(0).getUri();
+
+        ResourceCollection<StoragePool> storagePools = storagePoolClient.getByName(
+                StoragePoolClientSample.STORAGE_POOL_NAME);
+
+        List<StoragePool> filteredPools = this.getFilteredPoolsByStoragesystemUri(storagePools, storageSystemUri);
+
+        String storagePoolUri = filteredPools.get(0).getUri();
 
         StorageVolumeTemplate storageVolumeTemplate = new StorageVolumeTemplate();
 
@@ -140,6 +149,19 @@ public class StorageVolumeTemplateClientSample {
         storageVolumeTemplate.setType(ResourceCategory.RC_STORAGE_VOLUME_TEMPLATE_V200); //v200
 
         return storageVolumeTemplate;
+    }
+
+    private List<StoragePool> getFilteredPoolsByStoragesystemUri(ResourceCollection<StoragePool> storagePools, final String storageSystemUri) {
+
+        List<StoragePool> filteredPools = storagePools.getMembers(new Predicate<StoragePool>() {
+
+            @Override
+            public boolean apply(StoragePool input) {
+                return (storageSystemUri.equalsIgnoreCase(input.getStorageSystemUri()));
+            }
+        });
+
+        return filteredPools;
     }
 
     public static void main(final String[] args) throws Exception {

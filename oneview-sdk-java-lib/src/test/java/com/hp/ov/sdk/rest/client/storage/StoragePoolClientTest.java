@@ -16,109 +16,97 @@
 
 package com.hp.ov.sdk.rest.client.storage;
 
-import static org.mockito.BDDMockito.given;
+import static com.hp.ov.sdk.rest.client.storage.StoragePoolClient.STORAGE_POOL_URI;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.AddStoragePool;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StoragePoolClientTest {
 
-    private static final String ANY_STORAGE_POOL_RESOURCE_ID = "random-UUID";
-    private static final String ANY_STORAGE_POOL_RESOURCE_NAME = "random-Name";
-    private static final String ANY_STORAGE_SYSTEM_RESOURCE_NAME = "random-Name";
+    private static final String ANY_RESOURCE_ID = "random-UUID";
+    private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private StoragePoolClient storagePoolClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private StoragePoolClient client = Reflection.newProxy(StoragePoolClient.class,
+            new ClientRequestHandler<>(baseClient, StoragePoolClient.class));
 
     @Test
     public void shouldGetStoragePoolById() {
-        storagePoolClient.getById(ANY_STORAGE_POOL_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.STORAGE_POOL_URI + "/" + ANY_STORAGE_POOL_RESOURCE_ID;
+        String expectedUri = STORAGE_POOL_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, StoragePool.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(StoragePool.class).getType());
     }
 
     @Test
     public void shouldGetAllStoragePools() {
-        storagePoolClient.getAll();
+        client.getAll();
+        Request expectedRequest = new Request(HttpMethod.GET, STORAGE_POOL_URI);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.STORAGE_POOL_URI, StoragePool.class);
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<StoragePool>>() {}.getType());
     }
 
     @Test
     public void shouldGetStoragePoolCollectionByStoragePoolName() {
-        storagePoolClient.getByName(ANY_STORAGE_POOL_RESOURCE_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.STORAGE_POOL_URI,
-                StoragePool.class, UrlParameter.getFilterByNameParameter(ANY_STORAGE_POOL_RESOURCE_NAME));
-    }
+        Request expectedRequest = new Request(HttpMethod.GET, STORAGE_POOL_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
 
-    @Test
-    public void shouldGetStoragePoolCollectionByStoragePoolAndStorageSystemName() {
-        given(baseClient.getResourceCollection(any(String.class), any(Class.class), any(UrlParameter.class)))
-                .willReturn(new ResourceCollection<StoragePool>());
-
-        storagePoolClient.getByName(ANY_STORAGE_POOL_RESOURCE_NAME, ANY_STORAGE_SYSTEM_RESOURCE_NAME);
-
-        then(baseClient).should().getResourceCollection(ResourceUris.STORAGE_POOL_URI,
-                StoragePool.class, UrlParameter.getFilterByNameParameter(ANY_STORAGE_POOL_RESOURCE_NAME));
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<StoragePool>>() {}.getType());
     }
 
     @Test
     public void shouldAddStoragePool() {
         AddStoragePool storagePool = new AddStoragePool();
 
-        storagePoolClient.add(storagePool, false);
+        client.add(storagePool);
 
-        Request request = new Request(HttpMethod.POST, ResourceUris.STORAGE_POOL_URI, storagePool);
+        Request expectedRequest = new Request(HttpMethod.POST, STORAGE_POOL_URI);
+        expectedRequest.setEntity(storagePool);
 
-        request.setForceReturnTask(true);
-
-        then(baseClient).should().executeMonitorableRequest(request, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateStoragePool() {
         StoragePool storagePool = new StoragePool();
 
-        storagePoolClient.update(ANY_STORAGE_POOL_RESOURCE_ID, storagePool, false);
+        client.update(ANY_RESOURCE_ID, storagePool);
 
-        String expectedUri = ResourceUris.STORAGE_POOL_URI + "/" + ANY_STORAGE_POOL_RESOURCE_ID;
-        Request request = new Request(HttpMethod.PUT, expectedUri, storagePool);
+        String expectedUri = STORAGE_POOL_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setEntity(storagePool);
 
-        request.setForceReturnTask(true);
-
-        then(baseClient).should().executeMonitorableRequest(request, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldRemoveStoragePool() {
-        storagePoolClient.remove(ANY_STORAGE_POOL_RESOURCE_ID, false);
+        client.remove(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.STORAGE_POOL_URI + "/" + ANY_STORAGE_POOL_RESOURCE_ID;
-        Request request = new Request(HttpMethod.DELETE, expectedUri);
+        String expectedUri = STORAGE_POOL_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        request.setForceReturnTask(true);
-
-        then(baseClient).should().executeMonitorableRequest(request, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 }
