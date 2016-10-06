@@ -16,30 +16,38 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.networking.InterconnectClient.INTERCONNECT_NAME_SERVERS_URI;
+import static com.hp.ov.sdk.rest.client.networking.InterconnectClient.INTERCONNECT_PORTS_URI;
+import static com.hp.ov.sdk.rest.client.networking.InterconnectClient.INTERCONNECT_RESET_PORT_PROTECTION_URI;
+import static com.hp.ov.sdk.rest.client.networking.InterconnectClient.INTERCONNECT_STATISTICS_URI;
+import static com.hp.ov.sdk.rest.client.networking.InterconnectClient.INTERCONNECT_SUBPORT_URI;
+import static com.hp.ov.sdk.rest.client.networking.InterconnectClient.INTERCONNECT_UPDATE_PORTS_URI;
+import static com.hp.ov.sdk.rest.client.networking.InterconnectClient.INTERCONNECT_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.NameServer;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.PortStatistics;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SubportStatistics;
 import com.hp.ov.sdk.dto.networking.InterconnectsStatistics;
 import com.hp.ov.sdk.dto.networking.Port;
 import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InterconnectClientTest {
@@ -49,133 +57,147 @@ public class InterconnectClientTest {
     private static final String ANY_PORT_NAME = "random-Port-Name";
     private static final int ANY_SUBPORT_NUMBER = 1;
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private InterconnectClient client;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private InterconnectClient client = Reflection.newProxy(InterconnectClient.class,
+            new ClientRequestHandler<>(baseClient, InterconnectClient.class));
 
     @Test
     public void shouldGetInterconnect() {
         client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.INTERCONNECT_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = INTERCONNECT_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, Interconnect.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Interconnect.class).getType());
     }
 
     @Test
     public void shouldGetAllInterconnects() {
         client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.INTERCONNECT_URI, Interconnect.class);
+        Request expectedRequest = new Request(HttpMethod.GET, INTERCONNECT_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<Interconnect>>() {}.getType());
     }
 
     @Test
     public void shouldGetInterconnectsByName() {
         client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.INTERCONNECT_URI,
-                Interconnect.class,
-                UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, INTERCONNECT_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<Interconnect>>() {}.getType());
     }
 
     @Test
     public void shouldPatchInterconnect() {
         Patch patch = new Patch();
 
-        client.patch(ANY_RESOURCE_ID, patch, false);
+        client.patch(ANY_RESOURCE_ID, patch);
 
-        String expectedUri = ResourceUris.INTERCONNECT_URI + "/" + ANY_RESOURCE_ID;
-        Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri, patch);
+        String expectedUri = INTERCONNECT_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri);
+        expectedRequest.setEntity(patch);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateInterconnectPort() {
         Port port = new Port();
 
-        client.updatePort(ANY_RESOURCE_ID, port, false);
+        client.updatePort(ANY_RESOURCE_ID, port);
 
-        String expectedUri = ResourceUris.INTERCONNECT_URI
+        String expectedUri = INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.INTERCONNECT_PORTS_URI;
+                + INTERCONNECT_PORTS_URI;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setEntity(port);
 
-        then(baseClient).should().updateResource(expectedUri, port, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateInterconnectPorts() {
         List<Port> ports = new ArrayList<>();
 
-        client.updatePorts(ANY_RESOURCE_ID, ports, false);
+        client.updatePorts(ANY_RESOURCE_ID, ports);
 
-        String expectedUri = ResourceUris.INTERCONNECT_URI
+        String expectedUri = INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.INTERCONNECT_UPDATE_PORTS_URI;
+                + INTERCONNECT_UPDATE_PORTS_URI;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setEntity(ports);
 
-        then(baseClient).should().updateResource(expectedUri, ports, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldResetInterconnectPortProtection() {
-        client.resetPortProtection(ANY_RESOURCE_ID, false);
+        client.resetPortProtection(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.INTERCONNECT_URI
+        String expectedUri = INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.INTERCONNECT_RESET_PORT_PROTECTION_URI;
+                + INTERCONNECT_RESET_PORT_PROTECTION_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetInterconnectStatistics() {
         client.getStatistics(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.INTERCONNECT_URI
+        String expectedUri = INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.INTERCONNECT_STATISTICS_URI;
+                + INTERCONNECT_STATISTICS_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, InterconnectsStatistics.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(InterconnectsStatistics.class).getType());
     }
 
     @Test
     public void shouldGetInterconnectPortStatistics() {
         client.getPortStatistics(ANY_RESOURCE_ID, ANY_PORT_NAME);
 
-        String expectedUri = ResourceUris.INTERCONNECT_URI
+        String expectedUri = INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.INTERCONNECT_STATISTICS_URI
+                + INTERCONNECT_STATISTICS_URI
                 + "/" + ANY_PORT_NAME;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, PortStatistics.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(PortStatistics.class).getType());
     }
 
     @Test
     public void shouldGetInterconnectSubportStatistics() {
         client.getSubportStatistics(ANY_RESOURCE_ID, ANY_PORT_NAME, ANY_SUBPORT_NUMBER);
 
-        String expectedUri = ResourceUris.INTERCONNECT_URI
+        String expectedUri = INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.INTERCONNECT_STATISTICS_URI
+                + INTERCONNECT_STATISTICS_URI
                 + "/" + ANY_PORT_NAME
-                + "/" + ResourceUris.INTERCONNECT_SUBPORT_URI
+                + INTERCONNECT_SUBPORT_URI
                 + "/" + ANY_SUBPORT_NUMBER;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, SubportStatistics.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(SubportStatistics.class).getType());
     }
 
     @Test
     public void shouldGetInterconnectNamedServers() {
         client.getNamedServers(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.INTERCONNECT_URI
+        String expectedUri = INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.INTERCONNECT_NAME_SERVERS_URI;
+                + INTERCONNECT_NAME_SERVERS_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResourceList(expectedUri, NameServer.class);
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<List<NameServer>>() {}.getType());
     }
 
 }
