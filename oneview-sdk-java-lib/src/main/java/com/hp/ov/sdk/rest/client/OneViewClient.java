@@ -174,7 +174,8 @@ public class OneViewClient {
     }
 
     public synchronized InternalLinkSetClient internalLinkSet() {
-        return this.getClient(InternalLinkSetClient.class);
+        return Reflection.newProxy(InternalLinkSetClient.class,
+                new ClientRequestHandler<>(this.baseClient, InternalLinkSetClient.class));
     }
 
     public synchronized LogicalDownlinkClient logicalDownlink() {
