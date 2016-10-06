@@ -100,7 +100,8 @@ public class OneViewClient {
     }
 
     public synchronized ConnectionTemplateClient connectionTemplate() {
-        return this.getClient(ConnectionTemplateClient.class);
+        return Reflection.newProxy(ConnectionTemplateClient.class,
+                new ClientRequestHandler<>(this.baseClient, ConnectionTemplateClient.class));
     }
 
     public synchronized DataCenterClient dataCenter() {

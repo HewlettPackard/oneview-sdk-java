@@ -15,84 +15,20 @@
  */
 package com.hp.ov.sdk.rest.client.networking;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.ethernet.ConnectionTemplate;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class ConnectionTemplateClient {
+@Api(ConnectionTemplateClient.CONNECTION_TEMPLATE_URI)
+public interface ConnectionTemplateClient extends
+        SearchableResource<ConnectionTemplate> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionTemplateClient.class);
-
-    private final BaseClient baseClient;
-
-    public ConnectionTemplateClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link ConnectionTemplate} details for the specified connection template.
-     *
-     * @param resourceId connection template resource identifier as seen in HPE OneView.
-     *
-     * @return {@link ConnectionTemplate} object containing the details.
-     */
-    public ConnectionTemplate getById(String resourceId) {
-        LOGGER.info("ConnectionTemplateClient : getById : Start");
-
-        ConnectionTemplate connectionTemplate = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.CONNECTION_TEMPLATE_URI, resourceId), ConnectionTemplate.class);
-
-        LOGGER.info("ConnectionTemplateClient : getById : End");
-
-        return connectionTemplate;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link ConnectionTemplate}&gt; containing details
-     * for all the available connection templates found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link ConnectionTemplate}&gt; containing
-     * the details for all found connection templates.
-     */
-    public ResourceCollection<ConnectionTemplate> getAll() {
-        LOGGER.info("ConnectionTemplateClient : getAll : Start");
-
-        ResourceCollection<ConnectionTemplate> connectionTemplates = baseClient.getResourceCollection(
-                ResourceUris.CONNECTION_TEMPLATE_URI, ConnectionTemplate.class);
-
-        LOGGER.info("ConnectionTemplateClient : getAll : End");
-
-        return connectionTemplates;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link ConnectionTemplate}&gt; containing details
-     * for the available connection templates found under the current HPE OneView that match the name.
-     *
-     * @param name connection template name as seen in HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link ConnectionTemplate}&gt; containing
-     * the details for the found connection templates.
-     */
-    public ResourceCollection<ConnectionTemplate> getByName(String name) {
-        LOGGER.info("ConnectionTemplateClient : getByName : Start");
-
-        ResourceCollection<ConnectionTemplate> connectionTemplates = baseClient.getResourceCollection(
-                ResourceUris.CONNECTION_TEMPLATE_URI, ConnectionTemplate.class,
-                UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("ConnectionTemplateClient : getByName : End");
-
-        return connectionTemplates;
-    }
+    String CONNECTION_TEMPLATE_URI = "/rest/connection-templates";
+    String DEFAULT_CONNECTION_TEMPLATE_URI = "/defaultConnectionTemplate";
 
     /**
      * Retrieves the default connection template details for the network
@@ -100,16 +36,8 @@ public class ConnectionTemplateClient {
      *
      * @return {@link ConnectionTemplate} object containing the default details.
      */
-    public ConnectionTemplate getDefaultConnectionTemplate() {
-        LOGGER.info("ConnectionTemplateClient : getDefaultConnectionTemplate : Start");
-
-        ConnectionTemplate connectionTemplate = baseClient.getResource(
-                ResourceUris.DEFAULT_CONNECTION_TEMPLATE_URI, ConnectionTemplate.class);
-
-        LOGGER.info("ConnectionTemplateClient : getDefaultConnectionTemplate : End");
-
-        return connectionTemplate;
-    }
+    @Endpoint(uri = DEFAULT_CONNECTION_TEMPLATE_URI)
+    ConnectionTemplate getDefaultConnectionTemplate();
 
     /**
      * Updates a {@link ConnectionTemplate} identified by the given resource identifier.
@@ -119,17 +47,7 @@ public class ConnectionTemplateClient {
      *
      * @return {@link ConnectionTemplate} containing the connection template updated.
      */
-    public ConnectionTemplate update(String resourceId, ConnectionTemplate connectionTemplate) {
-        LOGGER.info("ConnectionTemplateClient : update : Start");
-
-        Request request = new Request(HttpMethod.PUT, UrlUtils.createUrl(
-                ResourceUris.CONNECTION_TEMPLATE_URI, resourceId), connectionTemplate);
-        ConnectionTemplate updatedConnectionTemplate = this.baseClient.executeRequest(request,
-                ConnectionTemplate.class);
-
-        LOGGER.info("ConnectionTemplateClient : update : End");
-
-        return updatedConnectionTemplate;
-    }
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
+    ConnectionTemplate update(@PathParam("resourceId") String resourceId, @BodyParam ConnectionTemplate connectionTemplate);
 
 }

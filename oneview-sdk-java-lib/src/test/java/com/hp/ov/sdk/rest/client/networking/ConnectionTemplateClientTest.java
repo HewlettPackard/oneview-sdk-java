@@ -16,76 +16,88 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.networking.ConnectionTemplateClient.CONNECTION_TEMPLATE_URI;
+import static com.hp.ov.sdk.rest.client.networking.ConnectionTemplateClient.DEFAULT_CONNECTION_TEMPLATE_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.ethernet.ConnectionTemplate;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ConnectionTemplateClientTest {
 
-    private static final String ANY_CONNECTION_TEMPLATE_RESOURCE_ID = "random-UUID";
-    private static final String ANY_CONNECTION_TEMPLATE_RESOURCE_NAME = "random-Name";
+    private static final String ANY_RESOURCE_ID = "random-UUID";
+    private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private ConnectionTemplateClient connectionTemplateClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private ConnectionTemplateClient client = Reflection.newProxy(ConnectionTemplateClient.class,
+            new ClientRequestHandler<>(baseClient, ConnectionTemplateClient.class));
 
     @Test
     public void shouldGetConnectionTemplate() {
-        connectionTemplateClient.getById(ANY_CONNECTION_TEMPLATE_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.CONNECTION_TEMPLATE_URI + "/" + ANY_CONNECTION_TEMPLATE_RESOURCE_ID;
+        String expectedUri = CONNECTION_TEMPLATE_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, ConnectionTemplate.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(ConnectionTemplate.class).getType());
     }
 
     @Test
     public void shouldGetAllConnectionTemplate() {
-        connectionTemplateClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.CONNECTION_TEMPLATE_URI, ConnectionTemplate.class);
+        Request expectedRequest = new Request(HttpMethod.GET, CONNECTION_TEMPLATE_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<ConnectionTemplate>>() {}.getType());
     }
 
     @Test
     public void shouldGetConnectionTemplateCollectionByName() {
-        connectionTemplateClient.getByName(ANY_CONNECTION_TEMPLATE_RESOURCE_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.CONNECTION_TEMPLATE_URI,
-                ConnectionTemplate.class, UrlParameter.getFilterByNameParameter(ANY_CONNECTION_TEMPLATE_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, CONNECTION_TEMPLATE_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<ConnectionTemplate>>() {}.getType());
     }
 
     @Test
     public void shouldGetDefaultConnectionTemplate() {
-        connectionTemplateClient.getDefaultConnectionTemplate();
+        client.getDefaultConnectionTemplate();
 
-        String expectedUri = ResourceUris.DEFAULT_CONNECTION_TEMPLATE_URI;
+        String expectedUri = CONNECTION_TEMPLATE_URI + DEFAULT_CONNECTION_TEMPLATE_URI;
 
-        then(baseClient).should().getResource(expectedUri, ConnectionTemplate.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(ConnectionTemplate.class).getType());
     }
 
     @Test
     public void shouldUpdateConnectionTemplate() {
         ConnectionTemplate connectionTemplate = new ConnectionTemplate();
 
-        connectionTemplateClient.update(ANY_CONNECTION_TEMPLATE_RESOURCE_ID, connectionTemplate);
+        client.update(ANY_RESOURCE_ID, connectionTemplate);
 
-        String expectedUri = ResourceUris.CONNECTION_TEMPLATE_URI + "/" + ANY_CONNECTION_TEMPLATE_RESOURCE_ID;
-        Request request = new Request(HttpMethod.PUT, expectedUri, connectionTemplate);
+        String expectedUri = CONNECTION_TEMPLATE_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setEntity(connectionTemplate);
 
-        then(baseClient).should().executeRequest(request, ConnectionTemplate.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(ConnectionTemplate.class).getType());
     }
 
 }
