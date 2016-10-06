@@ -199,7 +199,8 @@ public class OneViewClient {
     }
 
     public synchronized LogicalInterconnectClient logicalInterconnect() {
-        return this.getClient(LogicalInterconnectClient.class);
+        return Reflection.newProxy(LogicalInterconnectClient.class,
+                new ClientRequestHandler<>(this.baseClient, LogicalInterconnectClient.class));
     }
 
     public synchronized LogicalInterconnectGroupClient logicalInterconnectGroup() {
