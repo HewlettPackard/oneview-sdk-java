@@ -245,7 +245,8 @@ public class OneViewClient {
     }
 
     public synchronized SasLogicalJbodClient sasLogicalJbod() {
-        return this.getClient(SasLogicalJbodClient.class);
+        return Reflection.newProxy(SasLogicalJbodClient.class,
+                new ClientRequestHandler<>(this.baseClient, SasLogicalJbodClient.class));
     }
 
     public synchronized ServerHardwareClient serverHardware() {

@@ -18,84 +18,18 @@ package com.hp.ov.sdk.rest.client.storage;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.storage.Drive;
 import com.hp.ov.sdk.dto.storage.saslogicaljbod.SasLogicalJbod;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class SasLogicalJbodClient {
+@Api(SasLogicalJbodClient.SAS_LOGICAL_JBOD_URI)
+public interface SasLogicalJbodClient extends SearchableResource<SasLogicalJbod> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SasLogicalJbodClient.class);
-
-    protected static final String SAS_LOGICAL_JBOD_URI = "/rest/sas-logical-jbods";
-    protected static final String DRIVES = "drives";
-
-    private final BaseClient baseClient;
-
-    public SasLogicalJbodClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link SasLogicalJbod} details for the specified SAS logical JBOD.
-     *
-     * @param resourceId SAS logical JBOD resource identifier as seen in HPE OneView.
-     *
-     * @return {@link SasLogicalJbod} object containing the details.
-     */
-    public SasLogicalJbod getById(String resourceId) {
-        LOGGER.info("SasLogicalJbodClient : getById : Start");
-
-        SasLogicalJbod sasLogicalJbod = baseClient.getResource(
-                UrlUtils.createUrl(SAS_LOGICAL_JBOD_URI, resourceId), SasLogicalJbod.class);
-
-        LOGGER.info("SasLogicalJbodClient : getById : End");
-
-        return sasLogicalJbod;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link SasLogicalJbod}&gt; containing details
-     * for all the available SAS logical JBOD found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link SasLogicalJbod}&gt; containing
-     * the details for all found SAS logical JBODs.
-     */
-    public ResourceCollection<SasLogicalJbod> getAll() {
-        LOGGER.info("SasLogicalJbodClient : getAll : Start");
-
-        ResourceCollection<SasLogicalJbod> saslogicalJbods = baseClient.getResourceCollection(
-                SAS_LOGICAL_JBOD_URI, SasLogicalJbod.class);
-
-        LOGGER.info("SasLogicalJbodClient : getAll : End");
-
-        return saslogicalJbods;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link SasLogicalJbod}&gt; containing details
-     * for the available SAS logical JBOD found under the current HPE OneView that match the name.
-     *
-     * @param name SAS logical JBOD name as seen in HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link SasLogicalJbod}&gt; containing
-     * the details for the found SAS logical JBODs.
-     */
-    public ResourceCollection<SasLogicalJbod> getByName(String name) {
-        LOGGER.info("SasLogicalJbodClient : getByName : Start");
-
-        ResourceCollection<SasLogicalJbod> saslogicalJbods = baseClient.getResourceCollection(
-                SAS_LOGICAL_JBOD_URI, SasLogicalJbod.class, UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("SasLogicalJbodClient : getByName : End");
-
-        return saslogicalJbods;
-    }
+    String SAS_LOGICAL_JBOD_URI = "/rest/sas-logical-jbods";
+    String DRIVES = "/drives";
 
     /**
      * Retrieves a {@link List}&lt;{@link Drive}&gt; containing details for the drives
@@ -106,15 +40,7 @@ public class SasLogicalJbodClient {
      * @return {@link List}&lt;{@link Drive}&gt; containing the details for the found drives
      * allocated to the given SAS logical JBOD.
      */
-    public List<Drive> getDrives(String resourceId) {
-        LOGGER.info("SasLogicalJbodClient : getDrives : Start");
-
-        List<Drive> drives = baseClient.getResourceList(
-                UrlUtils.createUrl(SAS_LOGICAL_JBOD_URI, resourceId, DRIVES), Drive.class);
-
-        LOGGER.info("SasLogicalJbodClient : getDrives : End");
-
-        return drives;
-    }
+    @Endpoint(uri = "/{resourceId}" + DRIVES)
+    List<Drive> getDrives(@PathParam("resourceId") String resourceId);
 
 }
