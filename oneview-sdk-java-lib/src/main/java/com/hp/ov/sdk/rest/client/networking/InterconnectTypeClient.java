@@ -15,82 +15,32 @@
  */
 package com.hp.ov.sdk.rest.client.networking;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.InterconnectType;
 import com.hp.ov.sdk.dto.InterconnectTypeName;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.QueryParam;
 
-public class InterconnectTypeClient {
+@Api(InterconnectTypeClient.INTERCONNECT_TYPE_URI)
+public interface InterconnectTypeClient extends SearchableResource<InterconnectType> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(InterconnectTypeClient.class);
-
-    private final BaseClient baseClient;
-
-    public InterconnectTypeClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
+    String INTERCONNECT_TYPE_URI = "/rest/interconnect-types";
 
     /**
-     * Retrieves the {@link InterconnectType} details for the specified interconnect type.
+     * Retrieves a paginated collection ({@link ResourceCollection}) containing the details for the
+     * available resources found under the current HPE OneView that match the <code>name</code> provided.
      *
-     * @param resourceId interconnect type resource identifier as seen in HPE OneView.
+     * <p>The filter applied in this case is as follows:
+     * <p>filter="name matches '<i>name</i>'"
      *
-     * @return {@link InterconnectType} object containing the details.
+     * @param name interconnect type name that should be used to filter the resources found in HPE OneView.
+     *
+     * @return {@link ResourceCollection} paginated collection containing the details for the
+     * available resources that match the filter.
      */
-    public InterconnectType getById(String resourceId) {
-        LOGGER.info("InterconnectTypeClient : getById : Start");
-
-        InterconnectType interconnectType = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.INTERCONNECT_TYPE_URI, resourceId), InterconnectType.class);
-
-        LOGGER.info("InterconnectTypeClient : getById : End");
-
-        return interconnectType;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link InterconnectType}&gt; containing details
-     * for all the available interconnect types found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link InterconnectType}&gt; containing
-     * the details for all found interconnect types.
-     */
-    public ResourceCollection<InterconnectType> getAll() {
-        LOGGER.info("InterconnectTypeClient : getAll : Start");
-
-        ResourceCollection<InterconnectType> interconnectTypes = baseClient.getResourceCollection(
-                ResourceUris.INTERCONNECT_TYPE_URI, InterconnectType.class);
-
-        LOGGER.info("InterconnectTypeClient : getAll : End");
-
-        return interconnectTypes;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link InterconnectType}&gt; containing details
-     * for the available interconnect types found under the current HPE OneView that match the name.
-     *
-     * @param typeName interconnect type name as seen in HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link InterconnectType}&gt; containing
-     * the details for the found interconnect types.
-     */
-    public ResourceCollection<InterconnectType> getByName(InterconnectTypeName typeName) {
-        LOGGER.info("InterconnectTypeClient : getByName : Start");
-
-        ResourceCollection<InterconnectType> interconnectTypes = baseClient.getResourceCollection(
-                ResourceUris.INTERCONNECT_TYPE_URI, InterconnectType.class,
-                UrlParameter.getFilterByNameParameter(typeName.getValue()));
-
-        LOGGER.info("InterconnectTypeClient : getByName : End");
-
-        return interconnectTypes;
-    }
+    @Endpoint
+    ResourceCollection<InterconnectType> getByName(@QueryParam InterconnectTypeName name);
 
 }

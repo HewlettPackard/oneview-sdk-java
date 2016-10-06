@@ -37,7 +37,6 @@ public class ResourceUris {
     public static final String FC_SANS_PROVIDER_URI = "/rest/fc-sans/providers";
     public static final String FIRMWARE_BUNDLE_URI = "/rest/firmware-bundles";
     public static final String FIRMWARE_DRIVER_URI = "/rest/firmware-drivers";
-    public static final String INTERCONNECT_TYPE_URI = "/rest/interconnect-types";
     public static final String INTERCONNECT_URI = "/rest/interconnects";
     public static final String INTERCONNECT_PORTS_URI = "ports";
     public static final String INTERCONNECT_STATISTICS_URI = "statistics";

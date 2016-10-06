@@ -65,11 +65,18 @@ public class InterconnectTypeClientSample {
         LOGGER.info("Interconnect type returned to client: {}", interconnectType.toJsonString());
     }
 
+    private void getInterconnectTypeByNameString() {
+        InterconnectType interconnectType = this.interconnectTypeClient.getByName("HP VC FlexFabric-20/40 F8 Module").get(0);
+
+        LOGGER.info("Interconnect type returned to client: {}", interconnectType.toJsonString());
+    }
+
     public static void main(final String[] args) throws Exception {
         InterconnectTypeClientSample client = new InterconnectTypeClientSample();
 
         client.getInterconnectType();
         client.getAllInterconnectTypes();
         client.getInterconnectTypeByName();
+        client.getInterconnectTypeByNameString();
     }
 }

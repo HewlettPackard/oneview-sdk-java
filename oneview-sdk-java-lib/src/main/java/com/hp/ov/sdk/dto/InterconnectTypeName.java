@@ -35,4 +35,8 @@ public enum InterconnectTypeName {
         return this.value;
     }
 
+    @Override
+    public String toString(){
+        return value;
+    }
 }

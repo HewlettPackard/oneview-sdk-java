@@ -59,7 +59,7 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
         Request request = new Request(endpoint.method(), this.baseUri + endpoint.uri());
 
         if (GET_BY_NAME_METHOD.equals(method.getName()) && (args.length == 1)) {
-            request.addQuery(UrlParameter.getFilterByNameParameter((String) args[0]));
+            request.addQuery(UrlParameter.getFilterByNameParameter(String.valueOf(args[0])));
         } else {
             this.fillRequestAccordingParams(request, this.token.method(method).getParameters(), args);
             this.fillRequestAccordingOptions(request, args);
