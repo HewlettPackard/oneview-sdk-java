@@ -16,69 +16,76 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.networking.SasInterconnectTypeClient.SAS_INTERCONNECT_TYPE_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.sasinterconnect.SasInterconnectType;
 import com.hp.ov.sdk.dto.networking.sasinterconnect.SasInterconnectTypeName;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SasInterconnectTypeClientTest {
 
-    private static final String ANY_SAS_INTERCONNECT_TYPE_RESOURCE_ID = "random-UUID";
-    private static final String ANY_SAS_INTERCONNECT_TYPE_NAME = "random-Name";
+    private static final String ANY_RESOURCE_ID = "random-UUID";
+    private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private SasInterconnectTypeClient sasInterconnectTypeClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private SasInterconnectTypeClient client = Reflection.newProxy(SasInterconnectTypeClient.class,
+            new ClientRequestHandler<>(baseClient, SasInterconnectTypeClient.class));
 
     @Test
     public void shouldGetSasInterconnectTypeById() {
-        sasInterconnectTypeClient.getById(ANY_SAS_INTERCONNECT_TYPE_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = SasInterconnectTypeClient.SAS_INTERCONNECT_TYPE_URI
-                + "/" + ANY_SAS_INTERCONNECT_TYPE_RESOURCE_ID;
+        String expectedUri = SAS_INTERCONNECT_TYPE_URI
+                + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, SasInterconnectType.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(SasInterconnectType.class).getType());
     }
 
     @Test
     public void shouldGetAllSasInterconnectTypes() {
-        sasInterconnectTypeClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(
-                SasInterconnectTypeClient.SAS_INTERCONNECT_TYPE_URI,
-                SasInterconnectType.class);
+        Request expectedRequest = new Request(HttpMethod.GET, SAS_INTERCONNECT_TYPE_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<SasInterconnectType>>() {}.getType());
     }
 
     @Test
     public void shouldGetSasInterconnectTypeByNameUsingEnum() {
-        sasInterconnectTypeClient.getByName(SasInterconnectTypeName.SYNERGY_12GB_SAS_CONNECTION_MODULE);
+        client.getByName(SasInterconnectTypeName.SYNERGY_12GB_SAS_CONNECTION_MODULE);
 
-        then(baseClient).should().getResourceCollection(
-                SasInterconnectTypeClient.SAS_INTERCONNECT_TYPE_URI,
-                SasInterconnectType.class,
-                UrlParameter.getFilterByNameParameter(
-                        SasInterconnectTypeName.SYNERGY_12GB_SAS_CONNECTION_MODULE.getValue()));
+        Request expectedRequest = new Request(HttpMethod.GET, SAS_INTERCONNECT_TYPE_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(SasInterconnectTypeName.SYNERGY_12GB_SAS_CONNECTION_MODULE.getValue()));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<SasInterconnectType>>() {}.getType());
     }
 
     @Test
     public void shouldGetSasInterconnectTypeByNameUsingString() {
-        sasInterconnectTypeClient.getByName(ANY_SAS_INTERCONNECT_TYPE_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(
-                SasInterconnectTypeClient.SAS_INTERCONNECT_TYPE_URI,
-                SasInterconnectType.class,
-                UrlParameter.getFilterByNameParameter(ANY_SAS_INTERCONNECT_TYPE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, SAS_INTERCONNECT_TYPE_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<SasInterconnectType>>() {}.getType());
     }
 
 }

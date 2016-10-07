@@ -62,12 +62,19 @@ public class SasInterconnectTypesClientSample {
         LOGGER.info("SAS interconnect type returned to client: {}", interconnectType.toJsonString());
     }
 
+    private void getSasInterconnectTypeByNameString() {
+        SasInterconnectType interconnectType = this.sasInterconnectTypeClient.getByName("Synergy 12Gb SAS Connection Module").get(0);
+
+        LOGGER.info("SAS interconnect type returned to client: {}", interconnectType.toJsonString());
+    }
+
     public static void main(final String[] args) {
         SasInterconnectTypesClientSample client = new SasInterconnectTypesClientSample();
 
-        client.getSasInterconnectTypeById();
         client.getAllSasInterconnectTypes();
+        client.getSasInterconnectTypeById();
         client.getSasInterconnectTypeByName();
+        client.getSasInterconnectTypeByNameString();
     }
 
 }

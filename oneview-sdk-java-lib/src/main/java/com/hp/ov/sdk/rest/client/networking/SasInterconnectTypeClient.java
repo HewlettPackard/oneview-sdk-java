@@ -16,102 +16,32 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.sasinterconnect.SasInterconnectType;
 import com.hp.ov.sdk.dto.networking.sasinterconnect.SasInterconnectTypeName;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.QueryParam;
 
-public class SasInterconnectTypeClient {
+@Api(SasInterconnectTypeClient.SAS_INTERCONNECT_TYPE_URI)
+public interface SasInterconnectTypeClient extends SearchableResource<SasInterconnectType> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SasInterconnectTypeClient.class);
-
-    protected static final String SAS_INTERCONNECT_TYPE_URI = "/rest/sas-interconnect-types";
-
-    private final BaseClient baseClient;
-
-    public SasInterconnectTypeClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
+    String SAS_INTERCONNECT_TYPE_URI = "/rest/sas-interconnect-types";
 
     /**
-     * Retrieves the {@link SasInterconnectType} details for the specified SAS interconnect type.
+     * Retrieves a paginated collection ({@link ResourceCollection}) containing the details for the
+     * available resources found under the current HPE OneView that match the <code>name</code> provided.
      *
-     * @param resourceId SAS interconnect type resource identifier as seen in HPE OneView.
+     * <p>The filter applied in this case is as follows:
+     * <p>filter="name matches '<i>name</i>'"
      *
-     * @return {@link SasInterconnectType} object containing the details.
+     * @param name name that should be used to filter the resources found in HPE OneView.
+     *
+     * @return {@link ResourceCollection} paginated collection containing the details for the
+     * available resources that match the filter.
      */
-    public SasInterconnectType getById(String resourceId) {
-        LOGGER.info("SasInterconnectTypeClient : getById : Start");
-
-        SasInterconnectType interconnectType = baseClient.getResource(
-                UrlUtils.createUrl(SAS_INTERCONNECT_TYPE_URI, resourceId), SasInterconnectType.class);
-
-        LOGGER.info("SasInterconnectTypeClient : getById : End");
-
-        return interconnectType;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link SasInterconnectType}&gt; containing details
-     * for all the available SAS interconnect types found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link SasInterconnectType}&gt; containing
-     * the details for all found SAS interconnect types.
-     */
-    public ResourceCollection<SasInterconnectType> getAll() {
-        LOGGER.info("SasInterconnectTypeClient : getAll : Start");
-
-        ResourceCollection<SasInterconnectType> interconnectTypes = baseClient.getResourceCollection(
-                SAS_INTERCONNECT_TYPE_URI, SasInterconnectType.class);
-
-        LOGGER.info("SasInterconnectTypeClient : getAll : End");
-
-        return interconnectTypes;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link SasInterconnectType}&gt; containing details
-     * for the available SAS interconnect types found under the current HPE OneView that match the name.
-     *
-     * @param typeName {@link SasInterconnectTypeName} identifying the SAS interconnect type.
-     *
-     * @return {@link ResourceCollection}&lt;{@link SasInterconnectType}&gt; containing
-     * the details for the found SAS interconnect types.
-     */
-    public ResourceCollection<SasInterconnectType> getByName(SasInterconnectTypeName typeName) {
-        LOGGER.info("SasInterconnectTypeClient : getByName : Start");
-
-        ResourceCollection<SasInterconnectType> interconnectTypes = this.getByName(typeName.getValue());
-
-        LOGGER.info("SasInterconnectTypeClient : getByName : End");
-
-        return interconnectTypes;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link SasInterconnectType}&gt; containing details
-     * for the available SAS interconnect types found under the current HPE OneView that match the name.
-     *
-     * @param typeName SAS interconnect type name as seen in HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link SasInterconnectType}&gt; containing
-     * the details for the found SAS interconnect types.
-     */
-    public ResourceCollection<SasInterconnectType> getByName(String typeName) {
-        LOGGER.info("SasInterconnectTypeClient : getByName : Start");
-
-        ResourceCollection<SasInterconnectType> interconnectTypes = baseClient.getResourceCollection(
-                SAS_INTERCONNECT_TYPE_URI, SasInterconnectType.class,
-                UrlParameter.getFilterByNameParameter(typeName));
-
-        LOGGER.info("SasInterconnectTypeClient : getByName : End");
-
-        return interconnectTypes;
-    }
+    @Endpoint
+    ResourceCollection<SasInterconnectType> getByName(@QueryParam SasInterconnectTypeName typeName);
 
 }
