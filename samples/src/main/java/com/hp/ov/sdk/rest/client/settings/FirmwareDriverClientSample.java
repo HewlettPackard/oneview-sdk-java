@@ -64,7 +64,7 @@ public class FirmwareDriverClientSample {
 
     private void deleteFirmwareDriver() {
         FwBaseline firmwareDriver = this.client.getByName(FIRMWARE_DRIVER_NAME).get(0);
-        TaskResource task = this.client.delete(firmwareDriver.getResourceId(), false);
+        TaskResource task = this.client.delete(firmwareDriver.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }

@@ -20,21 +20,21 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.ContentType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 
 public class FirmwareBundleClient {
 
+    protected static final String FIRMWARE_BUNDLE_URI = "/rest/firmware-bundles";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(FirmwareBundleClient.class);
     private static final int TIMEOUT = 300000; // in milliseconds = 5 mins
-
     private final BaseClient baseClient;
 
     public FirmwareBundleClient(BaseClient baseClient) {
@@ -57,7 +57,7 @@ public class FirmwareBundleClient {
 
         validateFirmwareBundleFile(firmwareBundle);
 
-        Request request = new Request(HttpMethod.POST, ResourceUris.FIRMWARE_BUNDLE_URI, firmwareBundle);
+        Request request = new Request(HttpMethod.POST, FIRMWARE_BUNDLE_URI, firmwareBundle);
 
         request.setContentType(ContentType.MULTIPART_FORM_DATA);
         request.setTimeout(TIMEOUT);

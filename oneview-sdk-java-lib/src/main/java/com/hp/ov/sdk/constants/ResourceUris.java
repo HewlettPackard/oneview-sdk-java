@@ -30,8 +30,6 @@ public class ResourceUris {
     public static final String AVAILABLE_STORAGE_SYSTEMS = AVAILABLE_STORAGE_SYSTEM + "s";
     public static final String AVAILABLE_TARGETS = SERVER_PROFILE_URI + "/available-targets";
     public static final String ENVIRONMENT_CONFIGURATION_URI = "environmentalConfiguration";
-    public static final String FIRMWARE_BUNDLE_URI = "/rest/firmware-bundles";
-    public static final String FIRMWARE_DRIVER_URI = "/rest/firmware-drivers";
     public static final String LOGIN_SESSIONS = "/rest/login-sessions";
     public static final String PROFILE_PORTS_URI = SERVER_PROFILE_URI + "/profile-ports";
     public static final String SERVER_HARDWARE_TYPE_URI = "/rest/server-hardware-types";
