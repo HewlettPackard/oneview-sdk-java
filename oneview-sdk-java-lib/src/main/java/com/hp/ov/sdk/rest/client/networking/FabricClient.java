@@ -15,84 +15,23 @@
  */
 package com.hp.ov.sdk.rest.client.networking;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.fabric.Fabric;
 import com.hp.ov.sdk.dto.networking.fabric.VlanPool;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class FabricClient {
+@Api(FabricClient.FABRIC_URI)
+public interface FabricClient extends SearchableResource<Fabric> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FabricClient.class);
 
-    public static final String FABRIC_URI = "/rest/fabrics";
-    public static final String RESERVED_VLAN_RANGE_URI = "reserved-vlan-range";
-
-    private final BaseClient baseClient;
-
-    public FabricClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link Fabric} details for the specified fabric.
-     *
-     * @param resourceId fabric resource identifier as seen in HPE OneView.
-     *
-     * @return {@link Fabric} object containing the details.
-     */
-    public Fabric getById(String resourceId) {
-        LOGGER.info("FabricClient : getById : Start");
-
-        Fabric fabric = baseClient.getResource(
-                UrlUtils.createUrl(FABRIC_URI, resourceId), Fabric.class);
-
-        LOGGER.info("FabricClient : getById : End");
-
-        return fabric;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link Fabric}&gt; containing details
-     * for all the available fabrics found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link Fabric}&gt; containing
-     * the details for all found fabrics.
-     */
-    public ResourceCollection<Fabric> getAll() {
-        LOGGER.info("FabricClient : getAll : Start");
-
-        ResourceCollection<Fabric> fabrics = baseClient.getResourceCollection(FABRIC_URI, Fabric.class);
-
-        LOGGER.info("FabricClient : getAll : End");
-
-        return fabrics;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link Fabric}&gt; containing details
-     * for the available fabrics found under the current HPE OneView that match the name.
-     *
-     * @param name fabric name as seen in HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link Fabric}&gt; containing
-     * the details for the found fabrics.
-     */
-    public ResourceCollection<Fabric> getByName(String name) {
-        LOGGER.info("FabricClient : getByName : Start");
-
-        ResourceCollection<Fabric> fabrics = baseClient.getResourceCollection(
-                FABRIC_URI, Fabric.class, UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("FabricClient : getByName : End");
-
-        return fabrics;
-    }
+    String FABRIC_URI = "/rest/fabrics";
+    String RESERVED_VLAN_RANGE_URI = "/reserved-vlan-range";
 
     /**
      * Retrieves the {@link VlanPool} range for the fabric.
@@ -101,36 +40,21 @@ public class FabricClient {
      *
      * @return {@link VlanPool} object containing the details.
      */
-    public VlanPool getReservedVlanRange(String resourceId) {
-        LOGGER.info("FabricClient : getReservedVlanRange : Start");
-
-        VlanPool vlanPoll = baseClient.getResource(
-                UrlUtils.createUrl(FABRIC_URI, resourceId, RESERVED_VLAN_RANGE_URI), VlanPool.class);
-
-        LOGGER.info("FabricClient : getReservedVlanRange : End");
-
-        return vlanPoll;
-    }
+    @Endpoint(uri = "/{resourceId}" + RESERVED_VLAN_RANGE_URI)
+    VlanPool getReservedVlanRange(@PathParam("resourceId") String resourceId);
 
     /**
      * Updates a {@link VlanPool} range for the fabric.
      *
      * @param resourceId fabric resource identifier as seen in HPE OneView.
      * @param vlanPool object containing the range details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource updateReservedVlanRange(String resourceId, VlanPool vlanPool, boolean aSync) {
-        LOGGER.info("FabricClient : updateReservedVlanRange : Start");
-
-        TaskResource taskResource = baseClient.updateResource(
-                UrlUtils.createUrl(FABRIC_URI, resourceId, RESERVED_VLAN_RANGE_URI), vlanPool, aSync);
-
-        LOGGER.info("FabricClient : updateReservedVlanRange : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + RESERVED_VLAN_RANGE_URI, method = HttpMethod.PUT)
+    TaskResource updateReservedVlanRange(@PathParam("resourceId") String resourceId,
+            @BodyParam VlanPool vlanPool, RequestOption... options);
 
 }

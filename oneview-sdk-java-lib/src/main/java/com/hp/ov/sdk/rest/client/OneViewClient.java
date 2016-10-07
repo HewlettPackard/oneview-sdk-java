@@ -130,7 +130,8 @@ public class OneViewClient {
     }
 
     public synchronized FabricClient fabric() {
-        return this.getClient(FabricClient.class);
+        return Reflection.newProxy(FabricClient.class,
+                new ClientRequestHandler<>(this.baseClient, FabricClient.class));
     }
 
     public synchronized FcNetworkClient fcNetwork() {

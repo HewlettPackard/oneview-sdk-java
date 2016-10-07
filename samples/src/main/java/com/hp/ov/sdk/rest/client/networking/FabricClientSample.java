@@ -72,7 +72,7 @@ public class FabricClientSample {
 
         vlanRange.setStart(vlanRange.getStart() - 1);
 
-        TaskResource task = this.fabricClient.updateReservedVlanRange(FABRIC_RESOURCE_ID, vlanRange , false);
+        TaskResource task = this.fabricClient.updateReservedVlanRange(FABRIC_RESOURCE_ID, vlanRange );
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
