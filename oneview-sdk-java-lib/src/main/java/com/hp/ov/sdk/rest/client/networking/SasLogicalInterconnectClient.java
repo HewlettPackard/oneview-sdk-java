@@ -115,6 +115,7 @@ public interface SasLogicalInterconnectClient extends SearchableResource<SasLogi
      * consistent state may involve automatically removing existing interconnects from management
      * and/or adding new interconnects for management.
      *
+     * @param resourceId resource identifier for SAS logical interconnect as seen in HPE OneView.
      * @param interconnect {@link SasLogicalInterconnect} SAS logical interconnect.
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
