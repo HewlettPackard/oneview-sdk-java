@@ -20,22 +20,8 @@ public class ResourceUris {
     /**
      * PLEASE, try to keep it in alphabetical order
      */
-    public static final String SERVER_PROFILE_URI = "/rest/server-profiles";
-
-
     public static final String APPLIANCE_VERSION = "/rest/version";
-    public static final String AVAILABLE_NETWORKS_URI = SERVER_PROFILE_URI + "/available-networks";
-    public static final String AVAILABLE_SERVERS_URI = SERVER_PROFILE_URI + "/available-servers";
-    public static final String AVAILABLE_STORAGE_SYSTEM = SERVER_PROFILE_URI + "/available-storage-system";
-    public static final String AVAILABLE_STORAGE_SYSTEMS = AVAILABLE_STORAGE_SYSTEM + "s";
-    public static final String AVAILABLE_TARGETS = SERVER_PROFILE_URI + "/available-targets";
-    public static final String ENVIRONMENT_CONFIGURATION_URI = "environmentalConfiguration";
     public static final String LOGIN_SESSIONS = "/rest/login-sessions";
-    public static final String PROFILE_PORTS_URI = SERVER_PROFILE_URI + "/profile-ports";
     public static final String SERVER_HARDWARE_TYPE_URI = "/rest/server-hardware-types";
-    public static final String SERVER_PROFILE_COMPLIANCE_PREVIEW_URI = "compliance-preview";
-    public static final String SERVER_PROFILE_COMPLIANCE_MESSAGES_URI = "messages";
-    public static final String SERVER_PROFILE_COMPLIANCE_TRANSFORMATION_URI = "transformation";
-    public static final String TASK_URI = "/rest/tasks";
 
 }

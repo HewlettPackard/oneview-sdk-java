@@ -277,7 +277,8 @@ public class OneViewClient {
     }
 
     public synchronized ServerProfileClient serverProfile() {
-        return this.getClient(ServerProfileClient.class);
+        return Reflection.newProxy(ServerProfileClient.class,
+                new ClientRequestHandler<>(this.baseClient, ServerProfileClient.class));
     }
 
     public synchronized ServerProfileTemplateClient serverProfileTemplate() {
