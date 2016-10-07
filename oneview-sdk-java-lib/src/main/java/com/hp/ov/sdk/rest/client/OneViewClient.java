@@ -168,7 +168,8 @@ public class OneViewClient {
     }
 
     public synchronized InterconnectLinkTopologyClient interconnectLinkTopology() {
-        return this.getClient(InterconnectLinkTopologyClient.class);
+        return Reflection.newProxy(InterconnectLinkTopologyClient.class,
+                new ClientRequestHandler<>(this.baseClient, InterconnectLinkTopologyClient.class));
     }
 
     public synchronized InterconnectTypeClient interconnectType() {
