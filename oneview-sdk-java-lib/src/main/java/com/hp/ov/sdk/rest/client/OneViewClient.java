@@ -109,7 +109,8 @@ public class OneViewClient {
     }
 
     public synchronized DriveEnclosureClient driveEnclosure() {
-        return this.getClient(DriveEnclosureClient.class);
+        return Reflection.newProxy(DriveEnclosureClient.class,
+                new ClientRequestHandler<>(this.baseClient, DriveEnclosureClient.class));
     }
 
     public synchronized EnclosureClient enclosure() {

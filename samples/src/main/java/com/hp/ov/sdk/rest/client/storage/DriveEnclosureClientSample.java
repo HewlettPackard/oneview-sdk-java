@@ -81,7 +81,7 @@ public class DriveEnclosureClientSample {
         patch.setPath("/powerState");
         patch.setValue("On");
 
-        TaskResource taskResource = this.driveEnclosureClient.patch(driveEnclosure.getResourceId(), patch, false);
+        TaskResource taskResource = this.driveEnclosureClient.patch(driveEnclosure.getResourceId(), patch);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -93,7 +93,7 @@ public class DriveEnclosureClientSample {
         refreshStateConfig.setRefreshState(RefreshState.RefreshPending);
 
         TaskResource taskResource = this.driveEnclosureClient.updateRefreshState(
-                driveEnclosure.getResourceId(), refreshStateConfig, false);
+                driveEnclosure.getResourceId(), refreshStateConfig);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
