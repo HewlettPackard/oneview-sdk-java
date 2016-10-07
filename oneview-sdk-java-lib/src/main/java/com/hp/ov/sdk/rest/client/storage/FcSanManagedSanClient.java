@@ -17,94 +17,28 @@ package com.hp.ov.sdk.rest.client.storage;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.dto.EndpointResponse;
 import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.dto.FcSansManagedSanTask;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.fcsans.LocateSanResponse;
 import com.hp.ov.sdk.dto.fcsans.SanRequest;
 import com.hp.ov.sdk.dto.fcsans.SanResponse;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class FcSanManagedSanClient {
+@Api(FcSanManagedSanClient.FC_SANS_MANAGED_SAN_URI)
+public interface FcSanManagedSanClient extends SearchableResource<SanResponse> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FcSanManagedSanClient.class);
-
-    protected static final String FC_SANS_MANAGED_SAN_URI = "/rest/fc-sans/managed-sans";
-    protected static final String FC_SANS_MANAGED_SAN_ENDPOINTS = "endpoints";
-    protected static final String FC_SANS_MANAGED_SAN_ISSUES = "issues";
-    protected static final String FC_SANS_WWN_LOCATE_URI = "?locate=";
-
-    private final BaseClient baseClient;
-
-    public FcSanManagedSanClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link SanResponse} details for the specified managed SAN.
-     *
-     * @param resourceId managed SAN resource identifier as seen in HPE OneView.
-     *
-     * @return {@link SanResponse} object containing the details.
-     */
-    public SanResponse getById(String resourceId) {
-        LOGGER.info("FcSanManagedSanClient : getById : Start");
-
-        SanResponse san = baseClient.getResource(
-                UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, resourceId), SanResponse.class);
-
-        LOGGER.info("FcSanManagedSanClient : getById : End");
-
-        return san;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link SanResponse}&gt; containing details
-     * for all the available managed SANs found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link SanResponse}&gt; containing
-     * the details for all found managed SANs.
-     */
-    public ResourceCollection<SanResponse> getAll() {
-        LOGGER.info("FcSanManagedSanClient : getAll : Start");
-
-        ResourceCollection<SanResponse> sans = baseClient.getResourceCollection(FC_SANS_MANAGED_SAN_URI, SanResponse.class);
-
-        LOGGER.info("FcSanManagedSanClient : getAll : End");
-
-        return sans;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link SanResponse}&gt; containing details
-     * for the available managed SANs found under the current HPE OneView that match the name.
-     *
-     * @param name managed SAN name as seen in HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link SanResponse}&gt; containing
-     * the details for the found managed SANs.
-     */
-    public ResourceCollection<SanResponse> getByName(String name) {
-        LOGGER.info("FcSanManagedSanClient : getByName : Start");
-
-        ResourceCollection<SanResponse> sans = baseClient.getResourceCollection(
-                FC_SANS_MANAGED_SAN_URI, SanResponse.class,
-                UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("FcSanManagedSanClient : getByName : End");
-
-        return sans;
-    }
+    String FC_SANS_MANAGED_SAN_URI = "/rest/fc-sans/managed-sans";
+    String FC_SANS_MANAGED_SAN_ENDPOINTS_URI = "/endpoints";
+    String FC_SANS_MANAGED_SAN_ISSUES_URI = "/issues";
+    String FC_SANS_WWN_LOCATE_URI = "?locate=";
 
     /**
      * Updates a managed SAN identified by the given resource identifier.
@@ -114,18 +48,8 @@ public class FcSanManagedSanClient {
      *
      * @return {@link SanResponse} containing the updated managed SAN details.
      */
-    public SanResponse update(String resourceId, SanRequest sanRequest) {
-        LOGGER.info("FcSanManagedSanClient : update : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, resourceId), sanRequest);
-
-        SanResponse updatedSan = baseClient.executeRequest(request, SanResponse.class);
-
-        LOGGER.info("FcSanManagedSanClient : update : End");
-
-        return updatedSan;
-    }
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
+    SanResponse update(@PathParam("resourceId") String resourceId, @BodyParam SanRequest sanRequest);
 
     /**
      * Reports all endpoints known within the specified SAN and the data about each endpoint.
@@ -135,40 +59,21 @@ public class FcSanManagedSanClient {
      * @return {@link ResourceCollection}&lt;{@link EndpointResponse}&gt; containing
      * the details for all found endpoints of a given managed SAN.
      */
-    public ResourceCollection<EndpointResponse> getEndpoints(String resourceId) {
-        LOGGER.info("FcSanManagedSanClient : getEndpoints : Start");
-
-        ResourceCollection<EndpointResponse> sanEndpoints = baseClient.getResourceCollection(
-                UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, resourceId, FC_SANS_MANAGED_SAN_ENDPOINTS), EndpointResponse.class);
-
-        LOGGER.info("FcSanManagedSanClient : getEndpoints : End");
-
-        return sanEndpoints;
-    }
+    @Endpoint(uri = "/{resourceId}" + FC_SANS_MANAGED_SAN_ENDPOINTS_URI)
+    ResourceCollection<EndpointResponse> getEndpoints(@PathParam("resourceId") String resourceId);
 
     /**
      * Creates a new SAN issues report indicating any connectivity issues in the specified SAN.
      *
      * @param resourceId managed SAN resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link FcSansManagedSanTask} which contains the task status for the process
      *          and the report data.
      */
-    public FcSansManagedSanTask createIssuesReport(String resourceId, boolean aSync) {
-        LOGGER.info("FcSanManagedSanClient : createIssuesReport : Start");
-
-        Request request = new Request(HttpMethod.POST,
-                UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, resourceId,
-                        FC_SANS_MANAGED_SAN_ISSUES));
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("FcSanManagedSanClient : createIssuesReport : End");
-
-        return new FcSansManagedSanTask(taskResource, new ResourceAdaptor());
-    }
+    @Endpoint(uri = "/{resourceId}" + FC_SANS_MANAGED_SAN_ISSUES_URI, method = HttpMethod.POST)
+    FcSansManagedSanTask createIssuesReport(@PathParam("resourceId") String resourceId, RequestOption... options);
 
     /**
      * Creates an endpoints CSV file for a SAN. Clients should perform a GET request on the
@@ -178,19 +83,8 @@ public class FcSanManagedSanClient {
      *
      * @return {@link EndpointsCsvFileResponse} contains the data of the created CSV file.
      */
-    public EndpointsCsvFileResponse createEndpointsCsv(String resourceId) {
-        LOGGER.info("FcSanManagedSanClient : createEndpointsCsv : Start");
-
-        Request request = new Request(HttpMethod.POST,
-                UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, resourceId, FC_SANS_MANAGED_SAN_ENDPOINTS));
-
-        EndpointsCsvFileResponse endpointsCsvFileResponse = this.baseClient.executeRequest(request,
-                EndpointsCsvFileResponse.class);
-
-        LOGGER.info("FcSanManagedSanClient : createEndpointsCsv : End");
-
-        return endpointsCsvFileResponse;
-    }
+    @Endpoint(uri = "/{resourceId}" + FC_SANS_MANAGED_SAN_ENDPOINTS_URI, method = HttpMethod.POST)
+    EndpointsCsvFileResponse createEndpointsCsv(@PathParam("resourceId") String resourceId);
 
     /**
      * Retrieves a list of associations between provided WWNs and the SANs (if any) on which they reside
@@ -199,15 +93,7 @@ public class FcSanManagedSanClient {
      *
      * @return A list of {@link LocateSanResponse} containing the details for all associations found.
      */
-    public List<LocateSanResponse> getWwnAssociations(String wwn) {
-        LOGGER.info("FcSanManagedSanClient : getWwnAssociations : Start");
-
-        List<LocateSanResponse> sanResponse = baseClient.getResourceList(
-                UrlUtils.createUrl(FC_SANS_MANAGED_SAN_URI, FC_SANS_WWN_LOCATE_URI, wwn), LocateSanResponse.class);
-
-        LOGGER.info("FcSanManagedSanClient : getWwnAssociations : End");
-
-        return sanResponse;
-    }
+    @Endpoint(uri = FC_SANS_WWN_LOCATE_URI + "{wwn}")
+    List<LocateSanResponse> getWwnAssociations(@PathParam("wwn") String wwn);
 
 }

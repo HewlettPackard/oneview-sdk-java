@@ -106,12 +106,12 @@ public class FcSansManagedSanClientSample {
 
     private void createFcSanManagedSanIssuesReport() {
         SanResponse san = this.fcSanManagedSanClient.getByName(RESOURCE_NAME).get(0);
-        FcSansManagedSanTask task = this.fcSanManagedSanClient.createIssuesReport(san.getResourceId(), false);
+        FcSansManagedSanTask task = this.fcSanManagedSanClient.createIssuesReport(san.getResourceId());
 
-        LOGGER.info("Task object returned to client : " + task.getTask().toJsonString());
+        LOGGER.info("Task object returned to client : " + JsonPrettyPrinter.print(task));
 
         for (FcIssueResponse issue : task.getIssues()) {
-            LOGGER.info("Issue returned to client : " + JsonPrettyPrinter.print(issue));
+            LOGGER.info("Issue(s) returned to client : " + JsonPrettyPrinter.print(issue));
         }
     }
 
@@ -131,8 +131,8 @@ public class FcSansManagedSanClientSample {
     public static void main(final String[] args) throws Exception {
         FcSansManagedSanClientSample client = new FcSansManagedSanClientSample();
 
-        client.getFcSanManagedSanById();
         client.getAllFcSanManagedSans();
+        client.getFcSanManagedSanById();
         client.getFcSanManagedSanByName();
 
         client.getFcSanManagedSanEndpoints();
