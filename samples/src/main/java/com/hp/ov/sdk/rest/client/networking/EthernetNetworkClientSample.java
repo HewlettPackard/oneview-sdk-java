@@ -31,6 +31,8 @@ import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.dto.networking.ethernet.Purpose;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.http.core.BasicURIQuery;
+import com.hp.ov.sdk.rest.http.core.URIQuery;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
 public class EthernetNetworkClientSample {
@@ -85,6 +87,23 @@ public class EthernetNetworkClientSample {
         LOGGER.info("Number of ethernet networks returned to client (count): {}", networks.getCount());
     }
 
+    private void getAllEthernetNetworksWithCount() {
+        ResourceCollection<Network> networks = client.getAll(500);
+
+        LOGGER.info("Number of ethernet networks returned to client (count): {}", networks.getCount());
+    }
+
+    private void getEthernetNetworksWithFilter() {
+        BasicURIQuery query = new BasicURIQuery();
+
+        query.addParameter(URIQuery.START, "2");
+        query.addParameter(URIQuery.COUNT, "1");
+
+        ResourceCollection<Network> networks = client.get(query);
+
+        LOGGER.info("Ethernet networks returned to client: {}", networks.toJsonString());
+    }
+
     private void getEthernetNetworkByName() {
         Network network = client.getByName(ETHERNET_NETWORK_NAME).get(0);
 
@@ -96,8 +115,7 @@ public class EthernetNetworkClientSample {
 
         network.setName(ETHERNET_NETWORK_NAME_UPDATED);
 
-        TaskResource task = this.client.update(network.getResourceId(),
-                network);
+        TaskResource task = this.client.update(network.getResourceId(), network);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -162,5 +180,7 @@ public class EthernetNetworkClientSample {
         sample.deleteEthernetNetwork();
 
         sample.createEthernetNetworkInBulk();
+        sample.getEthernetNetworksWithFilter();
+        sample.getAllEthernetNetworksWithCount();
     }
 }

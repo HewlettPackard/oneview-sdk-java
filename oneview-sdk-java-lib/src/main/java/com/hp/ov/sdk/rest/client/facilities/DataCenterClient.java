@@ -22,7 +22,6 @@ import com.hp.ov.sdk.dto.facilities.datacenter.DataCenter;
 import com.hp.ov.sdk.dto.facilities.datacenter.VisualContent;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.rest.http.core.UrlQuery;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 import com.hp.ov.sdk.rest.reflect.Api;
 import com.hp.ov.sdk.rest.reflect.BodyParam;
@@ -86,7 +85,8 @@ public interface DataCenterClient extends
      * @return {@link DataCenter} object containing the result of this request.
      */
     @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
-    DataCenter update(@PathParam("resourceId") String resourceId, @BodyParam DataCenter resource, RequestOption... options);
+    DataCenter update(@PathParam("resourceId") String resourceId,
+            @BodyParam DataCenter resource, RequestOption... options);
 
     /**
      * Removes the resource identified by the provided <code>resourceId</code>.
@@ -125,7 +125,7 @@ public interface DataCenterClient extends
      * @return {@link TaskResource} containing the task status for the process.
      */
     @Endpoint(method = HttpMethod.DELETE)
-    public TaskResource removeByFilter(@QueryParam UrlQuery filter, RequestOption ... options);
+    TaskResource removeByFilter(@QueryParam(key = "filter") String filter, RequestOption ... options);
 
     /**
      * Retrieves a {@link List}&lt;{@link VisualContent}&gt; describing each rack
@@ -137,6 +137,6 @@ public interface DataCenterClient extends
      * within the data center.
      */
     @Endpoint(uri = "/{resourceId}" + DATA_CENTER_VISUAL_CONTENT_URI)
-    public List<VisualContent> getVisualContent(@PathParam("resourceId") String resourceId);
+    List<VisualContent> getVisualContent(@PathParam("resourceId") String resourceId);
 
 }

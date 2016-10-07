@@ -29,7 +29,6 @@ import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.UtilizationData;
-import com.hp.ov.sdk.rest.client.GenericFilter;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
@@ -119,8 +118,7 @@ public class PowerDeliveryDeviceClientSample {
     }
 
     private void removePowerDeliveryDeviceByFilter() {
-        GenericFilter filter = new GenericFilter();
-        filter.setFilter("'name' = '" + SAMPLE_RESOURCE_NAME + "'");
+        String filter = "'name' = '" + SAMPLE_RESOURCE_NAME + "'";
         TaskResource task = this.client.removeByFilter(filter);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());

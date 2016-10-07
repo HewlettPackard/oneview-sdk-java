@@ -26,7 +26,6 @@ import com.hp.ov.sdk.dto.UtilizationData;
 import com.hp.ov.sdk.rest.client.common.RemovableResource;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.rest.http.core.UrlQuery;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 import com.hp.ov.sdk.rest.reflect.Api;
 import com.hp.ov.sdk.rest.reflect.BodyParam;
@@ -128,7 +127,7 @@ public interface PowerDeliveryDeviceClient extends
      * @return {@link TaskResource} containing the task status for the process.
      */
     @Endpoint(method = HttpMethod.DELETE)
-    TaskResource removeByFilter(@QueryParam UrlQuery filter, RequestOption ... options);
+    TaskResource removeByFilter(@QueryParam(key = "filter") String filter, RequestOption ... options);
 
     /**
      * Removes the resource identified by the provided <code>resourceId</code>.

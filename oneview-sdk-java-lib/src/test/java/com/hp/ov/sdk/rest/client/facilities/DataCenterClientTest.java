@@ -36,7 +36,6 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.facilities.datacenter.DataCenter;
 import com.hp.ov.sdk.dto.facilities.datacenter.VisualContent;
 import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.client.GenericFilter;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
@@ -125,15 +124,13 @@ public class DataCenterClientTest {
 
     @Test
     public void shouldRemoveDataCenterByFilter() {
-
-        GenericFilter filter = new GenericFilter();
-        filter.setFilter("'name' = '" + ANY_RESOURCE_NAME + "'");
+        String filter = "'name' = '" + ANY_RESOURCE_NAME + "'";
         dataCenterClient.removeByFilter(filter, TaskTimeout.of(321));
 
         String expectedUri = DATA_CENTER_URI;
         Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        expectedRequest.addQuery(new UrlParameter("filter", filter.parameters().get(0).getValue()));
+        expectedRequest.addQuery(new UrlParameter("filter", filter));
 
         expectedRequest.setTimeout(321);
 

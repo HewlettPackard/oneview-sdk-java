@@ -30,8 +30,8 @@ import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.URIQuery;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.UrlQuery;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 
@@ -57,7 +57,7 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
         Request request = this.buildRequest(method, args);
 
         if (GET_ALL_METHOD.equals(method.getName())) {
-            return this.handleGetAll(method);
+            return this.handleGetAll(request, this.token.method(method).getReturnType().getType());
         } else {
             if (TaskResource.class.equals(method.getReturnType())) {
                 return this.baseClient.executeMonitorableRequest(request);
@@ -92,10 +92,16 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
             if (pathParam != null) {
                 request.setUri(request.getUri().replaceFirst("\\{" + pathParam.value() + "\\}", args[i].toString()));
             } else if (queryParam != null) {
-                UrlQuery query = (UrlQuery) args[i];
+                if (URIQuery.class.isAssignableFrom(args[i].getClass())) {
+                    URIQuery query = (URIQuery) args[i];
 
-                for (UrlParameter parameter : query.parameters()) {
-                    request.addQuery(parameter);
+                    for (UrlParameter parameter : query.value()) {
+                        request.addQuery(parameter);
+                    }
+                } else {
+                    String value = String.valueOf(args[i]);
+
+                    request.addQuery(new UrlParameter(queryParam.key(), value));
                 }
             } else {
                 if (bodyParam != null) {
@@ -122,20 +128,17 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
         }
     }
 
-    private ResourceCollection<Object> handleGetAll(Method method) {
-        Type returnType = this.token.method(method).getReturnType().getType();
+    private ResourceCollection<Object> handleGetAll(Request request, Type returnType) {
         ResourceCollection<Object> resources = new ResourceCollection<>();
 
-        String nextPageUri = this.baseUri;
-
         do {
-            Request request = new Request(HttpMethod.GET, nextPageUri);
-            ResourceCollection<Object> response = (ResourceCollection<Object>) this.baseClient.executeRequest(request, returnType);
+            ResourceCollection<Object> response = (ResourceCollection<Object>)
+                    this.baseClient.executeRequest(request, returnType);
 
             resources.addMembers(response.getMembers());
             resources.setTotal(response.getTotal());
 
-            nextPageUri = response.getNextPageUri();
+            request = new Request(HttpMethod.GET, response.getNextPageUri());
         } while (resources.getCount() < resources.getTotal());
 
         return resources;

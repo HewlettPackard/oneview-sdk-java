@@ -24,7 +24,6 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.rack.Rack;
 import com.hp.ov.sdk.dto.rack.TopologyInformation;
-import com.hp.ov.sdk.rest.client.GenericFilter;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
@@ -93,8 +92,7 @@ public class RackClientSample {
     }
 
     private void removeRackByFilter() {
-        GenericFilter filter = new GenericFilter();
-        filter.setFilter("'name' = '" + RACK_NAME + "'");
+        String filter = "'name' = '" + RACK_NAME + "'";
         TaskResource task = this.rackClient.removeByFilter(filter);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());

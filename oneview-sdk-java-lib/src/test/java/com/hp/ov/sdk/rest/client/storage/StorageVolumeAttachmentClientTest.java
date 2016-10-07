@@ -19,9 +19,12 @@ package com.hp.ov.sdk.rest.client.storage;
 import static com.hp.ov.sdk.rest.client.storage.StorageVolumeAttachmentClient.STORAGE_VOLUME_ATTACHMENT_PATH_URI;
 import static com.hp.ov.sdk.rest.client.storage.StorageVolumeAttachmentClient.STORAGE_VOLUME_ATTACHMENT_REPAIR_URI;
 import static com.hp.ov.sdk.rest.client.storage.StorageVolumeAttachmentClient.STORAGE_VOLUME_ATTACHMENT_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import org.junit.Test;
@@ -63,6 +66,8 @@ public class StorageVolumeAttachmentClientTest {
 
     @Test
     public void shouldGetAllStorageVolumeAttachments() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, STORAGE_VOLUME_ATTACHMENT_URI);

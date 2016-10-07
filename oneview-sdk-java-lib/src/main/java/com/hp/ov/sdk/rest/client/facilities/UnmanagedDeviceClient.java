@@ -20,7 +20,6 @@ import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.facilities.unmanageddevice.UnmanagedDevice;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.rest.http.core.UrlQuery;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 import com.hp.ov.sdk.rest.reflect.Api;
 import com.hp.ov.sdk.rest.reflect.BodyParam;
@@ -84,7 +83,8 @@ public interface UnmanagedDeviceClient extends
      * @return {@link UnmanagedDevice} object containing the result of this request.
      */
     @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
-    UnmanagedDevice update(@PathParam("resourceId") String resourceId, @BodyParam UnmanagedDevice resource, RequestOption... options);
+    UnmanagedDevice update(@PathParam("resourceId") String resourceId,
+            @BodyParam UnmanagedDevice resource, RequestOption... options);
 
     /**
      * Removes the resource identified by the provided <code>resourceId</code>.
@@ -123,7 +123,7 @@ public interface UnmanagedDeviceClient extends
      * @return {@link TaskResource} containing the task status for the process.
      */
     @Endpoint(method = HttpMethod.DELETE)
-    public TaskResource removeByFilter(@QueryParam UrlQuery filter, RequestOption ... options);
+    TaskResource removeByFilter(@QueryParam(key = "filter") String filter, RequestOption ... options);
 
     /**
      * Returns a description of the environmental configuration (supported feature set,
@@ -135,5 +135,5 @@ public interface UnmanagedDeviceClient extends
      * environmental configuration.
      */
     @Endpoint(uri = "/{resourceId}" + ENVIRONMENT_CONFIGURATION_URI)
-    public EnvironmentalConfiguration getEnvironmentalConfiguration(@PathParam("resourceId") String resourceId);
+    EnvironmentalConfiguration getEnvironmentalConfiguration(@PathParam("resourceId") String resourceId);
 }

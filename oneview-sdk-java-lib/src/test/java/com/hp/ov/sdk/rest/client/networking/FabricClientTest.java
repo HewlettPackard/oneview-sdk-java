@@ -18,8 +18,12 @@ package com.hp.ov.sdk.rest.client.networking;
 
 import static com.hp.ov.sdk.rest.client.networking.FabricClient.FABRIC_URI;
 import static com.hp.ov.sdk.rest.client.networking.FabricClient.RESERVED_VLAN_RANGE_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+
+import java.lang.reflect.Type;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,6 +63,8 @@ public class FabricClientTest {
 
     @Test
     public void shouldGetAllFabric() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, FABRIC_URI);

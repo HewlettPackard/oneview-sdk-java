@@ -23,9 +23,12 @@ import static com.hp.ov.sdk.rest.client.networking.InterconnectClient.INTERCONNE
 import static com.hp.ov.sdk.rest.client.networking.InterconnectClient.INTERCONNECT_SUBPORT_URI;
 import static com.hp.ov.sdk.rest.client.networking.InterconnectClient.INTERCONNECT_UPDATE_PORTS_URI;
 import static com.hp.ov.sdk.rest.client.networking.InterconnectClient.INTERCONNECT_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,6 +76,8 @@ public class InterconnectClientTest {
 
     @Test
     public void shouldGetAllInterconnects() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, INTERCONNECT_URI);

@@ -35,7 +35,6 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.rack.Rack;
 import com.hp.ov.sdk.dto.rack.TopologyInformation;
 import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.client.GenericFilter;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
@@ -125,14 +124,13 @@ public class RackClientTest {
 
     @Test
     public void shouldRemoveRackByFilter() {
-        GenericFilter filter = new GenericFilter();
-        filter.setFilter("'name' = '" + ANY_RESOURCE_NAME + "'");
+        String filter= "'name' = '" + ANY_RESOURCE_NAME + "'";
         client.removeByFilter(filter, TaskTimeout.of(321));
 
         String expectedUri = RACK_URI;
         Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        expectedRequest.addQuery(new UrlParameter("filter", filter.parameters().get(0).getValue()));
+        expectedRequest.addQuery(new UrlParameter("filter", filter));
 
         expectedRequest.setTimeout(321);
 

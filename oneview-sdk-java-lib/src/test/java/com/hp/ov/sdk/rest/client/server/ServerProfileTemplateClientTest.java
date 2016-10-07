@@ -16,7 +16,11 @@
 
 package com.hp.ov.sdk.rest.client.server;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
+
+import java.lang.reflect.Type;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +28,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
 import com.hp.ov.sdk.dto.servers.serverprofiletemplate.ServerProfileTemplate;
@@ -54,6 +59,8 @@ public class ServerProfileTemplateClientTest {
 
     @Test
     public void shouldGetAllServerProfileTemplates() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         then(baseClient).should().getResourceCollection(

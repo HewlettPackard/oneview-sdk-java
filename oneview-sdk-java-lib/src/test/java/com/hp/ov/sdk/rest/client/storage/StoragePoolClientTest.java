@@ -17,8 +17,12 @@
 package com.hp.ov.sdk.rest.client.storage;
 
 import static com.hp.ov.sdk.rest.client.storage.StoragePoolClient.STORAGE_POOL_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+
+import java.lang.reflect.Type;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,7 +61,10 @@ public class StoragePoolClientTest {
 
     @Test
     public void shouldGetAllStoragePools() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
+
         Request expectedRequest = new Request(HttpMethod.GET, STORAGE_POOL_URI);
 
         then(baseClient).should().executeRequest(expectedRequest,
