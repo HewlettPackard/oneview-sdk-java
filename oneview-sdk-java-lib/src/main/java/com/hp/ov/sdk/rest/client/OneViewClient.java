@@ -292,7 +292,8 @@ public class OneViewClient {
     }
 
     public synchronized SwitchClient switches() {
-        return this.getClient(SwitchClient.class);
+        return Reflection.newProxy(SwitchClient.class,
+                new ClientRequestHandler<>(this.baseClient, SwitchClient.class));
     }
 
     public synchronized SwitchTypeClient switchType() {

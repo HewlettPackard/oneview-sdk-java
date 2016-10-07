@@ -31,5 +31,6 @@ public @interface Endpoint {
 
     String uri() default StringUtils.EMPTY;
     HttpMethod method() default HttpMethod.GET;
+    boolean forceReturnTask() default false;
 
 }

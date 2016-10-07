@@ -79,7 +79,7 @@ public class FcSansDeviceManagerClientTest {
 
         Request expectedRequest = new Request(HttpMethod.POST, ANY_PROVIDER_URI, deviceManager);
 
-        expectedRequest.setForceTaskReturn(true);
+        expectedRequest.setForceReturnTask(true);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
     }
@@ -93,7 +93,7 @@ public class FcSansDeviceManagerClientTest {
         String expectedUri = ResourceUris.FC_SANS_DEVICE_MANAGER_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, deviceManager);
 
-        expectedRequest.setForceTaskReturn(true);
+        expectedRequest.setForceReturnTask(true);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
     }

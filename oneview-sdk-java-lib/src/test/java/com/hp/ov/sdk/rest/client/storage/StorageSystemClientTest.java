@@ -79,7 +79,7 @@ public class StorageSystemClientTest {
 
         Request request = new Request(HttpMethod.POST, ResourceUris.STORAGE_SYSTEM_URI, storageSystemCredentials);
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
 
         then(baseClient).should().executeMonitorableRequest(request, false);
     }
@@ -93,7 +93,7 @@ public class StorageSystemClientTest {
         String expectedUri = ResourceUris.STORAGE_SYSTEM_URI + "/" + ANY_STORAGE_SYSTEM_RESOURCE_ID;
         Request request = new Request(HttpMethod.PUT, expectedUri, storageSystem);
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
 
         then(baseClient).should().executeMonitorableRequest(request, false);
     }
@@ -105,7 +105,7 @@ public class StorageSystemClientTest {
         String expectedUri = ResourceUris.STORAGE_SYSTEM_URI + "/" + ANY_STORAGE_SYSTEM_RESOURCE_ID;
         Request request = new Request(HttpMethod.DELETE, expectedUri);
 
-        request.setForceTaskReturn(true);
+        request.setForceReturnTask(true);
 
         then(baseClient).should().executeMonitorableRequest(request, false);
     }
