@@ -16,23 +16,29 @@
 
 package com.hp.ov.sdk.rest.client.storage;
 
+import static com.hp.ov.sdk.rest.client.storage.DriveEnclosureClient.DRIVE_ENCLOSURE_URI;
+import static com.hp.ov.sdk.rest.client.storage.DriveEnclosureClient.PORT_MAP_URI;
+import static com.hp.ov.sdk.rest.client.storage.DriveEnclosureClient.REFRESH_STATE_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.Patch;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.storage.driveenclosures.DriveEnclosure;
 import com.hp.ov.sdk.dto.storage.driveenclosures.DriveEnclosurePortMap;
 import com.hp.ov.sdk.dto.storage.driveenclosures.DriveEnclosureRefreshRequest;
 import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.ContentType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DriveEnclosureClientTest {
@@ -40,78 +46,79 @@ public class DriveEnclosureClientTest {
     private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private DriveEnclosureClient driveEnclosureClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private DriveEnclosureClient client = Reflection.newProxy(DriveEnclosureClient.class,
+            new ClientRequestHandler<>(baseClient, DriveEnclosureClient.class));
 
     @Test
     public void shouldGetDriveEnclosureById() {
-        driveEnclosureClient.getById(ANY_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = DriveEnclosureClient.DRIVE_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = DRIVE_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, DriveEnclosure.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(DriveEnclosure.class).getType());
     }
 
     @Test
     public void shouldGetAllDriveEnclosures() {
-        driveEnclosureClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(DriveEnclosureClient.DRIVE_ENCLOSURE_URI, DriveEnclosure.class);
+        Request expectedRequest = new Request(HttpMethod.GET, DRIVE_ENCLOSURE_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<DriveEnclosure>>() {}.getType());
     }
 
     @Test
     public void shouldGetDriveEnclosuresByName() {
-        driveEnclosureClient.getByName(ANY_RESOURCE_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(DriveEnclosureClient.DRIVE_ENCLOSURE_URI,
-                DriveEnclosure.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, DRIVE_ENCLOSURE_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<DriveEnclosure>>() {}.getType());
     }
 
     @Test
     public void shouldGetDriveEnclosurePortMap() {
-        driveEnclosureClient.getPortMap(ANY_RESOURCE_ID);
+        client.getPortMap(ANY_RESOURCE_ID);
 
-        String expectedUri = DriveEnclosureClient.DRIVE_ENCLOSURE_URI
-                + "/"
-                + ANY_RESOURCE_ID
-                + "/"
-                + DriveEnclosureClient.PORT_MAP_URI;
+        String expectedUri = DRIVE_ENCLOSURE_URI
+                + "/" + ANY_RESOURCE_ID
+                + PORT_MAP_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, DriveEnclosurePortMap.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(DriveEnclosurePortMap.class).getType());
     }
 
     @Test
     public void shouldPatchDriveEnclosure() {
         Patch patch = new Patch();
 
-        driveEnclosureClient.patch(ANY_RESOURCE_ID, patch, false);
+        client.patch(ANY_RESOURCE_ID, patch, TaskTimeout.of(321));
 
-        String expectedUri = DriveEnclosureClient.DRIVE_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = DRIVE_ENCLOSURE_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri, patch);
+        expectedRequest.setTimeout(321);
 
-        expectedRequest.setContentType(ContentType.APPLICATION_JSON_PATCH);
-        expectedRequest.setTimeout(1200000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateDriveEnclosureRefreshState() {
         DriveEnclosureRefreshRequest refreshStateConfig = new DriveEnclosureRefreshRequest();
 
-        driveEnclosureClient.updateRefreshState(ANY_RESOURCE_ID, refreshStateConfig, false);
+        client.updateRefreshState(ANY_RESOURCE_ID, refreshStateConfig, TaskTimeout.of(321));
 
-        String expectedUri = DriveEnclosureClient.DRIVE_ENCLOSURE_URI
+        String expectedUri = DRIVE_ENCLOSURE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + DriveEnclosureClient.REFRESH_STATE_URI;
+                + REFRESH_STATE_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, refreshStateConfig);
+        expectedRequest.setTimeout(321);
 
-        expectedRequest.setTimeout(1200000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
 }
