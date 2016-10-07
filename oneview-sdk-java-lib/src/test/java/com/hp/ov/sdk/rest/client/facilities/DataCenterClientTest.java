@@ -18,9 +18,12 @@ package com.hp.ov.sdk.rest.client.facilities;
 
 import static com.hp.ov.sdk.rest.client.facilities.DataCenterClient.DATA_CENTER_URI;
 import static com.hp.ov.sdk.rest.client.facilities.DataCenterClient.DATA_CENTER_VISUAL_CONTENT_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import org.junit.Test;
@@ -62,6 +65,8 @@ public class DataCenterClientTest {
 
     @Test
     public void shouldGetAllDataCenter() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         dataCenterClient.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, DATA_CENTER_URI);

@@ -21,9 +21,12 @@ import static com.hp.ov.sdk.rest.client.networking.SwitchClient.SWITCHES_REFRESH
 import static com.hp.ov.sdk.rest.client.networking.SwitchClient.SWITCHES_STATISTICS_URI;
 import static com.hp.ov.sdk.rest.client.networking.SwitchClient.SWITCHES_UPDATE_PORTS_URI;
 import static com.hp.ov.sdk.rest.client.networking.SwitchClient.SWITCHES_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +73,10 @@ public class SwitchClientTest {
 
     @Test
     public void shouldGetAllSwitch() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
+
         Request expectedRequest = new Request(HttpMethod.GET, SWITCHES_URI);
 
         then(baseClient).should().executeRequest(expectedRequest,

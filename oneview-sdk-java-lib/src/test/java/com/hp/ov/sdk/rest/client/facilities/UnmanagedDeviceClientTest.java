@@ -18,8 +18,12 @@ package com.hp.ov.sdk.rest.client.facilities;
 
 import static com.hp.ov.sdk.rest.client.facilities.UnmanagedDeviceClient.ENVIRONMENT_CONFIGURATION_URI;
 import static com.hp.ov.sdk.rest.client.facilities.UnmanagedDeviceClient.UNMANAGED_DEVICE_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+
+import java.lang.reflect.Type;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,6 +64,8 @@ public class UnmanagedDeviceClientTest {
 
     @Test
     public void shouldGetAllUnmanagedDevice() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, UNMANAGED_DEVICE_URI);

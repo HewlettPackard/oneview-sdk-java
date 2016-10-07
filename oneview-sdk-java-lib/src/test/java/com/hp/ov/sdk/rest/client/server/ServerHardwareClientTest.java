@@ -28,8 +28,12 @@ import static com.hp.ov.sdk.rest.client.server.ServerHardwareClient.SERVER_HARDW
 import static com.hp.ov.sdk.rest.client.server.ServerHardwareClient.SERVER_HARDWARE_REMOTE_CONSOLE_URI;
 import static com.hp.ov.sdk.rest.client.server.ServerHardwareClient.SERVER_HARDWARE_URI;
 import static com.hp.ov.sdk.rest.client.server.ServerHardwareClient.SERVER_HARDWARE_UTILIZATION_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+
+import java.lang.reflect.Type;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -80,6 +84,8 @@ public class ServerHardwareClientTest {
 
     @Test
     public void shouldGetAllServerHardware() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         serverHardwareClient.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, SERVER_HARDWARE_URI);

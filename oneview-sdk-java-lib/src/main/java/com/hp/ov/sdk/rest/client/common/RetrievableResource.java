@@ -16,9 +16,9 @@
 
 package com.hp.ov.sdk.rest.client.common;
 
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.rest.reflect.Endpoint;
 import com.hp.ov.sdk.rest.reflect.PathParam;
-import com.hp.ov.sdk.dto.ResourceCollection;
 
 public interface RetrievableResource<T> {
 
@@ -38,6 +38,15 @@ public interface RetrievableResource<T> {
      *
      * @return {@link ResourceCollection} paginated collection containing the details for the
      * available resources.
+     */
+    @Endpoint
+    ResourceCollection<T> get();
+
+    /**
+     * Retrieves a collection ({@link ResourceCollection}) containing the details for the <b>all</b>
+     * available resources of a given type found under the current HPE OneView.
+     *
+     * @return {@link ResourceCollection} collection containing the details for the available resources.
      */
     @Endpoint
     ResourceCollection<T> getAll();

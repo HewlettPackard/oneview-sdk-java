@@ -82,7 +82,7 @@ public class EthernetNetworkClientSample {
     private void getAllEthernetNetworks() {
         ResourceCollection<Network> networks = client.getAll();
 
-        LOGGER.info("Ethernet networks returned to client: {}", networks.toJsonString());
+        LOGGER.info("Number of ethernet networks returned to client (count): {}", networks.getCount());
     }
 
     private void getEthernetNetworkByName() {

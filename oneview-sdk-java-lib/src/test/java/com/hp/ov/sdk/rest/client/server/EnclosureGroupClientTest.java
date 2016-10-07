@@ -18,8 +18,12 @@ package com.hp.ov.sdk.rest.client.server;
 
 import static com.hp.ov.sdk.rest.client.server.EnclosureGroupClient.ENCLOSURE_GROUP_SCRIPT_URI;
 import static com.hp.ov.sdk.rest.client.server.EnclosureGroupClient.ENCLOSURE_GROUP_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+
+import java.lang.reflect.Type;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,6 +63,8 @@ public class EnclosureGroupClientTest {
 
     @Test
     public void shouldGetAllEnclosureGroup() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, ENCLOSURE_GROUP_URI);

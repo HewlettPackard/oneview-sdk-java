@@ -17,6 +17,7 @@
 package com.hp.ov.sdk.rest.reflect;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import com.google.common.reflect.AbstractInvocationHandler;
@@ -24,6 +25,7 @@ import com.google.common.reflect.Parameter;
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.dto.FcSansManagedSanTask;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.ContentType;
@@ -38,6 +40,7 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
     public static Object EMPTY_OBJECT = new Object();
 
     private static final String GET_BY_NAME_METHOD = "getByName";
+    private static final String GET_ALL_METHOD = "getAll";
 
     private final BaseClient baseClient;
     private final String baseUri;
@@ -53,15 +56,16 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
     protected Object handleInvocation(Object proxy, Method method, Object[] args) throws Throwable {
         Request request = this.buildRequest(method, args);
 
-        if (TaskResource.class.equals(method.getReturnType())) {
-            return this.baseClient.executeMonitorableRequest(request);
+        if (GET_ALL_METHOD.equals(method.getName())) {
+            return this.handleGetAll(method);
+        } else {
+            if (TaskResource.class.equals(method.getReturnType())) {
+                return this.baseClient.executeMonitorableRequest(request);
+            } else if (FcSansManagedSanTask.class.equals(method.getReturnType())) {
+                return new FcSansManagedSanTask(this.baseClient.executeMonitorableRequest(request), new ResourceAdaptor());
+            }
+            return this.baseClient.executeRequest(request, this.token.method(method).getReturnType().getType());
         }
-
-        if (FcSansManagedSanTask.class.equals(method.getReturnType())) {
-            return new FcSansManagedSanTask(this.baseClient.executeMonitorableRequest(request), new ResourceAdaptor());
-        }
-
-        return this.baseClient.executeRequest(request, this.token.method(method).getReturnType().getType());
     }
 
     private Request buildRequest(Method method, Object[] args) {
@@ -116,6 +120,25 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
                 option.apply(request);
             }
         }
+    }
+
+    private ResourceCollection<Object> handleGetAll(Method method) {
+        Type returnType = this.token.method(method).getReturnType().getType();
+        ResourceCollection<Object> resources = new ResourceCollection<>();
+
+        String nextPageUri = this.baseUri;
+
+        do {
+            Request request = new Request(HttpMethod.GET, nextPageUri);
+            ResourceCollection<Object> response = (ResourceCollection<Object>) this.baseClient.executeRequest(request, returnType);
+
+            resources.addMembers(response.getMembers());
+            resources.setTotal(response.getTotal());
+
+            nextPageUri = response.getNextPageUri();
+        } while (resources.getCount() < resources.getTotal());
+
+        return resources;
     }
 
 }
