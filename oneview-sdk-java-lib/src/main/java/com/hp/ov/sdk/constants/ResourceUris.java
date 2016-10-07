@@ -29,8 +29,6 @@ public class ResourceUris {
     public static final String AVAILABLE_STORAGE_SYSTEM = SERVER_PROFILE_URI + "/available-storage-system";
     public static final String AVAILABLE_STORAGE_SYSTEMS = AVAILABLE_STORAGE_SYSTEM + "s";
     public static final String AVAILABLE_TARGETS = SERVER_PROFILE_URI + "/available-targets";
-    public static final String CONNECTION_TEMPLATE_URI = "/rest/connection-templates";
-    public static final String DEFAULT_CONNECTION_TEMPLATE_URI = "/rest/connection-templates/defaultConnectionTemplate";
     public static final String ENVIRONMENT_CONFIGURATION_URI = "environmentalConfiguration";
     public static final String FC_SANS_DEVICE_MANAGER = "device-managers";
     public static final String FC_SANS_DEVICE_MANAGER_URI = "/rest/fc-sans/device-managers";
