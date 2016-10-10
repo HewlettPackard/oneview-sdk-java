@@ -78,21 +78,21 @@ public class StorageVolumeAttachmentClientSample {
                 JsonPrettyPrinter.print(storageVolumeAttachmentPaths));
     }
 
-    private void getExtraUnmanagedStorageVolumeAttachments() {
+    private void getExtraUnmanagedStorageVolumes() {
         ResourceCollection<ExtraStorageVolume> extraStorageVolumes
-                = this.storageVolumeAttachmentClient.getExtraUnmanagedAttachments();
+                = this.storageVolumeAttachmentClient.getExtraUnmanagedStorageVolumes();
 
         LOGGER.info("Extra unmanaged storage volume attachments returned to client: {}",
                 JsonPrettyPrinter.print(extraStorageVolumes));
     }
 
-    private void repairExtraUnmanagedStorageVolumeAttachment() {
+    private void repairExtraPresentationsFromServerProfile() {
         ExtraStorageVolumeRepair repair = new ExtraStorageVolumeRepair();
 
         repair.setType("ExtraUnmanagedStorageVolumes");
         repair.setResourceUri(String.format("%s/%s", ResourceUris.SERVER_PROFILE_URI, SERVER_PROFILE_ID));
 
-        TaskResource task = this.storageVolumeAttachmentClient.repairExtraUnmanagedAttachment(repair, false);
+        TaskResource task = this.storageVolumeAttachmentClient.repairExtraPresentations(repair);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -100,12 +100,12 @@ public class StorageVolumeAttachmentClientSample {
     public static void main(String[] args) {
         StorageVolumeAttachmentClientSample client = new StorageVolumeAttachmentClientSample();
 
-        client.getStorageVolumeAttachment();
         client.getAllStorageVolumeAttachments();
-        client.getStorageVolumeAttachmentPath();
+        client.getStorageVolumeAttachment();
         client.getAllStorageVolumeAttachmentPaths();
-        client.getExtraUnmanagedStorageVolumeAttachments();
-        client.repairExtraUnmanagedStorageVolumeAttachment();
+        client.getStorageVolumeAttachmentPath();
+        client.getExtraUnmanagedStorageVolumes();
+        client.repairExtraPresentationsFromServerProfile();
     }
 
 }

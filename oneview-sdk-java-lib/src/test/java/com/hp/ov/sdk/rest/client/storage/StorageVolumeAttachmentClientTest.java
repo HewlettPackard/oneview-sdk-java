@@ -16,90 +16,112 @@
 
 package com.hp.ov.sdk.rest.client.storage;
 
+import static com.hp.ov.sdk.rest.client.storage.StorageVolumeAttachmentClient.STORAGE_VOLUME_ATTACHMENT_PATH_URI;
+import static com.hp.ov.sdk.rest.client.storage.StorageVolumeAttachmentClient.STORAGE_VOLUME_ATTACHMENT_REPAIR_URI;
+import static com.hp.ov.sdk.rest.client.storage.StorageVolumeAttachmentClient.STORAGE_VOLUME_ATTACHMENT_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.ExtraStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StorageVolumeAttachment;
 import com.hp.ov.sdk.dto.StorageVolumeAttachmentPath;
 import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StorageVolumeAttachmentClientTest {
 
-    private static final String ANY_STORAGE_VOLUME_ATTACHMENT_RESOURCE_ID = "random-UUID";
-    private static final String ANY_STORAGE_VOLUME_ATTACHMENT_PATH_RESOURCE_ID = "random-UUID";
+    private static final String ANY_RESOURCE_ID = "random-UUID";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private StorageVolumeAttachmentClient storageVolumeAttachmentClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private StorageVolumeAttachmentClient client = Reflection.newProxy(StorageVolumeAttachmentClient.class,
+            new ClientRequestHandler<>(baseClient, StorageVolumeAttachmentClient.class));
 
     @Test
     public void shouldGetStorageVolumeAttachmentById() {
-        storageVolumeAttachmentClient.getById(ANY_STORAGE_VOLUME_ATTACHMENT_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.STORAGE_VOLUME_ATTACHMENT_URI
-                + "/" + ANY_STORAGE_VOLUME_ATTACHMENT_RESOURCE_ID;
+        String expectedUri = STORAGE_VOLUME_ATTACHMENT_URI
+                + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, StorageVolumeAttachment.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(StorageVolumeAttachment.class).getType());
     }
 
     @Test
     public void shouldGetAllStorageVolumeAttachments() {
-        storageVolumeAttachmentClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.STORAGE_VOLUME_ATTACHMENT_URI,
-                StorageVolumeAttachment.class);
+        Request expectedRequest = new Request(HttpMethod.GET, STORAGE_VOLUME_ATTACHMENT_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<StorageVolumeAttachment>>() {}.getType());
     }
 
     @Test
     public void shouldGetAttachmentPath() {
-        storageVolumeAttachmentClient.getAttachmentPath(ANY_STORAGE_VOLUME_ATTACHMENT_RESOURCE_ID,
-                ANY_STORAGE_VOLUME_ATTACHMENT_PATH_RESOURCE_ID);
+        client.getAttachmentPath(ANY_RESOURCE_ID,
+                ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.STORAGE_VOLUME_ATTACHMENT_URI
-                + "/" + ANY_STORAGE_VOLUME_ATTACHMENT_RESOURCE_ID
-                + "/" + ResourceUris.STORAGE_VOLUME_ATTACHMENT_PATH_URI
-                + "/" + ANY_STORAGE_VOLUME_ATTACHMENT_PATH_RESOURCE_ID;
+        String expectedUri = STORAGE_VOLUME_ATTACHMENT_URI
+                + "/" + ANY_RESOURCE_ID
+                + STORAGE_VOLUME_ATTACHMENT_PATH_URI
+                + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, StorageVolumeAttachmentPath.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(StorageVolumeAttachmentPath.class).getType());
     }
 
     @Test
     public void shouldGetAllAttachmentPaths() {
-        storageVolumeAttachmentClient.getAllAttachmentPaths(ANY_STORAGE_VOLUME_ATTACHMENT_RESOURCE_ID);
+        client.getAllAttachmentPaths(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.STORAGE_VOLUME_ATTACHMENT_URI
-                + "/" + ANY_STORAGE_VOLUME_ATTACHMENT_RESOURCE_ID
-                + "/" + ResourceUris.STORAGE_VOLUME_ATTACHMENT_PATH_URI;
+        String expectedUri = STORAGE_VOLUME_ATTACHMENT_URI
+                + "/" + ANY_RESOURCE_ID
+                + STORAGE_VOLUME_ATTACHMENT_PATH_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResourceList(expectedUri, StorageVolumeAttachmentPath.class);
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<List<StorageVolumeAttachmentPath>>() {}.getType());
     }
 
     @Test
-    public void shouldGetExtraUnmanagedAttachments() {
-        storageVolumeAttachmentClient.getExtraUnmanagedAttachments();
+    public void shouldGetExtraUnmanagedStorageVolumes() {
+        client.getExtraUnmanagedStorageVolumes();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.STORAGE_VOLUME_ATTACHMENT_REPAIR_URI,
-                ExtraStorageVolume.class, new UrlParameter("alertFixType", "ExtraUnmanagedStorageVolumes"));
+        String expectedUri = STORAGE_VOLUME_ATTACHMENT_URI
+                + STORAGE_VOLUME_ATTACHMENT_REPAIR_URI
+                + "?alertFixType=ExtraUnmanagedStorageVolumes";
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<ExtraStorageVolume>>() {}.getType());
     }
 
     @Test
     public void shouldRepairExtraUnmanagedAttachment() {
         ExtraStorageVolumeRepair repair = new ExtraStorageVolumeRepair();
 
-        storageVolumeAttachmentClient.repairExtraUnmanagedAttachment(repair, false);
+        client.repairExtraPresentations(repair, TaskTimeout.of(321));
 
-        then(baseClient).should().createResource(ResourceUris.STORAGE_VOLUME_ATTACHMENT_REPAIR_URI, repair, false);
+        String expectedUri = STORAGE_VOLUME_ATTACHMENT_URI
+                + STORAGE_VOLUME_ATTACHMENT_REPAIR_URI;
+        Request expectedRequest = new Request(HttpMethod.POST, expectedUri, repair);
+        expectedRequest.setTimeout(321);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 }
