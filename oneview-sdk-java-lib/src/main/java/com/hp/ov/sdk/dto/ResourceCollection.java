@@ -100,6 +100,11 @@ public class ResourceCollection<T> extends BaseModelResource {
         this.setCount(this.members.size());
     }
 
+    public void addMembers(List<T> members) {
+        this.members.addAll(members);
+        this.setCount(this.members.size());
+    }
+
     @Override
     public String getResourceId() {
         throw new UnsupportedOperationException();

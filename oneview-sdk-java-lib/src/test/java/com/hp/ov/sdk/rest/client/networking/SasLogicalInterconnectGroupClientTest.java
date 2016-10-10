@@ -17,8 +17,12 @@
 package com.hp.ov.sdk.rest.client.networking;
 
 import static com.hp.ov.sdk.rest.client.networking.SasLogicalInterconnectGroupClient.SAS_LOGICAL_INTERCONNECT_GROUP_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+
+import java.lang.reflect.Type;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,7 +62,10 @@ public class SasLogicalInterconnectGroupClientTest {
 
     @Test
     public void shouldGetAllSasLogicalInterconnectGroups() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
+
         Request expectedRequest = new Request(HttpMethod.GET, SAS_LOGICAL_INTERCONNECT_GROUP_URI);
 
         then(baseClient).should().executeRequest(expectedRequest,

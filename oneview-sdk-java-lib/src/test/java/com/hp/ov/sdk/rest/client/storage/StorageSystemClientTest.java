@@ -20,9 +20,12 @@ import static com.hp.ov.sdk.rest.client.storage.StorageSystemClient.STORAGE_POOL
 import static com.hp.ov.sdk.rest.client.storage.StorageSystemClient.STORAGE_SYSTEM_HOST_TYPES_URI;
 import static com.hp.ov.sdk.rest.client.storage.StorageSystemClient.STORAGE_SYSTEM_MANAGED_PORTS_URI;
 import static com.hp.ov.sdk.rest.client.storage.StorageSystemClient.STORAGE_SYSTEM_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import org.junit.Test;
@@ -66,6 +69,8 @@ public class StorageSystemClientTest {
 
     @Test
     public void shouldGetAllStorageSystem() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, STORAGE_SYSTEM_URI);

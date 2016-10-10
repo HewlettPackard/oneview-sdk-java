@@ -17,8 +17,12 @@
 package com.hp.ov.sdk.rest.client.storage;
 
 import static com.hp.ov.sdk.rest.client.storage.SasLogicalJbodAttachmentClient.SAS_LOGICAL_JBOD_ATTACHMENT_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+
+import java.lang.reflect.Type;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,6 +62,8 @@ public class SasLogicalJbodAttachmentClientTest {
 
     @Test
     public void shouldGetAllSasLogicalJbodAttachments() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, SAS_LOGICAL_JBOD_ATTACHMENT_URI);

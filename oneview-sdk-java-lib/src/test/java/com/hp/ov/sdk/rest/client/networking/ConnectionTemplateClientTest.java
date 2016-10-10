@@ -18,8 +18,12 @@ package com.hp.ov.sdk.rest.client.networking;
 
 import static com.hp.ov.sdk.rest.client.networking.ConnectionTemplateClient.CONNECTION_TEMPLATE_URI;
 import static com.hp.ov.sdk.rest.client.networking.ConnectionTemplateClient.DEFAULT_CONNECTION_TEMPLATE_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+
+import java.lang.reflect.Type;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,6 +61,8 @@ public class ConnectionTemplateClientTest {
 
     @Test
     public void shouldGetAllConnectionTemplate() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, CONNECTION_TEMPLATE_URI);

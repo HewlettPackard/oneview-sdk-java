@@ -20,9 +20,12 @@ import static com.hp.ov.sdk.rest.client.storage.FcSanManagedSanClient.FC_SANS_MA
 import static com.hp.ov.sdk.rest.client.storage.FcSanManagedSanClient.FC_SANS_MANAGED_SAN_ISSUES_URI;
 import static com.hp.ov.sdk.rest.client.storage.FcSanManagedSanClient.FC_SANS_MANAGED_SAN_URI;
 import static com.hp.ov.sdk.rest.client.storage.FcSanManagedSanClient.FC_SANS_WWN_LOCATE_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import org.junit.Test;
@@ -67,7 +70,10 @@ public class FcSanManagedSanClientTest {
 
     @Test
     public void shouldGetAllFcSanManagedSan() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
+
         Request expectedRequest = new Request(HttpMethod.GET, FC_SANS_MANAGED_SAN_URI);
 
         then(baseClient).should().executeRequest(expectedRequest,

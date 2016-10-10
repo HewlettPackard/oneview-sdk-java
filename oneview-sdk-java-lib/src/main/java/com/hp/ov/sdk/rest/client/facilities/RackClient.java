@@ -20,7 +20,7 @@ import com.hp.ov.sdk.dto.rack.Rack;
 import com.hp.ov.sdk.dto.rack.TopologyInformation;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.rest.http.core.UrlQuery;
+import com.hp.ov.sdk.rest.http.core.URIQuery;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 import com.hp.ov.sdk.rest.reflect.Api;
 import com.hp.ov.sdk.rest.reflect.BodyParam;
@@ -123,7 +123,7 @@ public interface RackClient extends
      * @return {@link TaskResource} containing the task status for the process.
      */
     @Endpoint(method = HttpMethod.DELETE)
-    public TaskResource removeByFilter(@QueryParam UrlQuery filter, RequestOption ... options);
+    TaskResource removeByFilter(@QueryParam(key = URIQuery.FILTER) String filter, RequestOption ... options);
 
     /**
      * Retrieves the topology information for the rack resource specified by
@@ -134,6 +134,6 @@ public interface RackClient extends
      * @return {@link TopologyInformation} containing the topology information for the rack.
      */
     @Endpoint(uri = "/{resourceId}" + RACK_DEVICE_TOPOLOGY)
-    public TopologyInformation getDeviceTopology(@PathParam("resourceId") String resourceId);
+    TopologyInformation getDeviceTopology(@PathParam("resourceId") String resourceId);
 
 }

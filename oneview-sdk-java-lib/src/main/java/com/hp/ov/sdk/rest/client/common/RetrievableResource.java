@@ -16,9 +16,11 @@
 
 package com.hp.ov.sdk.rest.client.common;
 
+import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.rest.http.core.URIQuery;
 import com.hp.ov.sdk.rest.reflect.Endpoint;
 import com.hp.ov.sdk.rest.reflect.PathParam;
-import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.rest.reflect.QueryParam;
 
 public interface RetrievableResource<T> {
 
@@ -40,6 +42,38 @@ public interface RetrievableResource<T> {
      * available resources.
      */
     @Endpoint
+    ResourceCollection<T> get();
+
+    /**
+     * Retrieves a paginated collection ({@link ResourceCollection}) containing the details for the
+     * available resources found under the current HPE OneView.
+     *
+     * @param query URI query containing the parameters that should be used to build the request.
+     *
+     * @return {@link ResourceCollection} paginated collection containing the details for the
+     * available resources.
+     */
+    @Endpoint
+    ResourceCollection<T> get(@QueryParam URIQuery query);
+
+    /**
+     * Retrieves a collection ({@link ResourceCollection}) containing the details for <b>all</b>
+     * available resources of a given type found under the current HPE OneView.
+     *
+     * @return {@link ResourceCollection} collection containing the details for the available resources.
+     */
+    @Endpoint
     ResourceCollection<T> getAll();
+
+    /**
+     * Retrieves a collection ({@link ResourceCollection}) containing the details for <b>all</b>
+     * available resources of a given type found under the current HPE OneView.
+     *
+     * @param count defines the number of resources that should be retrieved in each request.
+     *
+     * @return {@link ResourceCollection} collection containing the details for the available resources.
+     */
+    @Endpoint
+    ResourceCollection<T> getAll(@QueryParam(key = URIQuery.COUNT) int count);
 
 }

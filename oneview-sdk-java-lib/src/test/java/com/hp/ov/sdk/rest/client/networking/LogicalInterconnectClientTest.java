@@ -32,9 +32,12 @@ import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOG
 import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_TELEMETRY_CONFIGURATION_URI;
 import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_UNASSIGNED_UPLINK_PORTS_URI;
 import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,6 +93,8 @@ public class LogicalInterconnectClientTest {
 
     @Test
     public void shouldGetAllLogicalInterconnects() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, LOGICAL_INTERCONNECT_URI);

@@ -21,8 +21,12 @@ import static com.hp.ov.sdk.rest.client.storage.StorageVolumeClient.REPAIR_FILTE
 import static com.hp.ov.sdk.rest.client.storage.StorageVolumeClient.REPAIR_URI;
 import static com.hp.ov.sdk.rest.client.storage.StorageVolumeClient.SNAPSHOTS_URI;
 import static com.hp.ov.sdk.rest.client.storage.StorageVolumeClient.STORAGE_VOLUME_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+
+import java.lang.reflect.Type;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,6 +70,8 @@ public class StorageVolumeClientTest {
 
     @Test
     public void shouldGetAllStorageVolumes() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, STORAGE_VOLUME_URI);

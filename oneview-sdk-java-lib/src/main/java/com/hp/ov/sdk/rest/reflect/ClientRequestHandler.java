@@ -17,6 +17,7 @@
 package com.hp.ov.sdk.rest.reflect;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import com.google.common.reflect.AbstractInvocationHandler;
@@ -24,12 +25,13 @@ import com.google.common.reflect.Parameter;
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.dto.FcSansManagedSanTask;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.URIQuery;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.UrlQuery;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 
@@ -38,6 +40,7 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
     public static Object EMPTY_OBJECT = new Object();
 
     private static final String GET_BY_NAME_METHOD = "getByName";
+    private static final String GET_ALL_METHOD = "getAll";
 
     private final BaseClient baseClient;
     private final String baseUri;
@@ -53,15 +56,16 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
     protected Object handleInvocation(Object proxy, Method method, Object[] args) throws Throwable {
         Request request = this.buildRequest(method, args);
 
-        if (TaskResource.class.equals(method.getReturnType())) {
-            return this.baseClient.executeMonitorableRequest(request);
+        if (GET_ALL_METHOD.equals(method.getName())) {
+            return this.handleGetAll(request, this.token.method(method).getReturnType().getType());
+        } else {
+            if (TaskResource.class.equals(method.getReturnType())) {
+                return this.baseClient.executeMonitorableRequest(request);
+            } else if (FcSansManagedSanTask.class.equals(method.getReturnType())) {
+                return new FcSansManagedSanTask(this.baseClient.executeMonitorableRequest(request), new ResourceAdaptor());
+            }
+            return this.baseClient.executeRequest(request, this.token.method(method).getReturnType().getType());
         }
-
-        if (FcSansManagedSanTask.class.equals(method.getReturnType())) {
-            return new FcSansManagedSanTask(this.baseClient.executeMonitorableRequest(request), new ResourceAdaptor());
-        }
-
-        return this.baseClient.executeRequest(request, this.token.method(method).getReturnType().getType());
     }
 
     private Request buildRequest(Method method, Object[] args) {
@@ -88,10 +92,16 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
             if (pathParam != null) {
                 request.setUri(request.getUri().replaceFirst("\\{" + pathParam.value() + "\\}", args[i].toString()));
             } else if (queryParam != null) {
-                UrlQuery query = (UrlQuery) args[i];
+                if (URIQuery.class.isAssignableFrom(args[i].getClass())) {
+                    URIQuery query = (URIQuery) args[i];
 
-                for (UrlParameter parameter : query.parameters()) {
-                    request.addQuery(parameter);
+                    for (UrlParameter parameter : query.value()) {
+                        request.addQuery(parameter);
+                    }
+                } else {
+                    String value = String.valueOf(args[i]);
+
+                    request.addQuery(new UrlParameter(queryParam.key(), value));
                 }
             } else {
                 if (bodyParam != null) {
@@ -116,6 +126,22 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
                 option.apply(request);
             }
         }
+    }
+
+    private ResourceCollection<Object> handleGetAll(Request request, Type returnType) {
+        ResourceCollection<Object> resources = new ResourceCollection<>();
+
+        do {
+            ResourceCollection<Object> response = (ResourceCollection<Object>)
+                    this.baseClient.executeRequest(request, returnType);
+
+            resources.addMembers(response.getMembers());
+            resources.setTotal(response.getTotal());
+
+            request = new Request(HttpMethod.GET, response.getNextPageUri());
+        } while (resources.getCount() < resources.getTotal());
+
+        return resources;
     }
 
 }

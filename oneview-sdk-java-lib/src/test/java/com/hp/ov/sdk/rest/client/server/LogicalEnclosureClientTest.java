@@ -21,8 +21,12 @@ import static com.hp.ov.sdk.rest.client.server.LogicalEnclosureClient.LOGICAL_EN
 import static com.hp.ov.sdk.rest.client.server.LogicalEnclosureClient.SCRIPT_URI;
 import static com.hp.ov.sdk.rest.client.server.LogicalEnclosureClient.SUPPORT_DUMP_URI;
 import static com.hp.ov.sdk.rest.client.server.LogicalEnclosureClient.UPDATE_FROM_GROUP_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+
+import java.lang.reflect.Type;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -65,6 +69,8 @@ public class LogicalEnclosureClientTest {
 
     @Test
     public void shouldGetAllLogicalEnclosure() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, LOGICAL_ENCLOSURE_URI);

@@ -20,11 +20,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.hp.ov.sdk.rest.http.core.URIQuery;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.UrlQuery;
 
-public class FirmwareInventoryFilter implements UrlQuery {
+public class FirmwareInventoryFilter implements URIQuery {
 
     private static final String COMPONENT_NAME = "components.componentName";
     private static final String COMPONENT_LOCATION = "components.componentLocation";
@@ -63,7 +63,7 @@ public class FirmwareInventoryFilter implements UrlQuery {
     }
 
     @Override
-    public List<UrlParameter> parameters() {
-        return ImmutableList.copyOf(this.filters.values());
+    public List<UrlParameter> value() {
+        return Lists.newArrayList(this.filters.values());
     }
 }

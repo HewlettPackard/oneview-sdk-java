@@ -18,9 +18,12 @@ package com.hp.ov.sdk.rest.client.facilities;
 
 import static com.hp.ov.sdk.rest.client.facilities.DataCenterClient.DATA_CENTER_URI;
 import static com.hp.ov.sdk.rest.client.facilities.DataCenterClient.DATA_CENTER_VISUAL_CONTENT_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import org.junit.Test;
@@ -33,7 +36,6 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.facilities.datacenter.DataCenter;
 import com.hp.ov.sdk.dto.facilities.datacenter.VisualContent;
 import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.client.GenericFilter;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
@@ -62,6 +64,8 @@ public class DataCenterClientTest {
 
     @Test
     public void shouldGetAllDataCenter() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         dataCenterClient.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, DATA_CENTER_URI);
@@ -120,15 +124,13 @@ public class DataCenterClientTest {
 
     @Test
     public void shouldRemoveDataCenterByFilter() {
-
-        GenericFilter filter = new GenericFilter();
-        filter.setFilter("'name' = '" + ANY_RESOURCE_NAME + "'");
+        String filter = "'name' = '" + ANY_RESOURCE_NAME + "'";
         dataCenterClient.removeByFilter(filter, TaskTimeout.of(321));
 
         String expectedUri = DATA_CENTER_URI;
         Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        expectedRequest.addQuery(new UrlParameter("filter", filter.parameters().get(0).getValue()));
+        expectedRequest.addQuery(new UrlParameter("filter", filter));
 
         expectedRequest.setTimeout(321);
 

@@ -14,19 +14,28 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.rest.reflect;
+package com.hp.ov.sdk.rest.http.core;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.collect.ImmutableList;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.PARAMETER)
-public @interface QueryParam {
+public class BasicURIQuery implements URIQuery {
 
-    String key() default StringUtils.EMPTY;
+    private List<UrlParameter> parameters = new LinkedList<>();
+
+    public boolean addParameter(UrlParameter parameter) {
+        return this.parameters.add(parameter);
+    }
+
+    public boolean addParameter(String key, String value) {
+        return this.parameters.add(new UrlParameter(key, value));
+    }
+
+    @Override
+    public List<UrlParameter> value() {
+        return ImmutableList.copyOf(this.parameters);
+    }
 
 }

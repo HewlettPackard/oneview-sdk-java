@@ -19,8 +19,12 @@ package com.hp.ov.sdk.rest.client.storage;
 import static com.hp.ov.sdk.rest.client.storage.DriveEnclosureClient.DRIVE_ENCLOSURE_URI;
 import static com.hp.ov.sdk.rest.client.storage.DriveEnclosureClient.PORT_MAP_URI;
 import static com.hp.ov.sdk.rest.client.storage.DriveEnclosureClient.REFRESH_STATE_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+
+import java.lang.reflect.Type;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,6 +66,8 @@ public class DriveEnclosureClientTest {
 
     @Test
     public void shouldGetAllDriveEnclosures() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, DRIVE_ENCLOSURE_URI);

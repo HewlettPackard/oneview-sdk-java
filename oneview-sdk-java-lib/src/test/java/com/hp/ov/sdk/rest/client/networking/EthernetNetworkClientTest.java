@@ -16,13 +16,16 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.ETHERNET_URI;
 import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.BULK_ETHERNET_URI;
 import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.ASSOCIATED_UPLINK_GROUPS;
 import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.ASSOCIATED_PROFILES;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import org.junit.Test;
@@ -62,6 +65,8 @@ public class EthernetNetworkClientTest {
 
     @Test
     public void shouldGetAllEthernetNetwork() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, ETHERNET_URI);

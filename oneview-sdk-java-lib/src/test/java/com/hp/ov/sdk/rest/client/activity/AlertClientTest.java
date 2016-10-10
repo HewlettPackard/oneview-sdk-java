@@ -18,8 +18,12 @@ package com.hp.ov.sdk.rest.client.activity;
 
 import static com.hp.ov.sdk.rest.client.activity.AlertClient.ALERTS_CHANGELOG_URI;
 import static com.hp.ov.sdk.rest.client.activity.AlertClient.ALERTS_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+
+import java.lang.reflect.Type;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,6 +62,8 @@ public class AlertClientTest {
 
     @Test
     public void shouldGetAllAlerts() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, ALERTS_URI);

@@ -26,9 +26,12 @@ import static com.hp.ov.sdk.rest.client.server.ServerProfileClient.SERVER_PROFIL
 import static com.hp.ov.sdk.rest.client.server.ServerProfileClient.SERVER_PROFILE_COMPLIANCE_TRANSFORMATION_URI;
 import static com.hp.ov.sdk.rest.client.server.ServerProfileClient.SERVER_PROFILE_PROFILE_PORTS_URI;
 import static com.hp.ov.sdk.rest.client.server.ServerProfileClient.SERVER_PROFILE_URI;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import org.junit.Test;
@@ -81,6 +84,8 @@ public class ServerProfileClientTest {
 
     @Test
     public void shouldGetAllServerProfile() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
         client.getAll();
 
         Request expectedRequest = new Request(HttpMethod.GET, SERVER_PROFILE_URI);

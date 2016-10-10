@@ -18,8 +18,13 @@ package com.hp.ov.sdk.rest.http.core;
 
 import java.util.List;
 
-public interface UrlQuery {
+public interface URIQuery {
 
-    List<UrlParameter> parameters();
+    String COUNT = "count";
+    String START = "start";
+    String FORCE = "force";
+    String FILTER = "filter";
+
+    List<UrlParameter> value();
 
 }
