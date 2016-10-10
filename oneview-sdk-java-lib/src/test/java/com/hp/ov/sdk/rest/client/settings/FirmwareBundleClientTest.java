@@ -16,9 +16,10 @@
 
 package com.hp.ov.sdk.rest.client.settings;
 
+import static com.hp.ov.sdk.rest.client.settings.FirmwareBundleClient.FIRMWARE_BUNDLE_URI;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.mock;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import java.io.File;
 
@@ -28,11 +29,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.ContentType;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -54,7 +54,7 @@ public class FirmwareBundleClientTest {
         client.add(firmwareBundleFile, false);
 
         Request expectedRequest = new Request(HttpMethod.POST,
-                ResourceUris.FIRMWARE_BUNDLE_URI, firmwareBundleFile);
+                FIRMWARE_BUNDLE_URI, firmwareBundleFile);
 
         expectedRequest.setContentType(ContentType.MULTIPART_FORM_DATA);
         expectedRequest.setTimeout(300000);

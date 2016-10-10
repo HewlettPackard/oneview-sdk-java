@@ -165,7 +165,8 @@ public class OneViewClient {
     }
 
     public synchronized FirmwareDriverClient firmwareDriver() {
-        return this.getClient(FirmwareDriverClient.class);
+        return Reflection.newProxy(FirmwareDriverClient.class,
+                new ClientRequestHandler<>(this.baseClient, FirmwareDriverClient.class));
     }
 
     public synchronized InterconnectClient interconnect() {

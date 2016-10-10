@@ -16,18 +16,24 @@
 
 package com.hp.ov.sdk.rest.client.settings;
 
+import static com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient.FIRMWARE_DRIVER_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.firmware.FwBaseline;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FirmwareDriverClientTest {
@@ -35,43 +41,50 @@ public class FirmwareDriverClientTest {
     private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private FirmwareDriverClient client;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private FirmwareDriverClient client = Reflection.newProxy(FirmwareDriverClient.class,
+            new ClientRequestHandler<>(baseClient, FirmwareDriverClient.class));
 
     @Test
     public void shouldGetFirmwareDriverById() {
         client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.FIRMWARE_DRIVER_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = FIRMWARE_DRIVER_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, FwBaseline.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(FwBaseline.class).getType());
     }
 
     @Test
     public void shouldGetAllFirmwareDrivers() {
         client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.FIRMWARE_DRIVER_URI, FwBaseline.class);
+        Request expectedRequest = new Request(HttpMethod.GET, FIRMWARE_DRIVER_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<FwBaseline>>() {}.getType());
     }
 
     @Test
     public void shouldGetFirmwareDriverByName() {
         client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.FIRMWARE_DRIVER_URI,
-                FwBaseline.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, FIRMWARE_DRIVER_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<FwBaseline>>() {}.getType());
     }
 
     @Test
     public void shouldDeleteFirmwareDriver() {
-        client.delete(ANY_RESOURCE_ID, false);
+        client.delete(ANY_RESOURCE_ID, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.FIRMWARE_DRIVER_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = FIRMWARE_DRIVER_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
+        expectedRequest.setTimeout(321);
 
-        then(baseClient).should().deleteResource(expectedUri, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
 }
