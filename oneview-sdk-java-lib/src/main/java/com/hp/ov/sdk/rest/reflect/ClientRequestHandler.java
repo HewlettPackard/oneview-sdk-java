@@ -22,6 +22,8 @@ import java.util.List;
 import com.google.common.reflect.AbstractInvocationHandler;
 import com.google.common.reflect.Parameter;
 import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.adaptors.ResourceAdaptor;
+import com.hp.ov.sdk.dto.FcSansManagedSanTask;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.ContentType;
@@ -54,6 +56,11 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
         if (TaskResource.class.equals(method.getReturnType())) {
             return this.baseClient.executeMonitorableRequest(request);
         }
+
+        if (FcSansManagedSanTask.class.equals(method.getReturnType())) {
+            return new FcSansManagedSanTask(this.baseClient.executeMonitorableRequest(request), new ResourceAdaptor());
+        }
+
         return this.baseClient.executeRequest(request, this.token.method(method).getReturnType().getType());
     }
 

@@ -150,7 +150,8 @@ public class OneViewClient {
     }
 
     public synchronized FcSanManagedSanClient fcSanManagedSan() {
-        return this.getClient(FcSanManagedSanClient.class);
+        return Reflection.newProxy(FcSanManagedSanClient.class,
+                new ClientRequestHandler<>(this.baseClient, FcSanManagedSanClient.class));
     }
 
     public synchronized FcSanProviderClient fcSanProvider() {
