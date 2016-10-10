@@ -232,7 +232,8 @@ public class OneViewClient {
     }
 
     public synchronized SasInterconnectTypeClient sasInterconnectType() {
-        return this.getClient(SasInterconnectTypeClient.class);
+        return Reflection.newProxy(SasInterconnectTypeClient.class,
+                new ClientRequestHandler<>(this.baseClient, SasInterconnectTypeClient.class));
     }
 
     public synchronized SasLogicalInterconnectClient sasLogicalInterconnect() {
