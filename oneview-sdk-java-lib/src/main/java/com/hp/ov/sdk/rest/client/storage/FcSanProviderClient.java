@@ -1,6 +1,6 @@
 /*
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
- *  
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,13 +15,16 @@
  */
 package com.hp.ov.sdk.rest.client.storage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.DeviceManagerResponse;
 import com.hp.ov.sdk.dto.SanProviderResponse;
-import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.dto.TaskResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
 /**
  * A provider is a software plugin for the SAN Resource Manager that enables the resource manager
@@ -29,55 +32,37 @@ import com.hp.ov.sdk.rest.client.BaseClient;
  * The SAN Resource Manager includes a provider that communicates with Brocade Network Advisor or
  * HPE SAN Network Advisor systems, and another that communicates with HPE 5900 series switches.
  */
-public class FcSanProviderClient {
+@Api(FcSanProviderClient.FC_SANS_PROVIDER_URI)
+public interface FcSanProviderClient extends
+        SearchableResource<SanProviderResponse> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FcSanProviderClient.class);
-
-    private final BaseClient baseClient;
-
-    public FcSanProviderClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
+    String FC_SANS_PROVIDER_URI = "/rest/fc-sans/providers";
+    String FC_SANS_PROVIDER_DEVICE_MANAGER_URI = "/device-managers";
 
     /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link SanProviderResponse}&gt; containing details
-     * for all the available SAN providers found under the current HPE OneView.
+     * Adds a resource according to the provided <code>resource</code> object.
      *
-     * @return {@link ResourceCollection}&lt;{@link SanProviderResponse}&gt; containing
-     * the details for all found SAN providers.
+     * <p>According to the resource type, the add action can take some time to complete.
+     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
+     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
+     * the default behavior is to wait until the add action completes. Below is an example that
+     * illustrates how the timeout can be specified:
+     *
+     * <pre>{@code
+     *     SomeClient client = oneViewClient.someClient();
+     *     SomeResource resource = new SomeResource();
+     *     TaskResource task = client.add(resource, TaskTimeout.of(5000)); //5 secs
+     * }</pre>
+     *
+     * @param providerId The ID of the provider of the device manager
+     * @param deviceManager object containing the SAN manager credential details.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
+     *
+     * @return {@link TaskResource} containing the task status for the process.
      */
-    public ResourceCollection<SanProviderResponse> getAll() {
-        LOGGER.info("FcSanProviderClient : getAll : Start");
-
-        ResourceCollection<SanProviderResponse> sanProviders = baseClient.getResourceCollection(
-                ResourceUris.FC_SANS_PROVIDER_URI, SanProviderResponse.class);
-
-        LOGGER.info("FcSanProviderClient : getAll : End");
-
-        return sanProviders;
-    }
-
-    /**
-     * Retrieves the SAN provider found under the current HPE OneView that match the name.
-     *
-     * @param displayName SAN provider name as seen in HPE OneView.
-     *
-     * @return {@link SanProviderResponse} details for the found SAN provider.
-     */
-    public SanProviderResponse getByName(String displayName) {
-        LOGGER.info("FcSanProviderClient : getByName : start");
-
-        SanProviderResponse sanProviderResponse = null;
-
-        for (SanProviderResponse sanProvider : getAll().getMembers()) {
-            if (sanProvider.getDisplayName().equals(displayName)) {
-                sanProviderResponse = sanProvider;
-                break;
-            }
-        }
-        LOGGER.info("FcSanProviderClient : getByName : end");
-
-        return sanProviderResponse;
-    }
+    @Endpoint(uri = "/{providerId}" + FC_SANS_PROVIDER_DEVICE_MANAGER_URI ,method = HttpMethod.POST)
+    public TaskResource addSanManager(@PathParam("providerId") String providerId,
+            @BodyParam DeviceManagerResponse deviceManager, RequestOption... options);
 
 }

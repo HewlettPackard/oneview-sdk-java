@@ -15,173 +15,32 @@
  */
 package com.hp.ov.sdk.rest.client.storage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.DeviceManagerResponse;
+import com.hp.ov.sdk.rest.client.common.RemovableResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.client.common.UpdatableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResource;
-import com.hp.ov.sdk.dto.TaskState;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class FcSanDeviceManagerClient {
+@Api(FcSanDeviceManagerClient.FC_SANS_DEVICE_MANAGER_URI)
+public interface FcSanDeviceManagerClient extends
+        SearchableResource<DeviceManagerResponse>,
+        UpdatableResource<DeviceManagerResponse>,
+        RemovableResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FcSanDeviceManagerClient.class);
+    String FC_SANS_DEVICE_MANAGER_URI = "/rest/fc-sans/device-managers";
 
-    private final BaseClient baseClient;
-
-    public FcSanDeviceManagerClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
 
     /**
-     * Retrieves the {@link DeviceManagerResponse} details for the specified SAN manager.
+     * Removes the resource identified by the provided <code>resourceId</code>.
      *
-     * @param resourceId SAN manager resource identifier as seen in HPE OneView.
+     * @param resourceId resource identifier as seen in HPE OneView.
      *
-     * @return {@link DeviceManagerResponse} object containing the details.
+     * @return {@link String} object containing the result of this request.
      */
-    public DeviceManagerResponse getById(String resourceId) {
-        LOGGER.info("FcSanDeviceManagerClient : getById : Start");
-
-        DeviceManagerResponse deviceManager = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.FC_SANS_DEVICE_MANAGER_URI, resourceId),
-                DeviceManagerResponse.class);
-
-        LOGGER.info("FcSanDeviceManagerClient : getById : End");
-
-        return deviceManager;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link DeviceManagerResponse}&gt; containing details
-     * for all the available SAN managers found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link DeviceManagerResponse}&gt; containing
-     * the details for all found SAN managers.
-     */
-    public ResourceCollection<DeviceManagerResponse> getAll() {
-        LOGGER.info("FcSanDeviceManagerClient : getAll : Start");
-
-        ResourceCollection<DeviceManagerResponse> deviceManagers = baseClient.getResourceCollection(
-                ResourceUris.FC_SANS_DEVICE_MANAGER_URI, DeviceManagerResponse.class);
-
-        LOGGER.info("FcSanDeviceManagerClient : getAll : End");
-
-        return deviceManagers;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link DeviceManagerResponse}&gt; containing details
-     * for the available SAN managers found under the current HPE OneView that match the name.
-     *
-     * @param name SAN manager name as seen in HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link DeviceManagerResponse}&gt; containing
-     * the details for the found SAN managers.
-     */
-    public ResourceCollection<DeviceManagerResponse> getByName(String name) {
-        LOGGER.info("FcSanDeviceManagerClient : getByName : Start");
-
-        ResourceCollection<DeviceManagerResponse> deviceManagers = baseClient.getResourceCollection(
-                ResourceUris.FC_SANS_DEVICE_MANAGER_URI, DeviceManagerResponse.class,
-                UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("FcSanDeviceManagerClient : getByName : End");
-
-        return deviceManagers;
-    }
-
-    /**
-     * Adds a SAN manager according to the provided {@link DeviceManagerResponse} object and provider URI.
-     * The request can be processed synchronously or asynchronously.
-     *
-     * @param providerDeviceManagerUri URI for the provider of the device manager
-     * @param deviceManager object containing the SAN manager credential details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource add(String providerDeviceManagerUri,
-            DeviceManagerResponse deviceManager, boolean aSync) {
-        LOGGER.info("FcSanDeviceManagerClient : add : Start");
-
-        Request request = new Request(HttpMethod.POST, providerDeviceManagerUri, deviceManager);
-
-        request.setForceReturnTask(true);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("FcSanDeviceManagerClient : add : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Updates a SAN manager identified by the given resource identifier.
-     *
-     * @param resourceId SAN manager resource identifier as seen in HPE OneView.
-     * @param deviceManager object containing the SAN manager details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource update(String resourceId, DeviceManagerResponse deviceManager, boolean aSync) {
-        LOGGER.info("FcSanDeviceManagerClient : update : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(ResourceUris.FC_SANS_DEVICE_MANAGER_URI, resourceId), deviceManager);
-
-        request.setForceReturnTask(true);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("FcSanDeviceManagerClient : update : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Removes the SAN manager identified by the given resource identifier.
-     *
-     * @param resourceId SAN manager resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource remove(String resourceId, boolean aSync) {
-        LOGGER.info("FcSanDeviceManagerClient : remove : Start");
-
-        String requestUri = UrlUtils.createUrl(ResourceUris.FC_SANS_DEVICE_MANAGER_URI, resourceId);
-
-        TaskResource taskResource;
-
-        // OV 2.0 returns code 200 with no task and the string ""OK"" in the body
-        // This IF should catch responses from OV 3.0+
-        if (this.baseClient.getApiVersion().getValue() >= ApiVersion.V_300.getValue()) {
-            taskResource = baseClient.deleteResource(requestUri, aSync);
-        } else {
-            Request request = new Request(HttpMethod.DELETE, requestUri);
-
-            this.baseClient.executeRequest(request, String.class);
-
-            taskResource = new TaskResource();
-            taskResource.setComputedPercentComplete(Integer.valueOf(100));
-            taskResource.setTaskState(TaskState.Completed);
-        }
-
-        LOGGER.info("FcSanDeviceManagerClient : remove : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.DELETE)
+    String remove_V120_200(@PathParam("resourceId") String resourceId);
 
 }

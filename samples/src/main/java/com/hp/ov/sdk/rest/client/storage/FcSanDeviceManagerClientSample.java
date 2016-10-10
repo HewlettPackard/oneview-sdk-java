@@ -15,9 +15,6 @@
  */
 package com.hp.ov.sdk.rest.client.storage;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +23,6 @@ import com.hp.ov.sdk.dto.DeviceManagerResponse;
 import com.hp.ov.sdk.dto.Property;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.SanProviderResponse;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
@@ -40,29 +36,21 @@ public class FcSanDeviceManagerClientSample {
     private static final Logger LOGGER = LoggerFactory.getLogger(FcSanDeviceManagerClientSample.class);
 
     private final FcSanDeviceManagerClient fcSanDeviceManagerClient;
-    private final FcSanProviderClient fcSanProviderClient;
 
     // test values - user input
     // ================================
-    private static final String PROVIDER_NAME = "Brocade Network Advisor";
-    private static final String RESOURCE_ID = "841d3cdc-81c0-4644-baaa-b16b2df77547";
+    private static final String RESOURCE_ID = "2e1fabc7-88eb-4884-899b-a6740130d094";
     private static final String RESOURCE_NAME = "172.18.15.1";
     private static final String HOSTNAME = "Host";
     private static final String HOSTNAME_VALUE = "172.18.15.1";
-    private static final String USERNAME = "Username";
-    private static final String USERNAME_VALUE = "dcs";
     private static final String PASSWORD = "Password";
     private static final String PASSWORD_VALUE = "dcs";
-    private static final String PORT = "Port";
-    private static final String USE_SSL = "UseSsl";
-    private static final String USE_SSL_VALUE = "true";
     // ================================
 
     private FcSanDeviceManagerClientSample() {
         OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
-        
+
         fcSanDeviceManagerClient = oneViewClient.fcSanDeviceManager();
-        fcSanProviderClient = oneViewClient.fcSanProvider();
     }
 
     private void getFcSanDeviceManagerById() {
@@ -83,16 +71,6 @@ public class FcSanDeviceManagerClientSample {
         LOGGER.info("DeviceManagerResponse object returned to client: {}", deviceManager.toJsonString());
     }
 
-    private void addFcSanDeviceManager() {
-        SanProviderResponse sanProvider = fcSanProviderClient.getByName(PROVIDER_NAME);
-        DeviceManagerResponse deviceManager = this.buildDeviceManager(sanProvider);
-
-        TaskResource taskResource = fcSanDeviceManagerClient.add(sanProvider.getDeviceManagersUri(),
-                deviceManager, false);
-
-        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
-    }
-
     private void updateFcSanDeviceManager() {
         DeviceManagerResponse deviceManager = this.fcSanDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
 
@@ -100,80 +78,49 @@ public class FcSanDeviceManagerClientSample {
         deviceManager.setRefreshState(RefreshState.RefreshPending);
 
         TaskResource taskResource = fcSanDeviceManagerClient.update(deviceManager.getResourceId(),
-                deviceManager, false);
+                deviceManager);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void removeFcSanDeviceManager() {
         DeviceManagerResponse deviceManager = this.fcSanDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
-        TaskResource taskResource = this.fcSanDeviceManagerClient.remove(deviceManager.getResourceId(), false);
+        TaskResource taskResource = this.fcSanDeviceManagerClient.remove(deviceManager.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
+    private void removeFcSanDeviceManager120_200() {
+        DeviceManagerResponse deviceManager = this.fcSanDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
+        String response = this.fcSanDeviceManagerClient.remove_V120_200(deviceManager.getResourceId());
+
+        LOGGER.info("String object returned to client: {}", response);
+    }
+
     private DeviceManagerResponse updateHostConnectionDetails(DeviceManagerResponse deviceManager) {
         for (Property property : deviceManager.getConnectionInfo()) {
-            if (property.getName().equalsIgnoreCase("host")) {
+            if (property.getName().equalsIgnoreCase(HOSTNAME)) {
                 property.setValue(HOSTNAME_VALUE);
             }
-            if (property.getName().equalsIgnoreCase("password")) {
+            if (property.getName().equalsIgnoreCase(PASSWORD)) {
                 property.setValue(PASSWORD_VALUE);
             }
         }
         return deviceManager;
     }
 
-    private DeviceManagerResponse buildDeviceManager(SanProviderResponse sanProviderResponse) {
-        DeviceManagerResponse deviceManagerResponseDto = new DeviceManagerResponse();
-        List<Property> connectionInfo = new ArrayList<>();
-        String portValue = "";
-        for (Property property : sanProviderResponse.getDefaultConnectionInfo()) {
-            if (property.getDisplayName().contains("Port")) {
-                portValue = property.getValue();
-            }
-        }
-
-        Property host = new Property();
-        host.setName(HOSTNAME);
-        host.setValue(HOSTNAME_VALUE);
-
-        Property port = new Property();
-        port.setName(PORT);
-        port.setValue(portValue);
-
-        Property user = new Property();
-        user.setName(USERNAME);
-        user.setValue(USERNAME_VALUE);
-
-        Property password = new Property();
-        password.setName(PASSWORD);
-        password.setValue(PASSWORD_VALUE);
-
-        Property useSsl = new Property();
-        useSsl.setName(USE_SSL);
-        useSsl.setValue(USE_SSL_VALUE);
-
-        connectionInfo.add(host);
-        connectionInfo.add(port);
-        connectionInfo.add(user);
-        connectionInfo.add(password);
-        connectionInfo.add(useSsl);
-
-        deviceManagerResponseDto.setConnectionInfo(connectionInfo);
-
-        return deviceManagerResponseDto;
-    }
-
     public static void main(final String[] args) throws Exception {
         FcSanDeviceManagerClientSample client = new FcSanDeviceManagerClientSample();
-
-        client.addFcSanDeviceManager();
 
         client.getFcSanDeviceManagerById();
         client.getAllFcSanDeviceManagers();
         client.getFcSanDeviceManagerByName();
         client.updateFcSanDeviceManager();
+
+        //  OneView 1.2 & 2.0
+        client.removeFcSanDeviceManager120_200();
+
+        // OneView 3.0
         client.removeFcSanDeviceManager();
     }
 }
