@@ -16,17 +16,23 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.networking.InterconnectLinkTopologyClient.INTERCONNECT_LINK_TOPOLOGY_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.interconnectlinktopologies.InterconnectLinkTopology;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InterconnectLinkTopologyClientTest {
@@ -34,34 +40,38 @@ public class InterconnectLinkTopologyClientTest {
     private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private InterconnectLinkTopologyClient client;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private InterconnectLinkTopologyClient client = Reflection.newProxy(InterconnectLinkTopologyClient.class,
+            new ClientRequestHandler<>(baseClient, InterconnectLinkTopologyClient.class));
 
     @Test
     public void shouldGetInterconnectLinkTopology() {
         client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = InterconnectLinkTopologyClient.INTERCONNECT_LINK_TOPOLOGY_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = INTERCONNECT_LINK_TOPOLOGY_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, InterconnectLinkTopology.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(InterconnectLinkTopology.class).getType());
     }
 
     @Test
     public void shouldGetAllInterconnectLinkTopology() {
         client.getAll();
+        Request expectedRequest = new Request(HttpMethod.GET, INTERCONNECT_LINK_TOPOLOGY_URI);
 
-        then(baseClient).should().getResourceCollection(InterconnectLinkTopologyClient.INTERCONNECT_LINK_TOPOLOGY_URI, InterconnectLinkTopology.class);
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<InterconnectLinkTopology>>() {}.getType());
     }
 
     @Test
     public void shouldGetInterconnectLinkTopologiesByName() {
         client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(InterconnectLinkTopologyClient.INTERCONNECT_LINK_TOPOLOGY_URI,
-                InterconnectLinkTopology.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, INTERCONNECT_LINK_TOPOLOGY_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<InterconnectLinkTopology>>() {}.getType());
     }
 
 }
