@@ -79,7 +79,6 @@ public class ResourceUris {
     public static final String STORAGE_SYSTEM_HOST_TYPES_URI = STORAGE_SYSTEM_URI + "/host-types";
     public static final String STORAGE_VOLUME_ATTACHMENT_PATH_URI = "paths";
     public static final String STORAGE_VOLUME_ATTACHMENT_REPAIR_URI = STORAGE_VOLUME_ATTACHMENT_URI + "/repair";
-    public static final String SWITCH_TYPE_URI = "/rest/switch-types";
     public static final String TASK_URI = "/rest/tasks";
     public static final String WITHOUT_ETHERNET = "withoutEthernet";
 

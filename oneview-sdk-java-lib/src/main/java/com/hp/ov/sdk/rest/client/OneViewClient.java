@@ -298,7 +298,8 @@ public class OneViewClient {
     }
 
     public synchronized SwitchTypeClient switchType() {
-        return this.getClient(SwitchTypeClient.class);
+        return Reflection.newProxy(SwitchTypeClient.class,
+                new ClientRequestHandler<>(this.baseClient, SwitchTypeClient.class));
     }
 
     public synchronized UnmanagedDeviceClient unmanagedDevice() {

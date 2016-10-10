@@ -16,52 +16,62 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.networking.SwitchTypeClient.SWITCH_TYPE_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.InterconnectType;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SwitchTypeClientTest {
 
-    private static final String ANY_SWITCH_TYPE_RESOURCE_ID = "random-UUID";
-    private static final String ANY_SWITCH_TYPE_RESOURCE_NAME = "random-Name";
+    private static final String ANY_RESOURCE_ID = "random-UUID";
+    private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private SwitchTypeClient switchClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private SwitchTypeClient client = Reflection.newProxy(SwitchTypeClient.class,
+            new ClientRequestHandler<>(baseClient, SwitchTypeClient.class));
 
     @Test
     public void shouldGetSwitchType() {
-        switchClient.getById(ANY_SWITCH_TYPE_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.SWITCH_TYPE_URI + "/" + ANY_SWITCH_TYPE_RESOURCE_ID;
+        String expectedUri = SWITCH_TYPE_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, InterconnectType.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(InterconnectType.class).getType());
     }
 
     @Test
     public void shouldGetAllSwitchType() {
-        switchClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.SWITCH_TYPE_URI, InterconnectType.class);
+        Request expectedRequest = new Request(HttpMethod.GET, SWITCH_TYPE_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<InterconnectType>>() {}.getType());
     }
 
     @Test
     public void shouldGetSwitchTypesByName() {
-        switchClient.getByName(ANY_SWITCH_TYPE_RESOURCE_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.SWITCH_TYPE_URI,
-                InterconnectType.class, UrlParameter.getFilterByNameParameter(ANY_SWITCH_TYPE_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, SWITCH_TYPE_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<InterconnectType>>() {}.getType());
     }
 }
