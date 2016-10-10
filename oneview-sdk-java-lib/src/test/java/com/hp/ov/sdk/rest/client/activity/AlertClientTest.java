@@ -16,97 +16,97 @@
 
 package com.hp.ov.sdk.rest.client.activity;
 
+import static com.hp.ov.sdk.rest.client.activity.AlertClient.ALERTS_CHANGELOG_URI;
+import static com.hp.ov.sdk.rest.client.activity.AlertClient.ALERTS_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.base.Optional;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.alerts.AlertResource;
 import com.hp.ov.sdk.dto.alerts.AlertUpdate;
 import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AlertClientTest {
 
-    private static final String ANY_ALERT_RESOURCE_ID = "random-UUID";
-    private static final String ANY_ALERT_FILTER = "random-Filter";
-    private static final String ANY_ALERT_CHANGE_LOG_ID = "random-ChangeLog";
+    private static final String ANY_RESOURCE_ID = "random-UUID";
+    private static final String ANY_FILTER = "random-Filter";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private AlertClient alertClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private AlertClient client = Reflection.newProxy(AlertClient.class,
+            new ClientRequestHandler<>(baseClient, AlertClient.class));
 
     @Test
     public void shouldGetAlert() {
-        alertClient.getById(ANY_ALERT_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = AlertClient.ALERTS_URI + "/" + ANY_ALERT_RESOURCE_ID;
+        String expectedUri = ALERTS_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, AlertResource.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(AlertResource.class).getType());
     }
 
     @Test
     public void shouldGetAllAlerts() {
-        alertClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(AlertClient.ALERTS_URI, AlertResource.class);
+        Request expectedRequest = new Request(HttpMethod.GET, ALERTS_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<AlertResource>>() {}.getType());
     }
 
     @Test
     public void shouldUpdateAlert() {
         AlertUpdate alertUpdate = new AlertUpdate();
 
-        alertClient.update(ANY_ALERT_RESOURCE_ID, alertUpdate);
+        client.update(ANY_RESOURCE_ID, alertUpdate);
 
-        String expectedUri = AlertClient.ALERTS_URI + "/" + ANY_ALERT_RESOURCE_ID;
-        Request request = new Request(HttpMethod.PUT, expectedUri, alertUpdate);
+        String expectedUri = ALERTS_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, alertUpdate);
 
-        then(baseClient).should().executeRequest(request, AlertResource.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(AlertResource.class).getType());
     }
 
     @Test
     public void shouldDeleteAlert() {
-        alertClient.delete(ANY_ALERT_RESOURCE_ID);
+        client.delete(ANY_RESOURCE_ID);
 
-        String expectedUri = AlertClient.ALERTS_URI + "/" + ANY_ALERT_RESOURCE_ID;
-        Request request = new Request(HttpMethod.DELETE, expectedUri);
+        String expectedUri = ALERTS_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().executeRequest(request, String.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(String.class).getType());
     }
 
     @Test
     public void shouldDeleteAlertsByFilterWithFilter() {
-        alertClient.deleteByFilter(Optional.of(ANY_ALERT_FILTER), false);
+        client.deleteByFilter(ANY_FILTER, TaskTimeout.of(321));
 
-        UrlParameter filter = new UrlParameter("filter", ANY_ALERT_FILTER);
+        String expectedUri = ALERTS_URI + "?filter=" + ANY_FILTER;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
+        expectedRequest.setTimeout(321);
 
-        then(baseClient).should().deleteResource(AlertClient.ALERTS_URI, false, filter);
-    }
-
-    @Test
-    public void shouldDeleteAlertsByFilterWithoutFilter() {
-        alertClient.deleteByFilter(Optional.<String>absent(), false);
-
-        then(baseClient).should().deleteResource(AlertClient.ALERTS_URI, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldDeleteAlertChangeLog() {
-        alertClient.deleteAlertChangeLog(ANY_ALERT_CHANGE_LOG_ID);
+        client.deleteAlertChangeLog(ANY_RESOURCE_ID);
 
-        String expectedUri = AlertClient.ALERTS_CHANGELOG_URI + "/" + ANY_ALERT_CHANGE_LOG_ID;
-        Request request = new Request(HttpMethod.DELETE, expectedUri);
+        String expectedUri = ALERTS_URI + ALERTS_CHANGELOG_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().executeRequest(request, String.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(String.class).getType());
     }
 
 }

@@ -19,7 +19,6 @@ package com.hp.ov.sdk.rest.client.activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Optional;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
@@ -34,8 +33,8 @@ public class AlertClientSample {
 
     // These are variables to be defined by the user
     // ================================
-    private static final String ALERT_RESOURCE_ID = "56";
-    private static final String ALERT_CHANGE_LOG_ID = "107";
+    private static final String ALERT_RESOURCE_ID = "4";
+    private static final String ALERT_CHANGE_LOG_ID = "9";
     // ================================
 
     private final AlertClient client;
@@ -71,21 +70,21 @@ public class AlertClientSample {
     }
 
     private void deleteAlert() {
-        TaskResource taskResource = this.client.delete(ALERT_RESOURCE_ID);
+        String response = this.client.delete(ALERT_RESOURCE_ID);
 
-        LOGGER.info("Task returned to client: {}", taskResource.toJsonString());
+        LOGGER.info("Task returned to client: {}", response);
     }
 
     private void deleteAlertChangeLog() {
-        TaskResource taskResource = this.client.deleteAlertChangeLog(ALERT_CHANGE_LOG_ID);
+        String response = this.client.deleteAlertChangeLog(ALERT_CHANGE_LOG_ID);
 
-        LOGGER.info("Task returned to client: {}", taskResource.toJsonString());
+        LOGGER.info("Task returned to client: {}", response);
     }
 
     private void deleteAlertsByFilter() {
-        String filter = "urgency='" + AlertUrgency.Medium.toString() +"'"; // "urgency='Medium'"
+        String filter = "urgency='" + AlertUrgency.High.toString() +"'"; // "urgency='High'"
 
-        TaskResource taskResource = this.client.deleteByFilter(Optional.of(filter), false);
+        TaskResource taskResource = this.client.deleteByFilter(filter);
 
         LOGGER.info("Task returned to client: {}", taskResource.toJsonString());
     }
@@ -93,8 +92,8 @@ public class AlertClientSample {
     public static void main(String[] args) {
         AlertClientSample sample = new AlertClientSample();
 
-        sample.getAlertById();
         sample.getAllAlerts();
+        sample.getAlertById();
         sample.updateAlert();
 
         sample.deleteAlertChangeLog();

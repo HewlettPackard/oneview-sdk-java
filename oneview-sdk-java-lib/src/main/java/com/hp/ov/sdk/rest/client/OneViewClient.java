@@ -96,7 +96,8 @@ public class OneViewClient {
     }
 
     public synchronized AlertClient alert() {
-        return this.getClient(AlertClient.class);
+        return Reflection.newProxy(AlertClient.class,
+                new ClientRequestHandler<>(this.baseClient, AlertClient.class));
     }
 
     public synchronized ConnectionTemplateClient connectionTemplate() {

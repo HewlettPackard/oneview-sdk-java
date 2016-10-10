@@ -16,90 +16,35 @@
 
 package com.hp.ov.sdk.rest.client.activity;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Optional;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
-import com.hp.ov.sdk.dto.TaskState;
 import com.hp.ov.sdk.dto.alerts.AlertResource;
 import com.hp.ov.sdk.dto.alerts.AlertUpdate;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.RetrievableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class AlertClient {
+@Api(AlertClient.ALERTS_URI)
+public interface AlertClient extends
+        RetrievableResource<AlertResource> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AlertClient.class);
-
-    protected static final String ALERTS_URI = "/rest/alerts";
-    protected static final String ALERTS_CHANGELOG_URI = "/rest/alerts/AlertChangeLog";
-
-    private final BaseClient baseClient;
-
-    public AlertClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
+    String ALERTS_URI = "/rest/alerts";
+    String ALERTS_CHANGELOG_URI = "/AlertChangeLog";
 
     /**
-     * Retrieves the {@link AlertResource} details for the specified alert.
+     * Updates the resource identified by <code>resourceId</code> according to the
+     * provided <code>resource</code> object.
      *
-     * @param resourceId alert resource identifier as seen in HPE OneView.
+     * @param resourceId resource identifier as seen in HPE OneView.
+     * @param resource object containing the details of the resource that should be created.
      *
-     * @return {@link AlertResource} object containing the details.
+     * @return {@link AlertResource} the updated alert resource.
      */
-    public AlertResource getById(String resourceId) {
-        LOGGER.info("AlertClient : getById : Start");
-
-        AlertResource alert = baseClient.getResource(UrlUtils.createUrl(ALERTS_URI, resourceId), AlertResource.class);
-
-        LOGGER.info("AlertClient : getById : End");
-
-        return alert;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link AlertResource}&gt; containing details
-     * for all the available alerts found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link AlertResource}&gt; containing
-     * the details for all found alerts.
-     */
-    public ResourceCollection<AlertResource> getAll() {
-        LOGGER.info("AlertClient : getAll : Start");
-
-        ResourceCollection<AlertResource> alerts = baseClient.getResourceCollection(ALERTS_URI, AlertResource.class);
-
-        LOGGER.info("AlertClient : getAll : End");
-
-        return alerts;
-    }
-
-    /**
-     * Updates a {@link AlertResource} identified by the given resource identifier.
-     *
-     * @param resourceId alert resource identifier as seen in HPE OneView.
-     * @param alertUpdate object containing the alert details.
-     *
-     * @return {@link AlertResource} containing the updated alert.
-     */
-    public AlertResource update(String resourceId, AlertUpdate alertUpdate) {
-        LOGGER.info("AlertClient : update : Start");
-
-        Request request = new Request(HttpMethod.PUT, UrlUtils.createUrl(ALERTS_URI, resourceId), alertUpdate);
-
-        AlertResource updatedAlert = this.baseClient.executeRequest(request, AlertResource.class);
-
-        LOGGER.info("AlertClient : update : End");
-
-        return updatedAlert;
-    }
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
+    AlertResource update(@PathParam("resourceId") String resourceId, @BodyParam AlertUpdate resource);
 
     /**
      * Deletes the {@link AlertResource} identified by the given resource identifier.
@@ -107,18 +52,10 @@ public class AlertClient {
      * @param resourceId alert resource identifier as seen in HPE OneView.
      *
      * @return {@link TaskResource} containing the task status for the process.
+     * @return {@link String} containing the response of the process.
      */
-    public TaskResource delete(String resourceId) {
-        LOGGER.info("DataCenterClient : delete : Start");
-
-        Request request = new Request(HttpMethod.DELETE, UrlUtils.createUrl(ALERTS_URI, resourceId));
-
-        this.baseClient.executeRequest(request, String.class);
-
-        LOGGER.info("DataCenterClient : delete : End");
-
-        return this.buildCompleteTask("Delete alert.");
-    }
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.DELETE)
+    String delete(@PathParam("resourceId") String resourceId);
 
     /**
      * Deletes all the {@link AlertResource}(s) that match the filter. If no filter
@@ -127,26 +64,13 @@ public class AlertClient {
      * process the request asynchronously or synchronously, based on the aSync flag input.
      *
      * @param filter A general filter/query string that narrows the list of resources.
-     * @param aSync Flag input to process request asynchronously or synchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource deleteByFilter(Optional<String> filter, boolean aSync) {
-        LOGGER.info("AlertClient : deleteByFilter : Start");
-
-        TaskResource taskResource;
-
-        if (filter.isPresent()) {
-            taskResource = baseClient.deleteResource(ALERTS_URI, aSync,
-                    new UrlParameter("filter", filter.get()));
-        } else {
-            taskResource = baseClient.deleteResource(ALERTS_URI, aSync);
-        }
-
-        LOGGER.info("AlertClient : deleteByFilter : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "?filter={filter}", method = HttpMethod.DELETE)
+    TaskResource deleteByFilter(@PathParam("filter") String filter, RequestOption... options);
 
     /**
      * Deletes the alert change log item identified by changeLogId. Only user-entered change logs
@@ -156,32 +80,9 @@ public class AlertClient {
      *
      * @param changeLogId alert change log identifier as seen in HPE OneView.
      *
-     * @return {@link TaskResource} containing the task status for the process.
+     * @return {@link String} containing the response of the process.
      */
-    public TaskResource deleteAlertChangeLog(String changeLogId) {
-        LOGGER.info("DataCenterClient : deleteAlertChangeLog : Start");
-
-        Request request = new Request(HttpMethod.DELETE, UrlUtils.createUrl(ALERTS_CHANGELOG_URI, changeLogId));
-
-        this.baseClient.executeRequest(request, String.class);
-
-        LOGGER.info("DataCenterClient : deleteAlertChangeLog : End");
-
-        return this.buildCompleteTask("Delete alert change log.");
-    }
-
-    private TaskResource buildCompleteTask(String name) {
-        TaskResource task = new TaskResource();
-        String date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date());
-
-        task.setName(name);
-        task.setComputedPercentComplete(Integer.valueOf(100));
-        task.setPercentComplete(Integer.valueOf(100));
-        task.setTaskState(TaskState.Completed);
-        task.setCreated(date);
-        task.setModified(date);
-
-        return task;
-    }
+    @Endpoint(uri = ALERTS_CHANGELOG_URI + "/{changeLogId}", method = HttpMethod.DELETE)
+    String deleteAlertChangeLog(@PathParam("changeLogId") String changeLogId);
 
 }
