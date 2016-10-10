@@ -16,21 +16,27 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.networking.SasInterconnectClient.SAS_INTERCONNECT_URI;
+import static com.hp.ov.sdk.rest.client.networking.SasInterconnectClient.SAS_INTERCONNECT_URI_REFRESH;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.Patch;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.sasinterconnects.SasInterConnectRefreshRequest;
 import com.hp.ov.sdk.dto.networking.sasinterconnects.SasInterconnect;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SasInterconnectClientTest {
@@ -38,62 +44,67 @@ public class SasInterconnectClientTest {
     private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private SasInterconnectClient client;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private SasInterconnectClient client = Reflection.newProxy(SasInterconnectClient.class,
+            new ClientRequestHandler<>(baseClient, SasInterconnectClient.class));
 
     @Test
     public void shouldGetSasInterconnect() {
         client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = SasInterconnectClient.SAS_INTERCONNECT_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = SAS_INTERCONNECT_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, SasInterconnect.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(SasInterconnect.class).getType());
     }
 
     @Test
     public void shouldGetAllSasInterconnect() {
         client.getAll();
 
-        then(baseClient).should().getResourceCollection(SasInterconnectClient.SAS_INTERCONNECT_URI, SasInterconnect.class);
+        Request expectedRequest = new Request(HttpMethod.GET, SAS_INTERCONNECT_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<SasInterconnect>>() {}.getType());
     }
 
     @Test
     public void shouldGetSasInterconnectsByName() {
         client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(SasInterconnectClient.SAS_INTERCONNECT_URI,
-                SasInterconnect.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, SAS_INTERCONNECT_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<SasInterconnect>>() {}.getType());
     }
 
     @Test
     public void shouldPatchInterconnect() {
         Patch patch = new Patch();
 
-        client.patch(ANY_RESOURCE_ID, patch, false);
+        client.patch(ANY_RESOURCE_ID, patch, TaskTimeout.of(321));
 
-        String expectedUri = SasInterconnectClient.SAS_INTERCONNECT_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = SAS_INTERCONNECT_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri, patch);
-        expectedRequest.setTimeout(300000);
+        expectedRequest.setTimeout(321);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldRefreshSasInterconnectState() {
         SasInterConnectRefreshRequest requestBody = new SasInterConnectRefreshRequest();
-        client.refreshState(ANY_RESOURCE_ID, requestBody, false);
+        client.refreshState(ANY_RESOURCE_ID, requestBody, TaskTimeout.of(321));
 
-        String expectedUri = SasInterconnectClient.SAS_INTERCONNECT_URI
+        String expectedUri = SAS_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + SasInterconnectClient.SAS_INTERCONNECT_URI_REFRESH;
+                + SAS_INTERCONNECT_URI_REFRESH;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, requestBody);
         expectedRequest.setForceReturnTask(true);
-        expectedRequest.setTimeout(120000);
+        expectedRequest.setTimeout(321);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
 }

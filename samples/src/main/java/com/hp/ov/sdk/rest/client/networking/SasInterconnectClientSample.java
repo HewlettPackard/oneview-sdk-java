@@ -75,7 +75,7 @@ public class SasInterconnectClientSample {
         patch.setPath("/powerState");
         patch.setValue("On");
 
-        TaskResource task = this.client.patch(interconnect.getResourceId(), patch, false);
+        TaskResource task = this.client.patch(interconnect.getResourceId(), patch);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -86,7 +86,7 @@ public class SasInterconnectClientSample {
         SasInterConnectRefreshRequest requestBody = new SasInterConnectRefreshRequest();
         requestBody.setRefreshState(RefreshState.RefreshPending);
 
-        TaskResource task = this.client.refreshState(interconnect.getResourceId(), requestBody, false);
+        TaskResource task = this.client.refreshState(interconnect.getResourceId(), requestBody);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
