@@ -15,85 +15,22 @@
  */
 package com.hp.ov.sdk.rest.client.server;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.servers.serverhardwaretype.ServerHardwareType;
 import com.hp.ov.sdk.dto.servers.serverhardwaretype.ServerHardwareTypeUpdate;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.DeletableResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class ServerHardwareTypeClient {
+@Api(ServerHardwareTypeClient.SERVER_HARDWARE_TYPE_URI)
+public interface ServerHardwareTypeClient extends
+        SearchableResource<ServerHardwareType>,
+        DeletableResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServerHardwareTypeClient.class);
-
-    private final BaseClient baseClient;
-
-    public ServerHardwareTypeClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link ServerHardwareType} details for the specified server hardware type.
-     *
-     * @param resourceId server hardware type resource identifier as seen in HPE OneView.
-     *
-     * @return {@link ServerHardwareType} object containing the details.
-     */
-    public ServerHardwareType getById(String resourceId) {
-        LOGGER.info("ServerHardwareTypeClient : getById : Start");
-
-        ServerHardwareType serverHardwareType = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.SERVER_HARDWARE_TYPE_URI, resourceId), ServerHardwareType.class);
-
-        LOGGER.info("ServerHardwareTypeClient : getById : End");
-
-        return serverHardwareType;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link ServerHardwareType}&gt; containing the details
-     * for all the available server hardware types found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link ServerHardwareType}&gt; containing
-     * the details for all found server hardware types.
-     */
-    public ResourceCollection<ServerHardwareType> getAll() {
-        LOGGER.info("ServerHardwareTypeClient : getAll : Start");
-
-        ResourceCollection<ServerHardwareType> serverHardwareTypes = baseClient.getResourceCollection(
-                ResourceUris.SERVER_HARDWARE_TYPE_URI, ServerHardwareType.class);
-
-        LOGGER.info("ServerHardwareTypeClient : getAll : End");
-
-        return serverHardwareTypes;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link ServerHardwareType}&gt; containing details
-     * for the available server hardware types found under the current HPE OneView that match the name.
-     *
-     * @param name server hardware type name as seen in HPE OneView.
-     *
-     * @return {@link ServerHardwareType} object containing the details.
-     */
-    public ResourceCollection<ServerHardwareType> getByName(String name) {
-        LOGGER.info("ServerHardwareTypeClient : getByName : Start");
-
-        ResourceCollection<ServerHardwareType> serverHardwareTypes = baseClient.getResourceCollection(
-                ResourceUris.SERVER_HARDWARE_TYPE_URI, ServerHardwareType.class,
-                UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("ServerHardwareTypeClient : getByName : End");
-
-        return serverHardwareTypes;
-    }
+    String SERVER_HARDWARE_TYPE_URI = "/rest/server-hardware-types";
 
     /**
      * Updates a {@link ServerHardwareType} identified by the given resource identifier.
@@ -103,37 +40,8 @@ public class ServerHardwareTypeClient {
      *
      * @return {@link ServerHardwareType} containing the updated server hardware type.
      */
-    public ServerHardwareType update(String resourceId, ServerHardwareTypeUpdate serverHardwareTypeUpdate) {
-        LOGGER.info("ServerHardwareTypeClient : update : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(ResourceUris.SERVER_HARDWARE_TYPE_URI, resourceId), serverHardwareTypeUpdate);
-
-        ServerHardwareType serverHardwareTypeUpdated = baseClient.executeRequest(request, ServerHardwareType.class);
-
-        LOGGER.info("ServerHardwareTypeClient : update : End");
-
-        return serverHardwareTypeUpdated;
-    }
-
-    /**
-     * Deletes the {@link ServerHardwareType} identified by the given resource identifier.
-     *
-     * @param resourceId server hardware type resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link String} containing the response.
-     */
-    public TaskResource delete(String resourceId, boolean aSync) {
-        LOGGER.info("ServerHardwareTypeClient : delete : Start");
-
-        TaskResource taskResource = baseClient.deleteResource(
-                UrlUtils.createUrl(ResourceUris.SERVER_HARDWARE_TYPE_URI, resourceId), aSync);
-
-        LOGGER.info("ServerHardwareTypeClient : delete : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
+    ServerHardwareType update(@PathParam("resourceId") String resourceId,
+            @BodyParam ServerHardwareTypeUpdate serverHardwareTypeUpdate);
 
 }

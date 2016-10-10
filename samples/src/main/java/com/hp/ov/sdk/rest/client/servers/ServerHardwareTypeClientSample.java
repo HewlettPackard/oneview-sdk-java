@@ -82,7 +82,7 @@ public class ServerHardwareTypeClientSample {
         ServerHardwareType serverHardwareType
                 = serverHardwareTypeClient.getByName(SERVER_HARDWARE_TYPE_RESOURCE_NAME).get(0);
 
-        TaskResource taskResource = this.serverHardwareTypeClient.delete(serverHardwareType.getResourceId(), false);
+        TaskResource taskResource = this.serverHardwareTypeClient.delete(serverHardwareType.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
