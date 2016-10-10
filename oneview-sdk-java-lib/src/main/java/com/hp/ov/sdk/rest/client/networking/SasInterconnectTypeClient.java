@@ -36,7 +36,7 @@ public interface SasInterconnectTypeClient extends SearchableResource<SasInterco
      * <p>The filter applied in this case is as follows:
      * <p>filter="name matches '<i>name</i>'"
      *
-     * @param name name that should be used to filter the resources found in HPE OneView.
+     * @param typeName name that should be used to filter the resources found in HPE OneView.
      *
      * @return {@link ResourceCollection} paginated collection containing the details for the
      * available resources that match the filter.
