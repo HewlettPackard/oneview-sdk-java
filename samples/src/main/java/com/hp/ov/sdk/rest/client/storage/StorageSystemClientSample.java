@@ -87,7 +87,7 @@ public class StorageSystemClientSample {
 
     private void addStorageSystem() {
         AddStorageSystemCredentials addStorageSystemCredentials = buildStorageSystem();
-        TaskResource taskResource = storageSystemClient.add(addStorageSystemCredentials, false);
+        TaskResource taskResource = storageSystemClient.add(addStorageSystemCredentials);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
 
@@ -96,7 +96,7 @@ public class StorageSystemClientSample {
 
         storageSystem.setManagedDomain("TestDomain");
 
-        taskResource = this.storageSystemClient.update(storageSystemId, storageSystem, false);
+        taskResource = this.storageSystemClient.update(storageSystemId, storageSystem);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -106,16 +106,16 @@ public class StorageSystemClientSample {
         StorageSystem updatedStorageSystem = buildUpdateStorageSystem(storageSystem);
 
         TaskResource taskResource = storageSystemClient.update(storageSystem.getResourceId(),
-                updatedStorageSystem, false);
+                updatedStorageSystem);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void removeStorageSystem() {
         StorageSystem storageSystem = this.storageSystemClient.getByName(STORAGE_SYSTEM_NAME).get(0);
-        TaskResource taskResource = this.storageSystemClient.remove(storageSystem.getResourceId(), false);
+        TaskResource taskResource = this.storageSystemClient.remove(storageSystem.getResourceId());
 
-        LOGGER.info("Task object returned to client : " + taskResource);
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void getStorageSystemStoragePools() {

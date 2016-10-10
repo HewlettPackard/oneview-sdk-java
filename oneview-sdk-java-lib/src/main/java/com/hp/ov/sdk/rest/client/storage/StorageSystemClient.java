@@ -17,161 +17,31 @@ package com.hp.ov.sdk.rest.client.storage;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.StorageSystem;
 import com.hp.ov.sdk.dto.StorageTargetPort;
-import com.hp.ov.sdk.dto.TaskResource;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.AddableResource;
+import com.hp.ov.sdk.rest.client.common.RemovableResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.client.common.UpdatableResource;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class StorageSystemClient {
+@Api(StorageSystemClient.STORAGE_SYSTEM_URI)
+public interface StorageSystemClient extends
+        SearchableResource<StorageSystem>,
+        AddableResource<AddStorageSystemCredentials>,
+        UpdatableResource<StorageSystem>,
+        RemovableResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StorageSystemClient.class);
+    String STORAGE_SYSTEM_URI = "/rest/storage-systems";
 
-    private final BaseClient baseClient;
-
-    public StorageSystemClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link StorageSystem} details for the specified storage system.
-     *
-     * @param resourceId storage system resource identifier as seen in HPE OneView.
-     *
-     * @return {@link StorageSystem} object containing the details.
-     */
-    public StorageSystem getById(String resourceId) {
-        LOGGER.info("StorageSystemClient : getById : Start");
-
-        StorageSystem storageSystem = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.STORAGE_SYSTEM_URI, resourceId), StorageSystem.class);
-
-        LOGGER.info("StorageSystemClient : getById : End");
-
-        return storageSystem;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link StorageSystem}&gt; containing details
-     * for all the available storage systems found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link StorageSystem}&gt; containing
-     * the details for all found storage systems.
-     */
-    public ResourceCollection<StorageSystem> getAll() {
-        LOGGER.info("StorageSystemClient : getAll : Start");
-
-        ResourceCollection<StorageSystem> storageSystems = baseClient.getResourceCollection(
-                ResourceUris.STORAGE_SYSTEM_URI, StorageSystem.class);
-
-        LOGGER.info("StorageSystemClient : getAll : End");
-
-        return storageSystems;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link StorageSystem}&gt; containing details
-     * for the available storage systems found under the current HPE OneView that match the name.
-     *
-     * @param name storage system name as seen in HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link StorageSystem}&gt; containing
-     * the details for the found storage systems.
-     */
-    public ResourceCollection<StorageSystem> getByName(String name) {
-        LOGGER.info("StorageSystemClient : getByName : Start");
-
-        ResourceCollection<StorageSystem> storageSystems = baseClient.getResourceCollection(
-                ResourceUris.STORAGE_SYSTEM_URI, StorageSystem.class,
-                UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("StorageSystemClient : getByName : End");
-
-        return storageSystems;
-    }
-
-    /**
-     * Adds a storage system according to the provided {@link AddStorageSystemCredentials} object.
-     * The request can be processed synchronously or asynchronously.
-     *
-     * @param storageSystemCredentials object containing the storage system credential details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource add(AddStorageSystemCredentials storageSystemCredentials, boolean aSync) {
-        LOGGER.info("StorageSystemClient : add : Start");
-
-        Request request = new Request(HttpMethod.POST, ResourceUris.STORAGE_SYSTEM_URI, storageSystemCredentials);
-
-        request.setForceReturnTask(true);
-
-        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("StorageSystemClient : add : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Updates a storage system identified by the given resource identifier.
-     *
-     * @param resourceId storage system resource identifier as seen in HPE OneView.
-     * @param storageSystem object containing the storage system details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource update(String resourceId, StorageSystem storageSystem, boolean aSync) {
-        LOGGER.info("StorageSystemClient : update : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(ResourceUris.STORAGE_SYSTEM_URI, resourceId), storageSystem);
-
-        request.setForceReturnTask(true);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("StorageSystemClient : update : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Removes the storage system identified by the given resource identifier.
-     *
-     * @param resourceId storage system resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource remove(String resourceId, boolean aSync) {
-        LOGGER.info("StorageSystemClient : remove : Start");
-
-        Request request = new Request(HttpMethod.DELETE,
-                UrlUtils.createUrl(ResourceUris.STORAGE_SYSTEM_URI, resourceId));
-
-        request.setForceReturnTask(true);
-
-        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("StorageSystemClient : remove : End");
-
-        return taskResource;
-    }
+    String STORAGE_POOL_STORAGE_SYSTEM_URI = "/storage-pools";
+    String STORAGE_SYSTEM_HOST_TYPES_URI = "/host-types";
+    String STORAGE_SYSTEM_MANAGED_PORTS_URI = "/managedPorts";
 
     /**
      * Retrieves a list of storage pools belonging to the specified storage system.
@@ -181,17 +51,8 @@ public class StorageSystemClient {
      * @return {@link ResourceCollection}&lt;{@link StoragePool}&gt; containing
      * the details for all found storage pools.
      */
-    public ResourceCollection<StoragePool> getStoragePools(String resourceId) {
-        LOGGER.info("StorageSystemClient : getStoragePools : Start");
-
-        ResourceCollection<StoragePool> storagePools = baseClient.getResourceCollection(UrlUtils.createUrl(
-                ResourceUris.STORAGE_SYSTEM_URI, resourceId, ResourceUris.STORAGE_POOL_STORAGE_SYSTEM_URI),
-                StoragePool.class);
-
-        LOGGER.info("StorageSystemClient : getStoragePools : End");
-
-        return storagePools;
-    }
+    @Endpoint(uri = "/{resourceId}" + STORAGE_POOL_STORAGE_SYSTEM_URI)
+    public ResourceCollection<StoragePool> getStoragePools(@PathParam("resourceId") String resourceId);
 
     /**
      * Retrieves all managed target ports for the specified storage system.
@@ -201,17 +62,8 @@ public class StorageSystemClient {
      * @return {@link ResourceCollection}&lt;{@link StorageTargetPort}&gt; containing
      * the details for all found storage target ports.
      */
-    public ResourceCollection<StorageTargetPort> getAllManagedPorts(String resourceId) {
-        LOGGER.info("StorageSystemClient : getAllManagedPorts : Start");
-
-        ResourceCollection<StorageTargetPort> allManagedPorts = baseClient.getResourceCollection(UrlUtils.createUrl(
-                ResourceUris.STORAGE_SYSTEM_URI, resourceId, ResourceUris.MANAGED_PORTS_STORAGE_SYSTEM_URI),
-                StorageTargetPort.class);
-
-        LOGGER.info("StorageSystemClient : getAllManagedPorts : End");
-
-        return allManagedPorts;
-    }
+    @Endpoint(uri = "/{resourceId}" + STORAGE_SYSTEM_MANAGED_PORTS_URI)
+    public ResourceCollection<StorageTargetPort> getAllManagedPorts(@PathParam("resourceId") String resourceId);
 
     /**
      * Retrieves a specific managed target port for the specified storage system.
@@ -221,32 +73,17 @@ public class StorageSystemClient {
      *
      * @return {@link StorageTargetPort} containing the storage target port details.
      */
-    public StorageTargetPort getManagedPort(String resourceId, String managedPortId) {
-        LOGGER.info("StorageSystemClient : getManagedPort : Start");
-
-        StorageTargetPort managedPort = baseClient.getResource(UrlUtils.createUrl(
-                ResourceUris.STORAGE_SYSTEM_URI, resourceId,
-                ResourceUris.MANAGED_PORTS_STORAGE_SYSTEM_URI, managedPortId),
-                StorageTargetPort.class);
-
-        LOGGER.info("StorageSystemClient : getManagedPort : End");
-
-        return managedPort;
-    }
+    @Endpoint(uri = "/{resourceId}" + STORAGE_SYSTEM_MANAGED_PORTS_URI + "/{managedPortId}")
+    public StorageTargetPort getManagedPort(
+            @PathParam("resourceId") String resourceId,
+            @PathParam("managedPortId") String managedPortId);
 
     /**
      * Retrieves the list of supported storage host types.
      *
      * @return a list containing the names of the supported host types.
      */
-    public List<String> getHostTypes() {
-        LOGGER.info("StorageSystemClient : getHostTypes : Start");
-
-        List<String> hostTypes = baseClient.getResourceList(ResourceUris.STORAGE_SYSTEM_HOST_TYPES_URI, String.class);
-
-        LOGGER.info("StorageSystemClient : getHostTypes : End");
-
-        return hostTypes;
-    }
+    @Endpoint(uri = STORAGE_SYSTEM_HOST_TYPES_URI)
+    public List<String> getHostTypes();
 
 }
