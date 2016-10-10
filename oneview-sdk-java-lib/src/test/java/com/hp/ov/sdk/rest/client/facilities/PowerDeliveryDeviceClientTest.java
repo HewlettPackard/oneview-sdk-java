@@ -16,27 +16,37 @@
 
 package com.hp.ov.sdk.rest.client.facilities;
 
-import static org.mockito.BDDMockito.given;
+import static com.hp.ov.sdk.rest.client.facilities.PowerDeliveryDeviceClient.POWER_DEVICE_DISCOVERY_URI;
+import static com.hp.ov.sdk.rest.client.facilities.PowerDeliveryDeviceClient.POWER_DEVICE_POWER_STATE_URI;
+import static com.hp.ov.sdk.rest.client.facilities.PowerDeliveryDeviceClient.POWER_DEVICE_REFRESH_STATE_URI;
+import static com.hp.ov.sdk.rest.client.facilities.PowerDeliveryDeviceClient.POWER_DEVICE_SYNCHRONOUS_URI;
+import static com.hp.ov.sdk.rest.client.facilities.PowerDeliveryDeviceClient.POWER_DEVICE_UID_STATE_URI;
+import static com.hp.ov.sdk.rest.client.facilities.PowerDeliveryDeviceClient.POWER_DEVICE_URI;
+import static com.hp.ov.sdk.rest.client.facilities.PowerDeliveryDeviceClient.POWER_DEVICE_UTILIZATION_URI;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.ImportPdd;
+import com.hp.ov.sdk.dto.Light;
 import com.hp.ov.sdk.dto.OutletState;
+import com.hp.ov.sdk.dto.Power;
 import com.hp.ov.sdk.dto.PowerDeliveryDevice;
 import com.hp.ov.sdk.dto.PowerDeliveryDeviceRefreshRequest;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.UtilizationData;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.client.GenericFilter;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PowerDeliveryDeviceClientTest {
@@ -44,195 +54,199 @@ public class PowerDeliveryDeviceClientTest {
     private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private PowerDeliveryDeviceClient powerDeliveryDeviceClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private PowerDeliveryDeviceClient client = Reflection.newProxy(PowerDeliveryDeviceClient.class,
+            new ClientRequestHandler<>(baseClient, PowerDeliveryDeviceClient.class));
 
     @Test
     public void shouldGetPowerDeliveryDeviceById() {
-        powerDeliveryDeviceClient.getById(ANY_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.POWER_DEVICE_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = POWER_DEVICE_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, PowerDeliveryDevice.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(PowerDeliveryDevice.class).getType());
     }
 
     @Test
     public void shouldGetAllPowerDeliveryDevice() {
-        powerDeliveryDeviceClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.POWER_DEVICE_URI, PowerDeliveryDevice.class);
+        Request expectedRequest = new Request(HttpMethod.GET, POWER_DEVICE_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<PowerDeliveryDevice>>() {}.getType());
     }
 
     @Test
     public void shouldGetPowerDeliveryDeviceByName() {
-        powerDeliveryDeviceClient.getByName(ANY_RESOURCE_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.POWER_DEVICE_URI,
-                PowerDeliveryDevice.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, POWER_DEVICE_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<PowerDeliveryDevice>>() {}.getType());
     }
 
     @Test
     public void shouldAddPowerDeliveryDevice() {
         PowerDeliveryDevice powerDeliveryDevice = new PowerDeliveryDevice();
 
-        powerDeliveryDeviceClient.add(powerDeliveryDevice);
+        client.add(powerDeliveryDevice);
 
-        Request request = new Request(HttpMethod.POST, ResourceUris.POWER_DEVICE_URI, powerDeliveryDevice);
+        Request expectedRequest = new Request(HttpMethod.POST, POWER_DEVICE_URI, powerDeliveryDevice);
 
-        then(baseClient).should().executeRequest(request, PowerDeliveryDevice.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(PowerDeliveryDevice.class).getType());
     }
 
     @Test
     public void shouldAddDiscoveredPowerDeliveryDevice() {
         ImportPdd importPdd = new ImportPdd();
 
-        powerDeliveryDeviceClient.add(importPdd, false);
+        client.add(importPdd, TaskTimeout.of(321));
 
-        Request request = new Request(HttpMethod.POST, ResourceUris.POWER_DEVICE_DISCOVERY_URI, importPdd);
+        String expectedUri = POWER_DEVICE_URI
+                + POWER_DEVICE_DISCOVERY_URI;
+        Request expectedRequest = new Request(HttpMethod.POST, expectedUri, importPdd);
+        expectedRequest.setTimeout(321);
 
-        request.setTimeout(1200000);
-
-        then(baseClient).should().executeMonitorableRequest(request, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdatePowerDeliveryDevice() {
         PowerDeliveryDevice powerDeliveryDevice = new PowerDeliveryDevice();
 
-        powerDeliveryDeviceClient.update(ANY_RESOURCE_ID, powerDeliveryDevice);
+        client.update(ANY_RESOURCE_ID, powerDeliveryDevice);
 
-        String expectedUri = ResourceUris.POWER_DEVICE_URI + "/" + ANY_RESOURCE_ID;
-        Request request = new Request(HttpMethod.PUT, expectedUri, powerDeliveryDevice);
+        String expectedUri = POWER_DEVICE_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, powerDeliveryDevice);
 
-        then(baseClient).should().executeRequest(request, PowerDeliveryDevice.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(PowerDeliveryDevice.class).getType());
     }
 
     @Test
     public void shouldRemovePowerDeliveryDevice() {
-        powerDeliveryDeviceClient.remove(ANY_RESOURCE_ID, false);
+        client.remove(ANY_RESOURCE_ID, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.POWER_DEVICE_URI + "/" + ANY_RESOURCE_ID;
-        Request request = new Request(HttpMethod.DELETE, expectedUri);
+        String expectedUri = POWER_DEVICE_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
+        expectedRequest.setTimeout(321);
 
-        request.setTimeout(1200000);
-
-        then(baseClient).should().executeMonitorableRequest(request, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldRemovePowerDeliveryDeviceByFilter() {
-        powerDeliveryDeviceClient.removeByFilter(ANY_RESOURCE_NAME, false);
+        GenericFilter filter = new GenericFilter();
+        filter.setFilter("'name' = '" + ANY_RESOURCE_NAME + "'");
+        client.removeByFilter(filter, TaskTimeout.of(321));
 
-        UrlParameter filter = new UrlParameter("filter", ANY_RESOURCE_NAME);
-        Request request = new Request(HttpMethod.DELETE, ResourceUris.POWER_DEVICE_URI);
+        String expectedUri = POWER_DEVICE_URI;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        request.setTimeout(1200000);
-        request.addQuery(filter);
+        expectedRequest.addQuery(new UrlParameter("filter", filter.parameters().get(0).getValue()));
 
-        then(baseClient).should().executeMonitorableRequest(request, false);
+        expectedRequest.setTimeout(321);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldRemovePowerDeliveryDeviceSynchronously() {
-        powerDeliveryDeviceClient.remove(ANY_RESOURCE_ID);
+        client.remove(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.POWER_DEVICE_URI
+        String expectedUri = POWER_DEVICE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.POWER_DEVICE_SYNCHRONOUS_URI;
+                + POWER_DEVICE_SYNCHRONOUS_URI;
 
         Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().executeRequest(expectedRequest, String.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(String.class).getType());
     }
 
     @Test
     public void shouldGetPowerDeliveryDevicePowerState() {
-        given(baseClient.getResource(anyString(), any(Class.class))).willReturn("\"On\"");
+        client.getPowerState(ANY_RESOURCE_ID);
 
-        powerDeliveryDeviceClient.getPowerState(ANY_RESOURCE_ID);
-
-        String expectedUri = ResourceUris.POWER_DEVICE_URI
+        String expectedUri = POWER_DEVICE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.POWER_DEVICE_POWER_STATE_URI;
+                + POWER_DEVICE_POWER_STATE_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, String.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Power.class).getType());
     }
 
     @Test
     public void shouldUpdatePowerDeliveryDevicePowerState() {
         OutletState powerState = new OutletState();
 
-        powerDeliveryDeviceClient.updatePowerState(ANY_RESOURCE_ID, powerState, false);
+        client.updatePowerState(ANY_RESOURCE_ID, powerState);
 
-        String expectedUri = ResourceUris.POWER_DEVICE_URI
+        String expectedUri = POWER_DEVICE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.POWER_DEVICE_POWER_STATE_URI;
+                + POWER_DEVICE_POWER_STATE_URI;
 
-        Request request = new Request(HttpMethod.PUT, expectedUri, powerState);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setEntity(powerState);
 
-        request.setTimeout(1200000);
-
-        then(baseClient).should().executeMonitorableRequest(request, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdatePowerDeliveryDeviceRefreshState() {
         PowerDeliveryDeviceRefreshRequest refreshState = new PowerDeliveryDeviceRefreshRequest();
 
-        powerDeliveryDeviceClient.updateRefreshState(ANY_RESOURCE_ID, refreshState, false);
+        client.updateRefreshState(ANY_RESOURCE_ID, refreshState);
 
-        String expectedUri = ResourceUris.POWER_DEVICE_URI
+        String expectedUri = POWER_DEVICE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.POWER_DEVICE_REFRESH_STATE_URI;
-        Request request = new Request(HttpMethod.PUT, expectedUri, refreshState);
+                + POWER_DEVICE_REFRESH_STATE_URI;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setEntity(refreshState);
 
-        request.setTimeout(1200000);
-
-        then(baseClient).should().executeMonitorableRequest(request, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetPowerDeliveryDeviceUidState() {
-        given(baseClient.getResource(anyString(), any(Class.class))).willReturn("\"On\"");
+        client.getUidState(ANY_RESOURCE_ID);
 
-        powerDeliveryDeviceClient.getUidState(ANY_RESOURCE_ID);
-
-        String expectedUri = ResourceUris.POWER_DEVICE_URI
+        String expectedUri = POWER_DEVICE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.POWER_DEVICE_UID_STATE_URI;
+                + POWER_DEVICE_UID_STATE_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, String.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Light.class).getType());
     }
 
     @Test
     public void shouldUpdatePowerDeliveryDeviceUidState() {
         OutletState uidState = new OutletState();
 
-        powerDeliveryDeviceClient.updateUidState(ANY_RESOURCE_ID, uidState, false);
+        client.updateUidState(ANY_RESOURCE_ID, uidState);
 
-        String expectedUri = ResourceUris.POWER_DEVICE_URI
+        String expectedUri = POWER_DEVICE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.POWER_DEVICE_UID_STATE_URI;
+                + POWER_DEVICE_UID_STATE_URI;
 
-        Request request = new Request(HttpMethod.PUT, expectedUri, uidState);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setEntity(uidState);
 
-        request.setTimeout(1200000);
-
-        then(baseClient).should().executeMonitorableRequest(request, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetPowerDeliveryDeviceUtilization() {
-        powerDeliveryDeviceClient.getUtilization(ANY_RESOURCE_ID);
+        client.getUtilization(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.POWER_DEVICE_URI
+        String expectedUri = POWER_DEVICE_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.POWER_DEVICE_UTILIZATION_URI;
+                + POWER_DEVICE_UTILIZATION_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, UtilizationData.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(UtilizationData.class).getType());
     }
 
 }

@@ -226,7 +226,8 @@ public class OneViewClient {
     }
 
     public synchronized PowerDeliveryDeviceClient powerDeliveryDevice() {
-        return this.getClient(PowerDeliveryDeviceClient.class);
+        return Reflection.newProxy(PowerDeliveryDeviceClient.class,
+                new ClientRequestHandler<>(this.baseClient, PowerDeliveryDeviceClient.class));
     }
 
     public synchronized RackClient rack() {

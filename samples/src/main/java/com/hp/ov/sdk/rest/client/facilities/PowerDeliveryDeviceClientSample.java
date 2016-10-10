@@ -29,7 +29,9 @@ import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.UtilizationData;
+import com.hp.ov.sdk.rest.client.GenericFilter;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
 public class PowerDeliveryDeviceClientSample {
@@ -38,11 +40,11 @@ public class PowerDeliveryDeviceClientSample {
 
     // test values - user input
     // ================================
-    private static final String RESOURCE_ID = "66a80189-d239-4505-878c-7244c8fddc9b";
+    private static final String RESOURCE_ID = "35323930-4936-4450-5531-303153474820";
     private static final String RESOURCE_NAME = "172.18.8.11, PDU 1, L6,Outlet1";
     private static final String SAMPLE_RESOURCE_NAME = "SamplePDD";
     private static final String SAMPLE_RESOURCE_NAME_UPDATED = "SamplePDD-Updated";
-    private static final String HOSTNAME = "172.18.8.11";
+    private static final String HOSTNAME = "172.18.8.12";
     private static final String USERNAME = "dcs";
     private static final String PASSWORD = "dcs";
     // ================================
@@ -91,7 +93,7 @@ public class PowerDeliveryDeviceClientSample {
         importPdd.setPassword(PASSWORD);
         importPdd.setForce(true);
 
-        TaskResource task = this.client.add(importPdd, false);
+        TaskResource task = this.client.add(importPdd);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -111,16 +113,17 @@ public class PowerDeliveryDeviceClientSample {
     private void removePowerDeliveryDevice() {
         PowerDeliveryDevice powerDeliveryDevice = this.client.getByName(SAMPLE_RESOURCE_NAME_UPDATED).get(0);
 
-        TaskResource task = this.client.remove(powerDeliveryDevice.getResourceId(), false);
+        TaskResource task = this.client.remove(powerDeliveryDevice.getResourceId(), TaskTimeout.of(60000));
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void removePowerDeliveryDeviceByFilter() {
-        String filter = "name='" + SAMPLE_RESOURCE_NAME +"'";
-        TaskResource task = this.client.removeByFilter(filter, false);
+        GenericFilter filter = new GenericFilter();
+        filter.setFilter("'name' = '" + SAMPLE_RESOURCE_NAME + "'");
+        TaskResource task = this.client.removeByFilter(filter);
 
-        LOGGER.info("Task object returned to client: {}", task.toJsonString());
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
     private void removePowerDeliveryDeviceSynchronously() {
@@ -145,7 +148,7 @@ public class PowerDeliveryDeviceClientSample {
 
         outletState.setPowerState(Power.On);
 
-        TaskResource task = this.client.updatePowerState(powerDeliveryDevice.getResourceId(), outletState, false);
+        TaskResource task = this.client.updatePowerState(powerDeliveryDevice.getResourceId(), outletState);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -156,7 +159,7 @@ public class PowerDeliveryDeviceClientSample {
 
         refreshState.setRefreshState(RefreshState.RefreshPending);
 
-        TaskResource task = this.client.updateRefreshState(powerDeliveryDevice.getResourceId(), refreshState, false);
+        TaskResource task = this.client.updateRefreshState(powerDeliveryDevice.getResourceId(), refreshState);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -175,7 +178,7 @@ public class PowerDeliveryDeviceClientSample {
 
         outletStateState.setUidState(Light.On);
 
-        TaskResource task = this.client.updateUidState(powerDeliveryDevice.getResourceId(), outletStateState, false);
+        TaskResource task = this.client.updateUidState(powerDeliveryDevice.getResourceId(), outletStateState);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }

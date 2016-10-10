@@ -15,233 +15,142 @@
  */
 package com.hp.ov.sdk.rest.client.facilities;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.ImportPdd;
 import com.hp.ov.sdk.dto.Light;
 import com.hp.ov.sdk.dto.OutletState;
 import com.hp.ov.sdk.dto.Power;
 import com.hp.ov.sdk.dto.PowerDeliveryDevice;
 import com.hp.ov.sdk.dto.PowerDeliveryDeviceRefreshRequest;
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.UtilizationData;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.RemovableResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.UrlQuery;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
+import com.hp.ov.sdk.rest.reflect.QueryParam;
 
-public class PowerDeliveryDeviceClient {
+@Api(PowerDeliveryDeviceClient.POWER_DEVICE_URI)
+public interface PowerDeliveryDeviceClient extends
+        SearchableResource<PowerDeliveryDevice>,
+        RemovableResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PowerDeliveryDeviceClient.class);
-    private static final int TIMEOUT = 1200000; // in milliseconds
-
-    private final BaseClient baseClient;
-
-    public PowerDeliveryDeviceClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link PowerDeliveryDevice} details for the specified power delivery device.
-     *
-     * @param resourceId power delivery device resource identifier as seen in HPE OneView.
-     *
-     * @return {@link PowerDeliveryDevice} object containing the details.
-     */
-    public PowerDeliveryDevice getById(String resourceId) {
-        LOGGER.info("PowerDeliveryDeviceClient : getById : Start");
-
-        PowerDeliveryDevice powerDeliveryDevice = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI, resourceId), PowerDeliveryDevice.class);
-
-        LOGGER.info("PowerDeliveryDeviceClient : getById : End");
-
-        return powerDeliveryDevice;
-    }
+    String POWER_DEVICE_URI = "/rest/power-devices";
+    String POWER_DEVICE_DISCOVERY_URI = "/discover";
+    String POWER_DEVICE_POWER_STATE_URI = "/powerState";
+    String POWER_DEVICE_REFRESH_STATE_URI = "/refreshState";
+    String POWER_DEVICE_UID_STATE_URI = "/uidState";
+    String POWER_DEVICE_UTILIZATION_URI = "/utilization";
+    String POWER_DEVICE_SYNCHRONOUS_URI = "/synchronous";
 
     /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link PowerDeliveryDevice}&gt; containing details
-     * for all the available power delivery devices found under the current HPE OneView.
+     * Adds a resource according to the provided <code>resource</code> object.
      *
-     * @return {@link ResourceCollection}&lt;{@link PowerDeliveryDevice}&gt; containing
-     * the details for all found power delivery devices.
-     */
-    public ResourceCollection<PowerDeliveryDevice> getAll() {
-        LOGGER.info("PowerDeliveryDeviceClient : getAll : Start");
-
-        ResourceCollection<PowerDeliveryDevice> powerDevices = baseClient.getResourceCollection(
-                ResourceUris.POWER_DEVICE_URI, PowerDeliveryDevice.class);
-
-        LOGGER.info("PowerDeliveryDeviceClient : getAll : End");
-
-        return powerDevices;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link PowerDeliveryDevice}&gt; containing details
-     * for the available power delivery devices found under the current HPE OneView that match the name.
+     * <p>According to the resource type, the add action can take some time to complete.
+     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
+     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
+     * the default behavior is to wait until the add action completes. Below is an example that
+     * illustrates how the timeout can be specified:
      *
-     * @param name power delivery device name as seen in HPE OneView.
+     * <pre>{@code
+     *     SomeClient client = oneViewClient.someClient();
+     *     SomeResource resource = new SomeResource();
+     *     TaskResource task = client.add(resource, TaskTimeout.of(5000)); //5 secs
+     * }</pre>
      *
-     * @return {@link ResourceCollection}&lt;{@link PowerDeliveryDevice}&gt; containing
-     * the details for the found power delivery devices.
-     */
-    public ResourceCollection<PowerDeliveryDevice> getByName(String name) {
-        LOGGER.info("PowerDeliveryDeviceClient : getByName : Start");
-
-        ResourceCollection<PowerDeliveryDevice> powerDevices = baseClient.getResourceCollection(
-                ResourceUris.POWER_DEVICE_URI, PowerDeliveryDevice.class, UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("PowerDeliveryDeviceClient : getByName : End");
-
-        return powerDevices;
-    }
-
-    /**
-     * Adds a power delivery device according to the provided {@link PowerDeliveryDevice} object.
-     * Use this method to create a representation of power delivery devices that
-     * provide power to other resources but cannot otherwise be discovered by
-     * the management appliance.
-     *
-     * @param powerDeliveryDevice object containing the power delivery device details.
-     *
-     * @return {@link PowerDeliveryDevice} containing the added power delivery device.
-     */
-    public PowerDeliveryDevice add(PowerDeliveryDevice powerDeliveryDevice) {
-        LOGGER.info("PowerDeliveryDeviceClient : add : Start");
-
-        Request request = new Request(HttpMethod.POST, ResourceUris.POWER_DEVICE_URI, powerDeliveryDevice);
-
-        PowerDeliveryDevice createdPowerDeliveryDevice = this.baseClient.executeRequest(request, PowerDeliveryDevice.class);
-
-        LOGGER.info("PowerDeliveryDeviceClient : add : End");
-
-        return createdPowerDeliveryDevice;
-    }
-
-    /**
-     * Adds an HPE iPDU and bring all components under management by discovery of
-     * its management module. Bring the management module under exclusive management
-     * by the appliance, configure any management or data collection settings,
-     * and create a private set of administrative credentials to enable ongoing
-     * communication and management of the iPDU. The request can be processed
-     * synchronously or asynchronously.
-     *
-     * @param importPdd object containing the power delivery device connection details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param resource object containing the details of the resource that should be added.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource add(ImportPdd importPdd, boolean aSync) {
-        LOGGER.info("PowerDeliveryDeviceClient : add : Start");
-
-        Request request = new Request(HttpMethod.POST, ResourceUris.POWER_DEVICE_DISCOVERY_URI, importPdd);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("PowerDeliveryDeviceClient : add : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = POWER_DEVICE_DISCOVERY_URI, method = HttpMethod.POST)
+    TaskResource add(@BodyParam ImportPdd resource, RequestOption... options);
 
     /**
-     * Updates a {@link PowerDeliveryDevice} identified by the given resource identifier.
+     * Adds a resource according to the provided <code>resource</code> object.
      *
-     * @param resourceId power delivery device resource identifier as seen in HPE OneView.
-     * @param powerDeliveryDevice object containing the power delivery device details.
+     * <pre>{@code
+     *     SomeClient client = oneViewClient.someClient();
+     *     SomeResource resource = new SomeResource();
+     *     TaskResource task = client.add(resource, TaskTimeout.of(5000)); //5 secs
+     * }</pre>
      *
-     * @return {@link PowerDeliveryDevice} containing the power delivery device updated.
+     * @param resource object containing the details of the resource that should be added.
+     *
+     * @return {@link PowerDeliveryDevice} object containing the result of this request.
      */
-    public PowerDeliveryDevice update(String resourceId, PowerDeliveryDevice powerDeliveryDevice) {
-        LOGGER.info("PowerDeliveryDeviceClient : update : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI, resourceId), powerDeliveryDevice);
-
-        PowerDeliveryDevice updatedPowerDeliveryDevice = this.baseClient.executeRequest(request, PowerDeliveryDevice.class);
-
-        LOGGER.info("PowerDeliveryDeviceClient : update : End");
-
-        return updatedPowerDeliveryDevice;
-    }
+    @Endpoint(method = HttpMethod.POST)
+    PowerDeliveryDevice add(@BodyParam PowerDeliveryDevice resource);
 
     /**
-     * Removes the {@link PowerDeliveryDevice} identified by the given resource identifier.
+     * Updates the resource identified by <code>resourceId</code> according to the
+     * provided <code>resource</code> object.
      *
-     * @param resourceId power delivery device resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * <p>According to the resource type, the update action can take some time to complete.
+     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
+     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
+     * the default behavior is to wait until the update action completes. Below is an example that
+     * illustrates how the timeout can be specified:
      *
-     * @return {@link TaskResource} containing the task status for the process.
+     * <pre>{@code
+     *     SomeClient client = oneViewClient.someClient();
+     *     SomeResource resource = client.getByName("resourceName");
+     *     //do some changes to the resource
+     *     TaskResource task = client.update(resource.getResourceId(), resource, TaskTimeout.of(5000)); //5 secs
+     * }</pre>
+     *
+     * @param resourceId resource identifier as seen in HPE OneView.
+     * @param powerDeliveryDevice object containing the details of the resource that should be created.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
+     *
+     * @return {@link PowerDeliveryDevice} object containing the result of this request.
      */
-    public TaskResource remove(String resourceId, boolean aSync) {
-        LOGGER.info("PowerDeliveryDeviceClient : remove : Start");
-
-        Request request = new Request(HttpMethod.DELETE,
-                UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI, resourceId));
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("PowerDeliveryDeviceClient : remove : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
+    PowerDeliveryDevice update(@PathParam("resourceId") String resourceId,
+            @BodyParam PowerDeliveryDevice powerDeliveryDevice, RequestOption... options);
 
     /**
      * Removes the {@link PowerDeliveryDevice}(s) matching the filter. A filter is required
      * to identify the set of resources to be removed. The actual deletion will proceed
      * asynchronously. Although, the method can process the request asynchronously or
-     * synchronously, based on the aSync flag input.
+     * synchronously, based on the {@link RequestOption} input.
      *
      * @param filter A general filter/query string that narrows the list of resources.
-     * @param aSync Flag input to process request asynchronously or synchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                 some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource removeByFilter(String filter, boolean aSync) {
-        LOGGER.info("PowerDeliveryDeviceClient : removeByFilter : Start");
-
-        Request request = new Request(HttpMethod.DELETE, ResourceUris.POWER_DEVICE_URI);
-
-        request.setTimeout(TIMEOUT);
-        request.addQuery(new UrlParameter("filter", filter));
-
-        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.trace("PowerDeliveryDeviceClient : removeByFilter : End");
-
-        return taskResource;
-    }
+    @Endpoint(method = HttpMethod.DELETE)
+    TaskResource removeByFilter(@QueryParam UrlQuery filter, RequestOption ... options);
 
     /**
-     * Removes the {@link PowerDeliveryDevice} identified by the given resource identifier.
-     * <b>This method only returns after the power device has been completely removed.</b>
+     * Removes the resource identified by the provided <code>resourceId</code>.
      *
-     * @param resourceId power delivery device resource identifier as seen in HPE OneView.
+     * <p>According to the resource type, the remove action can take some time to complete.
+     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
+     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
+     * the default behavior is to wait until the remove action completes. Below is an example that
+     * illustrates how the timeout can be specified:
      *
-     * @return {@link String} containing the response from the server.
+     * <pre>{@code
+     *     String resourceName = "someResourceName";
+     *     SomeResource resource = client.getByName(resourceName);
+     *     TaskResource task = client.remove(resource.getResourceId(), TaskTimeout.of(5000)); //5 secs
+     * }</pre>
+     *
+     * @param resourceId resource identifier as seen in HPE OneView.
+     *
+     * @return {@link String} containing the result of this request.
      */
-    public String remove(String resourceId) {
-        LOGGER.info("PowerDeliveryDeviceClient : remove : Start");
-
-        Request request = new Request(HttpMethod.DELETE, UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI,
-                resourceId, ResourceUris.POWER_DEVICE_SYNCHRONOUS_URI));
-
-        String response = this.baseClient.executeRequest(request, String.class);
-
-        LOGGER.info("PowerDeliveryDeviceClient : remove : End");
-
-        return response;
-    }
+    @Endpoint(uri = "/{resourceId}" + POWER_DEVICE_SYNCHRONOUS_URI, method = HttpMethod.DELETE)
+    String remove(@PathParam("resourceId") String resourceId);
 
     /**
      * Retrieves the power state details for the specified power delivery device.
@@ -250,76 +159,36 @@ public class PowerDeliveryDeviceClient {
      *
      * @return {@link Power} object containing the details.
      */
-    public Power getPowerState(String resourceId) {
-        LOGGER.info("PowerDeliveryDeviceClient : getPowerState : Start");
-
-        String powerStateResponse = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI, resourceId,
-                        ResourceUris.POWER_DEVICE_POWER_STATE_URI),
-                String.class);
-
-        Power powerState = Enum.valueOf(Power.class, powerStateResponse.replaceAll("^\"|\"$", ""));
-
-        LOGGER.info("PowerDeliveryDeviceClient : getPowerState : End");
-
-        return powerState;
-    }
+    @Endpoint(uri = "/{resourceId}" + POWER_DEVICE_POWER_STATE_URI)
+    Power getPowerState(@PathParam("resourceId") String resourceId);
 
     /**
      * Updates the power state of the power device identified by the given resource identifier.
      *
      * @param resourceId power delivery device resource identifier as seen in HPE OneView.
      * @param outletState power state of the power delivery device.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource updatePowerState(String resourceId, OutletState outletState, boolean aSync) {
-        LOGGER.info("PowerDeliveryDeviceClient : updatePowerState : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI, resourceId,
-                    ResourceUris.POWER_DEVICE_POWER_STATE_URI),
-                outletState);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("PowerDeliveryDeviceClient : updatePowerState : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + POWER_DEVICE_POWER_STATE_URI, method = HttpMethod.PUT)
+    TaskResource updatePowerState(@PathParam("resourceId") String resourceId,
+            @BodyParam OutletState outletState, RequestOption... options);
 
     /**
      * Updates the refresh state of the power device identified by the given resource identifier.
      *
      * @param resourceId power delivery device resource identifier as seen in HPE OneView.
      * @param refreshState refresh state of the power delivery device.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource updateRefreshState(String resourceId,
-            PowerDeliveryDeviceRefreshRequest refreshState, boolean aSync) {
-
-        LOGGER.info("PowerDeliveryDeviceClient : updateRefreshState : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI, resourceId,
-                        ResourceUris.POWER_DEVICE_REFRESH_STATE_URI),
-                refreshState);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("PowerDeliveryDeviceClient : updateRefreshState : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + POWER_DEVICE_REFRESH_STATE_URI, method = HttpMethod.PUT)
+    TaskResource updateRefreshState(@PathParam("resourceId") String resourceId,
+            @BodyParam PowerDeliveryDeviceRefreshRequest refreshState, RequestOption... options);
 
     /**
      * Retrieves the unit identification (UID) light state details for the specified power delivery device.
@@ -328,20 +197,8 @@ public class PowerDeliveryDeviceClient {
      *
      * @return {@link Light} object containing the details.
      */
-    public Light getUidState(String resourceId) {
-        LOGGER.info("PowerDeliveryDeviceClient : getUidState : Start");
-
-        String uidStateResponse = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI, resourceId,
-                        ResourceUris.POWER_DEVICE_UID_STATE_URI),
-                String.class);
-
-        Light lightState = Enum.valueOf(Light.class, uidStateResponse.replaceAll("^\"|\"$", ""));
-
-        LOGGER.info("PowerDeliveryDeviceClient : getUidState : End");
-
-        return lightState;
-    }
+    @Endpoint(uri = "/{resourceId}" + POWER_DEVICE_UID_STATE_URI)
+    Light getUidState(@PathParam("resourceId") String resourceId);
 
     /**
      * Updates the unit identification (UID) light state of the power device
@@ -349,27 +206,14 @@ public class PowerDeliveryDeviceClient {
      *
      * @param resourceId power delivery device resource identifier as seen in HPE OneView.
      * @param outletState identification (UID) light state of the power delivery device.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource updateUidState(String resourceId, OutletState outletState, boolean aSync) {
-        LOGGER.info("PowerDeliveryDeviceClient : updateUidState : Start");
-
-        Request request = new Request(HttpMethod.PUT,
-                UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI, resourceId,
-                        ResourceUris.POWER_DEVICE_UID_STATE_URI),
-                outletState);
-
-        request.setTimeout(TIMEOUT);
-
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("PowerDeliveryDeviceClient : updateUidState : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + POWER_DEVICE_UID_STATE_URI, method = HttpMethod.PUT)
+    TaskResource updateUidState(@PathParam("resourceId") String resourceId,
+            @BodyParam OutletState outletState, RequestOption... options);
 
     /**
      * Retrieves the {@link UtilizationData} details for the specified power delivery device.
@@ -378,17 +222,7 @@ public class PowerDeliveryDeviceClient {
      *
      * @return {@link UtilizationData} object containing the details.
      */
-    public UtilizationData getUtilization(String resourceId) {
-        LOGGER.info("PowerDeliveryDeviceClient : getUtilization : Start");
-
-        UtilizationData utilizationData = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.POWER_DEVICE_URI, resourceId,
-                        ResourceUris.POWER_DEVICE_UTILIZATION_URI),
-                UtilizationData.class);
-
-        LOGGER.info("PowerDeliveryDeviceClient : getUtilization : End");
-
-        return utilizationData;
-    }
+    @Endpoint(uri = "/{resourceId}" + POWER_DEVICE_UTILIZATION_URI)
+    UtilizationData getUtilization(@PathParam("resourceId") String resourceId);
 
 }

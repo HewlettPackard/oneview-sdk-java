@@ -56,13 +56,6 @@ public class ResourceUris {
     public static final String LOGICAL_INTERCONNECT_INTERNAL_VLANS_URI = "internalVlans";
     public static final String LOGICAL_INTERCONNECT_UNASSIGNED_UPLINK_PORTS_URI = "unassignedUplinkPortsForPortMonitor";
     public static final String LOGIN_SESSIONS = "/rest/login-sessions";
-    public static final String POWER_DEVICE_DISCOVERY_URI = "/rest/power-devices/discover";
-    public static final String POWER_DEVICE_POWER_STATE_URI = "powerState";
-    public static final String POWER_DEVICE_REFRESH_STATE_URI = "refreshState";
-    public static final String POWER_DEVICE_UID_STATE_URI = "uidState";
-    public static final String POWER_DEVICE_UTILIZATION_URI = "utilization";
-    public static final String POWER_DEVICE_SYNCHRONOUS_URI = "synchronous";
-    public static final String POWER_DEVICE_URI = "/rest/power-devices";
     public static final String PROFILE_PORTS_URI = SERVER_PROFILE_URI + "/profile-ports";
     public static final String SERVER_HARDWARE_TYPE_URI = "/rest/server-hardware-types";
     public static final String SERVER_PROFILE_COMPLIANCE_PREVIEW_URI = "compliance-preview";
