@@ -42,7 +42,6 @@ public class ResourceUris {
     public static final String INTERCONNECT_NAME_SERVERS_URI = "nameServers";
     public static final String INTERCONNECT_UPDATE_PORTS_URI = "update-ports";
     public static final String INTERCONNECT_RESET_PORT_PROTECTION_URI = "resetportprotection";
-    public static final String LOGICAL_DOWNLINK_URI = "/rest/logical-downlinks";
     public static final String LOGICAL_INTERCONNECT_URI = "/rest/logical-interconnects";
     public static final String LOGICAL_INTERCONNECT_FIRMWARE_URI = "firmware";
     public static final String LOGICAL_INTERCONNECT_LOCATION_URI = "locations";
@@ -80,6 +79,5 @@ public class ResourceUris {
     public static final String STORAGE_VOLUME_ATTACHMENT_PATH_URI = "paths";
     public static final String STORAGE_VOLUME_ATTACHMENT_REPAIR_URI = STORAGE_VOLUME_ATTACHMENT_URI + "/repair";
     public static final String TASK_URI = "/rest/tasks";
-    public static final String WITHOUT_ETHERNET = "withoutEthernet";
 
 }

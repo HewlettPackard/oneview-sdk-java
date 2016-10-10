@@ -184,7 +184,8 @@ public class OneViewClient {
     }
 
     public synchronized LogicalDownlinkClient logicalDownlink() {
-        return this.getClient(LogicalDownlinkClient.class);
+        return Reflection.newProxy(LogicalDownlinkClient.class,
+                new ClientRequestHandler<>(this.baseClient, LogicalDownlinkClient.class));
     }
 
     public synchronized LogicalEnclosureClient logicalEnclosure() {

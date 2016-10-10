@@ -16,18 +16,24 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.networking.LogicalDownlinkClient.LOGICAL_DOWNLINK_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalDownlinkClient.WITHOUT_ETHERNET_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.logicaldownlinks.LogicalDownlink;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LogicalDownlinkClientTest {
@@ -35,54 +41,62 @@ public class LogicalDownlinkClientTest {
     private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private LogicalDownlinkClient logicalDownlinkClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private LogicalDownlinkClient client = Reflection.newProxy(LogicalDownlinkClient.class,
+            new ClientRequestHandler<>(baseClient, LogicalDownlinkClient.class));
 
     @Test
     public void shouldGetLogicalDownlinkById() {
-        logicalDownlinkClient.getById(ANY_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_DOWNLINK_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = LOGICAL_DOWNLINK_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, LogicalDownlink.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(LogicalDownlink.class).getType());
     }
 
     @Test
     public void shouldGetAllLogicalDownlink() {
-        logicalDownlinkClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.LOGICAL_DOWNLINK_URI, LogicalDownlink.class);
+        Request expectedRequest = new Request(HttpMethod.GET, LOGICAL_DOWNLINK_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<LogicalDownlink>>() {}.getType());
     }
 
     @Test
     public void shouldGetLogicalDownlinkCollectionByName() {
-        logicalDownlinkClient.getByName(ANY_RESOURCE_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.LOGICAL_DOWNLINK_URI,
-                LogicalDownlink.class, UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, LOGICAL_DOWNLINK_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<LogicalDownlink>>() {}.getType());
     }
 
     @Test
     public void shouldGetLogicalDownlinkByIdWithoutEthernet() {
-        logicalDownlinkClient.getByIdWithoutEthernet(ANY_RESOURCE_ID);
+        client.getByIdWithoutEthernet(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_DOWNLINK_URI
+        String expectedUri = LOGICAL_DOWNLINK_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.WITHOUT_ETHERNET;
+                + WITHOUT_ETHERNET_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, LogicalDownlink.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(LogicalDownlink.class).getType());
     }
 
     @Test
     public void shouldGetAllLogicalDownlinkWithoutEthernet() {
-        logicalDownlinkClient.getAllWithoutEthernet();
+        client.getAllWithoutEthernet();
 
-        String expectedUri = ResourceUris.LOGICAL_DOWNLINK_URI + "/" + ResourceUris.WITHOUT_ETHERNET;
+        String expectedUri = LOGICAL_DOWNLINK_URI + WITHOUT_ETHERNET_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResourceCollection(expectedUri, LogicalDownlink.class);
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<LogicalDownlink>>() {}.getType());
     }
 
 }

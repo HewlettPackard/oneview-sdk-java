@@ -79,8 +79,8 @@ public class LogicalDownlinkClientSample {
     public static void main(String[] args) {
         LogicalDownlinkClientSample sample = new LogicalDownlinkClientSample();
 
-        sample.getLogicalDownlinkById();
         sample.getAllLogicalDownlink();
+        sample.getLogicalDownlinkById();
         sample.getLogicalDownlinkByName();
         sample.getLogicalDownlinkByIdWithoutEthernet();
         sample.getAllLogicalDownlinkWithoutEthernet();

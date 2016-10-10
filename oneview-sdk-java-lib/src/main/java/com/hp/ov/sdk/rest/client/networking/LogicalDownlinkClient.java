@@ -1,6 +1,6 @@
 /*
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
- *  
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,81 +15,18 @@
  */
 package com.hp.ov.sdk.rest.client.networking;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.logicaldownlinks.LogicalDownlink;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class LogicalDownlinkClient {
+@Api(LogicalDownlinkClient.LOGICAL_DOWNLINK_URI)
+public interface LogicalDownlinkClient extends SearchableResource<LogicalDownlink> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LogicalDownlinkClient.class);
-
-    private final BaseClient baseClient;
-
-    public LogicalDownlinkClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link LogicalDownlink} details for the specified logical downlink.
-     *
-     * @param resourceId logical downlink resource identifier as seen in HPE OneView.
-     *
-     * @return {@link LogicalDownlink} object containing the details.
-     */
-    public LogicalDownlink getById(String resourceId) {
-        LOGGER.info("LogicalDownlinkClient : getById : Start");
-
-        LogicalDownlink logicalDownlink = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.LOGICAL_DOWNLINK_URI, resourceId), LogicalDownlink.class);
-
-        LOGGER.info("LogicalDownlinkClient : getById : End");
-
-        return logicalDownlink;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link LogicalDownlink}&gt; containing details
-     * for all the available logical downlink found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link LogicalDownlink}&gt; containing
-     * the details for all found logical downlink.
-     */
-    public ResourceCollection<LogicalDownlink> getAll() {
-        LOGGER.info("LogicalDownlinkClient : getAll : Start");
-
-        ResourceCollection<LogicalDownlink> logicalDownlink = baseClient.getResourceCollection(
-                ResourceUris.LOGICAL_DOWNLINK_URI, LogicalDownlink.class);
-
-        LOGGER.info("LogicalDownlinkClient : getAll : End");
-
-        return logicalDownlink;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link LogicalDownlink}&gt; containing details
-     * for the available logical downlink found under the current HPE OneView that match the name.
-     *
-     * @param name logical downlink name as seen in HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link LogicalDownlink}&gt; containing
-     * the details for the found logical downlink.
-     */
-    public ResourceCollection<LogicalDownlink> getByName(String name) {
-        LOGGER.info("LogicalDownlinkClient : getByName : Start");
-
-        ResourceCollection<LogicalDownlink> logicalDownlink = baseClient.getResourceCollection(
-                ResourceUris.LOGICAL_DOWNLINK_URI, LogicalDownlink.class, UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("LogicalDownlinkClient : getByName : End");
-
-        return logicalDownlink;
-    }
+    String LOGICAL_DOWNLINK_URI = "/rest/logical-downlinks";
+    String WITHOUT_ETHERNET_URI = "/withoutEthernet";
 
     /**
      * Retrieves the {@link LogicalDownlink} details for the specified logical downlink,
@@ -99,17 +36,8 @@ public class LogicalDownlinkClient {
      *
      * @return {@link LogicalDownlink} object containing the details.
      */
-    public LogicalDownlink getByIdWithoutEthernet(String resourceId) {
-        LOGGER.info("LogicalDownlinkClient : getByIdWithoutEthernet : Start");
-
-        LogicalDownlink logicalDownlink = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.LOGICAL_DOWNLINK_URI, resourceId, ResourceUris.WITHOUT_ETHERNET),
-                LogicalDownlink.class);
-
-        LOGGER.info("LogicalDownlinkClient : getByIdWithoutEthernet : End");
-
-        return logicalDownlink;
-    }
+    @Endpoint(uri = "/{resourceId}" + WITHOUT_ETHERNET_URI)
+    LogicalDownlink getByIdWithoutEthernet(@PathParam("resourceId") String resourceId);
 
     /**
      * Retrieves a {@link ResourceCollection}&lt;{@link LogicalDownlink}&gt; containing details
@@ -119,16 +47,7 @@ public class LogicalDownlinkClient {
      * @return {@link ResourceCollection}&lt;{@link LogicalDownlink}&gt; containing
      * the details for all found logical downlink.
      */
-    public ResourceCollection<LogicalDownlink> getAllWithoutEthernet() {
-        LOGGER.info("LogicalDownlinkClient : getAllWithoutEthernet : Start");
-
-        ResourceCollection<LogicalDownlink> logicalDownlink = baseClient.getResourceCollection(
-                UrlUtils.createUrl(ResourceUris.LOGICAL_DOWNLINK_URI, ResourceUris.WITHOUT_ETHERNET),
-                LogicalDownlink.class);
-
-        LOGGER.info("LogicalDownlinkClient : getAllWithoutEthernet : End");
-
-        return logicalDownlink;
-    }
+    @Endpoint(uri = WITHOUT_ETHERNET_URI)
+    ResourceCollection<LogicalDownlink> getAllWithoutEthernet();
 
 }
