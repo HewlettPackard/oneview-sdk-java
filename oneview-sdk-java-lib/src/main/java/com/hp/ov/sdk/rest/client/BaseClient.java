@@ -26,13 +26,13 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Supplier;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
@@ -220,7 +220,7 @@ public class BaseClient {
     private String executeRequest(Request request) {
         String response = client.sendRequest(params, request);
 
-        LOGGER.info("BaseClient : executeRequest : response from OV: " + response);
+        LOGGER.info("response from OV: " + response);
 
         if (StringUtils.isBlank(response)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance,

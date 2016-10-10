@@ -32,13 +32,6 @@ public class ResourceUris {
     public static final String ENVIRONMENT_CONFIGURATION_URI = "environmentalConfiguration";
     public static final String FIRMWARE_BUNDLE_URI = "/rest/firmware-bundles";
     public static final String FIRMWARE_DRIVER_URI = "/rest/firmware-drivers";
-    public static final String INTERCONNECT_URI = "/rest/interconnects";
-    public static final String INTERCONNECT_PORTS_URI = "ports";
-    public static final String INTERCONNECT_STATISTICS_URI = "statistics";
-    public static final String INTERCONNECT_SUBPORT_URI = "subport";
-    public static final String INTERCONNECT_NAME_SERVERS_URI = "nameServers";
-    public static final String INTERCONNECT_UPDATE_PORTS_URI = "update-ports";
-    public static final String INTERCONNECT_RESET_PORT_PROTECTION_URI = "resetportprotection";
     public static final String LOGICAL_INTERCONNECT_URI = "/rest/logical-interconnects";
     public static final String LOGICAL_INTERCONNECT_FIRMWARE_URI = "firmware";
     public static final String LOGICAL_INTERCONNECT_LOCATION_URI = "locations";

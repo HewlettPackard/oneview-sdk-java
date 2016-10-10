@@ -18,117 +18,34 @@ package com.hp.ov.sdk.rest.client.networking;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.NameServer;
-import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.PortStatistics;
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.SubportStatistics;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.InterconnectsStatistics;
 import com.hp.ov.sdk.dto.networking.Port;
 import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.PatchableResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-public class InterconnectClient {
+@Api(InterconnectClient.INTERCONNECT_URI)
+public interface InterconnectClient extends
+        SearchableResource<Interconnect>,
+        PatchableResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(InterconnectClient.class);
-
-    private final BaseClient baseClient;
-
-    public InterconnectClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * The module aids in fetching the interconnect details for the specified
-     * interconnect resource identifier.
-     *
-     * @param resourceId resource identifier for interconnect as seen in HPE OneView.
-     *
-     * @return {@link Interconnect} containing the interconnect details.
-     */
-    public Interconnect getById(String resourceId) {
-        LOGGER.info("InterconnectClient : getById : Start");
-
-        Interconnect interconnect = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId), Interconnect.class);
-
-        LOGGER.info("InterconnectClient : getById : End");
-
-        return interconnect;
-    }
-
-    /**
-     * The module aids in fetching the interconnect details for all the
-     * interconnects found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link Interconnect}&gt; containing
-     * the details for all found interconnects.
-     */
-    public ResourceCollection<Interconnect> getAll() {
-        LOGGER.info("InterconnectClient : getAll : Start");
-
-        ResourceCollection<Interconnect> interconnects = baseClient.getResourceCollection(
-                ResourceUris.INTERCONNECT_URI, Interconnect.class);
-
-        LOGGER.info("InterconnectClient : getAll : End");
-
-        return interconnects;
-    }
-
-    /**
-     * The module aids in fetching the interconnect details for the interconnect
-     * name as specified in HPE OneView.
-     *
-     * @param name interconnect name as seen in HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link Interconnect}&gt; containing
-     * the details for all found interconnects.
-     */
-    public ResourceCollection<Interconnect> getByName(String name) {
-        LOGGER.info("InterconnectClient : getByName : Start");
-
-        ResourceCollection<Interconnect> interconnects = baseClient.getResourceCollection(
-                ResourceUris.INTERCONNECT_URI, Interconnect.class, UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("InterconnectClient : getByName : End");
-
-        return interconnects;
-    }
-
-    /**
-     * Performs a specific patch operation for the given interconnect. There are a limited
-     * set of interconnect properties which may be changed. They are: 'powerState',
-     * 'uidState', 'deviceResetState'. If the interconnect supports the operation, the
-     * operation is performed and a task is returned through which the results are reported.
-     *
-     * @param resourceId resource identifier for interconnect as seen in HPE OneView.
-     * @param patch containing the update to be made to existing interconnect.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource patch(String resourceId, Patch patch, boolean aSync) {
-        LOGGER.info("InterconnectClient : patch : Start");
-
-        Request request = new Request(HttpMethod.PATCH,
-                UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId), patch);
-
-        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("InterconnectClient : patch : End");
-
-        return taskResource;
-    }
+    String INTERCONNECT_URI = "/rest/interconnects";
+    String INTERCONNECT_NAME_SERVERS_URI = "/nameServers";
+    String INTERCONNECT_PORTS_URI = "/ports";
+    String INTERCONNECT_RESET_PORT_PROTECTION_URI = "/resetportprotection";
+    String INTERCONNECT_STATISTICS_URI = "/statistics";
+    String INTERCONNECT_SUBPORT_URI = "/subport";
+    String INTERCONNECT_UPDATE_PORTS_URI = "/update-ports";
 
     /**
      * The module takes in a {@link Port} object and updates the existing
@@ -136,22 +53,14 @@ public class InterconnectClient {
      *
      * @param resourceId resource identifier for interconnect as seen in HPE OneView.
      * @param port containing the interconnect port details, used to update a interconnect port.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource updatePort(String resourceId, Port port, boolean aSync) {
-        LOGGER.info("InterconnectClient : updatePort : Start");
-
-        TaskResource taskResource = baseClient.updateResource(
-                UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId, ResourceUris.INTERCONNECT_PORTS_URI),
-                port, aSync);
-
-        LOGGER.info("InterconnectClient : updatePort : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + INTERCONNECT_PORTS_URI, method = HttpMethod.PUT)
+    TaskResource updatePort(@PathParam("resourceId") String resourceId,
+            @BodyParam Port port, RequestOption... options);
 
     /**
      * The module takes in a {@link List}&lt;{@link Port}&gt; object and updates the existing
@@ -159,46 +68,26 @@ public class InterconnectClient {
      *
      * @param resourceId resource identifier for interconnect as seen in HPE OneView.
      * @param ports containing the interconnect ports details, used to update the interconnect ports.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource updatePorts(String resourceId, List<Port> ports, boolean aSync) {
-        LOGGER.info("InterconnectClient : updatePorts : Start");
-
-        TaskResource taskResource = baseClient.updateResource(
-                UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId,
-                        ResourceUris.INTERCONNECT_UPDATE_PORTS_URI),
-                ports, aSync);
-
-        LOGGER.info("InterconnectClient : updatePorts : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + INTERCONNECT_UPDATE_PORTS_URI, method = HttpMethod.PUT)
+    TaskResource updatePorts(@PathParam("resourceId") String resourceId,
+            @BodyParam List<Port> ports, RequestOption... options);
 
     /**
      * Triggers a reset of the interconnect port protection.
      *
      * @param resourceId resource identifier for interconnect as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options varargs of {@link RequestOption} which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource resetPortProtection(String resourceId, boolean aSync) {
-        LOGGER.info("InterconnectClient : resetPortProtection : Start");
-
-        String uri = UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId,
-                ResourceUris.INTERCONNECT_RESET_PORT_PROTECTION_URI);
-        Request request = new Request(HttpMethod.PUT, uri);
-
-        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
-
-        LOGGER.info("InterconnectClient : resetPortProtection : End");
-
-        return taskResource;
-    }
+    @Endpoint(uri = "/{resourceId}" + INTERCONNECT_RESET_PORT_PROTECTION_URI, method = HttpMethod.PUT)
+    TaskResource resetPortProtection(@PathParam("resourceId") String resourceId, RequestOption... options);
 
     /**
      * Retrieve the statistics of an interconnect for the specified
@@ -208,18 +97,8 @@ public class InterconnectClient {
      *
      * @return {@link InterconnectsStatistics} containing the interconnect statistics details.
      */
-    public InterconnectsStatistics getStatistics(String resourceId) {
-        LOGGER.info("InterconnectClient : getStatistics : Start");
-
-        InterconnectsStatistics statistics = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId,
-                        ResourceUris.INTERCONNECT_STATISTICS_URI),
-                InterconnectsStatistics.class);
-
-        LOGGER.info("InterconnectClient : getStatistics : End");
-
-        return statistics;
-    }
+    @Endpoint(uri = "/{resourceId}" + INTERCONNECT_STATISTICS_URI)
+    InterconnectsStatistics getStatistics(@PathParam("resourceId") String resourceId);
 
     /**
      * Retrieve the statistics of an interconnect port for the specified
@@ -230,18 +109,8 @@ public class InterconnectClient {
      *
      * @return {@link PortStatistics} containing the statistics of an interconnect port details.
      */
-    public PortStatistics getPortStatistics(String resourceId, String portName) {
-        LOGGER.info("InterconnectClient : getPortStatistics : Start");
-
-        PortStatistics statistics = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId,
-                        ResourceUris.INTERCONNECT_STATISTICS_URI, portName),
-                PortStatistics.class);
-
-        LOGGER.info("InterconnectClient : getPortStatistics : End");
-
-        return statistics;
-    }
+    @Endpoint(uri = "/{resourceId}" + INTERCONNECT_STATISTICS_URI + "/{portName}")
+    PortStatistics getPortStatistics(@PathParam("resourceId") String resourceId, @PathParam("portName") String portName);
 
     /**
      * Retrieve the statistics of an interconnect subport for the specified
@@ -253,19 +122,10 @@ public class InterconnectClient {
      *
      * @return {@link SubportStatistics} containing the statistics of an interconnect subport details.
      */
-    public SubportStatistics getSubportStatistics(String resourceId, String portName, int subportName) {
-        LOGGER.info("InterconnectClient : getSubportStatistics : Start");
-
-        SubportStatistics statistics = baseClient.getResource(
-                UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId,
-                        ResourceUris.INTERCONNECT_STATISTICS_URI, portName,
-                        ResourceUris.INTERCONNECT_SUBPORT_URI, String.valueOf(subportName)),
-                SubportStatistics.class);
-
-        LOGGER.info("InterconnectClient : getSubportStatistics : End");
-
-        return statistics;
-    }
+    @Endpoint(uri = "/{resourceId}" + INTERCONNECT_STATISTICS_URI + "/{portName}" + INTERCONNECT_SUBPORT_URI + "/{subportName}")
+    SubportStatistics getSubportStatistics(@PathParam("resourceId") String resourceId,
+            @PathParam("portName") String portName,
+            @PathParam("subportName") int subportName);
 
     /**
      * Retrieves the named servers for an interconnect found under the current HPE OneView.
@@ -275,17 +135,7 @@ public class InterconnectClient {
      * @return {@link List}&lt;{@link NameServer}&gt; containing the name servers
      * for the specified interconnect.
      */
-    public List<NameServer> getNamedServers(String resourceId) {
-        LOGGER.info("InterconnectClient : getNamedServers : Start");
-
-        List<NameServer> nameServers = baseClient.getResourceList(
-                UrlUtils.createUrl(ResourceUris.INTERCONNECT_URI, resourceId,
-                        ResourceUris.INTERCONNECT_NAME_SERVERS_URI),
-                NameServer.class);
-
-        LOGGER.info("InterconnectClient : getNamedServers : End");
-
-        return nameServers;
-    }
+    @Endpoint(uri = "/{resourceId}" + INTERCONNECT_NAME_SERVERS_URI)
+    List<NameServer> getNamedServers(@PathParam("resourceId") String resourceId);
 
 }
