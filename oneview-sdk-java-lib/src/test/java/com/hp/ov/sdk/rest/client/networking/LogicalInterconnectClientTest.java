@@ -16,22 +16,34 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
-import static org.mockito.BDDMockito.given;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_COMPLIANCE_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_CONFIGURATION_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_ETHERNET_SETTINGS_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_FIRMWARE_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_FORWARDING_INFORMATION_BASE_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_INTERCONNECTS_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_INTERNAL_NETWORKS_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_INTERNAL_VLANS_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_LOCATION_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_PORT_MONITOR_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_QOS_AGGREGATED_CONFIGURATION_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_SETTINGS_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_SNMP_CONFIGURATION_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_TELEMETRY_CONFIGURATION_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_UNASSIGNED_UPLINK_PORTS_URI;
+import static com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient.LOGICAL_INTERCONNECT_URI;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.InterconnectFibDataEntry;
 import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
 import com.hp.ov.sdk.dto.InternalVlanAssociation;
@@ -47,8 +59,11 @@ import com.hp.ov.sdk.dto.networking.logicalinterconnects.LiFirmware;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.LogicalInterconnect;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.PortMonitor;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LogicalInterconnectClientTest {
@@ -59,343 +74,343 @@ public class LogicalInterconnectClientTest {
     private static final String ANY_ENCLOSURE_URI = "random-Enclosure-URI";
     private static final String ANY_BAY = "random-Bay";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private LogicalInterconnectClient client;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private LogicalInterconnectClient client = Reflection.newProxy(LogicalInterconnectClient.class,
+            new ClientRequestHandler<>(baseClient, LogicalInterconnectClient.class));
 
     @Test
     public void shouldGetLogicalInterconnectById() {
         client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = LOGICAL_INTERCONNECT_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, LogicalInterconnect.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(LogicalInterconnect.class).getType());
     }
 
     @Test
     public void shouldGetAllLogicalInterconnects() {
         client.getAll();
 
-        then(baseClient).should().getResourceCollection(ResourceUris.LOGICAL_INTERCONNECT_URI,
-                LogicalInterconnect.class);
+        Request expectedRequest = new Request(HttpMethod.GET, LOGICAL_INTERCONNECT_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<LogicalInterconnect>>() {}.getType());
     }
 
     @Test
     public void shouldGetLogicalInterconnectByName() {
-        given(this.baseClient.getResourceCollection(anyString(), eq(LogicalInterconnect.class)))
-                .willReturn(new ResourceCollection<LogicalInterconnect>());
-
         client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(ResourceUris.LOGICAL_INTERCONNECT_URI,
-                LogicalInterconnect.class);
+        Request expectedRequest = new Request(HttpMethod.GET, LOGICAL_INTERCONNECT_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<LogicalInterconnect>>() {}.getType());
     }
 
     @Test
     public void shouldCreateInterconnect() {
         Location location = new Location();
 
-        client.createInterconnect(location, false);
+        client.createInterconnect(location, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_LOCATION_URI
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_INTERCONNECTS_URI;
+        String expectedUri = LOGICAL_INTERCONNECT_URI
+                + LOGICAL_INTERCONNECT_LOCATION_URI
+                + LOGICAL_INTERCONNECT_INTERCONNECTS_URI;
         Request expectedRequest = new Request(HttpMethod.POST, expectedUri, location);
+        expectedRequest.setTimeout(321);
 
-        expectedRequest.setTimeout(300000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldDeleteInterconnect() {
-        client.deleteInterconnect(ANY_ENCLOSURE_URI, ANY_BAY, false);
+        client.deleteInterconnect(ANY_ENCLOSURE_URI, ANY_BAY, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_LOCATION_URI
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_INTERCONNECTS_URI;
+        String expectedUri = LOGICAL_INTERCONNECT_URI
+                + LOGICAL_INTERCONNECT_LOCATION_URI
+                + LOGICAL_INTERCONNECT_INTERCONNECTS_URI
+                + "?location=Enclosure:" + ANY_ENCLOSURE_URI
+                + ",Bay:" + ANY_BAY;
         Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
+        expectedRequest.setTimeout(321);
 
-        expectedRequest.setTimeout(300000);
-        expectedRequest.addQuery(new UrlParameter("location",
-                "Enclosure:" + ANY_ENCLOSURE_URI + ",Bay:" + ANY_BAY));
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetLogicalInterconnectSnmpConfiguration() {
         client.getSnmpConfiguration(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_SNMP_CONFIGURATION_URI;
+                + LOGICAL_INTERCONNECT_SNMP_CONFIGURATION_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, SnmpConfiguration.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(SnmpConfiguration.class).getType());
     }
 
     @Test
     public void shouldUpdateLogicalInterconnectSnmpConfiguration() {
         SnmpConfiguration snmpConfiguration = new SnmpConfiguration();
 
-        client.updateSnmpConfiguration(ANY_RESOURCE_ID, snmpConfiguration, false);
+        client.updateSnmpConfiguration(ANY_RESOURCE_ID, snmpConfiguration, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_SNMP_CONFIGURATION_URI;
+                + LOGICAL_INTERCONNECT_SNMP_CONFIGURATION_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, snmpConfiguration);
+        expectedRequest.setTimeout(321);
 
-        expectedRequest.setTimeout(300000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetLogicalInterconnectForwardingInformationBase() {
         client.getForwardingInformationBase(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_FORWARDING_INFORMATION_BASE_URI;
+                + LOGICAL_INTERCONNECT_FORWARDING_INFORMATION_BASE_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResourceCollection(expectedUri, InterconnectFibDataEntry.class);
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<InterconnectFibDataEntry>>() {}.getType());
     }
 
     @Test
     public void shouldCreateLogicalInterconnectForwardingInformationBase() {
         client.createForwardingInformationBase(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_FORWARDING_INFORMATION_BASE_URI;
+                + LOGICAL_INTERCONNECT_FORWARDING_INFORMATION_BASE_URI;
         Request expectedRequest = new Request(HttpMethod.POST, expectedUri);
 
-        then(baseClient).should().executeRequest(expectedRequest, InterconnectFibDataInfo.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(InterconnectFibDataInfo.class).getType());
     }
 
     @Test
     public void shouldGetLogicalInterconnectFirmware() {
         client.getFirmware(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_FIRMWARE_URI;
+                + LOGICAL_INTERCONNECT_FIRMWARE_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, LiFirmware.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(LiFirmware.class).getType());
     }
 
     @Test
     public void shouldUpdateLogicalInterconnectFirmware() {
         LiFirmware liFirmware = new LiFirmware();
 
-        client.updateFirmware(ANY_RESOURCE_ID, liFirmware, false);
+        client.updateFirmware(ANY_RESOURCE_ID, liFirmware, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_FIRMWARE_URI;
+                + LOGICAL_INTERCONNECT_FIRMWARE_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, liFirmware);
+        expectedRequest.setTimeout(321);
 
-        expectedRequest.setTimeout(300000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetLogicalInterconnectQosAggregatedConfiguration() {
         client.getQosAggregatedConfiguration(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_QOS_AGGREGATED_CONFIGURATION_URI;
+                + LOGICAL_INTERCONNECT_QOS_AGGREGATED_CONFIGURATION_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, QosAggregatedConfiguration.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(QosAggregatedConfiguration.class).getType());
     }
 
     @Test
     public void shouldUpdateLogicalInterconnectQosAggregatedConfiguration() {
         QosAggregatedConfiguration configuration = new QosAggregatedConfiguration();
 
-        client.updateQosAggregatedConfiguration(ANY_RESOURCE_ID, configuration, false);
+        client.updateQosAggregatedConfiguration(ANY_RESOURCE_ID, configuration, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_QOS_AGGREGATED_CONFIGURATION_URI;
+                + LOGICAL_INTERCONNECT_QOS_AGGREGATED_CONFIGURATION_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, configuration);
+        expectedRequest.setTimeout(321);
 
-        expectedRequest.setTimeout(300000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetLogicalInterconnectTelemetryConfiguration() {
         client.getTelemetryConfiguration(ANY_RESOURCE_ID, ANY_TELEMETRY_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_TELEMETRY_CONFIGURATION_URI
+                + LOGICAL_INTERCONNECT_TELEMETRY_CONFIGURATION_URI
                 + "/" + ANY_TELEMETRY_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, TelemetryConfiguration.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(TelemetryConfiguration.class).getType());
+    }
+
+    @Test
+    public void shouldUpdateLogicalInterconnectTelemetryConfigurationV120() {
+        TelemetryConfiguration configuration = new TelemetryConfiguration();
+
+        client.updateTelemetryConfigurationV120(ANY_RESOURCE_ID, ANY_TELEMETRY_ID, configuration);
+
+        String expectedUri = LOGICAL_INTERCONNECT_URI
+                + "/" + ANY_RESOURCE_ID
+                + LOGICAL_INTERCONNECT_TELEMETRY_CONFIGURATION_URI
+                + "/" + ANY_TELEMETRY_ID;
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, configuration);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(TelemetryConfiguration.class).getType());
     }
 
     @Test
     public void shouldUpdateLogicalInterconnectTelemetryConfiguration() {
         TelemetryConfiguration configuration = new TelemetryConfiguration();
 
-        client.updateTelemetryConfiguration(ANY_RESOURCE_ID, ANY_TELEMETRY_ID, configuration);
+        client.updateTelemetryConfiguration(ANY_RESOURCE_ID, ANY_TELEMETRY_ID, configuration, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_TELEMETRY_CONFIGURATION_URI
+                + LOGICAL_INTERCONNECT_TELEMETRY_CONFIGURATION_URI
                 + "/" + ANY_TELEMETRY_ID;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, configuration);
+        expectedRequest.setTimeout(321);
 
-        then(baseClient).should().executeRequest(expectedRequest, TelemetryConfiguration.class);
-    }
-
-    @Test
-    public void shouldUpdateLogicalInterconnectTelemetryConfigurationV200() {
-        TelemetryConfiguration configuration = new TelemetryConfiguration();
-
-        client.updateTelemetryConfigurationV200(ANY_RESOURCE_ID, ANY_TELEMETRY_ID, configuration, false);
-
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
-                + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_TELEMETRY_CONFIGURATION_URI
-                + "/" + ANY_TELEMETRY_ID;
-        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, configuration);
-
-        expectedRequest.setTimeout(300000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetLogicalInterconnectPortMonitorConfiguration() {
         client.getPortMonitorConfiguration(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_PORT_MONITOR_URI;
+                + LOGICAL_INTERCONNECT_PORT_MONITOR_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, PortMonitor.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(PortMonitor.class).getType());
     }
 
     @Test
     public void shouldUpdateLogicalInterconnectPortMonitorConfiguration() {
         PortMonitor portMonitor = new PortMonitor();
 
-        client.updatePortMonitorConfiguration(ANY_RESOURCE_ID, portMonitor, false);
+        client.updatePortMonitorConfiguration(ANY_RESOURCE_ID, portMonitor, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_PORT_MONITOR_URI;
+                + LOGICAL_INTERCONNECT_PORT_MONITOR_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, portMonitor);
+        expectedRequest.setTimeout(321);
 
-        expectedRequest.setTimeout(300000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateLogicalInterconnectConfiguration() {
-        client.updateConfiguration(ANY_RESOURCE_ID, false);
+        client.updateConfiguration(ANY_RESOURCE_ID, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_CONFIGURATION_URI;
+                + LOGICAL_INTERCONNECT_CONFIGURATION_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setTimeout(321);
 
-        expectedRequest.setTimeout(300000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateLogicalInterconnectSettings() {
         InterconnectSettingsV2 settings = new InterconnectSettingsV2();
 
-        client.updateSettings(ANY_RESOURCE_ID, settings, false);
+        client.updateSettings(ANY_RESOURCE_ID, settings, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_SETTINGS_URI;
+                + LOGICAL_INTERCONNECT_SETTINGS_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, settings);
+        expectedRequest.setTimeout(321);
 
-        expectedRequest.setTimeout(300000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateLogicalInterconnectEthernetSettings() {
         EthernetInterconnectSettingsV2 settings = new EthernetInterconnectSettingsV2();
 
-        client.updateEthernetSettings(ANY_RESOURCE_ID, settings, false);
+        client.updateEthernetSettings(ANY_RESOURCE_ID, settings, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_ETHERNET_SETTINGS_URI;
+                + LOGICAL_INTERCONNECT_ETHERNET_SETTINGS_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, settings);
+        expectedRequest.setTimeout(321);
 
-        expectedRequest.setTimeout(300000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateLogicalInterconnectCompliance() {
-        client.updateCompliance(ANY_RESOURCE_ID, false);
+        client.updateCompliance(ANY_RESOURCE_ID, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_COMPLIANCE_URI;
+                + LOGICAL_INTERCONNECT_COMPLIANCE_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        expectedRequest.setTimeout(321);
 
-        expectedRequest.setTimeout(300000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldUpdateLogicalInterconnectInternalNetworks() {
         List<String> networkUris = new ArrayList<>();
 
-        client.updateInternalNetworks(ANY_RESOURCE_ID, networkUris, false);
+        client.updateInternalNetworks(ANY_RESOURCE_ID, networkUris, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_INTERNAL_NETWORKS_URI;
+                + LOGICAL_INTERCONNECT_INTERNAL_NETWORKS_URI;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, networkUris);
+        expectedRequest.setTimeout(321);
 
-        expectedRequest.setTimeout(300000);
-
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetLogicalInterconnectInternalVlans() {
         client.getInternalVlans(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_INTERNAL_VLANS_URI;
+                + LOGICAL_INTERCONNECT_INTERNAL_VLANS_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResourceCollection(expectedUri, InternalVlanAssociation.class);
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<InternalVlanAssociation>>() {}.getType());
     }
 
     @Test
     public void shouldGetLogicalInterconnectUnassignedUplinkPortsForPortMonitor() {
         client.getUnassignedUplinkPortsForPortMonitor(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.LOGICAL_INTERCONNECT_URI
+        String expectedUri = LOGICAL_INTERCONNECT_URI
                 + "/" + ANY_RESOURCE_ID
-                + "/" + ResourceUris.LOGICAL_INTERCONNECT_UNASSIGNED_UPLINK_PORTS_URI;
+                + LOGICAL_INTERCONNECT_UNASSIGNED_UPLINK_PORTS_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResourceCollection(expectedUri, PortMonitorUplinkPort.class);
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<PortMonitorUplinkPort>>() {}.getType());
     }
 
 }
