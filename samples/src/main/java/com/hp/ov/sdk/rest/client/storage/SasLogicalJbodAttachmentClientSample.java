@@ -65,8 +65,8 @@ public class SasLogicalJbodAttachmentClientSample {
     public static void main(String[] args) {
         SasLogicalJbodAttachmentClientSample sample = new SasLogicalJbodAttachmentClientSample();
 
-        sample.getSasLogicalJbodAttachmentById();
         sample.getAllSasLogicalJbodAttachments();
+        sample.getSasLogicalJbodAttachmentById();
         sample.getSasLogicalJbodAttachmentByName();
     }
 

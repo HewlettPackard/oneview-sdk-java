@@ -16,57 +16,65 @@
 
 package com.hp.ov.sdk.rest.client.storage;
 
+import static com.hp.ov.sdk.rest.client.storage.SasLogicalJbodAttachmentClient.SAS_LOGICAL_JBOD_ATTACHMENT_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.storage.saslogicaljbod.SasLogicalJbodAttachment;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SasLogicalJbodAttachmentClientTest {
 
-    private static final String ANY_SAS_LOGICAL_ATTACHMENT_RESOURCE_ID = "random-UUID";
-    private static final String ANY_SAS_LOGICAL_ATTACHMENT_TYPE_NAME = "random-Name";
+    private static final String ANY_RESOURCE_ID = "random-UUID";
+    private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private SasLogicalJbodAttachmentClient sasLogicalJbodAttachmentClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private SasLogicalJbodAttachmentClient client = Reflection.newProxy(SasLogicalJbodAttachmentClient.class,
+            new ClientRequestHandler<>(baseClient, SasLogicalJbodAttachmentClient.class));
 
     @Test
     public void shouldGetSasLogicalJbodAttachmentById() {
-        sasLogicalJbodAttachmentClient.getById(ANY_SAS_LOGICAL_ATTACHMENT_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = SasLogicalJbodAttachmentClient.SAS_LOGICAL_JBOD_ATTACHMENT_URI
-                + "/" + ANY_SAS_LOGICAL_ATTACHMENT_RESOURCE_ID;
+        String expectedUri = SAS_LOGICAL_JBOD_ATTACHMENT_URI
+                + "/" + ANY_RESOURCE_ID;
 
-        then(baseClient).should().getResource(expectedUri, SasLogicalJbodAttachment.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(SasLogicalJbodAttachment.class).getType());
     }
 
     @Test
     public void shouldGetAllSasLogicalJbodAttachments() {
-        sasLogicalJbodAttachmentClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(
-                SasLogicalJbodAttachmentClient.SAS_LOGICAL_JBOD_ATTACHMENT_URI,
-                SasLogicalJbodAttachment.class);
+        Request expectedRequest = new Request(HttpMethod.GET, SAS_LOGICAL_JBOD_ATTACHMENT_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<SasLogicalJbodAttachment>>() {}.getType());
     }
 
     @Test
     public void shouldGetSasLogicalJbodAttachmentByName() {
-        sasLogicalJbodAttachmentClient.getByName(ANY_SAS_LOGICAL_ATTACHMENT_TYPE_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(
-                SasLogicalJbodAttachmentClient.SAS_LOGICAL_JBOD_ATTACHMENT_URI,
-                SasLogicalJbodAttachment.class,
-                UrlParameter.getFilterByNameParameter(ANY_SAS_LOGICAL_ATTACHMENT_TYPE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, SAS_LOGICAL_JBOD_ATTACHMENT_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<SasLogicalJbodAttachment>>() {}.getType());
     }
 
 }
