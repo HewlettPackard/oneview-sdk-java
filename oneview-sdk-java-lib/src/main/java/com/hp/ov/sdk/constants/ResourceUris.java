@@ -22,6 +22,5 @@ public class ResourceUris {
      */
     public static final String APPLIANCE_VERSION = "/rest/version";
     public static final String LOGIN_SESSIONS = "/rest/login-sessions";
-    public static final String SERVER_HARDWARE_TYPE_URI = "/rest/server-hardware-types";
 
 }

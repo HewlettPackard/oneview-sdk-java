@@ -16,80 +16,88 @@
 
 package com.hp.ov.sdk.rest.client.server;
 
+import static com.hp.ov.sdk.rest.client.server.ServerHardwareTypeClient.SERVER_HARDWARE_TYPE_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.servers.serverhardwaretype.ServerHardwareType;
 import com.hp.ov.sdk.dto.servers.serverhardwaretype.ServerHardwareTypeUpdate;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ServerHardwareTypeClientTest {
 
-    private static final String ANY_SERVER_HARDWARE_TYPE_RESOURCE_ID = "random-UUID";
-    private static final String ANY_SERVER_HARDWARE_TYPE_RESOURCE_NAME = "random-Name";
+    private static final String ANY_RESOURCE_ID = "random-UUID";
+    private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private ServerHardwareTypeClient serverHardwareTypeClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private ServerHardwareTypeClient client = Reflection.newProxy(ServerHardwareTypeClient.class,
+            new ClientRequestHandler<>(baseClient, ServerHardwareTypeClient.class));
 
     @Test
     public void shouldGetServerHardwareType() {
-        serverHardwareTypeClient.getById(ANY_SERVER_HARDWARE_TYPE_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = ResourceUris.SERVER_HARDWARE_TYPE_URI + "/" + ANY_SERVER_HARDWARE_TYPE_RESOURCE_ID;
+        String expectedUri = SERVER_HARDWARE_TYPE_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, ServerHardwareType.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(ServerHardwareType.class).getType());
     }
 
     @Test
     public void shouldGetAllServerHardwareTypes() {
-        serverHardwareTypeClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(
-                ResourceUris.SERVER_HARDWARE_TYPE_URI, ServerHardwareType.class);
+        Request expectedRequest = new Request(HttpMethod.GET, SERVER_HARDWARE_TYPE_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<ServerHardwareType>>() {}.getType());
     }
 
     @Test
     public void shouldGetServerHardwareTypeByName() {
-        serverHardwareTypeClient.getByName(ANY_SERVER_HARDWARE_TYPE_RESOURCE_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(
-                ResourceUris.SERVER_HARDWARE_TYPE_URI,
-                ServerHardwareType.class,
-                UrlParameter.getFilterByNameParameter(ANY_SERVER_HARDWARE_TYPE_RESOURCE_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, SERVER_HARDWARE_TYPE_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<ServerHardwareType>>() {}.getType());
     }
 
     @Test
     public void shouldUpdateServerHardwareType() {
         ServerHardwareTypeUpdate serverHardwareTypeUpdate = new ServerHardwareTypeUpdate();
 
-        serverHardwareTypeClient.update(ANY_SERVER_HARDWARE_TYPE_RESOURCE_ID, serverHardwareTypeUpdate);
+        client.update(ANY_RESOURCE_ID, serverHardwareTypeUpdate);
 
-        String expectedUri = ResourceUris.SERVER_HARDWARE_TYPE_URI + "/" + ANY_SERVER_HARDWARE_TYPE_RESOURCE_ID;
+        String expectedUri = SERVER_HARDWARE_TYPE_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, serverHardwareTypeUpdate);
 
-        then(baseClient).should().executeRequest(expectedRequest, ServerHardwareType.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(ServerHardwareType.class).getType());
     }
 
     @Test
     public void shouldDeleteServerHardwareType() {
-        serverHardwareTypeClient.delete(ANY_SERVER_HARDWARE_TYPE_RESOURCE_ID, false);
+        client.delete(ANY_RESOURCE_ID, TaskTimeout.of(321));
 
-        String expectedUri = ResourceUris.SERVER_HARDWARE_TYPE_URI + "/" + ANY_SERVER_HARDWARE_TYPE_RESOURCE_ID;
+        String expectedUri = SERVER_HARDWARE_TYPE_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
+        expectedRequest.setTimeout(321);
 
-        then(baseClient).should().deleteResource(expectedUri, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
 }
