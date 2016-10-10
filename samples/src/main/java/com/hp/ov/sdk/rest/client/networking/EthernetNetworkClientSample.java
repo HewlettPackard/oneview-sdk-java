@@ -43,6 +43,10 @@ public class EthernetNetworkClientSample {
     // ================================
     private static final String ETHERNET_NETWORK_NAME = "Ethernet-Network_SAMPLE";
     private static final String ETHERNET_NETWORK_NAME_UPDATED = ETHERNET_NETWORK_NAME + "_Updated";
+    private static final String ETHERNET_NETWORK_BULK_VLAN_INTERVAL = "401-405";
+
+    public static final String ETHERNET_NETWORK_PROD_401 = "Prod_401";
+    public static final String ETHERNET_NETWORK_PROD_402 = "Prod_402";
     // ================================
 
     private final EthernetNetworkClient client;
@@ -147,7 +151,7 @@ public class EthernetNetworkClientSample {
     private void createEthernetNetworkInBulk() {
         BulkEthernetNetwork network = new BulkEthernetNetwork();
 
-        network.setVlanIdRange("401-405");
+        network.setVlanIdRange(ETHERNET_NETWORK_BULK_VLAN_INTERVAL);
         network.setPurpose(Purpose.General);
         network.setNamePrefix("Prod");
         network.setSmartLink(false);

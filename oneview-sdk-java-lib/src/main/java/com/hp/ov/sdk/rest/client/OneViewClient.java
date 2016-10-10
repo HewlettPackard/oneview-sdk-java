@@ -96,68 +96,55 @@ public class OneViewClient {
     }
 
     public synchronized AlertClient alert() {
-        return Reflection.newProxy(AlertClient.class,
-                new ClientRequestHandler<>(this.baseClient, AlertClient.class));
+        return this.getProxy(AlertClient.class);
     }
 
     public synchronized ConnectionTemplateClient connectionTemplate() {
-        return Reflection.newProxy(ConnectionTemplateClient.class,
-                new ClientRequestHandler<>(this.baseClient, ConnectionTemplateClient.class));
+        return this.getProxy(ConnectionTemplateClient.class);
     }
 
     public synchronized DataCenterClient dataCenter() {
-        return Reflection.newProxy(DataCenterClient.class,
-                new ClientRequestHandler<>(this.baseClient, DataCenterClient.class));
+        return this.getProxy(DataCenterClient.class);
     }
 
     public synchronized DriveEnclosureClient driveEnclosure() {
-        return Reflection.newProxy(DriveEnclosureClient.class,
-                new ClientRequestHandler<>(this.baseClient, DriveEnclosureClient.class));
+        return this.getProxy(DriveEnclosureClient.class);
     }
 
     public synchronized EnclosureClient enclosure() {
-        return Reflection.newProxy(EnclosureClient.class,
-                new ClientRequestHandler<>(this.baseClient, EnclosureClient.class));
+        return this.getProxy(EnclosureClient.class);
     }
 
     public synchronized EnclosureGroupClient enclosureGroup() {
-        return Reflection.newProxy(EnclosureGroupClient.class,
-                new ClientRequestHandler<>(this.baseClient, EnclosureGroupClient.class));
+        return this.getProxy(EnclosureGroupClient.class);
     }
 
     public synchronized EthernetNetworkClient ethernetNetwork() {
-        return Reflection.newProxy(EthernetNetworkClient.class,
-                new ClientRequestHandler<>(this.baseClient, EthernetNetworkClient.class));
+        return this.getProxy(EthernetNetworkClient.class);
     }
 
     public synchronized FabricClient fabric() {
-        return Reflection.newProxy(FabricClient.class,
-                new ClientRequestHandler<>(this.baseClient, FabricClient.class));
+        return this.getProxy(FabricClient.class);
     }
 
     public synchronized FcNetworkClient fcNetwork() {
-        return Reflection.newProxy(FcNetworkClient.class,
-                new ClientRequestHandler<>(this.baseClient, FcNetworkClient.class));
+        return this.getProxy(FcNetworkClient.class);
     }
 
     public synchronized FcoeNetworkClient fcoeNetwork() {
-        return Reflection.newProxy(FcoeNetworkClient.class,
-                new ClientRequestHandler<>(this.baseClient, FcoeNetworkClient.class));
+        return this.getProxy(FcoeNetworkClient.class);
     }
 
     public synchronized FcSanDeviceManagerClient fcSanDeviceManager() {
-        return Reflection.newProxy(FcSanDeviceManagerClient.class,
-                new ClientRequestHandler<>(this.baseClient, FcSanDeviceManagerClient.class));
+        return this.getProxy(FcSanDeviceManagerClient.class);
     }
 
     public synchronized FcSanManagedSanClient fcSanManagedSan() {
-        return Reflection.newProxy(FcSanManagedSanClient.class,
-                new ClientRequestHandler<>(this.baseClient, FcSanManagedSanClient.class));
+        return this.getProxy(FcSanManagedSanClient.class);
     }
 
     public synchronized FcSanProviderClient fcSanProvider() {
-        return Reflection.newProxy(FcSanProviderClient.class,
-                new ClientRequestHandler<>(this.baseClient, FcSanProviderClient.class));
+        return this.getProxy(FcSanProviderClient.class);
     }
 
     public synchronized FirmwareBundleClient firmwareBundle() {
@@ -165,58 +152,47 @@ public class OneViewClient {
     }
 
     public synchronized FirmwareDriverClient firmwareDriver() {
-        return Reflection.newProxy(FirmwareDriverClient.class,
-                new ClientRequestHandler<>(this.baseClient, FirmwareDriverClient.class));
+        return this.getProxy(FirmwareDriverClient.class);
     }
 
     public synchronized InterconnectClient interconnect() {
-        return Reflection.newProxy(InterconnectClient.class,
-                new ClientRequestHandler<>(this.baseClient, InterconnectClient.class));
+        return this.getProxy(InterconnectClient.class);
     }
 
     public synchronized InterconnectLinkTopologyClient interconnectLinkTopology() {
-        return Reflection.newProxy(InterconnectLinkTopologyClient.class,
-                new ClientRequestHandler<>(this.baseClient, InterconnectLinkTopologyClient.class));
+        return this.getProxy(InterconnectLinkTopologyClient.class);
     }
 
     public synchronized InterconnectTypeClient interconnectType() {
-        return Reflection.newProxy(InterconnectTypeClient.class,
-                new ClientRequestHandler<>(this.baseClient, InterconnectTypeClient.class));
+        return this.getProxy(InterconnectTypeClient.class);
     }
 
     public synchronized InternalLinkSetClient internalLinkSet() {
-        return Reflection.newProxy(InternalLinkSetClient.class,
-                new ClientRequestHandler<>(this.baseClient, InternalLinkSetClient.class));
+        return this.getProxy(InternalLinkSetClient.class);
     }
 
     public synchronized LogicalDownlinkClient logicalDownlink() {
-        return Reflection.newProxy(LogicalDownlinkClient.class,
-                new ClientRequestHandler<>(this.baseClient, LogicalDownlinkClient.class));
+        return this.getProxy(LogicalDownlinkClient.class);
     }
 
     public synchronized LogicalEnclosureClient logicalEnclosure() {
-        return Reflection.newProxy(LogicalEnclosureClient.class,
-                new ClientRequestHandler<>(this.baseClient, LogicalEnclosureClient.class));
+        return this.getProxy(LogicalEnclosureClient.class);
     }
 
     public synchronized LogicalInterconnectClient logicalInterconnect() {
-        return Reflection.newProxy(LogicalInterconnectClient.class,
-                new ClientRequestHandler<>(this.baseClient, LogicalInterconnectClient.class));
+        return this.getProxy(LogicalInterconnectClient.class);
     }
 
     public synchronized LogicalInterconnectGroupClient logicalInterconnectGroup() {
-        return Reflection.newProxy(LogicalInterconnectGroupClient.class,
-                new ClientRequestHandler<>(this.baseClient, LogicalInterconnectGroupClient.class));
+        return this.getProxy(LogicalInterconnectGroupClient.class);
     }
 
     public synchronized LogicalSwitchClient logicalSwitch() {
-        return Reflection.newProxy(LogicalSwitchClient.class,
-                new ClientRequestHandler<>(this.baseClient, LogicalSwitchClient.class));
+        return this.getProxy(LogicalSwitchClient.class);
     }
 
     public synchronized LogicalSwitchGroupClient logicalSwitchGroup() {
-        return Reflection.newProxy(LogicalSwitchGroupClient.class,
-                new ClientRequestHandler<>(this.baseClient, LogicalSwitchGroupClient.class));
+        return this.getProxy(LogicalSwitchGroupClient.class);
     }
 
     public synchronized MessagingCertificateClient messagingCertificate() {
@@ -224,112 +200,102 @@ public class OneViewClient {
     }
 
     public synchronized NetworkSetClient networkSet() {
-        return Reflection.newProxy(NetworkSetClient.class,
-                new ClientRequestHandler<>(this.baseClient, NetworkSetClient.class));
+        return this.getProxy(NetworkSetClient.class);
     }
 
     public synchronized PowerDeliveryDeviceClient powerDeliveryDevice() {
-        return Reflection.newProxy(PowerDeliveryDeviceClient.class,
-                new ClientRequestHandler<>(this.baseClient, PowerDeliveryDeviceClient.class));
+        return this.getProxy(PowerDeliveryDeviceClient.class);
     }
 
     public synchronized RackClient rack() {
-        return Reflection.newProxy(RackClient.class,
-                new ClientRequestHandler<>(this.baseClient, RackClient.class));
+        return this.getProxy(RackClient.class);
     }
 
     public synchronized SasInterconnectClient sasInterconnects() {
-        return Reflection.newProxy(SasInterconnectClient.class,
-                new ClientRequestHandler<>(this.baseClient, SasInterconnectClient.class));
+        return this.getProxy(SasInterconnectClient.class);
     }
 
     public synchronized SasInterconnectTypeClient sasInterconnectType() {
-        return Reflection.newProxy(SasInterconnectTypeClient.class,
-                new ClientRequestHandler<>(this.baseClient, SasInterconnectTypeClient.class));
+        return this.getProxy(SasInterconnectTypeClient.class);
     }
 
     public synchronized SasLogicalInterconnectClient sasLogicalInterconnect() {
-        return Reflection.newProxy(SasLogicalInterconnectClient.class,
-                new ClientRequestHandler<>(this.baseClient, SasLogicalInterconnectClient.class));
+        return this.getProxy(SasLogicalInterconnectClient.class);
     }
 
     public synchronized SasLogicalInterconnectGroupClient sasLogicalInterconnectGroup() {
-        return Reflection.newProxy(SasLogicalInterconnectGroupClient.class,
-                new ClientRequestHandler<>(this.baseClient, SasLogicalInterconnectGroupClient.class));
+        return this.getProxy(SasLogicalInterconnectGroupClient.class);
     }
 
     public synchronized SasLogicalJbodAttachmentClient sasLogicalJbodAttachment() {
-        return Reflection.newProxy(SasLogicalJbodAttachmentClient.class,
-                new ClientRequestHandler<>(this.baseClient, SasLogicalJbodAttachmentClient.class));
+        return this.getProxy(SasLogicalJbodAttachmentClient.class);
     }
 
     public synchronized SasLogicalJbodClient sasLogicalJbod() {
-        return Reflection.newProxy(SasLogicalJbodClient.class,
-                new ClientRequestHandler<>(this.baseClient, SasLogicalJbodClient.class));
+        return this.getProxy(SasLogicalJbodClient.class);
     }
 
     public synchronized ServerHardwareClient serverHardware() {
-        return Reflection.newProxy(ServerHardwareClient.class,
-                new ClientRequestHandler<>(this.baseClient, ServerHardwareClient.class));
+        return this.getProxy(ServerHardwareClient.class);
     }
 
     public synchronized ServerHardwareTypeClient serverHardwareType() {
-        return Reflection.newProxy(ServerHardwareTypeClient.class,
-                new ClientRequestHandler<>(this.baseClient, ServerHardwareTypeClient.class));
+        return this.getProxy(ServerHardwareTypeClient.class);
     }
 
     public synchronized ServerProfileClient serverProfile() {
-        return Reflection.newProxy(ServerProfileClient.class,
-                new ClientRequestHandler<>(this.baseClient, ServerProfileClient.class));
+        return this.getProxy(ServerProfileClient.class);
     }
 
     public synchronized ServerProfileTemplateClient serverProfileTemplate() {
-        return this.getClient(ServerProfileTemplateClient.class);
+        return this.getProxy(ServerProfileTemplateClient.class);
     }
 
     public synchronized StoragePoolClient storagePool() {
-        return Reflection.newProxy(StoragePoolClient.class,
-                new ClientRequestHandler<>(this.baseClient, StoragePoolClient.class));
+        return this.getProxy(StoragePoolClient.class);
     }
 
     public synchronized StorageSystemClient storageSystem() {
-        return Reflection.newProxy(StorageSystemClient.class,
-                new ClientRequestHandler<>(this.baseClient, StorageSystemClient.class));
+        return this.getProxy(StorageSystemClient.class);
     }
 
     public synchronized StorageVolumeClient storageVolume() {
-        return Reflection.newProxy(StorageVolumeClient.class,
-                new ClientRequestHandler<>(this.baseClient, StorageVolumeClient.class));
+        return this.getProxy(StorageVolumeClient.class);
     }
 
     public synchronized StorageVolumeAttachmentClient storageVolumeAttachment() {
-        return Reflection.newProxy(StorageVolumeAttachmentClient.class,
-                new ClientRequestHandler<>(this.baseClient, StorageVolumeAttachmentClient.class));
+        return this.getProxy(StorageVolumeAttachmentClient.class);
     }
 
     public synchronized StorageVolumeTemplateClient storageVolumeTemplate() {
-        return Reflection.newProxy(StorageVolumeTemplateClient.class,
-                new ClientRequestHandler<>(this.baseClient, StorageVolumeTemplateClient.class));
+        return this.getProxy(StorageVolumeTemplateClient.class);
     }
 
     public synchronized SwitchClient switches() {
-        return Reflection.newProxy(SwitchClient.class,
-                new ClientRequestHandler<>(this.baseClient, SwitchClient.class));
+        return this.getProxy(SwitchClient.class);
     }
 
     public synchronized SwitchTypeClient switchType() {
-        return Reflection.newProxy(SwitchTypeClient.class,
-                new ClientRequestHandler<>(this.baseClient, SwitchTypeClient.class));
+        return this.getProxy(SwitchTypeClient.class);
     }
 
     public synchronized UnmanagedDeviceClient unmanagedDevice() {
-        return Reflection.newProxy(UnmanagedDeviceClient.class,
-                new ClientRequestHandler<>(this.baseClient, UnmanagedDeviceClient.class));
+        return this.getProxy(UnmanagedDeviceClient.class);
     }
 
     public synchronized UplinkSetClient uplinkSet() {
-        return Reflection.newProxy(UplinkSetClient.class,
-                new ClientRequestHandler<>(this.baseClient, UplinkSetClient.class));
+        return this.getProxy(UplinkSetClient.class);
+    }
+
+    private <T> T getProxy(Class<T> clientClass) {
+        T instance = (T) this.instances.get(clientClass);
+
+        if (instance == null) {
+            instance = Reflection.newProxy(clientClass, new ClientRequestHandler<>(this.baseClient, clientClass));
+
+            this.instances.put(clientClass, instance);
+        }
+        return instance;
     }
 
     private <T> T getClient(Class<T> clientClass) {
