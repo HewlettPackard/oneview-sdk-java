@@ -156,7 +156,7 @@ public class ServerProfileTemplateClientSample {
         serverProfile.setName("ServerProfileFromTemplate");
         serverProfile.setServerHardwareUri(SERVER_HARDWARE_URI);
 
-        TaskResource taskResource = serverProfileClient.create(serverProfile, false);
+        TaskResource taskResource = serverProfileClient.create(serverProfile);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }

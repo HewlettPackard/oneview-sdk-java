@@ -22,7 +22,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Optional;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.AvailableStorageSystem;
 import com.hp.ov.sdk.dto.AvailableTargets;
@@ -73,8 +72,8 @@ public class ServerProfileClientSample {
 
     // test values - user input
     // ================================
-    private static final String RESOURCE_ID = "dd27c36f-5666-446d-90e1-877a4eb9c3e8";
-    private static final String SERVER_PROFILE_NAME = "server-profile";
+    private static final String RESOURCE_ID = "72a9376c-0caf-4cae-aee6-7e8d46f6a61e";
+    private static final String SERVER_PROFILE_NAME = "server_profile";
     private static final String SERVER_PROFILE_NAME_UPDATED = SERVER_PROFILE_NAME + "_Updated";
     private static final String BAY_NAME = "Encl1, bay 15";
     private static final List<String> NETWORK_NAMES = Arrays.asList("Prod_401", "Prod_402");
@@ -111,7 +110,7 @@ public class ServerProfileClientSample {
     private void createServerProfile() {
         ServerProfile serverProfile = buildServerProfile();
 
-        TaskResource taskResource = serverProfileClient.create(serverProfile, false);
+        TaskResource taskResource = serverProfileClient.create(serverProfile);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -119,7 +118,7 @@ public class ServerProfileClientSample {
     private void deleteServerProfile() {
         ServerProfile serverProfile = this.serverProfileClient.getByName(SERVER_PROFILE_NAME_UPDATED).get(0);
 
-        TaskResource taskResource = serverProfileClient.delete(serverProfile.getResourceId(), false);
+        TaskResource taskResource = serverProfileClient.delete(serverProfile.getResourceId());
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -127,7 +126,7 @@ public class ServerProfileClientSample {
     private void deleteServerProfileByFilter() {
         String filter = "name='" + SERVER_PROFILE_NAME +"'";
 
-        TaskResource taskResource = this.serverProfileClient.deleteByFilter(filter, false);
+        TaskResource taskResource = this.serverProfileClient.deleteByFilter(filter);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -137,7 +136,7 @@ public class ServerProfileClientSample {
 
         serverProfile.setName(SERVER_PROFILE_NAME_UPDATED);
 
-        TaskResource taskResource = serverProfileClient.update(serverProfile.getResourceId(), serverProfile, false);
+        TaskResource taskResource = serverProfileClient.update(serverProfile.getResourceId(), serverProfile);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -152,7 +151,7 @@ public class ServerProfileClientSample {
         patch.setPath("/templateCompliance");
         patch.setValue("Compliant");
 
-        TaskResource taskResource = serverProfileClient.patch(serverProfile.getResourceId(), patch, false);
+        TaskResource taskResource = serverProfileClient.patch(serverProfile.getResourceId(), patch);
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
@@ -243,7 +242,9 @@ public class ServerProfileClientSample {
 
     private void getAvailableTargetsForServerProfile() {
         AvailableTargets targets = serverProfileClient.getAvailableTargets(
-                Optional.<String>absent(), Optional.<String>absent(), Optional.<String>absent());
+                "",
+                "",
+                "");
 
         LOGGER.info("AvailableTargets object returned to client : " + targets.toJsonString());
     }
