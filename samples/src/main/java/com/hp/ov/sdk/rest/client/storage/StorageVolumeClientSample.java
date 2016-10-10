@@ -15,15 +15,19 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.storage;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Predicate;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.AddStorageVolume;
 import com.hp.ov.sdk.dto.AttachableStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolume;
 import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
 import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.StorageVolume;
 import com.hp.ov.sdk.dto.StorageVolumeProvisioningParameters;
 import com.hp.ov.sdk.dto.StorageVolumeSnapshot;
@@ -187,8 +191,12 @@ public class StorageVolumeClientSample {
     private AddStorageVolume buildStorageVolume() {
         String storageSystemUri = storageSystemClient.getByName(
                 StorageSystemClientSample.STORAGE_SYSTEM_NAME).get(0).getUri();
-        String storagePoolUri = storagePoolClient.getByName(
-                StoragePoolClientSample.STORAGE_POOL_NAME, storageSystemUri).get(0).getUri();
+        ResourceCollection<StoragePool> storagePools = storagePoolClient.getByName(
+                StoragePoolClientSample.STORAGE_POOL_NAME);
+
+        List<StoragePool> filteredPools = this.getFilteredPoolsByStoragesystemUri(storagePools, storageSystemUri);
+
+        String storagePoolUri = filteredPools.get(0).getUri();
 
         AddStorageVolume dto = new AddStorageVolume();
 
@@ -209,10 +217,15 @@ public class StorageVolumeClientSample {
     }
 
     private AddStorageVolume buildPrivateStorageVolume() {
-        String storageSystemUri = storageSystemClient.getByName(
+        final String storageSystemUri = storageSystemClient.getByName(
                 StorageSystemClientSample.STORAGE_SYSTEM_NAME).get(0).getUri();
-        String storagePoolUri = storagePoolClient.getByName(
-                StoragePoolClientSample.STORAGE_POOL_NAME, storageSystemUri).get(0).getUri();
+
+        ResourceCollection<StoragePool> storagePools = storagePoolClient.getByName(
+                StoragePoolClientSample.STORAGE_POOL_NAME);
+
+        List<StoragePool> filteredPools = this.getFilteredPoolsByStoragesystemUri(storagePools, storageSystemUri);
+
+        String storagePoolUri = filteredPools.get(0).getUri();
 
         AddStorageVolume dto = new AddStorageVolume();
 
@@ -229,6 +242,19 @@ public class StorageVolumeClientSample {
         dto.setProvisioningParameters(provisioningParameters);
 
         return dto;
+    }
+
+    private List<StoragePool> getFilteredPoolsByStoragesystemUri(ResourceCollection<StoragePool> storagePools, final String storageSystemUri) {
+
+        List<StoragePool> filteredPools = storagePools.getMembers(new Predicate<StoragePool>() {
+
+            @Override
+            public boolean apply(StoragePool input) {
+                return (storageSystemUri.equalsIgnoreCase(input.getStorageSystemUri()));
+            }
+        });
+
+        return filteredPools;
     }
 
     public static void main(final String[] args) throws Exception {

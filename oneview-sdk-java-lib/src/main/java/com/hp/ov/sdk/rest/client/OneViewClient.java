@@ -282,7 +282,8 @@ public class OneViewClient {
     }
 
     public synchronized StoragePoolClient storagePool() {
-        return this.getClient(StoragePoolClient.class);
+        return Reflection.newProxy(StoragePoolClient.class,
+                new ClientRequestHandler<>(this.baseClient, StoragePoolClient.class));
     }
 
     public synchronized StorageSystemClient storageSystem() {
