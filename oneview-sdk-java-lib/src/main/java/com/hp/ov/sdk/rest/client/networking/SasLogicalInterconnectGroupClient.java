@@ -15,148 +15,20 @@
  */
 package com.hp.ov.sdk.rest.client.networking;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.saslogicalinterconnectgroup.SasLogicalInterconnectGroup;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.rest.client.common.CreatableResource;
+import com.hp.ov.sdk.rest.client.common.DeletableResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.client.common.UpdatableResource;
+import com.hp.ov.sdk.rest.reflect.Api;
 
-public class SasLogicalInterconnectGroupClient {
+@Api(SasLogicalInterconnectGroupClient.SAS_LOGICAL_INTERCONNECT_GROUP_URI)
+public interface SasLogicalInterconnectGroupClient extends
+        SearchableResource<SasLogicalInterconnectGroup>,
+        CreatableResource<SasLogicalInterconnectGroup>,
+        UpdatableResource<SasLogicalInterconnectGroup>,
+        DeletableResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SasLogicalInterconnectGroupClient.class);
-
-    protected static final String SAS_LOGICAL_INTERCONNECT_GROUP_URI = "/rest/sas-logical-interconnect-groups";
-
-    private final BaseClient baseClient;
-
-    public SasLogicalInterconnectGroupClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
-
-    /**
-     * Retrieves the {@link SasLogicalInterconnectGroup} details for the specified SAS logical interconnect group.
-     *
-     * @param resourceId SAS logical interconnect group resource identifier as seen in HPE OneView.
-     *
-     * @return {@link SasLogicalInterconnectGroup} object containing the details.
-     */
-    public SasLogicalInterconnectGroup getById(String resourceId) {
-        LOGGER.info("SasLogicalInterconnectGroupClient : getById : Start");
-
-        SasLogicalInterconnectGroup interconnectGroup = baseClient.getResource(
-                UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_GROUP_URI, resourceId),
-                SasLogicalInterconnectGroup.class);
-
-        LOGGER.info("SasLogicalInterconnectGroupClient : getById : End");
-
-        return interconnectGroup;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link SasLogicalInterconnectGroup}&gt; containing the details
-     * for all the available SAS logical interconnect groups found under the current HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link SasLogicalInterconnectGroup}&gt; containing
-     * the details for all found SAS logical interconnect groups.
-     */
-    public ResourceCollection<SasLogicalInterconnectGroup> getAll() {
-        LOGGER.info("SasLogicalInterconnectGroupClient : getAll : Start");
-
-        ResourceCollection<SasLogicalInterconnectGroup> interconnectGroups = baseClient.getResourceCollection(
-                SAS_LOGICAL_INTERCONNECT_GROUP_URI,
-                SasLogicalInterconnectGroup.class);
-
-        LOGGER.info("SasLogicalInterconnectGroupClient : getAll : End");
-
-        return interconnectGroups;
-    }
-
-    /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link SasLogicalInterconnectGroup}&gt; containing details
-     * for the available SAS logical interconnect groups found under the current HPE OneView that match the name.
-     *
-     * @param name SAS logical interconnect group name as seen in HPE OneView.
-     *
-     * @return {@link ResourceCollection}&lt;{@link SasLogicalInterconnectGroup}&gt; containing
-     * the details for the found SAS logical interconnect groups.
-     */
-    public ResourceCollection<SasLogicalInterconnectGroup> getByName(String name) {
-        LOGGER.info("SasLogicalInterconnectGroupClient : getByName : Start");
-
-        ResourceCollection<SasLogicalInterconnectGroup> interconnectGroups = baseClient.getResourceCollection(
-                SAS_LOGICAL_INTERCONNECT_GROUP_URI,
-                SasLogicalInterconnectGroup.class,
-                UrlParameter.getFilterByNameParameter(name));
-
-        LOGGER.info("SasLogicalInterconnectGroupClient : getByName : End");
-
-        return interconnectGroups;
-    }
-
-    /**
-     * Creates a SAS logical interconnect group according to the provided {@link SasLogicalInterconnectGroup} object.
-     * The request can be processed synchronously or asynchronously.
-     *
-     * @param interconnectGroup object containing the SAS logical interconnect group details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource create(SasLogicalInterconnectGroup interconnectGroup, boolean aSync) {
-        LOGGER.info("SasLogicalInterconnectGroupClient : create : Start");
-
-        TaskResource taskResource = baseClient.createResource(
-                SAS_LOGICAL_INTERCONNECT_GROUP_URI, interconnectGroup, aSync);
-
-        LOGGER.info("SasLogicalInterconnectGroupClient : create : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Updates a {@link SasLogicalInterconnectGroup} identified by the given resource identifier.
-     *
-     * @param resourceId SAS logical interconnect group resource identifier as seen in HPE OneView.
-     * @param interconnectGroup object containing the SAS logical interconnect group details.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource update(String resourceId, SasLogicalInterconnectGroup interconnectGroup, boolean aSync) {
-        LOGGER.info("SasLogicalInterconnectGroupClient : update : Start");
-
-        TaskResource taskResource = baseClient.updateResource(
-                UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_GROUP_URI, resourceId), interconnectGroup, aSync);
-
-        LOGGER.info("SasLogicalInterconnectGroupClient : update : End");
-
-        return taskResource;
-    }
-
-    /**
-     * Deletes the {@link SasLogicalInterconnectGroup} identified by the given resource identifier.
-     *
-     * @param resourceId SAS logical interconnect group resource identifier as seen in HPE OneView.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
-     *
-     * @return {@link TaskResource} containing the task status for the process.
-     */
-    public TaskResource delete(String resourceId, boolean aSync) {
-        LOGGER.info("SasLogicalInterconnectGroupClient : delete : Start");
-
-        TaskResource taskResource = baseClient.deleteResource(
-                UrlUtils.createUrl(SAS_LOGICAL_INTERCONNECT_GROUP_URI, resourceId), aSync);
-
-        LOGGER.info("SasLogicalInterconnectGroupClient : delete : End");
-
-        return taskResource;
-    }
+    String SAS_LOGICAL_INTERCONNECT_GROUP_URI = "/rest/sas-logical-interconnect-groups";
 
 }

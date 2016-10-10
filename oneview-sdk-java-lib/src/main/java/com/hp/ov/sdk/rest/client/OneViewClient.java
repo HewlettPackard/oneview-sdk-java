@@ -254,7 +254,8 @@ public class OneViewClient {
     }
 
     public synchronized SasLogicalInterconnectGroupClient sasLogicalInterconnectGroup() {
-        return this.getClient(SasLogicalInterconnectGroupClient.class);
+        return Reflection.newProxy(SasLogicalInterconnectGroupClient.class,
+                new ClientRequestHandler<>(this.baseClient, SasLogicalInterconnectGroupClient.class));
     }
 
     public synchronized SasLogicalJbodAttachmentClient sasLogicalJbodAttachment() {

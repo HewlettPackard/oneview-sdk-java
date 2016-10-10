@@ -61,7 +61,7 @@ public class SasLogicalInterconnectGroupClientSample {
     private void createSasLogicalInterconnectGroup() {
         SasLogicalInterconnectGroup interconnectGroup = buildSasLogicalInterconnectGroup();
 
-        TaskResource task = this.client.create(interconnectGroup, false);
+        TaskResource task = this.client.create(interconnectGroup);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -89,7 +89,7 @@ public class SasLogicalInterconnectGroupClientSample {
 
         interconnectGroup.setName(SAS_LOGICAL_INTERCONNECT_GROUP_NAME_UPDATED);
 
-        TaskResource task = this.client.update(interconnectGroup.getResourceId(), interconnectGroup, false);
+        TaskResource task = this.client.update(interconnectGroup.getResourceId(), interconnectGroup);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -98,7 +98,7 @@ public class SasLogicalInterconnectGroupClientSample {
         SasLogicalInterconnectGroup interconnectGroup
                 = client.getByName(SAS_LOGICAL_INTERCONNECT_GROUP_NAME_UPDATED).get(0);
 
-        TaskResource task = this.client.delete(interconnectGroup.getResourceId(), false);
+        TaskResource task = this.client.delete(interconnectGroup.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
