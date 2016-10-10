@@ -16,68 +16,82 @@
 
 package com.hp.ov.sdk.rest.client.storage;
 
+import static com.hp.ov.sdk.rest.client.storage.SasLogicalJbodClient.DRIVES;
+import static com.hp.ov.sdk.rest.client.storage.SasLogicalJbodClient.SAS_LOGICAL_JBOD_URI;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.google.common.reflect.Reflection;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.storage.Drive;
 import com.hp.ov.sdk.dto.storage.saslogicaljbod.SasLogicalJbod;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SasLogicalJbodClientTest {
 
-    private static final String ANY_SAS_LOGICAL_RESOURCE_ID = "random-UUID";
-    private static final String ANY_SAS_LOGICAL_NAME = "random-Name";
+    private static final String ANY_RESOURCE_ID = "random-UUID";
+    private static final String ANY_RESOURCE_NAME = "random-Name";
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private SasLogicalJbodClient sasLogicalJbodClient;
+    private BaseClient baseClient = mock(BaseClient.class);
+    private SasLogicalJbodClient client = Reflection.newProxy(SasLogicalJbodClient.class,
+            new ClientRequestHandler<>(baseClient, SasLogicalJbodClient.class));
 
     @Test
     public void shouldGetSasLogicalJbodById() {
-        sasLogicalJbodClient.getById(ANY_SAS_LOGICAL_RESOURCE_ID);
+        client.getById(ANY_RESOURCE_ID);
 
         String expectedUri = SasLogicalJbodClient.SAS_LOGICAL_JBOD_URI
-                + "/" + ANY_SAS_LOGICAL_RESOURCE_ID;
+                + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().getResource(expectedUri, SasLogicalJbod.class);
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(SasLogicalJbod.class).getType());
     }
 
     @Test
     public void shouldGetAllSasLogicalJbods() {
-        sasLogicalJbodClient.getAll();
+        client.getAll();
 
-        then(baseClient).should().getResourceCollection(
-                SasLogicalJbodClient.SAS_LOGICAL_JBOD_URI, SasLogicalJbod.class);
+        Request expectedRequest = new Request(HttpMethod.GET, SAS_LOGICAL_JBOD_URI);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<SasLogicalJbod>>() {}.getType());
     }
 
     @Test
     public void shouldGetSasLogicalJbodByName() {
-        sasLogicalJbodClient.getByName(ANY_SAS_LOGICAL_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
-        then(baseClient).should().getResourceCollection(
-                SasLogicalJbodClient.SAS_LOGICAL_JBOD_URI,
-                SasLogicalJbod.class,
-                UrlParameter.getFilterByNameParameter(ANY_SAS_LOGICAL_NAME));
+        Request expectedRequest = new Request(HttpMethod.GET, SAS_LOGICAL_JBOD_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<SasLogicalJbod>>() {}.getType());
     }
 
     @Test
     public void shouldGetSasLogicalJbodDrives() {
-        sasLogicalJbodClient.getDrives(ANY_SAS_LOGICAL_RESOURCE_ID);
+        client.getDrives(ANY_RESOURCE_ID);
 
-        String expectedUri = SasLogicalJbodClient.SAS_LOGICAL_JBOD_URI
-                + "/" + ANY_SAS_LOGICAL_RESOURCE_ID
-                + "/" + SasLogicalJbodClient.DRIVES;
+        String expectedUri = SAS_LOGICAL_JBOD_URI
+                + "/" + ANY_RESOURCE_ID
+                + DRIVES;
 
-        then(baseClient).should().getResourceList(expectedUri, Drive.class);
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<List<Drive>>() {}.getType());
     }
 
 }
