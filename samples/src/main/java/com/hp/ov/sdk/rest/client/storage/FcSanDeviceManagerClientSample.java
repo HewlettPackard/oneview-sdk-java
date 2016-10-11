@@ -19,11 +19,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.dto.DeviceManagerResponse;
 import com.hp.ov.sdk.dto.Property;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
+import com.hp.ov.sdk.dto.fcsans.DeviceManagerResponse;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 /*

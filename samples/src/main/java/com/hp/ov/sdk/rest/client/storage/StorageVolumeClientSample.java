@@ -22,16 +22,16 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.dto.AddStorageVolume;
-import com.hp.ov.sdk.dto.AttachableStorageVolume;
-import com.hp.ov.sdk.dto.ExtraStorageVolume;
-import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.StoragePool;
-import com.hp.ov.sdk.dto.StorageVolume;
-import com.hp.ov.sdk.dto.StorageVolumeProvisioningParameters;
-import com.hp.ov.sdk.dto.StorageVolumeSnapshot;
 import com.hp.ov.sdk.dto.TaskResource;
+import com.hp.ov.sdk.dto.storage.AddStorageVolume;
+import com.hp.ov.sdk.dto.storage.AttachableStorageVolume;
+import com.hp.ov.sdk.dto.storage.ExtraStorageVolume;
+import com.hp.ov.sdk.dto.storage.ExtraStorageVolumeRepair;
+import com.hp.ov.sdk.dto.storage.StoragePool;
+import com.hp.ov.sdk.dto.storage.StorageVolume;
+import com.hp.ov.sdk.dto.storage.StorageVolumeProvisioningParameters;
+import com.hp.ov.sdk.dto.storage.StorageVolumeSnapshot;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 /*

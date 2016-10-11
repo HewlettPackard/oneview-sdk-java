@@ -21,15 +21,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.dto.FirmwareUpdateOn;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.Patch.PatchOperation;
-import com.hp.ov.sdk.dto.PatchFirmwareValue;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.SupportDump;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.servers.logicalenclosure.AddLogicalEnclosure;
+import com.hp.ov.sdk.dto.servers.logicalenclosure.FirmwareUpdateOn;
 import com.hp.ov.sdk.dto.servers.logicalenclosure.LogicalEnclosure;
+import com.hp.ov.sdk.dto.servers.logicalenclosure.PatchFirmwareValue;
+import com.hp.ov.sdk.dto.servers.logicalenclosure.SupportDump;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;

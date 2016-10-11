@@ -15,7 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.messaging.msmb.listeners;
 
-import com.hp.ov.sdk.dto.MsmbAlertsMessageDto;
+import com.hp.ov.sdk.messaging.core.MsmbAlertsMessageDto;
 
 public interface MsmbListener {
 

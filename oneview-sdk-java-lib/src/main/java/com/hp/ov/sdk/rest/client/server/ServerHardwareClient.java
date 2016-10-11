@@ -15,17 +15,17 @@
  */
 package com.hp.ov.sdk.rest.client.server;
 
-import com.hp.ov.sdk.dto.BiosSettings;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
-import com.hp.ov.sdk.dto.IloSsoUrlResult;
-import com.hp.ov.sdk.dto.JavaRemoteConsoleUrlResult;
-import com.hp.ov.sdk.dto.RefreshStateRequest;
-import com.hp.ov.sdk.dto.RemoteConsoleUrlResult;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.UtilizationData;
 import com.hp.ov.sdk.dto.servers.serverhardware.AddServer;
+import com.hp.ov.sdk.dto.servers.serverhardware.BiosSettings;
+import com.hp.ov.sdk.dto.servers.serverhardware.IloSsoUrlResult;
+import com.hp.ov.sdk.dto.servers.serverhardware.JavaRemoteConsoleUrlResult;
+import com.hp.ov.sdk.dto.servers.serverhardware.RefreshStateRequest;
+import com.hp.ov.sdk.dto.servers.serverhardware.RemoteConsoleUrlResult;
 import com.hp.ov.sdk.dto.servers.serverhardware.ServerFirmwareInventory;
 import com.hp.ov.sdk.dto.servers.serverhardware.ServerHardware;
 import com.hp.ov.sdk.dto.servers.serverhardware.ServerPowerControlRequest;

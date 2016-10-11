@@ -29,9 +29,9 @@ import org.junit.Test;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.hp.ov.sdk.constants.ResourceCategory;
-import com.hp.ov.sdk.dto.AllocatedCapacity;
 import com.hp.ov.sdk.dto.RefreshState;
-import com.hp.ov.sdk.dto.StoragePool;
+import com.hp.ov.sdk.dto.storage.AllocatedCapacity;
+import com.hp.ov.sdk.dto.storage.StoragePool;
 
 public class StoragePoolSerializationAdapterTest {
 

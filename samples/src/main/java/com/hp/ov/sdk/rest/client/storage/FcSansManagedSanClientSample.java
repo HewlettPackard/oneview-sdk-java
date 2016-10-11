@@ -21,17 +21,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.dto.EndpointResponse;
-import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
-import com.hp.ov.sdk.dto.FcIssueResponse;
-import com.hp.ov.sdk.dto.FcSansManagedSanTask;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.fcsans.EndpointResponse;
+import com.hp.ov.sdk.dto.fcsans.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.dto.fcsans.LocateSanResponse;
 import com.hp.ov.sdk.dto.fcsans.SanPolicy;
 import com.hp.ov.sdk.dto.fcsans.SanRequest;
 import com.hp.ov.sdk.dto.fcsans.SanResponse;
 import com.hp.ov.sdk.dto.fcsans.ZoningPolicy;
+import com.hp.ov.sdk.dto.storage.FcIssueResponse;
+import com.hp.ov.sdk.dto.storage.FcSansManagedSanTask;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 

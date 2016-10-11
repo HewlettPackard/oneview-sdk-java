@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.google.gson.annotations.Since;
-import com.hp.ov.sdk.dto.PortStatistics;
+import com.hp.ov.sdk.dto.networking.interconnect.PortStatistics;
 
 public class InterconnectsStatistics implements Serializable {
 

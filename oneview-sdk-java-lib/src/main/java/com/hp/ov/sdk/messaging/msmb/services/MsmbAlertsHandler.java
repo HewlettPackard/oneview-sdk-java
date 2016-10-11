@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
-import com.hp.ov.sdk.dto.MsmbAlertsMessageDto;
+import com.hp.ov.sdk.messaging.core.MsmbAlertsMessageDto;
 import com.hp.ov.sdk.messaging.msmb.listeners.MsmbListener;
 
 public class MsmbAlertsHandler {

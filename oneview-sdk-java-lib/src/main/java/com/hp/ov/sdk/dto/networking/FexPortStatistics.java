@@ -18,7 +18,6 @@ package com.hp.ov.sdk.dto.networking;
 import java.util.List;
 
 import com.hp.ov.sdk.dto.BaseModelResource;
-import com.hp.ov.sdk.dto.FexCommonStatistics;
 
 public class FexPortStatistics extends BaseModelResource {
 

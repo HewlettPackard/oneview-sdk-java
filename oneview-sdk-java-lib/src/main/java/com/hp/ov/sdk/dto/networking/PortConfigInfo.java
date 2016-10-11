@@ -22,7 +22,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.Since;
-import com.hp.ov.sdk.dto.Location;
 
 
 public class PortConfigInfo implements Serializable {

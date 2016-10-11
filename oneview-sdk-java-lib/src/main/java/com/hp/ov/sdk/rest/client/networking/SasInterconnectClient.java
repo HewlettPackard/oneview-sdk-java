@@ -16,8 +16,8 @@
 package com.hp.ov.sdk.rest.client.networking;
 
 import com.hp.ov.sdk.dto.TaskResource;
-import com.hp.ov.sdk.dto.networking.sasinterconnects.SasInterConnectRefreshRequest;
-import com.hp.ov.sdk.dto.networking.sasinterconnects.SasInterconnect;
+import com.hp.ov.sdk.dto.networking.sasinterconnect.SasInterConnectRefreshRequest;
+import com.hp.ov.sdk.dto.networking.sasinterconnect.SasInterconnect;
 import com.hp.ov.sdk.rest.client.common.PatchableResource;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;

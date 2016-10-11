@@ -23,7 +23,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.google.gson.annotations.Since;
 import com.google.gson.annotations.Until;
-import com.hp.ov.sdk.dto.ServerFabricDeviceLocation;
+import com.hp.ov.sdk.dto.servers.ServerFabricDeviceLocation;
 
 public class Adapter {
 

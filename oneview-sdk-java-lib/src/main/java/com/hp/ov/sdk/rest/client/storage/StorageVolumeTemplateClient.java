@@ -15,9 +15,9 @@
  */
 package com.hp.ov.sdk.rest.client.storage;
 
-import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplate;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.StorageVolumeTemplate;
+import com.hp.ov.sdk.dto.storage.ConnectableStorageVolumeTemplate;
+import com.hp.ov.sdk.dto.storage.StorageVolumeTemplate;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.reflect.Api;

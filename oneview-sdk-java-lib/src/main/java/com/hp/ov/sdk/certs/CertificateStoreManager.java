@@ -41,10 +41,10 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.google.common.io.BaseEncoding;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.CaCert;
-import com.hp.ov.sdk.dto.RabbitMqClientCert;
 import com.hp.ov.sdk.exceptions.SDKCertificateException;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
+import com.hp.ov.sdk.messaging.core.CaCert;
+import com.hp.ov.sdk.messaging.core.RabbitMqClientCert;
 
 public class CertificateStoreManager {
 

@@ -16,7 +16,7 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
-import com.hp.ov.sdk.dto.InterconnectType;
+import com.hp.ov.sdk.dto.networking.interconnect.InterconnectType;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.reflect.Api;
 

@@ -22,16 +22,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.dto.NameServer;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.Patch.PatchOperation;
-import com.hp.ov.sdk.dto.PortStatistics;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.SubportStatistics;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.InterconnectsStatistics;
 import com.hp.ov.sdk.dto.networking.Port;
 import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
+import com.hp.ov.sdk.dto.networking.interconnect.NameServer;
+import com.hp.ov.sdk.dto.networking.interconnect.PortStatistics;
+import com.hp.ov.sdk.dto.networking.interconnect.SubportStatistics;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 

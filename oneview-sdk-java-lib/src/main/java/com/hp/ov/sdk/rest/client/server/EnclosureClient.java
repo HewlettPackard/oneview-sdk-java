@@ -18,13 +18,13 @@ package com.hp.ov.sdk.rest.client.server;
 
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.EnvironmentalConfigurationUpdate;
-import com.hp.ov.sdk.dto.FwBaselineConfig;
-import com.hp.ov.sdk.dto.RefreshStateConfig;
-import com.hp.ov.sdk.dto.SsoUrlData;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.UtilizationData;
 import com.hp.ov.sdk.dto.servers.enclosure.AddEnclosure;
 import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
+import com.hp.ov.sdk.dto.servers.enclosure.FwBaselineConfig;
+import com.hp.ov.sdk.dto.servers.enclosure.RefreshStateConfig;
+import com.hp.ov.sdk.dto.servers.enclosure.SsoUrlData;
 import com.hp.ov.sdk.rest.client.common.AddableResource;
 import com.hp.ov.sdk.rest.client.common.PatchableResource;
 import com.hp.ov.sdk.rest.client.common.RemovableResource;

@@ -34,11 +34,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
-import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.StoragePool;
-import com.hp.ov.sdk.dto.StorageSystem;
-import com.hp.ov.sdk.dto.StorageTargetPort;
+import com.hp.ov.sdk.dto.storage.AddStorageSystemCredentials;
+import com.hp.ov.sdk.dto.storage.StoragePool;
+import com.hp.ov.sdk.dto.storage.StorageSystem;
+import com.hp.ov.sdk.dto.storage.StorageTargetPort;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;

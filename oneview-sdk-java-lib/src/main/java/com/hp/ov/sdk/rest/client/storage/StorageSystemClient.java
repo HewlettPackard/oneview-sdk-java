@@ -17,11 +17,11 @@ package com.hp.ov.sdk.rest.client.storage;
 
 import java.util.List;
 
-import com.hp.ov.sdk.dto.AddStorageSystemCredentials;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.StoragePool;
-import com.hp.ov.sdk.dto.StorageSystem;
-import com.hp.ov.sdk.dto.StorageTargetPort;
+import com.hp.ov.sdk.dto.storage.AddStorageSystemCredentials;
+import com.hp.ov.sdk.dto.storage.StoragePool;
+import com.hp.ov.sdk.dto.storage.StorageSystem;
+import com.hp.ov.sdk.dto.storage.StorageTargetPort;
 import com.hp.ov.sdk.rest.client.common.AddableResource;
 import com.hp.ov.sdk.rest.client.common.RemovableResource;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;

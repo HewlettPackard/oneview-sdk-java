@@ -21,12 +21,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.dto.ExtraStorageVolume;
-import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.StorageVolumeAttachment;
-import com.hp.ov.sdk.dto.StorageVolumeAttachmentPath;
 import com.hp.ov.sdk.dto.TaskResource;
+import com.hp.ov.sdk.dto.storage.ExtraStorageVolume;
+import com.hp.ov.sdk.dto.storage.ExtraStorageVolumeRepair;
+import com.hp.ov.sdk.dto.storage.StorageVolumeAttachment;
+import com.hp.ov.sdk.dto.storage.StorageVolumeAttachmentPath;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.server.ServerProfileClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;

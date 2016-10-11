@@ -18,8 +18,8 @@
 
 package com.hp.ov.sdk.msmb.consumer;
 
-import com.hp.ov.sdk.dto.MsmbAlertsMessageDto;
 import com.hp.ov.sdk.dto.samples.MsmbMessage;
+import com.hp.ov.sdk.messaging.core.MsmbAlertsMessageDto;
 import com.hp.ov.sdk.messaging.msmb.listeners.MsmbListener;
 import com.hp.ov.sdk.messaging.msmb.services.MsmbAlertsHandler;
 

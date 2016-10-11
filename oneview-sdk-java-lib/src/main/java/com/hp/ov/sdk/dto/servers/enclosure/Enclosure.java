@@ -23,10 +23,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
-import com.hp.ov.sdk.dto.ReconfigurationState;
 import com.hp.ov.sdk.dto.RefreshState;
-import com.hp.ov.sdk.dto.generated.InterconnectBay;
-import com.hp.ov.sdk.dto.generated.Oa;
 import com.hp.ov.sdk.dto.servers.LicensingIntent;
 import com.hp.ov.sdk.dto.servers.RemoteSupportSettings;
 

@@ -24,12 +24,12 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
-import com.hp.ov.sdk.dto.Location;
-import com.hp.ov.sdk.dto.LocationEntry;
-import com.hp.ov.sdk.dto.LocationType;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.EthernetNetworkType;
+import com.hp.ov.sdk.dto.networking.Location;
+import com.hp.ov.sdk.dto.networking.LocationEntry;
+import com.hp.ov.sdk.dto.networking.LocationType;
 import com.hp.ov.sdk.dto.networking.NetworkType;
 import com.hp.ov.sdk.dto.networking.OpSpeed;
 import com.hp.ov.sdk.dto.networking.PortConfigInfo;

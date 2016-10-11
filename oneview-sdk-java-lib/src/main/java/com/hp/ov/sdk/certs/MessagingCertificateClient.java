@@ -18,10 +18,10 @@ package com.hp.ov.sdk.certs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.dto.CaCert;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.dto.RabbitMqClientCert;
 import com.hp.ov.sdk.dto.TaskResource;
+import com.hp.ov.sdk.messaging.core.CaCert;
+import com.hp.ov.sdk.messaging.core.RabbitMqClientCert;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 

@@ -18,13 +18,13 @@ package com.hp.ov.sdk.rest.client.networking;
 
 import java.util.List;
 
-import com.hp.ov.sdk.dto.NameServer;
-import com.hp.ov.sdk.dto.PortStatistics;
-import com.hp.ov.sdk.dto.SubportStatistics;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.InterconnectsStatistics;
 import com.hp.ov.sdk.dto.networking.Port;
 import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
+import com.hp.ov.sdk.dto.networking.interconnect.NameServer;
+import com.hp.ov.sdk.dto.networking.interconnect.PortStatistics;
+import com.hp.ov.sdk.dto.networking.interconnect.SubportStatistics;
 import com.hp.ov.sdk.rest.client.common.PatchableResource;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;

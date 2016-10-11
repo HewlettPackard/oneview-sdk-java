@@ -20,9 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.dto.CaCert;
-import com.hp.ov.sdk.dto.RabbitMqClientCert;
 import com.hp.ov.sdk.dto.TaskResource;
+import com.hp.ov.sdk.messaging.core.CaCert;
+import com.hp.ov.sdk.messaging.core.RabbitMqClientCert;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 

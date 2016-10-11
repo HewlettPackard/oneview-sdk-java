@@ -24,10 +24,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.HardResetState;
-import com.hp.ov.sdk.dto.Location;
 import com.hp.ov.sdk.dto.PowerState;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.UIDState;
+import com.hp.ov.sdk.dto.networking.Location;
 
 public class DriveEnclosure extends BaseModelResource {
 

@@ -26,6 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
+import com.hp.ov.sdk.dto.storage.ExtraStorageVolume;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;

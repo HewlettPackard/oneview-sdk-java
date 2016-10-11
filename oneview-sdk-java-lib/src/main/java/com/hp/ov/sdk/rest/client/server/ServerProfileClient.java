@@ -17,16 +17,16 @@ package com.hp.ov.sdk.rest.client.server;
 
 import java.util.List;
 
-import com.hp.ov.sdk.dto.AvailableStorageSystem;
-import com.hp.ov.sdk.dto.AvailableTargets;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.ServerProfileCompliancePreview;
-import com.hp.ov.sdk.dto.ServerProfileHealth;
 import com.hp.ov.sdk.dto.TaskResource;
-import com.hp.ov.sdk.dto.generated.AvailableNetworks;
-import com.hp.ov.sdk.dto.generated.AvailableServers;
-import com.hp.ov.sdk.dto.generated.ProfilePorts;
+import com.hp.ov.sdk.dto.servers.serverprofile.AvailableNetworks;
+import com.hp.ov.sdk.dto.servers.serverprofile.AvailableServers;
+import com.hp.ov.sdk.dto.servers.serverprofile.AvailableStorageSystem;
+import com.hp.ov.sdk.dto.servers.serverprofile.AvailableTargets;
+import com.hp.ov.sdk.dto.servers.serverprofile.ProfilePorts;
 import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
+import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfileCompliancePreview;
+import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfileHealth;
 import com.hp.ov.sdk.rest.client.common.CreatableResource;
 import com.hp.ov.sdk.rest.client.common.DeletableResource;
 import com.hp.ov.sdk.rest.client.common.PatchableResource;

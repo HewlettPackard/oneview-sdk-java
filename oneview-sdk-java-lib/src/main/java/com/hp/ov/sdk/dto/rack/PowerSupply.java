@@ -19,8 +19,6 @@ package com.hp.ov.sdk.dto.rack;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.hp.ov.sdk.dto.generated.PowerSupplySide;
-
 public class PowerSupply {
 
     private Integer id;

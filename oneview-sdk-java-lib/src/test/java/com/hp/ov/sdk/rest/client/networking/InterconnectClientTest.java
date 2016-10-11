@@ -38,14 +38,14 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
-import com.hp.ov.sdk.dto.NameServer;
 import com.hp.ov.sdk.dto.Patch;
-import com.hp.ov.sdk.dto.PortStatistics;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.SubportStatistics;
 import com.hp.ov.sdk.dto.networking.InterconnectsStatistics;
 import com.hp.ov.sdk.dto.networking.Port;
 import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
+import com.hp.ov.sdk.dto.networking.interconnect.NameServer;
+import com.hp.ov.sdk.dto.networking.interconnect.PortStatistics;
+import com.hp.ov.sdk.dto.networking.interconnect.SubportStatistics;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;

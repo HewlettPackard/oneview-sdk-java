@@ -24,9 +24,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.GsonBuilder;
-import com.hp.ov.sdk.dto.generated.LicenseRequirement;
-import com.hp.ov.sdk.dto.generated.PowerCapType;
-import com.hp.ov.sdk.dto.generated.PsuList;
 
 public final class EnvironmentalConfiguration implements Serializable {
 
