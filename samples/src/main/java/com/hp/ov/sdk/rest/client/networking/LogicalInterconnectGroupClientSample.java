@@ -25,11 +25,11 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
-import com.hp.ov.sdk.dto.InterconnectTypeName;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
-import com.hp.ov.sdk.dto.generated.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.interconnect.InterconnectTypeName;
+import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.dto.samples.UplinkSetValue;

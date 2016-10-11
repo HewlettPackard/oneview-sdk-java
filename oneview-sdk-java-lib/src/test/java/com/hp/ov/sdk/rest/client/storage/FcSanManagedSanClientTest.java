@@ -34,9 +34,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
-import com.hp.ov.sdk.dto.EndpointResponse;
-import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.fcsans.EndpointResponse;
+import com.hp.ov.sdk.dto.fcsans.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.dto.fcsans.LocateSanResponse;
 import com.hp.ov.sdk.dto.fcsans.SanRequest;
 import com.hp.ov.sdk.dto.fcsans.SanResponse;

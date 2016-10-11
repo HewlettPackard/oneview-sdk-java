@@ -17,13 +17,13 @@ package com.hp.ov.sdk.rest.client.storage;
 
 import java.util.List;
 
-import com.hp.ov.sdk.dto.EndpointResponse;
-import com.hp.ov.sdk.dto.EndpointsCsvFileResponse;
-import com.hp.ov.sdk.dto.FcSansManagedSanTask;
 import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.dto.fcsans.EndpointResponse;
+import com.hp.ov.sdk.dto.fcsans.EndpointsCsvFileResponse;
 import com.hp.ov.sdk.dto.fcsans.LocateSanResponse;
 import com.hp.ov.sdk.dto.fcsans.SanRequest;
 import com.hp.ov.sdk.dto.fcsans.SanResponse;
+import com.hp.ov.sdk.dto.storage.FcSansManagedSanTask;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;

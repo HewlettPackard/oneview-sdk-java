@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
-import com.hp.ov.sdk.dto.ScmbAlertsMessageDto;
 import com.hp.ov.sdk.messaging.scmb.listeners.ScmbListener;
 
 public class ScmbAlertsHandler {

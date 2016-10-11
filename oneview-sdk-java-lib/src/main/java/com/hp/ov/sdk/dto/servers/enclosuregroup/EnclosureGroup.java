@@ -24,8 +24,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.StackingMode;
-import com.hp.ov.sdk.dto.generated.InterconnectBayMapping;
-import com.hp.ov.sdk.dto.generated.PortMapping;
 import com.hp.ov.sdk.dto.servers.IpAddressingMode;
 import com.hp.ov.sdk.dto.servers.OSDeploymentSettings;
 

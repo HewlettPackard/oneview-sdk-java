@@ -15,7 +15,7 @@
  */
 package com.hp.ov.sdk.rest.client.storage;
 
-import com.hp.ov.sdk.dto.DeviceManagerResponse;
+import com.hp.ov.sdk.dto.fcsans.DeviceManagerResponse;
 import com.hp.ov.sdk.rest.client.common.RemovableResource;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.client.common.UpdatableResource;

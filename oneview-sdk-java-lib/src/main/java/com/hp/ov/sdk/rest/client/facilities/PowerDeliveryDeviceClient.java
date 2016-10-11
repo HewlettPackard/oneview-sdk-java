@@ -15,14 +15,14 @@
  */
 package com.hp.ov.sdk.rest.client.facilities;
 
-import com.hp.ov.sdk.dto.ImportPdd;
-import com.hp.ov.sdk.dto.Light;
-import com.hp.ov.sdk.dto.OutletState;
-import com.hp.ov.sdk.dto.Power;
-import com.hp.ov.sdk.dto.PowerDeliveryDevice;
-import com.hp.ov.sdk.dto.PowerDeliveryDeviceRefreshRequest;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.UtilizationData;
+import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.ImportPdd;
+import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.Light;
+import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.OutletState;
+import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.Power;
+import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.PowerDeliveryDevice;
+import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.PowerDeliveryDeviceRefreshRequest;
 import com.hp.ov.sdk.rest.client.common.RemovableResource;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;

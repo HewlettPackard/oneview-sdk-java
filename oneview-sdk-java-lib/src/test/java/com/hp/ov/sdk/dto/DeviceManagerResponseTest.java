@@ -19,6 +19,8 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
+import com.hp.ov.sdk.dto.fcsans.DeviceManagerResponse;
+
 public class DeviceManagerResponseTest {
 
     @Test

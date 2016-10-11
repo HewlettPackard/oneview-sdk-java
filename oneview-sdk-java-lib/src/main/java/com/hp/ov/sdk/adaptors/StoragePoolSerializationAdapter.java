@@ -26,8 +26,8 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.hp.ov.sdk.constants.ResourceCategory;
-import com.hp.ov.sdk.dto.AllocatedCapacity;
-import com.hp.ov.sdk.dto.StoragePool;
+import com.hp.ov.sdk.dto.storage.AllocatedCapacity;
+import com.hp.ov.sdk.dto.storage.StoragePool;
 
 
 public class StoragePoolSerializationAdapter implements JsonSerializer<StoragePool>,

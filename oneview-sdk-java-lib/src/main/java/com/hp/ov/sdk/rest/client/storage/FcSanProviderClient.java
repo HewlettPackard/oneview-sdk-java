@@ -15,9 +15,9 @@
  */
 package com.hp.ov.sdk.rest.client.storage;
 
-import com.hp.ov.sdk.dto.DeviceManagerResponse;
-import com.hp.ov.sdk.dto.SanProviderResponse;
 import com.hp.ov.sdk.dto.TaskResource;
+import com.hp.ov.sdk.dto.fcsans.DeviceManagerResponse;
+import com.hp.ov.sdk.dto.fcsans.SanProviderResponse;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;

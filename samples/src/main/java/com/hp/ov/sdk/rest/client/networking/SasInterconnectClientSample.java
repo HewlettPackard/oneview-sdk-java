@@ -22,11 +22,11 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.Patch.PatchOperation;
+import com.hp.ov.sdk.dto.networking.sasinterconnect.SasInterConnectRefreshRequest;
+import com.hp.ov.sdk.dto.networking.sasinterconnect.SasInterconnect;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
-import com.hp.ov.sdk.dto.networking.sasinterconnects.SasInterConnectRefreshRequest;
-import com.hp.ov.sdk.dto.networking.sasinterconnects.SasInterconnect;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 public class SasInterconnectClientSample {

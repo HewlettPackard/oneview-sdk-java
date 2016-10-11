@@ -34,8 +34,8 @@ import com.hp.ov.sdk.adaptors.StoragePoolSerializationAdapter;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.PortTelemetry;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.StoragePool;
 import com.hp.ov.sdk.dto.servers.serverhardwaretype.StorageCapabilities;
+import com.hp.ov.sdk.dto.storage.StoragePool;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInternalException;
 

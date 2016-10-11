@@ -23,7 +23,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.hp.ov.sdk.dto.BaseModelResource;
-import com.hp.ov.sdk.dto.Location;
+import com.hp.ov.sdk.dto.networking.Location;
 import com.hp.ov.sdk.dto.networking.PortConfigInfo;
 
 public class InternalLinkSet extends BaseModelResource {

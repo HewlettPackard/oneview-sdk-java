@@ -22,8 +22,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.hp.ov.sdk.dto.BaseModelResource;
-import com.hp.ov.sdk.dto.Location;
 import com.hp.ov.sdk.dto.RefreshState;
+import com.hp.ov.sdk.dto.networking.Location;
 
 public class Drive extends BaseModelResource {
 

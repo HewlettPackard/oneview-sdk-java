@@ -23,9 +23,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.hp.ov.sdk.dto.EnetTrapCategory;
-import com.hp.ov.sdk.dto.FcTrapCategory;
-import com.hp.ov.sdk.dto.TrapSeverity;
 import com.hp.ov.sdk.dto.VcmTrapCategory;
 
 public class TrapDestination implements Serializable {

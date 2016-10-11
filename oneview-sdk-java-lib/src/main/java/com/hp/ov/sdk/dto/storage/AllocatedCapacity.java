@@ -1,0 +1,80 @@
+/*******************************************************************************
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
+package com.hp.ov.sdk.dto.storage;
+
+
+import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+public class AllocatedCapacity implements Serializable {
+
+    private static final long serialVersionUID = 6489451066416592780L;
+
+    private String snapshotAllocatedCapacity;
+    private String totalAllocatedCapacity;
+    private String volumeAllocatedCapacity;
+
+    public String getSnapshotAllocatedCapacity() {
+        return snapshotAllocatedCapacity;
+    }
+
+    public void setSnapshotAllocatedCapacity(String snapshotAllocatedCapacity) {
+        this.snapshotAllocatedCapacity = snapshotAllocatedCapacity;
+    }
+
+    public String getTotalAllocatedCapacity() {
+        return totalAllocatedCapacity;
+    }
+
+    public void setTotalAllocatedCapacity(String totalAllocatedCapacity) {
+        this.totalAllocatedCapacity = totalAllocatedCapacity;
+    }
+
+    public String getVolumeAllocatedCapacity() {
+        return volumeAllocatedCapacity;
+    }
+
+    public void setVolumeAllocatedCapacity(String volumeAllocatedCapacity) {
+        this.volumeAllocatedCapacity = volumeAllocatedCapacity;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj instanceof AllocatedCapacity) {
+            AllocatedCapacity that = (AllocatedCapacity) obj;
+
+            return new EqualsBuilder()
+                    .append(snapshotAllocatedCapacity, that.snapshotAllocatedCapacity)
+                    .append(totalAllocatedCapacity, that.totalAllocatedCapacity)
+                    .append(volumeAllocatedCapacity, that.volumeAllocatedCapacity)
+                    .isEquals();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(snapshotAllocatedCapacity)
+                .append(totalAllocatedCapacity)
+                .append(volumeAllocatedCapacity)
+                .toHashCode();
+    }
+}

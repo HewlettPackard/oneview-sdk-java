@@ -23,11 +23,11 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Predicate;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
-import com.hp.ov.sdk.dto.ConnectableStorageVolumeTemplate;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.StoragePool;
-import com.hp.ov.sdk.dto.StorageVolumeTemplate;
-import com.hp.ov.sdk.dto.TemplateProvisioningData;
+import com.hp.ov.sdk.dto.storage.ConnectableStorageVolumeTemplate;
+import com.hp.ov.sdk.dto.storage.StoragePool;
+import com.hp.ov.sdk.dto.storage.StorageVolumeTemplate;
+import com.hp.ov.sdk.dto.storage.TemplateProvisioningData;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 /*

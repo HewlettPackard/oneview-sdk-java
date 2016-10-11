@@ -33,11 +33,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
-import com.hp.ov.sdk.dto.ExtraStorageVolume;
-import com.hp.ov.sdk.dto.ExtraStorageVolumeRepair;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.StorageVolumeAttachment;
-import com.hp.ov.sdk.dto.StorageVolumeAttachmentPath;
+import com.hp.ov.sdk.dto.storage.ExtraStorageVolume;
+import com.hp.ov.sdk.dto.storage.ExtraStorageVolumeRepair;
+import com.hp.ov.sdk.dto.storage.StorageVolumeAttachment;
+import com.hp.ov.sdk.dto.storage.StorageVolumeAttachmentPath;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.client.Request;

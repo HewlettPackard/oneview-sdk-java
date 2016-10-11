@@ -18,21 +18,21 @@ package com.hp.ov.sdk.rest.client.networking;
 
 import java.util.List;
 
-import com.hp.ov.sdk.dto.InterconnectFibDataEntry;
-import com.hp.ov.sdk.dto.InterconnectFibDataInfo;
-import com.hp.ov.sdk.dto.InternalVlanAssociation;
-import com.hp.ov.sdk.dto.Location;
 import com.hp.ov.sdk.dto.PortMonitorUplinkPort;
-import com.hp.ov.sdk.dto.QosAggregatedConfiguration;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.Location;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
+import com.hp.ov.sdk.dto.networking.interconnect.InterconnectFibDataEntry;
+import com.hp.ov.sdk.dto.networking.interconnect.InterconnectFibDataInfo;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.InternalVlanAssociation;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.LiFirmware;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.LogicalInterconnect;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.PortMonitor;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.QosAggregatedConfiguration;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;

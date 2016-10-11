@@ -15,8 +15,8 @@
  */
 package com.hp.ov.sdk.rest.client.storage;
 
-import com.hp.ov.sdk.dto.AddStoragePool;
-import com.hp.ov.sdk.dto.StoragePool;
+import com.hp.ov.sdk.dto.networking.AddStoragePool;
+import com.hp.ov.sdk.dto.storage.StoragePool;
 import com.hp.ov.sdk.rest.client.common.AddableResource;
 import com.hp.ov.sdk.rest.client.common.RemovableResource;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;

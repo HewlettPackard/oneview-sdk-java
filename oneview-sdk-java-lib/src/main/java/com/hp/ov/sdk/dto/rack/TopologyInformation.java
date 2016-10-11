@@ -24,7 +24,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.hp.ov.sdk.dto.PowerDeliveryDevice;
+import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.PowerDeliveryDevice;
 
 public class TopologyInformation {
 

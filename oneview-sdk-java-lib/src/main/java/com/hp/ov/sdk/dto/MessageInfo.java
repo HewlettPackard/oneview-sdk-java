@@ -17,7 +17,7 @@ package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
 
-import com.hp.ov.sdk.dto.ProfileConnectionStatus.ServerProfileStatus;
+import com.hp.ov.sdk.dto.servers.serverprofile.ProfileConnectionStatus.ServerProfileStatus;
 
 public class MessageInfo implements Serializable {
 

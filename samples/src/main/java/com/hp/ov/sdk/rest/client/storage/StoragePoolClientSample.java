@@ -19,12 +19,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
-import com.hp.ov.sdk.dto.AddStoragePool;
 import com.hp.ov.sdk.dto.RefreshState;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.StoragePool;
-import com.hp.ov.sdk.dto.StorageSystem;
 import com.hp.ov.sdk.dto.TaskResource;
+import com.hp.ov.sdk.dto.networking.AddStoragePool;
+import com.hp.ov.sdk.dto.storage.StoragePool;
+import com.hp.ov.sdk.dto.storage.StorageSystem;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 
 /*
