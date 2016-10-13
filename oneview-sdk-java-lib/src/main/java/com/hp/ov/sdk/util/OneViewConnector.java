@@ -19,7 +19,6 @@ package com.hp.ov.sdk.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.certs.SslPropertiesManager;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.ApplianceVersions;
 import com.hp.ov.sdk.dto.security.login.LoginInformation;
@@ -28,7 +27,6 @@ import com.hp.ov.sdk.exceptions.SDKApiVersionMismatchException;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
-import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 
 public class OneViewConnector {
@@ -36,28 +34,20 @@ public class OneViewConnector {
     private static final Logger LOGGER = LoggerFactory.getLogger(OneViewConnector.class);
 
     private final RestParams params;
-    private final HttpSslProperties httpSslProperties;
     private final VersionClient versionClient;
     private final LoginSessionClient loginSessionClient;
 
-    public OneViewConnector(RestParams params, HttpSslProperties httpSslProperties,
-            VersionClient versionClient, LoginSessionClient loginSessionClient) {
+    public OneViewConnector(RestParams params,
+            VersionClient versionClient,
+            LoginSessionClient loginSessionClient) {
         this.params = params;
-        this.httpSslProperties = httpSslProperties;
         this.versionClient = versionClient;
         this.loginSessionClient = loginSessionClient;
     }
 
     public void connect() {
-        this.setupSslContext();
         this.checkVersions();
         this.setupSessionId();
-    }
-
-    private void setupSslContext() {
-        SslPropertiesManager manager = new SslPropertiesManager();
-
-        manager.loadSslProperties(this.httpSslProperties);
     }
 
     private void checkVersions() {

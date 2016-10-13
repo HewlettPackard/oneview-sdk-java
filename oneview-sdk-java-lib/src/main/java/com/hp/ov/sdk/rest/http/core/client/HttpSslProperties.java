@@ -21,9 +21,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class HttpSslProperties {
 
-    private String trustStore = null;
-    private String trustStorePassword = null;
-    private String trustStoreType = null;
+    private final String trustStore;
+    private final String trustStorePassword;
+    private final String trustStoreType;
 
     public HttpSslProperties(SDKConfiguration sdkConfiguration) {
         this.trustStore = sdkConfiguration.getTrustStoreFile();
@@ -35,24 +35,12 @@ public class HttpSslProperties {
         return trustStore;
     }
 
-    public void setTrustStore(final String trustStore) {
-        this.trustStore = trustStore;
-    }
-
     public String getTrustStorePassword() {
         return trustStorePassword;
     }
 
-    public void setTrustStorePassword(final String trustStorePassword) {
-        this.trustStorePassword = trustStorePassword;
-    }
-
     public String getTrustStoreType() {
         return trustStoreType;
-    }
-
-    public void setTrustStoreType(final String trustStoreType) {
-        this.trustStoreType = trustStoreType;
     }
 
     /*

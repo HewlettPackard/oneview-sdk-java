@@ -32,10 +32,10 @@ public class SDKConfiguration {
     // Trust store properties keys
     private static final String TRUST_STORE_FILE = "truststore.file";
     private static final String TRUST_STORE_TYPE = "truststore.type";
+    private static final String TRUST_STORE_PASSWORD = "truststore.password";
 
     // OneView properties keys
     private static final String API_VERSION = "oneview.api_version";
-    private static final String TRUST_STORE_PASSWORD = "oneview.trust_store_password";
     private static final String HOSTNAME = "oneview.hostname";
     private static final String DOMAIN = "oneview.domain";
     private static final String USERNAME = "oneview.username";

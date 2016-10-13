@@ -85,10 +85,10 @@ public class OneViewClient {
     private final Map<Class<?>, Object> instances = new ConcurrentHashMap<>();
 
     public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
-        this.baseClient = new BaseClient(params);
+        this.baseClient = new BaseClient(params, httpSslProperties);
 
         OneViewConnector connector = new OneViewConnector(
-                params, httpSslProperties,
+                params,
                 new VersionClient(this.baseClient),
                 new LoginSessionClient(this.baseClient));
 

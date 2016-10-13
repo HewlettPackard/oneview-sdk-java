@@ -15,9 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.http.core.client;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.TrustManager;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -41,9 +38,6 @@ public class RestParams {
     private int amqpPort = 5671; // default port
     private String routingKey = "scmb.alerts.#"; // default value
     private String exchange = "scmb";// default value
-
-    private TrustManager trustManager = null;
-    private HostnameVerifier hostnameVerifier = null;
 
     public RestParams() {
     }
@@ -217,44 +211,6 @@ public class RestParams {
         this.exchange = exchange;
     }
 
-    /**
-     * @return the hostVerifier
-     */
-    public HostnameVerifier getHostnameVerifier() {
-        return hostnameVerifier;
-    }
-
-    /**
-     * Sets a new HostnameVerifier for future connections.
-     *
-     * @param verifier {@link HostnameVerifier} hostname verifier.
-     *
-     * @return the old HostnameVerifier
-     **/
-    public HostnameVerifier
-    setHostnameVerifier(final HostnameVerifier verifier) {
-       HostnameVerifier old = this.getHostnameVerifier();
-       this.hostnameVerifier = verifier;
-       return old;
-    }
-
-    public TrustManager getTrustManager() {
-       return this.trustManager;
-    }
-
-    /**
-     * Sets a new TrustManager for future connections.
-     *
-     * @param trustMgr {@link TrustManager} trust manager.
-     *
-     * @return the old TrustManager
-     **/
-    public TrustManager setTrustManager(final TrustManager trustMgr) {
-       TrustManager old = getTrustManager();
-       this.trustManager = trustMgr;
-       return old;
-    }
-
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
@@ -268,22 +224,6 @@ public class RestParams {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
-    }
-
-    /**
-     * Is a non-default TrustManager to be used.
-     * @return true if non-default, false otherwise
-     **/
-    public boolean hasTrustManager() {
-       return getTrustManager() != null;
-    }
-
-    /**
-     * Is a non-default HostnameVerifier to be used.
-     * @return true if non-default, false otherwise
-     **/
-    public boolean hasHostnameVerifier() {
-       return getHostnameVerifier() != null;
     }
 
 }
