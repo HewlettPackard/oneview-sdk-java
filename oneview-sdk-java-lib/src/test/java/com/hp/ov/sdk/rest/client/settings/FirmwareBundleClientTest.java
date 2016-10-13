@@ -59,7 +59,7 @@ public class FirmwareBundleClientTest {
         expectedRequest.setContentType(ContentType.MULTIPART_FORM_DATA);
         expectedRequest.setTimeout(300000);
 
-        then(baseClient).should().executeMonitorableRequest(expectedRequest, false);
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)

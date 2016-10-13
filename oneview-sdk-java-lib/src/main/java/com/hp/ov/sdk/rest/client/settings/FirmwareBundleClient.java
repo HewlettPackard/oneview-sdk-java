@@ -62,7 +62,7 @@ public class FirmwareBundleClient {
         request.setContentType(ContentType.MULTIPART_FORM_DATA);
         request.setTimeout(TIMEOUT);
 
-        TaskResource taskResource = baseClient.executeMonitorableRequest(request, aSync);
+        TaskResource taskResource = baseClient.executeMonitorableRequest(request);
 
         LOGGER.info("FirmwareBundleClient : add : End");
 

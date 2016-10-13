@@ -19,13 +19,16 @@ package com.hp.ov.sdk.rest.client.settings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.constants.ResourceUris;
 import com.hp.ov.sdk.dto.ApplianceVersions;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.Request;
 
 public class VersionClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VersionClient.class);
+
+    private static final String APPLIANCE_VERSION = "/rest/version";
 
     private final BaseClient baseClient;
 
@@ -44,7 +47,9 @@ public class VersionClient {
     public ApplianceVersions getApplianceVersions() {
         LOGGER.info("VersionClient : getVersion : Start");
 
-        ApplianceVersions versions = baseClient.getResource(ResourceUris.APPLIANCE_VERSION, ApplianceVersions.class);
+        Request request = new Request(HttpMethod.GET, APPLIANCE_VERSION);
+
+        ApplianceVersions versions = baseClient.executeRequest(request, ApplianceVersions.class);
 
         LOGGER.info("VersionClient : getVersion : End");
 

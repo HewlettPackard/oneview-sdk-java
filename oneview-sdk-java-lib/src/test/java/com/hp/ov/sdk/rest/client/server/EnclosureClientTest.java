@@ -55,7 +55,6 @@ import com.hp.ov.sdk.dto.servers.enclosure.SsoUrlData;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
 import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
@@ -132,8 +131,6 @@ public class EnclosureClientTest {
 
     @Test
     public void shouldPatchEnclosureV200() {
-        given(this.baseClient.getApiVersion()).willReturn(ApiVersion.V_200);
-
         Patch patch = new Patch();
 
         enclosureClient.patch(ANY_RESOURCE_ID, patch, TaskTimeout.of(123));
@@ -148,8 +145,6 @@ public class EnclosureClientTest {
 
     @Test
     public void shouldPatchEnclosureV300() {
-        given(this.baseClient.getApiVersion()).willReturn(ApiVersion.V_300);
-
         Patch patch = new Patch();
 
         enclosureClient.patch(ANY_RESOURCE_ID, patch, TaskTimeout.of(123));
@@ -226,8 +221,6 @@ public class EnclosureClientTest {
 
     @Test
     public void shouldGetEnclosureActiveOaSsoUrlV200() {
-        given(this.baseClient.getApiVersion()).willReturn(ApiVersion.V_200);
-
         enclosureClient.getActiveOaSsoUrl(ANY_RESOURCE_ID);
 
         String expectedUri = ENCLOSURE_URI
@@ -242,8 +235,6 @@ public class EnclosureClientTest {
 
     @Test
     public void shouldGetEnclosureStandbyOaSsoUrlV120() {
-        given(this.baseClient.getApiVersion()).willReturn(ApiVersion.V_120);
-
         enclosureClient.getStandbyOaSsoUrl_V120(ANY_RESOURCE_ID);
 
         String expectedUri = ENCLOSURE_URI
@@ -257,8 +248,6 @@ public class EnclosureClientTest {
 
     @Test
     public void shouldGetEnclosureStandbyOaSsoUrlV200() {
-        given(this.baseClient.getApiVersion()).willReturn(ApiVersion.V_200);
-
         enclosureClient.getStandbyOaSsoUrl(ANY_RESOURCE_ID);
 
         String expectedUri = ENCLOSURE_URI

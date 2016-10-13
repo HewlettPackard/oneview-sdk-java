@@ -16,12 +16,18 @@
 
 package com.hp.ov.sdk.rest.client;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+
+import java.lang.reflect.Type;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,13 +36,12 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.base.Supplier;
+import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
-import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
@@ -46,8 +51,9 @@ import com.hp.ov.sdk.tasks.TaskMonitor;
 public class BaseClientTest {
 
     private static final String ANY_URI_STRING = "random-URL";
-    private static final String ANY_RESOURCE_NAME = "random-Name";
+    private static final String ANY_RESPONSE_STRING = "random-Response";
     private static final String ANY_RESOURCE = "{\"type\":\"random-Type\"}";
+    private static final String ANY_TASK_RESOURCE = "{\"type\":\"task-resource\"}";
 
     @Mock
     private RestParams params;
@@ -62,183 +68,112 @@ public class BaseClientTest {
     private BaseClient baseClient;
 
     @Test(expected = SDKInvalidArgumentException.class)
-    public void shouldThrowExceptionWhenTryingToGetResourceWithoutUri() {
-        this.baseClient.getResource(null, Object.class);
+    public void shouldThrowExceptionWhenTryingToExecuteRequestWithoutType() {
+        this.baseClient.executeRequest(new Request(HttpMethod.GET, ANY_URI_STRING), (Type) null);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
-    public void shouldThrowExceptionWhenTryingToGetResourceWithoutClass() {
-        this.baseClient.getResource(ANY_URI_STRING, null);
+    public void shouldThrowExceptionWhenTryingToExecuteRequestWithoutClass() {
+        this.baseClient.executeRequest(new Request(HttpMethod.GET, ANY_URI_STRING), null);
+    }
+
+    @Test(expected = SDKInvalidArgumentException.class)
+    public void shouldThrowExceptionWhenTryingToExecuteRequestWithoutRequestObjectWithType() {
+        this.baseClient.executeRequest(null, TypeToken.of(Object.class).getType());
+    }
+
+    @Test(expected = SDKInvalidArgumentException.class)
+    public void shouldThrowExceptionWhenTryingToExecuteRequestWithoutRequestObjectWithClass() {
+        this.baseClient.executeRequest(null, Object.class);
     }
 
     @Test(expected = SDKNoResponseException.class)
-    public void shouldThrowExceptionWhenServerReturnsNoResponseForGetResource() {
+    public void shouldThrowExceptionWhenServerReturnsNoResponseForExecuteRequestWithType() {
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn("");
 
-        this.baseClient.getResource(ANY_URI_STRING, Object.class);
+        this.baseClient.executeRequest(new Request(HttpMethod.GET, ANY_URI_STRING),
+                TypeToken.of(Object.class).getType());
+    }
+
+    @Test(expected = SDKNoResponseException.class)
+    public void shouldThrowExceptionWhenServerReturnsNoResponseForExecuteRequestWithClass() {
+        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn("");
+
+        this.baseClient.executeRequest(new Request(HttpMethod.GET, ANY_URI_STRING), Object.class);
     }
 
     @Test
-    public void shouldGetResource() {
+    public void shouldExecuteRequestWithType() {
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
 
         Request request = new Request(HttpMethod.GET, ANY_URI_STRING);
 
-        this.baseClient.getResource(ANY_URI_STRING, Object.class);
+        this.baseClient.executeRequest(request, TypeToken.of(Object.class).getType());
 
         then(httpClient).should().sendRequest(eq(params), eq(request));
     }
 
-    @Test(expected = SDKInvalidArgumentException.class)
-    public void shouldThrowExceptionWhenTryingToGetResourceCollectionWithoutUri() {
-        this.baseClient.getResourceCollection(null, Object.class);
-    }
-
-    @Test(expected = SDKInvalidArgumentException.class)
-    public void shouldThrowExceptionWhenTryingToGetResourceCollectionWithoutClass() {
-        this.baseClient.getResourceCollection(ANY_URI_STRING, null);
-    }
-
-    @Test(expected = SDKNoResponseException.class)
-    public void shouldThrowExceptionWhenServerReturnsNoResponseForGetResourceCollection() {
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn("");
-
-        this.baseClient.getResourceCollection(ANY_URI_STRING, Object.class);
-    }
-
     @Test
-    public void shouldGetResourceCollection() {
+    public void shouldExecuteRequestWithClass() {
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
 
         Request request = new Request(HttpMethod.GET, ANY_URI_STRING);
 
-        request.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
-
-        this.baseClient.getResourceCollection(ANY_URI_STRING, Object.class,
-                UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+        this.baseClient.executeRequest(request, Object.class);
 
         then(httpClient).should().sendRequest(eq(params), eq(request));
     }
 
-    @Test(expected = SDKInvalidArgumentException.class)
-    public void shouldThrowExceptionWhenTryingToCreateResourceWithoutUri() {
-        this.baseClient.createResource(null, new Object(), false);
-    }
+    @Test
+    public void shouldExecuteRequestWithTypeAndReturnString() {
+        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESPONSE_STRING);
 
-    @Test(expected = SDKInvalidArgumentException.class)
-    public void shouldThrowExceptionWhenTryingToCreateResourceWithoutBody() {
-        this.baseClient.createResource(ANY_URI_STRING, null, false);
-    }
+        Request request = new Request(HttpMethod.GET, ANY_URI_STRING);
+        String response = (String) this.baseClient.executeRequest(request, TypeToken.of(String.class).getType());
 
-    @Test(expected = SDKNoResponseException.class)
-    public void shouldThrowExceptionWhenServerReturnsNoResponseForCreateResource() {
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn("");
+        then(httpClient).should().sendRequest(eq(params), eq(request));
 
-        this.baseClient.createResource(ANY_URI_STRING, new Object(), false);
+        assertThat(response, is(equalTo(ANY_RESPONSE_STRING)));
     }
 
     @Test
-    public void shouldCreateResource() {
-        Object body = new Object();
+    public void shouldExecuteRequestWithClassAndReturnString() {
+        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESPONSE_STRING);
 
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
-        given(adaptor.buildResource(anyString(), eq(TaskResource.class))).willReturn(new TaskResource());
-        given(supplier.get()).willReturn(mock(TaskMonitor.class));
+        Request request = new Request(HttpMethod.GET, ANY_URI_STRING);
+        String response = this.baseClient.executeRequest(request, String.class);
 
-        Request expectedRequest = new Request(HttpMethod.POST, ANY_URI_STRING, body);
+        then(httpClient).should().sendRequest(eq(params), eq(request));
 
-        this.baseClient.createResource(ANY_URI_STRING, body, false);
-
-        then(httpClient).should().sendRequest(eq(params), eq(expectedRequest));
+        assertThat(response, is(equalTo(ANY_RESPONSE_STRING)));
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
-    public void shouldThrowExceptionWhenTryingToUpdateResourceWithoutUri() {
-        this.baseClient.updateResource(null, new Object(), false);
-    }
-
-    @Test(expected = SDKInvalidArgumentException.class)
-    public void shouldThrowExceptionWhenTryingToUpdateResourceWithoutBody() {
-        this.baseClient.updateResource(ANY_URI_STRING, null, false);
+    public void shouldThrowExceptionWhenTryingToExecuteMonitorableRequestWithoutRequestObject() {
+        this.baseClient.executeMonitorableRequest(null);
     }
 
     @Test(expected = SDKNoResponseException.class)
-    public void shouldThrowExceptionWhenServerReturnsNoResponseForUpdateResource() {
+    public void shouldThrowExceptionWhenServerReturnsNoResponseForExecuteMonitorableRequest() {
         given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn("");
 
-        this.baseClient.createResource(ANY_URI_STRING, new Object(), false);
+        this.baseClient.executeMonitorableRequest(new Request(HttpMethod.GET, ANY_URI_STRING));
     }
 
     @Test
-    public void shouldUpdateResource() {
-        Object body = new Object();
+    public void shouldExecuteMonitorableRequest() {
+        TaskMonitor monitor = mock(TaskMonitor.class);
 
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
+        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_TASK_RESOURCE);
         given(adaptor.buildResource(anyString(), eq(TaskResource.class))).willReturn(new TaskResource());
-        given(supplier.get()).willReturn(mock(TaskMonitor.class));
+        given(supplier.get()).willReturn(monitor);
+        given(monitor.execute(any(BaseClient.class), any(TaskResource.class), anyInt())).willReturn(new TaskResource());
 
-        Request expectedRequest = new Request(HttpMethod.PUT, ANY_URI_STRING, body);
+        Request request = new Request(HttpMethod.GET, ANY_URI_STRING);
 
-        this.baseClient.updateResource(ANY_URI_STRING, body, false);
+        this.baseClient.executeMonitorableRequest(request);
 
-        then(httpClient).should().sendRequest(eq(params), eq(expectedRequest));
+        then(httpClient).should().sendRequest(eq(params), eq(request));
     }
 
-    @Test(expected = SDKInvalidArgumentException.class)
-    public void shouldThrowExceptionWhenTryingToPatchResourceWithoutUri() {
-        this.baseClient.patchResource(null, new Patch(), false);
-    }
-
-    @Test(expected = SDKInvalidArgumentException.class)
-    public void shouldThrowExceptionWhenTryingToPatchResourceWithoutBody() {
-        this.baseClient.patchResource(ANY_URI_STRING, null, false);
-    }
-
-    @Test(expected = SDKNoResponseException.class)
-    public void shouldThrowExceptionWhenServerReturnsNoResponseForPatchResource() {
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn("");
-
-        this.baseClient.patchResource(ANY_URI_STRING, new Patch(), false);
-    }
-
-    @Test
-    public void shouldPatchResource() {
-        Patch patch = new Patch();
-        patch.setOp(Patch.PatchOperation.replace);
-
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
-        given(adaptor.buildResource(anyString(), eq(TaskResource.class))).willReturn(new TaskResource());
-        given(supplier.get()).willReturn(mock(TaskMonitor.class));
-
-        Request expectedRequest = new Request(HttpMethod.PATCH, ANY_URI_STRING, patch);
-
-        this.baseClient.patchResource(ANY_URI_STRING, patch, false);
-
-        then(httpClient).should().sendRequest(eq(params), eq(expectedRequest));
-    }
-
-    @Test(expected = SDKInvalidArgumentException.class)
-    public void shouldThrowExceptionWhenTryingToDeleteResourceWithoutUri() {
-        this.baseClient.deleteResource(null, false);
-    }
-
-    @Test(expected = SDKNoResponseException.class)
-    public void shouldThrowExceptionWhenServerReturnsNoResponseForDeleteResource() {
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn("");
-
-        this.baseClient.deleteResource(ANY_URI_STRING, false);
-    }
-
-    @Test
-    public void shouldDeleteResource() {
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
-        given(adaptor.buildResource(anyString(), eq(TaskResource.class))).willReturn(new TaskResource());
-        given(supplier.get()).willReturn(mock(TaskMonitor.class));
-
-        Request expectedRequest = new Request(HttpMethod.DELETE, ANY_URI_STRING);
-
-        this.baseClient.deleteResource(ANY_URI_STRING, false);
-
-        then(httpClient).should().sendRequest(eq(params), eq(expectedRequest));
-    }
 }

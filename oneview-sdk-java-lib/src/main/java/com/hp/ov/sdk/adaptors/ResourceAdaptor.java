@@ -16,7 +16,6 @@
 package com.hp.ov.sdk.adaptors;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
@@ -24,16 +23,6 @@ import com.hp.ov.sdk.util.StringUtil;
 
 public class ResourceAdaptor {
 
-    @Deprecated
-    public <T> List<T> buildListOfResource(String source, Class<T> resourceType) {
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-
-        String sourceReplaced = this.applyReplacementsOnSource(source);
-
-        return converter.jsonToList(sourceReplaced, resourceType);
-    }
-
-    @Deprecated
     public <T> ResourceCollection<T> buildResourceCollection(String source, Class<T> resourceType) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
@@ -42,7 +31,6 @@ public class ResourceAdaptor {
         return converter.jsonToResourceCollection(sourceReplaced, resourceType);
     }
 
-    @Deprecated
     public <T> T buildResource(String source, Class<T> resourceType) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
