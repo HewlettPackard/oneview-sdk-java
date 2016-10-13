@@ -281,7 +281,7 @@ public class HttpRestClient {
      */
     private URI buildURI(Request request) throws SDKBadRequestException {
         try {
-            URIBuilder uri = new URIBuilder(UrlUtils.createRestUrl(config.getOneViewHostname(), request.getUri()));
+            URIBuilder uri = new URIBuilder(UrlUtils.createRestUrl(request.getHostname(), request.getUri()));
 
             for (UrlParameter entry : request.getQuery()) {
                 uri.addParameter(entry.getKey(), entry.getValue());

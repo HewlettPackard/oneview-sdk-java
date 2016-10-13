@@ -33,6 +33,7 @@ public class Request {
 
     private final HttpMethod type;
 
+    private String hostname;
     private String uri;
     private List<UrlParameter> query;
     private Optional<Object> entity;
@@ -119,6 +120,14 @@ public class Request {
 
     public int getTimeout() {
         return taskTimeoutMillis;
+    }
+
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
+    }
+
+    public String getHostname() {
+        return hostname;
     }
 
     public void setTimeout(int taskTimeoutMillis) {

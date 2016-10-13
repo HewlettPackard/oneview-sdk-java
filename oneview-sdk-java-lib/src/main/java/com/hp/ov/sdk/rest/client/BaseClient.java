@@ -39,10 +39,11 @@ public class BaseClient {
     private final ResourceAdaptor adaptor;
     private final HttpRestClient client;
     private final Supplier<TaskMonitor> supplier;
+    private final String hostname;
 
     private String sessionId;
 
-    public BaseClient(SDKConfiguration config) {
+    public BaseClient(SDKConfiguration config, String hostname) {
         this(new ResourceAdaptor(),
              new HttpRestClient(config, new JsonSerializer(), SSLContextFactory.getDefaultContext(config)),
              new Supplier<TaskMonitor>() {
@@ -50,18 +51,21 @@ public class BaseClient {
                 public TaskMonitor get() {
                     return new TaskMonitor();
                 }
-             }
+             },
+             hostname
         );
     }
 
     protected BaseClient(
             ResourceAdaptor adaptor,
             HttpRestClient client,
-            Supplier<TaskMonitor> supplier) {
+            Supplier<TaskMonitor> supplier,
+            String hostname) {
 
         this.adaptor = adaptor;
         this.client = client;
         this.supplier = supplier;
+        this.hostname = hostname;
     }
 
     public void setSessionId(String sessionId) {
@@ -111,6 +115,8 @@ public class BaseClient {
     }
 
     private String executeRequest(Request request) {
+        request.setHostname(this.hostname);
+
         String response = client.sendRequest(sessionId, request);
 
         if (StringUtils.isBlank(response)) {

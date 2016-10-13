@@ -49,6 +49,9 @@ public class SDKConfiguration {
     private static final String TRUST_STORE_FILE = "truststore.file";
     private static final String TRUST_STORE_PASSWORD = "truststore.password";
 
+    // Image Streamer properties keys
+    private static final String I3S_HOSTNAME = "i3s.hostname";
+
     // OneView properties keys
     private static final String API_VERSION = "oneview.api_version";
     private static final String HOSTNAME = "oneview.hostname";
@@ -191,6 +194,10 @@ public class SDKConfiguration {
 
             return new SDKConfiguration(properties);
         }
+    }
+
+    public String getImageStreamerHostname() {
+        return this.properties.getProperty(I3S_HOSTNAME);
     }
 
 }

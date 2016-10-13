@@ -86,7 +86,7 @@ public class OneViewClient {
     private final Map<Class<?>, Object> instances = new ConcurrentHashMap<>();
 
     public OneViewClient(SDKConfiguration config) {
-        this.baseClient = new BaseClient(config);
+        this.baseClient = new BaseClient(config, config.getOneViewHostname());
 
         OneViewConnector connector = new OneViewConnector(
                 config,
