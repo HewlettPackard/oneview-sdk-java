@@ -40,7 +40,7 @@ public class OsBuildPlanClientSample {
     public OsBuildPlanClientSample() {
         ImageStreamerClient i3sClient = new ImageStreamerClientSample().getImageStreamerClient();
 
-        this.osBuildPlanClient = i3sClient.osBuildPlanClient();
+        this.osBuildPlanClient = i3sClient.osBuildPlan();
     }
 
     private void getOsBuildPlanById() {

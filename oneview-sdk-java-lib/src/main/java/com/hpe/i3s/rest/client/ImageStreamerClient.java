@@ -23,6 +23,7 @@ import com.google.common.reflect.Reflection;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
+import com.hpe.i3s.client.deployment.DeploymentPlanClient;
 import com.hpe.i3s.client.deployment.OsBuildPlanClient;
 import com.hpe.i3s.client.statelessserver.OsVolumeClient;
 
@@ -36,12 +37,16 @@ public class ImageStreamerClient {
         this.baseClient = new BaseClient(config, config.getImageStreamerHostname());
     }
 
-    public synchronized OsBuildPlanClient osBuildPlanClient() {
+    public synchronized OsBuildPlanClient osBuildPlan() {
         return this.getProxy(OsBuildPlanClient.class);
     }
 
-    public synchronized OsVolumeClient osVolumeClient() {
+    public synchronized OsVolumeClient osVolume() {
         return this.getProxy(OsVolumeClient.class);
+    }
+
+    public synchronized DeploymentPlanClient deploymentPlan() {
+        return this.getProxy(DeploymentPlanClient.class);
     }
 
     private <T> T getProxy(Class<T> clientClass) {
