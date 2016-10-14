@@ -20,15 +20,6 @@ import com.hp.ov.sdk.constants.SdkConstants;
 
 public final class UrlUtils {
 
-    public static String createUrl(String resourceUri, String ... pathSegments) {
-        StringBuilder builder = new StringBuilder(resourceUri);
-
-        for (String pathSegment : pathSegments) {
-            builder.append("/").append(pathSegment);
-        }
-        return builder.toString();
-    }
-
     public static String getResourceIdFromUri(final String uri) {
         return uri.substring(uri.lastIndexOf("/") + 1);
     }

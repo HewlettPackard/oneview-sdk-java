@@ -19,16 +19,17 @@ package com.hp.ov.sdk.rest.client.security;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.constants.ResourceUris;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.dto.security.login.LoginInformation;
 import com.hp.ov.sdk.dto.security.login.LoginSession;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 
 public class LoginSessionClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginSessionClient.class);
+
+    private static final String LOGIN_SESSIONS = "/rest/login-sessions";
 
     private final BaseClient baseClient;
 
@@ -48,7 +49,7 @@ public class LoginSessionClient {
     public LoginSession authenticate(LoginInformation loginInformation) {
         LOGGER.info("LoginSessionClient : authenticate : Start");
 
-        Request request = new Request(HttpMethod.POST, ResourceUris.LOGIN_SESSIONS, loginInformation);
+        Request request = new Request(HttpMethod.POST, LOGIN_SESSIONS, loginInformation);
         LoginSession loginSession = baseClient.executeRequest(request, LoginSession.class);
 
         LOGGER.info("LoginSessionClient : authenticate : End");

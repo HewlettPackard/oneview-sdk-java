@@ -42,9 +42,8 @@ public class MessagingCertificateClient {
     public RabbitMqClientCert getRabbitMqClientCertificateKeyPair() {
         LOGGER.info("MessagingCertificateManager : getRabbitMqClientCertificate : Start");
 
-        RabbitMqClientCert certificate = this.baseClient.getResource(
-                RABBIT_MQ_CLIENT_CERT_KEYPAIR,
-                RabbitMqClientCert.class);
+        Request request = new Request(HttpMethod.GET, RABBIT_MQ_CLIENT_CERT_KEYPAIR);
+        RabbitMqClientCert certificate = this.baseClient.executeRequest(request, RabbitMqClientCert.class);
 
         String tempKeyData = certificate.getBase64SSLKeyData()
                 .replace("-----BEGIN RSA PRIVATE KEY-----", "")
@@ -89,7 +88,7 @@ public class MessagingCertificateClient {
 
         Request request = new Request(HttpMethod.POST, RABBIT_MQ_CLIENT_CERT, rabbitMqClientCert);
 
-        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request, false);
+        TaskResource taskResource = this.baseClient.executeMonitorableRequest(request);
 
         LOGGER.info("MessagingCertificateManager : generateRabbitMqClientCert : End");
 

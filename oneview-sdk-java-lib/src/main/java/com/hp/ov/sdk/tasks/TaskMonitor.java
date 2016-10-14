@@ -30,6 +30,8 @@ import com.hp.ov.sdk.dto.TaskState;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKTasksException;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.client.Request;
 
 public class TaskMonitor {
 
@@ -67,7 +69,9 @@ public class TaskMonitor {
         dateToLive.add(Calendar.MILLISECOND, taskTimeoutMillis);
 
         while (dateToLive.after(Calendar.getInstance())) {
-            task = client.getResource(task.getUri(), TaskResource.class);
+            Request request = new Request(HttpMethod.GET, task.getUri());
+
+            task = client.executeRequest(request, TaskResource.class);
 
             LOGGER.info("Task completed percentage {} and status {}", task.getPercentComplete(), task.getTaskState());
 
@@ -85,7 +89,9 @@ public class TaskMonitor {
 
     private TaskResource checkTaskPercentage(BaseClient client, TaskResource task) {
         while (task.getPercentComplete() < SdkConstants.PERCENTAGE_100) {
-            task = client.getResource(task.getUri(), TaskResource.class);
+            Request request = new Request(HttpMethod.GET, task.getUri());
+
+            task = client.executeRequest(request, TaskResource.class);
 
             LOGGER.info("Task completed percentage {} and status {}", task.getPercentComplete(), task.getTaskState());
 
