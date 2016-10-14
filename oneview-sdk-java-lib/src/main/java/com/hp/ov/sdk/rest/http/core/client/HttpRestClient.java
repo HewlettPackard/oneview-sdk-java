@@ -22,16 +22,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.EntityBuilder;
@@ -44,11 +42,16 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,8 +76,9 @@ public class HttpRestClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpRestClient.class);
 
-    private static final String LOCATION_HEADER = "Location";
-    private static final int TIMEOUT = 20000; // milliseconds
+    //TODO these parameters should be configurable
+    private static final int MAX_NUMBER_OF_CONNECTIONS = 20;
+    private static final int SOCKET_TIMEOUT = 60; //seconds
 
     /*
     TODO this could be replaced by a one way converter (Object to JSON).
@@ -82,23 +86,57 @@ public class HttpRestClient {
     choose the appropriate converter according to the Content-Type.
      */
     private final JsonSerializer serializer;
+    private final CloseableHttpClient httpClient;
 
-    public HttpRestClient(JsonSerializer serializer) {
+    public HttpRestClient(JsonSerializer serializer, SSLContext sslContext) {
         this.serializer = serializer;
+        this.httpClient = this.buildHttpClient(sslContext);
     }
 
-    private static final class HttpRestClientHolder {
-        private static final HttpRestClient INSTANCE = new HttpRestClient(new JsonSerializer());
+    private CloseableHttpClient buildHttpClient(SSLContext sslContext) {
+        SSLConnectionSocketFactory sslFactory = new SSLConnectionSocketFactory(
+                sslContext, SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
+                .register("http", PlainConnectionSocketFactory.INSTANCE)
+                .register("https", sslFactory)
+                .build();
+
+        PoolingHttpClientConnectionManager manager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+
+        manager.setMaxTotal(MAX_NUMBER_OF_CONNECTIONS);
+        manager.setDefaultMaxPerRoute(MAX_NUMBER_OF_CONNECTIONS);
+
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setAuthenticationEnabled(false)
+                .setContentCompressionEnabled(false)
+                .setConnectTimeout(5 * 1000)
+                .setConnectionRequestTimeout(5 * 1000)
+                .setSocketTimeout(SOCKET_TIMEOUT * 1000)
+                .build();
+
+        return HttpClientBuilder.create()
+                .setDefaultRequestConfig(requestConfig)
+                .setConnectionManager(manager).build();
     }
 
-    /**
-     * Gets an instance of the HttpRestClient object.
-     *
-     * @return
-     *  An instance of the HttpRestClient object.
-     */
-    public static HttpRestClient getClient() {
-        return HttpRestClientHolder.INSTANCE;
+    public void shutdown() {
+        if (this.httpClient != null) {
+            try {
+                this.httpClient.close();
+            } catch (IOException e) {
+                LOGGER.info("I/O exception while shutting down HTTP client", e);
+            }
+        }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            shutdown();
+        } finally {
+            super.finalize();
+        }
     }
 
     /**
@@ -173,7 +211,6 @@ public class HttpRestClient {
         }
 
         if (requestBase != null) {
-            requestBase.setConfig(createRequestTimeoutConfiguration());
             setRequestHeaders(restParams, requestBase);
 
             return getResponse(requestBase, restParams, request.isForceReturnTask());
@@ -233,20 +270,6 @@ public class HttpRestClient {
     }
 
     /**
-     * Creates the timeout configuration for the request.
-     *
-     * @return
-     *  A request configuration.
-     */
-    private RequestConfig createRequestTimeoutConfiguration() {
-        return RequestConfig.custom()
-                .setConnectionRequestTimeout(TIMEOUT)
-                .setConnectTimeout(TIMEOUT)
-                .setSocketTimeout(TIMEOUT)
-                .build();
-    }
-
-    /**
      * Builds the URI used in the request.
      *
      * @param params
@@ -298,31 +321,28 @@ public class HttpRestClient {
      * @return
      */
     private String getResponse(HttpUriRequest request, RestParams params, final boolean forceReturnTask) {
-        CloseableHttpClient client = buildHttpClient(params);
+        String responseBody = null;
+        HttpResponse response = null;
 
-        StringBuffer responseBody = new StringBuffer();
         try {
-            HttpResponse response = client.execute(request);
+            response = httpClient.execute(request);
+
             int responseCode = response.getStatusLine().getStatusCode();
             LOGGER.debug("Response code: " + responseCode);
 
             if (responseCode == HttpsURLConnection.HTTP_NO_CONTENT) {
-                responseBody.append("{}");
+                responseBody = "{}";
             } else {
-                BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-                String line = "";
-                while ((line = rd.readLine()) != null) {
-                    responseBody.append(line);
-                }
+                responseBody = EntityUtils.toString(response.getEntity());
             }
 
-            LOGGER.info("Response Body: " + responseBody.toString());
+            LOGGER.info("Response Body: " + responseBody);
             checkResponse(responseCode);
 
             if (forceReturnTask || ((responseCode == HttpURLConnection.HTTP_ACCEPTED) && (responseBody.length() == 0)
-                    && response.containsHeader(LOCATION_HEADER))) {
+                    && response.containsHeader(HttpHeaders.LOCATION))) {
                 // Response contains a task
-                String restUri = response.getFirstHeader(LOCATION_HEADER).getValue();
+                String restUri = response.getFirstHeader(HttpHeaders.LOCATION).getValue();
                 restUri = restUri.substring(restUri.indexOf("/rest"));
 
                 Request taskRequest = new Request(HttpMethod.GET, restUri);
@@ -333,56 +353,12 @@ public class HttpRestClient {
         } catch (IOException e) {
             LOGGER.error("IO Error: ", e);
             throw new SDKBadRequestException(SDKErrorEnum.badRequestError, null, null, null, SdkConstants.APPLIANCE, e);
+        } finally {
+            if (response != null) {
+                EntityUtils.consumeQuietly(response.getEntity());
+            }
         }
-
-        return responseBody.toString();
-    }
-
-    /**
-     * Creates the HTTP client.
-     *
-     * @param params
-     *  connection parameters.
-     * @return
-     *  A HTTP client.
-     */
-    private CloseableHttpClient buildHttpClient(RestParams params) {
-        HttpClientBuilder clientBuilder = HttpClients.custom();
-
-        // We dont need to set it the best available is used.
-        // See SSLContext.init()
-        TrustManager[] trustManagers = null;
-
-        // If they want a different manager we need to use that.
-        if (params.hasTrustManager()) {
-            LOGGER.debug("Using user supplied trust manager: " + params.getTrustManager().getClass().getName());
-            trustManagers = new TrustManager[] { params.getTrustManager() };
-        }
-
-        try {
-            SSLContext sc = SSLContext.getInstance("TLSv1.2");
-            sc.init(null, // Use the best available key manager
-                    trustManagers, // If null best available is used
-                    new java.security.SecureRandom());
-
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sc, new String[] { "TLSv1" }, null,
-                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());
-
-            clientBuilder.setSSLSocketFactory(sslsf);
-
-        } catch (NoSuchAlgorithmException ex) {
-            LOGGER.error("Unable to set TrustManager", ex);
-        } catch (KeyManagementException ex) {
-            LOGGER.error("Unable to set TrustManager", ex);
-        }
-
-        // Use a different host verifier?
-        if (params.hasHostnameVerifier()) {
-            LOGGER.debug("Using user supplied host verifier: " + params.getHostnameVerifier().getClass().getName());
-            clientBuilder.setSSLHostnameVerifier(params.getHostnameVerifier());
-        }
-
-        return clientBuilder.build();
+        return responseBody;
     }
 
     /**

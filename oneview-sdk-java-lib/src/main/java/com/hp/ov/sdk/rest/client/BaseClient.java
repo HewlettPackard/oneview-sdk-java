@@ -27,10 +27,13 @@ import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
+import com.hp.ov.sdk.rest.http.core.SSLContextFactory;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
+import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitor;
+import com.hp.ov.sdk.util.JsonSerializer;
 
 public class BaseClient {
 
@@ -39,13 +42,17 @@ public class BaseClient {
     private final HttpRestClient client;
     private final Supplier<TaskMonitor> supplier;
 
-    public BaseClient(RestParams params) {
-        this(params, new ResourceAdaptor(), HttpRestClient.getClient(), new Supplier<TaskMonitor>() {
-            @Override
-            public TaskMonitor get() {
-                return new TaskMonitor();
-            }
-        });
+    public BaseClient(RestParams params, HttpSslProperties properties) {
+        this(params,
+                new ResourceAdaptor(),
+                new HttpRestClient(new JsonSerializer(), SSLContextFactory.getDefaultContext(properties)),
+                new Supplier<TaskMonitor>() {
+                    @Override
+                    public TaskMonitor get() {
+                        return new TaskMonitor();
+                    }
+                }
+        );
     }
 
     protected BaseClient(RestParams params,

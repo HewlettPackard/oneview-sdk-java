@@ -56,9 +56,9 @@ public class ScmbClient {
 
         try {
             HttpSslProperties httpSslProperties = credentials.createHttpSslProperties();
-            BaseClient baseClient = new BaseClient(params);
+            BaseClient baseClient = new BaseClient(params, httpSslProperties);
 
-            OneViewConnector connector = new OneViewConnector(params, httpSslProperties,
+            OneViewConnector connector = new OneViewConnector(params,
                     new VersionClient(baseClient), new LoginSessionClient(baseClient));
 
             connector.connect();
