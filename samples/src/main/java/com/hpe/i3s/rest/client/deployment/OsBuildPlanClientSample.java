@@ -21,14 +21,13 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.rest.client.facilities.RackClientSample;
-import com.hpe.i3s.client.osbuildplan.OsBuildPlanClient;
+import com.hpe.i3s.client.deployment.OsBuildPlanClient;
 import com.hpe.i3s.dto.deployment.osbuildplan.OeBuildPlan;
 import com.hpe.i3s.rest.client.ImageStreamerClient;
 
 public class OsBuildPlanClientSample {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RackClientSample.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OsBuildPlanClientSample.class);
 
     // These are variables to be defined by user
     // ================================

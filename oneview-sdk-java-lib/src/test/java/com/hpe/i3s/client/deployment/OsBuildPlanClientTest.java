@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hpe.i3s.client.osbuildplan;
+package com.hpe.i3s.client.deployment;
 
-import static com.hpe.i3s.client.osbuildplan.OsBuildPlanClient.BUILD_PLAN_URI;
+import static com.hpe.i3s.client.deployment.OsBuildPlanClient.BUILD_PLAN_URI;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
@@ -35,6 +35,7 @@ import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
+import com.hpe.i3s.client.deployment.OsBuildPlanClient;
 import com.hpe.i3s.dto.deployment.osbuildplan.OeBuildPlan;
 
 @RunWith(MockitoJUnitRunner.class)
