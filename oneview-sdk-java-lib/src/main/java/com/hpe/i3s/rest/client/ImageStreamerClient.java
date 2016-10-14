@@ -23,6 +23,7 @@ import com.google.common.reflect.Reflection;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
+import com.hpe.i3s.client.deployment.ArtifactsBundleClient;
 import com.hpe.i3s.client.deployment.DeploymentPlanClient;
 import com.hpe.i3s.client.deployment.OsBuildPlanClient;
 import com.hpe.i3s.client.deployment.PlanScriptClient;
@@ -36,6 +37,10 @@ public class ImageStreamerClient {
 
     public ImageStreamerClient(SDKConfiguration config) {
         this.baseClient = new BaseClient(config, config.getImageStreamerHostname());
+    }
+
+    public synchronized ArtifactsBundleClient artifactsBundle() {
+        return this.getProxy(ArtifactsBundleClient.class);
     }
 
     public synchronized DeploymentPlanClient deploymentPlan() {
