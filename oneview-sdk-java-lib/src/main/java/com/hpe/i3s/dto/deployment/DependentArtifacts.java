@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
@@ -14,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.hpe.i3s.dto.deployment.osbuildplan;
+package com.hpe.i3s.dto.deployment;
 
 import java.io.Serializable;
 

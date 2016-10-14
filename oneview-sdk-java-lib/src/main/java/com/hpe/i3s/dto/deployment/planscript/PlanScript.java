@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hpe.i3s.dto.deployment.osbuildplan;
+ */
+package com.hpe.i3s.dto.deployment.planscript;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,57 +25,42 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hpe.i3s.dto.deployment.DependentArtifacts;
 
-public class OeBuildPlan extends BaseModelResource {
+public class PlanScript extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
-    private String buildPlanid;
-    private BuildStep buildStep;
-    private List<CustomAttribute> customAttributes = new ArrayList<>();
+    private String content;
+    private String customAttributes;
     private List<DependentArtifacts> dependentArtifacts = new ArrayList<>();
-    private String etag;
     private boolean hpProvided;
-    private String oeBuildPlanType;
+    private String id;
+    private PlanType planType;
 
     /**
-     * @return the buildPlanid
+     * @return the content
      */
-    public String getBuildPlanid() {
-        return buildPlanid;
+    public String getContent() {
+        return content;
     }
 
     /**
-     * @param buildPlanid the buildPlanid to set
+     * @param content the content to set
      */
-    public void setBuildPlanid(String buildPlanid) {
-        this.buildPlanid = buildPlanid;
-    }
-
-    /**
-     * @return the buildStep
-     */
-    public BuildStep getBuildStep() {
-        return buildStep;
-    }
-
-    /**
-     * @param buildStep the buildStep to set
-     */
-    public void setBuildStep(BuildStep buildStep) {
-        this.buildStep = buildStep;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     /**
      * @return the customAttributes
      */
-    public List<CustomAttribute> getCustomAttributes() {
+    public String getCustomAttributes() {
         return customAttributes;
     }
 
     /**
      * @param customAttributes the customAttributes to set
      */
-    public void setCustomAttributes(List<CustomAttribute> customAttributes) {
+    public void setCustomAttributes(String customAttributes) {
         this.customAttributes = customAttributes;
     }
 
@@ -94,20 +79,6 @@ public class OeBuildPlan extends BaseModelResource {
     }
 
     /**
-     * @return the etag
-     */
-    public String getEtag() {
-        return etag;
-    }
-
-    /**
-     * @param etag the etag to set
-     */
-    public void setEtag(String etag) {
-        this.etag = etag;
-    }
-
-    /**
      * @return the hpProvided
      */
     public boolean isHpProvided() {
@@ -122,17 +93,31 @@ public class OeBuildPlan extends BaseModelResource {
     }
 
     /**
-     * @return the oeBuildPlanType
+     * @return the id
      */
-    public String getOeBuildPlanType() {
-        return oeBuildPlanType;
+    public String getId() {
+        return id;
     }
 
     /**
-     * @param oeBuildPlanType the oeBuildPlanType to set
+     * @param id the id to set
      */
-    public void setOeBuildPlanType(String oeBuildPlanType) {
-        this.oeBuildPlanType = oeBuildPlanType;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the planType
+     */
+    public PlanType getPlanType() {
+        return planType;
+    }
+
+    /**
+     * @param planType the planType to set
+     */
+    public void setPlanType(PlanType planType) {
+        this.planType = planType;
     }
 
     @Override
@@ -149,4 +134,5 @@ public class OeBuildPlan extends BaseModelResource {
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
+
 }
