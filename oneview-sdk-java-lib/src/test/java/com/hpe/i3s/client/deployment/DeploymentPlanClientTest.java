@@ -48,7 +48,7 @@ public class DeploymentPlanClientTest {
             new ClientRequestHandler<>(baseClient, DeploymentPlanClient.class));
 
     @Test
-    public void shouldGetOsBuildPlan() {
+    public void shouldGetDeploymentPlanById() {
         client.getById(ANY_RESOURCE_ID);
 
         String expectedUri = DEPLOYMENT_PLAN_URI + "/" + ANY_RESOURCE_ID;
@@ -58,7 +58,7 @@ public class DeploymentPlanClientTest {
     }
 
     @Test
-    public void shouldGetAllOsBuildPlans() {
+    public void shouldGetAllDeploymentPlans() {
         given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
 
         client.getAll();
@@ -70,7 +70,7 @@ public class DeploymentPlanClientTest {
     }
 
     @Test
-    public void shouldGetOsBuildPlanCollectionByName() {
+    public void shouldGetDeploymentPlanCollectionByName() {
         client.getByName(ANY_RESOURCE_NAME);
 
         Request expectedRequest = new Request(HttpMethod.GET, DEPLOYMENT_PLAN_URI);
@@ -81,7 +81,7 @@ public class DeploymentPlanClientTest {
     }
 
     @Test
-    public void shouldCreateOsBuildPlan() {
+    public void shouldCreateDeploymentPlan() {
         DeploymentPlan deploymentPlan = new DeploymentPlan();
 
         client.create(deploymentPlan);
@@ -93,7 +93,7 @@ public class DeploymentPlanClientTest {
     }
 
     @Test
-    public void shouldUpdateOsBuildPlan() {
+    public void shouldUpdateDeploymentPlan() {
         DeploymentPlan deploymentPlan = new DeploymentPlan();
 
         client.update(ANY_RESOURCE_ID, deploymentPlan);
@@ -106,7 +106,7 @@ public class DeploymentPlanClientTest {
     }
 
     @Test
-    public void shouldDeleteOsBuildPlan() {
+    public void shouldDeleteDeploymentPlan() {
         client.delete(ANY_RESOURCE_ID);
 
 

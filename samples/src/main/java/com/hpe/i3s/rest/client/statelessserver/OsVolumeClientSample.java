@@ -35,38 +35,37 @@ public class OsVolumeClientSample {
     private static final String OS_VOLUME_NAME = "Sample OS Volume";
     // ================================
 
-    private final OsVolumeClient osVolumeclient;
+    private final OsVolumeClient osVolumeClient;
 
     public OsVolumeClientSample() {
         ImageStreamerClient i3sClient = new ImageStreamerClientSample().getImageStreamerClient();
 
-        this.osVolumeclient = i3sClient.osVolumeClient();
+        this.osVolumeClient = i3sClient.osVolume();
     }
 
     private void getOsVolumeById() {
-        OsVolume osVolume = this.osVolumeclient.getById(OS_VOLUME_RESOURCE_ID);
+        OsVolume osVolume = this.osVolumeClient.getById(OS_VOLUME_RESOURCE_ID);
 
         LOGGER.info("OS Volume object returned to client : " + osVolume.toJsonString());
     }
 
     private void getAllOsBuildPlans() {
-        ResourceCollection<OsVolume> osVolumes = this.osVolumeclient.getAll();
+        ResourceCollection<OsVolume> osVolumes = this.osVolumeClient.getAll();
 
         LOGGER.info("OS Volumes returned to client : " + osVolumes.toJsonString());
     }
 
     private void getOsVolumeByName() {
-        OsVolume osVolume = this.osVolumeclient.getByName(OS_VOLUME_NAME).get(0);
+        OsVolume osVolume = this.osVolumeClient.getByName(OS_VOLUME_NAME).get(0);
 
         LOGGER.info("OS Volume object returned to client : " + osVolume.toJsonString());
     }
 
     private void getArchivedOsVolume() {
-        OsVolume osVolume = this.osVolumeclient.getArchivedOsVolume(ARCHIVED_OS_VOLUME_RESOURCE_ID);
+        OsVolume osVolume = this.osVolumeClient.getArchivedOsVolume(ARCHIVED_OS_VOLUME_RESOURCE_ID);
 
         LOGGER.info("Archived OS Volume object returned to client : " + osVolume.toJsonString());
     }
-
 
     public static void main(String[] args) {
         OsVolumeClientSample sample = new OsVolumeClientSample();
