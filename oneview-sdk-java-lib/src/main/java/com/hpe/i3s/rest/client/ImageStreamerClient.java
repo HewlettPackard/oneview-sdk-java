@@ -25,6 +25,7 @@ import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 import com.hpe.i3s.client.deployment.ArtifactsBundleClient;
 import com.hpe.i3s.client.deployment.DeploymentPlanClient;
+import com.hpe.i3s.client.deployment.GoldenImageClient;
 import com.hpe.i3s.client.deployment.OsBuildPlanClient;
 import com.hpe.i3s.client.deployment.PlanScriptClient;
 import com.hpe.i3s.client.statelessserver.OsVolumeClient;
@@ -57,6 +58,10 @@ public class ImageStreamerClient {
 
     public synchronized PlanScriptClient planScript() {
         return this.getProxy(PlanScriptClient.class);
+    }
+
+    public synchronized GoldenImageClient goldenImage() {
+        return this.getProxy(GoldenImageClient.class);
     }
 
     private <T> T getProxy(Class<T> clientClass) {

@@ -70,6 +70,7 @@ import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.util.JsonSerializer;
 import com.hp.ov.sdk.util.UrlUtils;
+import com.hpe.i3s.dto.deployment.goldenimage.GoldenImageFile;
 
 public class HttpRestClient {
 
@@ -249,14 +250,27 @@ public class HttpRestClient {
                         .setText(request.getEntity().toString())
                         .build();
             } else if (ContentType.MULTIPART_FORM_DATA == contentType) {
-                File file = (File) request.getEntity();
-                entity = MultipartEntityBuilder.create()
-                        .setContentType(toApacheContentType(contentType))
-                        .addBinaryBody("file", file)
-                        .build();
+                Object content = request.getEntity();
 
-                //TODO add support for custom headers in Request object
-                base.setHeader("uploadfilename", file.getName());
+                if (content instanceof GoldenImageFile) {
+                    GoldenImageFile goldenImageFile = (GoldenImageFile) request.getEntity();
+
+                    entity = MultipartEntityBuilder.create()
+                            .setContentType(toApacheContentType(contentType))
+                            .addBinaryBody("file", goldenImageFile.getFile())
+                            .addTextBody("name", goldenImageFile.getName())
+                            .addTextBody("description", goldenImageFile.getDescription())
+                            .build();
+                } else {
+                    File file = (File) request.getEntity();
+                    entity = MultipartEntityBuilder.create()
+                            .setContentType(toApacheContentType(contentType))
+                            .addBinaryBody("file", file)
+                            .build();
+
+                    //TODO add support for custom headers in Request object
+                    base.setHeader("uploadfilename", file.getName());
+                }
             } else {
                 LOGGER.error("Unknown entity Content-Type");
 
