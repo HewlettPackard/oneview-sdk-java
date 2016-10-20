@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.exceptions.SDKPropertiesFileException;
-import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 
@@ -40,12 +39,12 @@ public class HPOneViewCredential {
         }
     }
 
-    public RestParams createRestParams() {
-        return new RestParams(sdkConfiguration);
+    public SDKConfiguration getSDKConfiguration() {
+        return this.sdkConfiguration;
     }
 
-    public HttpSslProperties createHttpSslProperties() {
-        return new HttpSslProperties(sdkConfiguration);
+    public RestParams createRestParams() {
+        return new RestParams(sdkConfiguration);
     }
 
 }

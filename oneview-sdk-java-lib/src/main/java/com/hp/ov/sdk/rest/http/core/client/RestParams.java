@@ -24,7 +24,7 @@ public class RestParams {
     private final String userName;
 
     /* parameters for RabbitMQ connection */
-    private final int amqpPort;
+    private final int messageBusPort;
 
     private String sessionId = null;
 
@@ -34,7 +34,7 @@ public class RestParams {
         this.hostname = sdkConfiguration.getOneViewHostname();
         this.userName = sdkConfiguration.getOneViewUserName();
         this.password = sdkConfiguration.getOneViewPassword();
-        this.amqpPort = sdkConfiguration.getMessageBusPort();
+        this.messageBusPort = sdkConfiguration.getMessageBusPort();
     }
 
     /**
@@ -87,10 +87,10 @@ public class RestParams {
     }
 
     /**
-     * @return the amqpPort
+     * @return the messageBusPort
      */
-    public int getAmqpPort() {
-        return amqpPort;
+    public int getMessageBusPort() {
+        return messageBusPort;
     }
 
 }

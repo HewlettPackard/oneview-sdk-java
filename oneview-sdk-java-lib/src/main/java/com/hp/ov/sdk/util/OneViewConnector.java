@@ -27,33 +27,34 @@ import com.hp.ov.sdk.exceptions.SDKApiVersionMismatchException;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
+import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 
 public class OneViewConnector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OneViewConnector.class);
 
-    private final RestParams params;
+    private final SDKConfiguration config;
     private final VersionClient versionClient;
     private final LoginSessionClient loginSessionClient;
 
-    public OneViewConnector(RestParams params,
+    public OneViewConnector(SDKConfiguration config,
             VersionClient versionClient,
             LoginSessionClient loginSessionClient) {
-        this.params = params;
+        this.config = config;
         this.versionClient = versionClient;
         this.loginSessionClient = loginSessionClient;
     }
 
-    public void connect() {
+    public String connect() {
         this.checkVersions();
-        this.setupSessionId();
+
+        return this.setupSessionId();
     }
 
     private void checkVersions() {
         ApplianceVersions versions = this.versionClient.getApplianceVersions();
 
-        int requestedVersion = params.getApiVersion().getValue();
+        int requestedVersion = config.getOneViewApiVersion().getValue();
         int applianceMinimumVersion = versions.getMinimumVersion();
         int applianceCurrentVersion = versions.getCurrentVersion();
 
@@ -71,15 +72,15 @@ public class OneViewConnector {
                 null, null, null, SdkConstants.APPLIANCE, null);
     }
 
-    private void setupSessionId() {
+    private String setupSessionId() {
         LoginInformation loginInformation = new LoginInformation();
 
-        loginInformation.setUserName(this.params.getUserName());
-        loginInformation.setPassword(this.params.getPassword());
+        loginInformation.setUserName(this.config.getOneViewUserName());
+        loginInformation.setPassword(this.config.getOneViewPassword());
 
         LoginSession loginSession = this.loginSessionClient.authenticate(loginInformation);
 
-        this.params.setSessionId(loginSession.getSessionID());
+        return loginSession.getSessionID();
     }
 
 }

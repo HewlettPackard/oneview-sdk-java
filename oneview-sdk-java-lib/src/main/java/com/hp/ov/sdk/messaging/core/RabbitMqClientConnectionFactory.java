@@ -28,7 +28,7 @@ public class RabbitMqClientConnectionFactory {
 
         final ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(params.getHostname());
-        factory.setPort(params.getAmqpPort());
+        factory.setPort(params.getMessageBusPort());
 
         // Set Auth mechanism to "EXTERNAL" so that commonName of the client
         // certificate is mapped to AMQP user name. Hence, No need to set

@@ -30,7 +30,6 @@ import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
-import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.OneViewConnector;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
@@ -56,13 +55,12 @@ public class ScmbClient {
         RestParams params = credentials.createRestParams();
 
         try {
-            HttpSslProperties httpSslProperties = credentials.createHttpSslProperties();
-            BaseClient baseClient = new BaseClient(params, httpSslProperties);
+            BaseClient baseClient = new BaseClient(credentials.getSDKConfiguration());
 
-            OneViewConnector connector = new OneViewConnector(params,
+            OneViewConnector connector = new OneViewConnector(credentials.getSDKConfiguration(),
                     new VersionClient(baseClient), new LoginSessionClient(baseClient));
 
-            connector.connect();
+            baseClient.setSessionID(connector.connect());
 
             // create MessageExecutionQueue object
             final ScmbMessageExecutionQueue messageQueue = new ScmbMessageExecutionQueue(

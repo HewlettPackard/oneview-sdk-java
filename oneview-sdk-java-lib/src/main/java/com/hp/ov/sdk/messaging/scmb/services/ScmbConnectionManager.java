@@ -61,7 +61,6 @@ public class ScmbConnectionManager {
         if (null == params) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
-        final String sessionId = params.getSessionId();
         // check if connection object already exists in the map
         // scmbConnection = map.get(params.getHostname());
         if (!map.containsKey(params.getHostname())) {

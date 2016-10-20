@@ -73,8 +73,7 @@ import com.hp.ov.sdk.rest.client.storage.StorageSystemClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeAttachmentClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeTemplateClient;
-import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
+import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 import com.hp.ov.sdk.util.OneViewConnector;
 
@@ -84,15 +83,15 @@ public class OneViewClient {
 
     private final Map<Class<?>, Object> instances = new ConcurrentHashMap<>();
 
-    public OneViewClient(RestParams params, HttpSslProperties httpSslProperties) {
-        this.baseClient = new BaseClient(params, httpSslProperties);
+    public OneViewClient(SDKConfiguration config) {
+        this.baseClient = new BaseClient(config);
 
         OneViewConnector connector = new OneViewConnector(
-                params,
+                config,
                 new VersionClient(this.baseClient),
                 new LoginSessionClient(this.baseClient));
 
-        connector.connect();
+        this.baseClient.setSessionID(connector.connect());
     }
 
     public synchronized AlertClient alert() {
