@@ -18,23 +18,13 @@ package com.hp.ov.sdk.rest.http.core.client;
 public class RestParams {
 
     private final ApiVersion apiVersion;
-    private final String domain;
     private final String hostname;
-    private final String password;
-    private final String userName;
-
-    /* parameters for RabbitMQ connection */
-    private final int messageBusPort;
 
     private String sessionId = null;
 
     public RestParams(SDKConfiguration sdkConfiguration) {
         this.apiVersion = sdkConfiguration.getOneViewApiVersion();
-        this.domain = sdkConfiguration.getOneViewDomain();
         this.hostname = sdkConfiguration.getOneViewHostname();
-        this.userName = sdkConfiguration.getOneViewUserName();
-        this.password = sdkConfiguration.getOneViewPassword();
-        this.messageBusPort = sdkConfiguration.getMessageBusPort();
     }
 
     /**
@@ -45,31 +35,10 @@ public class RestParams {
     }
 
     /**
-     * @return the domain
-     */
-    public String getDomain() {
-        return domain;
-    }
-
-    /**
      * @return the hostname
      */
     public String getHostname() {
         return hostname;
-    }
-
-    /**
-     * @return the password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * @return the userName
-     */
-    public String getUserName() {
-        return userName;
     }
 
     /**
@@ -84,13 +53,6 @@ public class RestParams {
      */
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
-    }
-
-    /**
-     * @return the messageBusPort
-     */
-    public int getMessageBusPort() {
-        return messageBusPort;
     }
 
 }

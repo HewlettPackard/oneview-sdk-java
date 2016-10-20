@@ -70,7 +70,7 @@ public class ScmbClient {
             messageQueue.start();
 
             // then start scmb
-            objectUnderTest.startScmb(params);
+            objectUnderTest.startScmb(credentials.getSDKConfiguration());
             objectUnderTest.processConsumer(params, SCMB_TASKS_ROUTING_KEY, messageQueue);
 
             // Optional:  Start next processor with different routing key

@@ -17,18 +17,18 @@ package com.hp.ov.sdk.messaging.core;
 
 import javax.net.ssl.SSLContext;
 
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
+import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DefaultSaslConfig;
 
 
 public class RabbitMqClientConnectionFactory {
 
-    public static ConnectionFactory getConnectionFactory(final SSLContext sslContext, final RestParams params) {
+    public static ConnectionFactory getConnectionFactory(final SSLContext sslContext, SDKConfiguration config) {
 
         final ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost(params.getHostname());
-        factory.setPort(params.getMessageBusPort());
+        factory.setHost(config.getOneViewHostname());
+        factory.setPort(config.getMessageBusPort());
 
         // Set Auth mechanism to "EXTERNAL" so that commonName of the client
         // certificate is mapped to AMQP user name. Hence, No need to set

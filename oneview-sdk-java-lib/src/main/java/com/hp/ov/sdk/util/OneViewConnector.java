@@ -77,6 +77,7 @@ public class OneViewConnector {
 
         loginInformation.setUserName(this.config.getOneViewUserName());
         loginInformation.setPassword(this.config.getOneViewPassword());
+        loginInformation.setAuthLoginDomain(this.config.getOneViewDomain());
 
         LoginSession loginSession = this.loginSessionClient.authenticate(loginInformation);
 

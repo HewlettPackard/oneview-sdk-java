@@ -37,6 +37,7 @@ import com.hp.ov.sdk.messaging.core.CaCert;
 import com.hp.ov.sdk.messaging.core.RabbitMqClientCert;
 import com.hp.ov.sdk.messaging.core.RabbitMqClientConnectionFactory;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
+import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -55,23 +56,23 @@ public class MsmbConnectionManager {
         this.messagingCertificate = messagingCertificate;
     }
 
-    public void startMsmb(final RestParams params) {
+    public void startMsmb(SDKConfiguration config) {
         Connection conn = null;
         Channel channel = null;
         // validate args
-        if (null == params) {
+        if (null == config) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
         }
         // check if connection object already exists in the map
         // msmbConnection = map.get(params.getHostname());
-        if (!map.containsKey(params.getHostname())) {
+        if (!map.containsKey(config.getOneViewHostname())) {
             // get client cert
             final RabbitMqClientCert mqClientCert = messagingCertificate.getRabbitMqClientCertificateKeyPair();
             // get CA cert
             CaCert caCert = messagingCertificate.getCACertificate();
             // get SSLContext
             SSLContext sslContext = CertificateStoreManager.getSslContext(mqClientCert, caCert);
-            ConnectionFactory connectionFactory = RabbitMqClientConnectionFactory.getConnectionFactory(sslContext, params);
+            ConnectionFactory connectionFactory = RabbitMqClientConnectionFactory.getConnectionFactory(sslContext, config);
             connectionFactory.setConnectionTimeout(1000);
 
             try {
@@ -82,7 +83,7 @@ public class MsmbConnectionManager {
                         null);
             }
             // put into map
-            map.putIfAbsent(params.getHostname(), new MsmbConnection(conn, channel, MsmbState.START));
+            map.putIfAbsent(config.getOneViewHostname(), new MsmbConnection(conn, channel, MsmbState.START));
         }
 
     }

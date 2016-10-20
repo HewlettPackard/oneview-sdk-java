@@ -71,7 +71,7 @@ public class MsmbClient {
             messageQueue.start();
 
             // then start scmb
-            objectUnderTest.startMsmb(params);
+            objectUnderTest.startMsmb(credentials.getSDKConfiguration());
             objectUnderTest.processConsumer(params, MSMB_ROUTING_KEY, messageQueue);
             // Optional: start next processor with different routing key
             // objectUnderTest.processConsumer(params, "scmb.interconnects.#", messageQueue);
