@@ -26,12 +26,7 @@ import com.hp.ov.sdk.exceptions.SDKScmbConnectionNotFoundException;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbAlertsHandler;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbConnectionManager;
 import com.hp.ov.sdk.messaging.scmb.services.ScmbMessageExecutionQueue;
-import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
-import com.hp.ov.sdk.rest.client.settings.VersionClient;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
-import com.hp.ov.sdk.util.OneViewConnector;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 public class ScmbClient {
@@ -52,16 +47,9 @@ public class ScmbClient {
     }
 
     public void scmbProcessor() {
-        RestParams params = credentials.createRestParams();
+        String hostname = credentials.getSDKConfiguration().getOneViewHostname();
 
         try {
-            BaseClient baseClient = new BaseClient(credentials.getSDKConfiguration());
-
-            OneViewConnector connector = new OneViewConnector(credentials.getSDKConfiguration(),
-                    new VersionClient(baseClient), new LoginSessionClient(baseClient));
-
-            baseClient.setSessionID(connector.connect());
-
             // create MessageExecutionQueue object
             final ScmbMessageExecutionQueue messageQueue = new ScmbMessageExecutionQueue(
                     new ScmbAlertsHandler(new TaskMessageHandler()));
@@ -71,18 +59,18 @@ public class ScmbClient {
 
             // then start scmb
             objectUnderTest.startScmb(credentials.getSDKConfiguration());
-            objectUnderTest.processConsumer(params, SCMB_TASKS_ROUTING_KEY, messageQueue);
+            objectUnderTest.processConsumer(hostname, SCMB_TASKS_ROUTING_KEY, messageQueue);
 
             // Optional:  Start next processor with different routing key
             // objectUnderTest.processConsumer(params, "scmb.interconnects.#");
         } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ScmbClient : scmbProcessor : resource not found : " + params.getHostname());
+            System.out.println("ScmbClient : scmbProcessor : resource not found : " + hostname);
         } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ScmbClient : scmbProcessor : no such url : " + params.getHostname());
+            System.out.println("ScmbClient : scmbProcessor : no such url : " + hostname);
         } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ScmbClient : scmbProcessor : Applicance Not reachabe at : " + params.getHostname());
+            System.out.println("ScmbClient : scmbProcessor : Applicance Not reachabe at : " + hostname);
         } catch (final SDKNoResponseException ex) {
-            System.out.println("ScmbClient : scmbProcessor : No response from appliance : " + params.getHostname());
+            System.out.println("ScmbClient : scmbProcessor : No response from appliance : " + hostname);
         } catch (final SDKInvalidArgumentException ex) {
             System.out.println("ScmbClient : scmbProcessor : arguments are null ");
         } catch (final SDKScmbConnectionNotFoundException ex) {
@@ -91,16 +79,16 @@ public class ScmbClient {
     }
 
     private void stopScmb() {
-        RestParams params = credentials.createRestParams();
+        String hostname = credentials.getSDKConfiguration().getOneViewHostname();
 
         try {
-            objectUnderTest.stopScmb(params);
+            objectUnderTest.stopScmb(hostname);
         } catch (final SDKResourceNotFoundException ex) {
-            System.out.println("ScmbClient : stopScmb : resource not found : " + params.getHostname());
+            System.out.println("ScmbClient : stopScmb : resource not found : " + hostname);
         } catch (final SDKNoSuchUrlException ex) {
-            System.out.println("ScmbClient : stopScmb : no such url : " + params.getHostname());
+            System.out.println("ScmbClient : stopScmb : no such url : " + hostname);
         } catch (final SDKApplianceNotReachableException e) {
-            System.out.println("ScmbClient : stopScmb : Applicance Not reachabe at : " + params.getHostname());
+            System.out.println("ScmbClient : stopScmb : Applicance Not reachabe at : " + hostname);
         } catch (final SDKInvalidArgumentException ex) {
             System.out.println("ScmbClient : stopScmb : arguments are null ");
         } catch (final SDKScmbConnectionNotFoundException e) {

@@ -78,7 +78,6 @@ public class HttpRestClientTest {
                 .build();
 
         params = new RestParams(config);
-        params.setSessionId("sessionID");
 
         // Apache HTTP client mock
         PowerMockito.mockStatic(SSLContext.class);

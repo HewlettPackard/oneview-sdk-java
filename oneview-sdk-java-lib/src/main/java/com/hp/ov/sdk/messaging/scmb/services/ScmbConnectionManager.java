@@ -35,7 +35,6 @@ import com.hp.ov.sdk.exceptions.SDKScmbConnectionNotFoundException;
 import com.hp.ov.sdk.messaging.core.CaCert;
 import com.hp.ov.sdk.messaging.core.RabbitMqClientCert;
 import com.hp.ov.sdk.messaging.core.RabbitMqClientConnectionFactory;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -99,37 +98,33 @@ public class ScmbConnectionManager {
         return executor;
     }
 
-    public Thread createScmbProcessThread(final RestParams params, final Connection conn, final Channel channel,
+    public Thread createScmbProcessThread(String hostname, final Channel channel,
             final String routingKey, final ScmbMessageExecutionQueue messageQueue) {
-        final String key = params.getHostname();
 
-        ScmbProcessor scmbProcessorThread = (ScmbProcessor) scmbProcessThreadQueue.putIfAbsent(key, new ScmbProcessor(params, conn, channel, routingKey, messageQueue));
+        ScmbProcessor scmbProcessorThread = (ScmbProcessor) scmbProcessThreadQueue.putIfAbsent(hostname,
+                new ScmbProcessor(channel, routingKey, messageQueue));
         if (scmbProcessorThread == null) {
-            scmbProcessorThread = (ScmbProcessor) scmbProcessThreadQueue.get(key);
+            scmbProcessorThread = (ScmbProcessor) scmbProcessThreadQueue.get(hostname);
         }
 
         return scmbProcessorThread;
     }
 
-    public void stopScmb(final RestParams params) {
-        if (map.containsKey(params.getHostname())) {
-            final String key = params.getHostname();
-            if (scmbProcessThreadQueue.containsKey(key)) {
-                final Thread scmbThread = scmbProcessThreadQueue.get(key);
+    public void stopScmb(String hostname) {
+        if (map.containsKey(hostname)) {
+            if (scmbProcessThreadQueue.containsKey(hostname)) {
+                final Thread scmbThread = scmbProcessThreadQueue.get(hostname);
                 ((ScmbProcessor) scmbThread).releaseScmbThread();
             }
-            removeScmbConnection(params);
+            removeScmbConnection(hostname);
         }
     }
 
-    public void removeScmbConnection(final RestParams params) throws SDKInvalidArgumentException,
+    public void removeScmbConnection(String hostname) throws SDKInvalidArgumentException,
             SDKScmbConnectionNotFoundException {
-        // validate params
-        if (null == params) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
-        }
+
         // check if connection object already exists in the map
-        final ScmbConnection scmbConnection = map.get(params.getHostname());
+        final ScmbConnection scmbConnection = map.get(hostname);
         if (null == scmbConnection) {
             throw new SDKScmbConnectionNotFoundException(SDKErrorEnum.scmbConnectionNotFound, null, null, null,
                     SdkConstants.SCMB_CONNECTION, null);
@@ -144,32 +139,27 @@ public class ScmbConnectionManager {
                  * reply-text=OK, class-id=0, method-id=0)
                  */
                 // scmbConnection.getChannel().close();
-                map.remove(params.getHostname());
+                map.remove(hostname);
             } catch (final IOException e) {
                 LOGGER.error("ScmbConnectionManager : removeScmbConnection : error in closing connection");
             }
         }
     }
 
-    public void processConsumer(final RestParams params, final String routingKey, final ScmbMessageExecutionQueue messageQueue) {
-        Connection conn = null;
+    public void processConsumer(String hostname, final String routingKey, final ScmbMessageExecutionQueue messageQueue) {
         Channel channel = null;
-        // validate params
-        if (null == params) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.APPLIANCE, null);
-        }
-        if (map.containsKey(params.getHostname())) {
-            conn = map.get(params.getHostname()).getConn();
-            channel = map.get(params.getHostname()).getChannel();
+
+        if (map.containsKey(hostname)) {
+            channel = map.get(hostname).getChannel();
         } else {
             throw new SDKScmbConnectionNotFoundException(SDKErrorEnum.scmbConnectionNotFound, null, null, null,
                     SdkConstants.SCMB_CONNECTION, null);
         }
 
         // create thread
-        final ScmbProcessor processor = (ScmbProcessor) createScmbProcessThread(params, conn, channel, routingKey, messageQueue);
+        final ScmbProcessor processor = (ScmbProcessor) createScmbProcessThread(hostname, channel, routingKey, messageQueue);
         // processor.start();
-        final ExecutorService executor = getExecutor(params.getHostname());
+        final ExecutorService executor = getExecutor(hostname);
         executor.execute(processor);
     }
 
