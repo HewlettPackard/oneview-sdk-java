@@ -37,6 +37,7 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 public class MsmbClient {
 
+    private static final String MSMB_ROUTING_KEY = "msmb.#";
     private final MsmbConnectionManager objectUnderTest;
 
     private OneViewClient oneViewClient;
@@ -73,7 +74,7 @@ public class MsmbClient {
 
             // then start scmb
             objectUnderTest.startMsmb(params);
-            objectUnderTest.processConsumer(params, credentials.getSdkConfiguration().getMessageBusAlertsRoutingKey(), messageQueue);
+            objectUnderTest.processConsumer(params, MSMB_ROUTING_KEY, messageQueue);
             // Optional: start next processor with different routing key
             // objectUnderTest.processConsumer(params, "scmb.interconnects.#", messageQueue);
         } catch (final SDKResourceNotFoundException ex) {

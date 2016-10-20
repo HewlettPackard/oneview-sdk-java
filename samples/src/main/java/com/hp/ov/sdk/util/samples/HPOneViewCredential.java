@@ -34,7 +34,7 @@ public class HPOneViewCredential {
 
     public HPOneViewCredential() {
         try {
-            sdkConfiguration = new SDKConfiguration(ONEVIEW_JAVA_SDK_CONFIG_PROPERTIES_FILE);
+            sdkConfiguration = SDKConfiguration.fromFile(ONEVIEW_JAVA_SDK_CONFIG_PROPERTIES_FILE);
         } catch (SDKPropertiesFileException e) {
             LOGGER.error("Error loading configuration file.", e);
         }
@@ -48,7 +48,4 @@ public class HPOneViewCredential {
         return new HttpSslProperties(sdkConfiguration);
     }
 
-    public SDKConfiguration getSdkConfiguration() {
-        return sdkConfiguration;
-    }
 }

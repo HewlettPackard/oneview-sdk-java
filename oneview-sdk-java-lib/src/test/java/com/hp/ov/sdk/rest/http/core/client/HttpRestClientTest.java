@@ -71,7 +71,13 @@ public class HttpRestClientTest {
 
     @Before
     public void setUp() throws Exception {
-        params = new RestParams();
+        SDKConfiguration config = SDKConfiguration.create()
+                .withOneViewApiVersion(ApiVersion.V_300)
+                .withOneViewHostname("1.1.1.1")
+                .withOneViewUser("user", "pass")
+                .build();
+
+        params = new RestParams(config);
         params.setSessionId("sessionID");
 
         // Apache HTTP client mock

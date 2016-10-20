@@ -37,6 +37,7 @@ import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 public class ScmbClient {
 
+    private static final String SCMB_TASKS_ROUTING_KEY = "scmb.tasks.#";
     private final ScmbConnectionManager objectUnderTest;
 
     private OneViewClient oneViewClient;
@@ -72,7 +73,7 @@ public class ScmbClient {
 
             // then start scmb
             objectUnderTest.startScmb(params);
-            objectUnderTest.processConsumer(params, credentials.getSdkConfiguration().getMessageBusTaskRoutingKey(), messageQueue);
+            objectUnderTest.processConsumer(params, SCMB_TASKS_ROUTING_KEY, messageQueue);
 
             // Optional:  Start next processor with different routing key
             // objectUnderTest.processConsumer(params, "scmb.interconnects.#");
