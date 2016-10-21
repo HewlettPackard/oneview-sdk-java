@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -13,22 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hp.ov.sdk.messaging.scmb.services;
 
+package com.hp.ov.sdk.messaging.scmb;
+
+import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.messaging.core.BaseMessageModel;
 
-public class ScmbAlertsMessageDto extends BaseMessageModel {
+public class ScmbMessage<T extends BaseModelResource> extends BaseMessageModel<T> {
 
-    private static final long serialVersionUID = -2688048004658940084L;
-
-    private ScmbAlertsResource resource;
-
-    public ScmbAlertsResource getResource() {
-        return resource;
-    }
-
-    public void setResource(final ScmbAlertsResource resource) {
-        this.resource = resource;
-    }
+    private static final long serialVersionUID = -6123819933524554432L;
 
 }

@@ -19,9 +19,12 @@ package com.hp.ov.sdk.messaging.core;
 import java.io.IOException;
 
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
+import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.exceptions.SDKMessageBusException;
 import com.hp.ov.sdk.messaging.msmb.MsmbMessage;
 import com.hp.ov.sdk.messaging.msmb.MsmbMessageHandler;
+import com.hp.ov.sdk.messaging.scmb.ScmbMessage;
+import com.hp.ov.sdk.messaging.scmb.ScmbMessageHandler;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.rabbitmq.client.AMQP;
@@ -64,7 +67,7 @@ public class MessageBusClient {
         }
     }
 
-    public Channel subscribeToMetricStreaming(String routingKey, final MsmbMessageHandler handler) {
+    public Channel addMsmbHandler(String routingKey, final MsmbMessageHandler handler) {
         Channel channel;
 
         try {
@@ -85,14 +88,37 @@ public class MessageBusClient {
                 }
             });
         } catch (IOException e) {
-            throw new SDKMessageBusException("Could not subscribe to RabbitMQ metric streaming message bus", e);
+            throw new SDKMessageBusException("Could not subscribe to Metric Streaming Message Bus", e);
         }
         return channel;
     }
 
-    public void subscribeToStateChange(String routingKey) {
+    public <T extends BaseModelResource> Channel addScmbHandler(String routingKey, final ScmbMessageHandler<T> handler) {
+        Channel channel;
 
+        try {
+            channel = this.connection.createChannel();
+            String queue = channel.queueDeclare().getQueue();
+
+            channel.queueBind(queue, SCMB_EXCHANGE, routingKey);
+
+            channel.basicConsume(queue, true, new DefaultConsumer(channel) {
+                @SuppressWarnings("unchecked")
+                @Override
+                public void handleDelivery(String consumerTag, Envelope envelope,
+                        AMQP.BasicProperties properties, byte[] body) throws IOException {
+                    String message = new String(body, "UTF-8");
+
+                    ScmbMessage<T> scmbMessage = (ScmbMessage<T>) MessageBusClient.this.adaptor.buildResource(
+                            message, handler.typeToken().getType());
+
+                    handler.handleMessage(scmbMessage);
+                }
+            });
+        } catch (IOException e) {
+            throw new SDKMessageBusException("Could not subscribe to State-Changed Message Bus", e);
+        }
+        return channel;
     }
-
 
 }

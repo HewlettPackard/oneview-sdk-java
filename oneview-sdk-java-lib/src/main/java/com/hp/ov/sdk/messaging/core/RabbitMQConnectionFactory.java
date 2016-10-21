@@ -60,7 +60,7 @@ class RabbitMQConnectionFactory {
     Connection getConnection() throws IOException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(config.getOneViewHostname());
-        factory.setPort(Integer.parseInt(config.getRabbitMQPort()));
+        factory.setPort(config.getMessageBusPort());
 
         //Set Auth mechanism to "EXTERNAL" so that commonName of the client certificate
         //is mapped to AMQP user name. Hence, No need to set userId/password here.

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.msmb;
+package com.hp.ov.sdk.messagebus;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +42,7 @@ public class MetricStreamingMessageBusSample {
     }
 
     private void subscribeToMetricStreamingMessageBus() {
-        this.client.subscribeToMetricStreaming("msmb.#", new MsmbMessageHandler() {
+        this.client.addMsmbHandler("msmb.#", new MsmbMessageHandler() {
             @Override
             public void handleMessage(MsmbMessage message) {
                 LOGGER.info(JsonPrettyPrinter.print(message));
@@ -59,7 +59,7 @@ public class MetricStreamingMessageBusSample {
 
         sample.subscribeToMetricStreamingMessageBus();
 
-        Thread.sleep(1 * 60 * 1000); //waits 10 min
+        Thread.sleep(10 * 60 * 1000); //waits 10 min
 
         sample.disconnect();
     }
