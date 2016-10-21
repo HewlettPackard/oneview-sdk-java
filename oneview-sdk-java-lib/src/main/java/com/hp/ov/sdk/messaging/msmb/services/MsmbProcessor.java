@@ -21,26 +21,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.rabbitmq.client.AMQP.Queue.DeclareOk;
 import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.GetResponse;
 
 public class MsmbProcessor extends Thread {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MsmbProcessor.class);
 
-    private final RestParams params;
-    private final Connection conn;
     private final Channel channel;
     private final String routingKey;
     private final MsmbMessageExecutionQueue messageQueue;
 
-    public MsmbProcessor(final RestParams params, final Connection conn, final Channel channel, final String routingKey,
-            final MsmbMessageExecutionQueue messageQueue) {
-        this.params = params;
-        this.conn = conn;
+    public MsmbProcessor(final Channel channel, final String routingKey, final MsmbMessageExecutionQueue messageQueue) {
         this.channel = channel;
         this.routingKey = routingKey;
         this.messageQueue = messageQueue;

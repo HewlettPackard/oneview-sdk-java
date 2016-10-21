@@ -32,6 +32,7 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.RestParams;
+import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.hp.ov.sdk.tasks.TaskMonitor;
 import com.hp.ov.sdk.util.JsonSerializer;
 
@@ -42,16 +43,16 @@ public class BaseClient {
     private final HttpRestClient client;
     private final Supplier<TaskMonitor> supplier;
 
-    public BaseClient(RestParams params, HttpSslProperties properties) {
-        this(params,
-                new ResourceAdaptor(),
-                new HttpRestClient(new JsonSerializer(), SSLContextFactory.getDefaultContext(properties)),
-                new Supplier<TaskMonitor>() {
-                    @Override
-                    public TaskMonitor get() {
-                        return new TaskMonitor();
-                    }
+    public BaseClient(SDKConfiguration config) {
+        this(new RestParams(config),
+             new ResourceAdaptor(),
+             new HttpRestClient(new JsonSerializer(), SSLContextFactory.getDefaultContext(new HttpSslProperties(config))),
+             new Supplier<TaskMonitor>() {
+                @Override
+                public TaskMonitor get() {
+                    return new TaskMonitor();
                 }
+             }
         );
     }
 
@@ -64,6 +65,10 @@ public class BaseClient {
         this.adaptor = adaptor;
         this.client = client;
         this.supplier = supplier;
+    }
+
+    public void setSessionID(String sessionID) {
+        this.params.setSessionId(sessionID);
     }
 
     public Object executeRequest(Request request, Type returnType) {

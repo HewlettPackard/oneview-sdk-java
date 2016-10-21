@@ -15,20 +15,14 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.http.core.client;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 public class HttpSslProperties {
 
     private final String trustStore;
     private final String trustStorePassword;
-    private final String trustStoreType;
 
     public HttpSslProperties(SDKConfiguration sdkConfiguration) {
         this.trustStore = sdkConfiguration.getTrustStoreFile();
         this.trustStorePassword = sdkConfiguration.getTrustStorePassword();
-        this.trustStoreType = sdkConfiguration.getTrustStoreType();
     }
 
     public String getTrustStore() {
@@ -37,34 +31,6 @@ public class HttpSslProperties {
 
     public String getTrustStorePassword() {
         return trustStorePassword;
-    }
-
-    public String getTrustStoreType() {
-        return trustStoreType;
-    }
-
-    /*
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    /*
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(final Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
-    }
-
-    /*
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
     }
 
 }

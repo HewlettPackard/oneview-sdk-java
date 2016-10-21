@@ -71,8 +71,13 @@ public class HttpRestClientTest {
 
     @Before
     public void setUp() throws Exception {
-        params = new RestParams();
-        params.setSessionId("sessionID");
+        SDKConfiguration config = SDKConfiguration.create()
+                .withOneViewApiVersion(ApiVersion.V_300)
+                .withOneViewHostname("1.1.1.1")
+                .withOneViewUser("user", "pass")
+                .build();
+
+        params = new RestParams(config);
 
         // Apache HTTP client mock
         PowerMockito.mockStatic(SSLContext.class);

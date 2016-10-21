@@ -17,18 +17,14 @@
 package com.hp.ov.sdk;
 
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 public class OneViewClientSample {
 
     public static OneViewClient getOneViewClient() {
         HPOneViewCredential credentials = new HPOneViewCredential();
-        RestParams params = credentials.createRestParams();
-        HttpSslProperties httpSslProperties = credentials.createHttpSslProperties();
 
-        OneViewClient client = new OneViewClient(params, httpSslProperties);
+        OneViewClient client = new OneViewClient(credentials.getSDKConfiguration());
 
         return client;
     }

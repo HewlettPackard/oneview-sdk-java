@@ -17,21 +17,29 @@ package com.hp.ov.sdk.rest.http.core.client;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import com.hp.ov.sdk.exceptions.SDKPropertiesFileException;
 
 public class SDKConfiguration {
 
+    private static final int DEFAULT_MESSAGE_BUS_PORT = 5671;
+    private static final ApiVersion DEFAULT_API_VERSION = ApiVersion.V_300;
+    private static final String DEFAULT_DOMAIN = "LOCAL";
+
+    private static final String[] MANDATORY_FIELDS = {
+            SDKConfiguration.USERNAME,
+            SDKConfiguration.PASSWORD,
+            SDKConfiguration.HOSTNAME};
+
     // Message bus properties keys
-    private static final String SCMB_TASKS_ROUTING_KEY = "messagebus.scmb_tasks_routing_key";
-    private static final String MSMB_EXCHANGE_NAME = "messagebus.msmb_exchange_name";
-    private static final String MSMB_ALERTS_ROUTING_KEY = "messagebus.msmb_alerts_routing_key";
-    private static final String AMQP_PORT = "messagebus.amqpPort";
+    private static final String MESSAGE_BUS_PORT = "messagebus.port";
 
     // Trust store properties keys
     private static final String TRUST_STORE_FILE = "truststore.file";
-    private static final String TRUST_STORE_TYPE = "truststore.type";
     private static final String TRUST_STORE_PASSWORD = "truststore.password";
 
     // OneView properties keys
@@ -41,51 +49,22 @@ public class SDKConfiguration {
     private static final String USERNAME = "oneview.username";
     private static final String PASSWORD = "oneview.password";
 
-    private Properties properties = new Properties();
-    private InputStream inputStream;
+    private final Properties properties;
 
-    public SDKConfiguration(String filePath) {
-        this.loadProperties(filePath);
-    }
-
-    private void loadProperties(String filePath) {
-
-        this.inputStream = this.getClass().getClassLoader().getResourceAsStream(filePath);
-        if (inputStream != null) {
-            try {
-                properties.load(inputStream);
-            } catch (IOException e) {
-                throw new SDKPropertiesFileException(e);
-            }
-        } else {
-            throw new SDKPropertiesFileException("Properties file " + filePath + " not found in classpath.");
+    private SDKConfiguration(Properties properties) throws SDKPropertiesFileException {
+        if (!properties.keySet().containsAll(Arrays.asList(MANDATORY_FIELDS))) {
+            throw new SDKPropertiesFileException("Missing mandatory SDK configuration parameters");
         }
+        this.properties = properties;
     }
 
-    public void reloadProperties() throws IOException {
-        if (this.inputStream != null) {
-            properties.load(inputStream);
-        }
-    }
-
-    public String getPropertyValue (String propertyName, String defaultValue) {
+    public String getPropertyValue(String propertyName, String defaultValue) {
         return this.properties.getProperty(propertyName, defaultValue);
     }
 
-    public String getMessageBusTaskRoutingKey() {
-        return this.properties.getProperty(SCMB_TASKS_ROUTING_KEY);
-    }
-
-    public String getMessageBusExchangeName() {
-        return this.properties.getProperty(MSMB_EXCHANGE_NAME);
-    }
-
-    public String getMessageBusAlertsRoutingKey() {
-        return this.properties.getProperty(MSMB_ALERTS_ROUTING_KEY);
-    }
-
-    public String getRabbitMQPort() {
-        return this.properties.getProperty(AMQP_PORT);
+    public int getMessageBusPort() throws NumberFormatException {
+        return Integer.parseInt(this.properties.getProperty(MESSAGE_BUS_PORT,
+                String.valueOf(DEFAULT_MESSAGE_BUS_PORT)));
     }
 
     public String getTrustStoreFile() {
@@ -96,12 +75,9 @@ public class SDKConfiguration {
         return this.properties.getProperty(TRUST_STORE_PASSWORD);
     }
 
-    public String getTrustStoreType() {
-        return this.properties.getProperty(TRUST_STORE_TYPE);
-    }
-
     public ApiVersion getOneViewApiVersion() {
-        return ApiVersion.fromStringValue(this.properties.getProperty(API_VERSION));
+        return ApiVersion.fromStringValue(this.properties.getProperty(API_VERSION,
+                String.valueOf(DEFAULT_API_VERSION.getValue())));
     }
 
     public String getOneViewHostname() {
@@ -117,7 +93,74 @@ public class SDKConfiguration {
     }
 
     public String getOneViewDomain() {
-        return this.properties.getProperty(DOMAIN);
+        return this.properties.getProperty(DOMAIN, DEFAULT_DOMAIN);
+    }
+
+    public static SDKConfiguration fromFile(String filePath) {
+        InputStream inputStream = SDKConfiguration.class.getClassLoader().getResourceAsStream(filePath);
+
+        if (inputStream != null) {
+            try {
+                Properties properties = new Properties();
+
+                properties.load(inputStream);
+
+                return new SDKConfiguration(properties);
+            } catch (IOException e) {
+                throw new SDKPropertiesFileException(e);
+            }
+        } else {
+            throw new SDKPropertiesFileException("Properties file '" + filePath + "' not found in classpath.");
+        }
+    }
+
+    public static SDKConfigurationBuilder create() {
+        return new SDKConfigurationBuilder();
+    }
+
+    public static class SDKConfigurationBuilder {
+
+        private Map<String, String> values = new HashMap<>();
+
+        public SDKConfigurationBuilder withOneViewHostname(String hostname) {
+            values.put(SDKConfiguration.HOSTNAME, hostname);
+            return this;
+        }
+
+        public SDKConfigurationBuilder withOneViewUser(String userName, String password) {
+            values.put(SDKConfiguration.USERNAME, userName);
+            values.put(SDKConfiguration.PASSWORD, password);
+            return this;
+        }
+
+        public SDKConfigurationBuilder withOneViewDomain(String domain) {
+            values.put(SDKConfiguration.DOMAIN, domain);
+            return this;
+        }
+
+        public SDKConfigurationBuilder withOneViewApiVersion(ApiVersion version) {
+            values.put(SDKConfiguration.API_VERSION, String.valueOf(version.getValue()));
+            return this;
+        }
+
+        public SDKConfigurationBuilder withMessageBusPort(int port) {
+            values.put(SDKConfiguration.MESSAGE_BUS_PORT, String.valueOf(port));
+            return this;
+        }
+
+        public SDKConfigurationBuilder withTrustStore(String path, String password) {
+            values.put(SDKConfiguration.TRUST_STORE_FILE, path);
+            values.put(SDKConfiguration.TRUST_STORE_PASSWORD, password);
+            return this;
+        }
+
+        public SDKConfiguration build() throws RuntimeException {
+            Properties properties = new Properties();
+
+            properties.putAll(values);
+
+            return new SDKConfiguration(properties);
+        }
     }
 
 }

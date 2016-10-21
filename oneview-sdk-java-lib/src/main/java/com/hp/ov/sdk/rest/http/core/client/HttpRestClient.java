@@ -15,10 +15,8 @@
  */
 package com.hp.ov.sdk.rest.http.core.client;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
