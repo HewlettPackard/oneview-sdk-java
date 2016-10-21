@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,33 +12,46 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hp.ov.sdk.messaging.msmb.services;
+ */
 
+package com.hp.ov.sdk.messaging.msmb;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hp.ov.sdk.messaging.core.MetricSampleList;
+public class ResourceData implements Serializable {
 
-public class ResourceDataList {
+    private static final long serialVersionUID = 9092119679200157844L;
 
     private String resourceId;
-    private List<MetricSampleList> metricSampleList = new ArrayList<MetricSampleList>();
+    private List<MetricSample> metricSampleList = new ArrayList<>();
 
+    /**
+     * @return the resourceId
+     */
     public String getResourceId() {
         return resourceId;
     }
 
-    public void setResourceId(final String resourceId) {
+    /**
+     * @param resourceId the resourceId to set
+     */
+    public void setResourceId(String resourceId) {
         this.resourceId = resourceId;
     }
 
-    public List<MetricSampleList> getMetricSampleList() {
+    /**
+     * @return the metricSampleList
+     */
+    public List<MetricSample> getMetricSampleList() {
         return metricSampleList;
     }
 
-    public void setMetricSampleList(final List<MetricSampleList> metricSampleList) {
+    /**
+     * @param metricSampleList the metricSampleList to set
+     */
+    public void setMetricSampleList(List<MetricSample> metricSampleList) {
         this.metricSampleList = metricSampleList;
     }
-
 }

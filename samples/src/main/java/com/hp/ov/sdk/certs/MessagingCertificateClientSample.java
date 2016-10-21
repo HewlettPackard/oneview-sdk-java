@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.messaging.core.CaCert;
-import com.hp.ov.sdk.messaging.core.RabbitMqClientCert;
+import com.hp.ov.sdk.messaging.core.RabbitMQClientCert;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
@@ -39,19 +39,19 @@ public class MessagingCertificateClientSample {
     }
 
     private void createRabbitMqClientCertificate() {
-        RabbitMqClientCert certificate = new RabbitMqClientCert();
+        RabbitMQClientCert certificate = new RabbitMQClientCert();
 
         certificate.setCommonName("sample");
         certificate.setSignedCert(false);
         certificate.setType("RabbitMqClientCertV2");
 
-        TaskResource taskResource = client.generateRabbitMqClientCert(certificate);
+        TaskResource taskResource = client.generateRabbitMQClientCert(certificate);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void getRabbitMqClientCertificateKeyPair() {
-        RabbitMqClientCert certificate = client.getRabbitMqClientCertificateKeyPair();
+        RabbitMQClientCert certificate = client.getRabbitMQClientCertificateKeyPair();
 
         LOGGER.info("Rabbit MQ client certificate returned to client: {}", certificate.toJsonString());
     }

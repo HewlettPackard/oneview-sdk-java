@@ -26,14 +26,14 @@ import javax.net.ssl.SSLContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.certs.CertificateStoreManager;
+import com.hp.ov.sdk.messaging.core.CertificateStoreManager;
 import com.hp.ov.sdk.certs.MessagingCertificateClient;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKScmbConnectionNotFoundException;
 import com.hp.ov.sdk.messaging.core.CaCert;
-import com.hp.ov.sdk.messaging.core.RabbitMqClientCert;
+import com.hp.ov.sdk.messaging.core.RabbitMQClientCert;
 import com.hp.ov.sdk.messaging.core.RabbitMqClientConnectionFactory;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.rabbitmq.client.Channel;
@@ -65,12 +65,12 @@ public class ScmbConnectionManager {
         // scmbConnection = map.get(params.getHostname());
         if (!map.containsKey(config.getOneViewHostname())) {
             // get client cert
-            final RabbitMqClientCert mqClientCert = messagingCertificate.getRabbitMqClientCertificateKeyPair();
+            final RabbitMQClientCert mqClientCert = messagingCertificate.getRabbitMQClientCertificateKeyPair();
             // get CA cert
             CaCert caCert = messagingCertificate.getCACertificate();
             // get SSLContext
             SSLContext sslContext = CertificateStoreManager.getSslContext(mqClientCert, caCert);
-            ConnectionFactory connectionFactory = RabbitMqClientConnectionFactory.getConnectionFactory(sslContext, config);
+            ConnectionFactory connectionFactory = RabbitMqClientConnectionFactory.getConnectionFactory(sslContext, params);
             connectionFactory.setConnectionTimeout(1000);
             try {
                 conn = connectionFactory.newConnection();

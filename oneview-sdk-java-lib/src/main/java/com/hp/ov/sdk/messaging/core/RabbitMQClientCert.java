@@ -17,10 +17,11 @@ package com.hp.ov.sdk.messaging.core;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.hp.ov.sdk.dto.BaseModelResource;
 
-public class RabbitMqClientCert extends BaseModelResource {
+public class RabbitMQClientCert extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,125 +31,214 @@ public class RabbitMqClientCert extends BaseModelResource {
     private String commonName;
     private String countryName;
     private String emailAddress;
-    private int expiresInDays;
-    private int keysize;
+    private Integer expiresInDays;
+    private Integer keysize;
     private String locality;
     private String organizationalUnitName;
     private String organizationName;
     private String pkcs12KeyPair;
-    private boolean signedCert;
+    private Boolean signedCert;
     private String stateOrProvinceName;
 
+    /**
+     * @return the aliasName
+     */
     public String getAliasName() {
         return aliasName;
     }
 
-    public void setAliasName(final String aliasName) {
+    /**
+     * @param aliasName the aliasName to set
+     */
+    public void setAliasName(String aliasName) {
         this.aliasName = aliasName;
     }
 
+    /**
+     * @return the base64SSLCertData
+     */
     public String getBase64SSLCertData() {
         return base64SSLCertData;
     }
 
-    public void setBase64SSLCertData(final String base64sslCertData) {
-        base64SSLCertData = base64sslCertData;
+    /**
+     * @param base64SSLCertData the base64SSLCertData to set
+     */
+    public void setBase64SSLCertData(String base64SSLCertData) {
+        this.base64SSLCertData = base64SSLCertData;
     }
 
+    /**
+     * @return the base64SSLKeyData
+     */
     public String getBase64SSLKeyData() {
         return base64SSLKeyData;
     }
 
-    public void setBase64SSLKeyData(final String base64sslKeyData) {
-        base64SSLKeyData = base64sslKeyData;
+    /**
+     * @param base64SSLKeyData the base64SSLKeyData to set
+     */
+    public void setBase64SSLKeyData(String base64SSLKeyData) {
+        this.base64SSLKeyData = base64SSLKeyData;
     }
 
+    /**
+     * @return the commonName
+     */
     public String getCommonName() {
         return commonName;
     }
 
-    public void setCommonName(final String commonName) {
+    /**
+     * @param commonName the commonName to set
+     */
+    public void setCommonName(String commonName) {
         this.commonName = commonName;
     }
 
+    /**
+     * @return the countryName
+     */
     public String getCountryName() {
         return countryName;
     }
 
-    public void setCountryName(final String countryName) {
+    /**
+     * @param countryName the countryName to set
+     */
+    public void setCountryName(String countryName) {
         this.countryName = countryName;
     }
 
+    /**
+     * @return the emailAddress
+     */
     public String getEmailAddress() {
         return emailAddress;
     }
 
-    public void setEmailAddress(final String emailAddress) {
+    /**
+     * @param emailAddress the emailAddress to set
+     */
+    public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
 
-    public int getExpiresInDays() {
+    /**
+     * @return the expiresInDays
+     */
+    public Integer getExpiresInDays() {
         return expiresInDays;
     }
 
-    public void setExpiresInDays(final int expiresInDays) {
+    /**
+     * @param expiresInDays the expiresInDays to set
+     */
+    public void setExpiresInDays(Integer expiresInDays) {
         this.expiresInDays = expiresInDays;
     }
 
-    public int getKeysize() {
+    /**
+     * @return the keysize
+     */
+    public Integer getKeysize() {
         return keysize;
     }
 
-    public void setKeysize(final int keysize) {
+    /**
+     * @param keysize the keysize to set
+     */
+    public void setKeysize(Integer keysize) {
         this.keysize = keysize;
     }
 
+    /**
+     * @return the locality
+     */
     public String getLocality() {
         return locality;
     }
 
-    public void setLocality(final String locality) {
+    /**
+     * @param locality the locality to set
+     */
+    public void setLocality(String locality) {
         this.locality = locality;
     }
 
+    /**
+     * @return the organizationalUnitName
+     */
     public String getOrganizationalUnitName() {
         return organizationalUnitName;
     }
 
-    public void setOrganizationalUnitName(final String organizationalUnitName) {
+    /**
+     * @param organizationalUnitName the organizationalUnitName to set
+     */
+    public void setOrganizationalUnitName(String organizationalUnitName) {
         this.organizationalUnitName = organizationalUnitName;
     }
 
+    /**
+     * @return the organizationName
+     */
     public String getOrganizationName() {
         return organizationName;
     }
 
-    public void setOrganizationName(final String organizationName) {
+    /**
+     * @param organizationName the organizationName to set
+     */
+    public void setOrganizationName(String organizationName) {
         this.organizationName = organizationName;
     }
 
+    /**
+     * @return the pkcs12KeyPair
+     */
     public String getPkcs12KeyPair() {
         return pkcs12KeyPair;
     }
 
-    public void setPkcs12KeyPair(final String pkcs12KeyPair) {
+    /**
+     * @param pkcs12KeyPair the pkcs12KeyPair to set
+     */
+    public void setPkcs12KeyPair(String pkcs12KeyPair) {
         this.pkcs12KeyPair = pkcs12KeyPair;
     }
 
-    public boolean isSignedCert() {
+    /**
+     * @return the signedCert
+     */
+    public Boolean getSignedCert() {
         return signedCert;
     }
 
-    public void setSignedCert(final boolean signedCert) {
+    /**
+     * @param signedCert the signedCert to set
+     */
+    public void setSignedCert(Boolean signedCert) {
         this.signedCert = signedCert;
     }
 
+    /**
+     * @return the stateOrProvinceName
+     */
     public String getStateOrProvinceName() {
         return stateOrProvinceName;
     }
 
-    public void setStateOrProvinceName(final String stateOrProvinceName) {
+    /**
+     * @param stateOrProvinceName the stateOrProvinceName to set
+     */
+    public void setStateOrProvinceName(String stateOrProvinceName) {
         this.stateOrProvinceName = stateOrProvinceName;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
@@ -157,8 +247,7 @@ public class RabbitMqClientCert extends BaseModelResource {
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
-
 }
