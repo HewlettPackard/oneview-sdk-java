@@ -22,6 +22,8 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
@@ -71,7 +73,7 @@ public class StoragePoolSerializationAdapterTest {
     }
 
     @Test
-    public void shouldSerializeStoragePool() {
+    public void shouldSerializeStoragePool() throws ParseException {
         StoragePoolSerializationAdapter adapter = new StoragePoolSerializationAdapter();
         StoragePool storagePool = this.buildStoragePool();
 
@@ -84,7 +86,7 @@ public class StoragePoolSerializationAdapterTest {
     }
 
     @Test
-    public void shouldSerializeStoragePoolV2() {
+    public void shouldSerializeStoragePoolV2() throws ParseException {
         StoragePoolSerializationAdapter adapter = new StoragePoolSerializationAdapter();
         StoragePool storagePool = this.buildStoragePoolV2();
 
@@ -96,7 +98,7 @@ public class StoragePoolSerializationAdapterTest {
                 is(equalTo(Boolean.FALSE)));
     }
 
-    private StoragePool buildStoragePoolV2() {
+    private StoragePool buildStoragePoolV2() throws ParseException {
         StoragePool storagePool = this.buildCommonStoragePool();
 
         AllocatedCapacity allocatedCapacity = new AllocatedCapacity();
@@ -111,7 +113,7 @@ public class StoragePoolSerializationAdapterTest {
         return storagePool;
     }
 
-    private StoragePool buildStoragePool() {
+    private StoragePool buildStoragePool() throws ParseException {
         StoragePool storagePool = this.buildCommonStoragePool();
 
         storagePool.setType(ResourceCategory.RC_STORAGE_POOL);
@@ -120,7 +122,7 @@ public class StoragePoolSerializationAdapterTest {
         return storagePool;
     }
 
-    private StoragePool buildCommonStoragePool() {
+    private StoragePool buildCommonStoragePool() throws ParseException {
         StoragePool storagePool = new StoragePool();
 
         storagePool.setDeviceType("FC");
@@ -138,9 +140,9 @@ public class StoragePoolSerializationAdapterTest {
         storagePool.setStatus("OK");
         storagePool.setName("FST_CPG1");
         storagePool.setState("Configured");
-        storagePool.setCreated("2016-02-26T16:41:13.396Z");
+        storagePool.setCreated(new SimpleDateFormat(DateAdapter.DEFAULT_DATE_FORMAT).parse("2016-02-26T16:41:13.396Z"));
         storagePool.setETag("2016-02-26T16:41:13.397Z");
-        storagePool.setModified(null);
+        storagePool.setModified(new SimpleDateFormat(DateAdapter.DEFAULT_DATE_FORMAT).parse("2016-02-26T16:41:13.396Z"));
         storagePool.setCategory("storage-pools");
         storagePool.setUri("/rest/storage-pools/33DCD9C3-ADE7-41B6-8E20-A50F51786CF0");
 

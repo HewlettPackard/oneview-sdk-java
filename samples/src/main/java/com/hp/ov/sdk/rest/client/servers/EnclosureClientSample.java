@@ -68,7 +68,7 @@ public class EnclosureClientSample {
     // ================================
 
     private EnclosureClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.enclosureClient = oneViewClient.enclosure();
         this.firmwareDriverClient = oneViewClient.firmwareDriver();

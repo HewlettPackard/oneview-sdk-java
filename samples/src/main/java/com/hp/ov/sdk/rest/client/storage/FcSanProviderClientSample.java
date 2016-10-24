@@ -56,7 +56,7 @@ public class FcSanProviderClientSample {
     // ================================
 
     private FcSanProviderClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         fcSanProviderClient = oneViewClient.fcSanProvider();
     }

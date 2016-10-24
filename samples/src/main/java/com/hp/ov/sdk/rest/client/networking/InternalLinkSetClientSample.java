@@ -37,7 +37,7 @@ public class InternalLinkSetClientSample {
     private final InternalLinkSetClient client;
 
     private InternalLinkSetClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.client = oneViewClient.internalLinkSet();
     }

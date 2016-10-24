@@ -46,7 +46,7 @@ public class LogicalSwitchGroupClientSample {
     private final SwitchTypeClient typeClient;
 
     private LogicalSwitchGroupClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.client = oneViewClient.logicalSwitchGroup();
         this.typeClient = oneViewClient.switchType();

@@ -52,7 +52,7 @@ public class StorageVolumeTemplateClientSample {
     private final StorageSystemClient storageSystemClient;
 
     public StorageVolumeTemplateClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.storageVolumeTemplateClient = oneViewClient.storageVolumeTemplate();
         this.storagePoolClient = oneViewClient.storagePool();

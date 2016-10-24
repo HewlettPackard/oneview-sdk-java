@@ -41,7 +41,7 @@ public class ServerHardwareTypeClientSample {
     private final ServerHardwareTypeClient serverHardwareTypeClient;
 
     private ServerHardwareTypeClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.serverHardwareTypeClient = oneViewClient.serverHardwareType();
     }

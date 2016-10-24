@@ -44,7 +44,7 @@ public class ConnectionTemplateClientSample {
     // ================================
 
     private ConnectionTemplateClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.connectionTemplateClient = oneViewClient.connectionTemplate();
     }

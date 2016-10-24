@@ -37,7 +37,7 @@ public class SasInterconnectTypesClientSample {
     // ================================
 
     public SasInterconnectTypesClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.sasInterconnectTypeClient = oneViewClient.sasInterconnectType();
     }

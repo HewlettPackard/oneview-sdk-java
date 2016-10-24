@@ -38,7 +38,7 @@ public class SwitchTypeClientSample {
     private final SwitchTypeClient client;
 
     private SwitchTypeClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.client = oneViewClient.switchType();
     }

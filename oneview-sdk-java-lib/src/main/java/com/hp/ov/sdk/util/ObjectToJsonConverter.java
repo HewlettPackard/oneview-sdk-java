@@ -16,6 +16,7 @@
 package com.hp.ov.sdk.util;
 
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
+import com.hp.ov.sdk.adaptors.DateAdapter;
 import com.hp.ov.sdk.adaptors.PortTelemetrySerializationAdapter;
 import com.hp.ov.sdk.adaptors.StorageCapabilitiesDeserializer;
 import com.hp.ov.sdk.adaptors.StoragePoolSerializationAdapter;
@@ -47,6 +49,7 @@ public class ObjectToJsonConverter {
             .put(StoragePool.class, new StoragePoolSerializationAdapter())
             .put(PortTelemetry.class, new PortTelemetrySerializationAdapter())
             .put(StorageCapabilities.class, new StorageCapabilitiesDeserializer())
+            .put(Date.class, new DateAdapter())
             .build();
 
     private Gson gson;

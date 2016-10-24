@@ -41,7 +41,7 @@ public class FcNetworkClientSample {
     private final FcNetworkClient client;
 
     private FcNetworkClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.client = oneViewClient.fcNetwork();
     }

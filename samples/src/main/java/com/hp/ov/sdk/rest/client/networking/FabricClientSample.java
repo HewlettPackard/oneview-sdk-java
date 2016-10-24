@@ -38,7 +38,7 @@ public class FabricClientSample {
     // ================================
 
     public FabricClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.fabricClient = oneViewClient.fabric();
     }

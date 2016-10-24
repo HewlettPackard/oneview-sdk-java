@@ -63,7 +63,7 @@ public class StorageSystemClientSample {
     // ================================
 
     private StorageSystemClientSample() {
-        this.oneViewClient = OneViewClientSample.getOneViewClient();
+        this.oneViewClient = new OneViewClientSample().getOneViewClient();
         this.storageSystemClient = oneViewClient.storageSystem();
     }
 

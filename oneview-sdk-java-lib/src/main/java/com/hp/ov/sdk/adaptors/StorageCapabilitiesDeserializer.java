@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -61,7 +61,7 @@ public class StorageCapabilitiesDeserializer implements JsonDeserializer<Storage
             }
             return storageCapabilities;
         }
-        return new Gson().fromJson(json, StorageCapabilities.class);
+        return new GsonBuilder().create().fromJson(json, StorageCapabilities.class);
     }
 
 }

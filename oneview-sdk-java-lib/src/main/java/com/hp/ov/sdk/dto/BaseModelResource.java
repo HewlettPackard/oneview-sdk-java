@@ -16,6 +16,7 @@
 package com.hp.ov.sdk.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -29,10 +30,10 @@ public class BaseModelResource implements Serializable {
     private static final long serialVersionUID = 5688679045442246487L;
 
     private String category;
-    private String created;
+    private Date created;
     private String description;
     private String eTag;
-    private String modified;
+    private Date modified;
     private String name;
     private String state;
     private String status;
@@ -56,14 +57,14 @@ public class BaseModelResource implements Serializable {
     /**
      * @return the created
      */
-    public String getCreated() {
+    public Date getCreated() {
         return created;
     }
 
     /**
      * @param created the created to set
      */
-    public void setCreated(String created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
@@ -98,14 +99,14 @@ public class BaseModelResource implements Serializable {
     /**
      * @return the modified
      */
-    public String getModified() {
+    public Date getModified() {
         return modified;
     }
 
     /**
      * @param modified the modified to set
      */
-    public void setModified(String modified) {
+    public void setModified(Date modified) {
         this.modified = modified;
     }
 

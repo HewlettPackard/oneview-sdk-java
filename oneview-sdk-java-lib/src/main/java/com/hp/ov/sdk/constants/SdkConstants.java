@@ -28,13 +28,10 @@ public class SdkConstants {
     public static final String FIBRE_CHANNEL = "FibreChannel";
     public static final String FIRMWARE_BUNDLE = "firmware-bundles";
     public static final String HTTPS = "https://";
-    public static final String MSMB_EXCHANGE_NAME = "msmb";
 
     public static final int PERCENTAGE_100 = 100;
     public static final int NO_TASK_TIMEOUT = 0;
 
-    public static final String SCMB_CONNECTION = "scmb connection";
-    public static final String SCMB_EXCHANGE_NAME = "scmb";
     public static final String SERVER_HARDWARE = "server-hardware";
     public static final String SERVER_PROFILE = "server-profile";
     public static final String SERVER_PROFILES = SERVER_PROFILE + "s";

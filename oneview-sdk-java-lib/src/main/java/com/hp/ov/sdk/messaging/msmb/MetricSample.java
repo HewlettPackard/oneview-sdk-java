@@ -1,5 +1,5 @@
-/*******************************************************************************
- * (C) Copyright 2015-2016 Hewlett Packard Enterprise Development LP
+/*
+ * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -12,28 +12,46 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/
-package com.hp.ov.sdk.messaging.core;
+ */
 
-public class MetricSampleList {
+package com.hp.ov.sdk.messaging.msmb;
 
-    private String[] valueArray;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class MetricSample implements Serializable {
+
+    private static final long serialVersionUID = -7090704811685853929L;
+
+    private List<String> valueArray = new ArrayList<>();
     private String name;
 
-    public String[] getValueArray() {
+    /**
+     * @return the valueArray
+     */
+    public List<String> getValueArray() {
         return valueArray;
     }
 
-    public void setValueArray(final String[] valueArray) {
+    /**
+     * @param valueArray the valueArray to set
+     */
+    public void setValueArray(List<String> valueArray) {
         this.valueArray = valueArray;
     }
 
+    /**
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
         this.name = name;
     }
-
 }

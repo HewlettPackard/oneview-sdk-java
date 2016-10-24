@@ -41,7 +41,7 @@ public class LogicalDownlinkClientSample {
     // ================================
 
     private LogicalDownlinkClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.logicalDownlinkClient = oneViewClient.logicalDownlink();
     }

@@ -37,7 +37,7 @@ public class FirmwareBundleClientSample {
     // ================================
 
     private FirmwareBundleClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.client = oneViewClient.firmwareBundle();
     }

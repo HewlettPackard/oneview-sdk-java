@@ -39,7 +39,7 @@ public class FirmwareDriverClientSample {
     private final FirmwareDriverClient client;
 
     public FirmwareDriverClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.client = oneViewClient.firmwareDriver();
     }

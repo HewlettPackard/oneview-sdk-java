@@ -43,7 +43,7 @@ public class DriveEnclosureClientSample {
     // ================================
 
     private DriveEnclosureClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.driveEnclosureClient = oneViewClient.driveEnclosure();
     }

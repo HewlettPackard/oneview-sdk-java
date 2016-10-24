@@ -41,7 +41,7 @@ public class InterconnectTypeClientSample {
     // ================================
 
     public InterconnectTypeClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.interconnectTypeClient = oneViewClient.interconnectType();
     }

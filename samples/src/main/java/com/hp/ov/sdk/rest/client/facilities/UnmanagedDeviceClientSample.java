@@ -39,7 +39,7 @@ public class UnmanagedDeviceClientSample {
     private final UnmanagedDeviceClient unmanagedDeviceClient;
 
     public UnmanagedDeviceClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.unmanagedDeviceClient = oneViewClient.unmanagedDevice();
     }

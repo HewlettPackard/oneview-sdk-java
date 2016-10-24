@@ -51,7 +51,7 @@ public class PowerDeliveryDeviceClientSample {
     private final PowerDeliveryDeviceClient client;
 
     private PowerDeliveryDeviceClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         client = oneViewClient.powerDeliveryDevice();
     }

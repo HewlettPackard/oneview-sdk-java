@@ -39,7 +39,7 @@ public class FcoeNetworkClientSample {
     private final FcoeNetworkClient client;
 
     private FcoeNetworkClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.client = oneViewClient.fcoeNetwork();
     }

@@ -54,7 +54,7 @@ public class FcSansManagedSanClientSample {
     // ================================
 
     private FcSansManagedSanClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.fcSanManagedSanClient = oneViewClient.fcSanManagedSan();
     }
