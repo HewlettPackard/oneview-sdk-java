@@ -13,6 +13,16 @@ Javadocs are available at [http://hewlettpackard.github.io/oneview-sdk-java/](ht
 * Maven **3.0.5**
 * OpenSSL
 
+### Add a Maven dependency ###
+You can add the **HPE OneView Java SDK** as a dependency of your Maven project by adding the following lines to your `pom.xml` file:
+```xml
+<dependency>
+  <groupId>com.hpe.oneview</groupId>
+  <artifactId>oneview-sdk-java</artifactId>
+  <version>3.0.0</version>
+</dependency>
+```
+
 ### Build from source ###
 Once the repository has been cloned from GitHub, you can build the SDK using Maven. To build the project you must use the command:
 
@@ -54,7 +64,7 @@ The SDK comes with several sample programs inside the `samples` module. For each
 
 > Note: If you choose to use Eclipse IDE, you will need to generate the Eclipse IDE files (`\*.classpath`, `\*.project`, `\*.wtpmodules` and the `.settings` folder). You can generate these files using Maven Eclipse Plugin with the command `mvn clean eclipse:clean eclipse:eclipse`.
 
-The file `SamplesConstants.java` must be updated to contain the following information:
+The file `oneview_java_sdk_config.properties` must be updated to contain the following information:
 * Path for the `TrustStore` file and its password
 * OneView credentials and host information
 
