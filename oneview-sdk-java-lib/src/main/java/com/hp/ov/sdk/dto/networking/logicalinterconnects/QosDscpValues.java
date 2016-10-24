@@ -62,9 +62,6 @@ public enum QosDscpValues {
         return getAllValuesMap().get(dscpVal);
     }
 
-    /**
-     * @return
-     */
     private static Map<String, QosDscpValues> getAllValuesMap() {
         final Map<String, QosDscpValues> lookup = new HashMap<String, QosDscpValues>();
 

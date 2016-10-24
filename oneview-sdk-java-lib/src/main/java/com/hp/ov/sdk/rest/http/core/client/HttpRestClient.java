@@ -74,10 +74,6 @@ public class HttpRestClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpRestClient.class);
 
-    //TODO these parameters should be configurable
-    private static final int MAX_NUMBER_OF_CONNECTIONS = 20;
-    private static final int SOCKET_TIMEOUT = 60; //seconds
-
     /*
     TODO this could be replaced by a one way converter (Object to JSON).
     We can also consider to have a Map containing several converters and
@@ -86,7 +82,10 @@ public class HttpRestClient {
     private final JsonSerializer serializer;
     private final CloseableHttpClient httpClient;
 
-    public HttpRestClient(JsonSerializer serializer, SSLContext sslContext) {
+    private SDKConfiguration sdkConfiguration;
+
+    public HttpRestClient(SDKConfiguration sdkConfiguration, JsonSerializer serializer, SSLContext sslContext) {
+        this.sdkConfiguration = sdkConfiguration;
         this.serializer = serializer;
         this.httpClient = this.buildHttpClient(sslContext);
     }
@@ -102,15 +101,15 @@ public class HttpRestClient {
 
         PoolingHttpClientConnectionManager manager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
 
-        manager.setMaxTotal(MAX_NUMBER_OF_CONNECTIONS);
-        manager.setDefaultMaxPerRoute(MAX_NUMBER_OF_CONNECTIONS);
+        manager.setMaxTotal(sdkConfiguration.getClientMaxNumberOfConnections());
+        manager.setDefaultMaxPerRoute(sdkConfiguration.getClientMaxNumberOfConnections());
 
         RequestConfig requestConfig = RequestConfig.custom()
                 .setAuthenticationEnabled(false)
                 .setContentCompressionEnabled(false)
                 .setConnectTimeout(5 * 1000)
                 .setConnectionRequestTimeout(5 * 1000)
-                .setSocketTimeout(SOCKET_TIMEOUT * 1000)
+                .setSocketTimeout(sdkConfiguration.getClientSocketTimeout() * 1000)
                 .build();
 
         return HttpClientBuilder.create()
@@ -316,7 +315,7 @@ public class HttpRestClient {
      *  connection parameters.
      * @param forceReturnTask
      *  Forces the check for the Location header (task) even when the response code is not 202.
-     * @return
+     * @return {@link String} object containing the response of the request
      */
     private String getResponse(HttpUriRequest request, RestParams params, final boolean forceReturnTask) {
         String responseBody = null;

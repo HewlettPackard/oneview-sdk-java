@@ -50,9 +50,6 @@ public enum QosDot1pValues {
         return getAllValuesMap().get(egress);
     }
 
-    /**
-     * @return
-     */
     private static Map<Integer, QosDot1pValues> getAllValuesMap() {
         final Map<Integer, QosDot1pValues> lookup = new HashMap<Integer, QosDot1pValues>();
         lookup.put(0, DOT1P_BEST_EFFORT);

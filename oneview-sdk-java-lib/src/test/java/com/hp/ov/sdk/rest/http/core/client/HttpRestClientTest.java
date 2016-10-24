@@ -46,6 +46,8 @@ import com.hp.ov.sdk.util.JsonSerializer;
 public class HttpRestClientTest {
 
     @Mock
+    private SDKConfiguration sdkConfiguration;
+    @Mock
     private SSLContext sslContext;
     @Mock
     private SSLConnectionSocketFactory sslsf;
@@ -87,6 +89,9 @@ public class HttpRestClientTest {
         PowerMockito.mockStatic(SSLConnectionSocketFactory.class);
         PowerMockito.whenNew(SSLConnectionSocketFactory.class).withAnyArguments().thenReturn(sslsf);
 
+        Mockito.when(sdkConfiguration.getClientMaxNumberOfConnections()).thenReturn(20);
+        Mockito.when(sdkConfiguration.getClientSocketTimeout()).thenReturn(60);
+
         PowerMockito.mockStatic(HttpClientBuilder.class);
         Mockito.when(HttpClientBuilder.create()).thenReturn(clientBuilder);
         Mockito.when(clientBuilder.setDefaultRequestConfig(Mockito.any(RequestConfig.class))).thenReturn(clientBuilder);
@@ -104,13 +109,13 @@ public class HttpRestClientTest {
     @Test
     public void testGetClient() {
         assertNull(restClient);
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
         assertNotNull(restClient);
     }
 
     @Test
     public void testSendRequestPost() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
         Mockito.when(responseStatus.getStatusCode()).thenReturn(201);
         String result = restClient.sendRequest(params, new Request(HttpMethod.POST, ""));
         assertNotNull(result);
@@ -118,21 +123,21 @@ public class HttpRestClientTest {
 
     @Test
     public void testSendRequestPostNoBody() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
         String result = restClient.sendRequest(params, new Request(HttpMethod.POST, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestGet() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
         String result = restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestPatch() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
         Mockito.when(responseStatus.getStatusCode()).thenReturn(202);
         String result = restClient.sendRequest(params, new Request(HttpMethod.PATCH, ""));
         assertNotNull(result);
@@ -140,35 +145,35 @@ public class HttpRestClientTest {
 
     @Test
     public void testSendRequestPatchNoBody() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
         String result = restClient.sendRequest(params, new Request(HttpMethod.PATCH, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestPut() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
         String result = restClient.sendRequest(params, new Request(HttpMethod.PUT, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestPutNoBody() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
         String result = restClient.sendRequest(params, new Request(HttpMethod.PUT, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestDelete() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
         String result = restClient.sendRequest(params, new Request(HttpMethod.DELETE, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestNotAuthoritativeResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(203);
 
@@ -178,7 +183,7 @@ public class HttpRestClientTest {
 
     @Test
     public void testSendRequestNoContentResponse() throws Exception {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseEntity.getContent()).thenReturn(new ByteArrayInputStream("".getBytes()));
         Mockito.when(responseStatus.getStatusCode()).thenReturn(204);
@@ -190,7 +195,7 @@ public class HttpRestClientTest {
 
     @Test
     public void testSendRequestResetResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(205);
 
@@ -200,7 +205,7 @@ public class HttpRestClientTest {
 
     @Test
     public void testSendRequestPartialResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(206);
 
@@ -210,7 +215,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestMultiChoiceResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(300);
 
@@ -220,7 +225,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestMovedPermResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(301);
 
@@ -230,7 +235,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestMovedTempResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(302);
 
@@ -240,7 +245,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestSeeOtherResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(303);
 
@@ -250,7 +255,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestNotModifiedResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(304);
 
@@ -260,7 +265,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestUseProxyResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(305);
 
@@ -270,7 +275,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKBadRequestException.class)
     public void testSendRequestBadRequestResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(400);
 
@@ -280,7 +285,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKUnauthorizedException.class)
     public void testSendRequestUnauthorizedResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(401);
 
@@ -290,7 +295,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestPaymentRequiredResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(402);
 
@@ -300,7 +305,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKForbiddenException.class)
     public void testSendRequestForbiddenResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(403);
 
@@ -310,7 +315,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKResourceNotFoundException.class)
     public void testSendRequestNotFoundResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(404);
 
@@ -320,7 +325,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKMethodNotAllowed.class)
     public void testSendRequestBadMethodResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(405);
 
@@ -330,7 +335,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestNotAcceptableResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(406);
 
@@ -340,7 +345,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestProxyAuthResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(407);
 
@@ -350,7 +355,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestClientTimeoutResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(408);
 
@@ -360,7 +365,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKInternalServerErrorException.class)
     public void testSendRequestConflictResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(409);
 
@@ -370,7 +375,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestGoneResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(410);
 
@@ -380,7 +385,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestLengthRequiredResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(411);
 
@@ -390,7 +395,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKInternalServerErrorException.class)
     public void testSendRequestPreconFailedResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(412);
 
@@ -400,7 +405,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestEntityTooLargeResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(413);
 
@@ -410,7 +415,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestUriTooLongResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(414);
 
@@ -420,7 +425,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKInternalServerErrorException.class)
     public void testSendRequestUnsupportedTypeResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(415);
 
@@ -430,7 +435,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKInternalServerErrorException.class)
     public void testSendRequestInternalErrorResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(500);
 
@@ -440,7 +445,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestNotImplementedResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(501);
 
@@ -450,7 +455,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestBadGatewayResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(502);
 
@@ -460,7 +465,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKInternalServerErrorException.class)
     public void testSendRequestUnavailableResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(503);
 
@@ -470,7 +475,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestGatewayTimoutResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(504);
 
@@ -480,7 +485,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestHttpVersionNotSupportedResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(505);
 
@@ -490,7 +495,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKApplianceNotReachableException.class)
     public void testSendRequestNotReachableResponse() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(999);
 
@@ -500,14 +505,14 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKBadRequestException.class)
     public void testSendRequestInvalidRequestType() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
         restClient.sendRequest(params, new Request(null, ""));
         fail("Exception should have been raised");
     }
 
     @Test
     public void testSendRequestForceReturnTask() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
         Request request = new Request(HttpMethod.POST, "");
 
         request.setForceReturnTask(true);
@@ -518,14 +523,14 @@ public class HttpRestClientTest {
 
     @Test
     public void testSendRequestStringBody() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
         String result = restClient.sendRequest(params, new Request(HttpMethod.POST, "", ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestWithUriParameters() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
 
         Request request = new Request(HttpMethod.GET, "");
 
@@ -537,7 +542,7 @@ public class HttpRestClientTest {
 
     @Test (expected = SDKBadRequestException.class)
     public void testSendRequestWithBadUriParameters() {
-        restClient = new HttpRestClient(new JsonSerializer(), SSLContextFactory.getAvailableContext());
+        restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
         Request request = new Request(HttpMethod.GET, "http :");
 
         request.addQuery(new UrlParameter("filter", "name='anyName"));

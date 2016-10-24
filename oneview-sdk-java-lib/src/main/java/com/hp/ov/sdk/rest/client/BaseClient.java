@@ -46,7 +46,7 @@ public class BaseClient {
     public BaseClient(SDKConfiguration config) {
         this(new RestParams(config),
              new ResourceAdaptor(),
-             new HttpRestClient(new JsonSerializer(), SSLContextFactory.getDefaultContext(new HttpSslProperties(config))),
+             new HttpRestClient(config, new JsonSerializer(), SSLContextFactory.getDefaultContext(new HttpSslProperties(config))),
              new Supplier<TaskMonitor>() {
                 @Override
                 public TaskMonitor get() {

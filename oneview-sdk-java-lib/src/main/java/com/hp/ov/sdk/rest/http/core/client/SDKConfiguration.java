@@ -35,6 +35,12 @@ public class SDKConfiguration {
             SDKConfiguration.PASSWORD,
             SDKConfiguration.HOSTNAME};
 
+    // HTTP Client properties keys
+    private static final String CLIENT_MAX_NUMBER_OF_CONNECTIONS = "client.max_number_of_connections";
+    private static final String DEFAULT_CLIENT_MAX_NUMBER_OF_CONNECTIONS = "20";
+    private static final String CLIENT_SOCKET_TIMEOUT = "client.socket_timeout";
+    private static final String DEFAULT_CLIENT_SOCKET_TIMEOUT = "60";
+
     // Message bus properties keys
     private static final String MESSAGE_BUS_PORT = "messagebus.port";
 
@@ -78,6 +84,16 @@ public class SDKConfiguration {
     public ApiVersion getOneViewApiVersion() {
         return ApiVersion.fromStringValue(this.properties.getProperty(API_VERSION,
                 String.valueOf(DEFAULT_API_VERSION.getValue())));
+    }
+
+    public int getClientMaxNumberOfConnections() throws NumberFormatException {
+        return Integer.parseInt(this.properties.getProperty(CLIENT_MAX_NUMBER_OF_CONNECTIONS,
+                DEFAULT_CLIENT_MAX_NUMBER_OF_CONNECTIONS));
+    }
+
+    public int getClientSocketTimeout() throws NumberFormatException {
+        return Integer.parseInt(this.properties.getProperty(CLIENT_SOCKET_TIMEOUT,
+                DEFAULT_CLIENT_SOCKET_TIMEOUT));
     }
 
     public String getOneViewHostname() {
@@ -140,6 +156,16 @@ public class SDKConfiguration {
 
         public SDKConfigurationBuilder withOneViewApiVersion(ApiVersion version) {
             values.put(SDKConfiguration.API_VERSION, String.valueOf(version.getValue()));
+            return this;
+        }
+
+        public SDKConfigurationBuilder withMaxNumberOfConnections(int numberOfConnections) {
+            values.put(SDKConfiguration.CLIENT_MAX_NUMBER_OF_CONNECTIONS, String.valueOf(numberOfConnections));
+            return this;
+        }
+
+        public SDKConfigurationBuilder withSocketTimeout(int socketTimeout) {
+            values.put(SDKConfiguration.CLIENT_SOCKET_TIMEOUT, String.valueOf(socketTimeout));
             return this;
         }
 
