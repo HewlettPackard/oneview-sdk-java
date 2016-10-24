@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.TaskResource;
+import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
 import com.hp.ov.sdk.messaging.core.MessageBusClient;
 import com.hp.ov.sdk.messaging.scmb.ScmbMessage;
 import com.hp.ov.sdk.messaging.scmb.ScmbMessageHandler;
@@ -58,6 +59,21 @@ public class StateChangedMessageBusSample {
         });
     }
 
+    private void subscribeToFcNetworksStateChangedMessageBus() {
+        this.client.addScmbHandler("scmb.fc-networks.#", new ScmbMessageHandler<FcNetwork>() {
+            @Override
+            public void handleMessage(ScmbMessage<FcNetwork> message) {
+                FcNetwork network = message.getResource();
+
+                LOGGER.info("FC-Network received in State-Changed Message Bus: {}", network.toJsonString());
+            }
+            @Override
+            public TypeToken<ScmbMessage<FcNetwork>> typeToken() {
+                return new TypeToken<ScmbMessage<FcNetwork>>() {};
+            }
+        });
+    }
+
     private void disconnect() {
         this.client.disconnect();
     }
@@ -66,8 +82,9 @@ public class StateChangedMessageBusSample {
         StateChangedMessageBusSample sample = new StateChangedMessageBusSample();
 
         sample.subscribeToTasksStateChangedMessageBus();
+        sample.subscribeToFcNetworksStateChangedMessageBus();
 
-        Thread.sleep(5 * 60 * 1000); //waits 10 min
+        Thread.sleep(5 * 60 * 1000); //waits 5 minutes
 
         sample.disconnect();
     }

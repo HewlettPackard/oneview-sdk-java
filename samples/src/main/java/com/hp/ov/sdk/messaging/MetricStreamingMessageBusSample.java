@@ -60,7 +60,7 @@ public class MetricStreamingMessageBusSample {
 
         sample.subscribeToMetricStreamingMessageBus();
 
-        Thread.sleep(10 * 60 * 1000); //waits 10 min
+        Thread.sleep(10 * 60 * 1000); //waits 10 minutes
 
         sample.disconnect();
     }
