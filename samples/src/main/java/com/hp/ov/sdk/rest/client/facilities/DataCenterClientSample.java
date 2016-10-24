@@ -43,7 +43,7 @@ public class DataCenterClientSample {
     private final DataCenterClient dataCenterClient;
 
     public DataCenterClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.dataCenterClient = oneViewClient.dataCenter();
     }

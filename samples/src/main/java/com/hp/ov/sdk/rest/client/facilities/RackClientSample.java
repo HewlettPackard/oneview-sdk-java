@@ -40,7 +40,7 @@ public class RackClientSample {
     private final RackClient rackClient;
 
     public RackClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.rackClient = oneViewClient.rack();
     }

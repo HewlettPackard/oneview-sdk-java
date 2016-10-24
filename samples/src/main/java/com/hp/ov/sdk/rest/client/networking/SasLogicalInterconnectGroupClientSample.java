@@ -52,7 +52,7 @@ public class SasLogicalInterconnectGroupClientSample {
     private final SasInterconnectTypeClient typeClient;
 
     private SasLogicalInterconnectGroupClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.client = oneViewClient.sasLogicalInterconnectGroup();
         this.typeClient = oneViewClient.sasInterconnectType();

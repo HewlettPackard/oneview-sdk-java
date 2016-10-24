@@ -58,7 +58,7 @@ public class StorageVolumeClientSample {
     // ================================
 
     private StorageVolumeClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.storageVolumeClient = oneViewClient.storageVolume();
         this.storagePoolClient = oneViewClient.storagePool();

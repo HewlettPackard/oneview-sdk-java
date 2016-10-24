@@ -49,7 +49,7 @@ public class SasLogicalInterconnectClientSample {
     private final FirmwareDriverClient fwClient;
 
     private SasLogicalInterconnectClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.client = oneViewClient.sasLogicalInterconnect();
         this.fwClient = oneViewClient.firmwareDriver();

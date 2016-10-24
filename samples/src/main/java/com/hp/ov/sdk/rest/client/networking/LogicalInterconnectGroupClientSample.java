@@ -72,7 +72,7 @@ public class LogicalInterconnectGroupClientSample {
     private ResourceDtoUtils resourceDtoUtils;
 
     private LogicalInterconnectGroupClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
         this.client = oneViewClient.logicalInterconnectGroup();
 
         resourceDtoUtils = new ResourceDtoUtils(oneViewClient);

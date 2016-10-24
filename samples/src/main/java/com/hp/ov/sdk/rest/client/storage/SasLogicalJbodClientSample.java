@@ -41,7 +41,7 @@ public class SasLogicalJbodClientSample {
     // ================================
 
     private SasLogicalJbodClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.sasLogicalJbodClient = oneViewClient.sasLogicalJbod();
     }

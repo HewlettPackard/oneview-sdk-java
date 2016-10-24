@@ -16,17 +16,42 @@
 
 package com.hp.ov.sdk;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.hp.ov.sdk.exceptions.SDKPropertiesFileException;
 import com.hp.ov.sdk.rest.client.OneViewClient;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
+import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 
 public class OneViewClientSample {
 
-    public static OneViewClient getOneViewClient() {
-        HPOneViewCredential credentials = new HPOneViewCredential();
+    private static final Logger LOGGER = LoggerFactory.getLogger(OneViewClientSample.class);
 
-        OneViewClient client = new OneViewClient(credentials.getSDKConfiguration());
+    private static final String ONEVIEW_JAVA_SDK_CONFIG_PROPERTIES_FILE = "oneview_java_sdk_config.properties";
 
+    private SDKConfiguration config;
+    private OneViewClient client;
+
+    public OneViewClient getOneViewClient() {
+        if (client == null) {
+            try {
+                client = new OneViewClient(this.getSDKConfiguration());
+            } catch (Exception e) {
+                LOGGER.error("An error occurred while creating a client instance", e);
+            }
+        }
         return client;
+    }
+
+    public SDKConfiguration getSDKConfiguration() {
+        if (config == null) {
+            try {
+                config = SDKConfiguration.fromFile(ONEVIEW_JAVA_SDK_CONFIG_PROPERTIES_FILE);
+            } catch (SDKPropertiesFileException e) {
+                LOGGER.error("An error occurred while loading configuration file", e);
+            }
+        }
+        return this.config;
     }
 
 }

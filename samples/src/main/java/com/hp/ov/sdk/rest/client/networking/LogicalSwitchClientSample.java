@@ -50,7 +50,7 @@ public class LogicalSwitchClientSample {
     private final LogicalSwitchGroupClient groupClient;
 
     private LogicalSwitchClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.client = oneViewClient.logicalSwitch();
         this.groupClient = oneViewClient.logicalSwitchGroup();

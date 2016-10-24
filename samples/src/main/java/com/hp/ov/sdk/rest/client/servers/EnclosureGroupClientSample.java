@@ -54,7 +54,7 @@ public class EnclosureGroupClientSample {
     // ================================
 
     public EnclosureGroupClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.interconnectGroupClient = oneViewClient.logicalInterconnectGroup();
         this.enclosureGroupClient = oneViewClient.enclosureGroup();

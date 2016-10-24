@@ -38,7 +38,7 @@ import javax.net.ssl.TrustManagerFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.google.common.io.BaseEncoding;
-import com.hp.ov.sdk.certs.MessagingCertificateClient;
+import com.hp.ov.sdk.rest.client.security.MessagingCertificateClient;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.exceptions.SDKCertificateException;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;

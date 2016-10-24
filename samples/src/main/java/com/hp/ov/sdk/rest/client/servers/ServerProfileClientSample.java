@@ -55,7 +55,7 @@ import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.UrlUtils;
-import com.hp.ov.sdk.util.samples.ResourceDtoUtilsWrapper;
+import com.hp.ov.sdk.util.ResourceDtoUtilsWrapper;
 
 /*
  * ServerProfileClientSample is a sample program capture/consume the entire server configuration managed
@@ -83,7 +83,7 @@ public class ServerProfileClientSample {
     // ================================
 
     private ServerProfileClientSample() {
-        oneViewClient = OneViewClientSample.getOneViewClient();
+        oneViewClient = new OneViewClientSample().getOneViewClient();
 
         serverProfileClient = oneViewClient.serverProfile();
         enclosureGroupClient = oneViewClient.enclosureGroup();

@@ -61,7 +61,7 @@ public class LogicalEnclosureClientSample {
     // ================================
 
     private LogicalEnclosureClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.logicalEnclosureClient = oneViewClient.logicalEnclosure();
         this.firmwareDriverClient = oneViewClient.firmwareDriver();

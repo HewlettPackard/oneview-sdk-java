@@ -52,7 +52,7 @@ public class EthernetNetworkClientSample {
     private final EthernetNetworkClient client;
 
     private EthernetNetworkClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.client = oneViewClient.ethernetNetwork();
     }

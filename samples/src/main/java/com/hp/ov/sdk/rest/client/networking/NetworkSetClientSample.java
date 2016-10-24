@@ -49,7 +49,7 @@ public class NetworkSetClientSample {
     // ================================
 
     private NetworkSetClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
         this.client = oneViewClient.networkSet();
 
         this.resourceDtoUtils = new ResourceDtoUtils(oneViewClient);

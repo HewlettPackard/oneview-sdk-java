@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.messagebus;
+package com.hp.ov.sdk.messaging;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,6 @@ import com.hp.ov.sdk.messaging.msmb.MsmbMessageHandler;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
-import com.hp.ov.sdk.util.samples.HPOneViewCredential;
 
 public class MetricStreamingMessageBusSample {
 
@@ -35,8 +34,10 @@ public class MetricStreamingMessageBusSample {
     private final MessageBusClient client;
 
     public MetricStreamingMessageBusSample() {
-        SDKConfiguration config = new HPOneViewCredential().getSdkConfiguration();
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClientSample sample = new OneViewClientSample();
+
+        OneViewClient oneViewClient = sample.getOneViewClient();
+        SDKConfiguration config = sample.getSDKConfiguration();
 
         this.client = MessageBusClient.connect(config, oneViewClient);
     }

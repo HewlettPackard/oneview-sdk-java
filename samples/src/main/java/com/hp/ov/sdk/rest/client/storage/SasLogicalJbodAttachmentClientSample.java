@@ -37,7 +37,7 @@ public class SasLogicalJbodAttachmentClientSample {
     // ================================
 
     private SasLogicalJbodAttachmentClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.sasLogicalJbodAttachmentClient = oneViewClient.sasLogicalJbodAttachment();
     }

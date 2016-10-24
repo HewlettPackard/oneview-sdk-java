@@ -24,6 +24,7 @@ import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.messaging.core.CaCert;
 import com.hp.ov.sdk.messaging.core.RabbitMQClientCert;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.security.MessagingCertificateClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
 public class MessagingCertificateClientSample {
@@ -33,7 +34,7 @@ public class MessagingCertificateClientSample {
     private final MessagingCertificateClient client;
 
     private MessagingCertificateClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.client = oneViewClient.messagingCertificate();
     }

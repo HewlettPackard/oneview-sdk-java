@@ -48,7 +48,7 @@ public class FcSanDeviceManagerClientSample {
     // ================================
 
     private FcSanDeviceManagerClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         fcSanDeviceManagerClient = oneViewClient.fcSanDeviceManager();
     }

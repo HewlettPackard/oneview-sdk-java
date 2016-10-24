@@ -45,7 +45,7 @@ public class StorageVolumeAttachmentClientSample {
     private final StorageVolumeAttachmentClient storageVolumeAttachmentClient;
 
     public StorageVolumeAttachmentClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.storageVolumeAttachmentClient = oneViewClient.storageVolumeAttachment();
     }

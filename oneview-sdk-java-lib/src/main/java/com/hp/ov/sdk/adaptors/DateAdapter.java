@@ -37,7 +37,7 @@ public class DateAdapter implements JsonSerializer<Date>, JsonDeserializer<Date>
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DateAdapter.class);
 
-    private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSX";
+    public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSX";
 
     @Override
     public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {

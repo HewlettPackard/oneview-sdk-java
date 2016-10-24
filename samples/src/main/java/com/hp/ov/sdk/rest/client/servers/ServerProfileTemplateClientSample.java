@@ -86,7 +86,7 @@ public class ServerProfileTemplateClientSample {
     // ================================
 
     private ServerProfileTemplateClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.serverProfileTemplateClient = oneViewClient.serverProfileTemplate();
         this.serverProfileClient = oneViewClient.serverProfile();

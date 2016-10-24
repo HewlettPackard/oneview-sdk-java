@@ -37,7 +37,7 @@ public class InterconnectLinkTopologyClientSample {
     private final InterconnectLinkTopologyClient client;
 
     private InterconnectLinkTopologyClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.client = oneViewClient.interconnectLinkTopology();
     }

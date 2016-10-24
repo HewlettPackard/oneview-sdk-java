@@ -40,7 +40,7 @@ public class AlertClientSample {
     private final AlertClient client;
 
     private AlertClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.client = oneViewClient.alert();
     }

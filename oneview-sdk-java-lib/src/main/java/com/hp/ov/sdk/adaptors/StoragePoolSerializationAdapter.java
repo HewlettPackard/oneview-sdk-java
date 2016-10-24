@@ -16,8 +16,10 @@
 package com.hp.ov.sdk.adaptors;
 
 import java.lang.reflect.Type;
+import java.util.Date;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -33,25 +35,25 @@ import com.hp.ov.sdk.dto.storage.StoragePool;
 public class StoragePoolSerializationAdapter implements JsonSerializer<StoragePool>,
         JsonDeserializer<StoragePool> {
 
+    private Gson gson;
+
     @Override
     public StoragePool deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
-
-        Gson gson = new Gson();
         JsonElement allocatedCapacity = json.getAsJsonObject().remove(StoragePool.ALLOCATED_CAPACITY_FIELD);
-        StoragePool storagePool = gson.fromJson(json, StoragePool.class);
+        StoragePool storagePool = gson().fromJson(json, StoragePool.class);
 
         if (allocatedCapacity.isJsonPrimitive()) {
             storagePool.setAllocatedCapacity(allocatedCapacity.getAsString());
         } else {
-            storagePool.setAllocatedCapacityDetails(gson.fromJson(allocatedCapacity, AllocatedCapacity.class));
+            storagePool.setAllocatedCapacityDetails(gson().fromJson(allocatedCapacity, AllocatedCapacity.class));
         }
         return storagePool;
     }
 
     @Override
     public JsonElement serialize(StoragePool src, Type typeOfSrc, JsonSerializationContext context) {
-        JsonElement jsonElement = new Gson().toJsonTree(src);
+        JsonElement jsonElement = gson().toJsonTree(src);
 
         if (ResourceCategory.RC_STORAGE_POOL.equalsIgnoreCase(src.getType())) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
@@ -60,6 +62,13 @@ public class StoragePoolSerializationAdapter implements JsonSerializer<StoragePo
             jsonObject.addProperty(StoragePool.ALLOCATED_CAPACITY_FIELD, src.getAllocatedCapacity());
         }
         return jsonElement;
+    }
+
+    private Gson gson() {
+        if (gson == null) {
+            gson = new GsonBuilder().registerTypeAdapter(Date.class, new DateAdapter()).create();
+        }
+        return gson;
     }
 
 }

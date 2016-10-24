@@ -51,7 +51,7 @@ public class SwitchClientSample {
     private final SwitchClient switchClient;
 
     public SwitchClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.switchClient = oneViewClient.switches();
     }

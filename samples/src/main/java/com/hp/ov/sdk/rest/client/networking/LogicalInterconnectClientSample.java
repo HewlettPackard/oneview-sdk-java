@@ -78,7 +78,7 @@ public class LogicalInterconnectClientSample {
     // ================================
 
     private LogicalInterconnectClientSample() {
-        this.oneViewClient = OneViewClientSample.getOneViewClient();
+        this.oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.enclosureClient = oneViewClient.enclosure();
         this.logicalInterconnectClient = oneViewClient.logicalInterconnect();

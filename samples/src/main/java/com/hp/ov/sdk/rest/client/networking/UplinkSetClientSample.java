@@ -68,7 +68,7 @@ public class UplinkSetClientSample {
     // ================================
 
     private UplinkSetClientSample() {
-        this.oneViewClient = OneViewClientSample.getOneViewClient();
+        this.oneViewClient = new OneViewClientSample().getOneViewClient();
 
         uplinkSetClient = oneViewClient.uplinkSet();
         enclosureClient = oneViewClient.enclosure();

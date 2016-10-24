@@ -42,7 +42,7 @@ public class SasInterconnectClientSample {
     private final SasInterconnectClient client;
 
     private SasInterconnectClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
+        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
         this.client = oneViewClient.sasInterconnects();
     }
