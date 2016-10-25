@@ -81,11 +81,10 @@ public class HttpRestClient {
      */
     private final JsonSerializer serializer;
     private final CloseableHttpClient httpClient;
-
-    private SDKConfiguration sdkConfiguration;
+    private final SDKConfiguration config;
 
     public HttpRestClient(SDKConfiguration sdkConfiguration, JsonSerializer serializer, SSLContext sslContext) {
-        this.sdkConfiguration = sdkConfiguration;
+        this.config = sdkConfiguration;
         this.serializer = serializer;
         this.httpClient = this.buildHttpClient(sslContext);
     }
@@ -101,20 +100,21 @@ public class HttpRestClient {
 
         PoolingHttpClientConnectionManager manager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
 
-        manager.setMaxTotal(sdkConfiguration.getClientMaxNumberOfConnections());
-        manager.setDefaultMaxPerRoute(sdkConfiguration.getClientMaxNumberOfConnections());
+        manager.setMaxTotal(config.getClientMaxNumberOfConnections());
+        manager.setDefaultMaxPerRoute(config.getClientMaxNumberOfConnections());
 
         RequestConfig requestConfig = RequestConfig.custom()
                 .setAuthenticationEnabled(false)
                 .setContentCompressionEnabled(false)
                 .setConnectTimeout(5 * 1000)
                 .setConnectionRequestTimeout(5 * 1000)
-                .setSocketTimeout(sdkConfiguration.getClientSocketTimeout() * 1000)
+                .setSocketTimeout(config.getClientSocketTimeout() * 1000)
                 .build();
 
         return HttpClientBuilder.create()
                 .setDefaultRequestConfig(requestConfig)
-                .setConnectionManager(manager).build();
+                .setConnectionManager(manager)
+                .build();
     }
 
     public void shutdown() {
@@ -139,7 +139,7 @@ public class HttpRestClient {
     /**
      * Send the request to OV and read the response.
      *
-     * @param restParams unmodifiable connection parameters (hostname, sessionId, etc)
+     * @param sessionId OV session token ID.
      * @param request contains the details specific to the current request.
      *
      * @return
@@ -147,11 +147,10 @@ public class HttpRestClient {
      * @throws
      *  SDKBadRequestException on unsupported method (PUT, GET..)
      **/
-    public String sendRequest(RestParams restParams, Request request) throws SDKBadRequestException {
-        URI uri = buildURI(restParams, request);
+    public String sendRequest(String sessionId, Request request) throws SDKBadRequestException {
+        URI uri = buildURI(request);
 
         LOGGER.debug("Using URL: " + uri.toString());
-        LOGGER.debug("Rest params passed, params = " + restParams + " object = " + request.getEntity());
 
         if (request.getType() == null) {
             throw new SDKBadRequestException(SDKErrorEnum.badRequestError, null, null, null,
@@ -163,7 +162,7 @@ public class HttpRestClient {
         switch (request.getType()) {
             case POST:
                 HttpPost post = new HttpPost(uri);
-                fillRequestEntity(post, restParams, request);
+                fillRequestEntity(post, request);
                 requestBase = post;
                 break;
             case GET:
@@ -178,22 +177,21 @@ public class HttpRestClient {
                 if (Patch.class.isInstance(request.getEntity())) {
                     entity = EntityBuilder.create()
                             .setText(serializer.toJsonArray((Patch) request.getEntity(),
-                                    restParams.getApiVersion()))
+                                    config.getOneViewApiVersion()))
                             .setContentType(toApacheContentType(request.getContentType())).build();
                 } else {
                     entity = EntityBuilder.create()
                             .setText(serializer.toJson(request.getEntity(),
-                                    restParams.getApiVersion()))
+                                    config.getOneViewApiVersion()))
                             .setContentType(toApacheContentType(request.getContentType())).build();
                 }
-
                 patch.setEntity(entity);
 
                 requestBase = patch;
                 break;
             case PUT:
                 HttpPut put = new HttpPut(uri);
-                fillRequestEntity(put, restParams, request);
+                fillRequestEntity(put, request);
                 requestBase = put;
                 break;
             case DELETE:
@@ -208,16 +206,16 @@ public class HttpRestClient {
         }
 
         if (requestBase != null) {
-            setRequestHeaders(restParams, requestBase);
+            setRequestHeaders(sessionId, requestBase);
 
-            return getResponse(requestBase, restParams, request.isForceReturnTask());
+            return getResponse(sessionId, requestBase, request.isForceReturnTask());
         }
         LOGGER.error("could not create a valid request.");
         throw new SDKBadRequestException(SDKErrorEnum.badRequestError, null, null, null,
                 SdkConstants.APPLIANCE, null);
     }
 
-    private void fillRequestEntity(HttpEntityEnclosingRequestBase base, RestParams params, Request request) {
+    private void fillRequestEntity(HttpEntityEnclosingRequestBase base, Request request) {
         if (request.hasEntity()) {
             HttpEntity entity;
             ContentType contentType = request.getContentType();
@@ -228,10 +226,9 @@ public class HttpRestClient {
                 String textEntity;
 
                 if (request.getEntity() instanceof List) {
-                    textEntity = serializer.toJsonArray((List) request.getEntity(),
-                            params.getApiVersion());
+                    textEntity = serializer.toJsonArray((List) request.getEntity(), config.getOneViewApiVersion());
                 } else {
-                    textEntity = serializer.toJson(request.getEntity(), params.getApiVersion());
+                    textEntity = serializer.toJson(request.getEntity(), config.getOneViewApiVersion());
                 }
 
                 entity = EntityBuilder.create()
@@ -269,15 +266,15 @@ public class HttpRestClient {
     /**
      * Builds the URI used in the request.
      *
-     * @param params
-     *  connection parameters.
-     * @return
-     *  The request URI
+     * @param request request parameters.
+     *
+     * @return request URI
+     *
      * @throws SDKBadRequestException
      */
-    private URI buildURI(RestParams params, Request request) throws SDKBadRequestException {
+    private URI buildURI(Request request) throws SDKBadRequestException {
         try {
-            URIBuilder uri = new URIBuilder(UrlUtils.createRestUrl(params.getHostname(), request.getUri()));
+            URIBuilder uri = new URIBuilder(UrlUtils.createRestUrl(config.getOneViewHostname(), request.getUri()));
 
             for (UrlParameter entry : request.getQuery()) {
                 uri.addParameter(entry.getKey(), entry.getValue());
@@ -292,32 +289,31 @@ public class HttpRestClient {
     /**
      * Configure the request headers.
      *
-     * @param params
-     *  connection parameters.
+     * @param sessionId
+     *  session token ID.
      * @param request
      *  Request information
      */
-    private void setRequestHeaders(RestParams params, HttpUriRequest request) {
-        if (StringUtils.isNotBlank(params.getSessionId())) {
-            request.setHeader("Auth", params.getSessionId());
+    private void setRequestHeaders(String sessionId, HttpUriRequest request) {
+        if (StringUtils.isNotBlank(sessionId)) {
+            request.setHeader("Auth", sessionId);
         }
         request.setHeader("Accept", "application/json");
         request.setHeader("accept-language", "en_US");
-        request.setHeader("X-Api-Version", String.valueOf(params.getApiVersion().getValue()));
+        request.setHeader("X-Api-Version", String.valueOf(config.getOneViewApiVersion().getValue()));
     }
 
     /**
      * Gets the response from HPE OneView.
      *
+     * @param sessionId OV session token ID.
      * @param request
      *  Request information.
-     * @param params
-     *  connection parameters.
      * @param forceReturnTask
      *  Forces the check for the Location header (task) even when the response code is not 202.
      * @return {@link String} object containing the response of the request
      */
-    private String getResponse(HttpUriRequest request, RestParams params, final boolean forceReturnTask) {
+    private String getResponse(String sessionId, HttpUriRequest request, final boolean forceReturnTask) {
         String responseBody = null;
         HttpResponse response = null;
 
@@ -344,7 +340,7 @@ public class HttpRestClient {
 
                 Request taskRequest = new Request(HttpMethod.GET, restUri);
 
-                return this.sendRequest(params, taskRequest);
+                return this.sendRequest(sessionId, taskRequest);
             }
 
         } catch (IOException e) {

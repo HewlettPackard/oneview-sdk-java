@@ -44,7 +44,6 @@ import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.tasks.TaskMonitor;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -55,8 +54,6 @@ public class BaseClientTest {
     private static final String ANY_RESOURCE = "{\"type\":\"random-Type\"}";
     private static final String ANY_TASK_RESOURCE = "{\"type\":\"task-resource\"}";
 
-    @Mock
-    private RestParams params;
     @Mock
     private ResourceAdaptor adaptor;
     @Mock
@@ -89,7 +86,7 @@ public class BaseClientTest {
 
     @Test(expected = SDKNoResponseException.class)
     public void shouldThrowExceptionWhenServerReturnsNoResponseForExecuteRequestWithType() {
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn("");
+        given(httpClient.sendRequest(anyString(), any(Request.class))).willReturn("");
 
         this.baseClient.executeRequest(new Request(HttpMethod.GET, ANY_URI_STRING),
                 TypeToken.of(Object.class).getType());
@@ -97,53 +94,53 @@ public class BaseClientTest {
 
     @Test(expected = SDKNoResponseException.class)
     public void shouldThrowExceptionWhenServerReturnsNoResponseForExecuteRequestWithClass() {
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn("");
+        given(httpClient.sendRequest(anyString(), any(Request.class))).willReturn("");
 
         this.baseClient.executeRequest(new Request(HttpMethod.GET, ANY_URI_STRING), Object.class);
     }
 
     @Test
     public void shouldExecuteRequestWithType() {
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
+        given(httpClient.sendRequest(anyString(), any(Request.class))).willReturn(ANY_RESOURCE);
 
         Request request = new Request(HttpMethod.GET, ANY_URI_STRING);
 
         this.baseClient.executeRequest(request, TypeToken.of(Object.class).getType());
 
-        then(httpClient).should().sendRequest(eq(params), eq(request));
+        then(httpClient).should().sendRequest(anyString(), eq(request));
     }
 
     @Test
     public void shouldExecuteRequestWithClass() {
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESOURCE);
+        given(httpClient.sendRequest(anyString(), any(Request.class))).willReturn(ANY_RESOURCE);
 
         Request request = new Request(HttpMethod.GET, ANY_URI_STRING);
 
         this.baseClient.executeRequest(request, Object.class);
 
-        then(httpClient).should().sendRequest(eq(params), eq(request));
+        then(httpClient).should().sendRequest(anyString(), eq(request));
     }
 
     @Test
     public void shouldExecuteRequestWithTypeAndReturnString() {
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESPONSE_STRING);
+        given(httpClient.sendRequest(anyString(), any(Request.class))).willReturn(ANY_RESPONSE_STRING);
 
         Request request = new Request(HttpMethod.GET, ANY_URI_STRING);
         String response = (String) this.baseClient.executeRequest(request, TypeToken.of(String.class).getType());
 
-        then(httpClient).should().sendRequest(eq(params), eq(request));
+        then(httpClient).should().sendRequest(anyString(), eq(request));
 
         assertThat(response, is(equalTo(ANY_RESPONSE_STRING)));
     }
 
     @Test
     public void shouldExecuteRequestWithClassAndReturnString() {
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_RESPONSE_STRING);
+        given(httpClient.sendRequest(anyString(), any(Request.class))).willReturn(ANY_RESPONSE_STRING);
 
         Request request = new Request(HttpMethod.GET, ANY_URI_STRING);
         String response = this.baseClient.executeRequest(request, String.class);
 
-        then(httpClient).should().sendRequest(eq(params), eq(request));
+        then(httpClient).should().sendRequest(anyString(), eq(request));
 
         assertThat(response, is(equalTo(ANY_RESPONSE_STRING)));
     }
@@ -155,7 +152,7 @@ public class BaseClientTest {
 
     @Test(expected = SDKNoResponseException.class)
     public void shouldThrowExceptionWhenServerReturnsNoResponseForExecuteMonitorableRequest() {
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn("");
+        given(httpClient.sendRequest(anyString(), any(Request.class))).willReturn("");
 
         this.baseClient.executeMonitorableRequest(new Request(HttpMethod.GET, ANY_URI_STRING));
     }
@@ -164,7 +161,7 @@ public class BaseClientTest {
     public void shouldExecuteMonitorableRequest() {
         TaskMonitor monitor = mock(TaskMonitor.class);
 
-        given(httpClient.sendRequest(any(RestParams.class), any(Request.class))).willReturn(ANY_TASK_RESOURCE);
+        given(httpClient.sendRequest(anyString(), any(Request.class))).willReturn(ANY_TASK_RESOURCE);
         given(adaptor.buildResource(anyString(), eq(TaskResource.class))).willReturn(new TaskResource());
         given(supplier.get()).willReturn(monitor);
         given(monitor.execute(any(BaseClient.class), any(TaskResource.class), anyInt())).willReturn(new TaskResource());
@@ -173,7 +170,7 @@ public class BaseClientTest {
 
         this.baseClient.executeMonitorableRequest(request);
 
-        then(httpClient).should().sendRequest(eq(params), eq(request));
+        then(httpClient).should().sendRequest(anyString(), eq(request));
     }
 
 }

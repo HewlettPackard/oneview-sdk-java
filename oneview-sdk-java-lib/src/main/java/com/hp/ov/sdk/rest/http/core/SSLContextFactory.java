@@ -31,7 +31,7 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLInitializationException;
 import org.apache.http.ssl.SSLContextBuilder;
 
-import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
+import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 
 public class SSLContextFactory {
 
@@ -39,21 +39,21 @@ public class SSLContextFactory {
      * The default SSLContext implementation.
      * <p>
      *     Creates a SSLContext with a TrustManager implementation for managing the specified <i>TrustStore</i> file.
-     *     The information to access the TrustStore file must be provided through the {@link HttpSslProperties} parameter.
+     *     The information to access the TrustStore file must be provided through the {@link SDKConfiguration} parameter.
      *     These information include the path to the file, its password and the type. Currently, the only type supported
      *     is the default type JKS.
      * </p>
      *
-     * @param properties SSL properties that will be used to create the context. These properties
-     *                   comprehends the path to the TrustSore file, its password and type.
+     * @param config SDK configuration containing SSL properties that will be used to create the context.
+     *               These properties comprehends the path to the TrustSore file and its password.
      * @return {@link SSLContext}
      */
-    public static SSLContext getDefaultContext(HttpSslProperties properties) {
+    public static SSLContext getDefaultContext(SDKConfiguration config) {
         try {
-            File trustStore = new File(properties.getTrustStore());
+            File trustStore = new File(config.getTrustStoreFile());
 
             SSLContext context = SSLContextBuilder.create()
-                    .loadTrustMaterial(trustStore, properties.getTrustStorePassword().toCharArray())
+                    .loadTrustMaterial(trustStore, config.getTrustStorePassword().toCharArray())
                     .build();
 
             return context;

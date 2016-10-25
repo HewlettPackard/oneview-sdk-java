@@ -29,24 +29,22 @@ import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.exceptions.SDKNoResponseException;
 import com.hp.ov.sdk.rest.http.core.SSLContextFactory;
 import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
-import com.hp.ov.sdk.rest.http.core.client.HttpSslProperties;
 import com.hp.ov.sdk.rest.http.core.client.Request;
-import com.hp.ov.sdk.rest.http.core.client.RestParams;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.hp.ov.sdk.tasks.TaskMonitor;
 import com.hp.ov.sdk.util.JsonSerializer;
 
 public class BaseClient {
 
-    private final RestParams params;
     private final ResourceAdaptor adaptor;
     private final HttpRestClient client;
     private final Supplier<TaskMonitor> supplier;
 
+    private String sessionId;
+
     public BaseClient(SDKConfiguration config) {
-        this(new RestParams(config),
-             new ResourceAdaptor(),
-             new HttpRestClient(config, new JsonSerializer(), SSLContextFactory.getDefaultContext(new HttpSslProperties(config))),
+        this(new ResourceAdaptor(),
+             new HttpRestClient(config, new JsonSerializer(), SSLContextFactory.getDefaultContext(config)),
              new Supplier<TaskMonitor>() {
                 @Override
                 public TaskMonitor get() {
@@ -56,19 +54,18 @@ public class BaseClient {
         );
     }
 
-    protected BaseClient(RestParams params,
+    protected BaseClient(
             ResourceAdaptor adaptor,
             HttpRestClient client,
             Supplier<TaskMonitor> supplier) {
 
-        this.params = params;
         this.adaptor = adaptor;
         this.client = client;
         this.supplier = supplier;
     }
 
-    public void setSessionID(String sessionID) {
-        this.params.setSessionId(sessionID);
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public Object executeRequest(Request request, Type returnType) {
@@ -115,7 +112,7 @@ public class BaseClient {
     }
 
     private String executeRequest(Request request) {
-        String response = client.sendRequest(params, request);
+        String response = client.sendRequest(sessionId, request);
 
         if (StringUtils.isBlank(response)) {
             throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance,

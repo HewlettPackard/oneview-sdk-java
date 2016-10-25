@@ -91,7 +91,7 @@ public class OneViewClient {
                 new VersionClient(this.baseClient),
                 new LoginSessionClient(this.baseClient));
 
-        this.baseClient.setSessionID(connector.connect());
+        this.baseClient.setSessionId(connector.connect());
     }
 
     public synchronized AlertClient alert() {

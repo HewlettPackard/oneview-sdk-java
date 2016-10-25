@@ -45,6 +45,8 @@ import com.hp.ov.sdk.util.JsonSerializer;
 @PrepareForTest({HttpClientBuilder.class, SSLContext.class, SSLConnectionSocketFactory.class})
 public class HttpRestClientTest {
 
+    private static final String SESSION_ID = "random-Auth";
+
     @Mock
     private SDKConfiguration sdkConfiguration;
     @Mock
@@ -66,20 +68,12 @@ public class HttpRestClientTest {
     @Mock
     private Header locationHeader;
 
-    private RestParams params;
     private HttpRestClient restClient;
 
     private String responseContent = "{data:\"data\"}";
 
     @Before
     public void setUp() throws Exception {
-        SDKConfiguration config = SDKConfiguration.create()
-                .withOneViewApiVersion(ApiVersion.V_300)
-                .withOneViewHostname("1.1.1.1")
-                .withOneViewUser("user", "pass")
-                .build();
-
-        params = new RestParams(config);
 
         // Apache HTTP client mock
         PowerMockito.mockStatic(SSLContext.class);
@@ -91,6 +85,8 @@ public class HttpRestClientTest {
 
         Mockito.when(sdkConfiguration.getClientMaxNumberOfConnections()).thenReturn(20);
         Mockito.when(sdkConfiguration.getClientSocketTimeout()).thenReturn(60);
+        Mockito.when(sdkConfiguration.getOneViewHostname()).thenReturn("1.1.1.1");
+        Mockito.when(sdkConfiguration.getOneViewApiVersion()).thenReturn(ApiVersion.V_300);
 
         PowerMockito.mockStatic(HttpClientBuilder.class);
         Mockito.when(HttpClientBuilder.create()).thenReturn(clientBuilder);
@@ -117,21 +113,21 @@ public class HttpRestClientTest {
     public void testSendRequestPost() {
         restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
         Mockito.when(responseStatus.getStatusCode()).thenReturn(201);
-        String result = restClient.sendRequest(params, new Request(HttpMethod.POST, ""));
+        String result = restClient.sendRequest(SESSION_ID, new Request(HttpMethod.POST, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestPostNoBody() {
         restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
-        String result = restClient.sendRequest(params, new Request(HttpMethod.POST, ""));
+        String result = restClient.sendRequest(SESSION_ID, new Request(HttpMethod.POST, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestGet() {
         restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
-        String result = restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        String result = restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         assertNotNull(result);
     }
 
@@ -139,35 +135,35 @@ public class HttpRestClientTest {
     public void testSendRequestPatch() {
         restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
         Mockito.when(responseStatus.getStatusCode()).thenReturn(202);
-        String result = restClient.sendRequest(params, new Request(HttpMethod.PATCH, ""));
+        String result = restClient.sendRequest(SESSION_ID, new Request(HttpMethod.PATCH, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestPatchNoBody() {
         restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
-        String result = restClient.sendRequest(params, new Request(HttpMethod.PATCH, ""));
+        String result = restClient.sendRequest(SESSION_ID, new Request(HttpMethod.PATCH, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestPut() {
         restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
-        String result = restClient.sendRequest(params, new Request(HttpMethod.PUT, ""));
+        String result = restClient.sendRequest(SESSION_ID, new Request(HttpMethod.PUT, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestPutNoBody() {
         restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
-        String result = restClient.sendRequest(params, new Request(HttpMethod.PUT, ""));
+        String result = restClient.sendRequest(SESSION_ID, new Request(HttpMethod.PUT, ""));
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestDelete() {
         restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
-        String result = restClient.sendRequest(params, new Request(HttpMethod.DELETE, ""));
+        String result = restClient.sendRequest(SESSION_ID, new Request(HttpMethod.DELETE, ""));
         assertNotNull(result);
     }
 
@@ -177,7 +173,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(203);
 
-        String result = restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        String result = restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         assertNotNull(result);
     }
 
@@ -188,7 +184,7 @@ public class HttpRestClientTest {
         Mockito.when(responseEntity.getContent()).thenReturn(new ByteArrayInputStream("".getBytes()));
         Mockito.when(responseStatus.getStatusCode()).thenReturn(204);
 
-        String result = restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        String result = restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         assertNotNull(result);
         assertEquals("Return must be \"{}\"", "{}", result);
     }
@@ -199,7 +195,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(205);
 
-        String result = restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        String result = restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         assertNotNull(result);
     }
 
@@ -209,7 +205,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(206);
 
-        String result = restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        String result = restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         assertNotNull(result);
     }
 
@@ -219,7 +215,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(300);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -229,7 +225,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(301);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -239,7 +235,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(302);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -249,7 +245,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(303);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -259,7 +255,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(304);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -269,7 +265,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(305);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -279,7 +275,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(400);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -289,7 +285,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(401);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -299,7 +295,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(402);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -309,7 +305,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(403);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -319,7 +315,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(404);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -329,7 +325,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(405);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -339,7 +335,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(406);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -349,7 +345,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(407);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -359,7 +355,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(408);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -369,7 +365,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(409);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -379,7 +375,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(410);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -389,7 +385,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(411);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -399,7 +395,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(412);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -409,7 +405,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(413);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -419,7 +415,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(414);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -429,7 +425,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(415);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -439,7 +435,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(500);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -449,7 +445,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(501);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -459,7 +455,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(502);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -469,7 +465,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(503);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -479,7 +475,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(504);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -489,7 +485,7 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(505);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
@@ -499,14 +495,14 @@ public class HttpRestClientTest {
 
         Mockito.when(responseStatus.getStatusCode()).thenReturn(999);
 
-        restClient.sendRequest(params, new Request(HttpMethod.GET, ""));
+        restClient.sendRequest(SESSION_ID, new Request(HttpMethod.GET, ""));
         fail("Exception should have been raised");
     }
 
     @Test (expected = SDKBadRequestException.class)
     public void testSendRequestInvalidRequestType() {
         restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
-        restClient.sendRequest(params, new Request(null, ""));
+        restClient.sendRequest(SESSION_ID, new Request(null, ""));
         fail("Exception should have been raised");
     }
 
@@ -517,14 +513,14 @@ public class HttpRestClientTest {
 
         request.setForceReturnTask(true);
 
-        String result = restClient.sendRequest(params, request);
+        String result = restClient.sendRequest(SESSION_ID, request);
         assertNotNull(result);
     }
 
     @Test
     public void testSendRequestStringBody() {
         restClient = new HttpRestClient(this.sdkConfiguration, new JsonSerializer(), SSLContextFactory.getAvailableContext());
-        String result = restClient.sendRequest(params, new Request(HttpMethod.POST, "", ""));
+        String result = restClient.sendRequest(SESSION_ID, new Request(HttpMethod.POST, "", ""));
         assertNotNull(result);
     }
 
@@ -536,7 +532,7 @@ public class HttpRestClientTest {
 
         request.addQuery(new UrlParameter("filter", "name='anyName"));
 
-        String result = restClient.sendRequest(params, request);
+        String result = restClient.sendRequest(SESSION_ID, request);
         assertNotNull(result);
     }
 
@@ -547,7 +543,7 @@ public class HttpRestClientTest {
 
         request.addQuery(new UrlParameter("filter", "name='anyName"));
 
-        String result = restClient.sendRequest(params, request);
+        String result = restClient.sendRequest(SESSION_ID, request);
         assertNotNull(result);
     }
 }
