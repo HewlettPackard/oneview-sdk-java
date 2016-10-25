@@ -39,10 +39,10 @@ function sign_file {
 		$JAVA_DEFAULT -i $TARGET_DIR/$FILE -o $TARGET_DIR -noextract
 	fi
 
- 	if [ $? -eq 0 ];
- 		then
- 		SIG=$TARGET_DIR/$FILE.sig
- 		ASC=$SIG.asc
+	if [ $? -eq 0 ];
+		then
+		SIG=$TARGET_DIR/$FILE.sig
+		ASC=$SIG.asc
 
 		if [ "$DEBUG" = "debug" ]; then
 			echo "[DEBUG] mv $SIG $TARGET_DIR/$FILE.asc"
@@ -55,24 +55,24 @@ function sign_file {
 			gpg --enarmor $SIG && rm $SIG && mv $ASC $TARGET_DIR/$FILE.asc
 		fi
 
- 		if [ $? -ne 0 ];
- 			then
- 			echo "[ERROR] Error occurred while generating ASCII armored signature file"
- 			exit 1
- 		fi
+		if [ $? -ne 0 ];
+			then
+			echo "[ERROR] Error occurred while generating ASCII armored signature file"
+			exit 1
+		fi
 
- 		echo "[INFO]"
+		echo "[INFO]"
 		echo "[INFO] <<< File '$FILE' successfully signed!"
- 	else
- 		echo "[ERROR] Error occurred while executing the signing process for file '$FILE'"
- 		exit 1
- 	fi
+	else
+		echo "[ERROR] Error occurred while executing the signing process for file '$FILE'"
+		exit 1
+	fi
 }
 
 function build_pom {
 	if [ ! -d $TARGET_DIR ]; then
 		mkdir $TARGET_DIR
-	fi 
+	fi
 
 	POM_FILE=$TARGET_DIR/$ARTIFACT_ID-$PROJECT_VERSION.pom
 
