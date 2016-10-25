@@ -177,7 +177,7 @@
             </execution>
           </executions>
           <configuration>
-            <executable>sign.sh</executable>
+            <executable>bin/sign.sh</executable>
             <arguments>
               <argument>${sign.hpe.client}</argument>
               <argument>${sign.hpe.keytab}</argument>
@@ -208,11 +208,6 @@
         <groupId>com.rabbitmq</groupId>
         <artifactId>amqp-client</artifactId>
         <version>3.4.4</version>
-      </dependency>
-      <dependency>
-        <groupId>org.json</groupId>
-        <artifactId>json</artifactId>
-        <version>20131018</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
