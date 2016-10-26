@@ -152,7 +152,8 @@ public class MessageBusClient {
                 }
             });
         } catch (IOException e) {
-            throw new SDKMessageBusException("Could not subscribe to State-Changed Message Bus", e);
+            throw new SDKMessageBusException(SDKErrorEnum.messageBusConnectionError,
+                    "Could not subscribe to State-Changed Message Bus", e);
         }
         return channel;
     }
