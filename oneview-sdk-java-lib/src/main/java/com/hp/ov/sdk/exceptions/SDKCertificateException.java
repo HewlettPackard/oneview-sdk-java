@@ -15,18 +15,16 @@
  *******************************************************************************/
 package com.hp.ov.sdk.exceptions;
 
+/**
+ * Exception is thrown as general key management exception for all
+ * operations dealing with key management other certificate problems.
+ */
 public class SDKCertificateException extends SDKException {
 
-    /**
-     * Exception is thrown as general key management exception for all
-     * operations dealing with key management other certificate problems.
-     */
     private static final long serialVersionUID = 1L;
 
-    public SDKCertificateException(final SDKErrorKey sdkErrorKey, final Object[] messageParameters,
-            final Object[] detailsParameters, final Object[] recommendedActionsParameters, final String errorSource,
-            final Throwable cause) {
-        super(sdkErrorKey, messageParameters, detailsParameters, recommendedActionsParameters, errorSource, cause);
+    public SDKCertificateException(SDKErrorKey sdkErrorKey, String errorSource, Throwable cause) {
+        super(sdkErrorKey, errorSource, cause);
     }
 
 }

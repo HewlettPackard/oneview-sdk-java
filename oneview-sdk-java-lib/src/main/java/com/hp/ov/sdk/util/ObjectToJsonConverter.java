@@ -75,8 +75,7 @@ public class ObjectToJsonConverter {
 
             return this.gson().fromJson(jsonInput, resourceType);
         } catch (final JsonParseException e) {
-            throw new SDKInternalException(SDKErrorEnum.internalError, null, null, null,
-                    SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
+            throw new SDKInternalException(SDKErrorEnum.internalError, SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
         }
     }
 
@@ -86,8 +85,7 @@ public class ObjectToJsonConverter {
 
             return this.gson().fromJson(jsonInput, resourceType);
         } catch (final JsonParseException e) {
-            throw new SDKInternalException(SDKErrorEnum.internalError, null, null, null,
-                    SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
+            throw new SDKInternalException(SDKErrorEnum.internalError, SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
         }
     }
 
@@ -100,8 +98,7 @@ public class ObjectToJsonConverter {
 
             return this.gson().fromJson(jsonInput, type);
         } catch (final JsonParseException e) {
-            throw new SDKInternalException(SDKErrorEnum.internalError, null, null, null,
-                    SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
+            throw new SDKInternalException(SDKErrorEnum.internalError, SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
         }
     }
 
@@ -114,8 +111,7 @@ public class ObjectToJsonConverter {
 
             return this.gson().fromJson(jsonInput, type);
         } catch (final JsonParseException e) {
-            throw new SDKInternalException(SDKErrorEnum.internalError, null, null, null,
-                    SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
+            throw new SDKInternalException(SDKErrorEnum.internalError, SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
         }
     }
 

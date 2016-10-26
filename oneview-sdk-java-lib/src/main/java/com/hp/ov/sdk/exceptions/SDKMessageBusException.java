@@ -16,14 +16,12 @@
 
 package com.hp.ov.sdk.exceptions;
 
-public class SDKMessageBusException extends RuntimeException {
+public class SDKMessageBusException extends SDKException {
 
-    public SDKMessageBusException(String message, Throwable throwable) {
-        super(message, throwable);
-    }
+    private static final long serialVersionUID = 1L;
 
-    public SDKMessageBusException(String message) {
-        super(message);
+    public SDKMessageBusException(SDKErrorKey sdkErrorKey, String errorSource, Throwable cause) {
+        super(sdkErrorKey, errorSource, cause);
     }
 
 }

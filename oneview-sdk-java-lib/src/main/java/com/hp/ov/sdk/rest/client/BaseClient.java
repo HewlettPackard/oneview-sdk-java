@@ -105,8 +105,7 @@ public class BaseClient {
     private void validateNotNullArguments(Object ... arguments) {
         for (Object argument : arguments) {
             if (argument == null) {
-                throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument,
-                        null, null, null, SdkConstants.APPLIANCE, null);
+                throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, SdkConstants.APPLIANCE);
             }
         }
     }
@@ -115,8 +114,7 @@ public class BaseClient {
         String response = client.sendRequest(sessionId, request);
 
         if (StringUtils.isBlank(response)) {
-            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance,
-                    null, null, null, request.getUri(), null);
+            throw new SDKNoResponseException(SDKErrorEnum.noResponseFromAppliance, request.getUri());
         }
         return response;
     }

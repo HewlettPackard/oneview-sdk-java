@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKPropertiesFileException;
 
 public class SDKConfiguration {
@@ -59,7 +60,8 @@ public class SDKConfiguration {
 
     private SDKConfiguration(Properties properties) throws SDKPropertiesFileException {
         if (!properties.keySet().containsAll(Arrays.asList(MANDATORY_FIELDS))) {
-            throw new SDKPropertiesFileException("Missing mandatory SDK configuration parameters");
+            throw new SDKPropertiesFileException(SDKErrorEnum.propertiesFileError,
+                    "Missing mandatory SDK configuration parameters", null);
         }
         this.properties = properties;
     }
@@ -123,10 +125,12 @@ public class SDKConfiguration {
 
                 return new SDKConfiguration(properties);
             } catch (IOException e) {
-                throw new SDKPropertiesFileException(e);
+                throw new SDKPropertiesFileException(SDKErrorEnum.propertiesFileError,
+                        "Error reading properties file", e);
             }
         } else {
-            throw new SDKPropertiesFileException("Properties file '" + filePath + "' not found in classpath.");
+            throw new SDKPropertiesFileException(SDKErrorEnum.propertiesFileError,
+                    "Properties file '" + filePath + "' not found in classpath.", null);
         }
     }
 

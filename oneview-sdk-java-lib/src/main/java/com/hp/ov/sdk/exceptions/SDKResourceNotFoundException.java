@@ -15,20 +15,15 @@
  *******************************************************************************/
 package com.hp.ov.sdk.exceptions;
 
+/**
+ * The URI path (excluding filters) specifies a non-existent resource or collection
+ */
 public class SDKResourceNotFoundException extends SDKException {
 
-    /**
-     * <p>
-     * The URI path (excluding filters) specifies a non-existent resource or
-     * collection
-     * </p>
-     */
     private static final long serialVersionUID = 1L;
 
-    public SDKResourceNotFoundException(final SDKErrorKey sdkErrorKey, final Object[] messageParameters,
-            final Object[] detailsParameters, final Object[] recommendedActionsParameters, final String errorSource,
-            final Throwable cause) {
-        super(sdkErrorKey, messageParameters, detailsParameters, recommendedActionsParameters, errorSource, cause);
+    public SDKResourceNotFoundException(SDKErrorKey sdkErrorKey, String errorSource) {
+        super(sdkErrorKey, errorSource, null);
     }
 
 }

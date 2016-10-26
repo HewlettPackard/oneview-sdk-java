@@ -17,15 +17,10 @@ package com.hp.ov.sdk.exceptions;
 
 public class SDKInvalidArgumentException extends SDKException {
 
-    /**
-     * Invalid argument is passed in params.
-     */
     private static final long serialVersionUID = 1L;
 
-    public SDKInvalidArgumentException(final SDKErrorKey sdkErrorKey, final Object[] messageParameters,
-            final Object[] detailsParameters, final Object[] recommendedActionsParameters, final String errorSource,
-            final Throwable cause) {
-        super(sdkErrorKey, messageParameters, detailsParameters, recommendedActionsParameters, errorSource, cause);
+    public SDKInvalidArgumentException(SDKErrorKey sdkErrorKey, String errorSource) {
+        super(sdkErrorKey, errorSource, null);
     }
 
 }

@@ -68,8 +68,7 @@ public class OneViewConnector {
             LOGGER.info("########### Checking API Version End ####################");
             return;
         }
-        throw new SDKApiVersionMismatchException(SDKErrorEnum.apiMismatchError,
-                null, null, null, SdkConstants.APPLIANCE, null);
+        throw new SDKApiVersionMismatchException(SDKErrorEnum.apiMismatchError, SdkConstants.APPLIANCE);
     }
 
     private String setupSessionId() {

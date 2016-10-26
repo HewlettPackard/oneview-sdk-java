@@ -15,18 +15,12 @@
  */
 package com.hp.ov.sdk.exceptions;
 
-import java.io.IOException;
-
-public class SDKPropertiesFileException extends RuntimeException {
+public class SDKPropertiesFileException extends SDKException {
 
     private static final long serialVersionUID = 1L;
 
-    public SDKPropertiesFileException(IOException e) {
-        super(e);
-    }
-
-    public SDKPropertiesFileException(String message) {
-        super(message);
+    public SDKPropertiesFileException(SDKErrorKey sdkErrorKey, String errorSource, Throwable cause) {
+        super(sdkErrorKey, errorSource, cause);
     }
 
 }
