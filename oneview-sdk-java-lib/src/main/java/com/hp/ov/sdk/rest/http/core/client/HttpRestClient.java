@@ -53,6 +53,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
@@ -87,6 +88,16 @@ public class HttpRestClient {
         this.config = sdkConfiguration;
         this.serializer = serializer;
         this.httpClient = this.buildHttpClient(sslContext);
+    }
+
+    @VisibleForTesting
+    protected HttpRestClient(SDKConfiguration sdkConfiguration,
+            JsonSerializer serializer,
+            CloseableHttpClient httpClient) {
+
+        this.config = sdkConfiguration;
+        this.serializer = serializer;
+        this.httpClient = httpClient;
     }
 
     private CloseableHttpClient buildHttpClient(SSLContext sslContext) {
