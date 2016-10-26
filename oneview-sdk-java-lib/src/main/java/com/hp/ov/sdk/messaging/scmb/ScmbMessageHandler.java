@@ -16,13 +16,8 @@
 
 package com.hp.ov.sdk.messaging.scmb;
 
-import com.google.common.reflect.TypeToken;
-import com.hp.ov.sdk.dto.BaseModelResource;
+public interface ScmbMessageHandler {
 
-public interface ScmbMessageHandler<T extends BaseModelResource> {
-
-    void handleMessage(ScmbMessage<T> message);
-
-    TypeToken<ScmbMessage<T>> typeToken();
+    void handleMessage(ScmbMessage message);
 
 }

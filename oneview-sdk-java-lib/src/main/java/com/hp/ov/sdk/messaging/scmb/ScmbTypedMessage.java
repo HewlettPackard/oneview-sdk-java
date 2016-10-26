@@ -16,10 +16,11 @@
 
 package com.hp.ov.sdk.messaging.scmb;
 
+import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.messaging.core.BaseMessageModel;
 
-public class ScmbMessage extends BaseMessageModel<String> {
+public class ScmbTypedMessage<T extends BaseModelResource> extends BaseMessageModel<T> {
 
-    private static final long serialVersionUID = 2236762264852243766L;
+    private static final long serialVersionUID = -6123819933524554432L;
 
 }
