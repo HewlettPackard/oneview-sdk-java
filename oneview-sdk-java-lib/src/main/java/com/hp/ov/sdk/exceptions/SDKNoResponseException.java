@@ -15,19 +15,15 @@
  *******************************************************************************/
 package com.hp.ov.sdk.exceptions;
 
+/**
+ * Response returned is null or empty when an response not null is expected.
+ */
 public class SDKNoResponseException extends SDKException {
 
-    /**
-     * <p>
-     * Response returned is null or empty when an response not null is expected.
-     * </p>
-     */
     private static final long serialVersionUID = 1L;
 
-    public SDKNoResponseException(final SDKErrorKey sdkErrorKey, final Object[] messageParameters,
-            final Object[] detailsParameters, final Object[] recommendedActionsParameters, final String errorSource,
-            final Throwable cause) {
-        super(sdkErrorKey, messageParameters, detailsParameters, recommendedActionsParameters, errorSource, cause);
+    public SDKNoResponseException(SDKErrorKey sdkErrorKey, String errorSource) {
+        super(sdkErrorKey, errorSource, null);
     }
 
 }

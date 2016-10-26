@@ -211,8 +211,8 @@ public class ResourceDtoUtils {
                     }
                 }
                 if (portNumber == -1) {
-                    throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.UPLINKSET
-                            + " port not found for Interconnect Type.", null);
+                    throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, SdkConstants.UPLINKSET
+                            + " port not found for Interconnect Type.");
                 }
 
                 final LogicalPortConfigInfo logicalPortConfigInfo = new LogicalPortConfigInfo();
@@ -381,12 +381,10 @@ public class ResourceDtoUtils {
                     .setServerHardwareTypeUri((serverHardwareTypeUri != null && serverHardwareTypeUri.length() != 0) ? serverHardwareTypeUri
                             : null);
             if (serverProfileDto.getServerHardwareTypeUri() == null) {
-                throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.SERVER_HARDWARE,
-                        null);
+                throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, SdkConstants.SERVER_HARDWARE);
             }
         } else {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, null, null, null, SdkConstants.SERVER_HARDWARE,
-                    null);
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, SdkConstants.SERVER_HARDWARE);
         }
         if (useBayNameForServerHardwareUri) {
             final String serverHardwareUri = getServerHardwareUri(serverHardwareName);

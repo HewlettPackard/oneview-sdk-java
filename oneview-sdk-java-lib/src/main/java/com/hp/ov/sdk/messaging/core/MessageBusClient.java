@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.dto.BaseModelResource;
+import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKMessageBusException;
 import com.hp.ov.sdk.messaging.msmb.MsmbMessage;
 import com.hp.ov.sdk.messaging.msmb.MsmbMessageHandler;
@@ -56,7 +57,8 @@ public class MessageBusClient {
         try {
             connection = factory.getConnection();
         } catch (IOException e) {
-            throw new SDKMessageBusException("Connection to RabbitMQ failed!", e);
+            throw new SDKMessageBusException(SDKErrorEnum.messageBusConnectionError,
+                    "Connection to RabbitMQ failed!", e);
         }
         return new MessageBusClient(connection);
     }
@@ -65,7 +67,8 @@ public class MessageBusClient {
         try {
             this.connection.close();
         } catch (IOException e) {
-            throw new SDKMessageBusException("Could not properly close the connection to RabbitMQ", e);
+            throw new SDKMessageBusException(SDKErrorEnum.messageBusConnectionError,
+                    "Could not properly close the connection to RabbitMQ", e);
         }
     }
 
@@ -90,7 +93,8 @@ public class MessageBusClient {
                 }
             });
         } catch (IOException e) {
-            throw new SDKMessageBusException("Could not subscribe to Metric Streaming Message Bus", e);
+            throw new SDKMessageBusException(SDKErrorEnum.messageBusConnectionError,
+                    "Could not subscribe to Metric Streaming Message Bus", e);
         }
         return channel;
     }
@@ -120,7 +124,8 @@ public class MessageBusClient {
                 }
             });
         } catch (IOException e) {
-            throw new SDKMessageBusException("Could not subscribe to State-Changed Message Bus", e);
+            throw new SDKMessageBusException(SDKErrorEnum.messageBusConnectionError,
+                    "Could not subscribe to State-Changed Message Bus", e);
         }
         return channel;
     }

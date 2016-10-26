@@ -89,11 +89,9 @@ class RabbitMQConnectionFactory {
                     buildTrustManager(caCert.getCaCert()).getTrustManagers(),
                     new SecureRandom());
         } catch (final NoSuchAlgorithmException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError,
-                    null, null, null, SdkConstants.CERTS, e);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError, SdkConstants.CERTS, e);
         } catch (final KeyManagementException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError,
-                    null, null, null, SdkConstants.CERTS, e);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError, SdkConstants.CERTS, e);
         }
         return sslContext;
     }
@@ -128,11 +126,9 @@ class RabbitMQConnectionFactory {
             kmf = KeyManagerFactory.getInstance("SunX509");
             kmf.init(ks, "password".toCharArray());
         } catch (GeneralSecurityException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError,
-                    null, null, null, SdkConstants.CERTS, e);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError, SdkConstants.CERTS, e);
         } catch (IOException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError,
-                    null, null, null, SdkConstants.CERTS, e);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError, SdkConstants.CERTS, e);
         }
         return kmf;
     }
@@ -155,11 +151,9 @@ class RabbitMQConnectionFactory {
             tmf = TrustManagerFactory.getInstance("SunX509");
             tmf.init(tks);
         } catch (GeneralSecurityException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError,
-                    null, null, null, SdkConstants.CERTS, e);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError, SdkConstants.CERTS, e);
         } catch (IOException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError,
-                    null, null, null, SdkConstants.CERTS, e);
+            throw new SDKCertificateException(SDKErrorEnum.certificateError, SdkConstants.CERTS, e);
         }
         return tmf;
     }

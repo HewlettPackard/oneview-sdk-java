@@ -20,6 +20,8 @@ import java.lang.reflect.Constructor;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.reflect.Reflection;
 import com.hp.ov.sdk.rest.client.security.MessagingCertificateClient;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
@@ -314,7 +316,7 @@ public class OneViewClient {
 
             return constructor.newInstance(this.baseClient);
         } catch (ReflectiveOperationException e) {
-            throw new SDKException(SDKErrorEnum.internalServerError, null, null, null, null, e);
+            throw new SDKException(SDKErrorEnum.internalServerError, StringUtils.EMPTY, e);
         }
     }
 

@@ -15,14 +15,16 @@
  *******************************************************************************/
 package com.hp.ov.sdk.exceptions;
 
-/*
- * <p>
- * The SDKErrorKey fetches the error detail and recommended action
- * </p>
- */
-public interface SDKErrorKey extends ErrorEnum {
+public interface SDKErrorKey {
+
+    String getErrorCode();
+
+    String getMessageKey();
+
+    String getResolutionKey();
 
     String getDetailsKey();
 
     String getRecommendedActionsKey();
+
 }

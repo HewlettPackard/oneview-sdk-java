@@ -58,7 +58,7 @@ public class TaskMonitor {
                 errorRecommendations.addAll(errorMessage.getRecommendedActions());
             }
             throw new SDKTasksException(SDKErrorEnum.tasksError, errorMessages.toArray(),
-                    null, errorRecommendations.toArray(), SdkConstants.TASK_MONITOR, null);
+                    errorRecommendations.toArray(), SdkConstants.TASK_MONITOR);
         }
         return taskResult;
     }
@@ -84,7 +84,7 @@ public class TaskMonitor {
 
         throw new SDKTasksException(SDKErrorEnum.tasksError,
                 new String[] {"Task monitoring exceeded the timeout limit of " + taskTimeoutMillis + " milliseconds."},
-                null, new String[] {"Increase the task timeout."}, SdkConstants.TASK_MONITOR, null);
+                new String[] {"Increase the task timeout."}, SdkConstants.TASK_MONITOR);
     }
 
     private TaskResource checkTaskPercentage(BaseClient client, TaskResource task) {

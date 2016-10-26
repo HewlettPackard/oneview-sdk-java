@@ -15,18 +15,17 @@
  *******************************************************************************/
 package com.hp.ov.sdk.exceptions;
 
+/**
+ * Exception resulted as part of task completion check
+ */
 public class SDKTasksException extends SDKException {
 
-    /**
-     * <p>
-     * Exception resulted as part of task completion check
-     * </p>
-     */
     private static final long serialVersionUID = 1L;
 
-    public SDKTasksException(final SDKErrorKey sdkErrorKey, final Object[] messageParameters, final Object[] detailsParameters,
-            final Object[] recommendedActionsParameters, final String errorSource, final Throwable cause) {
-        super(sdkErrorKey, messageParameters, detailsParameters, recommendedActionsParameters, errorSource, cause);
+    public SDKTasksException(SDKErrorKey sdkErrorKey, Object[] messageParameters,
+            Object[] recommendedActionsParameters, String errorSource) {
+
+        super(sdkErrorKey, messageParameters, new Object[0], recommendedActionsParameters, errorSource, null);
     }
 
 }

@@ -164,8 +164,7 @@ public class HttpRestClient {
         LOGGER.debug("Using URL: " + uri.toString());
 
         if (request.getType() == null) {
-            throw new SDKBadRequestException(SDKErrorEnum.badRequestError, null, null, null,
-                    SdkConstants.APPLIANCE, null);
+            throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE);
         }
 
         HttpRequestBase requestBase = null;
@@ -212,8 +211,7 @@ public class HttpRestClient {
             default:
                 // Since request type is an ENUM, there is no way this will be executed
                 LOGGER.error("Request type not supported.");
-                throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
-                        null, null, null, SdkConstants.APPLIANCE, null);
+                throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE);
         }
 
         if (requestBase != null) {
@@ -221,9 +219,8 @@ public class HttpRestClient {
 
             return getResponse(sessionId, requestBase, request.isForceReturnTask());
         }
-        LOGGER.error("could not create a valid request.");
-        throw new SDKBadRequestException(SDKErrorEnum.badRequestError, null, null, null,
-                SdkConstants.APPLIANCE, null);
+        LOGGER.error("Could not create a valid request.");
+        throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE);
     }
 
     private void fillRequestEntity(HttpEntityEnclosingRequestBase base, Request request) {
@@ -263,8 +260,7 @@ public class HttpRestClient {
             } else {
                 LOGGER.error("Unknown entity Content-Type");
 
-                throw new SDKInvalidArgumentException(SDKErrorEnum.internalServerError,
-                        null, null, null, "Unknown entity Content-Type", null);
+                throw new SDKInvalidArgumentException(SDKErrorEnum.internalServerError, "Unknown entity Content-Type");
             }
             base.setEntity(entity);
         }
@@ -292,8 +288,7 @@ public class HttpRestClient {
             }
             return uri.build();
         } catch (URISyntaxException e) {
-            throw new SDKBadRequestException(SDKErrorEnum.badRequestError,
-                    null, null, null, SdkConstants.APPLIANCE, e);
+            throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE, e);
         }
     }
 
@@ -356,7 +351,7 @@ public class HttpRestClient {
 
         } catch (IOException e) {
             LOGGER.error("IO Error: ", e);
-            throw new SDKBadRequestException(SDKErrorEnum.badRequestError, null, null, null, SdkConstants.APPLIANCE, e);
+            throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE, e);
         } finally {
             if (response != null) {
                 EntityUtils.consumeQuietly(response.getEntity());
@@ -386,24 +381,21 @@ public class HttpRestClient {
             return responseCode;
 
         case HttpsURLConnection.HTTP_NOT_FOUND:
-            throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, null, null, null,
-                    SdkConstants.APPLIANCE, null);
+            throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, SdkConstants.APPLIANCE);
         case HttpsURLConnection.HTTP_BAD_REQUEST:
-            throw new SDKBadRequestException(SDKErrorEnum.badRequestError, null, null, null, SdkConstants.APPLIANCE, null);
+            throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE);
         case HttpsURLConnection.HTTP_FORBIDDEN:
-            throw new SDKForbiddenException(SDKErrorEnum.forbiddenRequestError, null, null, null,
-                    SdkConstants.APPLIANCE, null);
+            throw new SDKForbiddenException(SDKErrorEnum.forbiddenRequestError, SdkConstants.APPLIANCE);
         case HttpsURLConnection.HTTP_BAD_METHOD:
-            throw new SDKMethodNotAllowed(SDKErrorEnum.methodNotFound, null, null, null, SdkConstants.APPLIANCE, null);
+            throw new SDKMethodNotAllowed(SDKErrorEnum.methodNotFound, SdkConstants.APPLIANCE);
         case HttpsURLConnection.HTTP_UNAUTHORIZED:
-            throw new SDKUnauthorizedException(SDKErrorEnum.unauthorized, null, null, null, SdkConstants.APPLIANCE, null);
+            throw new SDKUnauthorizedException(SDKErrorEnum.unauthorized, SdkConstants.APPLIANCE);
         case HttpsURLConnection.HTTP_CONFLICT:
         case HttpsURLConnection.HTTP_PRECON_FAILED:
         case HttpsURLConnection.HTTP_UNSUPPORTED_TYPE:
         case HttpsURLConnection.HTTP_INTERNAL_ERROR:
         case HttpsURLConnection.HTTP_UNAVAILABLE:
-            throw new SDKInternalServerErrorException(SDKErrorEnum.internalServerError, null, null, null,
-                    SdkConstants.APPLIANCE, null);
+            throw new SDKInternalServerErrorException(SDKErrorEnum.internalServerError, SdkConstants.APPLIANCE);
         case HttpsURLConnection.HTTP_BAD_GATEWAY:
         case HttpsURLConnection.HTTP_CLIENT_TIMEOUT:
         case HttpsURLConnection.HTTP_ENTITY_TOO_LARGE:
@@ -423,8 +415,7 @@ public class HttpRestClient {
         case HttpsURLConnection.HTTP_USE_PROXY:
         case HttpsURLConnection.HTTP_VERSION:
         default:
-            throw new SDKApplianceNotReachableException(SDKErrorEnum.applicanceNotReachable, null, null, null,
-                    SdkConstants.APPLIANCE, null);
+            throw new SDKApplianceNotReachableException(SDKErrorEnum.applianceNotReachable, SdkConstants.APPLIANCE);
         }
     }
 

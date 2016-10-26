@@ -15,16 +15,18 @@
  *******************************************************************************/
 package com.hp.ov.sdk.exceptions;
 
-public class SDKException extends SdkRuntimeException {
+/**
+ * The generic exception class from which all one-view sdk exception extend from.
+ */
+public class SDKException extends SDKRuntimeException {
 
-    /**
-     * <p>
-     * The generic exception class from which all one-view sdk exception extend
-     * from.
-     * </p>
-     */
     private static final long serialVersionUID = 1L;
+
     private SDKErrorKey errorKey;
+
+    public SDKException(SDKErrorKey sdkErrorKey, String errorSource, Throwable cause) {
+        this(sdkErrorKey, new Object[0], new Object[0], new Object[0], errorSource, cause);
+    }
 
     public SDKException(final SDKErrorKey sdkErrorKey,
                         final Object[] messageParameters,
