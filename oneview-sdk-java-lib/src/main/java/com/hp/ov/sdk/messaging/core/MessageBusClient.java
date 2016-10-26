@@ -25,6 +25,8 @@ import com.hp.ov.sdk.messaging.msmb.MsmbMessage;
 import com.hp.ov.sdk.messaging.msmb.MsmbMessageHandler;
 import com.hp.ov.sdk.messaging.scmb.ScmbMessage;
 import com.hp.ov.sdk.messaging.scmb.ScmbMessageHandler;
+import com.hp.ov.sdk.messaging.scmb.ScmbTypedMessage;
+import com.hp.ov.sdk.messaging.scmb.ScmbTypedMessageHandler;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.rabbitmq.client.AMQP;
@@ -93,7 +95,9 @@ public class MessageBusClient {
         return channel;
     }
 
-    public <T extends BaseModelResource> Channel addScmbHandler(String routingKey, final ScmbMessageHandler<T> handler) {
+    public <T extends BaseModelResource> Channel addScmbTypedHandler(String routingKey,
+            final ScmbTypedMessageHandler<T> handler) {
+
         Channel channel;
 
         try {
@@ -109,8 +113,35 @@ public class MessageBusClient {
                         AMQP.BasicProperties properties, byte[] body) throws IOException {
                     String message = new String(body, "UTF-8");
 
-                    ScmbMessage<T> scmbMessage = (ScmbMessage<T>) MessageBusClient.this.adaptor.buildResource(
+                    ScmbTypedMessage<T> scmbMessage = (ScmbTypedMessage<T>) MessageBusClient.this.adaptor.buildResource(
                             message, handler.typeToken().getType());
+
+                    handler.handleMessage(scmbMessage);
+                }
+            });
+        } catch (IOException e) {
+            throw new SDKMessageBusException("Could not subscribe to State-Changed Message Bus", e);
+        }
+        return channel;
+    }
+
+    public Channel addScmbHandler(String routingKey, final ScmbMessageHandler handler) {
+        Channel channel;
+
+        try {
+            channel = this.connection.createChannel();
+            String queue = channel.queueDeclare().getQueue();
+
+            channel.queueBind(queue, SCMB_EXCHANGE, routingKey);
+
+            channel.basicConsume(queue, true, new DefaultConsumer(channel) {
+                @SuppressWarnings("unchecked")
+                @Override
+                public void handleDelivery(String consumerTag, Envelope envelope,
+                        AMQP.BasicProperties properties, byte[] body) throws IOException {
+                    String message = new String(body, "UTF-8");
+
+                    ScmbMessage scmbMessage = MessageBusClient.this.adaptor.buildResource(message, ScmbMessage.class);
 
                     handler.handleMessage(scmbMessage);
                 }

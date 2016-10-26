@@ -20,14 +20,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.reflect.TypeToken;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
 import com.hp.ov.sdk.messaging.core.MessageBusClient;
 import com.hp.ov.sdk.messaging.scmb.ScmbMessage;
 import com.hp.ov.sdk.messaging.scmb.ScmbMessageHandler;
+import com.hp.ov.sdk.messaging.scmb.ScmbTypedMessage;
+import com.hp.ov.sdk.messaging.scmb.ScmbTypedMessageHandler;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
+import com.hp.ov.sdk.util.JsonPrettyPrinter;
 
 public class StateChangedMessageBusSample {
 
@@ -45,31 +50,45 @@ public class StateChangedMessageBusSample {
     }
 
     private void subscribeToTasksStateChangedMessageBus() {
-        this.client.addScmbHandler("scmb.tasks.#", new ScmbMessageHandler<TaskResource>() {
+        this.client.addScmbTypedHandler("scmb.tasks.#", new ScmbTypedMessageHandler<TaskResource>() {
             @Override
-            public void handleMessage(ScmbMessage<TaskResource> message) {
+            public void handleMessage(ScmbTypedMessage<TaskResource> message) {
                 TaskResource task = message.getResource();
 
                 LOGGER.info("Task received in State-Changed Message Bus: {}", task.toJsonString());
             }
             @Override
-            public TypeToken<ScmbMessage<TaskResource>> typeToken() {
-                return new TypeToken<ScmbMessage<TaskResource>>() {};
+            public TypeToken<ScmbTypedMessage<TaskResource>> typeToken() {
+                return new TypeToken<ScmbTypedMessage<TaskResource>>() {};
             }
         });
     }
 
     private void subscribeToFcNetworksStateChangedMessageBus() {
-        this.client.addScmbHandler("scmb.fc-networks.#", new ScmbMessageHandler<FcNetwork>() {
+        this.client.addScmbTypedHandler("scmb.fc-networks.#", new ScmbTypedMessageHandler<FcNetwork>() {
             @Override
-            public void handleMessage(ScmbMessage<FcNetwork> message) {
+            public void handleMessage(ScmbTypedMessage<FcNetwork> message) {
                 FcNetwork network = message.getResource();
 
                 LOGGER.info("FC-Network received in State-Changed Message Bus: {}", network.toJsonString());
             }
             @Override
-            public TypeToken<ScmbMessage<FcNetwork>> typeToken() {
-                return new TypeToken<ScmbMessage<FcNetwork>>() {};
+            public TypeToken<ScmbTypedMessage<FcNetwork>> typeToken() {
+                return new TypeToken<ScmbTypedMessage<FcNetwork>>() {};
+            }
+        });
+    }
+
+    private void subscribeToAllCreatedResourcesMessageBus() {
+        this.client.addScmbHandler("scmb.*.Created.#", new ScmbMessageHandler() {
+            @Override
+            public void handleMessage(ScmbMessage message) {
+                String resource = message.getResource();
+
+                JsonElement element = new JsonParser().parse(resource);
+
+                LOGGER.info("Created resource message received in State-Changed Message Bus: {}",
+                        JsonPrettyPrinter.print(element));
             }
         });
     }
@@ -83,6 +102,7 @@ public class StateChangedMessageBusSample {
 
         sample.subscribeToTasksStateChangedMessageBus();
         sample.subscribeToFcNetworksStateChangedMessageBus();
+        sample.subscribeToAllCreatedResourcesMessageBus();
 
         Thread.sleep(5 * 60 * 1000); //waits 5 minutes
 

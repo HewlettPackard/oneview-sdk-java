@@ -16,10 +16,13 @@
 
 package com.hp.ov.sdk.messaging.scmb;
 
-import com.hp.ov.sdk.messaging.core.BaseMessageModel;
+import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.BaseModelResource;
 
-public class ScmbMessage extends BaseMessageModel<String> {
+public interface ScmbTypedMessageHandler<T extends BaseModelResource> {
 
-    private static final long serialVersionUID = 2236762264852243766L;
+    void handleMessage(ScmbTypedMessage<T> message);
+
+    TypeToken<ScmbTypedMessage<T>> typeToken();
 
 }
