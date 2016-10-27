@@ -15,6 +15,7 @@
  */
 package com.hpe.i3s.rest.client.deployment;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +25,7 @@ import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 import com.hpe.i3s.client.deployment.PlanScriptClient;
 import com.hpe.i3s.dto.deployment.planscript.PlanScript;
+import com.hpe.i3s.dto.deployment.planscript.PlanType;
 import com.hpe.i3s.dto.deployment.planscript.ScriptDifferences;
 import com.hpe.i3s.rest.client.ImageStreamerClient;
 
@@ -33,7 +35,6 @@ public class PlanScriptClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String PLAN_SCRIPT_RESOURCE_ID = "d1778269-9efe-4a5b-be70-c9f556a47685";
     private static final String PLAN_SCRIPT_NAME = "Sample Plan Script";
     // ================================
 
@@ -47,42 +48,47 @@ public class PlanScriptClientSample {
     }
 
     private void getPlanScriptById() {
-        PlanScript planScript = this.planScriptClient.getById(PLAN_SCRIPT_RESOURCE_ID);
+        PlanScript planScript = this.planScriptClient.getByName(PLAN_SCRIPT_NAME).get(0);
 
-        LOGGER.info("Plan Script object returned to client : " + planScript.toJsonString());
+        planScript = this.planScriptClient.getById(planScript.getResourceId());
+
+        LOGGER.info("Plan script object returned to client : " + planScript.toJsonString());
     }
 
     private void getAllPlanScripts() {
         ResourceCollection<PlanScript> planScripts = this.planScriptClient.getAll();
 
-        LOGGER.info("Plan Scripts returned to client : " + planScripts.toJsonString());
+        LOGGER.info("Plan scripts returned to client : " + planScripts.toJsonString());
     }
 
     private void getPlanScriptByName() {
         PlanScript planScript = this.planScriptClient.getByName(PLAN_SCRIPT_NAME).get(0);
 
-        LOGGER.info("Plan Script object returned to client : " + planScript.toJsonString());
+        LOGGER.info("Plan script object returned to client : " + planScript.toJsonString());
     }
 
     private void createPlanScript() {
         PlanScript planScript = new PlanScript();
 
         planScript.setName(PLAN_SCRIPT_NAME);
+        planScript.setPlanType(PlanType.general);
+        planScript.setContent("Plan script content"); //required
+        planScript.setType(PlanScript.TYPE); //required
+        planScript.setDescription("This is a sample plan script"); //required
 
         PlanScript addedPlanScript = this.planScriptClient.create(planScript);
 
-        LOGGER.info("Plan Script object returned to client : " + addedPlanScript.toJsonString());
+        LOGGER.info("Plan script object returned to client : " + addedPlanScript.toJsonString());
     }
 
     private void updatePlanScript() {
         PlanScript planScript = this.planScriptClient.getByName(PLAN_SCRIPT_NAME).get(0);
-        String resourceId = planScript.getResourceId();
 
         planScript.setHpProvided(!planScript.isHpProvided());
 
-        PlanScript updatedPlanScript = this.planScriptClient.update(resourceId, planScript);
+        PlanScript updatedPlanScript = this.planScriptClient.update(planScript.getResourceId(), planScript);
 
-        LOGGER.info("Plan Script object returned to client : " + updatedPlanScript.toJsonString());
+        LOGGER.info("Plan script object returned to client : " + updatedPlanScript.toJsonString());
     }
 
     private void deletePlanScript() {
@@ -93,9 +99,12 @@ public class PlanScriptClientSample {
     }
 
     private void getPlanScriptDifferences() {
-        ScriptDifferences scriptDifferences = this.planScriptClient.getDifferences(PLAN_SCRIPT_RESOURCE_ID, PLAN_SCRIPT_NAME);
+        PlanScript planScript = this.planScriptClient.getByName(PLAN_SCRIPT_NAME).get(0);
 
-        LOGGER.info("ScriptDifferences object returned to client : " + JsonPrettyPrinter.print(scriptDifferences));
+        ScriptDifferences scriptDifferences = this.planScriptClient.getDifferences(
+                planScript.getResourceId(), StringUtils.EMPTY);
+
+        LOGGER.info("Script differences returned to client : " + JsonPrettyPrinter.print(scriptDifferences));
     }
 
     public static void main(String[] args) {

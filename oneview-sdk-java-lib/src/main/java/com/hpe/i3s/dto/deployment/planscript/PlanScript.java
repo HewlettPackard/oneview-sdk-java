@@ -27,6 +27,8 @@ import com.hpe.i3s.dto.deployment.DependentArtifacts;
 
 public class PlanScript extends BaseModelResource {
 
+    public static final String TYPE = "PlanScript";
+
     private static final long serialVersionUID = 1L;
 
     private String content;

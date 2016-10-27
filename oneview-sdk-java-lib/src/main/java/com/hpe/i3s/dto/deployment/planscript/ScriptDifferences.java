@@ -27,50 +27,50 @@ public class ScriptDifferences implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private List<String> canAdded = new ArrayList<>();
-    private List<String> canRemoved = new ArrayList<>();
-    private boolean contentChanged;
+    private List<String> caAdded = new ArrayList<>();
+    private List<String> caRemoved = new ArrayList<>();
+    private Boolean contentChanged;
     private List<String> defaultValueChanged = new ArrayList<>();
 
     /**
-     * @return the canAdded
+     * @return the caAdded
      */
-    public List<String> getCanAdded() {
-        return canAdded;
+    public List<String> getCaAdded() {
+        return caAdded;
     }
 
     /**
-     * @param canAdded the canAdded to set
+     * @param caAdded the caAdded to set
      */
-    public void setCanAdded(List<String> canAdded) {
-        this.canAdded = canAdded;
+    public void setCaAdded(List<String> caAdded) {
+        this.caAdded = caAdded;
     }
 
     /**
-     * @return the canRemoved
+     * @return the caRemoved
      */
-    public List<String> getCanRemoved() {
-        return canRemoved;
+    public List<String> getCaRemoved() {
+        return caRemoved;
     }
 
     /**
-     * @param canRemoved the canRemoved to set
+     * @param caRemoved the caRemoved to set
      */
-    public void setCanRemoved(List<String> canRemoved) {
-        this.canRemoved = canRemoved;
+    public void setCaRemoved(List<String> caRemoved) {
+        this.caRemoved = caRemoved;
     }
 
     /**
      * @return the contentChanged
      */
-    public boolean isContentChanged() {
+    public Boolean isContentChanged() {
         return contentChanged;
     }
 
     /**
      * @param contentChanged the contentChanged to set
      */
-    public void setContentChanged(boolean contentChanged) {
+    public void setContentChanged(Boolean contentChanged) {
         this.contentChanged = contentChanged;
     }
 

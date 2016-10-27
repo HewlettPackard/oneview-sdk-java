@@ -17,8 +17,8 @@ package com.hpe.i3s.dto.deployment.planscript;
 
 public enum PlanType {
 
-    Capture,
-    Deploy,
-    General
+    capture,
+    deploy,
+    general
 
 }
