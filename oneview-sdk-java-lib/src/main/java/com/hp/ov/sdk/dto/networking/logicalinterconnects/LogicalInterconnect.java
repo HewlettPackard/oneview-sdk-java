@@ -34,7 +34,7 @@ import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
 
 /**
  * The LogicalInterconnects data transfer object (DTO) contains the information
- * used to represent a LogicalInterconnects in the system. The
+ * used to represent LogicalInterconnects in the system. The
  * LogicalInterconnects Dto specifies the set of uplink set that is used to
  * channel the data(both vlan and fiber channel network) and the type of
  * interconnect that is used in the virtual connect to aid in the purpose. The

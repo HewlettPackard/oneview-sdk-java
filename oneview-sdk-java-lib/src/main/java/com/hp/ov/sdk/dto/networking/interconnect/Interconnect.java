@@ -33,7 +33,7 @@ import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 
 /**
  * The Interconnects data transfer object (DTO) contains the information used to
- * represent a interconnects in the system. It is passed in to the update
+ * represent an interconnect in the system. It is passed in to the update
  * interconnects REST api, as well as the update interconnects through java
  * client api.
  */

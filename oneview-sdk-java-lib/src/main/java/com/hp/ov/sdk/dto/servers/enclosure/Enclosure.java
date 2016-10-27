@@ -29,7 +29,7 @@ import com.hp.ov.sdk.dto.servers.RemoteSupportSettings;
 
 /**
  * The Enclosures data transfer object (DTO) contains the information used to
- * represent a enclosure in the system. It is passed in to the add/update
+ * represent an enclosure in the system. It is passed in to the add/update
  * enclosure REST api, as well as the add/update enclosure through java client
  * api.
  */

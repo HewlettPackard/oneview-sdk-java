@@ -16,9 +16,7 @@
 package com.hp.ov.sdk.dto.networking.logicalinterconnectgroup;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -29,9 +27,9 @@ public class ActiveQosConfig extends BaseModelResource {
 
     private static final long serialVersionUID = 1L;
 
-    private ActiveQosConfig.ConfigType configType;
-    private ActiveQosConfig.LinkClassificationType uplinkClassificationType;
-    private ActiveQosConfig.LinkClassificationType downlinkClassificationType;
+    private ConfigType configType;
+    private LinkClassificationType uplinkClassificationType;
+    private LinkClassificationType downlinkClassificationType;
     private List<QosTrafficClassifier> qosTrafficClassifiers = new ArrayList<QosTrafficClassifier>();
 
     /**
@@ -39,7 +37,7 @@ public class ActiveQosConfig extends BaseModelResource {
      * @return
      *     The configType
      */
-    public ActiveQosConfig.ConfigType getConfigType() {
+    public ConfigType getConfigType() {
         return configType;
     }
 
@@ -48,7 +46,7 @@ public class ActiveQosConfig extends BaseModelResource {
      * @param configType
      *     The configType
      */
-    public void setConfigType(ActiveQosConfig.ConfigType configType) {
+    public void setConfigType(ConfigType configType) {
         this.configType = configType;
     }
 
@@ -57,7 +55,7 @@ public class ActiveQosConfig extends BaseModelResource {
      * @return
      *     The uplinkClassificationType
      */
-    public ActiveQosConfig.LinkClassificationType getUplinkClassificationType() {
+    public LinkClassificationType getUplinkClassificationType() {
         return uplinkClassificationType;
     }
 
@@ -66,7 +64,7 @@ public class ActiveQosConfig extends BaseModelResource {
      * @param uplinkClassificationType
      *     The uplinkClassificationType
      */
-    public void setUplinkClassificationType(ActiveQosConfig.LinkClassificationType uplinkClassificationType) {
+    public void setUplinkClassificationType(LinkClassificationType uplinkClassificationType) {
         this.uplinkClassificationType = uplinkClassificationType;
     }
 
@@ -75,7 +73,7 @@ public class ActiveQosConfig extends BaseModelResource {
      * @return
      *     The downlinkClassificationType
      */
-    public ActiveQosConfig.LinkClassificationType getDownlinkClassificationType() {
+    public LinkClassificationType getDownlinkClassificationType() {
         return downlinkClassificationType;
     }
 
@@ -84,7 +82,7 @@ public class ActiveQosConfig extends BaseModelResource {
      * @param downlinkClassificationType
      *     The downlinkClassificationType
      */
-    public void setDownlinkClassificationType(ActiveQosConfig.LinkClassificationType downlinkClassificationType) {
+    public void setDownlinkClassificationType(LinkClassificationType downlinkClassificationType) {
         this.downlinkClassificationType = downlinkClassificationType;
     }
 
@@ -112,104 +110,13 @@ public class ActiveQosConfig extends BaseModelResource {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if (other instanceof ActiveQosConfig) {
-            ActiveQosConfig rhs = ((ActiveQosConfig) other);
-
-            return new EqualsBuilder()
-                    .append(configType, rhs.configType)
-                    .append(uplinkClassificationType, rhs.uplinkClassificationType)
-                    .append(downlinkClassificationType, rhs.downlinkClassificationType)
-                    .append(qosTrafficClassifiers, rhs.qosTrafficClassifiers)
-                    .appendSuper(super.equals(other))
-                    .isEquals();
-        }
-        return false;
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(configType)
-                .append(uplinkClassificationType)
-                .append(downlinkClassificationType)
-                .append(qosTrafficClassifiers)
-                .appendSuper(super.hashCode())
-                .toHashCode();
-    }
-
-    public static enum ConfigType {
-
-        Passthrough("Passthrough"),
-        CustomWithFCoE("CustomWithFCoE"),
-        CustomNoFCoE("CustomNoFCoE"),
-        Unknown("Unknown"),
-        NA("NA");
-        private final String value;
-        private final static Map<String, ActiveQosConfig.ConfigType> CONSTANTS = new HashMap<String, ActiveQosConfig.ConfigType>();
-
-        static {
-            for (ActiveQosConfig.ConfigType c: values()) {
-                CONSTANTS.put(c.value, c);
-            }
-        }
-
-        private ConfigType(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static ActiveQosConfig.ConfigType fromValue(String value) {
-            ActiveQosConfig.ConfigType constant = CONSTANTS.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
-
-    }
-
-    public static enum LinkClassificationType {
-
-        DOT1P("DOT1P"),
-        DSCP("DSCP"),
-        DOT1P_AND_DSCP("DOT1P_AND_DSCP"),
-        Unknown("Unknown"),
-        NA("NA");
-        private final String value;
-        private final static Map<String, ActiveQosConfig.LinkClassificationType> CONSTANTS = new HashMap<String, ActiveQosConfig.LinkClassificationType>();
-
-        static {
-            for (ActiveQosConfig.LinkClassificationType c: values()) {
-                CONSTANTS.put(c.value, c);
-            }
-        }
-
-        private LinkClassificationType(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return this.value;
-        }
-
-        public static ActiveQosConfig.LinkClassificationType fromValue(String value) {
-            ActiveQosConfig.LinkClassificationType constant = CONSTANTS.get(value);
-            if (constant == null) {
-                throw new IllegalArgumentException(value);
-            } else {
-                return constant;
-            }
-        }
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
 }

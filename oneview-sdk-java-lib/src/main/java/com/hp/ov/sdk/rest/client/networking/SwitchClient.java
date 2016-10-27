@@ -51,7 +51,7 @@ public interface SwitchClient extends
     String SWITCHES_UPDATE_PORTS_URI = "/update-ports";
 
     /**
-     * Requests a refresh for the specified Switch.
+     * Requests a refresh for the specified switch.
      *
      * @param resourceId
      *            switch resource identifier as seen in HPE OneView.

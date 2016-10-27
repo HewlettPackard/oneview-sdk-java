@@ -112,12 +112,10 @@ public class DataCenterClientTest {
 
     @Test
     public void shouldRemoveDataCenter() {
-        dataCenterClient.remove(ANY_RESOURCE_ID, TaskTimeout.of(321));
+        dataCenterClient.remove(ANY_RESOURCE_ID);
 
         String expectedUri = DATA_CENTER_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
-
-        expectedRequest.setTimeout(321);
 
         then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(String.class).getType());
     }

@@ -148,7 +148,7 @@ public class HttpRestClient {
     }
 
     /**
-     * Send the request to OV and read the response.
+     * Sends the request to OV and reads the response.
      *
      * @param sessionId OV session token ID.
      * @param request contains the details specific to the current request.

@@ -75,14 +75,15 @@ public interface SasLogicalInterconnectClient extends SearchableResource<SasLogi
             @BodyParam SasLiFirmware sasLiFirmware, RequestOption ... options);
 
     /**
-     * Initiates the replacement operation that enables the new drive enclosure to take over
-     * as a replacement for the prior drive enclosure when a drive enclosure has been physically
-     * replaced. The request requires specification of both the serial numbers of the original
-     * drive enclosure and its replacement to be provided. Track the completion of the
-     * replacement process by the task returned in the location header.
+     * Initiates the replacement operation that enables the new drive enclosure replace the
+     * prior drive enclosure when a drive enclosure has been physically replaced. The request
+     * requires specification of both the serial numbers of the original drive enclosure and
+     * its replacement to be provided. Track the completion of the replacement process by the
+     * task returned in the location header.
      *
      * @param resourceId resource identifier for SAS logical interconnect as seen in HPE OneView.
-     * @param replace specification of both the serial numbers of the original drive enclosure and its replacement.
+     * @param replace specification of both the serial numbers of the original drive enclosure
+     *        and its replacement.
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
      *
@@ -127,7 +128,7 @@ public interface SasLogicalInterconnectClient extends SearchableResource<SasLogi
             @BodyParam SasLogicalInterconnect interconnect, RequestOption ... options);
 
     /**
-     * Returns all the SAS logical interconnects to a consistent state. The SAS logical interconnects
+     * Returns all SAS logical interconnects to a consistent state. The SAS logical interconnects
      * state is compared to the associated SAS logical interconnect group. Any differences identified
      * are corrected, bringing the SAS logical interconnect back to a consistent state.
      * Changes are asynchronously applied to all managed SAS interconnects. Note that if the changes

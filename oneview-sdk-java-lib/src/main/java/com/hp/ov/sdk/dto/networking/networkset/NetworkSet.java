@@ -26,8 +26,8 @@ import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
 
 /**
- * The NetworkSet data transfer object (DTO) contains the information used to to
- * represent a collection of network that represents a network set in the
+ * The NetworkSet data transfer object (DTO) contains the information used to
+ * represent a collection of networks that represent a network set in the
  * system. It is passed in to the add/update networkSet REST api, as well as the
  * add/update networkSet through java client api.
  */

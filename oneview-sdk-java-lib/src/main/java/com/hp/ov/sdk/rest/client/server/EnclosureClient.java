@@ -61,7 +61,7 @@ public interface EnclosureClient extends
     String ROLE_ACTIVE = "?role=Active";
 
     /**
-     * Reapplies the enclosure configuration in the enclosure
+     * Re-applies the enclosure configuration in the enclosure
      * identified by the given resource identifier.
      *
      * @param resourceId enclosure resource identifier as seen in HPE OneView.
@@ -208,7 +208,7 @@ public interface EnclosureClient extends
             @BodyParam EnvironmentalConfigurationUpdate updateEnvironmentalConfiguration);
 
     /**
-     * Refresh the enclosure to fix any configuration issue.
+     * Refreshes the enclosure to fix any configuration issue.
      *
      * @param resourceId enclosure resource identifier as seen in HPE OneView.
      * @param refreshStateConfig refresh state details to fix configuration issues.

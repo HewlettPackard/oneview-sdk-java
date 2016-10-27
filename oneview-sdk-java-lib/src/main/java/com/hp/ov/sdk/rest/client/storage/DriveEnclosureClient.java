@@ -48,7 +48,7 @@ public interface DriveEnclosureClient extends
     DriveEnclosurePortMap getPortMap(@PathParam("resourceId") String resourceId);
 
     /**
-     * Refresh the Drive Enclosure to fix any configuration issue.
+     * Refreshes the Drive Enclosure to fix any configuration issue.
      *
      * @param resourceId Drive Enclosure resource identifier as seen in HPE OneView.
      * @param refreshStateConfig refresh state details to fix configuration issues.

@@ -87,7 +87,7 @@ public interface FcSanManagedSanClient extends SearchableResource<SanResponse> {
     EndpointsCsvFileResponse createEndpointsCsv(@PathParam("resourceId") String resourceId);
 
     /**
-     * Retrieves a list of associations between provided WWNs and the SANs (if any) on which they reside
+     * Retrieves a list of associations between provided WWNs and the SANs (if any) on which they reside.
      *
      * @param wwn The WWN that may be associated with the SAN.
      *

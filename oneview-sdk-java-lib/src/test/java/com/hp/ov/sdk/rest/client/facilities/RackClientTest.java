@@ -111,13 +111,11 @@ public class RackClientTest {
 
     @Test
     public void shouldRemoveRack() {
-        client.remove(ANY_RESOURCE_ID, TaskTimeout.of(321));
+        client.remove(ANY_RESOURCE_ID);
 
 
         String expectedUri = RACK_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
-
-        expectedRequest.setTimeout(321);
 
         then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(String.class).getType());
     }

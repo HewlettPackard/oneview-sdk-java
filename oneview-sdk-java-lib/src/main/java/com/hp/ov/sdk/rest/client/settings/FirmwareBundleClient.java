@@ -42,9 +42,9 @@ public class FirmwareBundleClient {
     }
 
     /**
-     * Upload an SPP ISO image file or a hotfix file to the appliance.
+     * Uploads an SPP ISO image file or a hotfix file to the appliance.
      *
-     * The API supports upload of one hotfix at a time into the system.
+     * The API supports uploading one hotfix at a time into the system.
      *
      * @param firmwareBundle path to the SPP ISO image file or hotfix file.
      * @param aSync flag to indicate whether the request should be processed

@@ -17,7 +17,7 @@
 package com.hp.ov.sdk.rest.http.core.client;
 
 /**
- * Some operations can be time consuming and return a {@link com.hp.ov.sdk.dto.TaskResource}
+ * Some operations can be time consuming and will return a {@link com.hp.ov.sdk.dto.TaskResource}
  * as a response so the client can monitor the progress of the request. In this cases, it is
  * possible to specify a timeout using an implementation of {@link RequestOption}
  * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}.

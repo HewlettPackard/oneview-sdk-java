@@ -40,12 +40,12 @@ public interface LogicalDownlinkClient extends SearchableResource<LogicalDownlin
     LogicalDownlink getByIdWithoutEthernet(@PathParam("resourceId") String resourceId);
 
     /**
-     * Retrieves a {@link ResourceCollection}&lt;{@link LogicalDownlink}&gt; containing details
-     * for all the available logical downlink found under the current HPE OneView, excluding any
+     * Retrieves the {@link ResourceCollection}&lt;{@link LogicalDownlink}&gt; containing details
+     * for all available logical downlinks found under the current HPE OneView, excluding any
      * existing ethernet networks.
      *
      * @return {@link ResourceCollection}&lt;{@link LogicalDownlink}&gt; containing
-     * the details for all found logical downlink.
+     * the details for all logical downlinks found.
      */
     @Endpoint(uri = WITHOUT_ETHERNET_URI)
     ResourceCollection<LogicalDownlink> getAllWithoutEthernet();

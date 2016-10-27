@@ -29,7 +29,7 @@ import com.hp.ov.sdk.dto.servers.OSDeploymentSettings;
 
 /**
  * The EnclosureGroup data transfer object (DTO) contains the information used
- * to represent a enclosure group in the system. It is used to pass details
+ * to represent an enclosure group in the system. It is used to pass details
  * about the LIG that the enclosure group uses while adding an enclosure. It is
  * passed to the add/update enclosureGroup REST api, as well as the add/update
  * enclosureGroup through java client api.

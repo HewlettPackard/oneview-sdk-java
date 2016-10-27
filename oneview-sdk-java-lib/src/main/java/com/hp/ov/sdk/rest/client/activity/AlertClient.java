@@ -35,7 +35,7 @@ public interface AlertClient extends
     String ALERTS_CHANGELOG_URI = "/AlertChangeLog";
 
     /**
-     * Updates the resource identified by <code>resourceId</code> according to the
+     * Updates the resource identified by the <code>resourceId</code> according to the
      * provided <code>resource</code> object.
      *
      * @param resourceId resource identifier as seen in HPE OneView.

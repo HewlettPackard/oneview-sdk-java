@@ -37,78 +37,35 @@ public interface UnmanagedDeviceClient extends
     /**
      * Adds a resource according to the provided <code>resource</code> object.
      *
-     * <p>According to the resource type, the add action can take some time to complete.
-     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
-     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
-     * the default behavior is to wait until the add action completes. Below is an example that
-     * illustrates how the timeout can be specified:
-     *
-     * <pre>{@code
-     *     SomeClient client = oneViewClient.someClient();
-     *     SomeResource resource = new SomeResource();
-     *     TaskResource task = client.add(resource, TaskTimeout.of(5000)); //5 secs
-     * }</pre>
-     *
      * @param resource object containing the details of the resource that should be added.
-     * @param options varargs of {@link RequestOption} which can be used to specify
-     *                some request options.
      *
      * @return {@link UnmanagedDevice} task containing the result of this request.
      */
     @Endpoint(method = HttpMethod.POST)
-    UnmanagedDevice add(@BodyParam UnmanagedDevice resource, RequestOption... options);
+    UnmanagedDevice add(@BodyParam UnmanagedDevice resource);
 
     /**
-     * Updates the resource identified by <code>resourceId</code> according to the
+     * Updates the resource identified by the <code>resourceId</code> according to the
      * provided <code>resource</code> object.
-     *
-     * <p>According to the resource type, the update action can take some time to complete.
-     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
-     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
-     * the default behavior is to wait until the update action completes. Below is an example that
-     * illustrates how the timeout can be specified:
-     *
-     * <pre>{@code
-     *     SomeClient client = oneViewClient.someClient();
-     *     SomeResource resource = client.getByName("resourceName");
-     *     //do some changes to the resource
-     *     TaskResource task = client.update(resource.getResourceId(), resource, TaskTimeout.of(5000)); //5 secs
-     * }</pre>
      *
      * @param resourceId resource identifier as seen in HPE OneView.
      * @param resource object containing the details of the resource that should be created.
-     * @param options varargs of {@link RequestOption} which can be used to specify
-     *                some request options.
      *
      * @return {@link UnmanagedDevice} object containing the result of this request.
      */
     @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
     UnmanagedDevice update(@PathParam("resourceId") String resourceId,
-            @BodyParam UnmanagedDevice resource, RequestOption... options);
+            @BodyParam UnmanagedDevice resource);
 
     /**
      * Removes the resource identified by the provided <code>resourceId</code>.
      *
-     * <p>According to the resource type, the remove action can take some time to complete.
-     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
-     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
-     * the default behavior is to wait until the remove action completes. Below is an example that
-     * illustrates how the timeout can be specified:
-     *
-     * <pre>{@code
-     *     String resourceName = "someResourceName";
-     *     SomeResource resource = client.getByName(resourceName);
-     *     TaskResource task = client.remove(resource.getResourceId(), TaskTimeout.of(5000)); //5 secs
-     * }</pre>
-     *
      * @param resourceId resource identifier as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
-     *                some request options.
      *
      * @return {@link String} containing the result of this request.
      */
     @Endpoint(uri = "/{resourceId}", method = HttpMethod.DELETE)
-    String remove(@PathParam("resourceId") String resourceId, RequestOption... options);
+    String remove(@PathParam("resourceId") String resourceId);
 
     /**
      * Removes the {@link UnmanagedDevice}(s) matching the filter. A filter is required
@@ -127,7 +84,7 @@ public interface UnmanagedDeviceClient extends
 
     /**
      * Returns a description of the environmental configuration (supported feature set,
-     * calibrated minimum and maximum power, location and dimensions, ...) of the resource.
+     * calibrated minimum and maximum power, location, and dimensions, ...) of the resource.
      *
      * @param resourceId unmanaged device resource identifier as seen in HPE OneView.
      *

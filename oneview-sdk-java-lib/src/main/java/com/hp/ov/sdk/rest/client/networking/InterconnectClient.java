@@ -101,7 +101,7 @@ public interface InterconnectClient extends
     InterconnectsStatistics getStatistics(@PathParam("resourceId") String resourceId);
 
     /**
-     * Retrieve the statistics of an interconnect port for the specified
+     * Retrieves the statistics of an interconnect port for the specified
      * interconnect resource identifier and port name.
      *
      * @param resourceId resource identifier for interconnect as seen in HPE OneView.
@@ -113,8 +113,8 @@ public interface InterconnectClient extends
     PortStatistics getPortStatistics(@PathParam("resourceId") String resourceId, @PathParam("portName") String portName);
 
     /**
-     * Retrieve the statistics of an interconnect subport for the specified
-     * interconnect resource identifier, port name and subport number.
+     * Retrieves the statistics of an interconnect subport for the specified
+     * interconnect resource identifier, port name, and subport number.
      *
      * @param resourceId resource identifier for interconnect as seen in HPE OneView.
      * @param portName name of the port as seen in HPE OneView

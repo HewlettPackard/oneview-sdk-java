@@ -119,7 +119,7 @@ public class ObjectToJsonConverter {
     }
 
     /**
-     * Process the JSON string received from OneView in order to remove/include unsupported characters.
+     * Processes the JSON string received from HPE OneView to remove or include unsupported characters.
      *
      * @param inputJson the JSON string received from OneView.
      *

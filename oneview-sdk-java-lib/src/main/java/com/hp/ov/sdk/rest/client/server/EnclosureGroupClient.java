@@ -32,7 +32,7 @@ public interface EnclosureGroupClient extends
     String ENCLOSURE_GROUP_SCRIPT_URI = "/script";
 
     /**
-     * Creates a enclosure group according to the provided {@link EnclosureGroup} object.
+     * Creates an enclosure group according to the provided {@link EnclosureGroup} object.
      *
      * @param enclosureGroup object containing the enclosure group details.
      *
@@ -42,7 +42,7 @@ public interface EnclosureGroupClient extends
     EnclosureGroup create(@BodyParam EnclosureGroup enclosureGroup);
 
     /**
-     * Updates a {@link EnclosureGroup} identified by the given resource identifier.
+     * Updates an {@link EnclosureGroup} identified by the given resource identifier.
      *
      * @param resourceId enclosure group resource identifier as seen in HPE OneView.
      * @param enclosureGroup object containing the enclosure group details.
@@ -74,7 +74,7 @@ public interface EnclosureGroupClient extends
 
     /**
      * Updates the configuration script for the specified enclosure group resource identifier.
-     * 
+     *
      * @param resourceId enclosure group resource identifier as seen in HPE OneView.
      * @param scriptData script data to be updated for enclosure group.
      *

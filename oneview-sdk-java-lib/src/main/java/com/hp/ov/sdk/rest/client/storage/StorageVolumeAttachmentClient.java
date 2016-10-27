@@ -42,7 +42,7 @@ public interface StorageVolumeAttachmentClient extends SearchableResource<Storag
     String STORAGE_VOLUME_ATTACHMENT_REPAIR_URI = "/repair";
 
     /**
-     * Returns the storage volume attachment details for a available storage volume attachment.
+     * Returns the storage volume attachment details for an available storage volume attachment.
      *
      * @param attachmentId storage volume attachment identifier as seen in HPE OneView.
      * @param pathId storage volume attachment path identifier as seen in HPE OneView.
@@ -54,7 +54,7 @@ public interface StorageVolumeAttachmentClient extends SearchableResource<Storag
             @PathParam("pathId") String pathId);
 
     /**
-     * Returns all the storage volume attachment paths for a storage volume attachment.
+     * Returns all storage volume attachment paths for a storage volume attachment.
      *
      * @param attachmentId storage volume attachment identifier as seen in HPE OneView.
      *

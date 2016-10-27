@@ -105,7 +105,7 @@ public interface ServerHardwareClient extends
     /**
      * Retrieves the settings that describe the environmental configuration
      * (supported feature set, calibrated minimum and maximum power,
-     * location and dimensions, ...) of the server hardware resource.
+     * location, and dimensions, ...) of the server hardware resource.
      *
      * @param resourceId server hardware resource identifier as seen in HPE OneView.
      *

@@ -17,10 +17,6 @@ package com.hp.ov.sdk.constants;
 
 public class SdkConstants {
 
-    /**
-     * PLEASE, try to keep it in alphabetical order
-     */
-
     public static final String APPLIANCE = "appliance";
 
     public static final String CERTS = "appliance-certificates";

@@ -36,7 +36,7 @@ public interface SasInterconnectClient extends
     String SAS_INTERCONNECT_URI_REFRESH = "/refreshState";
 
     /**
-     * Refresh a {@link SasInterconnect} identified by the given resource identifier.
+     * Refreshes a {@link SasInterconnect} identified by the given resource identifier.
      *
      * @param resourceId SAS interconnect resource identifier as seen in HPE OneView.
      * @param requestBody Initial SAS interconnect refresh state. At the moment refreshPending is permitted.

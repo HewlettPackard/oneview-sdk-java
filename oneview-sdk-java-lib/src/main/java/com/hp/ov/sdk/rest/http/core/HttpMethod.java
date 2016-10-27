@@ -17,6 +17,10 @@ package com.hp.ov.sdk.rest.http.core;
 
 public enum HttpMethod {
 
-    GET, PUT, POST, DELETE, PATCH
+    DELETE,
+    GET,
+    PATCH,
+    POST,
+    PUT
 
 }
