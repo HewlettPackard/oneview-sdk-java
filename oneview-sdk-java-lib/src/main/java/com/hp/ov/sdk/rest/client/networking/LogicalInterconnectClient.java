@@ -311,7 +311,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
             @BodyParam EthernetInterconnectSettingsV2 ethernetSettings, RequestOption... options);
 
     /**
-     * This modules aids in fetching a logical interconnect to a consistent state. The current logical
+     * This module aids in fetching a logical interconnect to a consistent state. The current logical
      * interconnect state is compared to the associated logical interconnect group. Any differences
      * identified are corrected, bringing the logical interconnect back to a consistent state.
      * Changes are asynchronously applied to all managed interconnects.
@@ -354,7 +354,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
 
     /**
      * This module aids in fetching a collection of uplink ports from the member
-     * interconnects which are eligible for assignment to an analyzer port.
+     * interconnects, which are eligible for assignment to an analyzer port.
      *
      * @param resourceId resource identifier for logical interconnect as seen in HPE OneView.
      *

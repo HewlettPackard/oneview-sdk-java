@@ -1,6 +1,6 @@
 /*
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
- *  
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -51,7 +51,7 @@ public interface ServerProfileTemplateClient extends
 
     /**
      * Transforms an existing server profile template by supplying a new server
-     * hardware type and/or enclosure group. A profile will be returned with a
+     * hardware type and enclosure group or both. A profile will be returned with a
      * new configuration based on the capabilities of the supplied server
      * hardware type and/or enclosure group. All deployed connections will have
      * their port assignment set to 'Auto'. Re-selection of the server hardware

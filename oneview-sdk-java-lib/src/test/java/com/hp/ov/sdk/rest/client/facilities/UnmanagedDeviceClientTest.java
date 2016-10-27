@@ -110,12 +110,10 @@ public class UnmanagedDeviceClientTest {
 
     @Test
     public void shouldRemoveUnmanagedDevice() {
-        client.remove(ANY_RESOURCE_ID, TaskTimeout.of(321));
+        client.remove(ANY_RESOURCE_ID);
 
         String expectedUri = UNMANAGED_DEVICE_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
-
-        expectedRequest.setTimeout(321);
 
         then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(String.class).getType());
     }

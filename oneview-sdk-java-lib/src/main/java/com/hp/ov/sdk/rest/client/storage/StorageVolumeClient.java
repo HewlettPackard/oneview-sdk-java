@@ -81,7 +81,7 @@ public interface StorageVolumeClient extends
             @PathParam("snapshotId") String snapshotId);
 
     /**
-     * Returns all the snapshots available for an existing storage volume.
+     * Returns all snapshots available for an existing storage volume.
      *
      * @param resourceId resource identifier for the storage volume as seen in HPE OneView.
      *

@@ -67,7 +67,7 @@ public interface LogicalEnclosureClient extends
     TaskResource updateFromGroup(@PathParam("resourceId") String resourceId, RequestOption ... options);
 
     /**
-     * Reapplies the logical enclosure configuration in the logical enclosure identified
+     * Re-applies the logical enclosure configuration in the logical enclosure identified
      * by the provided <code>resourceId</code>.
      *
      * Since this operation can take some time to complete, it is possible to specify a timeout
@@ -95,7 +95,7 @@ public interface LogicalEnclosureClient extends
     String getConfigurationScript(@PathParam("resourceId") String resourceId);
 
     /**
-     * Updates the logical enclosure script identified by <code>resourceId</code> according
+     * Updates the logical enclosure script identified by the <code>resourceId</code> according
      * to the provided script data.
      *
      * Since this operation can take some time to complete, it is possible to specify a timeout

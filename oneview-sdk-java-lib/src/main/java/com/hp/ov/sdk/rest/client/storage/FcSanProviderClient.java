@@ -28,7 +28,7 @@ import com.hp.ov.sdk.rest.reflect.PathParam;
 
 /**
  * A provider is a software plugin for the SAN Resource Manager that enables the resource manager
- * to communicate with some kind of device that provides SAN network zoning. For example,
+ * to communicate with a device that provides SAN network zoning. For example,
  * The SAN Resource Manager includes a provider that communicates with Brocade Network Advisor or
  * HPE SAN Network Advisor systems, and another that communicates with HPE 5900 series switches.
  */
@@ -42,11 +42,11 @@ public interface FcSanProviderClient extends
     /**
      * Adds a resource according to the provided <code>resource</code> object.
      *
-     * <p>According to the resource type, the add action can take some time to complete.
-     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
-     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
-     * the default behavior is to wait until the add action completes. Below is an example that
-     * illustrates how the timeout can be specified:
+     * <p>Depending on the resource type, the add action can take some time to complete, therefore,
+     * you can specify a timeout using an implementation of {@link RequestOption} called
+     * {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
+     * the default behavior is to wait until the add action completes. The following example shows
+     * how to specify the timeout:
      *
      * <pre>{@code
      *     SomeClient client = oneViewClient.someClient();
@@ -56,7 +56,7 @@ public interface FcSanProviderClient extends
      *
      * @param providerId The ID of the provider of the device manager
      * @param deviceManager object containing the SAN manager credential details.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options varargs of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.

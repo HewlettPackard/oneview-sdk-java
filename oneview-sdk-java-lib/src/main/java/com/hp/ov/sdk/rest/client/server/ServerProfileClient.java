@@ -71,7 +71,7 @@ public interface ServerProfileClient extends
     TaskResource deleteByFilter(@PathParam("filter") String filter, RequestOption... options);
 
     /**
-     * Retrieves the preview of manual and automatic updates required to make the
+     * Retrieves a preview of manual and automatic updates required to make the
      * server profile consistent with its template.
      *
      * @param resourceId server profile resource identifier as seen in HPE OneView.
@@ -92,8 +92,8 @@ public interface ServerProfileClient extends
     ServerProfileHealth getMessages(@PathParam("resourceId") String resourceId);
 
     /**
-     * Transforms an existing profile by supplying a new server hardware type and/or
-     * enclosure group. A profile will be returned with a new configuration based on
+     * Transforms an existing profile by supplying a new server hardware type and
+     * enclosure group or both . A profile will be returned with a new configuration based on
      * the capabilities of the supplied server hardware type and/or enclosure group.
      * All deployed connections will have their port assignment set to 'Auto'. Re-selection
      * of the server hardware may also be required. The new profile can subsequently be
@@ -116,7 +116,7 @@ public interface ServerProfileClient extends
 
     /**
      * The module aids in retrieving the list of ethernet networks, fibre
-     * channel networks and network sets that are available to a server profile
+     * channel networks, and network sets that are available to a server profile,
      * along with their respective ports for the specified enclosure group URI and
      * server hardware type URI.
      *
