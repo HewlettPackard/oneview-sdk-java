@@ -52,7 +52,7 @@ public interface DriveEnclosureClient extends
      *
      * @param resourceId Drive Enclosure resource identifier as seen in HPE OneView.
      * @param refreshStateConfig refresh state details to fix configuration issues.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.

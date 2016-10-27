@@ -27,11 +27,11 @@ public interface AddableResource<T> {
     /**
      * Adds a resource according to the provided <code>resource</code> object.
      *
-     * <p>Based on the resource type, the add action can take some time to complete, therefore,
-     * you can specify a timeout using an implementation of {@link RequestOption} called
-     * {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
-     * the default behavior is to wait until the add action completes. The following example shows
-     * how to specify the timeout:
+     * <p>Depending on the resource type, the add action can take some time to complete.
+     * Therefore, you can specify a timeout using an implementation of {@link RequestOption}
+     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is
+     * specified, the default behavior is to wait until the add action completes.
+     * The following example shows how to specify the timeout:
      *
      * <pre>{@code
      *     SomeClient client = oneViewClient.someClient();
@@ -40,7 +40,7 @@ public interface AddableResource<T> {
      * }</pre>
      *
      * @param resource object containing the details of the resource that should be added.
-     * @param options varargs of {@link RequestOption}, which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} task containing the result of this request.

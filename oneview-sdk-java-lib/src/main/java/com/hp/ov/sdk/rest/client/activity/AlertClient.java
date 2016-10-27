@@ -41,7 +41,7 @@ public interface AlertClient extends
      * @param resourceId resource identifier as seen in HPE OneView.
      * @param resource object containing the details of the resource that should be created.
      *
-     * @return {@link AlertResource} the updated alert resource.
+     * @return the updated {@link AlertResource}.
      */
     @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
     AlertResource update(@PathParam("resourceId") String resourceId, @BodyParam AlertUpdate resource);
@@ -49,9 +49,8 @@ public interface AlertClient extends
     /**
      * Deletes the {@link AlertResource} identified by the given resource identifier.
      *
-     * @param resourceId alert resource identifier as seen in HPE OneView.
+     * @param resourceId resource identifier as seen in HPE OneView.
      *
-     * @return {@link TaskResource} containing the task status for the process.
      * @return {@link String} containing the response of the process.
      */
     @Endpoint(uri = "/{resourceId}", method = HttpMethod.DELETE)
@@ -64,7 +63,7 @@ public interface AlertClient extends
      * process the request asynchronously or synchronously, based on the aSync flag input.
      *
      * @param filter A general filter/query string that narrows the list of resources.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.

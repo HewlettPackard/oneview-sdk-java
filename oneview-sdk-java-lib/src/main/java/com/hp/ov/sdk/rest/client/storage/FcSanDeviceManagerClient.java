@@ -32,7 +32,6 @@ public interface FcSanDeviceManagerClient extends
 
     String FC_SANS_DEVICE_MANAGER_URI = "/rest/fc-sans/device-managers";
 
-
     /**
      * Removes the resource identified by the provided <code>resourceId</code>.
      *

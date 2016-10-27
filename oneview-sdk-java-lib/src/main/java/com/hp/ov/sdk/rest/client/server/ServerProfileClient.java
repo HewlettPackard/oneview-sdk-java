@@ -62,7 +62,7 @@ public interface ServerProfileClient extends
      * to identify the set of resources to be removed.
      *
      * @param filter A general filter/query string that narrows the list of resources.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
 +    *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.

@@ -27,12 +27,14 @@ public interface SearchableResource<T> extends RetrievableResource<T> {
      * available resources found under the current HPE OneView that match the <code>name</code> provided.
      *
      * <p>The filter applied in this case is as follows:
-     * <p>filter="name matches '<i>name</i>'"
+     * <pre>
+     *     filter="name matches '<i>name</i>'"
+     * </pre>
      *
      * @param name name that should be used to filter the resources found in HPE OneView.
      *
      * @return {@link ResourceCollection} paginated collection containing the details for the
-     * available resources that match the filter.
+     * available resources if type &lt;T&gt; that match the filter.
      */
     @Endpoint
     ResourceCollection<T> getByName(@QueryParam String name);

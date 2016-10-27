@@ -65,13 +65,13 @@ public interface EnclosureClient extends
      * identified by the given resource identifier.
      *
      * @param resourceId enclosure resource identifier as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                 some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
     @Endpoint(uri = "/{resourceId}" + ENCLOSURE_CONFIGURATION_URI, method = HttpMethod.PUT)
-    public TaskResource updateConfiguration(@PathParam("resourceId") String resourceId, RequestOption ... options);
+    TaskResource updateConfiguration(@PathParam("resourceId") String resourceId, RequestOption ... options);
 
     /**
      * Retrieves the configuration script for the specified enclosure resource identifier.
@@ -81,20 +81,20 @@ public interface EnclosureClient extends
      * @return the configuration script for the specified enclosure.
      */
     @Endpoint(uri = "/{resourceId}" + ENCLOSURE_SCRIPT_URI)
-    public String getConfigurationScript(@PathParam("resourceId") String resourceId);
+    String getConfigurationScript(@PathParam("resourceId") String resourceId);
 
     /**
      * Updates the configuration script for the specified enclosure resource identifier.
      *
      * @param resourceId enclosure resource identifier as seen in HPE OneView.
      * @param scriptData script data to be updated for enclosure.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                 some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
     @Endpoint(uri = "/{resourceId}" + ENCLOSURE_SCRIPT_URI, method = HttpMethod.PUT)
-    public TaskResource updateConfigurationScript(@PathParam("resourceId") String resourceId
+    TaskResource updateConfigurationScript(@PathParam("resourceId") String resourceId
             , @BodyParam String scriptData, RequestOption ... options);
 
     /**
@@ -106,7 +106,7 @@ public interface EnclosureClient extends
      * @return {@link SsoUrlData} the data used for single sign URL.
      */
     @Endpoint(uri = "/{resourceId}" + ENCLOSURE_OA_SSO_URI + ROLE_ACTIVE)
-    public SsoUrlData getActiveOaSsoUrl(@PathParam("resourceId") String resourceId);
+    SsoUrlData getActiveOaSsoUrl(@PathParam("resourceId") String resourceId);
 
     /**
      * Retrieves data that can be used to construct a single sign-on URL
@@ -117,7 +117,7 @@ public interface EnclosureClient extends
      * @return {@link SsoUrlData} the data used for single sign URL.
      */
     @Endpoint(uri = "/{resourceId}" + ENCLOSURE_ACTIVE_OA_SSO_URI)
-    public SsoUrlData getActiveOaSsoUrl_V120(@PathParam("resourceId") String resourceId);
+    SsoUrlData getActiveOaSsoUrl_V120(@PathParam("resourceId") String resourceId);
 
     /**
      * Retrieves data that can be used to construct a single sign-on URL
@@ -128,7 +128,7 @@ public interface EnclosureClient extends
      * @return {@link SsoUrlData} the data used for single sign URL.
      */
     @Endpoint(uri = "/{resourceId}" + ENCLOSURE_OA_SSO_URI + ROLE_STANDBY)
-    public SsoUrlData getStandbyOaSsoUrl(@PathParam("resourceId") String resourceId);
+    SsoUrlData getStandbyOaSsoUrl(@PathParam("resourceId") String resourceId);
 
     /**
      * Retrieves data that can be used to construct a single sign-on URL
@@ -139,20 +139,20 @@ public interface EnclosureClient extends
      * @return {@link SsoUrlData} the data used for single sign URL.
      */
     @Endpoint(uri = "/{resourceId}" + ENCLOSURE_STANDBY_OA_SSO_URI)
-    public SsoUrlData getStandbyOaSsoUrl_V120(@PathParam("resourceId") String resourceId);
+    SsoUrlData getStandbyOaSsoUrl_V120(@PathParam("resourceId") String resourceId);
 
     /**
      * Updates the enclosure configuration with that of the enclosure group script.
      * <b>This is not applicable if the enclosure is monitored.</b>
      *
      * @param resourceId enclosure resource identifier as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                 some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
     @Endpoint(uri = "/{resourceId}" + ENCLOSURE_COMPLIANCE_URI, method = HttpMethod.PUT)
-    public TaskResource updateCompliance(@PathParam("resourceId") String resourceId, RequestOption ... options);
+    TaskResource updateCompliance(@PathParam("resourceId") String resourceId, RequestOption ... options);
 
     /**
      * Applies the firmware baseline to the enclosure. This method can be used to
@@ -162,13 +162,13 @@ public interface EnclosureClient extends
      *
      * @param resourceId enclosure resource identifier as seen in HPE OneView.
      * @param fwBaselineConfig the firmware baseline to be applied to the enclosure.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                 some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
     @Endpoint(uri = "/{resourceId}" + ENCLOSURE_FW_BASELINE_URI, method = HttpMethod.PUT)
-    public TaskResource updateFwBaseline(@PathParam("resourceId") String resourceId,
+    TaskResource updateFwBaseline(@PathParam("resourceId") String resourceId,
             @BodyParam FwBaselineConfig fwBaselineConfig, RequestOption ... options);
 
     /**
@@ -180,7 +180,7 @@ public interface EnclosureClient extends
      * such as power and cpu.
      */
     @Endpoint(uri = "/{resourceId}" + ENCLOSURE_UTILIZATION_URI)
-    public UtilizationData getUtilization(@PathParam("resourceId") String resourceId);
+    UtilizationData getUtilization(@PathParam("resourceId") String resourceId);
 
     /**
      * Retrieves the environmental configuration of the enclosure identified
@@ -191,7 +191,7 @@ public interface EnclosureClient extends
      * @return {@link EnvironmentalConfiguration} for the specified enclosure.
      */
     @Endpoint(uri = "/{resourceId}" + ENVIRONMENT_CONFIGURATION_URI)
-    public EnvironmentalConfiguration getEnvironmentalConfiguration(@PathParam("resourceId") String resourceId);
+    EnvironmentalConfiguration getEnvironmentalConfiguration(@PathParam("resourceId") String resourceId);
 
     /**
      * Updates the environmental configuration of the enclosure identified
@@ -204,7 +204,7 @@ public interface EnclosureClient extends
      * @return {@link EnvironmentalConfiguration} for the specified enclosure.
      */
     @Endpoint(uri = "/{resourceId}" + ENVIRONMENT_CONFIGURATION_URI, method = HttpMethod.PUT)
-    public EnvironmentalConfiguration updateEnvironmentalConfiguration(@PathParam("resourceId") String resourceId,
+    EnvironmentalConfiguration updateEnvironmentalConfiguration(@PathParam("resourceId") String resourceId,
             @BodyParam EnvironmentalConfigurationUpdate updateEnvironmentalConfiguration);
 
     /**
@@ -212,13 +212,13 @@ public interface EnclosureClient extends
      *
      * @param resourceId enclosure resource identifier as seen in HPE OneView.
      * @param refreshStateConfig refresh state details to fix configuration issues.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                 some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
     @Endpoint(uri = "/{resourceId}" + ENCLOSURE_REFRESH_STATE_URI, method = HttpMethod.PUT)
-    public TaskResource updateRefreshState(@PathParam("resourceId") String resourceId,
+    TaskResource updateRefreshState(@PathParam("resourceId") String resourceId,
             @BodyParam RefreshStateConfig refreshStateConfig, RequestOption ... options);
 
 }

@@ -97,7 +97,7 @@ public interface StorageVolumeClient extends
      * @param resourceId resource identifier for a storage volume as seen in HPE OneView.
      * @param snapshot {@link StorageVolumeSnapshot} object containing the data to be used during
      * the snapshot creation.
-     * @param options varargs of {@link RequestOption} which can be used to specify some request options.
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify some request options.
      *
      * @return {@link TaskResource} which returns the task status for the process.
      */
@@ -110,7 +110,7 @@ public interface StorageVolumeClient extends
      *
      * @param storageVolumeId resource identifier for a storage volume as seen in HPE OneView.
      * @param snapshotId resource identifier for the snapshot of the storage volume.
-     * @param options varargs of {@link RequestOption} which can be used to specify some request options.
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify some request options.
      *
      * @return {@link TaskResource} which returns the task status for the process.
      */
@@ -131,7 +131,7 @@ public interface StorageVolumeClient extends
      * Removes extra presentations from a specified storage volume on the storage system.
      *
      * @param repair information about the extra paths to delete.
-     * @param options varargs of {@link RequestOption} which can be used to specify some request options.
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify some request options.
      *
      * @return {@link TaskResource} which returns the task status for the process.
      */

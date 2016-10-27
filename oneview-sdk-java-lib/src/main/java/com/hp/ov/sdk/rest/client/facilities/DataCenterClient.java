@@ -72,10 +72,11 @@ public interface DataCenterClient extends
      * Removes the {@link DataCenter}(s) matching the filter. A filter is required
      * to identify the set of resources to be removed. The actual deletion will proceed
      * asynchronously, although the method can process the request asynchronously or
-     * synchronously, based on the aSync flag input.
+     * synchronously based on the {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}
+     * specified.
      *
-     * @param filter A general filter or query string that narrows the list of resources.
-     * @param options varargs of {@link RequestOption}, which can be used to specify
+     * @param filter A general filter string that narrows the list of resources.
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                 some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.

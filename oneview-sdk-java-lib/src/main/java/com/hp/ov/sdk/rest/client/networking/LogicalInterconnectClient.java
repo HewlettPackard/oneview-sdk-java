@@ -65,7 +65,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
      * The module aids in creating an interconnect at the given location.
      *
      * @param location location for the logical interconnect as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -78,7 +78,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
      *
      * @param enclosureUri enclosure URI as seen in HPE OneView.
      * @param bay bay of the interconnect as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options..
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -106,7 +106,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
      *
      * @param resourceId resource identifier for logical interconnect as seen in HPE OneView.
      * @param snmpConfiguration object containing the update to be made to the logical interconnect.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -157,7 +157,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
      *
      * @param resourceId resource identifier for logical interconnect as seen in HPE OneView.
      * @param liFirmware object containing the update to be made to the logical interconnect.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -181,7 +181,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
      * @param resourceId resource identifier for logical interconnect as seen in HPE OneView.
      * @param qosAggregatedConfiguration object containing the update to be made to the
      * logical interconnect.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -231,7 +231,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
      * interconnect as seen in HPE OneView.
      * @param telemetryConfiguration object containing the update to be made to existing
      *            telemetry configuration for logical interconnect.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -259,7 +259,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
      *
      * @param resourceId resource identifier for logical interconnect as seen in HPE OneView.
      * @param portMonitor port monitor fom the logical interconnect as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -273,7 +273,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
      * interconnect configuration to all managed interconnects.
      *
      * @param resourceId resource identifier for logical interconnect as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -287,7 +287,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
      *
      * @param resourceId resource identifier for logical interconnect as seen in HPE OneView.
      * @param interconnectSettings interconnect settings for logical interconnect as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -301,7 +301,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
      *
      * @param resourceId resource identifier for logical interconnect as seen in HPE OneView.
      * @param ethernetSettings ethernet settings for logical interconnect as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -317,7 +317,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
      * Changes are asynchronously applied to all managed interconnects.
      *
      * @param resourceId resource identifier for logical interconnect as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -331,7 +331,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
      * @param resourceId resource identifier for logical interconnect as seen in HPE OneView.
      * @param networkUris list containing the resource identifiers for logical interconnect
      * as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.

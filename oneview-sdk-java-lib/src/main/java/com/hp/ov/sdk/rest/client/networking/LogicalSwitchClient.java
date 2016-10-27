@@ -44,7 +44,7 @@ public interface LogicalSwitchClient extends
      * resource identifier. The request can be processed asynchronously or synchronously.
      *
      * @param resourceId logical switch identifier as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.

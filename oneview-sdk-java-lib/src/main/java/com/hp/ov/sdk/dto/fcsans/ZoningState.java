@@ -16,9 +16,9 @@
 package com.hp.ov.sdk.dto.fcsans;
 
 public enum ZoningState {
-    
-    Open, 
-    Unknown, 
-    Zoned;
-    
+
+    Open,
+    Unknown,
+    Zoned
+
 }

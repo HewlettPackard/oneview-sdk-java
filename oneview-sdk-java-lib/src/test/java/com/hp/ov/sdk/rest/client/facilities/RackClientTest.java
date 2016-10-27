@@ -113,7 +113,6 @@ public class RackClientTest {
     public void shouldRemoveRack() {
         client.remove(ANY_RESOURCE_ID);
 
-
         String expectedUri = RACK_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 

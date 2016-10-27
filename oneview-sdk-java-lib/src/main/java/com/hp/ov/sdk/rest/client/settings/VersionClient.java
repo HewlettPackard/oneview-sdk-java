@@ -38,20 +38,20 @@ public class VersionClient {
 
     /**
      * Returns the range of possible API versions supported by the appliance. The response
-     * contains the current version and the minimum version. The current version is the
+     * contains the current version and the oldest version. The current version is the
      * recommended version to specify in the REST header. The other versions are supported
      * for backward compatibility, but might not support the most current features.
      *
      * @return {@link ApplianceVersions} containing the versions supported by the appliance.
      */
     public ApplianceVersions getApplianceVersions() {
-        LOGGER.info("VersionClient : getVersion : Start");
+        LOGGER.info("Retrieving HPE OneView supported versions");
 
         Request request = new Request(HttpMethod.GET, APPLIANCE_VERSION);
 
         ApplianceVersions versions = baseClient.executeRequest(request, ApplianceVersions.class);
 
-        LOGGER.info("VersionClient : getVersion : End");
+        LOGGER.info("HPE OneView supported versions retrieved!");
 
         return versions;
     }
