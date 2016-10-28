@@ -54,4 +54,23 @@ public class OneViewClientSample {
         return this.config;
     }
 
+    /* SDKConfiguration can also be build programmatically */
+    /*
+    public SDKConfiguration getSDKConfiguration() {
+        if (config == null) {
+            try {
+                config = SDKConfiguration.create()
+                    .withOneViewHostname("10.10.10.10")
+                    .withOneViewUser("administrator", "admin")
+                    .withOneViewDomain("local")
+                    .withOneViewApiVersion(ApiVersion.V_300)
+                    .build();
+            } catch (SDKPropertiesFileException e) {
+                LOGGER.error("Some required properties may not have been configured!", e);
+            }
+        }
+        return this.config;
+    }
+    */
+
 }
