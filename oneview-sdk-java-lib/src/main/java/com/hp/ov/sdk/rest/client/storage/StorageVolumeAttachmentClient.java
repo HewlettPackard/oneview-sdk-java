@@ -77,7 +77,7 @@ public interface StorageVolumeAttachmentClient extends SearchableResource<Storag
      * Removes extra presentations of a storage volume attachment from a specific server profile.
      *
      * @param repair data of the server profile that should have their storage volumes repaired.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.

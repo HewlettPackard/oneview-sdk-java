@@ -25,7 +25,7 @@ import com.hp.ov.sdk.rest.reflect.QueryParam;
 public interface RetrievableResource<T> {
 
     /**
-     * Retrieves the resource identified by the given <code>resourceId</code>.
+     * Retrieves the resource identified by the provided <code>resourceId</code>.
      *
      * @param resourceId resource identifier as seen in HPE OneView.
      *
@@ -36,7 +36,7 @@ public interface RetrievableResource<T> {
 
     /**
      * Retrieves a paginated collection ({@link ResourceCollection}) containing the details for the
-     * available resources found under the current HPE OneView.
+     * available resources of type &lt;T&gt; found under the current HPE OneView.
      *
      * @return {@link ResourceCollection} paginated collection containing the details for the
      * available resources.
@@ -46,7 +46,7 @@ public interface RetrievableResource<T> {
 
     /**
      * Retrieves a paginated collection ({@link ResourceCollection}) containing the details for the
-     * available resources found under the current HPE OneView.
+     * available resources of type &lt;T&gt; found under the current HPE OneView.
      *
      * @param query URI query containing the parameters that should be used to build the request.
      *
@@ -58,7 +58,7 @@ public interface RetrievableResource<T> {
 
     /**
      * Retrieves a collection ({@link ResourceCollection}) containing the details for <b>all</b>
-     * available resources of a given type found under the current HPE OneView.
+     * available resources of type &lt;T&gt; found under the current HPE OneView.
      *
      * @return {@link ResourceCollection} collection containing the details for the available resources.
      */
@@ -67,7 +67,7 @@ public interface RetrievableResource<T> {
 
     /**
      * Retrieves a collection ({@link ResourceCollection}) containing the details for <b>all</b>
-     * available resources of a given type found under the current HPE OneView.
+     * available resources of type &lt;T&gt; found under the current HPE OneView.
      *
      * @param count defines the number of resources that should be retrieved in each request.
      *

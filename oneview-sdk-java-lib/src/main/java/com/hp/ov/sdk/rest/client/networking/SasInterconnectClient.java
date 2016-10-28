@@ -40,7 +40,7 @@ public interface SasInterconnectClient extends
      *
      * @param resourceId SAS interconnect resource identifier as seen in HPE OneView.
      * @param requestBody Initial SAS interconnect refresh state. At the moment refreshPending is permitted.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.

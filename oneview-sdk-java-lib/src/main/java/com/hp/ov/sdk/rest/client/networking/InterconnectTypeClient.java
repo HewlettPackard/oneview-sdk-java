@@ -33,7 +33,9 @@ public interface InterconnectTypeClient extends SearchableResource<InterconnectT
      * available resources found under the current HPE OneView that match the <code>name</code> provided.
      *
      * <p>The filter applied in this case is as follows:
-     * <p>filter="name matches '<i>name</i>'"
+     * <pre>
+     *     filter="name matches '<i>name</i>'"
+     * </pre>
      *
      * @param name interconnect type name that should be used to filter the resources found in HPE OneView.
      *

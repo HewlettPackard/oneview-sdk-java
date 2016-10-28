@@ -58,7 +58,7 @@ public interface LogicalEnclosureClient extends
      * is specified, the default behavior is to wait until the update completes.
      *
      * @param resourceId resource identifier as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} task containing the result of this request.
@@ -75,7 +75,7 @@ public interface LogicalEnclosureClient extends
      * is specified, the default behavior is to wait until the update completes.
      *
      * @param resourceId resource identifier as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} task containing the result of this request.
@@ -104,7 +104,7 @@ public interface LogicalEnclosureClient extends
      *
      * @param resourceId resource identifier as seen in HPE OneView.
      * @param scriptData script data to be configured in the logical enclosure.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} task containing the result of this request.
@@ -125,7 +125,7 @@ public interface LogicalEnclosureClient extends
      *
      * @param resourceId resource identifier as seen in HPE OneView.
      * @param supportDump object containing the details about how the support dump should be created.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} task containing the result of this request.

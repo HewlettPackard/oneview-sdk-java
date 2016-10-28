@@ -67,7 +67,7 @@ public interface ServerHardwareClient extends
      *
      * @param resourceId server hardware resource identifier as seen in HPE OneView.
      * @param serverPowerControlRequest object containing the ServerPowerControlRequest details.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} which returns the task status for the process.
@@ -82,7 +82,7 @@ public interface ServerHardwareClient extends
      *
      * @param resourceId server hardware resource identifier as seen in HPE OneView.
      * @param refreshStateRequest object containing the refresh state request details.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} which returns the task status for the process.
@@ -131,7 +131,7 @@ public interface ServerHardwareClient extends
      * required by HPE OneView to manage the server.
      *
      * @param resourceId server hardware resource identifier as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      * @return {@link TaskResource} which returns the task status for the process.
      */

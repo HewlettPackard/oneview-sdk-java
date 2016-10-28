@@ -66,7 +66,7 @@ public interface FcSanManagedSanClient extends SearchableResource<SanResponse> {
      * Creates a new SAN issues report indicating any connectivity issues in the specified SAN.
      *
      * @param resourceId managed SAN resource identifier as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link FcSansManagedSanTask} which contains the task status for the process

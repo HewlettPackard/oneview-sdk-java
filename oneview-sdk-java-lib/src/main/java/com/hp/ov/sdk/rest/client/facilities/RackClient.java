@@ -40,7 +40,7 @@ public interface RackClient extends
      *
      * @param resource object containing the details of the resource that should be added.
      *
-     * @return {@link Rack} object containing the result of this request.
+     * @return the added {@link Rack}.
      */
     @Endpoint(method = HttpMethod.POST)
     Rack add(@BodyParam Rack resource);
@@ -50,9 +50,9 @@ public interface RackClient extends
      * provided <code>resource</code> object.
      *
      * @param resourceId resource identifier as seen in HPE OneView.
-     * @param resource object containing the details of the resource that should be created.
+     * @param resource object containing the details of the resource that should be updated.
      *
-     * @return {@link Rack} object containing the result of this request.
+     * @return the updated {@link Rack}.
      */
     @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
     Rack update(@PathParam("resourceId") String resourceId, @BodyParam Rack resource);
@@ -70,11 +70,12 @@ public interface RackClient extends
     /**
      * Removes the {@link Rack}(s) matching the filter. A filter is required
      * to identify the set of resources to be removed. The actual deletion will proceed
-     * asynchronously. Although, the method can process the request asynchronously or
-     * synchronously, based on the aSync flag input.
+     * asynchronously, although the method can process the request asynchronously or
+     * synchronously based on the {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}
+     * specified.
      *
-     * @param filter A general filter/query string that narrows the list of resources.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param filter a general filter string that narrows the list of resources.
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                 some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -83,8 +84,8 @@ public interface RackClient extends
     TaskResource removeByFilter(@QueryParam(key = URIQuery.FILTER) String filter, RequestOption ... options);
 
     /**
-     * Retrieves the topology information for the rack resource specified by
-     * the given identifier.
+     * Retrieves the topology information for the rack resource identified
+     * by the provided <code>resourceId</code>.
      *
      * @param resourceId rack resource identifier as seen in HPE OneView.
      *

@@ -30,11 +30,11 @@ public interface PatchableResource {
      * Applies a patch on the resource identified by <code>resourceId</code> according to the
      * provided {@link Patch} object.
      *
-     * <p>According to the resource type, the patch action can take some time to complete.
-     * Thus, it is possible to specify a timeout using an implementation of {@link RequestOption}
-     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is specified,
-     * the default behavior is to wait until the patch action completes. Below is an example that
-     * illustrates how the timeout can be specified:
+     * <p>Depending on the resource type, the patch action can take some time to complete.
+     * Therefore, you can specify a timeout using an implementation of {@link RequestOption}
+     * called {@link com.hp.ov.sdk.rest.http.core.client.TaskTimeout}. If no timeout is
+     * specified, the default behavior is to wait until the patch action completes.
+     * The following example shows how to specify the timeout:
      *
      * <pre>{@code
      *     SomeClient client = oneViewClient.someClient();
@@ -46,7 +46,7 @@ public interface PatchableResource {
      * @param resourceId resource identifier as seen in HPE OneView.
      * @param patch object containing the patch details that should be applied on the
      *              specified resource.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} task containing the result of this request.

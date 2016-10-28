@@ -29,7 +29,6 @@ import com.hp.ov.sdk.rest.reflect.PathParam;
 @Api(FabricClient.FABRIC_URI)
 public interface FabricClient extends SearchableResource<Fabric> {
 
-
     String FABRIC_URI = "/rest/fabrics";
     String RESERVED_VLAN_RANGE_URI = "/reserved-vlan-range";
 
@@ -48,7 +47,7 @@ public interface FabricClient extends SearchableResource<Fabric> {
      *
      * @param resourceId fabric resource identifier as seen in HPE OneView.
      * @param vlanPool object containing the range details.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.

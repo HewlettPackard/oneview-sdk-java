@@ -56,13 +56,13 @@ public interface FcSanProviderClient extends
      *
      * @param providerId The ID of the provider of the device manager
      * @param deviceManager object containing the SAN manager credential details.
-     * @param options varargs of {@link RequestOption}, which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
     @Endpoint(uri = "/{providerId}" + FC_SANS_PROVIDER_DEVICE_MANAGER_URI ,method = HttpMethod.POST)
-    public TaskResource addSanManager(@PathParam("providerId") String providerId,
+    TaskResource addSanManager(@PathParam("providerId") String providerId,
             @BodyParam DeviceManagerResponse deviceManager, RequestOption... options);
 
 }

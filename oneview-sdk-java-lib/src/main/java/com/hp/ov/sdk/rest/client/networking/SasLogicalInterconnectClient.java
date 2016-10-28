@@ -65,7 +65,7 @@ public interface SasLogicalInterconnectClient extends SearchableResource<SasLogi
      *
      * @param resourceId resource identifier for SAS logical interconnect as seen in HPE OneView.
      * @param sasLiFirmware object containing the update to be made to the SAS logical interconnect.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -84,7 +84,7 @@ public interface SasLogicalInterconnectClient extends SearchableResource<SasLogi
      * @param resourceId resource identifier for SAS logical interconnect as seen in HPE OneView.
      * @param replace specification of both the serial numbers of the original drive enclosure
      *        and its replacement.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -98,7 +98,7 @@ public interface SasLogicalInterconnectClient extends SearchableResource<SasLogi
      * managed SAS interconnects of a SAS logical interconnect.
      *
      * @param resourceId resource identifier for SAS logical interconnect as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -118,7 +118,7 @@ public interface SasLogicalInterconnectClient extends SearchableResource<SasLogi
      *
      * @param resourceId resource identifier for SAS logical interconnect as seen in HPE OneView.
      * @param interconnect {@link SasLogicalInterconnect} SAS logical interconnect.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -138,7 +138,7 @@ public interface SasLogicalInterconnectClient extends SearchableResource<SasLogi
      * and/or adding new interconnects for management.
      *
      * @param sasLogicalInterconnectUris list containing the URIs of SAS logical interconnects as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.

@@ -56,7 +56,7 @@ public interface EthernetNetworkClient extends
      *                     is specified through the VLAN range. For each network, the VLAN number
      *                     will be used as suffix to uniquely identify the network.
      *
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} task containing the result of this request.

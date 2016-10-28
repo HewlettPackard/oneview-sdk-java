@@ -53,7 +53,7 @@ public interface InterconnectClient extends
      *
      * @param resourceId resource identifier for interconnect as seen in HPE OneView.
      * @param port containing the interconnect port details, used to update a interconnect port.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -68,7 +68,7 @@ public interface InterconnectClient extends
      *
      * @param resourceId resource identifier for interconnect as seen in HPE OneView.
      * @param ports containing the interconnect ports details, used to update the interconnect ports.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
@@ -81,7 +81,7 @@ public interface InterconnectClient extends
      * Triggers a reset of the interconnect port protection.
      *
      * @param resourceId resource identifier for interconnect as seen in HPE OneView.
-     * @param options varargs of {@link RequestOption} which can be used to specify
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
