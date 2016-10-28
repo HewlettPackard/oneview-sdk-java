@@ -31,7 +31,6 @@ public class OsBuildPlanClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String OS_BUILD_PLAN_RESOURCE_ID = "d1778269-9efe-4a5b-be70-c9f556a47685";
     private static final String OS_BUILD_PLAN_NAME = "Sample OS Build Plan";
     // ================================
 
@@ -44,7 +43,9 @@ public class OsBuildPlanClientSample {
     }
 
     private void getOsBuildPlanById() {
-        OeBuildPlan osBuildPlan = this.osBuildPlanClient.getById(OS_BUILD_PLAN_RESOURCE_ID);
+        OeBuildPlan osBuildPlan = this.osBuildPlanClient.getByName(OS_BUILD_PLAN_NAME).get(0);
+
+        osBuildPlan = this.osBuildPlanClient.getById(osBuildPlan.getResourceId());
 
         LOGGER.info("OS Build Plan object returned to client : " + osBuildPlan.toJsonString());
     }
@@ -65,6 +66,9 @@ public class OsBuildPlanClientSample {
         OeBuildPlan osBuildPlan = new OeBuildPlan();
 
         osBuildPlan.setName(OS_BUILD_PLAN_NAME);
+        osBuildPlan.setDescription("Sample build plan description");
+        osBuildPlan.setType(OeBuildPlan.TYPE);
+        osBuildPlan.setOeBuildPlanType("deploy");
 
         OeBuildPlan addedOsBuildPlan = this.osBuildPlanClient.create(osBuildPlan);
 
@@ -98,7 +102,6 @@ public class OsBuildPlanClientSample {
         sample.getAllOsBuildPlans();
         sample.updateOsBuildPlan();
         sample.deleteOsBuildPlan();
-
     }
 
 }

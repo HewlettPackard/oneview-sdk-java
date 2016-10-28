@@ -27,13 +27,14 @@ import com.hpe.i3s.dto.deployment.DependentArtifacts;
 
 public class OeBuildPlan extends BaseModelResource {
 
+    public static final String TYPE = "OeBuildPlan";
+
     private static final long serialVersionUID = 1L;
 
     private String buildPlanid;
-    private BuildStep buildStep;
+    private List<BuildStep> buildStep = new ArrayList<>();
     private List<CustomAttribute> customAttributes = new ArrayList<>();
     private List<DependentArtifacts> dependentArtifacts = new ArrayList<>();
-    private String etag;
     private boolean hpProvided;
     private String oeBuildPlanType;
 
@@ -54,14 +55,14 @@ public class OeBuildPlan extends BaseModelResource {
     /**
      * @return the buildStep
      */
-    public BuildStep getBuildStep() {
+    public List<BuildStep> getBuildStep() {
         return buildStep;
     }
 
     /**
      * @param buildStep the buildStep to set
      */
-    public void setBuildStep(BuildStep buildStep) {
+    public void setBuildStep(List<BuildStep> buildStep) {
         this.buildStep = buildStep;
     }
 
@@ -91,20 +92,6 @@ public class OeBuildPlan extends BaseModelResource {
      */
     public void setDependentArtifacts(List<DependentArtifacts> dependentArtifacts) {
         this.dependentArtifacts = dependentArtifacts;
-    }
-
-    /**
-     * @return the etag
-     */
-    public String getEtag() {
-        return etag;
-    }
-
-    /**
-     * @param etag the etag to set
-     */
-    public void setEtag(String etag) {
-        this.etag = etag;
     }
 
     /**

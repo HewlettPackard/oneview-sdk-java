@@ -39,7 +39,6 @@ public interface OsBuildPlanClient extends
     @Endpoint(method = HttpMethod.POST)
     OeBuildPlan create(@BodyParam OeBuildPlan resource);
 
-
     /**
      * Updates the resource identified by <code>resourceId</code> according to the
      * provided <code>resource</code> object.
@@ -51,7 +50,6 @@ public interface OsBuildPlanClient extends
      */
     @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
     OeBuildPlan update(@PathParam("resourceId") String resourceId, @BodyParam OeBuildPlan resource);
-
 
     /**
      * Deletes the resource identified by the provided <code>resourceId</code>.
