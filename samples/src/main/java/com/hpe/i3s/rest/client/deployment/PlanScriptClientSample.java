@@ -19,9 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 import com.hpe.i3s.client.deployment.PlanScriptClient;
 import com.hpe.i3s.dto.deployment.planscript.PlanScript;
@@ -41,8 +39,7 @@ public class PlanScriptClientSample {
     private final PlanScriptClient planScriptClient;
 
     public PlanScriptClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
-        ImageStreamerClient i3sClient = new ImageStreamerClient(oneViewClient);
+        ImageStreamerClient i3sClient = new ImageStreamerClientSample().getImageStreamerClient();
 
         this.planScriptClient = i3sClient.planScript();
     }

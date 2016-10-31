@@ -15,6 +15,10 @@
  */
 package com.hpe.i3s.rest.client.deployment;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,8 +26,11 @@ import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.http.core.client.DownloadPath;
 import com.hpe.i3s.client.deployment.ArtifactsBundleClient;
 import com.hpe.i3s.dto.deployment.artifactsbundle.ArtifactsBundle;
+import com.hpe.i3s.dto.deployment.artifactsbundle.CreateArtifactsBundle;
+import com.hpe.i3s.dto.deployment.artifactsbundle.InputArtifacts;
 import com.hpe.i3s.dto.deployment.artifactsbundle.UserBackupParams;
 import com.hpe.i3s.rest.client.ImageStreamerClient;
 
@@ -33,17 +40,20 @@ public class ArtifactsBundleClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String ARTIFACTS_BUNDLE_RESOURCE_ID = "abc123";
-    private static final String ARTIFACTS_BUNDLE_NAME = "Sample Artifact Bundle";
+    private static final String ARTIFACTS_BUNDLE_RESOURCE_ID = "92710244-aa44-4ee5-b96e-4d60d67f49d0";
+    private static final String ARTIFACTS_BUNDLE_BACKUP_RESOURCE_ID = "8063162e-b99c-4cca-9487-37c7f992724e";
+    private static final String ARTIFACTS_BUNDLE_NAME = "kova-bundle";
     private static final String ARTIFACTS_BUNDLE_NAME_UPDATED =  ARTIFACTS_BUNDLE_NAME + " Updated";
-    private static final String ARTIFACTS_BUNDLE_FILE_PATH =  "src/main/resources/bundle.ab";
+    private static final String ARTIFACTS_BUNDLE_FILE_PATH =  "C:\\Users\\kovalski\\Downloads\\kova-bundle-file.zip";
+    private static final String ARTIFACTS_BUNDLE_BACKUP_FILE_PATH =  "C:\\Users\\kovalski\\Downloads\\fake-backup-bundle.zip";
+    private static final String DEPLOYMENT_GROUP_RESOURCE_ID = "40ca28c0-d7cd-4312-be24-46f57e5737e4";
     // ================================
+
 
     private final ArtifactsBundleClient artifactsBundleClient;
 
     public ArtifactsBundleClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
-        ImageStreamerClient i3sClient = new ImageStreamerClient(oneViewClient);
+        ImageStreamerClient i3sClient = new ImageStreamerClientSample().getImageStreamerClient();
 
         this.artifactsBundleClient = i3sClient.artifactsBundle();
     }
@@ -68,16 +78,15 @@ public class ArtifactsBundleClientSample {
         LOGGER.info("Artifacts Bundles returned to client: {}", artifactsBundles.toJsonString());
     }
 
-    private void getBackupArchiveBundle() {
-        ArtifactsBundle artifactsBundle = this.artifactsBundleClient.getBackupArchiveBundle(ARTIFACTS_BUNDLE_RESOURCE_ID);
+    private void downloadBackupArchiveBundle() {
+        String response = this.artifactsBundleClient.downloadBackupArchiveBundle(ARTIFACTS_BUNDLE_BACKUP_RESOURCE_ID,
+                DownloadPath.at("C:\\Users\\kovalski\\Downloads\\"));
 
-        artifactsBundle = this.artifactsBundleClient.getBackupArchiveBundle(artifactsBundle.getResourceId());
-
-        LOGGER.info("Artifacts Bundle returned to client: {}", artifactsBundle.toJsonString());
+        LOGGER.info("response returned to client: {}", response);
     }
 
     private void getBackupBundle() {
-        ArtifactsBundle artifactsBundle = this.artifactsBundleClient.getBackupBundle(ARTIFACTS_BUNDLE_RESOURCE_ID);
+        ArtifactsBundle artifactsBundle = this.artifactsBundleClient.getBackupBundle(ARTIFACTS_BUNDLE_BACKUP_RESOURCE_ID);
 
         artifactsBundle = this.artifactsBundleClient.getBackupBundle(artifactsBundle.getResourceId());
 
@@ -91,9 +100,7 @@ public class ArtifactsBundleClientSample {
     }
 
     private void createArtifactsBundle() {
-        ArtifactsBundle artifactsBundle = new ArtifactsBundle();
-
-        artifactsBundle.setName(ARTIFACTS_BUNDLE_NAME);
+        CreateArtifactsBundle artifactsBundle = this.buildAddArtifactBundle();
 
         TaskResource task = this.artifactsBundleClient.create(artifactsBundle);
 
@@ -101,13 +108,15 @@ public class ArtifactsBundleClientSample {
     }
 
     private void createArtifactsBundleWithFile() {
-        TaskResource task = this.artifactsBundleClient.create(ARTIFACTS_BUNDLE_FILE_PATH);
+        File file = new File(ARTIFACTS_BUNDLE_FILE_PATH);
+        TaskResource task = this.artifactsBundleClient.create(file);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
     private void createBackupBundle() {
         UserBackupParams backupParams = new UserBackupParams();
+        backupParams.setDeploymentGroupURI("/rest/deployment-groups/" + DEPLOYMENT_GROUP_RESOURCE_ID);
 
         TaskResource task = this.artifactsBundleClient.createBackupBundle(backupParams);
 
@@ -116,8 +125,9 @@ public class ArtifactsBundleClientSample {
 
     private void extractBackupBundle() {
         UserBackupParams backupParams = new UserBackupParams();
+        backupParams.setDeploymentGroupURI("/rest/deployment-groups/" + DEPLOYMENT_GROUP_RESOURCE_ID);
 
-        TaskResource task = this.artifactsBundleClient.extractBackupBundle(ARTIFACTS_BUNDLE_RESOURCE_ID, backupParams);
+        TaskResource task = this.artifactsBundleClient.extractBackupBundle(ARTIFACTS_BUNDLE_BACKUP_RESOURCE_ID, backupParams);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -129,28 +139,25 @@ public class ArtifactsBundleClientSample {
     }
 
     private void downloadBundle() {
-        String response = this.artifactsBundleClient.downloadBundle(ARTIFACTS_BUNDLE_RESOURCE_ID);
+        String response = this.artifactsBundleClient.downloadBundle(ARTIFACTS_BUNDLE_RESOURCE_ID,
+                DownloadPath.at("C:\\Users\\kovalski\\Downloads\\"));
 
-        LOGGER.info("Task object returned to client: {}", response);
+        LOGGER.info("response returned to client: {}", response);
     }
 
     private void stopBundleCreation() {
-        ArtifactsBundle artifactsBundle = new ArtifactsBundle();
-
-        artifactsBundle.setName(ARTIFACTS_BUNDLE_NAME);
+        CreateArtifactsBundle artifactsBundle = this.buildAddArtifactBundle();
 
         TaskResource task = this.artifactsBundleClient.create(artifactsBundle);
         String response = this.artifactsBundleClient.stopBundleCreation(ARTIFACTS_BUNDLE_RESOURCE_ID, task.getUri());
 
-        LOGGER.info("Response object returned to client: {}", response);
+        LOGGER.info("Response returned to client: {}", response);
     }
 
     private void createBackupArchiveBundle() {
-        ArtifactsBundle artifactsBundle = new ArtifactsBundle();
+        File file = new File(ARTIFACTS_BUNDLE_BACKUP_FILE_PATH);
 
-        artifactsBundle.setName(ARTIFACTS_BUNDLE_NAME);
-
-        TaskResource task = this.artifactsBundleClient.createBackupArchiveBundle(ARTIFACTS_BUNDLE_FILE_PATH);
+        TaskResource task = this.artifactsBundleClient.createBackupArchiveBundle(file);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -160,10 +167,10 @@ public class ArtifactsBundleClientSample {
 
         artifactsBundle.setName(ARTIFACTS_BUNDLE_NAME_UPDATED);
 
-        TaskResource task = this.artifactsBundleClient.update(
+        artifactsBundle = this.artifactsBundleClient.update(
                 artifactsBundle.getResourceId(), artifactsBundle);
 
-        LOGGER.info("Task object returned to client: {}", task.toJsonString());
+        LOGGER.info("ArtifactsBundle object returned to client: {}", artifactsBundle.toJsonString());
     }
 
     private void deleteArtifactsBundle() {
@@ -172,6 +179,32 @@ public class ArtifactsBundleClientSample {
         TaskResource task = this.artifactsBundleClient.delete(artifactsBundle.getResourceId());
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
+    }
+
+    private CreateArtifactsBundle buildAddArtifactBundle() {
+        CreateArtifactsBundle artifactsBundle = new CreateArtifactsBundle();
+        artifactsBundle.setName(ARTIFACTS_BUNDLE_NAME);
+        artifactsBundle.setDescription("");
+
+        List<InputArtifacts> buildPlans = new ArrayList<>();
+        InputArtifacts buildPlan = new InputArtifacts();
+        buildPlan.setResourceUri("/rest/build-plans/" + OsBuildPlanClientSample.OS_BUILD_PLAN_RESOURCE_ID);
+        buildPlans.add(buildPlan);
+        artifactsBundle.setBuildPlans(buildPlans);
+
+        List<InputArtifacts> deploymentPlans = new ArrayList<>();
+        InputArtifacts deploymentPlan = new InputArtifacts();
+        deploymentPlan.setResourceUri("/rest/deployment-plans/" + DeploymentPlanClientSample.DEPLOYMENT_PLAN_RESOURCE_ID);
+        deploymentPlans.add(deploymentPlan);
+        artifactsBundle.setDeploymentPlans(deploymentPlans);
+
+        List<InputArtifacts> goldenImages = new ArrayList<>();
+        InputArtifacts goldenImage = new InputArtifacts();
+        goldenImage.setResourceUri("/rest/golden-images/" + GoldenImageClientSample.GOLDEN_IMAGE_RESOURCE_ID);
+        goldenImages.add(goldenImage);
+        artifactsBundle.setGoldenImages(goldenImages);
+
+        return artifactsBundle;
     }
 
     public static void main(String[] args) {
@@ -185,8 +218,8 @@ public class ArtifactsBundleClientSample {
         sample.getAllArtifactsBundles();
         sample.getArtifactsBundleById();
         sample.getArtifactsBundleByName();
-        sample.getBackupArchiveBundle();
         sample.getBackupBundle();
+        sample.downloadBackupArchiveBundle();
         sample.updateArtifactsBundle();
         sample.downloadBundle();
         sample.extractBackupBundle();

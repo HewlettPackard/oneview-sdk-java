@@ -1,6 +1,6 @@
 /*
  * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
- *  
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,15 +15,20 @@
  */
 package com.hpe.i3s.rest.client.deployment;
 
+import java.io.File;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.OneViewClientSample;
+import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.dto.TaskResource;
+import com.hp.ov.sdk.rest.http.core.client.DownloadPath;
 import com.hpe.i3s.client.deployment.GoldenImageClient;
 import com.hpe.i3s.dto.deployment.goldenimage.GoldenImage;
+import com.hpe.i3s.dto.deployment.goldenimage.GoldenImageFile;
 import com.hpe.i3s.rest.client.ImageStreamerClient;
+import com.hpe.i3s.rest.client.statelessserver.OsVolumeClientSample;
 
 public class GoldenImageClientSample {
 
@@ -31,15 +36,16 @@ public class GoldenImageClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String GOLDEN_IMAGE_NAME = "Sample-GoldenImage";
+    public static final String GOLDEN_IMAGE_RESOURCE_ID = "e19c0f43-eebb-4831-847c-0a6638398f23";
+    private static final String GOLDEN_IMAGE_NAME = "ESX-Ecosystem";
     private static final String GOLDEN_IMAGE_NAME_UPDATED =  GOLDEN_IMAGE_NAME + "_Updated";
+    private static final String GOLDEN_IMAGE_FILE_PATH = "C:\\Users\\kovalski\\Downloads\\ESX-Ecosystem.zip";
     // ================================
 
     private final GoldenImageClient client;
 
     public GoldenImageClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
-        ImageStreamerClient i3sClient = new ImageStreamerClient(oneViewClient);
+        ImageStreamerClient i3sClient = new ImageStreamerClientSample().getImageStreamerClient();
 
         this.client = i3sClient.goldenImage();
     }
@@ -60,10 +66,26 @@ public class GoldenImageClientSample {
 
     private void createGoldenImage() {
         GoldenImage goldenImage = new GoldenImage();
-
+        goldenImage.setType(ResourceCategory.RC_GOLDEN_IMAGE);
         goldenImage.setName(GOLDEN_IMAGE_NAME);
+        goldenImage.setDescription("");
+        goldenImage.setImageCapture(true);
+        goldenImage.setOsVolumeURI("/rest/os-volumes/" + OsVolumeClientSample.OS_VOLUME_RESOURCE_ID);
+        goldenImage.setBuildPlanUri("/rest/build-plans/" + OsBuildPlanClientSample.OS_BUILD_PLAN_RESOURCE_ID);
 
         String response = this.client.create(goldenImage);
+
+        LOGGER.info("Response returned to client: {}", response);
+    }
+
+    private void addGoldenImage() {
+        GoldenImageFile goldenImageFile = new GoldenImageFile();
+        goldenImageFile.setName(GOLDEN_IMAGE_NAME);
+        File file = new File(GOLDEN_IMAGE_FILE_PATH);
+        goldenImageFile.setFile(file );
+        goldenImageFile.setDescription("");
+
+        String response = this.client.create(goldenImageFile);
 
         LOGGER.info("Response returned to client: {}", response);
     }
@@ -79,25 +101,27 @@ public class GoldenImageClientSample {
     }
 
     private void deleteGoldenImage() {
-        GoldenImage goldenImage = this.client.getByName(GOLDEN_IMAGE_NAME_UPDATED).get(0);
+        GoldenImage goldenImage = this.client.getByName(GOLDEN_IMAGE_NAME).get(0);
 
-        String response = this.client.delete(goldenImage.getResourceId());
+        TaskResource taskResource = this.client.delete(goldenImage.getResourceId());
 
-        LOGGER.info("Response returned to client: {}", response);
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
 
     private void downloadGoldenImage() {
-        GoldenImage goldenImage = this.client.getByName(GOLDEN_IMAGE_NAME_UPDATED).get(0);
+        GoldenImage goldenImage = this.client.getByName(GOLDEN_IMAGE_NAME).get(0);
 
-        String goldenImageContent = this.client.download(goldenImage.getResourceId());
+        String response = this.client.download(goldenImage.getResourceId(),
+                DownloadPath.at("C:\\Users\\kovalski\\Downloads\\"));
 
-        LOGGER.info("Golden Image content returned to client: {}", goldenImageContent);
+        LOGGER.info("response returned to client: {}", response);
     }
 
     private void getGoldenImageArchivedLogs() {
-        GoldenImage goldenImage = this.client.getByName(GOLDEN_IMAGE_NAME_UPDATED).get(0);
+        GoldenImage goldenImage = this.client.getByName(GOLDEN_IMAGE_NAME).get(0);
 
-        String archivedLogs = this.client.getArchivedLogs(goldenImage.getResourceId());
+        String archivedLogs = this.client.getArchivedLogs(goldenImage.getResourceId(),
+                DownloadPath.at("C:\\Users\\kovalski\\Downloads\\"));
 
         LOGGER.info("Golden Image archived logs returned to client: {}", archivedLogs);
     }
@@ -106,6 +130,7 @@ public class GoldenImageClientSample {
         GoldenImageClientSample sample = new GoldenImageClientSample();
 
         sample.createGoldenImage();
+        sample.addGoldenImage();
         sample.getGoldenImageById();
         sample.getAllGoldenImages();
         sample.downloadGoldenImage();

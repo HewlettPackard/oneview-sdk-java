@@ -15,8 +15,14 @@
  */
 package com.hp.ov.sdk.rest.http.core.client;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,9 +32,12 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.Header;
+import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.EntityBuilder;
 import org.apache.http.client.methods.HttpDelete;
@@ -218,7 +227,7 @@ public class HttpRestClient {
         if (requestBase != null) {
             setRequestHeaders(sessionId, requestBase);
 
-            return getResponse(sessionId, requestBase, request.isForceReturnTask());
+            return getResponse(sessionId, requestBase, request.isForceReturnTask(), request.getDownloadPath());
         }
         LOGGER.error("Could not create a valid request.");
         throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE);
@@ -331,9 +340,11 @@ public class HttpRestClient {
      *  Request information.
      * @param forceReturnTask
      *  Forces the check for the Location header (task) even when the response code is not 202.
+     * @param downloadPath
+     *  The directory where a binary response will be downloaded.
      * @return {@link String} object containing the response of the request
      */
-    private String getResponse(String sessionId, HttpUriRequest request, final boolean forceReturnTask) {
+    private String getResponse(String sessionId, HttpUriRequest request, final boolean forceReturnTask, String downloadPath) {
         String responseBody = null;
         HttpResponse response = null;
 
@@ -346,7 +357,20 @@ public class HttpRestClient {
             if (responseCode == HttpsURLConnection.HTTP_NO_CONTENT) {
                 responseBody = "{}";
             } else {
+                Header contentType = response.getEntity().getContentType();
+                if (contentType != null
+                        && ContentType.APPLICATION_OCTET_STREAM.getMimeType().equals(contentType.getValue())) {
+                    // Downloadable file
+                    if (downloadPath == null) {
+                         // TODO Get value from properties
+                    }
+                    downloadFile(downloadPath, response);
+
+                    return "Download successfull.";
+                } else {
                 responseBody = EntityUtils.toString(response.getEntity());
+                }
+
             }
 
             LOGGER.info("Response Body: " + responseBody);
@@ -357,8 +381,10 @@ public class HttpRestClient {
                 // Response contains a task
                 String restUri = response.getFirstHeader(HttpHeaders.LOCATION).getValue();
                 restUri = restUri.substring(restUri.indexOf("/rest"));
+                LOGGER.debug("Starting to monitor task " + restUri);
 
                 Request taskRequest = new Request(HttpMethod.GET, restUri);
+                taskRequest.setHostname(request.getURI().getHost() + ":" + request.getURI().getPort());
 
                 return this.sendRequest(sessionId, taskRequest);
             }
@@ -366,12 +392,39 @@ public class HttpRestClient {
         } catch (IOException e) {
             LOGGER.error("IO Error: ", e);
             throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE, e);
-        } finally {
-            if (response != null) {
-                EntityUtils.consumeQuietly(response.getEntity());
+        }
+
+        return responseBody.toString();
+    }
+
+    private void downloadFile(final String downloadPath, HttpResponse response)
+            throws IOException, FileNotFoundException {
+        BufferedInputStream bis = new BufferedInputStream(response.getEntity().getContent());
+        if (!new File(downloadPath).isDirectory()) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, SdkConstants.DOWNLOAD_PATH);
+        }
+
+        String fileSize = response.getFirstHeader("Content-Length").getValue();
+        String fileName = null;
+        Header contentDisposition = response.getFirstHeader("Content-Disposition");
+        for (HeaderElement element : contentDisposition.getElements()) {
+            NameValuePair filenameParameter = element.getParameterByName("filename");
+            if (filenameParameter != null) {
+                fileName = filenameParameter.getValue()
+                        .replaceAll(",", ".")
+                        .replaceAll(":", ".");
             }
         }
-        return responseBody;
+
+        String filePath = downloadPath + fileName;
+        LOGGER.info("File \"" + fileName + "\" (" + fileSize + " bytes) being dowloaded to " + downloadPath);
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
+        int inByte;
+        while((inByte = bis.read()) != -1) {
+            bos.write(inByte);
+        }
+        bis.close();
+        bos.close();
     }
 
     /**

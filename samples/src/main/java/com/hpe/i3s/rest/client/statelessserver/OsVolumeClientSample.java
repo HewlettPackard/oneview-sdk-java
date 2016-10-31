@@ -30,9 +30,9 @@ public class OsVolumeClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String OS_VOLUME_RESOURCE_ID = "d1778269-9efe-4a5b-be70-c9f556a47685";
-    private static final String ARCHIVED_OS_VOLUME_RESOURCE_ID = "d1778269-9efe-4a5b-be70-c9f556a47685";
-    private static final String OS_VOLUME_NAME = "Sample OS Volume";
+    public static final String OS_VOLUME_RESOURCE_ID = "6bc3fbbf-7d4f-44de-bd04-fdd82814ad1b";
+    private static final String ARCHIVED_OS_VOLUME_RESOURCE_ID = "123";
+    private static final String OS_VOLUME_NAME = "OSVolume-5";
     // ================================
 
     private final OsVolumeClient osVolumeClient;
@@ -49,7 +49,7 @@ public class OsVolumeClientSample {
         LOGGER.info("OS Volume object returned to client : " + osVolume.toJsonString());
     }
 
-    private void getAllOsBuildPlans() {
+    private void getAllOsVolumes() {
         ResourceCollection<OsVolume> osVolumes = this.osVolumeClient.getAll();
 
         LOGGER.info("OS Volumes returned to client : " + osVolumes.toJsonString());
@@ -72,7 +72,7 @@ public class OsVolumeClientSample {
 
         sample.getOsVolumeByName();
         sample.getOsVolumeById();
-        sample.getAllOsBuildPlans();
+        sample.getAllOsVolumes();
         sample.getArchivedOsVolume();
     }
 

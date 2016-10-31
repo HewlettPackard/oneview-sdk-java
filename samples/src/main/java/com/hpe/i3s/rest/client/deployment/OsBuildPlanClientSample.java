@@ -31,6 +31,7 @@ public class OsBuildPlanClientSample {
 
     // These are variables to be defined by user
     // ================================
+    public static final String OS_BUILD_PLAN_RESOURCE_ID = "23f584b7-2c8d-4daa-8458-a4f997f20958";
     private static final String OS_BUILD_PLAN_NAME = "Sample OS Build Plan";
     // ================================
 

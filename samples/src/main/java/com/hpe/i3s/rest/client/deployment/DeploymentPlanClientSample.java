@@ -18,9 +18,8 @@ package com.hpe.i3s.rest.client.deployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.OneViewClientSample;
+import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hpe.i3s.client.deployment.DeploymentPlanClient;
 import com.hpe.i3s.dto.deployment.deploymentplan.DeploymentPlan;
 import com.hpe.i3s.rest.client.ImageStreamerClient;
@@ -31,15 +30,15 @@ public class DeploymentPlanClientSample {
 
     // These are variables to be defined by user
     // ================================
-    private static final String DEPLOYMENT_PLAN_NAME = "Sample Deployment Plan";
+    public static final String DEPLOYMENT_PLAN_RESOURCE_ID = "421e4aae-aebd-4bec-8cb5-4c2ef9b78a91";
+    private static final String DEPLOYMENT_PLAN_NAME = "kova-deploy-plan";
     private static final String DEPLOYMENT_PLAN_NAME_UPDATED =  DEPLOYMENT_PLAN_NAME + " Updated";
     // ================================
 
     private final DeploymentPlanClient deploymentPlanClient;
 
     public DeploymentPlanClientSample() {
-        OneViewClient oneViewClient = OneViewClientSample.getOneViewClient();
-        ImageStreamerClient i3sClient = new ImageStreamerClient(oneViewClient);
+        ImageStreamerClient i3sClient = new ImageStreamerClientSample().getImageStreamerClient();
 
         this.deploymentPlanClient = i3sClient.deploymentPlan();
     }
@@ -60,8 +59,11 @@ public class DeploymentPlanClientSample {
 
     private void createDeploymentPlan() {
         DeploymentPlan deploymentPlan = new DeploymentPlan();
-
+        deploymentPlan.setType(ResourceCategory.RC_DEPLOYMENT_PLAN);
         deploymentPlan.setName(DEPLOYMENT_PLAN_NAME);
+        deploymentPlan.setHpProvided(false);
+        deploymentPlan.setDescription("");
+        deploymentPlan.setOeBuildPlanURI("/rest/build-plans/" + OsBuildPlanClientSample.OS_BUILD_PLAN_RESOURCE_ID);
 
         DeploymentPlan addedDeploymentPlan = this.deploymentPlanClient.create(deploymentPlan);
 

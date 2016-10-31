@@ -34,7 +34,7 @@ public class OsVolume extends BaseModelResource {
     private String oeVolumeIQN;
     private String oeVolumeId;
     private String oeVolumeIp;
-    private int size;
+    private long size;
     private String statelessServerUri;
 
     /**
@@ -124,14 +124,14 @@ public class OsVolume extends BaseModelResource {
     /**
      * @return the size
      */
-    public int getSize() {
+    public long getSize() {
         return size;
     }
 
     /**
      * @param size the size to set
      */
-    public void setSize(int size) {
+    public void setSize(long size) {
         this.size = size;
     }
 

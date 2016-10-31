@@ -25,6 +25,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 
+import java.io.File;
 import java.lang.reflect.Type;
 
 import org.junit.Test;
@@ -35,12 +36,15 @@ import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.DownloadPath;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
 import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 import com.hpe.i3s.dto.deployment.artifactsbundle.ArtifactsBundle;
+import com.hpe.i3s.dto.deployment.artifactsbundle.CreateArtifactsBundle;
 import com.hpe.i3s.dto.deployment.artifactsbundle.UserBackupParams;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -90,7 +94,7 @@ public class ArtifactsBundleClientTest {
 
     @Test
     public void shouldCreateArtifactsBundle() {
-        ArtifactsBundle artifactsBundle = new ArtifactsBundle();
+        CreateArtifactsBundle artifactsBundle = new CreateArtifactsBundle();
 
         client.create(artifactsBundle, TaskTimeout.of(123));
 
@@ -102,10 +106,13 @@ public class ArtifactsBundleClientTest {
 
     @Test
     public void shouldCreateArtifactsBundleFromFile() {
-        client.create(ANY_FILE_PATH, TaskTimeout.of(123));
+        File file = new File(ANY_FILE_PATH);
+        client.create(file, DownloadPath.at(ANY_FILE_PATH));
 
-        Request expectedRequest = new Request(HttpMethod.POST, ARTIFACTS_BUNDLE_URI);
-        expectedRequest.setTimeout(123);
+        Request expectedRequest = new Request(HttpMethod.POST, ARTIFACTS_BUNDLE_URI, file);
+        expectedRequest.setDownloadPath(ANY_FILE_PATH);
+        expectedRequest.setContentType(ContentType.MULTIPART_FORM_DATA);
+        expectedRequest.setForceReturnTask(true);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
@@ -136,19 +143,23 @@ public class ArtifactsBundleClientTest {
 
     @Test
     public void shouldCreateBackupArchiveBundle() {
-        client.createBackupArchiveBundle(ANY_FILE_PATH, TaskTimeout.of(123));
+        File file = new File(ANY_FILE_PATH);
+        client.createBackupArchiveBundle(file, DownloadPath.at(ANY_FILE_PATH));
+
         String expectedUri = ARTIFACTS_BUNDLE_URI
                 + ARTIFACTS_BUNDLE_BACKUPS_URI
                 + ARTIFACTS_BUNDLE_ARCHIVE_URI;
-        Request expectedRequest = new Request(HttpMethod.POST, expectedUri);
-        expectedRequest.setTimeout(123);
+        Request expectedRequest = new Request(HttpMethod.POST, expectedUri, file);
+        expectedRequest.setDownloadPath(ANY_FILE_PATH);
+        expectedRequest.setContentType(ContentType.MULTIPART_FORM_DATA);
+        expectedRequest.setForceReturnTask(true);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test
     public void shouldGetBackupArchiveBundle() {
-        client.getBackupArchiveBundle(ANY_RESOURCE_ID);
+        client.downloadBackupArchiveBundle(ANY_RESOURCE_ID);
 
         String expectedUri = ARTIFACTS_BUNDLE_URI
                 + ARTIFACTS_BUNDLE_BACKUPS_URI
@@ -156,7 +167,7 @@ public class ArtifactsBundleClientTest {
                 + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(ArtifactsBundle.class).getType());
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(String.class).getType());
     }
 
     @Test
@@ -203,7 +214,8 @@ public class ArtifactsBundleClientTest {
 
         String expectedUri = ARTIFACTS_BUNDLE_URI
                 + "/" + ANY_RESOURCE_ID;
-        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, "");
+        expectedRequest.setContentType(ContentType.TEXT_PLAIN);
         expectedRequest.setTimeout(123);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest);

@@ -51,6 +51,7 @@ public class SDKConfiguration {
 
     // Image Streamer properties keys
     private static final String I3S_HOSTNAME = "i3s.hostname";
+    private static final String I3S_DOWNLOAD_FOLDER = "i3s.download_folder";
 
     // OneView properties keys
     private static final String API_VERSION = "oneview.api_version";
@@ -200,4 +201,7 @@ public class SDKConfiguration {
         return this.properties.getProperty(I3S_HOSTNAME);
     }
 
+    public String getImageStreamerDownloadFolder() {
+        return this.properties.getProperty(I3S_DOWNLOAD_FOLDER);
+    }
 }

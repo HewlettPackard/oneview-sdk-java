@@ -18,10 +18,11 @@ package com.hp.ov.sdk.rest.http.core;
 
 public enum ContentType {
 
-    TEXT_PLAIN("text/plain", "UTF-8"),
     APPLICATION_JSON("application/json", "UTF-8"),
     APPLICATION_JSON_PATCH("application/json-patch+json", "UTF-8"),
-    MULTIPART_FORM_DATA("multipart/form-data", "ISO-8859-1");
+    APPLICATION_OCTET_STREAM("application/octet-stream", "ISO-8859-1"),
+    MULTIPART_FORM_DATA("multipart/form-data", "ISO-8859-1"),
+    TEXT_PLAIN("text/plain", "");
 
     private final String mimeType;
     private final String charset;

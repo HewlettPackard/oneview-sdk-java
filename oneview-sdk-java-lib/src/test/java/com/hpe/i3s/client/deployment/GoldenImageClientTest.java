@@ -20,9 +20,9 @@ import static com.hpe.i3s.client.deployment.GoldenImageClient.GOLDEN_IMAGE_ARCHI
 import static com.hpe.i3s.client.deployment.GoldenImageClient.GOLDEN_IMAGE_DOWNLOAD_URI;
 import static com.hpe.i3s.client.deployment.GoldenImageClient.GOLDEN_IMAGE_URI;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.mock;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.any;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Type;
 
@@ -127,7 +127,7 @@ public class GoldenImageClientTest {
         String expectedUri = GOLDEN_IMAGE_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.DELETE, expectedUri);
 
-        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(String.class).getType());
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
 
     @Test

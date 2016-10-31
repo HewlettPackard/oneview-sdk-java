@@ -18,6 +18,7 @@ package com.hp.ov.sdk.constants;
 public class ResourceCategory {
 
     public static final String RC_BULK_NETWORK = "bulk-ethernet-network";
+    public static final String RC_DEPLOYMENT_PLAN = "OEDeploymentPlan";
     public static final String RC_ENCLOSURE_GROUP = "EnclosureGroupV2";
     public static final String RC_ENCLOSURE_GROUP_V200 = "EnclosureGroupV200";
     public static final String RC_ENCLOSURE_GROUP_V300 = "EnclosureGroupV300";
@@ -25,6 +26,7 @@ public class ResourceCategory {
     public static final String RC_FCNETWORK_V300 = "fc-networkV300";
     public static final String RC_FCOE_NETWORK = "fcoe-network";
     public static final String RC_FCOE_NETWORK_V300 = "fcoe-networkV300";
+    public static final String RC_GOLDEN_IMAGE = "GoldenImage";
     public static final String RC_LOGICAL_ENCLOSURE = "LogicalEnclosure";
     public static final String RC_LOGICAL_ENCLOSURE_V300 = "LogicalEnclosureV300";
     public static final String RC_LOGICAL_SWITCH_GROUP = "logical-switch-group";

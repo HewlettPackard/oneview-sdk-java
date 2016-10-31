@@ -35,7 +35,7 @@ public class ArtifactsBundle extends BaseModelResource {
     private String checksum;
     private List<DeploymentPlanArtifact> deploymentPlans = new ArrayList<>();
     private String downloadURI;
-    private GoldenImageArtifact goldenimage;
+    private List<GoldenImageArtifact> goldenimage = new ArrayList<>();
     private boolean importbundle;
     private String lastBackUpDownloadTime;
     private List<PlanScriptArtifact> planScripts = new ArrayList<>();
@@ -144,14 +144,14 @@ public class ArtifactsBundle extends BaseModelResource {
     /**
      * @return the goldenimage
      */
-    public GoldenImageArtifact getGoldenimage() {
+    public List<GoldenImageArtifact> getGoldenimage() {
         return goldenimage;
     }
 
     /**
      * @param goldenimage the goldenimage to set
      */
-    public void setGoldenimage(GoldenImageArtifact goldenimage) {
+    public void setGoldenimage(List<GoldenImageArtifact> goldenimage) {
         this.goldenimage = goldenimage;
     }
 
