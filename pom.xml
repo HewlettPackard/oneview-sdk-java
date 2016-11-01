@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.hpe.oneview</groupId>
   <artifactId>oneview-sdk-java-pom</artifactId>
-  <version>3.0.0</version>
+  <version>3.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>OneView SDK for Java Project</name>
 
