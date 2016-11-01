@@ -39,7 +39,7 @@ public class GoldenImageClientSample {
     public static final String GOLDEN_IMAGE_RESOURCE_ID = "e19c0f43-eebb-4831-847c-0a6638398f23";
     private static final String GOLDEN_IMAGE_NAME = "ESX-Ecosystem";
     private static final String GOLDEN_IMAGE_NAME_UPDATED =  GOLDEN_IMAGE_NAME + "_Updated";
-    private static final String GOLDEN_IMAGE_FILE_PATH = "C:\\Users\\kovalski\\Downloads\\ESX-Ecosystem.zip";
+    private static final String GOLDEN_IMAGE_FILE_PATH = "/home/user/Downloads/ESX-Ecosystem.zip";
     // ================================
 
     private final GoldenImageClient client;
@@ -55,13 +55,13 @@ public class GoldenImageClientSample {
 
         goldenImage = this.client.getById(goldenImage.getResourceId());
 
-        LOGGER.info("Golden Image returned to client: {}", goldenImage.toJsonString());
+        LOGGER.info("Golden image returned to client: {}", goldenImage.toJsonString());
     }
 
     private void getAllGoldenImages() {
         ResourceCollection<GoldenImage> goldenImages = this.client.getAll();
 
-        LOGGER.info("Golden Images returned to client: {}", goldenImages.toJsonString());
+        LOGGER.info("Golden images returned to client: {}", goldenImages.toJsonString());
     }
 
     private void createGoldenImage() {
@@ -97,7 +97,7 @@ public class GoldenImageClientSample {
 
         GoldenImage updatedGoldenImage = this.client.update(goldenImage.getResourceId(), goldenImage);
 
-        LOGGER.info("Golden Image object returned to client: {}", updatedGoldenImage.toJsonString());
+        LOGGER.info("Golden image returned to client: {}", updatedGoldenImage.toJsonString());
     }
 
     private void deleteGoldenImage() {
@@ -112,18 +112,18 @@ public class GoldenImageClientSample {
         GoldenImage goldenImage = this.client.getByName(GOLDEN_IMAGE_NAME).get(0);
 
         String response = this.client.download(goldenImage.getResourceId(),
-                DownloadPath.at("C:\\Users\\kovalski\\Downloads\\"));
+                DownloadPath.at("/home/user/Downloads"));
 
-        LOGGER.info("response returned to client: {}", response);
+        LOGGER.info("Response returned to client: {}", response);
     }
 
     private void getGoldenImageArchivedLogs() {
         GoldenImage goldenImage = this.client.getByName(GOLDEN_IMAGE_NAME).get(0);
 
-        String archivedLogs = this.client.getArchivedLogs(goldenImage.getResourceId(),
-                DownloadPath.at("C:\\Users\\kovalski\\Downloads\\"));
+        String response = this.client.getArchivedLogs(goldenImage.getResourceId(),
+                DownloadPath.at("/home/user/Downloads"));
 
-        LOGGER.info("Golden Image archived logs returned to client: {}", archivedLogs);
+        LOGGER.info("Response returned to client: {}", response);
     }
 
     public static void main(String[] args) {

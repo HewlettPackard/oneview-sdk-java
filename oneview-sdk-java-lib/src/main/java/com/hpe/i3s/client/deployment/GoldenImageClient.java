@@ -42,7 +42,7 @@ public interface GoldenImageClient extends
      *
      * @param resource object containing the details of the resource that should be created.
      *
-     * @return {@link GoldenImage} object containing the result of this request.
+     * @return {@link String} object containing the result of this request.
      */
     @Endpoint(method = HttpMethod.POST)
     String create(@BodyParam GoldenImage resource);
@@ -55,20 +55,20 @@ public interface GoldenImageClient extends
      *                    Details include the file (.zip format, name and description that should
      *                    be used to identify the golden image).
      *
-     * @return {@link String} object containing the result of this request.
+     * @return {@link String} containing the result of this request.
      */
     @Endpoint(method = HttpMethod.POST)
     String create(@BodyParam(type = ContentType.MULTIPART_FORM_DATA) GoldenImageFile goldenImage);
 
     /**
      * Download the details of the golden image capture logs which has been
-     * archived based on the specific attribute ID.
+     * archived based on the specific <code>resourceId</code>.
      *
-     * @param resourceId resource identifier as seen in HPE OneView.
+     * @param resourceId golden image identifier.
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
      *
-     * @return the archived logs for the specified golden image.
+     * @return {@link String} containing the result of this request.
      */
     @Endpoint(uri = GOLDEN_IMAGE_ARCHIVED_URI + "/{resourceId}")
     String getArchivedLogs(@PathParam("resourceId") String resourceId, RequestOption... options);
@@ -76,11 +76,11 @@ public interface GoldenImageClient extends
     /**
      * Downloads the content of the specified golden image.
      *
-     * @param resourceId resource identifier as seen in HPE OneView.
+     * @param resourceId golden image identifier.
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
      *
-     * @return content of the specified golden image.
+     * @return {@link String} containing the result of this request.
      */
     @Endpoint(uri = GOLDEN_IMAGE_DOWNLOAD_URI + "/{resourceId}")
     String download(@PathParam("resourceId") String resourceId, RequestOption... options);
@@ -89,8 +89,8 @@ public interface GoldenImageClient extends
      * Updates the resource identified by <code>resourceId</code> according to the
      * provided <code>resource</code> object.
      *
-     * @param resourceId resource identifier as seen in HPE OneView.
-     * @param resource object containing the details of the resource that should be created.
+     * @param resourceId golden image identifier.
+     * @param resource object containing the details of the resource that should be updated.
      *
      * @return {@link GoldenImage} object containing the result of this request.
      */

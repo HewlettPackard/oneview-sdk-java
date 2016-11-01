@@ -366,7 +366,8 @@ public class HttpRestClient {
                     }
                     downloadFile(downloadPath, response);
 
-                    return "Download successfull.";
+                    //TODO review return type in this case
+                    return "Download successful.";
                 } else {
                 responseBody = EntityUtils.toString(response.getEntity());
                 }
@@ -397,34 +398,41 @@ public class HttpRestClient {
         return responseBody.toString();
     }
 
-    private void downloadFile(final String downloadPath, HttpResponse response)
-            throws IOException, FileNotFoundException {
-        BufferedInputStream bis = new BufferedInputStream(response.getEntity().getContent());
+    private void downloadFile(final String downloadPath, HttpResponse response) {
         if (!new File(downloadPath).isDirectory()) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, SdkConstants.DOWNLOAD_PATH);
         }
 
-        String fileSize = response.getFirstHeader("Content-Length").getValue();
+        String fileSize = response.getFirstHeader(HttpHeaders.CONTENT_LENGTH).getValue();
         String fileName = null;
         Header contentDisposition = response.getFirstHeader("Content-Disposition");
+
         for (HeaderElement element : contentDisposition.getElements()) {
-            NameValuePair filenameParameter = element.getParameterByName("filename");
-            if (filenameParameter != null) {
-                fileName = filenameParameter.getValue()
+            NameValuePair fileNameParameter = element.getParameterByName("filename");
+
+            if (fileNameParameter != null) {
+                fileName = fileNameParameter.getValue()
                         .replaceAll(",", ".")
                         .replaceAll(":", ".");
             }
         }
 
+        LOGGER.info("File \"" + fileName + "\" (" + fileSize + " bytes) being downloaded to " + downloadPath);
+
         String filePath = downloadPath + fileName;
-        LOGGER.info("File \"" + fileName + "\" (" + fileSize + " bytes) being dowloaded to " + downloadPath);
-        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(filePath)));
-        int inByte;
-        while((inByte = bis.read()) != -1) {
-            bos.write(inByte);
+        try(BufferedInputStream bis = new BufferedInputStream(response.getEntity().getContent());
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(filePath)))) {
+
+            int inByte;
+
+            while((inByte = bis.read()) != -1) {
+                bos.write(inByte);
+            }
+        } catch (IOException e) {
+            LOGGER.warn("Error downloading file {}", fileName, e);
+
+            throw new SDKBadRequestException(SDKErrorEnum.internalError, SdkConstants.DOWNLOAD_PATH, e);
         }
-        bis.close();
-        bos.close();
     }
 
     /**

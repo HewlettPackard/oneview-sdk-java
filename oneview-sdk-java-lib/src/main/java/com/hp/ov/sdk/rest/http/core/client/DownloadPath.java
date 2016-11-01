@@ -17,7 +17,7 @@
 package com.hp.ov.sdk.rest.http.core.client;
 
 /**
- * Some operations return a file to be downloaded as a response. In this cases, it is
+ * Some operations return a file as the entity of a response. In this cases, it is
  * possible to specify a destination folder using an implementation of {@link RequestOption}
  * called {@link com.hp.ov.sdk.rest.http.core.client.DownloadPath}.
  *
@@ -25,8 +25,8 @@ package com.hp.ov.sdk.rest.http.core.client;
  * folder.
  *
  * <p>If no path is specified, the default behavior is to use the value specified on
- * oneview_java_sdk_config.properties file.
- * Below is an example that illustrates how the download path can be specified:
+ * the SDK configuration (using object {@link SDKConfiguration}).
+ * Below is an example that shows how the download path can be specified:
  *
  * <pre>{@code
  *     SomeClient client = oneViewClient.someClient();

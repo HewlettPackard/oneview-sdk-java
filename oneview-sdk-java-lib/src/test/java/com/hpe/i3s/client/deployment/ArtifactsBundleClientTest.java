@@ -45,6 +45,7 @@ import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
 import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 import com.hpe.i3s.dto.deployment.artifactsbundle.ArtifactsBundle;
 import com.hpe.i3s.dto.deployment.artifactsbundle.CreateArtifactsBundle;
+import com.hpe.i3s.dto.deployment.artifactsbundle.TaskUri;
 import com.hpe.i3s.dto.deployment.artifactsbundle.UserBackupParams;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -53,7 +54,7 @@ public class ArtifactsBundleClientTest {
     private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_NAME = "random-Name";
     private static final String ANY_FILE_PATH = "random-file-path";
-    private static final String ANY_TASK_INFO = "\"taskUri\":\"/rest/tasks/4545db75-1861-45a2-8468-f11ff07381rf\"";
+    private static final String ANY_TASK_URI = "/rest/tasks/4545db75-1861-45a2-8468-f11ff07381rf";
 
     private BaseClient baseClient = mock(BaseClient.class);
     private ArtifactsBundleClient client = Reflection.newProxy(ArtifactsBundleClient.class,
@@ -223,12 +224,16 @@ public class ArtifactsBundleClientTest {
 
     @Test
     public void shouldStopBundleCreation() {
-        client.stopBundleCreation(ANY_RESOURCE_ID, ANY_TASK_INFO);
+        TaskUri taskUri = new TaskUri();
+
+        taskUri.setTaskUri(ANY_TASK_URI);
+
+        client.stopBundleCreation(ANY_RESOURCE_ID, taskUri);
 
         String expectedUri = ARTIFACTS_BUNDLE_URI
                 + "/" + ANY_RESOURCE_ID
                 + ARTIFACTS_BUNDLE_STOP_ARTIFACT_CREATE_URI;
-        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, ANY_TASK_INFO);
+        Request expectedRequest = new Request(HttpMethod.PUT, expectedUri, taskUri);
 
         then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(String.class).getType());
     }

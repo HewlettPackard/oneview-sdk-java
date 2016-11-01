@@ -31,6 +31,7 @@ import com.hp.ov.sdk.rest.reflect.Endpoint;
 import com.hp.ov.sdk.rest.reflect.PathParam;
 import com.hpe.i3s.dto.deployment.artifactsbundle.CreateArtifactsBundle;
 import com.hpe.i3s.dto.deployment.artifactsbundle.ArtifactsBundle;
+import com.hpe.i3s.dto.deployment.artifactsbundle.TaskUri;
 import com.hpe.i3s.dto.deployment.artifactsbundle.UserBackupParams;
 
 @Api(ArtifactsBundleClient.ARTIFACTS_BUNDLE_URI)
@@ -48,7 +49,7 @@ public interface ArtifactsBundleClient extends
     /**
      * Creates an artifact bundle according to the provided <code>filePath</code> object.
      *
-     * @param file Object containing the fully qualified path to the artifacts bundle file.
+     * @param file {@link File} instance containing the artifacts bundle file.
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
      *
@@ -61,7 +62,7 @@ public interface ArtifactsBundleClient extends
      * Retrieves a paginated collection ({@link ResourceCollection}) containing the details for the
      * available backup bundles.
      *
-     * @return {@link ResourceCollection} Collection containing the details for the
+     * @return {@link ResourceCollection} collection containing the details for the
      * available resources.
      */
     @Endpoint(uri = ARTIFACTS_BUNDLE_BACKUPS_URI)
@@ -70,7 +71,7 @@ public interface ArtifactsBundleClient extends
     /**
      * Creates a backup bundle with all the artifacts present on the appliance.
      *
-     * @param userBackupParams Attributes of the backup.
+     * @param userBackupParams attributes of the backup bundle.
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
      *
@@ -80,27 +81,28 @@ public interface ArtifactsBundleClient extends
     TaskResource createBackupBundle(@BodyParam UserBackupParams userBackupParams, RequestOption... options);
 
     /**
-     * Upload a backup bundle from a local drive and extract all the artifacts present in the uploaded file.
+     * Uploads a backup bundle from a local drive and extract all the artifacts present in the uploaded file.
      *
-     * @param file Object containing the fully qualified path to the backup artifacts bundle file.
+     * @param file {@link File} instance containing the backup artifacts bundle file.
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
      *
      * @return {@link TaskResource} task containing the result of this request.
      */
-    @Endpoint(uri = ARTIFACTS_BUNDLE_BACKUPS_URI + ARTIFACTS_BUNDLE_ARCHIVE_URI
-            , method = HttpMethod.POST
-            , forceReturnTask = true)
-    TaskResource createBackupArchiveBundle(@BodyParam(type = ContentType.MULTIPART_FORM_DATA) File file, RequestOption... options);
+    @Endpoint(uri = ARTIFACTS_BUNDLE_BACKUPS_URI + ARTIFACTS_BUNDLE_ARCHIVE_URI,
+            method = HttpMethod.POST,
+            forceReturnTask = true)
+    TaskResource createBackupArchiveBundle(@BodyParam(type = ContentType.MULTIPART_FORM_DATA) File file,
+            RequestOption... options);
 
     /**
-     * Downloads the backup archive bundle identified by the given <code>resourceId</code>.
+     * Downloads the backup archive bundle identified by the provided <code>resourceId</code>.
      *
-     * @param resourceId Artifacts Bundle resource identifier.
+     * @param resourceId artifacts bundle identifier.
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
      *
-     * @return {@link ArtifactsBundle} object containing the result of this request.
+     * @return {@link String} containing the result of this request.
      */
     @Endpoint(uri = ARTIFACTS_BUNDLE_BACKUPS_URI + ARTIFACTS_BUNDLE_ARCHIVE_URI + "/{resourceId}")
     String downloadBackupArchiveBundle(@PathParam("resourceId") String resourceId, RequestOption... options);
@@ -108,7 +110,7 @@ public interface ArtifactsBundleClient extends
     /**
      * Retrieves the backup bundle identified by the given <code>resourceId</code>.
      *
-     * @param resourceId Artifacts Bundle resource identifier.
+     * @param resourceId artifacts bundle resource identifier.
      *
      * @return {@link ArtifactsBundle} object containing the result of this request.
      */
@@ -118,8 +120,8 @@ public interface ArtifactsBundleClient extends
     /**
      * Extracts the existing backup bundle on the appliance and creates all the artifacts.
      *
-     * @param resourceId resource identifier
-     * @param userBackupParams Attributes of the backup.
+     * @param resourceId artifacts bundle resource identifier.
+     * @param userBackupParams attributes of the backup.
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
      *
@@ -127,13 +129,12 @@ public interface ArtifactsBundleClient extends
      */
     @Endpoint(uri = ARTIFACTS_BUNDLE_BACKUPS_URI + "/{resourceId}", method = HttpMethod.PUT)
     TaskResource extractBackupBundle(@PathParam("resourceId") String resourceId,
-            @BodyParam UserBackupParams userBackupParams,
-            RequestOption... options);
+            @BodyParam UserBackupParams userBackupParams, RequestOption... options);
 
     /**
      * Downloads the content of the selected artifacts bundle to the admin's local drive.
      *
-     * @param resourceId resource identifier
+     * @param resourceId artifacts bundle resource identifier.
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
      *
@@ -145,7 +146,7 @@ public interface ArtifactsBundleClient extends
     /**
      * Extracts the selected artifact bundle and creates the artifacts on the appliance.
      *
-     * @param resourceId resource identifier
+     * @param resourceId artifacts bundle resource identifier.
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
      *
@@ -155,22 +156,22 @@ public interface ArtifactsBundleClient extends
     TaskResource extractBundle(@PathParam("resourceId") String resourceId, RequestOption... options);
 
     /**
-     * Stops creation of the selected artifact bundle, if the associated task is not in completed state.
+     * Stops the creation of the selected artifact bundle, if the associated task is not in completed state.
      *
-     * @param resourceId resource identifier
-     * @param body The task URI in the format "taskUri":"/rest/tasks/task_ID"
+     * @param resourceId artifacts bundle resource identifier.
+     * @param taskUri object containing the URI of the task that should be interrupted.
      *
      * @return {@link String} object containing the result of this request.
      */
     @Endpoint(uri = "/{resourceId}" + ARTIFACTS_BUNDLE_STOP_ARTIFACT_CREATE_URI, method = HttpMethod.PUT)
-    String stopBundleCreation(@PathParam("resourceId") String resourceId, @BodyParam String body);
+    String stopBundleCreation(@PathParam("resourceId") String resourceId, @BodyParam TaskUri taskUri);
 
     /**
      * Updates the resource identified by <code>resourceId</code> according to the
      * provided <code>resource</code> object.
      *
-     * @param resourceId resource identifier as seen in HPE OneView.
-     * @param resource object containing the details of the resource that should be created.
+     * @param resourceId artifacts bundle resource identifier.
+     * @param resource object containing the details of the resource that should be updated.
      *
      * @return {@link ArtifactsBundle} object containing the result of this request.
      */

@@ -31,6 +31,7 @@ import com.hpe.i3s.client.deployment.ArtifactsBundleClient;
 import com.hpe.i3s.dto.deployment.artifactsbundle.ArtifactsBundle;
 import com.hpe.i3s.dto.deployment.artifactsbundle.CreateArtifactsBundle;
 import com.hpe.i3s.dto.deployment.artifactsbundle.InputArtifacts;
+import com.hpe.i3s.dto.deployment.artifactsbundle.TaskUri;
 import com.hpe.i3s.dto.deployment.artifactsbundle.UserBackupParams;
 import com.hpe.i3s.rest.client.ImageStreamerClient;
 
@@ -42,10 +43,11 @@ public class ArtifactsBundleClientSample {
     // ================================
     private static final String ARTIFACTS_BUNDLE_RESOURCE_ID = "92710244-aa44-4ee5-b96e-4d60d67f49d0";
     private static final String ARTIFACTS_BUNDLE_BACKUP_RESOURCE_ID = "8063162e-b99c-4cca-9487-37c7f992724e";
-    private static final String ARTIFACTS_BUNDLE_NAME = "kova-bundle";
+    private static final String ARTIFACTS_BUNDLE_NAME = "bundle";
     private static final String ARTIFACTS_BUNDLE_NAME_UPDATED =  ARTIFACTS_BUNDLE_NAME + " Updated";
-    private static final String ARTIFACTS_BUNDLE_FILE_PATH =  "C:\\Users\\kovalski\\Downloads\\kova-bundle-file.zip";
-    private static final String ARTIFACTS_BUNDLE_BACKUP_FILE_PATH =  "C:\\Users\\kovalski\\Downloads\\fake-backup-bundle.zip";
+    private static final String ARTIFACTS_BUNDLE_FILE_PATH =  "/home/user/Downloads/bundle-file.zip";
+    private static final String ARTIFACTS_BUNDLE_BACKUP_FILE_PATH =  "/home/user/Downloads/bundle-file-backup.zip";
+    private static final String ARTIFACTS_BUNDLE_BACKUP_DOWNLOAD_PATH =  "/home/user/Downloads";
     private static final String DEPLOYMENT_GROUP_RESOURCE_ID = "40ca28c0-d7cd-4312-be24-46f57e5737e4";
     // ================================
 
@@ -80,9 +82,9 @@ public class ArtifactsBundleClientSample {
 
     private void downloadBackupArchiveBundle() {
         String response = this.artifactsBundleClient.downloadBackupArchiveBundle(ARTIFACTS_BUNDLE_BACKUP_RESOURCE_ID,
-                DownloadPath.at("C:\\Users\\kovalski\\Downloads\\"));
+                DownloadPath.at(ARTIFACTS_BUNDLE_BACKUP_DOWNLOAD_PATH));
 
-        LOGGER.info("response returned to client: {}", response);
+        LOGGER.info("Response returned to client: {}", response);
     }
 
     private void getBackupBundle() {
@@ -140,16 +142,21 @@ public class ArtifactsBundleClientSample {
 
     private void downloadBundle() {
         String response = this.artifactsBundleClient.downloadBundle(ARTIFACTS_BUNDLE_RESOURCE_ID,
-                DownloadPath.at("C:\\Users\\kovalski\\Downloads\\"));
+                DownloadPath.at(ARTIFACTS_BUNDLE_BACKUP_DOWNLOAD_PATH));
 
-        LOGGER.info("response returned to client: {}", response);
+        LOGGER.info("Response returned to client: {}", response);
     }
 
     private void stopBundleCreation() {
         CreateArtifactsBundle artifactsBundle = this.buildAddArtifactBundle();
 
         TaskResource task = this.artifactsBundleClient.create(artifactsBundle);
-        String response = this.artifactsBundleClient.stopBundleCreation(ARTIFACTS_BUNDLE_RESOURCE_ID, task.getUri());
+
+        TaskUri taskUri = new TaskUri();
+
+        taskUri.setTaskUri(task.getUri());
+
+        String response = this.artifactsBundleClient.stopBundleCreation(ARTIFACTS_BUNDLE_RESOURCE_ID, taskUri);
 
         LOGGER.info("Response returned to client: {}", response);
     }
@@ -170,7 +177,7 @@ public class ArtifactsBundleClientSample {
         artifactsBundle = this.artifactsBundleClient.update(
                 artifactsBundle.getResourceId(), artifactsBundle);
 
-        LOGGER.info("ArtifactsBundle object returned to client: {}", artifactsBundle.toJsonString());
+        LOGGER.info("Artifacts Bundle object returned to client: {}", artifactsBundle.toJsonString());
     }
 
     private void deleteArtifactsBundle() {

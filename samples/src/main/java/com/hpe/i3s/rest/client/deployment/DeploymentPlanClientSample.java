@@ -31,7 +31,7 @@ public class DeploymentPlanClientSample {
     // These are variables to be defined by user
     // ================================
     public static final String DEPLOYMENT_PLAN_RESOURCE_ID = "421e4aae-aebd-4bec-8cb5-4c2ef9b78a91";
-    private static final String DEPLOYMENT_PLAN_NAME = "kova-deploy-plan";
+    private static final String DEPLOYMENT_PLAN_NAME = "Sample-deployment-plan";
     private static final String DEPLOYMENT_PLAN_NAME_UPDATED =  DEPLOYMENT_PLAN_NAME + " Updated";
     // ================================
 
