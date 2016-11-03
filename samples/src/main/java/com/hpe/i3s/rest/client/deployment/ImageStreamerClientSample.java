@@ -19,39 +19,24 @@ package com.hpe.i3s.rest.client.deployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.exceptions.SDKPropertiesFileException;
-import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
+import com.hp.ov.sdk.OneViewClientSample;
 import com.hpe.i3s.rest.client.ImageStreamerClient;
 
-public class ImageStreamerClientSample {
+public class ImageStreamerClientSample extends OneViewClientSample {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageStreamerClientSample.class);
 
-    private static final String ONEVIEW_JAVA_SDK_CONFIG_PROPERTIES_FILE = "oneview_java_sdk_config.properties";
-
-    private SDKConfiguration config;
     private ImageStreamerClient client;
 
     public ImageStreamerClient getImageStreamerClient() {
         if (client == null) {
             try {
-                client = new ImageStreamerClient(this.getSDKConfiguration());
+                client = new ImageStreamerClient(super.getSDKConfiguration(), super.getOneViewClient());
             } catch (Exception e) {
                 LOGGER.error("An error occurred while creating a client instance", e);
             }
         }
         return client;
-    }
-
-    public SDKConfiguration getSDKConfiguration() {
-        if (config == null) {
-            try {
-                config = SDKConfiguration.fromFile(ONEVIEW_JAVA_SDK_CONFIG_PROPERTIES_FILE);
-            } catch (SDKPropertiesFileException e) {
-                LOGGER.error("An error occurred while loading configuration file", e);
-            }
-        }
-        return this.config;
     }
 
     /* SDKConfiguration can also be build programmatically */

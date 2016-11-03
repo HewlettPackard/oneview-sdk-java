@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.common.reflect.Reflection;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 import com.hpe.i3s.client.deployment.ArtifactsBundleClient;
@@ -36,8 +37,10 @@ public class ImageStreamerClient {
 
     private final Map<Class<?>, Object> instances = new ConcurrentHashMap<>();
 
-    public ImageStreamerClient(SDKConfiguration config) {
+    public ImageStreamerClient(SDKConfiguration config, OneViewClient oneViewClient) {
         this.baseClient = new BaseClient(config, config.getImageStreamerHostname());
+
+        this.baseClient.setSessionId(oneViewClient.getSessionId());
     }
 
     public synchronized ArtifactsBundleClient artifactsBundle() {

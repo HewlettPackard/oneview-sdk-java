@@ -71,6 +71,10 @@ public class BaseClient {
         this.sessionId = sessionId;
     }
 
+    public String getSessionId() {
+        return this.sessionId;
+    }
+
     public Object executeRequest(Request request, Type returnType) {
         this.validateNotNullArguments(request, returnType);
 

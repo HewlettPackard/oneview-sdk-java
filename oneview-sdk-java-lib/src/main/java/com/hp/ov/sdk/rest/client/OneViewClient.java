@@ -96,6 +96,10 @@ public class OneViewClient {
         this.baseClient.setSessionId(connector.connect());
     }
 
+    public String getSessionId() {
+        return this.baseClient.getSessionId();
+    }
+
     /**
      * Creates or retrieves an existing instance of {@link AlertClient}.
      * This client provides an interface for managing alerts.
