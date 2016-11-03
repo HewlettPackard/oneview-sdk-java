@@ -55,12 +55,12 @@ public class ImageStreamerClientSample {
     }
 
     /* SDKConfiguration can also be build programmatically */
-    /*
-    public SDKConfiguration getSDKConfiguration() {
+    /*public SDKConfiguration getSDKConfiguration() {
         if (config == null) {
             try {
                 config = SDKConfiguration.create()
                     .withOneViewHostname("10.10.10.10")
+                    .withImageStreamerHostname("10.10.10.10")
                     .withOneViewUser("administrator", "admin")
                     .withOneViewDomain("local")
                     .withOneViewApiVersion(ApiVersion.V_300)
@@ -70,7 +70,6 @@ public class ImageStreamerClientSample {
             }
         }
         return this.config;
-    }
-    */
+    }*/
 
 }

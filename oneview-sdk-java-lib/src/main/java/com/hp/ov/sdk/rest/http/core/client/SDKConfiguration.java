@@ -188,6 +188,16 @@ public class SDKConfiguration {
             return this;
         }
 
+        public SDKConfigurationBuilder withImageStreamerHostname(String hostname) {
+            values.put(SDKConfiguration.I3S_HOSTNAME, hostname);
+            return this;
+        }
+
+        public SDKConfigurationBuilder withImageStreamerDownloadPath(String path) {
+            values.put(SDKConfiguration.I3S_DOWNLOAD_FOLDER, path);
+            return this;
+        }
+
         public SDKConfiguration build() throws RuntimeException {
             Properties properties = new Properties();
 

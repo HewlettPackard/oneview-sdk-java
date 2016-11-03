@@ -336,10 +336,11 @@ public class HttpRestClient {
      * @return {@link String} object containing the response of the request
      */
     private String getResponse(String sessionId, HttpUriRequest request, boolean forceReturnTask, String downloadPath) {
+        HttpResponse response = null;
         String responseBody;
 
         try {
-            HttpResponse response = httpClient.execute(request);
+            response = httpClient.execute(request);
 
             int responseCode = response.getStatusLine().getStatusCode();
             LOGGER.debug("Response code: " + responseCode);
@@ -379,10 +380,13 @@ public class HttpRestClient {
 
                 return this.sendRequest(sessionId, taskRequest);
             }
-
         } catch (IOException e) {
             LOGGER.error("IO Error: ", e);
             throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE, e);
+        } finally {
+            if (response != null) {
+                EntityUtils.consumeQuietly(response.getEntity());
+            }
         }
 
         return responseBody;
@@ -407,7 +411,7 @@ public class HttpRestClient {
             }
         }
 
-        LOGGER.info("File \"" + fileName + "\" (" + fileSize + " bytes) being downloaded to " + downloadPath);
+        LOGGER.info("File \"" + fileName + "\" (" + fileSize + " bytes) is being downloaded to " + downloadPath);
 
         String filePath = downloadPath + fileName;
         try(BufferedInputStream bis = new BufferedInputStream(response.getEntity().getContent());
