@@ -15,7 +15,10 @@
  */
 package com.hp.ov.sdk.rest.http.core.client;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -26,9 +29,12 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.Header;
+import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.EntityBuilder;
 import org.apache.http.client.methods.HttpDelete;
@@ -70,6 +76,7 @@ import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.util.JsonSerializer;
 import com.hp.ov.sdk.util.UrlUtils;
+import com.hpe.i3s.dto.deployment.goldenimage.GoldenImageFile;
 
 public class HttpRestClient {
 
@@ -84,9 +91,9 @@ public class HttpRestClient {
     private final CloseableHttpClient httpClient;
     private final SDKConfiguration config;
 
-    public HttpRestClient(SDKConfiguration sdkConfiguration, JsonSerializer serializer, SSLContext sslContext) {
+    public HttpRestClient(SDKConfiguration sdkConfiguration, SSLContext sslContext) {
         this.config = sdkConfiguration;
-        this.serializer = serializer;
+        this.serializer = new JsonSerializer();
         this.httpClient = this.buildHttpClient(sslContext);
     }
 
@@ -167,7 +174,7 @@ public class HttpRestClient {
             throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE);
         }
 
-        HttpRequestBase requestBase = null;
+        HttpRequestBase requestBase;
 
         switch (request.getType()) {
             case POST:
@@ -176,12 +183,11 @@ public class HttpRestClient {
                 requestBase = post;
                 break;
             case GET:
-                HttpGet get = new HttpGet(uri);
-                requestBase = get;
+                requestBase = new HttpGet(uri);
                 break;
             case PATCH:
                 HttpPatch patch = new HttpPatch(uri);
-                HttpEntity entity = null;
+                HttpEntity entity;
 
                 // Switches uses empty patch requests (refresh)
                 if (Patch.class.isInstance(request.getEntity())) {
@@ -205,8 +211,7 @@ public class HttpRestClient {
                 requestBase = put;
                 break;
             case DELETE:
-                HttpDelete delete = new HttpDelete(uri);
-                requestBase = delete;
+                requestBase = new HttpDelete(uri);
                 break;
             default:
                 // Since request type is an ENUM, there is no way this will be executed
@@ -214,13 +219,9 @@ public class HttpRestClient {
                 throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE);
         }
 
-        if (requestBase != null) {
-            setRequestHeaders(sessionId, requestBase);
+        setRequestHeaders(sessionId, requestBase);
 
-            return getResponse(sessionId, requestBase, request.isForceReturnTask());
-        }
-        LOGGER.error("Could not create a valid request.");
-        throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE);
+        return getResponse(sessionId, requestBase, request.isForceReturnTask(), request.getDownloadPath());
     }
 
     private void fillRequestEntity(HttpEntityEnclosingRequestBase base, Request request) {
@@ -249,14 +250,27 @@ public class HttpRestClient {
                         .setText(request.getEntity().toString())
                         .build();
             } else if (ContentType.MULTIPART_FORM_DATA == contentType) {
-                File file = (File) request.getEntity();
-                entity = MultipartEntityBuilder.create()
-                        .setContentType(toApacheContentType(contentType))
-                        .addBinaryBody("file", file)
-                        .build();
+                Object content = request.getEntity();
 
-                //TODO add support for custom headers in Request object
-                base.setHeader("uploadfilename", file.getName());
+                if (content instanceof GoldenImageFile) {
+                    GoldenImageFile goldenImageFile = (GoldenImageFile) request.getEntity();
+
+                    entity = MultipartEntityBuilder.create()
+                            .setContentType(toApacheContentType(contentType))
+                            .addBinaryBody("file", goldenImageFile.getFile())
+                            .addTextBody("name", goldenImageFile.getName())
+                            .addTextBody("description", goldenImageFile.getDescription())
+                            .build();
+                } else {
+                    File file = (File) request.getEntity();
+                    entity = MultipartEntityBuilder.create()
+                            .setContentType(toApacheContentType(contentType))
+                            .addBinaryBody("file", file)
+                            .build();
+
+                    //TODO add support for custom headers in Request object
+                    base.setHeader("uploadfilename", file.getName());
+                }
             } else {
                 LOGGER.error("Unknown entity Content-Type");
 
@@ -281,7 +295,7 @@ public class HttpRestClient {
      */
     private URI buildURI(Request request) throws SDKBadRequestException {
         try {
-            URIBuilder uri = new URIBuilder(UrlUtils.createRestUrl(config.getOneViewHostname(), request.getUri()));
+            URIBuilder uri = new URIBuilder(UrlUtils.createRestUrl(request.getHostname(), request.getUri()));
 
             for (UrlParameter entry : request.getQuery()) {
                 uri.addParameter(entry.getKey(), entry.getValue());
@@ -317,11 +331,13 @@ public class HttpRestClient {
      *  Request information.
      * @param forceReturnTask
      *  Forces the check for the Location header (task) even when the response code is not 202.
+     * @param downloadPath
+     *  The directory where a binary response will be downloaded.
      * @return {@link String} object containing the response of the request
      */
-    private String getResponse(String sessionId, HttpUriRequest request, final boolean forceReturnTask) {
-        String responseBody = null;
+    private String getResponse(String sessionId, HttpUriRequest request, boolean forceReturnTask, String downloadPath) {
         HttpResponse response = null;
+        String responseBody;
 
         try {
             response = httpClient.execute(request);
@@ -332,7 +348,21 @@ public class HttpRestClient {
             if (responseCode == HttpsURLConnection.HTTP_NO_CONTENT) {
                 responseBody = "{}";
             } else {
-                responseBody = EntityUtils.toString(response.getEntity());
+                Header contentType = response.getEntity().getContentType();
+
+                if (contentType != null
+                        && ContentType.APPLICATION_OCTET_STREAM.getMimeType().equals(contentType.getValue())) {
+                    // Downloadable file
+                    if (downloadPath == null) {
+                         downloadPath = config.getImageStreamerDownloadFolder();
+                    }
+                    downloadFile(downloadPath, response);
+
+                    //TODO review return type in this case
+                    return "Download successful.";
+                } else {
+                    responseBody = EntityUtils.toString(response.getEntity());
+                }
             }
 
             LOGGER.info("Response Body: " + responseBody);
@@ -343,12 +373,13 @@ public class HttpRestClient {
                 // Response contains a task
                 String restUri = response.getFirstHeader(HttpHeaders.LOCATION).getValue();
                 restUri = restUri.substring(restUri.indexOf("/rest"));
+                LOGGER.debug("Starting to monitor task " + restUri);
 
                 Request taskRequest = new Request(HttpMethod.GET, restUri);
+                taskRequest.setHostname(request.getURI().getHost() + ":" + request.getURI().getPort());
 
                 return this.sendRequest(sessionId, taskRequest);
             }
-
         } catch (IOException e) {
             LOGGER.error("IO Error: ", e);
             throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE, e);
@@ -357,7 +388,45 @@ public class HttpRestClient {
                 EntityUtils.consumeQuietly(response.getEntity());
             }
         }
+
         return responseBody;
+    }
+
+    private void downloadFile(final String downloadPath, HttpResponse response) {
+        if (!new File(downloadPath).isDirectory()) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, SdkConstants.DOWNLOAD_PATH);
+        }
+
+        String fileSize = response.getFirstHeader(HttpHeaders.CONTENT_LENGTH).getValue();
+        String fileName = null;
+        Header contentDisposition = response.getFirstHeader("Content-Disposition");
+
+        for (HeaderElement element : contentDisposition.getElements()) {
+            NameValuePair fileNameParameter = element.getParameterByName("filename");
+
+            if (fileNameParameter != null) {
+                fileName = fileNameParameter.getValue()
+                        .replaceAll(",", ".")
+                        .replaceAll(":", ".");
+            }
+        }
+
+        LOGGER.info("File \"" + fileName + "\" (" + fileSize + " bytes) is being downloaded to " + downloadPath);
+
+        String filePath = downloadPath + fileName;
+        try(BufferedInputStream bis = new BufferedInputStream(response.getEntity().getContent());
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(filePath)))) {
+
+            int inByte;
+
+            while((inByte = bis.read()) != -1) {
+                bos.write(inByte);
+            }
+        } catch (IOException e) {
+            LOGGER.warn("Error downloading file {}", fileName, e);
+
+            throw new SDKBadRequestException(SDKErrorEnum.internalError, SdkConstants.DOWNLOAD_PATH, e);
+        }
     }
 
     /**

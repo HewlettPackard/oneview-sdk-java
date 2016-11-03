@@ -20,6 +20,7 @@ public class SdkConstants {
     public static final String APPLIANCE = "appliance";
 
     public static final String CERTS = "appliance-certificates";
+    public static final String DOWNLOAD_PATH = "download-path";
     public static final String ETHERNET = "Ethernet";
     public static final String FIBRE_CHANNEL = "FibreChannel";
     public static final String FIRMWARE_BUNDLE = "firmware-bundles";

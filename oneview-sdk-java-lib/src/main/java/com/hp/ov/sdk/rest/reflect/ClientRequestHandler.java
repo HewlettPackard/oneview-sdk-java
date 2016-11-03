@@ -41,6 +41,7 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
 
     private static final String GET_BY_NAME_METHOD = "getByName";
     private static final String GET_ALL_METHOD = "getAll";
+    private static final String EXTRACT_BUNDLE_METHOD = "extractBundle";
 
     private final BaseClient baseClient;
     private final String baseUri;
@@ -80,6 +81,13 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
             this.fillRequestAccordingParams(request, this.token.method(method).getParameters(), args);
             this.fillRequestAccordingOptions(request, args);
         }
+
+        // Artifact Bundle requires a specific ContentType and an empty body to work.
+        if (EXTRACT_BUNDLE_METHOD.equals(method.getName())) {
+            request.setContentType(ContentType.TEXT_PLAIN);
+            request.setEntity("");
+        }
+
         return request;
     }
 
@@ -128,6 +136,7 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private ResourceCollection<Object> handleGetAll(Request request, Type returnType) {
         ResourceCollection<Object> resources = new ResourceCollection<>();
 

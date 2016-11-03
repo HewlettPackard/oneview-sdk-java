@@ -11,5 +11,10 @@
 .settings/
 .classpath
 
+#IntelliJ files
+*.iml
+**/.idea/
+
 #Clover
 .clover/
+

@@ -49,6 +49,10 @@ public class SDKConfiguration {
     private static final String TRUST_STORE_FILE = "truststore.file";
     private static final String TRUST_STORE_PASSWORD = "truststore.password";
 
+    // Image Streamer properties keys
+    private static final String I3S_HOSTNAME = "i3s.hostname";
+    private static final String I3S_DOWNLOAD_FOLDER = "i3s.download_folder";
+
     // OneView properties keys
     private static final String API_VERSION = "oneview.api_version";
     private static final String HOSTNAME = "oneview.hostname";
@@ -184,6 +188,16 @@ public class SDKConfiguration {
             return this;
         }
 
+        public SDKConfigurationBuilder withImageStreamerHostname(String hostname) {
+            values.put(SDKConfiguration.I3S_HOSTNAME, hostname);
+            return this;
+        }
+
+        public SDKConfigurationBuilder withImageStreamerDownloadPath(String path) {
+            values.put(SDKConfiguration.I3S_DOWNLOAD_FOLDER, path);
+            return this;
+        }
+
         public SDKConfiguration build() throws RuntimeException {
             Properties properties = new Properties();
 
@@ -193,4 +207,11 @@ public class SDKConfiguration {
         }
     }
 
+    public String getImageStreamerHostname() {
+        return this.properties.getProperty(I3S_HOSTNAME);
+    }
+
+    public String getImageStreamerDownloadFolder() {
+        return this.properties.getProperty(I3S_DOWNLOAD_FOLDER);
+    }
 }

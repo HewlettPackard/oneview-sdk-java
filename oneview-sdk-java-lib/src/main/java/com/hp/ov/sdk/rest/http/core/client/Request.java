@@ -33,12 +33,14 @@ public class Request {
 
     private final HttpMethod type;
 
+    private String hostname;
     private String uri;
     private List<UrlParameter> query;
     private Optional<Object> entity;
     private ContentType contentType;
     private boolean forceReturnTask;
     private int taskTimeoutMillis;
+    private String downloadPath;
 
     public Request(HttpMethod type, String uri) {
         this(type, uri, null);
@@ -117,12 +119,28 @@ public class Request {
         this.forceReturnTask = forceReturnTask;
     }
 
+    public void setTimeout(int taskTimeoutMillis) {
+        this.taskTimeoutMillis = taskTimeoutMillis;
+    }
+
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
+    }
+
     public int getTimeout() {
         return taskTimeoutMillis;
     }
 
-    public void setTimeout(int taskTimeoutMillis) {
-        this.taskTimeoutMillis = taskTimeoutMillis;
+    public String getDownloadPath() {
+        return downloadPath;
+    }
+
+    public void setDownloadPath(String downloadPath) {
+        this.downloadPath = downloadPath;
+    }
+
+    public String getHostname() {
+        return hostname;
     }
 
     @Override
