@@ -15,28 +15,14 @@
 # limitations under the License.
 
 OV_HOSTNAME=$1
-OV_USERNAME=$2
-OV_PASSWORD=$3
 
 if [ -z "$OV_HOSTNAME" ]; then
 	echo "HPE OneView hostname is missing!"
-	echo "Usage: build-truststore.sh <hostname> <username> <password>"
+	echo "Usage: build-truststore.sh <hostname>"
 	exit 1
 fi
 
-if [ -z "$OV_USERNAME" ]; then
-	echo "HPE OneView username is missing!"
-	echo "Usage: build-truststore.sh <hostname> <username> <password>"
-	exit 1
-fi
-
-if [ -z "$OV_PASSWORD" ]; then
-	echo "HPE OneView password is missing!"
-	echo "Usage: build-truststore.sh <hostname> <username> <password>"
-	exit 1
-fi
-
-echo "Connecting to $OV_HOSTNAME as '$OV_USERNAME' with password '$OV_PASSWORD'"
+echo "Connecting to $OV_HOSTNAME"
 
 openssl s_client -connect $OV_HOSTNAME:443 < /dev/null 2>/dev/null | sed -n -e '/BEGIN\ CERTIFICATE/,/END\ CERTIFICATE/ p' > default-server.crt
 keytool -importcert -v -trustcacerts -alias $OV_HOSTNAME -file default-server.crt -keystore TrustStore
