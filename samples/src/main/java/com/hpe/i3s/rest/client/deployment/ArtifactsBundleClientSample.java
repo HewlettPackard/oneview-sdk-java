@@ -22,10 +22,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
-import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.client.DownloadPath;
 import com.hpe.i3s.client.deployment.ArtifactsBundleClient;
 import com.hpe.i3s.dto.deployment.artifactsbundle.ArtifactsBundle;

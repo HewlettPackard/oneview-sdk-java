@@ -32,7 +32,6 @@ import com.hp.ov.sdk.rest.http.core.client.HttpRestClient;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.hp.ov.sdk.tasks.TaskMonitor;
-import com.hp.ov.sdk.util.JsonSerializer;
 
 public class BaseClient {
 
@@ -45,7 +44,7 @@ public class BaseClient {
 
     public BaseClient(SDKConfiguration config, String hostname) {
         this(new ResourceAdaptor(),
-             new HttpRestClient(config, new JsonSerializer(), SSLContextFactory.getDefaultContext(config)),
+             new HttpRestClient(config, SSLContextFactory.getDefaultContext(config)),
              new Supplier<TaskMonitor>() {
                 @Override
                 public TaskMonitor get() {

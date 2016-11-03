@@ -17,12 +17,9 @@ package com.hp.ov.sdk.rest.http.core.client;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -94,9 +91,9 @@ public class HttpRestClient {
     private final CloseableHttpClient httpClient;
     private final SDKConfiguration config;
 
-    public HttpRestClient(SDKConfiguration sdkConfiguration, JsonSerializer serializer, SSLContext sslContext) {
+    public HttpRestClient(SDKConfiguration sdkConfiguration, SSLContext sslContext) {
         this.config = sdkConfiguration;
-        this.serializer = serializer;
+        this.serializer = new JsonSerializer();
         this.httpClient = this.buildHttpClient(sslContext);
     }
 
@@ -177,7 +174,7 @@ public class HttpRestClient {
             throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE);
         }
 
-        HttpRequestBase requestBase = null;
+        HttpRequestBase requestBase;
 
         switch (request.getType()) {
             case POST:
@@ -186,12 +183,11 @@ public class HttpRestClient {
                 requestBase = post;
                 break;
             case GET:
-                HttpGet get = new HttpGet(uri);
-                requestBase = get;
+                requestBase = new HttpGet(uri);
                 break;
             case PATCH:
                 HttpPatch patch = new HttpPatch(uri);
-                HttpEntity entity = null;
+                HttpEntity entity;
 
                 // Switches uses empty patch requests (refresh)
                 if (Patch.class.isInstance(request.getEntity())) {
@@ -215,8 +211,7 @@ public class HttpRestClient {
                 requestBase = put;
                 break;
             case DELETE:
-                HttpDelete delete = new HttpDelete(uri);
-                requestBase = delete;
+                requestBase = new HttpDelete(uri);
                 break;
             default:
                 // Since request type is an ENUM, there is no way this will be executed
@@ -224,13 +219,9 @@ public class HttpRestClient {
                 throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE);
         }
 
-        if (requestBase != null) {
-            setRequestHeaders(sessionId, requestBase);
+        setRequestHeaders(sessionId, requestBase);
 
-            return getResponse(sessionId, requestBase, request.isForceReturnTask(), request.getDownloadPath());
-        }
-        LOGGER.error("Could not create a valid request.");
-        throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE);
+        return getResponse(sessionId, requestBase, request.isForceReturnTask(), request.getDownloadPath());
     }
 
     private void fillRequestEntity(HttpEntityEnclosingRequestBase base, Request request) {
@@ -344,12 +335,11 @@ public class HttpRestClient {
      *  The directory where a binary response will be downloaded.
      * @return {@link String} object containing the response of the request
      */
-    private String getResponse(String sessionId, HttpUriRequest request, final boolean forceReturnTask, String downloadPath) {
-        String responseBody = null;
-        HttpResponse response = null;
+    private String getResponse(String sessionId, HttpUriRequest request, boolean forceReturnTask, String downloadPath) {
+        String responseBody;
 
         try {
-            response = httpClient.execute(request);
+            HttpResponse response = httpClient.execute(request);
 
             int responseCode = response.getStatusLine().getStatusCode();
             LOGGER.debug("Response code: " + responseCode);
@@ -358,20 +348,20 @@ public class HttpRestClient {
                 responseBody = "{}";
             } else {
                 Header contentType = response.getEntity().getContentType();
+
                 if (contentType != null
                         && ContentType.APPLICATION_OCTET_STREAM.getMimeType().equals(contentType.getValue())) {
                     // Downloadable file
                     if (downloadPath == null) {
-                         // TODO Get value from properties
+                         downloadPath = config.getImageStreamerDownloadFolder();
                     }
                     downloadFile(downloadPath, response);
 
                     //TODO review return type in this case
                     return "Download successful.";
                 } else {
-                responseBody = EntityUtils.toString(response.getEntity());
+                    responseBody = EntityUtils.toString(response.getEntity());
                 }
-
             }
 
             LOGGER.info("Response Body: " + responseBody);
@@ -395,7 +385,7 @@ public class HttpRestClient {
             throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE, e);
         }
 
-        return responseBody.toString();
+        return responseBody;
     }
 
     private void downloadFile(final String downloadPath, HttpResponse response) {

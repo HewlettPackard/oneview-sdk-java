@@ -18,9 +18,7 @@ package com.hpe.i3s.rest.client.deployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hpe.i3s.client.deployment.OsBuildPlanClient;
 import com.hpe.i3s.dto.deployment.osbuildplan.OeBuildPlan;
 import com.hpe.i3s.rest.client.ImageStreamerClient;

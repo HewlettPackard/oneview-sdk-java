@@ -41,7 +41,6 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
 
     private static final String GET_BY_NAME_METHOD = "getByName";
     private static final String GET_ALL_METHOD = "getAll";
-
     private static final String EXTRACT_BUNDLE_METHOD = "extractBundle";
 
     private final BaseClient baseClient;
@@ -137,6 +136,7 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private ResourceCollection<Object> handleGetAll(Request request, Type returnType) {
         ResourceCollection<Object> resources = new ResourceCollection<>();
 
