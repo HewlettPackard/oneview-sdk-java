@@ -16,7 +16,11 @@
 package com.hpe.i3s.client.deployment;
 
 import java.io.File;
+import java.util.List;
 
+import org.apache.http.HttpHeaders;
+
+import com.google.common.reflect.Parameter;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.common.CreatableResource;
@@ -24,6 +28,9 @@ import com.hp.ov.sdk.rest.client.common.DeletableResource;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.RequestInterceptor;
+import com.hp.ov.sdk.rest.http.core.client.BasicHeader;
+import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 import com.hp.ov.sdk.rest.reflect.Api;
 import com.hp.ov.sdk.rest.reflect.BodyParam;
@@ -152,8 +159,19 @@ public interface ArtifactsBundleClient extends
      *
      * @return {@link TaskResource} task containing the result of this request.
      */
-    @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT)
+    @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT,
+            requestInterceptor = {ExtractBundleRequestInterceptor.class})
     TaskResource extractBundle(@PathParam("resourceId") String resourceId, RequestOption... options);
+
+    class ExtractBundleRequestInterceptor implements RequestInterceptor {
+        @Override
+        public Request intercept(Request request, List<Parameter> params, Object[] args) {
+            request.setContentType(ContentType.TEXT_PLAIN);
+            request.setEntity("");
+
+            return request;
+        }
+    }
 
     /**
      * Stops the creation of the selected artifact bundle, if the associated task is not in completed state.

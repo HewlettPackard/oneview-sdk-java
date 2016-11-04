@@ -36,6 +36,7 @@ import org.apache.http.HttpHeaders;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.EntityBuilder;
@@ -130,6 +131,17 @@ public class HttpRestClient {
                 .setSocketTimeout(config.getClientSocketTimeout() * 1000)
                 .build();
 
+        HttpResponseInterceptor scopesResponseInterceptor = new HttpResponseInterceptor() {
+            @Override
+            public void process(HttpResponse response, HttpContext context) throws HttpException, IOException {
+                if (response.containsHeader(SdkConstants.X_TASK_URI_HEADER)) {
+                    Header header = response.getFirstHeader(SdkConstants.X_TASK_URI_HEADER);
+
+                    response.setHeader(HttpHeaders.LOCATION, header.getValue());
+                }
+            }
+        };
+
         HttpRequestInterceptor headerInterceptor = new HttpRequestInterceptor() {
             @Override
             public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
@@ -145,6 +157,7 @@ public class HttpRestClient {
                 .setDefaultRequestConfig(requestConfig)
                 .setConnectionManager(manager)
                 .addInterceptorFirst(headerInterceptor)
+                .addInterceptorFirst(scopesResponseInterceptor)
                 .build();
     }
 
@@ -213,6 +226,10 @@ public class HttpRestClient {
                 // Since request type is an ENUM, there is no way this will be executed
                 LOGGER.error("Request type not supported.");
                 throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE);
+        }
+
+        for (Header header : request.getHeaders()) {
+            requestBase.addHeader(header);
         }
 
         if (StringUtils.isNotBlank(sessionId)) {
@@ -340,9 +357,8 @@ public class HttpRestClient {
                     if (downloadPath == null) {
                          downloadPath = config.getImageStreamerDownloadFolder();
                     }
-                    String filePath = downloadFile(downloadPath, response);
 
-                    return filePath;
+                    return downloadFile(downloadPath, response);
                 } else {
                     responseBody = EntityUtils.toString(response.getEntity());
                 }
@@ -356,7 +372,7 @@ public class HttpRestClient {
                 // Response contains a task
                 String restUri = response.getFirstHeader(HttpHeaders.LOCATION).getValue();
                 restUri = restUri.substring(restUri.indexOf("/rest"));
-                LOGGER.debug("Starting to monitor task " + restUri);
+                LOGGER.debug("Retrieving task associated to request - task URI: " + restUri);
 
                 Request taskRequest = new Request(HttpMethod.GET, restUri);
                 taskRequest.setHostname(request.getURI().getHost() + ":" + request.getURI().getPort());

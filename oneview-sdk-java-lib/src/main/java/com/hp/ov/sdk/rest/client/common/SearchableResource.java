@@ -16,9 +16,14 @@
 
 package com.hp.ov.sdk.rest.client.common;
 
+import java.util.List;
+
+import com.google.common.reflect.Parameter;
 import com.hp.ov.sdk.dto.ResourceCollection;
+import com.hp.ov.sdk.rest.http.core.RequestInterceptor;
+import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.reflect.Endpoint;
-import com.hp.ov.sdk.rest.reflect.QueryParam;
 
 public interface SearchableResource<T> extends RetrievableResource<T> {
 
@@ -36,7 +41,16 @@ public interface SearchableResource<T> extends RetrievableResource<T> {
      * @return {@link ResourceCollection} paginated collection containing the details for the
      * available resources if type &lt;T&gt; that match the filter.
      */
-    @Endpoint
-    ResourceCollection<T> getByName(@QueryParam String name);
+    @Endpoint(requestInterceptor = GetByNameRequestInterceptor.class)
+    ResourceCollection<T> getByName(String name);
+
+    class GetByNameRequestInterceptor implements RequestInterceptor {
+        @Override
+        public Request intercept(Request request, List<Parameter> params, Object[] args) {
+            request.addQuery(UrlParameter.getFilterByNameParameter(String.valueOf(args[0])));
+
+            return request;
+        }
+    }
 
 }

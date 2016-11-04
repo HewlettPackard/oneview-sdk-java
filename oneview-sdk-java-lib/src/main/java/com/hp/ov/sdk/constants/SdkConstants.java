@@ -38,4 +38,6 @@ public class SdkConstants {
     public static final String JSON_TO_OBJECT_CONVERSION = "Json-to-object";
     public static final String TASK_MONITOR = "task-monitor";
 
+    public static final String X_TASK_URI_HEADER = "X-Task-Uri";
+
 }

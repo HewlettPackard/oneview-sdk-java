@@ -63,6 +63,7 @@ import com.hp.ov.sdk.rest.client.server.ServerProfileClient;
 import com.hp.ov.sdk.rest.client.server.ServerProfileTemplateClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareBundleClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
+import com.hp.ov.sdk.rest.client.settings.ScopeClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
 import com.hp.ov.sdk.rest.client.storage.DriveEnclosureClient;
 import com.hp.ov.sdk.rest.client.storage.FcSanDeviceManagerClient;
@@ -448,6 +449,16 @@ public class OneViewClient {
      */
     public synchronized SasLogicalJbodClient sasLogicalJbod() {
         return this.getProxy(SasLogicalJbodClient.class);
+    }
+
+    /**
+     * Creates or retrieves an existing instance of {@link ScopeClient}.
+     * This client provides an interface for managing scopes.
+     *
+     * @return an interface to the Scopes REST API.
+     */
+    public synchronized ScopeClient scope() {
+        return this.getProxy(ScopeClient.class);
     }
 
     /**
