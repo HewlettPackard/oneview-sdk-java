@@ -356,10 +356,9 @@ public class HttpRestClient {
                     if (downloadPath == null) {
                          downloadPath = config.getImageStreamerDownloadFolder();
                     }
-                    downloadFile(downloadPath, response);
+                    String filePath = downloadFile(downloadPath, response);
 
-                    //TODO review return type in this case
-                    return "Download successful.";
+                    return filePath;
                 } else {
                     responseBody = EntityUtils.toString(response.getEntity());
                 }
@@ -392,7 +391,7 @@ public class HttpRestClient {
         return responseBody;
     }
 
-    private void downloadFile(final String downloadPath, HttpResponse response) {
+    private String downloadFile(final String downloadPath, HttpResponse response) {
         if (!new File(downloadPath).isDirectory()) {
             throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, SdkConstants.DOWNLOAD_PATH);
         }
@@ -414,8 +413,9 @@ public class HttpRestClient {
         LOGGER.info("File \"" + fileName + "\" (" + fileSize + " bytes) is being downloaded to " + downloadPath);
 
         String filePath = downloadPath + fileName;
+        File file = new File(filePath);
         try(BufferedInputStream bis = new BufferedInputStream(response.getEntity().getContent());
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(filePath)))) {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file))) {
 
             int inByte;
 
@@ -427,6 +427,8 @@ public class HttpRestClient {
 
             throw new SDKBadRequestException(SDKErrorEnum.internalError, SdkConstants.DOWNLOAD_PATH, e);
         }
+
+        return filePath;
     }
 
     /**

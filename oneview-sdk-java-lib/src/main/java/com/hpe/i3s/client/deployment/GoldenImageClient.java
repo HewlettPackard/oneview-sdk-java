@@ -80,7 +80,7 @@ public interface GoldenImageClient extends
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
      *
-     * @return {@link String} containing the result of this request.
+     * @return {@link String} representing the path to the downloaded golden image.
      */
     @Endpoint(uri = GOLDEN_IMAGE_DOWNLOAD_URI + "/{resourceId}")
     String download(@PathParam("resourceId") String resourceId, RequestOption... options);

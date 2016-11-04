@@ -111,10 +111,10 @@ public class GoldenImageClientSample {
     private void downloadGoldenImage() {
         GoldenImage goldenImage = this.client.getByName(GOLDEN_IMAGE_NAME).get(0);
 
-        String response = this.client.download(goldenImage.getResourceId(),
+        String filePath = this.client.download(goldenImage.getResourceId(),
                 DownloadPath.at("/home/user/Downloads"));
 
-        LOGGER.info("Response returned to client: {}", response);
+        LOGGER.info("File returned to client: {}", filePath);
     }
 
     private void getGoldenImageArchivedLogs() {
