@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -32,7 +31,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
 import org.apache.http.HttpHeaders;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
@@ -55,13 +57,13 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.hp.ov.sdk.constants.SdkConstants;
-import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.exceptions.SDKApplianceNotReachableException;
 import com.hp.ov.sdk.exceptions.SDKBadRequestException;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
@@ -75,7 +77,6 @@ import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.util.JsonSerializer;
-import com.hp.ov.sdk.util.UrlUtils;
 import com.hpe.i3s.dto.deployment.goldenimage.GoldenImageFile;
 
 public class HttpRestClient {
@@ -129,9 +130,21 @@ public class HttpRestClient {
                 .setSocketTimeout(config.getClientSocketTimeout() * 1000)
                 .build();
 
+        HttpRequestInterceptor headerInterceptor = new HttpRequestInterceptor() {
+            @Override
+            public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
+                String version = String.valueOf(HttpRestClient.this.config.getOneViewApiVersion().getValue());
+
+                request.setHeader(HttpHeaders.ACCEPT, "application/json");
+                request.setHeader(HttpHeaders.ACCEPT_LANGUAGE, "en_US");
+                request.setHeader("X-Api-Version", version);
+            }
+        };
+
         return HttpClientBuilder.create()
                 .setDefaultRequestConfig(requestConfig)
                 .setConnectionManager(manager)
+                .addInterceptorFirst(headerInterceptor)
                 .build();
     }
 
@@ -160,19 +173,17 @@ public class HttpRestClient {
      * @param sessionId OV session token ID.
      * @param request contains the details specific to the current request.
      *
-     * @return
-     *  A string representing the response data.
-     * @throws
-     *  SDKBadRequestException on unsupported method (PUT, GET..)
+     * @return string containing the response data.
+     *
+     * @throws SDKBadRequestException on unsupported method (PUT, GET..)
      **/
-    public String sendRequest(String sessionId, Request request) throws SDKBadRequestException {
-        URI uri = buildURI(request);
-
-        LOGGER.debug("Using URL: " + uri.toString());
-
+    public String sendRequest(final String sessionId, Request request) throws SDKBadRequestException {
         if (request.getType() == null) {
-            throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE);
+            throw new SDKBadRequestException(SDKErrorEnum.badRequestError, "Request type (method) is missing!");
         }
+
+        URI uri = buildURI(request);
+        LOGGER.debug("Using URL: " + uri.toString());
 
         HttpRequestBase requestBase;
 
@@ -187,22 +198,7 @@ public class HttpRestClient {
                 break;
             case PATCH:
                 HttpPatch patch = new HttpPatch(uri);
-                HttpEntity entity;
-
-                // Switches uses empty patch requests (refresh)
-                if (Patch.class.isInstance(request.getEntity())) {
-                    entity = EntityBuilder.create()
-                            .setText(serializer.toJsonArray((Patch) request.getEntity(),
-                                    config.getOneViewApiVersion()))
-                            .setContentType(toApacheContentType(request.getContentType())).build();
-                } else {
-                    entity = EntityBuilder.create()
-                            .setText(serializer.toJson(request.getEntity(),
-                                    config.getOneViewApiVersion()))
-                            .setContentType(toApacheContentType(request.getContentType())).build();
-                }
-                patch.setEntity(entity);
-
+                fillRequestEntity(patch, request);
                 requestBase = patch;
                 break;
             case PUT:
@@ -219,7 +215,9 @@ public class HttpRestClient {
                 throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE);
         }
 
-        setRequestHeaders(sessionId, requestBase);
+        if (StringUtils.isNotBlank(sessionId)) {
+            requestBase.setHeader("Auth", sessionId);
+        }
 
         return getResponse(sessionId, requestBase, request.isForceReturnTask(), request.getDownloadPath());
     }
@@ -229,52 +227,51 @@ public class HttpRestClient {
             HttpEntity entity;
             ContentType contentType = request.getContentType();
 
-            //TODO add support for Content-Type "application/json-patch+json" (PATCH)
+            switch (contentType) {
+                case APPLICATION_JSON:
+                case APPLICATION_JSON_PATCH:
+                    String textEntity = serializer.toJson(request.getEntity(), config.getOneViewApiVersion());
 
-            if (ContentType.APPLICATION_JSON == contentType) {
-                String textEntity;
-
-                if (request.getEntity() instanceof List) {
-                    textEntity = serializer.toJsonArray((List) request.getEntity(), config.getOneViewApiVersion());
-                } else {
-                    textEntity = serializer.toJson(request.getEntity(), config.getOneViewApiVersion());
-                }
-
-                entity = EntityBuilder.create()
-                        .setContentType(toApacheContentType(contentType))
-                        .setText(textEntity)
-                        .build();
-            } else if (ContentType.TEXT_PLAIN == contentType) {
-                entity = EntityBuilder.create()
-                        .setContentType(toApacheContentType(contentType))
-                        .setText(request.getEntity().toString())
-                        .build();
-            } else if (ContentType.MULTIPART_FORM_DATA == contentType) {
-                Object content = request.getEntity();
-
-                if (content instanceof GoldenImageFile) {
-                    GoldenImageFile goldenImageFile = (GoldenImageFile) request.getEntity();
-
-                    entity = MultipartEntityBuilder.create()
+                    entity = EntityBuilder.create()
                             .setContentType(toApacheContentType(contentType))
-                            .addBinaryBody("file", goldenImageFile.getFile())
-                            .addTextBody("name", goldenImageFile.getName())
-                            .addTextBody("description", goldenImageFile.getDescription())
+                            .setText(textEntity)
                             .build();
-                } else {
-                    File file = (File) request.getEntity();
-                    entity = MultipartEntityBuilder.create()
+                    break;
+                case TEXT_PLAIN:
+                    entity = EntityBuilder.create()
                             .setContentType(toApacheContentType(contentType))
-                            .addBinaryBody("file", file)
+                            .setText(request.getEntity().toString())
                             .build();
+                    break;
+                case MULTIPART_FORM_DATA:
+                    Object content = request.getEntity();
 
-                    //TODO add support for custom headers in Request object
-                    base.setHeader("uploadfilename", file.getName());
-                }
-            } else {
-                LOGGER.error("Unknown entity Content-Type");
+                    if (content instanceof GoldenImageFile) {
+                        GoldenImageFile goldenImageFile = (GoldenImageFile) request.getEntity();
 
-                throw new SDKInvalidArgumentException(SDKErrorEnum.internalServerError, "Unknown entity Content-Type");
+                        entity = MultipartEntityBuilder.create()
+                                .setContentType(toApacheContentType(contentType))
+                                .addBinaryBody("file", goldenImageFile.getFile())
+                                .addTextBody("name", goldenImageFile.getName())
+                                .addTextBody("description", goldenImageFile.getDescription())
+                                .build();
+                    } else {
+                        File file = (File) request.getEntity();
+
+                        entity = MultipartEntityBuilder.create()
+                                .setContentType(toApacheContentType(contentType))
+                                .addBinaryBody("file", file)
+                                .build();
+
+                        //TODO add support for custom headers in Request object
+                        base.setHeader("uploadfilename", file.getName());
+                    }
+                    break;
+                default:
+                    LOGGER.error("Unsupported entity Content-Type " + contentType.toString());
+
+                    throw new SDKInvalidArgumentException(SDKErrorEnum.internalServerError,
+                            "Unsupported entity Content-Type " + contentType.toString());
             }
             base.setEntity(entity);
         }
@@ -295,7 +292,9 @@ public class HttpRestClient {
      */
     private URI buildURI(Request request) throws SDKBadRequestException {
         try {
-            URIBuilder uri = new URIBuilder(UrlUtils.createRestUrl(request.getHostname(), request.getUri()));
+            String uriString = String.format(SdkConstants.HTTPS + "%s%s", request.getHostname(), request.getUri());
+
+            URIBuilder uri = new URIBuilder(uriString);
 
             for (UrlParameter entry : request.getQuery()) {
                 uri.addParameter(entry.getKey(), entry.getValue());
@@ -304,23 +303,6 @@ public class HttpRestClient {
         } catch (URISyntaxException e) {
             throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE, e);
         }
-    }
-
-    /**
-     * Configure the request headers.
-     *
-     * @param sessionId
-     *  session token ID.
-     * @param request
-     *  Request information
-     */
-    private void setRequestHeaders(String sessionId, HttpUriRequest request) {
-        if (StringUtils.isNotBlank(sessionId)) {
-            request.setHeader("Auth", sessionId);
-        }
-        request.setHeader("Accept", "application/json");
-        request.setHeader("accept-language", "en_US");
-        request.setHeader("X-Api-Version", String.valueOf(config.getOneViewApiVersion().getValue()));
     }
 
     /**
@@ -335,7 +317,9 @@ public class HttpRestClient {
      *  The directory where a binary response will be downloaded.
      * @return {@link String} object containing the response of the request
      */
-    private String getResponse(String sessionId, HttpUriRequest request, boolean forceReturnTask, String downloadPath) {
+    private String getResponse(final String sessionId, HttpUriRequest request,
+            final boolean forceReturnTask, String downloadPath) {
+
         HttpResponse response = null;
         String responseBody;
 

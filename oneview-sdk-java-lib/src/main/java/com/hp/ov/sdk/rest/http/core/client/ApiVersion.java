@@ -15,6 +15,9 @@
  */
 package com.hp.ov.sdk.rest.http.core.client;
 
+import com.hp.ov.sdk.exceptions.SDKErrorEnum;
+import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
+
 public enum ApiVersion {
     V_120 (120),
     V_200 (200),
@@ -23,7 +26,7 @@ public enum ApiVersion {
 
     private final int value;
 
-    private ApiVersion(final int value) {
+    ApiVersion(final int value) {
         this.value = value;
     }
 
@@ -31,15 +34,16 @@ public enum ApiVersion {
         return value;
     }
 
-    public static ApiVersion fromStringValue(String value) throws NumberFormatException {
-        if (value != null) {
+    public static ApiVersion fromStringValue(String value) {
+        try {
             for (ApiVersion element : ApiVersion.values()) {
                 if (element.value == Integer.parseInt(value)) {
                     return element;
                 }
             }
+        } catch (NumberFormatException e) {
+            throw new SDKInvalidArgumentException(SDKErrorEnum.apiMismatchError, "Invalid API version format" + value, e);
         }
-
-        return null;
+        throw new SDKInvalidArgumentException(SDKErrorEnum.apiMismatchError, "Unsupported API version " + value);
     }
 }

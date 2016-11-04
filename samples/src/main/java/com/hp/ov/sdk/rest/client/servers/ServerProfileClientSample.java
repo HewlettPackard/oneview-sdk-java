@@ -54,7 +54,7 @@ import com.hp.ov.sdk.rest.client.storage.StorageVolumeClientSample;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.util.URIUtils;
 import com.hp.ov.sdk.util.ResourceDtoUtilsWrapper;
 
 /*
@@ -235,7 +235,7 @@ public class ServerProfileClientSample {
         AvailableStorageSystem availableStorageSystem = serverProfileClient.getAvailableStorageSystem(
                 ServerHardwareTypeClientSample.SERVER_HARDWARE_TYPE_URI,
                 enclosureGroupUri,
-                UrlUtils.getResourceIdFromUri(storageSystem.getStorageSystemUri()));
+                URIUtils.getResourceIdFromUri(storageSystem.getStorageSystemUri()));
 
         LOGGER.info("AvailableStorageSystem object returned to client : " + JsonPrettyPrinter.print(availableStorageSystem));
     }

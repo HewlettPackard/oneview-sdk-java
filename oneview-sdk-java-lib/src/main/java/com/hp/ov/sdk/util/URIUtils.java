@@ -16,16 +16,10 @@
 
 package com.hp.ov.sdk.util;
 
-import com.hp.ov.sdk.constants.SdkConstants;
-
-public final class UrlUtils {
+public final class URIUtils {
 
     public static String getResourceIdFromUri(final String uri) {
         return uri.substring(uri.lastIndexOf("/") + 1);
-    }
-
-    public static String createRestUrl(final String hostname, final String uri) {
-        return SdkConstants.HTTPS + hostname + uri;
     }
 
 }
