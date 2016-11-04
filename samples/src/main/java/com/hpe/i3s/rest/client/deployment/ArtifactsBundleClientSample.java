@@ -79,10 +79,10 @@ public class ArtifactsBundleClientSample {
     }
 
     private void downloadBackupArchiveBundle() {
-        String response = this.artifactsBundleClient.downloadBackupArchiveBundle(ARTIFACTS_BUNDLE_BACKUP_RESOURCE_ID,
+        String filePath = this.artifactsBundleClient.downloadBackupArchiveBundle(ARTIFACTS_BUNDLE_BACKUP_RESOURCE_ID,
                 DownloadPath.at(ARTIFACTS_BUNDLE_BACKUP_DOWNLOAD_PATH));
 
-        LOGGER.info("Response returned to client: {}", response);
+        LOGGER.info("File returned to client: {}", filePath);
     }
 
     private void getBackupBundle() {
@@ -139,10 +139,10 @@ public class ArtifactsBundleClientSample {
     }
 
     private void downloadBundle() {
-        String response = this.artifactsBundleClient.downloadBundle(ARTIFACTS_BUNDLE_RESOURCE_ID,
+        String filePath = this.artifactsBundleClient.downloadBundle(ARTIFACTS_BUNDLE_RESOURCE_ID,
                 DownloadPath.at(ARTIFACTS_BUNDLE_BACKUP_DOWNLOAD_PATH));
 
-        LOGGER.info("Response returned to client: {}", response);
+        LOGGER.info("File returned to client: {}", filePath);
     }
 
     private void stopBundleCreation() {

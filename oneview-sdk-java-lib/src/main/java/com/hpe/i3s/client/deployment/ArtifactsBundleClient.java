@@ -29,8 +29,8 @@ import com.hp.ov.sdk.rest.reflect.Api;
 import com.hp.ov.sdk.rest.reflect.BodyParam;
 import com.hp.ov.sdk.rest.reflect.Endpoint;
 import com.hp.ov.sdk.rest.reflect.PathParam;
-import com.hpe.i3s.dto.deployment.artifactsbundle.CreateArtifactsBundle;
 import com.hpe.i3s.dto.deployment.artifactsbundle.ArtifactsBundle;
+import com.hpe.i3s.dto.deployment.artifactsbundle.CreateArtifactsBundle;
 import com.hpe.i3s.dto.deployment.artifactsbundle.TaskUri;
 import com.hpe.i3s.dto.deployment.artifactsbundle.UserBackupParams;
 
@@ -102,7 +102,7 @@ public interface ArtifactsBundleClient extends
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
      *
-     * @return {@link String} containing the result of this request.
+     * @return {@link String} representing the path to the downloaded bundle.
      */
     @Endpoint(uri = ARTIFACTS_BUNDLE_BACKUPS_URI + ARTIFACTS_BUNDLE_ARCHIVE_URI + "/{resourceId}")
     String downloadBackupArchiveBundle(@PathParam("resourceId") String resourceId, RequestOption... options);
@@ -138,7 +138,7 @@ public interface ArtifactsBundleClient extends
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
      *
-     * @return {@link String} object containing the result of this request.
+     * @return {@link String} representing the path to the downloaded bundle.
      */
     @Endpoint(uri = ARTIFACTS_BUNDLE_DOWNLOAD_URI + "/{resourceId}")
     String downloadBundle(@PathParam("resourceId") String resourceId, RequestOption... options);
