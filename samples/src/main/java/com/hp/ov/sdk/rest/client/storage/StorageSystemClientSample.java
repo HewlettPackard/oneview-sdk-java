@@ -31,7 +31,7 @@ import com.hp.ov.sdk.dto.storage.StorageSystem;
 import com.hp.ov.sdk.dto.storage.StorageTargetPort;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClientSample;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.util.URIUtils;
 
 /*
  * StorageSystemClientSample is a sample program consume the storage server managed by HPE OneView.
@@ -91,7 +91,7 @@ public class StorageSystemClientSample {
 
         LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
 
-        String storageSystemId = UrlUtils.getResourceIdFromUri(taskResource.getAssociatedResource().getResourceUri());
+        String storageSystemId = URIUtils.getResourceIdFromUri(taskResource.getAssociatedResource().getResourceUri());
         StorageSystem storageSystem = this.storageSystemClient.getById(storageSystemId);
 
         storageSystem.setManagedDomain("TestDomain");

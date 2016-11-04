@@ -23,7 +23,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.GsonBuilder;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.util.URIUtils;
 
 public class BaseModelResource implements Serializable {
 
@@ -181,7 +181,7 @@ public class BaseModelResource implements Serializable {
     }
 
     public String getResourceId() {
-        return UrlUtils.getResourceIdFromUri(this.getUri());
+        return URIUtils.getResourceIdFromUri(this.getUri());
     }
 
     public boolean canEqual(Object obj) {

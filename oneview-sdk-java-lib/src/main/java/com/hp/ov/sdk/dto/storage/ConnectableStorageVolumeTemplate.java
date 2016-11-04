@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.util.URIUtils;
 
 public class ConnectableStorageVolumeTemplate implements Serializable {
 
@@ -82,7 +82,7 @@ public class ConnectableStorageVolumeTemplate implements Serializable {
     }
 
     public String getResourceId() {
-        return UrlUtils.getResourceIdFromUri(this.getTemplateUri());
+        return URIUtils.getResourceIdFromUri(this.getTemplateUri());
     }
 
 }

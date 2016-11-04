@@ -23,4 +23,8 @@ public class SDKInvalidArgumentException extends SDKException {
         super(sdkErrorKey, errorSource, null);
     }
 
+    public SDKInvalidArgumentException(SDKErrorKey sdkErrorKey, String errorSource, Throwable cause) {
+        super(sdkErrorKey, errorSource, cause);
+    }
+
 }

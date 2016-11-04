@@ -33,7 +33,7 @@ import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClientSample;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.util.URIUtils;
 
 public class SasLogicalInterconnectClientSample {
 
@@ -102,7 +102,7 @@ public class SasLogicalInterconnectClientSample {
 
         ReplaceDriveEnclosure replace = new ReplaceDriveEnclosure();
 
-        String driveEnclosureSerialNumber = UrlUtils.getResourceIdFromUri(interconnect.getDriveEnclosureUris().get(0));
+        String driveEnclosureSerialNumber = URIUtils.getResourceIdFromUri(interconnect.getDriveEnclosureUris().get(0));
 
         replace.setOldSerialNumber(driveEnclosureSerialNumber);
         replace.setNewSerialNumber(driveEnclosureSerialNumber);

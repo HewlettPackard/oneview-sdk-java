@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.Until;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.util.URIUtils;
 
 public class AttachableStorageVolume implements Serializable {
 
@@ -131,7 +131,7 @@ public class AttachableStorageVolume implements Serializable {
     }
 
     public String getResourceId() {
-        return UrlUtils.getResourceIdFromUri(this.getUri());
+        return URIUtils.getResourceIdFromUri(this.getUri());
     }
 
     public List<String> getAvailableNetworks() {

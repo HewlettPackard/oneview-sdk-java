@@ -41,7 +41,7 @@ import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureClient;
 import com.hp.ov.sdk.rest.client.servers.EnclosureClientSample;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.util.URIUtils;
 
 /*
  * UplinkSetClientSample is a sample program to assign/consume networks of HPE OneView to uplink ports of interconnect.
@@ -156,7 +156,7 @@ public class UplinkSetClientSample {
         for (int i = 0; i < enclosuresDto.getInterconnectBayCount(); i++) {
             if (Integer.parseInt(BAY_VALUE) == enclosuresDto.getInterconnectBays().get(i).getBayNumber()) {
                 if (null != enclosuresDto.getInterconnectBays().get(i).getInterconnectUri()) {
-                    resourceId = UrlUtils.getResourceIdFromUri(enclosuresDto.getInterconnectBays().get(i).getInterconnectUri());
+                    resourceId = URIUtils.getResourceIdFromUri(enclosuresDto.getInterconnectBays().get(i).getInterconnectUri());
                 }
 
                 Interconnect interconnectsDto = interconnectClient.getById(resourceId);

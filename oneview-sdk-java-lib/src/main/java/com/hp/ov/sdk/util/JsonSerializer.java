@@ -16,10 +16,6 @@
 
 package com.hp.ov.sdk.util;
 
-import java.util.Arrays;
-import java.util.List;
-
-import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 
 public class JsonSerializer {
@@ -28,18 +24,6 @@ public class JsonSerializer {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
 
         return converter.resourceToJson(source, apiVersion.getValue());
-    }
-
-    public String toJsonArray(List<?> source, ApiVersion apiVersion) {
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-
-        return converter.resourceToJson(source, apiVersion.getValue());
-    }
-
-    public String toJsonArray(Patch source, ApiVersion apiVersion) {
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-
-        return converter.resourceToJson(Arrays.asList(source), apiVersion.getValue());
     }
 
 }

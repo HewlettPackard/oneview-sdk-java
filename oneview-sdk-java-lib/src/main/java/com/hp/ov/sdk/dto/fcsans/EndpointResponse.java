@@ -21,7 +21,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.google.gson.annotations.Since;
-import com.hp.ov.sdk.util.UrlUtils;
+import com.hp.ov.sdk.util.URIUtils;
 
 public class EndpointResponse implements Serializable {
 
@@ -233,7 +233,7 @@ public class EndpointResponse implements Serializable {
     }
 
     public String getResourceId() {
-        return UrlUtils.getResourceIdFromUri(this.getUri());
+        return URIUtils.getResourceIdFromUri(this.getUri());
     }
 
     @Override
