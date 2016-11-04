@@ -19,43 +19,22 @@ import java.lang.reflect.Type;
 
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.util.ObjectToJsonConverter;
-import com.hp.ov.sdk.util.StringUtil;
 
 public class ResourceAdaptor {
 
     public <T> ResourceCollection<T> buildResourceCollection(String source, Class<T> resourceType) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-
-        String sourceReplaced = this.applyReplacementsOnSource(source);
-
-        return converter.jsonToResourceCollection(sourceReplaced, resourceType);
+        return converter.jsonToResourceCollection(source, resourceType);
     }
 
     public <T> T buildResource(String source, Class<T> resourceType) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-
-        String sourceReplaced = this.applyReplacementsOnSource(source);
-
-        return converter.jsonToResource(sourceReplaced, resourceType);
+        return converter.jsonToResource(source, resourceType);
     }
 
     public Object buildResource(String source, Type resourceType) {
         ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-
-        String sourceReplaced = this.applyReplacementsOnSource(source);
-
-        return converter.jsonToResource(sourceReplaced, resourceType);
-    }
-
-    private String applyReplacementsOnSource(String source) {
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-
-        String sourceAsJson = converter.processJsonFromOneView(source);
-        String sourceReplacedQuotesAndBackSlash = StringUtil.replaceQuotesAndBackSlash(sourceAsJson);
-        String sourceReplacedQuotesBackSlashWithQuote = StringUtil.replaceQuotesBackSlashWithQuote(
-                sourceReplacedQuotesAndBackSlash);
-
-        return sourceReplacedQuotesBackSlashWithQuote;
+        return converter.jsonToResource(source, resourceType);
     }
 
 }
