@@ -63,7 +63,7 @@ public interface ScopeClient extends
      * @return {@link Scope} the updated scope.
      */
     @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT,
-            requestInterceptor = { IfMatchRequestInterceptor.class })
+            requestInterceptor = IfMatchRequestInterceptor.class)
     Scope update(@PathParam("resourceId") String resourceId, @BodyParam Scope scope);
 
     /**
@@ -94,7 +94,7 @@ public interface ScopeClient extends
     @Endpoint(uri = "/{resourceId}",
             method = HttpMethod.DELETE,
             forceReturnTask = true,
-            requestInterceptor = { IfMatchRequestInterceptor.class })
+            requestInterceptor = IfMatchRequestInterceptor.class)
     TaskResource delete(@PathParam("resourceId") String resourceId, RequestOption ... options);
 
     /**

@@ -68,7 +68,7 @@ public interface SwitchClient extends
      *         process.
      */
     @Endpoint(uri = "/{resourceId}" + SWITCHES_REFRESH_URI, method = HttpMethod.PATCH,
-            requestInterceptor = {SwitchRefreshRequestInterceptor.class})
+            requestInterceptor = SwitchRefreshRequestInterceptor.class)
     TaskResource refresh(@PathParam("resourceId") String resourceId, RequestOption... options);
 
     class SwitchRefreshRequestInterceptor implements RequestInterceptor {

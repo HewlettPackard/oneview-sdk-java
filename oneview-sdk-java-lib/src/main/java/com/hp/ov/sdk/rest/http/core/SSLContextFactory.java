@@ -35,6 +35,13 @@ import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 
 public class SSLContextFactory {
 
+    public static SSLContext getContext(SDKConfiguration config) {
+        if (config.isTrustStoreEnabled()) {
+            return getDefaultContext(config);
+        }
+        return getTrustAllContext();
+    }
+
     /**
      * The default SSLContext implementation.
      * <p>
@@ -48,7 +55,7 @@ public class SSLContextFactory {
      *               These properties comprehends the path to the TrustSore file and its password.
      * @return {@link SSLContext}
      */
-    public static SSLContext getDefaultContext(SDKConfiguration config) {
+    private static SSLContext getDefaultContext(SDKConfiguration config) {
         try {
             File trustStore = new File(config.getTrustStoreFile());
 
@@ -71,7 +78,7 @@ public class SSLContextFactory {
      * </p>
      * @return {@link SSLContext}
      */
-    public static SSLContext getTrustAllContext() {
+    private static SSLContext getTrustAllContext() {
         try {
             SSLContext context = SSLContext.getInstance(SSLConnectionSocketFactory.TLS);
 
@@ -116,7 +123,7 @@ public class SSLContextFactory {
      *
      * @return {@link SSLContext}
      */
-    public static SSLContext getAvailableContext() {
+    private static SSLContext getAvailableContext() {
         try {
             SSLContext context = SSLContext.getInstance(SSLConnectionSocketFactory.TLS);
 

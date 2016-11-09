@@ -54,7 +54,7 @@ public interface ArtifactsBundleClient extends
     String ARTIFACTS_BUNDLE_STOP_ARTIFACT_CREATE_URI = "/stopArtifactCreate";
 
     /**
-     * Creates an artifact bundle according to the provided <code>filePath</code> object.
+     * Creates an artifact bundle according to the provided <code>file</code> object.
      *
      * @param file {@link File} instance containing the artifacts bundle file.
      * @param options varargs of {@link RequestOption} which can be used to specify
@@ -97,8 +97,7 @@ public interface ArtifactsBundleClient extends
      * @return {@link TaskResource} task containing the result of this request.
      */
     @Endpoint(uri = ARTIFACTS_BUNDLE_BACKUPS_URI + ARTIFACTS_BUNDLE_ARCHIVE_URI,
-            method = HttpMethod.POST,
-            forceReturnTask = true)
+            method = HttpMethod.POST, forceReturnTask = true)
     TaskResource createBackupArchiveBundle(@BodyParam(type = ContentType.MULTIPART_FORM_DATA) File file,
             RequestOption... options);
 
@@ -160,7 +159,7 @@ public interface ArtifactsBundleClient extends
      * @return {@link TaskResource} task containing the result of this request.
      */
     @Endpoint(uri = "/{resourceId}", method = HttpMethod.PUT,
-            requestInterceptor = {ExtractBundleRequestInterceptor.class})
+            requestInterceptor = ExtractBundleRequestInterceptor.class)
     TaskResource extractBundle(@PathParam("resourceId") String resourceId, RequestOption... options);
 
     class ExtractBundleRequestInterceptor implements RequestInterceptor {

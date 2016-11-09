@@ -44,7 +44,7 @@ public class BaseClient {
 
     public BaseClient(SDKConfiguration config, String hostname) {
         this(new ResourceAdaptor(),
-             new HttpRestClient(config, SSLContextFactory.getDefaultContext(config)),
+             new HttpRestClient(config, SSLContextFactory.getContext(config)),
              new Supplier<TaskMonitor>() {
                 @Override
                 public TaskMonitor get() {

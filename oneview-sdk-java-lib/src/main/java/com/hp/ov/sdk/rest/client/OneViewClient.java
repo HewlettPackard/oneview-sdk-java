@@ -23,7 +23,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.reflect.Reflection;
-import com.hp.ov.sdk.rest.client.security.MessagingCertificateClient;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKException;
 import com.hp.ov.sdk.rest.client.activity.AlertClient;
@@ -54,6 +53,7 @@ import com.hp.ov.sdk.rest.client.networking.SwitchClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
 import com.hp.ov.sdk.rest.client.networking.UplinkSetClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
+import com.hp.ov.sdk.rest.client.security.MessagingCertificateClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.server.LogicalEnclosureClient;
@@ -238,7 +238,7 @@ public class OneViewClient {
      * @return an interface to the firmware bundles REST API.
      */
     public synchronized FirmwareBundleClient firmwareBundle() {
-        return this.getClient(FirmwareBundleClient.class);
+        return this.getProxy(FirmwareBundleClient.class);
     }
 
     /**

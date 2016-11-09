@@ -47,7 +47,7 @@ public interface InterconnectTypeClient extends SearchableResource<InterconnectT
      * @return {@link ResourceCollection} paginated collection containing the details for the
      * available resources that match the filter.
      */
-    @Endpoint(requestInterceptor = {GetByNameRequestInterceptor.class})
+    @Endpoint(requestInterceptor = GetByNameRequestInterceptor.class)
     ResourceCollection<InterconnectType> getByName(InterconnectTypeName name);
 
     class GetByNameRequestInterceptor implements RequestInterceptor {

@@ -24,8 +24,10 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
@@ -110,8 +112,16 @@ public class HttpRestClient {
     }
 
     private CloseableHttpClient buildHttpClient(SSLContext sslContext) {
-        SSLConnectionSocketFactory sslFactory = new SSLConnectionSocketFactory(
-                sslContext, SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+        HostnameVerifier verifier = (config.isTrustStoreEnabled())
+                ? SSLConnectionSocketFactory.getDefaultHostnameVerifier()
+                : new HostnameVerifier() {
+            @Override
+            public boolean verify(String s, SSLSession sslSession) {
+                return true;
+            }
+        };
+
+        SSLConnectionSocketFactory sslFactory = new SSLConnectionSocketFactory(sslContext, verifier);
 
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
                 .register("http", PlainConnectionSocketFactory.INSTANCE)
