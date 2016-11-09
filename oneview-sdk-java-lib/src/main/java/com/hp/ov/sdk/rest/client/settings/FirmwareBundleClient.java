@@ -65,7 +65,7 @@ public interface FirmwareBundleClient {
         private void validateFirmwareBundleFile(File firmwareBundle) {
             if (!(firmwareBundle.exists() && firmwareBundle.isFile())) {
                 throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument,
-                        SdkConstants.FIRMWARE_BUNDLE);
+                        "Invalid firmware bundle file (file does not exists or it is not a regular file)");
             }
         }
     }

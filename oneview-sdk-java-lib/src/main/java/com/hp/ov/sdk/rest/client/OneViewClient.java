@@ -16,15 +16,10 @@
 
 package com.hp.ov.sdk.rest.client;
 
-import java.lang.reflect.Constructor;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.reflect.Reflection;
-import com.hp.ov.sdk.exceptions.SDKErrorEnum;
-import com.hp.ov.sdk.exceptions.SDKException;
 import com.hp.ov.sdk.rest.client.activity.AlertClient;
 import com.hp.ov.sdk.rest.client.facilities.DataCenterClient;
 import com.hp.ov.sdk.rest.client.facilities.PowerDeliveryDeviceClient;
@@ -358,7 +353,15 @@ public class OneViewClient {
      * @return an interface to the certificates REST API.
      */
     public synchronized MessagingCertificateClient messagingCertificate() {
-        return this.getClient(MessagingCertificateClient.class);
+        MessagingCertificateClient instance = (MessagingCertificateClient)
+                this.instances.get(MessagingCertificateClient.class);
+
+        if (instance == null) {
+            instance = new MessagingCertificateClient(this.baseClient);
+
+            this.instances.put(MessagingCertificateClient.class, instance);
+        }
+        return instance;
     }
 
     /**
@@ -595,32 +598,12 @@ public class OneViewClient {
         T instance = (T) this.instances.get(clientClass);
 
         if (instance == null) {
-            instance = Reflection.newProxy(clientClass, new ClientRequestHandler<>(this.baseClient, clientClass));
+            instance = Reflection.newProxy(clientClass,
+                    new ClientRequestHandler<>(this.baseClient, clientClass));
 
             this.instances.put(clientClass, instance);
         }
         return instance;
-    }
-
-    private <T> T getClient(Class<T> clientClass) {
-        T instance = (T) this.instances.get(clientClass);
-
-        if (instance == null) {
-            instance = this.buildClient(clientClass);
-
-            this.instances.put(clientClass, instance);
-        }
-        return instance;
-    }
-
-    private <T> T buildClient(Class<T> clientClass) {
-        try {
-            Constructor<T> constructor = clientClass.getConstructor(BaseClient.class);
-
-            return constructor.newInstance(this.baseClient);
-        } catch (ReflectiveOperationException e) {
-            throw new SDKException(SDKErrorEnum.internalServerError, StringUtils.EMPTY, e);
-        }
     }
 
 }

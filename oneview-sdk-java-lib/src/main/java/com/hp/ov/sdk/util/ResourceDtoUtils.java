@@ -87,7 +87,7 @@ public class ResourceDtoUtils {
     }
 
     public List<String> getNetworkUris(List<String> networkNames) {
-        List<String> networkUris = new ArrayList<String>();
+        List<String> networkUris = new ArrayList<>();
 
         for (String networkName : networkNames) {
             Network dto = oneViewClient.ethernetNetwork().getByName(networkName).get(0);
@@ -102,7 +102,7 @@ public class ResourceDtoUtils {
     }
 
     public List<String> getFcNetworkUris(final List<String> networkNames) {
-        List<String> networkUris = new ArrayList<String>();
+        List<String> networkUris = new ArrayList<>();
         FcNetwork dto = null;
         String fcNetworkUri = null;
 
@@ -113,7 +113,6 @@ public class ResourceDtoUtils {
                 fcNetworkUri = dto.getUri();
                 networkUris.add(fcNetworkUri);
             }
-
         }
         return networkUris;
     }
@@ -175,23 +174,10 @@ public class ResourceDtoUtils {
         return dto;
     }
 
-    /*
-     * public UplinkSet buildUplinkSetDto(final RestParams params, String
-     * ligName, String uplinkSetName, String uplinkSetType, List<String>
-     * networkNames, String nativeEthNetwork, HashMap<Integer, List<String>>
-     * bayPortMap, String ethMode, String lacpTimer, String fcUplinkSpeed) {
-     *
-     * }
-     */
     public UplinkSetGroup buildUplinkSetDto(final String ligName, final String uplinkSetName,
-            final String uplinkSetType, final List<String> networkNames, final HashMap<Integer, List<String>> bayPortMap,
-            final String lacpTimer, final String fcUplinkSpeed) {
-        return buildUplinkSetDto(ligName, uplinkSetName, uplinkSetType, bayPortMap, networkNames);
-    }
+            final NetworkType uplinkSetType, final HashMap<Integer, List<String>> bayPortMap, final List<String> networkNames) {
 
-    public UplinkSetGroup buildUplinkSetDto(final String ligName, final String uplinkSetName,
-            final String uplinkSetType, final HashMap<Integer, List<String>> bayPortMap, final List<String> networkNames) {
-        final List<LogicalPortConfigInfo> logicalPortConfigInfos = new ArrayList<LogicalPortConfigInfo>();
+        final List<LogicalPortConfigInfo> logicalPortConfigInfos = new ArrayList<>();
         final UplinkSetGroup uplinkSetDto = new UplinkSetGroup();
 
         InterconnectTypeClient interconnectTypeClient = oneViewClient.interconnectType();
@@ -211,15 +197,15 @@ public class ResourceDtoUtils {
                     }
                 }
                 if (portNumber == -1) {
-                    throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, SdkConstants.UPLINKSET
-                            + " port not found for Interconnect Type.");
+                    throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument,
+                            "Uplink set port not found for interconnect type.");
                 }
 
                 final LogicalPortConfigInfo logicalPortConfigInfo = new LogicalPortConfigInfo();
                 logicalPortConfigInfo.setDesiredSpeed(OpSpeed.Auto);
 
                 final LogicalLocation logicalLocation = new LogicalLocation();
-                final List<LogicalLocationEntry> locationEntriesList = new ArrayList<LogicalLocationEntry>();
+                final List<LogicalLocationEntry> locationEntriesList = new ArrayList<>();
                 final LogicalLocationEntry locationEntries11 = new LogicalLocationEntry();
                 locationEntries11.setRelativeValue(bayRelativeValue);
                 locationEntries11.setType(LocationType.Bay);
@@ -241,15 +227,15 @@ public class ResourceDtoUtils {
 
         uplinkSetDto.setName(uplinkSetName);
         uplinkSetDto.setMode(EnetPortSetAggregationMode.Auto);
-        if (uplinkSetType.equalsIgnoreCase(SdkConstants.ETHERNET)) {
-            uplinkSetDto.setNetworkType(NetworkType.Ethernet);
+        uplinkSetDto.setNetworkType(uplinkSetType);
+
+        if (uplinkSetType == NetworkType.Ethernet) {
             uplinkSetDto.setNetworkUris(this.getNetworkUris(networkNames));
-        } else if (uplinkSetType.equalsIgnoreCase(SdkConstants.FIBRE_CHANNEL)) {
-            uplinkSetDto.setNetworkType(NetworkType.FibreChannel);
+        } else if (uplinkSetType == NetworkType.FibreChannel) {
             uplinkSetDto.setNetworkUris(this.getFcNetworkUris(networkNames));
         }
-        uplinkSetDto.setPrimaryPort(null);
 
+        uplinkSetDto.setPrimaryPort(null);
         uplinkSetDto.setLogicalPortConfigInfos(logicalPortConfigInfos);
 
         return uplinkSetDto;
@@ -333,7 +319,7 @@ public class ResourceDtoUtils {
                     volumeAttachment.getVolumeStorageSystemUri().substring(
                             volumeAttachment.getVolumeStorageSystemUri().lastIndexOf("/") + 1));
 
-            final List<StoragePath> storagePaths = new ArrayList<StoragePath>();
+            final List<StoragePath> storagePaths = new ArrayList<>();
             for (int k = 0; k < storageTargetPortCollectionDto.getCount(); k++) {
                 if (fcId.containsKey(storageTargetPortCollectionDto.getMembers().get(k).getExpectedNetworkName())) {
                     final StoragePath storagePath = new StoragePath();
@@ -381,10 +367,12 @@ public class ResourceDtoUtils {
                     .setServerHardwareTypeUri((serverHardwareTypeUri != null && serverHardwareTypeUri.length() != 0) ? serverHardwareTypeUri
                             : null);
             if (serverProfileDto.getServerHardwareTypeUri() == null) {
-                throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, SdkConstants.SERVER_HARDWARE);
+                throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument,
+                        "Could not find the server hardware URI");
             }
         } else {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, SdkConstants.SERVER_HARDWARE);
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument,
+                    "Could not find server hardware name");
         }
         if (useBayNameForServerHardwareUri) {
             final String serverHardwareUri = getServerHardwareUri(serverHardwareName);
@@ -401,7 +389,7 @@ public class ResourceDtoUtils {
         serverProfileDto.setMacType(macType);
         serverProfileDto.setWwnType(wwnType);
         serverProfileDto.setSerialNumberType(serialNumberType);
-        serverProfileDto.setCategory(SdkConstants.SERVER_PROFILES);
+        serverProfileDto.setCategory(ResourceCategory.RC_SERVER_PROFILES);
 
         serverProfileDto.setConnections(connections);
         serverProfileDto.setBoot(boot);

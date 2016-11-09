@@ -18,12 +18,14 @@ package com.hp.ov.sdk.dto.samples;
 import java.util.HashMap;
 import java.util.List;
 
+import com.hp.ov.sdk.dto.networking.NetworkType;
+
 public class UplinkSetValue {
 
-    private HashMap<Integer, List<String>> bayPortMap = new HashMap<Integer, List<String>>();
+    private HashMap<Integer, List<String>> bayPortMap = new HashMap<>();
     private String ligName;
     private String uplinkSetName;
-    private String uplinkSetType;
+    private NetworkType uplinkSetType;
     private List<String> networkNames;
 
     /**
@@ -74,7 +76,7 @@ public class UplinkSetValue {
     /**
      * @return the uplinkSetType
      */
-    public String getUplinkSetType() {
+    public NetworkType getUplinkSetType() {
         return uplinkSetType;
     }
 
@@ -82,7 +84,7 @@ public class UplinkSetValue {
      * @param uplinkSetType
      *            the uplinkSetType to set
      */
-    public void setUplinkSetType(final String uplinkSetType) {
+    public void setUplinkSetType(final NetworkType uplinkSetType) {
         this.uplinkSetType = uplinkSetType;
     }
 

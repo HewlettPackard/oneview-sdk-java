@@ -403,7 +403,8 @@ public class HttpRestClient {
 
     private String downloadFile(final String downloadPath, HttpResponse response) {
         if (!new File(downloadPath).isDirectory()) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, SdkConstants.DOWNLOAD_PATH);
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument,
+                    "Configured download path is not a directory!");
         }
 
         String fileSize = response.getFirstHeader(HttpHeaders.CONTENT_LENGTH).getValue();
@@ -435,7 +436,8 @@ public class HttpRestClient {
         } catch (IOException e) {
             LOGGER.warn("Error downloading file {}", fileName, e);
 
-            throw new SDKBadRequestException(SDKErrorEnum.internalError, SdkConstants.DOWNLOAD_PATH, e);
+            throw new SDKBadRequestException(SDKErrorEnum.internalError,
+                    "An error occurred while downloading file", e);
         }
 
         return filePath;

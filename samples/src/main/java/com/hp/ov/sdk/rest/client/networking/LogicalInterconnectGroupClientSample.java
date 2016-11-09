@@ -28,6 +28,7 @@ import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.NetworkType;
 import com.hp.ov.sdk.dto.networking.interconnect.InterconnectTypeName;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
@@ -59,8 +60,7 @@ public class LogicalInterconnectGroupClientSample {
     private static final List<String> logicalInterconnectGroupName_B = Arrays.asList(FcNetworkClientSample.FC_NETWORK_NAME_B);
     private static final List<String> ethPort = Arrays.asList("X5", "X6");
     private static final List<String> fcPort = Arrays.asList("X2");
-    private static final String ethUplinkSetType = "Ethernet";
-    private static final String fcUplinkSetType = "FibreChannel";
+
     private static final String ethUplinkSetName = "EthernetUplinkSet";
     private static final String fcAUplinkSetName = "FCUplinkSetA";
     private static final String fcBUplinkSetName = "FCUplinkSetB";
@@ -174,12 +174,12 @@ public class LogicalInterconnectGroupClientSample {
     private List<UplinkSetGroup> buildUplinkSetGroupDto() {
         List<UplinkSetGroup> uplinkSetGroupDto;
 
-        final HashMap<Integer, List<String>> ethBayPortMap = new HashMap<Integer, List<String>>();
+        final HashMap<Integer, List<String>> ethBayPortMap = new HashMap<>();
         ethBayPortMap.put(1, ethPort);
         ethBayPortMap.put(2, ethPort);
-        final HashMap<Integer, List<String>> fcBayPortMapA = new HashMap<Integer, List<String>>();
+        final HashMap<Integer, List<String>> fcBayPortMapA = new HashMap<>();
         fcBayPortMapA.put(1, fcPort);
-        final HashMap<Integer, List<String>> fcBayPortMapB = new HashMap<Integer, List<String>>();
+        final HashMap<Integer, List<String>> fcBayPortMapB = new HashMap<>();
         fcBayPortMapB.put(2, fcPort);
 
         final List<UplinkSetValue> uplinkSetValues = new ArrayList<UplinkSetValue>();
@@ -188,21 +188,21 @@ public class LogicalInterconnectGroupClientSample {
         ethUplinkSetValue.setLigName(RESOURCE_NAME);
         ethUplinkSetValue.setNetworkNames(networkNames);
         ethUplinkSetValue.setUplinkSetName(ethUplinkSetName);
-        ethUplinkSetValue.setUplinkSetType(ethUplinkSetType);
+        ethUplinkSetValue.setUplinkSetType(NetworkType.Ethernet);
 
         final UplinkSetValue fcAUplinkSetValue = new UplinkSetValue();
         fcAUplinkSetValue.setBayPortMap(fcBayPortMapA);
         fcAUplinkSetValue.setLigName(RESOURCE_NAME);
         fcAUplinkSetValue.setNetworkNames(logicalInterconnectGroupName_A);
         fcAUplinkSetValue.setUplinkSetName(fcAUplinkSetName);
-        fcAUplinkSetValue.setUplinkSetType(fcUplinkSetType);
+        fcAUplinkSetValue.setUplinkSetType(NetworkType.FibreChannel);
 
         final UplinkSetValue fcBUplinkSetValue = new UplinkSetValue();
         fcBUplinkSetValue.setBayPortMap(fcBayPortMapB);
         fcBUplinkSetValue.setLigName(RESOURCE_NAME);
         fcBUplinkSetValue.setNetworkNames(logicalInterconnectGroupName_B);
         fcBUplinkSetValue.setUplinkSetName(fcBUplinkSetName);
-        fcBUplinkSetValue.setUplinkSetType(fcUplinkSetType);
+        fcBUplinkSetValue.setUplinkSetType(NetworkType.FibreChannel);
 
         uplinkSetValues.add(ethUplinkSetValue);
         uplinkSetValues.add(fcAUplinkSetValue);
