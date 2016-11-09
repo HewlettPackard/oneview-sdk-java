@@ -79,7 +79,7 @@ import com.hp.ov.sdk.exceptions.SDKUnauthorizedException;
 import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.util.JsonSerializer;
+import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hpe.i3s.dto.deployment.goldenimage.GoldenImageFile;
 
 public class HttpRestClient {
@@ -91,23 +91,23 @@ public class HttpRestClient {
     We can also consider to have a Map containing several converters and
     choose the appropriate converter according to the Content-Type.
      */
-    private final JsonSerializer serializer;
+    private final ObjectToJsonConverter converter;
     private final CloseableHttpClient httpClient;
     private final SDKConfiguration config;
 
     public HttpRestClient(SDKConfiguration sdkConfiguration, SSLContext sslContext) {
         this.config = sdkConfiguration;
-        this.serializer = new JsonSerializer();
+        this.converter = ObjectToJsonConverter.getInstance();
         this.httpClient = this.buildHttpClient(sslContext);
     }
 
     @VisibleForTesting
     protected HttpRestClient(SDKConfiguration sdkConfiguration,
-            JsonSerializer serializer,
+            ObjectToJsonConverter converter,
             CloseableHttpClient httpClient) {
 
         this.config = sdkConfiguration;
-        this.serializer = serializer;
+        this.converter = converter;
         this.httpClient = httpClient;
     }
 
@@ -257,7 +257,8 @@ public class HttpRestClient {
             switch (contentType) {
                 case APPLICATION_JSON:
                 case APPLICATION_JSON_PATCH:
-                    String textEntity = serializer.toJson(request.getEntity(), config.getOneViewApiVersion());
+                    String textEntity = converter.resourceToJson(request.getEntity(),
+                            config.getOneViewApiVersion().getValue());
 
                     entity = EntityBuilder.create()
                             .setContentType(toApacheContentType(contentType))

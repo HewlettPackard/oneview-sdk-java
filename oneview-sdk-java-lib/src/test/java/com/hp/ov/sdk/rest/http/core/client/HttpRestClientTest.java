@@ -28,7 +28,7 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.exceptions.SDKUnauthorizedException;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.util.JsonSerializer;
+import com.hp.ov.sdk.util.ObjectToJsonConverter;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HttpRestClientTest {
@@ -54,7 +54,7 @@ public class HttpRestClientTest {
 
     @Before
     public void setUp() throws Exception {
-        this.restClient = new HttpRestClient(sdkConfiguration, Mockito.mock(JsonSerializer.class), httpClient);
+        this.restClient = new HttpRestClient(sdkConfiguration, Mockito.mock(ObjectToJsonConverter.class), httpClient);
 
         Mockito.when(sdkConfiguration.getClientMaxNumberOfConnections()).thenReturn(20);
         Mockito.when(sdkConfiguration.getClientSocketTimeout()).thenReturn(60);
