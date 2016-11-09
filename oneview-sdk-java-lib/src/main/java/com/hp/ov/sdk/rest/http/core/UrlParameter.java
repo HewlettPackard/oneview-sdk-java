@@ -18,6 +18,7 @@ package com.hp.ov.sdk.rest.http.core;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class UrlParameter {
 
@@ -49,24 +50,16 @@ public class UrlParameter {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj instanceof UrlParameter) {
-            UrlParameter urlParameter = (UrlParameter) obj;
-
-            return new EqualsBuilder()
-                    .append(key, urlParameter.key)
-                    .append(value, urlParameter.value)
-                    .isEquals();
-        }
-        return false;
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(key)
-                .append(value)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

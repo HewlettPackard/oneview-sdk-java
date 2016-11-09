@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class LoginInformation implements Serializable {
 
@@ -54,26 +55,16 @@ public class LoginInformation implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-
-        if (obj instanceof LoginInformation) {
-            LoginInformation that = (LoginInformation) obj;
-
-            return new EqualsBuilder()
-                    .append(userName, that.userName)
-                    .append(password, that.password)
-                    .append(authLoginDomain, that.authLoginDomain)
-                    .isEquals();
-        }
-        return false;
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder()
-                .append(userName)
-                .append(password)
-                .append(authLoginDomain)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

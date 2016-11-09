@@ -18,8 +18,10 @@ package com.hp.ov.sdk.constants;
 public class SdkConstants {
 
     public static final String APPLIANCE = "appliance";
+    public static final String AUTH_HEADER = "Auth";
     public static final String HTTPS = "https://";
     public static final String SSL_VERSION = "TLSv1.2";
+    public static final String X_API_VERSION_HEADER = "X-Api-Version";
     public static final String X_TASK_URI_HEADER = "X-Task-Uri";
 
     public static final int NO_TASK_TIMEOUT = 0;

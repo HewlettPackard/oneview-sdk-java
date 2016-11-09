@@ -159,7 +159,7 @@ public class HttpRestClient {
 
                 request.setHeader(HttpHeaders.ACCEPT, "application/json");
                 request.setHeader(HttpHeaders.ACCEPT_LANGUAGE, "en_US");
-                request.setHeader("X-Api-Version", version);
+                request.setHeader(SdkConstants.X_API_VERSION_HEADER, version);
             }
         };
 
@@ -243,7 +243,7 @@ public class HttpRestClient {
         }
 
         if (StringUtils.isNotBlank(sessionId)) {
-            requestBase.setHeader("Auth", sessionId);
+            requestBase.setHeader(SdkConstants.AUTH_HEADER, sessionId);
         }
 
         return getResponse(sessionId, requestBase, request.isForceReturnTask(), request.getDownloadPath());
@@ -337,12 +337,11 @@ public class HttpRestClient {
      * Gets the response from HPE OneView.
      *
      * @param sessionId OV session token ID.
-     * @param request
-     *  Request information.
-     * @param forceReturnTask
-     *  Forces the check for the Location header (task) even when the response code is not 202.
-     * @param downloadPath
-     *  The directory where a binary response will be downloaded.
+     * @param request Request information.
+     * @param forceReturnTask Forces the check for the Location header (task)
+     *                        even when the response code is not 202.
+     * @param downloadPath The directory where a binary response will be downloaded.
+     *
      * @return {@link String} object containing the response of the request
      */
     private String getResponse(final String sessionId, HttpUriRequest request,
@@ -448,10 +447,9 @@ public class HttpRestClient {
      * Checks the HTTP response codes, on error throws the correct exception.
      * Sets the exception cause as e if it throws one.
      *
-     * @param responseCode
-     *  response code.
-     * @return
-     *  the response code.
+     * @param responseCode response code.
+     *
+     * @return the response code.
      */
     private int checkResponse(final int responseCode) {
         switch (responseCode) {
@@ -463,7 +461,6 @@ public class HttpRestClient {
         case HttpsURLConnection.HTTP_RESET:
         case HttpsURLConnection.HTTP_PARTIAL:
             return responseCode;
-
         case HttpsURLConnection.HTTP_NOT_FOUND:
             throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, SdkConstants.APPLIANCE);
         case HttpsURLConnection.HTTP_BAD_REQUEST:

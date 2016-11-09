@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.hp.ov.sdk.constants.ResourceCategory;
-import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.PortInfo;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.LocationType;
