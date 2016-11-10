@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.util;
+package com.hp.ov.sdk.rest.reflect;
 
-import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class JsonSerializer {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.PARAMETER)
+public @interface HeaderParam {
 
-    public String toJson(Object source, ApiVersion apiVersion) {
-        ObjectToJsonConverter converter = ObjectToJsonConverter.getInstance();
-
-        return converter.resourceToJson(source, apiVersion.getValue());
-    }
+    String value();
 
 }

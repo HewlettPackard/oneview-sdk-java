@@ -15,6 +15,8 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.http.core.client;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -46,6 +48,7 @@ public class SDKConfiguration {
     private static final String MESSAGE_BUS_PORT = "messagebus.port";
 
     // Trust store properties keys
+    private static final String TRUST_STORE_ENABLED = "truststore.enabled";
     private static final String TRUST_STORE_FILE = "truststore.file";
     private static final String TRUST_STORE_PASSWORD = "truststore.password";
 
@@ -77,6 +80,10 @@ public class SDKConfiguration {
     public int getMessageBusPort() throws NumberFormatException {
         return Integer.parseInt(this.properties.getProperty(MESSAGE_BUS_PORT,
                 String.valueOf(DEFAULT_MESSAGE_BUS_PORT)));
+    }
+
+    public boolean isTrustStoreEnabled() {
+        return Boolean.parseBoolean(this.properties.getProperty(TRUST_STORE_ENABLED, "true"));
     }
 
     public String getTrustStoreFile() {
@@ -119,22 +126,16 @@ public class SDKConfiguration {
     }
 
     public static SDKConfiguration fromFile(String filePath) {
-        InputStream inputStream = SDKConfiguration.class.getClassLoader().getResourceAsStream(filePath);
+        try {
+            FileInputStream inputStream = new FileInputStream(new File(filePath));
+            Properties properties = new Properties();
 
-        if (inputStream != null) {
-            try {
-                Properties properties = new Properties();
+            properties.load(inputStream);
 
-                properties.load(inputStream);
-
-                return new SDKConfiguration(properties);
-            } catch (IOException e) {
-                throw new SDKPropertiesFileException(SDKErrorEnum.propertiesFileError,
-                        "Error reading properties file", e);
-            }
-        } else {
+            return new SDKConfiguration(properties);
+        } catch (IOException e) {
             throw new SDKPropertiesFileException(SDKErrorEnum.propertiesFileError,
-                    "Properties file '" + filePath + "' not found in classpath.", null);
+                    "Error reading properties file", e);
         }
     }
 
@@ -157,7 +158,9 @@ public class SDKConfiguration {
             return this;
         }
 
-        public SDKConfigurationBuilder withOneViewDomain(String domain) {
+        public SDKConfigurationBuilder withOneViewUser(String userName, String password, String domain) {
+            values.put(SDKConfiguration.USERNAME, userName);
+            values.put(SDKConfiguration.PASSWORD, password);
             values.put(SDKConfiguration.DOMAIN, domain);
             return this;
         }
@@ -179,6 +182,11 @@ public class SDKConfiguration {
 
         public SDKConfigurationBuilder withMessageBusPort(int port) {
             values.put(SDKConfiguration.MESSAGE_BUS_PORT, String.valueOf(port));
+            return this;
+        }
+
+        public SDKConfigurationBuilder withTrustStoreEnabled(boolean enabled) {
+            values.put(SDKConfiguration.TRUST_STORE_ENABLED, String.valueOf(enabled));
             return this;
         }
 

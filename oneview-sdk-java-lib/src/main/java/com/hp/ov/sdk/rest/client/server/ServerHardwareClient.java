@@ -199,7 +199,7 @@ public interface ServerHardwareClient extends
      */
     @Endpoint(uri = SERVER_HARDWARE_FIRMWARE)
     ResourceCollection<ServerFirmwareInventory> getServerFirmwareInventoryByFilter(
-            @QueryParam() FirmwareInventoryFilter filter);
+            @QueryParam FirmwareInventoryFilter filter);
 
     /**
      * Retrieves the {@link ServerFirmwareInventory} details for the specified server hardware.

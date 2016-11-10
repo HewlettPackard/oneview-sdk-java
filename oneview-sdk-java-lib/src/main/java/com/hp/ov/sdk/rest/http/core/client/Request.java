@@ -21,6 +21,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.http.Header;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
@@ -41,6 +43,7 @@ public class Request {
     private boolean forceReturnTask;
     private int taskTimeoutMillis;
     private String downloadPath;
+    private List<Header> headers;
 
     public Request(HttpMethod type, String uri) {
         this(type, uri, null);
@@ -143,6 +146,21 @@ public class Request {
         return hostname;
     }
 
+    public void addHeader(Header header) {
+        this.headers().add(header);
+    }
+
+    public List<Header> getHeaders() {
+        return ImmutableList.copyOf(headers());
+    }
+
+    private List<Header> headers() {
+        if (headers == null) {
+            headers = new ArrayList<>();
+        }
+        return headers;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
@@ -151,5 +169,10 @@ public class Request {
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

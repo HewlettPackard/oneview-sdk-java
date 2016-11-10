@@ -13,65 +13,60 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.hp.ov.sdk.rest.client.settings;
 
 import java.io.File;
+import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.google.common.reflect.Parameter;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
-import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.RequestInterceptor;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.RequestOption;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
 
-public class FirmwareBundleClient {
+@Api(FirmwareBundleClient.FIRMWARE_BUNDLE_URI)
+public interface FirmwareBundleClient {
 
-    protected static final String FIRMWARE_BUNDLE_URI = "/rest/firmware-bundles";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(FirmwareBundleClient.class);
-    private static final int TIMEOUT = 300000; // in milliseconds = 5 mins
-    private final BaseClient baseClient;
-
-    public FirmwareBundleClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
+    String FIRMWARE_BUNDLE_URI = "/rest/firmware-bundles";
 
     /**
      * Uploads an SPP ISO image file or a hotfix file to the appliance.
-     *
-     * The API supports uploading one hotfix at a time into the system.
+     * <p>The API supports uploading one hotfix at a time into the system.</p>
      *
      * @param firmwareBundle path to the SPP ISO image file or hotfix file.
-     * @param aSync flag to indicate whether the request should be processed
-     * synchronously or asynchronously.
+     * @param options <code>varargs</code> of {@link RequestOption}, which can be used to specify
+     *                some request options.
      *
      * @return {@link TaskResource} containing the task status for the process.
      */
-    public TaskResource add(File firmwareBundle, boolean aSync) {
-        LOGGER.info("FirmwareBundleClient : add : Start");
+    @Endpoint(method = HttpMethod.POST, requestInterceptor = UploadFirmwareBundleRequestInterceptor.class)
+    TaskResource upload(@BodyParam(type = ContentType.MULTIPART_FORM_DATA) File firmwareBundle,
+            RequestOption... options);
 
-        validateFirmwareBundleFile(firmwareBundle);
+    class UploadFirmwareBundleRequestInterceptor implements RequestInterceptor {
+        @Override
+        public Request intercept(Request request, List<Parameter> params, Object[] args) {
+            File firmwareBundle = (File) args[0];
 
-        Request request = new Request(HttpMethod.POST, FIRMWARE_BUNDLE_URI, firmwareBundle);
+            this.validateFirmwareBundleFile(firmwareBundle);
 
-        request.setContentType(ContentType.MULTIPART_FORM_DATA);
-        request.setTimeout(TIMEOUT);
+            return request;
+        }
 
-        TaskResource taskResource = baseClient.executeMonitorableRequest(request);
-
-        LOGGER.info("FirmwareBundleClient : add : End");
-
-        return taskResource;
-    }
-
-    private void validateFirmwareBundleFile(File firmwareBundle) {
-        if (!(firmwareBundle.exists() && firmwareBundle.isFile())) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, SdkConstants.FIRMWARE_BUNDLE);
+        private void validateFirmwareBundleFile(File firmwareBundle) {
+            if (!(firmwareBundle.exists() && firmwareBundle.isFile())) {
+                throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument,
+                        "Invalid firmware bundle file (file does not exists or it is not a regular file)");
+            }
         }
     }
 

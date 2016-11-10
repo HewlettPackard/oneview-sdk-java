@@ -36,16 +36,16 @@ public class UplinkSet extends BaseModelResource {
 
     private ConnectionMode connectionMode;
     private EthernetNetworkType ethernetNetworkType;
-    private List<String> fcNetworkUris = new ArrayList<String>();
+    private List<String> fcNetworkUris = new ArrayList<>();
     @Since(200)
-    private List<String> fcoeNetworkUris = new ArrayList<String>();
+    private List<String> fcoeNetworkUris = new ArrayList<>();
     private LacpTimer lacpTimer;
     private String logicalInterconnectUri;
     private ManualLoginRedistributionState manualLoginRedistributionState;
     private String nativeNetworkUri;
     private NetworkType networkType;
-    private List<String> networkUris = new ArrayList<String>();
-    private List<PortConfigInfo> portConfigInfos = new ArrayList<PortConfigInfo>();
+    private List<String> networkUris = new ArrayList<>();
+    private List<PortConfigInfo> portConfigInfos = new ArrayList<>();
     private Location primaryPortLocation;
     private Reachability reachability;
 

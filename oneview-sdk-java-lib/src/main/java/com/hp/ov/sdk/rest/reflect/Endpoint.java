@@ -24,6 +24,7 @@ import java.lang.annotation.Target;
 import org.apache.commons.lang3.StringUtils;
 
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.RequestInterceptor;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
@@ -32,5 +33,8 @@ public @interface Endpoint {
     String uri() default StringUtils.EMPTY;
     HttpMethod method() default HttpMethod.GET;
     boolean forceReturnTask() default false;
+
+    /* custom interceptors */
+    Class<? extends RequestInterceptor>[] requestInterceptor() default {};
 
 }

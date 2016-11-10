@@ -16,26 +16,17 @@
 
 package com.hp.ov.sdk.rest.client.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.hp.ov.sdk.dto.security.login.LoginInformation;
 import com.hp.ov.sdk.dto.security.login.LoginSession;
-import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.BodyParam;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
 
-public class LoginSessionClient {
+@Api(LoginSessionClient.LOGIN_SESSIONS_URI)
+public interface LoginSessionClient {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoginSessionClient.class);
-
-    private static final String LOGIN_SESSIONS = "/rest/login-sessions";
-
-    private final BaseClient baseClient;
-
-    public LoginSessionClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
+    String LOGIN_SESSIONS_URI = "/rest/login-sessions";
 
     /**
      * Authenticate user with specified credentials. User name, password and an optional
@@ -46,15 +37,7 @@ public class LoginSessionClient {
      * @return {@link LoginSession} in case of a successful login, contains the sessionId
      * for further requests.
      */
-    public LoginSession authenticate(LoginInformation loginInformation) {
-        LOGGER.info("LoginSessionClient : authenticate : Start");
-
-        Request request = new Request(HttpMethod.POST, LOGIN_SESSIONS, loginInformation);
-        LoginSession loginSession = baseClient.executeRequest(request, LoginSession.class);
-
-        LOGGER.info("LoginSessionClient : authenticate : End");
-
-        return loginSession;
-    }
+    @Endpoint(method = HttpMethod.POST)
+    LoginSession authenticate(@BodyParam LoginInformation loginInformation);
 
 }

@@ -16,16 +16,6 @@
 
 package com.hp.ov.sdk.rest.client;
 
-import java.lang.reflect.Constructor;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.google.common.reflect.Reflection;
-import com.hp.ov.sdk.rest.client.security.MessagingCertificateClient;
-import com.hp.ov.sdk.exceptions.SDKErrorEnum;
-import com.hp.ov.sdk.exceptions.SDKException;
 import com.hp.ov.sdk.rest.client.activity.AlertClient;
 import com.hp.ov.sdk.rest.client.facilities.DataCenterClient;
 import com.hp.ov.sdk.rest.client.facilities.PowerDeliveryDeviceClient;
@@ -54,6 +44,7 @@ import com.hp.ov.sdk.rest.client.networking.SwitchClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
 import com.hp.ov.sdk.rest.client.networking.UplinkSetClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
+import com.hp.ov.sdk.rest.client.security.MessagingCertificateClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureGroupClient;
 import com.hp.ov.sdk.rest.client.server.LogicalEnclosureClient;
@@ -63,6 +54,7 @@ import com.hp.ov.sdk.rest.client.server.ServerProfileClient;
 import com.hp.ov.sdk.rest.client.server.ServerProfileTemplateClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareBundleClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
+import com.hp.ov.sdk.rest.client.settings.ScopeClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
 import com.hp.ov.sdk.rest.client.storage.DriveEnclosureClient;
 import com.hp.ov.sdk.rest.client.storage.FcSanDeviceManagerClient;
@@ -76,28 +68,31 @@ import com.hp.ov.sdk.rest.client.storage.StorageVolumeAttachmentClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeTemplateClient;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
-import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 import com.hp.ov.sdk.util.OneViewConnector;
+import com.hpe.core.AbstractClient;
 
-public class OneViewClient {
+public class OneViewClient extends AbstractClient {
 
     private final BaseClient baseClient;
 
-    private final Map<Class<?>, Object> instances = new ConcurrentHashMap<>();
+    private MessagingCertificateClient certificateClient;
 
     public OneViewClient(SDKConfiguration config) {
         this.baseClient = new BaseClient(config, config.getOneViewHostname());
 
         OneViewConnector connector = new OneViewConnector(
-                config,
-                new VersionClient(this.baseClient),
-                new LoginSessionClient(this.baseClient));
+                config, this.versionClient(), this.loginClient());
 
         this.baseClient.setSessionId(connector.connect());
     }
 
     public String getSessionId() {
         return this.baseClient.getSessionId();
+    }
+
+    @Override
+    protected BaseClient baseClient() {
+        return this.baseClient;
     }
 
     /**
@@ -107,7 +102,7 @@ public class OneViewClient {
      * @return an interface to the alerts REST API.
      */
     public synchronized AlertClient alert() {
-        return this.getProxy(AlertClient.class);
+        return getProxy(AlertClient.class);
     }
 
     /**
@@ -117,7 +112,7 @@ public class OneViewClient {
      * @return an interface to the connection templates REST API.
      */
     public synchronized ConnectionTemplateClient connectionTemplate() {
-        return this.getProxy(ConnectionTemplateClient.class);
+        return getProxy(ConnectionTemplateClient.class);
     }
 
     /**
@@ -127,7 +122,7 @@ public class OneViewClient {
      * @return an interface to the datacenters REST API.
      */
     public synchronized DataCenterClient dataCenter() {
-        return this.getProxy(DataCenterClient.class);
+        return getProxy(DataCenterClient.class);
     }
 
     /**
@@ -137,7 +132,7 @@ public class OneViewClient {
      * @return an interface to the drive enclosures REST API.
      */
     public synchronized DriveEnclosureClient driveEnclosure() {
-        return this.getProxy(DriveEnclosureClient.class);
+        return getProxy(DriveEnclosureClient.class);
     }
 
     /**
@@ -147,7 +142,7 @@ public class OneViewClient {
      * @return an interface to the enclosures REST API.
      */
     public synchronized EnclosureClient enclosure() {
-        return this.getProxy(EnclosureClient.class);
+        return getProxy(EnclosureClient.class);
     }
 
     /**
@@ -157,7 +152,7 @@ public class OneViewClient {
      * @return an interface to the enclosure groups REST API.
      */
     public synchronized EnclosureGroupClient enclosureGroup() {
-        return this.getProxy(EnclosureGroupClient.class);
+        return getProxy(EnclosureGroupClient.class);
     }
 
     /**
@@ -167,7 +162,7 @@ public class OneViewClient {
      * @return an interface to the ethernet networks REST API.
      */
     public synchronized EthernetNetworkClient ethernetNetwork() {
-        return this.getProxy(EthernetNetworkClient.class);
+        return getProxy(EthernetNetworkClient.class);
     }
 
     /**
@@ -177,7 +172,7 @@ public class OneViewClient {
      * @return an interface to the fabrics REST API.
      */
     public synchronized FabricClient fabric() {
-        return this.getProxy(FabricClient.class);
+        return getProxy(FabricClient.class);
     }
 
     /**
@@ -187,7 +182,7 @@ public class OneViewClient {
      * @return an interface to the FC networks REST API.
      */
     public synchronized FcNetworkClient fcNetwork() {
-        return this.getProxy(FcNetworkClient.class);
+        return getProxy(FcNetworkClient.class);
     }
 
     /**
@@ -197,7 +192,7 @@ public class OneViewClient {
      * @return an interface to the FCoE networks REST API.
      */
     public synchronized FcoeNetworkClient fcoeNetwork() {
-        return this.getProxy(FcoeNetworkClient.class);
+        return getProxy(FcoeNetworkClient.class);
     }
 
     /**
@@ -207,7 +202,7 @@ public class OneViewClient {
      * @return an interface to the SAN managers REST API.
      */
     public synchronized FcSanDeviceManagerClient fcSanDeviceManager() {
-        return this.getProxy(FcSanDeviceManagerClient.class);
+        return getProxy(FcSanDeviceManagerClient.class);
     }
 
     /**
@@ -217,7 +212,7 @@ public class OneViewClient {
      * @return an interface to the managed SANs REST API.
      */
     public synchronized FcSanManagedSanClient fcSanManagedSan() {
-        return this.getProxy(FcSanManagedSanClient.class);
+        return getProxy(FcSanManagedSanClient.class);
     }
 
     /**
@@ -227,7 +222,7 @@ public class OneViewClient {
      * @return an interface to the SAN providers REST API.
      */
     public synchronized FcSanProviderClient fcSanProvider() {
-        return this.getProxy(FcSanProviderClient.class);
+        return getProxy(FcSanProviderClient.class);
     }
 
     /**
@@ -237,7 +232,7 @@ public class OneViewClient {
      * @return an interface to the firmware bundles REST API.
      */
     public synchronized FirmwareBundleClient firmwareBundle() {
-        return this.getClient(FirmwareBundleClient.class);
+        return getProxy(FirmwareBundleClient.class);
     }
 
     /**
@@ -247,7 +242,7 @@ public class OneViewClient {
      * @return an interface to the firmware drivers REST API.
      */
     public synchronized FirmwareDriverClient firmwareDriver() {
-        return this.getProxy(FirmwareDriverClient.class);
+        return getProxy(FirmwareDriverClient.class);
     }
 
     /**
@@ -257,7 +252,7 @@ public class OneViewClient {
      * @return an interface to the interconnects REST API.
      */
     public synchronized InterconnectClient interconnect() {
-        return this.getProxy(InterconnectClient.class);
+        return getProxy(InterconnectClient.class);
     }
 
     /**
@@ -267,7 +262,7 @@ public class OneViewClient {
      * @return an interface to the interconnect link topologies REST API.
      */
     public synchronized InterconnectLinkTopologyClient interconnectLinkTopology() {
-        return this.getProxy(InterconnectLinkTopologyClient.class);
+        return getProxy(InterconnectLinkTopologyClient.class);
     }
 
     /**
@@ -277,7 +272,7 @@ public class OneViewClient {
      * @return an interface to the interconnect types REST API.
      */
     public synchronized InterconnectTypeClient interconnectType() {
-        return this.getProxy(InterconnectTypeClient.class);
+        return getProxy(InterconnectTypeClient.class);
     }
 
     /**
@@ -287,7 +282,7 @@ public class OneViewClient {
      * @return an interface to the internal link sets REST API.
      */
     public synchronized InternalLinkSetClient internalLinkSet() {
-        return this.getProxy(InternalLinkSetClient.class);
+        return getProxy(InternalLinkSetClient.class);
     }
 
     /**
@@ -297,7 +292,7 @@ public class OneViewClient {
      * @return an interface to the logical downlinks REST API.
      */
     public synchronized LogicalDownlinkClient logicalDownlink() {
-        return this.getProxy(LogicalDownlinkClient.class);
+        return getProxy(LogicalDownlinkClient.class);
     }
 
     /**
@@ -307,7 +302,7 @@ public class OneViewClient {
      * @return an interface to the logical enclosures REST API.
      */
     public synchronized LogicalEnclosureClient logicalEnclosure() {
-        return this.getProxy(LogicalEnclosureClient.class);
+        return getProxy(LogicalEnclosureClient.class);
     }
 
     /**
@@ -317,7 +312,7 @@ public class OneViewClient {
      * @return an interface to the logical interconnects REST API.
      */
     public synchronized LogicalInterconnectClient logicalInterconnect() {
-        return this.getProxy(LogicalInterconnectClient.class);
+        return getProxy(LogicalInterconnectClient.class);
     }
 
     /**
@@ -327,7 +322,7 @@ public class OneViewClient {
      * @return an interface to the logical interconnect groups REST API.
      */
     public synchronized LogicalInterconnectGroupClient logicalInterconnectGroup() {
-        return this.getProxy(LogicalInterconnectGroupClient.class);
+        return getProxy(LogicalInterconnectGroupClient.class);
     }
 
     /**
@@ -337,7 +332,7 @@ public class OneViewClient {
      * @return an interface to the logical switches REST API.
      */
     public synchronized LogicalSwitchClient logicalSwitch() {
-        return this.getProxy(LogicalSwitchClient.class);
+        return getProxy(LogicalSwitchClient.class);
     }
 
     /**
@@ -347,7 +342,17 @@ public class OneViewClient {
      * @return an interface to the logical switch groups REST API.
      */
     public synchronized LogicalSwitchGroupClient logicalSwitchGroup() {
-        return this.getProxy(LogicalSwitchGroupClient.class);
+        return getProxy(LogicalSwitchGroupClient.class);
+    }
+
+    /**
+     * Creates or retrieves an existing instance of {@link LoginSessionClient}.
+     * This client provides an interface for execute the authentication of an user.
+     *
+     * @return an interface to the login session REST API.
+     */
+    private synchronized LoginSessionClient loginClient() {
+        return getProxy(LoginSessionClient.class);
     }
 
     /**
@@ -357,7 +362,10 @@ public class OneViewClient {
      * @return an interface to the certificates REST API.
      */
     public synchronized MessagingCertificateClient messagingCertificate() {
-        return this.getClient(MessagingCertificateClient.class);
+        if (this.certificateClient == null) {
+            this.certificateClient = new MessagingCertificateClient(this.baseClient);
+        }
+        return this.certificateClient;
     }
 
     /**
@@ -367,7 +375,7 @@ public class OneViewClient {
      * @return an interface to the networks sets REST API.
      */
     public synchronized NetworkSetClient networkSet() {
-        return this.getProxy(NetworkSetClient.class);
+        return getProxy(NetworkSetClient.class);
     }
 
     /**
@@ -377,7 +385,7 @@ public class OneViewClient {
      * @return an interface to the power delivery devices REST API.
      */
     public synchronized PowerDeliveryDeviceClient powerDeliveryDevice() {
-        return this.getProxy(PowerDeliveryDeviceClient.class);
+        return getProxy(PowerDeliveryDeviceClient.class);
     }
 
     /**
@@ -387,7 +395,7 @@ public class OneViewClient {
      * @return an interface to the racks REST API.
      */
     public synchronized RackClient rack() {
-        return this.getProxy(RackClient.class);
+        return getProxy(RackClient.class);
     }
 
     /**
@@ -397,7 +405,7 @@ public class OneViewClient {
      * @return an interface to the SAS interconnects REST API.
      */
     public synchronized SasInterconnectClient sasInterconnects() {
-        return this.getProxy(SasInterconnectClient.class);
+        return getProxy(SasInterconnectClient.class);
     }
 
     /**
@@ -407,7 +415,7 @@ public class OneViewClient {
      * @return an interface to the SAS interconnect types REST API.
      */
     public synchronized SasInterconnectTypeClient sasInterconnectType() {
-        return this.getProxy(SasInterconnectTypeClient.class);
+        return getProxy(SasInterconnectTypeClient.class);
     }
 
     /**
@@ -417,7 +425,7 @@ public class OneViewClient {
      * @return an interface to the SAS logical interconnects REST API.
      */
     public synchronized SasLogicalInterconnectClient sasLogicalInterconnect() {
-        return this.getProxy(SasLogicalInterconnectClient.class);
+        return getProxy(SasLogicalInterconnectClient.class);
     }
 
     /**
@@ -427,7 +435,7 @@ public class OneViewClient {
      * @return an interface to the SAS logical interconnect groups REST API.
      */
     public synchronized SasLogicalInterconnectGroupClient sasLogicalInterconnectGroup() {
-        return this.getProxy(SasLogicalInterconnectGroupClient.class);
+        return getProxy(SasLogicalInterconnectGroupClient.class);
     }
 
     /**
@@ -437,7 +445,7 @@ public class OneViewClient {
      * @return an interface to the SAS logical JBOD attachments REST API.
      */
     public synchronized SasLogicalJbodAttachmentClient sasLogicalJbodAttachment() {
-        return this.getProxy(SasLogicalJbodAttachmentClient.class);
+        return getProxy(SasLogicalJbodAttachmentClient.class);
     }
 
     /**
@@ -447,7 +455,17 @@ public class OneViewClient {
      * @return an interface to the SAS logical JBODs REST API.
      */
     public synchronized SasLogicalJbodClient sasLogicalJbod() {
-        return this.getProxy(SasLogicalJbodClient.class);
+        return getProxy(SasLogicalJbodClient.class);
+    }
+
+    /**
+     * Creates or retrieves an existing instance of {@link ScopeClient}.
+     * This client provides an interface for managing scopes.
+     *
+     * @return an interface to the Scopes REST API.
+     */
+    public synchronized ScopeClient scope() {
+        return getProxy(ScopeClient.class);
     }
 
     /**
@@ -457,7 +475,7 @@ public class OneViewClient {
      * @return an interface to the server hardware REST API.
      */
     public synchronized ServerHardwareClient serverHardware() {
-        return this.getProxy(ServerHardwareClient.class);
+        return getProxy(ServerHardwareClient.class);
     }
 
     /**
@@ -467,7 +485,7 @@ public class OneViewClient {
      * @return an interface to the server hardware types REST API.
      */
     public synchronized ServerHardwareTypeClient serverHardwareType() {
-        return this.getProxy(ServerHardwareTypeClient.class);
+        return getProxy(ServerHardwareTypeClient.class);
     }
 
     /**
@@ -477,7 +495,7 @@ public class OneViewClient {
      * @return an interface to the server profiles REST API.
      */
     public synchronized ServerProfileClient serverProfile() {
-        return this.getProxy(ServerProfileClient.class);
+        return getProxy(ServerProfileClient.class);
     }
 
     /**
@@ -487,7 +505,7 @@ public class OneViewClient {
      * @return an interface to the server profile templates REST API.
      */
     public synchronized ServerProfileTemplateClient serverProfileTemplate() {
-        return this.getProxy(ServerProfileTemplateClient.class);
+        return getProxy(ServerProfileTemplateClient.class);
     }
 
     /**
@@ -497,7 +515,7 @@ public class OneViewClient {
      * @return an interface to the storage pools REST API.
      */
     public synchronized StoragePoolClient storagePool() {
-        return this.getProxy(StoragePoolClient.class);
+        return getProxy(StoragePoolClient.class);
     }
 
     /**
@@ -507,7 +525,7 @@ public class OneViewClient {
      * @return an interface to the storage systems REST API.
      */
     public synchronized StorageSystemClient storageSystem() {
-        return this.getProxy(StorageSystemClient.class);
+        return getProxy(StorageSystemClient.class);
     }
 
     /**
@@ -517,7 +535,7 @@ public class OneViewClient {
      * @return an interface to the storage volumes REST API.
      */
     public synchronized StorageVolumeClient storageVolume() {
-        return this.getProxy(StorageVolumeClient.class);
+        return getProxy(StorageVolumeClient.class);
     }
 
     /**
@@ -527,7 +545,7 @@ public class OneViewClient {
      * @return an interface to the storage volume attachments REST API.
      */
     public synchronized StorageVolumeAttachmentClient storageVolumeAttachment() {
-        return this.getProxy(StorageVolumeAttachmentClient.class);
+        return getProxy(StorageVolumeAttachmentClient.class);
     }
 
     /**
@@ -537,7 +555,7 @@ public class OneViewClient {
      * @return an interface to the storage volume templates REST API.
      */
     public synchronized StorageVolumeTemplateClient storageVolumeTemplate() {
-        return this.getProxy(StorageVolumeTemplateClient.class);
+        return getProxy(StorageVolumeTemplateClient.class);
     }
 
     /**
@@ -547,7 +565,7 @@ public class OneViewClient {
      * @return an interface to the switches REST API.
      */
     public synchronized SwitchClient switches() {
-        return this.getProxy(SwitchClient.class);
+        return getProxy(SwitchClient.class);
     }
 
     /**
@@ -557,7 +575,7 @@ public class OneViewClient {
      * @return an interface to the switch types REST API.
      */
     public synchronized SwitchTypeClient switchType() {
-        return this.getProxy(SwitchTypeClient.class);
+        return getProxy(SwitchTypeClient.class);
     }
 
     /**
@@ -567,7 +585,7 @@ public class OneViewClient {
      * @return an interface to the unmanaged devices REST API.
      */
     public synchronized UnmanagedDeviceClient unmanagedDevice() {
-        return this.getProxy(UnmanagedDeviceClient.class);
+        return getProxy(UnmanagedDeviceClient.class);
     }
 
     /**
@@ -577,39 +595,17 @@ public class OneViewClient {
      * @return an interface to the uplink sets REST API.
      */
     public synchronized UplinkSetClient uplinkSet() {
-        return this.getProxy(UplinkSetClient.class);
+        return getProxy(UplinkSetClient.class);
     }
 
-    private <T> T getProxy(Class<T> clientClass) {
-        T instance = (T) this.instances.get(clientClass);
-
-        if (instance == null) {
-            instance = Reflection.newProxy(clientClass, new ClientRequestHandler<>(this.baseClient, clientClass));
-
-            this.instances.put(clientClass, instance);
-        }
-        return instance;
-    }
-
-    private <T> T getClient(Class<T> clientClass) {
-        T instance = (T) this.instances.get(clientClass);
-
-        if (instance == null) {
-            instance = this.buildClient(clientClass);
-
-            this.instances.put(clientClass, instance);
-        }
-        return instance;
-    }
-
-    private <T> T buildClient(Class<T> clientClass) {
-        try {
-            Constructor<T> constructor = clientClass.getConstructor(BaseClient.class);
-
-            return constructor.newInstance(this.baseClient);
-        } catch (ReflectiveOperationException e) {
-            throw new SDKException(SDKErrorEnum.internalServerError, StringUtils.EMPTY, e);
-        }
+    /**
+     * Creates or retrieves an existing instance of {@link VersionClient}.
+     * This client provides an interface for retrieving version information.
+     *
+     * @return an interface to the version REST API.
+     */
+    private synchronized VersionClient versionClient() {
+        return getProxy(VersionClient.class);
     }
 
 }

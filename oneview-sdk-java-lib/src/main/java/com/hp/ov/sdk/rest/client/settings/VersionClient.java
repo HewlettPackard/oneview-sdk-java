@@ -16,25 +16,14 @@
 
 package com.hp.ov.sdk.rest.client.settings;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.hp.ov.sdk.dto.ApplianceVersions;
-import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
 
-public class VersionClient {
+@Api(VersionClient.VERSIONS_URI)
+public interface VersionClient {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(VersionClient.class);
-
-    private static final String APPLIANCE_VERSION = "/rest/version";
-
-    private final BaseClient baseClient;
-
-    public VersionClient(BaseClient baseClient) {
-        this.baseClient = baseClient;
-    }
+    String VERSIONS_URI = "/rest/version";
 
     /**
      * Returns the range of possible API versions supported by the appliance. The response
@@ -44,15 +33,7 @@ public class VersionClient {
      *
      * @return {@link ApplianceVersions} containing the versions supported by the appliance.
      */
-    public ApplianceVersions getApplianceVersions() {
-        LOGGER.info("Retrieving HPE OneView supported versions");
+    @Endpoint
+    ApplianceVersions getApplianceVersions();
 
-        Request request = new Request(HttpMethod.GET, APPLIANCE_VERSION);
-
-        ApplianceVersions versions = baseClient.executeRequest(request, ApplianceVersions.class);
-
-        LOGGER.info("HPE OneView supported versions retrieved!");
-
-        return versions;
-    }
 }

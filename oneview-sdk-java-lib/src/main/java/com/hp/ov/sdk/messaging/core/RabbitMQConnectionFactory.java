@@ -38,10 +38,10 @@ import javax.net.ssl.TrustManagerFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.google.common.io.BaseEncoding;
-import com.hp.ov.sdk.rest.client.security.MessagingCertificateClient;
 import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.exceptions.SDKCertificateException;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
+import com.hp.ov.sdk.rest.client.security.MessagingCertificateClient;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -88,10 +88,9 @@ class RabbitMQConnectionFactory {
                     buildKeyManager(rabbitMQClientCert).getKeyManagers(),
                     buildTrustManager(caCert.getCaCert()).getTrustManagers(),
                     new SecureRandom());
-        } catch (final NoSuchAlgorithmException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, SdkConstants.CERTS, e);
-        } catch (final KeyManagementException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, SdkConstants.CERTS, e);
+        } catch (final NoSuchAlgorithmException | KeyManagementException e) {
+            throw new SDKCertificateException(SDKErrorEnum.certificateError,
+                    "Error creating SSL context", e);
         }
         return sslContext;
     }
@@ -125,10 +124,9 @@ class RabbitMQConnectionFactory {
 
             kmf = KeyManagerFactory.getInstance("SunX509");
             kmf.init(ks, "password".toCharArray());
-        } catch (GeneralSecurityException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, SdkConstants.CERTS, e);
-        } catch (IOException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, SdkConstants.CERTS, e);
+        } catch (GeneralSecurityException | IOException e) {
+            throw new SDKCertificateException(SDKErrorEnum.certificateError,
+                    "Error creating key manager factory", e);
         }
         return kmf;
     }
@@ -150,10 +148,9 @@ class RabbitMQConnectionFactory {
             tks.setEntry("ca-cert", new KeyStore.TrustedCertificateEntry(certificate), null);
             tmf = TrustManagerFactory.getInstance("SunX509");
             tmf.init(tks);
-        } catch (GeneralSecurityException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, SdkConstants.CERTS, e);
-        } catch (IOException e) {
-            throw new SDKCertificateException(SDKErrorEnum.certificateError, SdkConstants.CERTS, e);
+        } catch (GeneralSecurityException | IOException e) {
+            throw new SDKCertificateException(SDKErrorEnum.certificateError,
+                    "Error creating trust manager factory", e);
         }
         return tmf;
     }

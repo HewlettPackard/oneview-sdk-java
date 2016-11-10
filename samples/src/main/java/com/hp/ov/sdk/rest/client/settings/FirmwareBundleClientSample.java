@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
 
 
 public class FirmwareBundleClientSample {
@@ -45,7 +46,7 @@ public class FirmwareBundleClientSample {
     private void addFirmwareBundle() {
         File firmwareBundleFile = new File(FIRMWARE_BUNDLE_FILE);
 
-        TaskResource task = this.client.add(firmwareBundleFile, false);
+        TaskResource task = this.client.upload(firmwareBundleFile, TaskTimeout.of(5 * 60 * 1000)); //5 mins
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }

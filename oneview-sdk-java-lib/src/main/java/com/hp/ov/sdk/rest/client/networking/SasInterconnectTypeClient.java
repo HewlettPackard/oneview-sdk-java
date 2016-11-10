@@ -16,13 +16,18 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import java.util.List;
+
+import com.google.common.reflect.Parameter;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.sasinterconnect.SasInterconnectType;
 import com.hp.ov.sdk.dto.networking.sasinterconnect.SasInterconnectTypeName;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.http.core.RequestInterceptor;
+import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.reflect.Api;
 import com.hp.ov.sdk.rest.reflect.Endpoint;
-import com.hp.ov.sdk.rest.reflect.QueryParam;
 
 @Api(SasInterconnectTypeClient.SAS_INTERCONNECT_TYPE_URI)
 public interface SasInterconnectTypeClient extends SearchableResource<SasInterconnectType> {
@@ -43,7 +48,18 @@ public interface SasInterconnectTypeClient extends SearchableResource<SasInterco
      * @return {@link ResourceCollection} paginated collection containing the details for the
      * available resources that match the filter.
      */
-    @Endpoint
-    ResourceCollection<SasInterconnectType> getByName(@QueryParam SasInterconnectTypeName typeName);
+    @Endpoint(requestInterceptor = GetByNameRequestInterceptor.class)
+    ResourceCollection<SasInterconnectType> getByName(SasInterconnectTypeName typeName);
+
+    class GetByNameRequestInterceptor implements RequestInterceptor {
+        @Override
+        public Request intercept(Request request, List<Parameter> params, Object[] args) {
+            SasInterconnectTypeName name = (SasInterconnectTypeName) args[0];
+
+            request.addQuery(UrlParameter.getFilterByNameParameter(name.getValue()));
+
+            return request;
+        }
+    }
 
 }

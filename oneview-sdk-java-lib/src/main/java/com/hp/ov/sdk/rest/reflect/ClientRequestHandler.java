@@ -28,20 +28,17 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.storage.FcSansManagedSanTask;
 import com.hp.ov.sdk.rest.client.BaseClient;
-import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.RequestInterceptor;
 import com.hp.ov.sdk.rest.http.core.URIQuery;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.BasicHeader;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 
 public class ClientRequestHandler<T> extends AbstractInvocationHandler {
 
-    public static Object EMPTY_OBJECT = new Object();
-
-    private static final String GET_BY_NAME_METHOD = "getByName";
     private static final String GET_ALL_METHOD = "getAll";
-    private static final String EXTRACT_BUNDLE_METHOD = "extractBundle";
 
     private final BaseClient baseClient;
     private final String baseUri;
@@ -69,26 +66,28 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
         }
     }
 
-    private Request buildRequest(Method method, Object[] args) {
+    private Request buildRequest(Method method, Object[] args) throws ReflectiveOperationException {
         Endpoint endpoint = method.getAnnotation(Endpoint.class);
 
         Request request = new Request(endpoint.method(), this.baseUri + endpoint.uri());
         request.setForceReturnTask(endpoint.forceReturnTask());
 
-        if (GET_BY_NAME_METHOD.equals(method.getName()) && (args.length == 1)) {
-            request.addQuery(UrlParameter.getFilterByNameParameter(String.valueOf(args[0])));
-        } else {
-            this.fillRequestAccordingParams(request, this.token.method(method).getParameters(), args);
-            this.fillRequestAccordingOptions(request, args);
-        }
+        this.fillRequestAccordingParams(request, this.token.method(method).getParameters(), args);
+        this.fillRequestAccordingOptions(request, args);
 
-        // Artifact Bundle requires a specific ContentType and an empty body to work.
-        if (EXTRACT_BUNDLE_METHOD.equals(method.getName())) {
-            request.setContentType(ContentType.TEXT_PLAIN);
-            request.setEntity("");
-        }
+        this.executeRequestInterceptors(request, this.token.method(method).getParameters(),
+                args, endpoint.requestInterceptor());
 
         return request;
+    }
+
+    private void executeRequestInterceptors(Request request, List<Parameter> params,
+            Object[] args, Class<? extends RequestInterceptor>[] classes) throws ReflectiveOperationException {
+        for (Class<? extends RequestInterceptor> clazz : classes) {
+            RequestInterceptor interceptor = clazz.newInstance();
+
+            interceptor.intercept(request, params, args);
+        }
     }
 
     private void fillRequestAccordingParams(Request request, List<Parameter> params, Object[] args) {
@@ -96,6 +95,7 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
             PathParam pathParam = params.get(i).getAnnotation(PathParam.class);
             QueryParam queryParam = params.get(i).getAnnotation(QueryParam.class);
             BodyParam bodyParam = params.get(i).getAnnotation(BodyParam.class);
+            HeaderParam headerParam = params.get(i).getAnnotation(HeaderParam.class);
 
             if (pathParam != null) {
                 request.setUri(request.getUri().replaceFirst("\\{" + pathParam.value() + "\\}", args[i].toString()));
@@ -111,15 +111,13 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
 
                     request.addQuery(new UrlParameter(queryParam.key(), value));
                 }
-            } else {
-                if (bodyParam != null) {
-                    request.setEntity(args[i]);
-                    request.setContentType(bodyParam.type());
-                } else if(request.getType() == HttpMethod.PATCH && request.getEntity() == null) {
-                    // Switch refresh request uses empty patch object
-                    request.setEntity(EMPTY_OBJECT);
-                    request.setContentType(ContentType.APPLICATION_JSON_PATCH);
-                }
+            } else if (headerParam != null) {
+                String value = String.valueOf(args[i]);
+
+                request.addHeader(new BasicHeader(headerParam.value(), value));
+            } else if (bodyParam != null) {
+                request.setEntity(args[i]);
+                request.setContentType(bodyParam.type());
             }
         }
     }

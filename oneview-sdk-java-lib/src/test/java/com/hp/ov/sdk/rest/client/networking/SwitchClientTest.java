@@ -135,11 +135,9 @@ public class SwitchClientTest {
     public void shouldRefreshSwitch() {
         client.refresh(ANY_RESOURCE_ID);
 
-        String expectedUri = SWITCHES_URI
-                + "/" + ANY_RESOURCE_ID
-                + SWITCHES_REFRESH_URI;
+        String expectedUri = SWITCHES_URI + "/" + ANY_RESOURCE_ID + SWITCHES_REFRESH_URI;
         Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri);
-        expectedRequest.setEntity(ClientRequestHandler.EMPTY_OBJECT);
+        expectedRequest.setEntity(SwitchClient.EMPTY_OBJECT_BODY);
         expectedRequest.setContentType(ContentType.APPLICATION_JSON_PATCH);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest);

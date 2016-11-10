@@ -27,7 +27,7 @@ public class OneViewClientSample {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OneViewClientSample.class);
 
-    private static final String ONEVIEW_JAVA_SDK_CONFIG_PROPERTIES_FILE = "oneview_java_sdk_config.properties";
+    private static final String SDK_CONFIG_SAMPLE_PROPERTIES = "src/main/resources/sdk-config-sample.properties";
 
     private SDKConfiguration config;
     private OneViewClient client;
@@ -46,7 +46,7 @@ public class OneViewClientSample {
     public SDKConfiguration getSDKConfiguration() {
         if (config == null) {
             try {
-                config = SDKConfiguration.fromFile(ONEVIEW_JAVA_SDK_CONFIG_PROPERTIES_FILE);
+                config = SDKConfiguration.fromFile(SDK_CONFIG_SAMPLE_PROPERTIES);
             } catch (SDKPropertiesFileException e) {
                 LOGGER.error("An error occurred while loading configuration file", e);
             }

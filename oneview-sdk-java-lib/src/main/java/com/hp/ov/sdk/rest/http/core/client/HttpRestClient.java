@@ -24,8 +24,10 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
@@ -36,6 +38,7 @@ import org.apache.http.HttpHeaders;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.EntityBuilder;
@@ -76,7 +79,7 @@ import com.hp.ov.sdk.exceptions.SDKUnauthorizedException;
 import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
-import com.hp.ov.sdk.util.JsonSerializer;
+import com.hp.ov.sdk.util.ObjectToJsonConverter;
 import com.hpe.i3s.dto.deployment.goldenimage.GoldenImageFile;
 
 public class HttpRestClient {
@@ -88,29 +91,37 @@ public class HttpRestClient {
     We can also consider to have a Map containing several converters and
     choose the appropriate converter according to the Content-Type.
      */
-    private final JsonSerializer serializer;
+    private final ObjectToJsonConverter converter;
     private final CloseableHttpClient httpClient;
     private final SDKConfiguration config;
 
     public HttpRestClient(SDKConfiguration sdkConfiguration, SSLContext sslContext) {
         this.config = sdkConfiguration;
-        this.serializer = new JsonSerializer();
+        this.converter = ObjectToJsonConverter.getInstance();
         this.httpClient = this.buildHttpClient(sslContext);
     }
 
     @VisibleForTesting
     protected HttpRestClient(SDKConfiguration sdkConfiguration,
-            JsonSerializer serializer,
+            ObjectToJsonConverter converter,
             CloseableHttpClient httpClient) {
 
         this.config = sdkConfiguration;
-        this.serializer = serializer;
+        this.converter = converter;
         this.httpClient = httpClient;
     }
 
     private CloseableHttpClient buildHttpClient(SSLContext sslContext) {
-        SSLConnectionSocketFactory sslFactory = new SSLConnectionSocketFactory(
-                sslContext, SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+        HostnameVerifier verifier = (config.isTrustStoreEnabled())
+                ? SSLConnectionSocketFactory.getDefaultHostnameVerifier()
+                : new HostnameVerifier() {
+            @Override
+            public boolean verify(String s, SSLSession sslSession) {
+                return true;
+            }
+        };
+
+        SSLConnectionSocketFactory sslFactory = new SSLConnectionSocketFactory(sslContext, verifier);
 
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
                 .register("http", PlainConnectionSocketFactory.INSTANCE)
@@ -130,6 +141,17 @@ public class HttpRestClient {
                 .setSocketTimeout(config.getClientSocketTimeout() * 1000)
                 .build();
 
+        HttpResponseInterceptor scopesResponseInterceptor = new HttpResponseInterceptor() {
+            @Override
+            public void process(HttpResponse response, HttpContext context) throws HttpException, IOException {
+                if (response.containsHeader(SdkConstants.X_TASK_URI_HEADER)) {
+                    Header header = response.getFirstHeader(SdkConstants.X_TASK_URI_HEADER);
+
+                    response.setHeader(HttpHeaders.LOCATION, header.getValue());
+                }
+            }
+        };
+
         HttpRequestInterceptor headerInterceptor = new HttpRequestInterceptor() {
             @Override
             public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
@@ -137,7 +159,7 @@ public class HttpRestClient {
 
                 request.setHeader(HttpHeaders.ACCEPT, "application/json");
                 request.setHeader(HttpHeaders.ACCEPT_LANGUAGE, "en_US");
-                request.setHeader("X-Api-Version", version);
+                request.setHeader(SdkConstants.X_API_VERSION_HEADER, version);
             }
         };
 
@@ -145,6 +167,7 @@ public class HttpRestClient {
                 .setDefaultRequestConfig(requestConfig)
                 .setConnectionManager(manager)
                 .addInterceptorFirst(headerInterceptor)
+                .addInterceptorFirst(scopesResponseInterceptor)
                 .build();
     }
 
@@ -215,8 +238,12 @@ public class HttpRestClient {
                 throw new SDKBadRequestException(SDKErrorEnum.badRequestError, SdkConstants.APPLIANCE);
         }
 
+        for (Header header : request.getHeaders()) {
+            requestBase.addHeader(header);
+        }
+
         if (StringUtils.isNotBlank(sessionId)) {
-            requestBase.setHeader("Auth", sessionId);
+            requestBase.setHeader(SdkConstants.AUTH_HEADER, sessionId);
         }
 
         return getResponse(sessionId, requestBase, request.isForceReturnTask(), request.getDownloadPath());
@@ -230,7 +257,8 @@ public class HttpRestClient {
             switch (contentType) {
                 case APPLICATION_JSON:
                 case APPLICATION_JSON_PATCH:
-                    String textEntity = serializer.toJson(request.getEntity(), config.getOneViewApiVersion());
+                    String textEntity = converter.resourceToJson(request.getEntity(),
+                            config.getOneViewApiVersion().getValue());
 
                     entity = EntityBuilder.create()
                             .setContentType(toApacheContentType(contentType))
@@ -309,12 +337,11 @@ public class HttpRestClient {
      * Gets the response from HPE OneView.
      *
      * @param sessionId OV session token ID.
-     * @param request
-     *  Request information.
-     * @param forceReturnTask
-     *  Forces the check for the Location header (task) even when the response code is not 202.
-     * @param downloadPath
-     *  The directory where a binary response will be downloaded.
+     * @param request Request information.
+     * @param forceReturnTask Forces the check for the Location header (task)
+     *                        even when the response code is not 202.
+     * @param downloadPath The directory where a binary response will be downloaded.
+     *
      * @return {@link String} object containing the response of the request
      */
     private String getResponse(final String sessionId, HttpUriRequest request,
@@ -340,9 +367,8 @@ public class HttpRestClient {
                     if (downloadPath == null) {
                          downloadPath = config.getImageStreamerDownloadFolder();
                     }
-                    String filePath = downloadFile(downloadPath, response);
 
-                    return filePath;
+                    return downloadFile(downloadPath, response);
                 } else {
                     responseBody = EntityUtils.toString(response.getEntity());
                 }
@@ -356,7 +382,7 @@ public class HttpRestClient {
                 // Response contains a task
                 String restUri = response.getFirstHeader(HttpHeaders.LOCATION).getValue();
                 restUri = restUri.substring(restUri.indexOf("/rest"));
-                LOGGER.debug("Starting to monitor task " + restUri);
+                LOGGER.debug("Retrieving task associated to request - task URI: " + restUri);
 
                 Request taskRequest = new Request(HttpMethod.GET, restUri);
                 taskRequest.setHostname(request.getURI().getHost() + ":" + request.getURI().getPort());
@@ -377,7 +403,8 @@ public class HttpRestClient {
 
     private String downloadFile(final String downloadPath, HttpResponse response) {
         if (!new File(downloadPath).isDirectory()) {
-            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument, SdkConstants.DOWNLOAD_PATH);
+            throw new SDKInvalidArgumentException(SDKErrorEnum.invalidArgument,
+                    "Configured download path is not a directory!");
         }
 
         String fileSize = response.getFirstHeader(HttpHeaders.CONTENT_LENGTH).getValue();
@@ -409,7 +436,8 @@ public class HttpRestClient {
         } catch (IOException e) {
             LOGGER.warn("Error downloading file {}", fileName, e);
 
-            throw new SDKBadRequestException(SDKErrorEnum.internalError, SdkConstants.DOWNLOAD_PATH, e);
+            throw new SDKBadRequestException(SDKErrorEnum.internalError,
+                    "An error occurred while downloading file", e);
         }
 
         return filePath;
@@ -419,10 +447,9 @@ public class HttpRestClient {
      * Checks the HTTP response codes, on error throws the correct exception.
      * Sets the exception cause as e if it throws one.
      *
-     * @param responseCode
-     *  response code.
-     * @return
-     *  the response code.
+     * @param responseCode response code.
+     *
+     * @return the response code.
      */
     private int checkResponse(final int responseCode) {
         switch (responseCode) {
@@ -434,7 +461,6 @@ public class HttpRestClient {
         case HttpsURLConnection.HTTP_RESET:
         case HttpsURLConnection.HTTP_PARTIAL:
             return responseCode;
-
         case HttpsURLConnection.HTTP_NOT_FOUND:
             throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, SdkConstants.APPLIANCE);
         case HttpsURLConnection.HTTP_BAD_REQUEST:

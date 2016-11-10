@@ -18,24 +18,13 @@ package com.hp.ov.sdk.constants;
 public class SdkConstants {
 
     public static final String APPLIANCE = "appliance";
-
-    public static final String CERTS = "appliance-certificates";
-    public static final String DOWNLOAD_PATH = "download-path";
-    public static final String ETHERNET = "Ethernet";
-    public static final String FIBRE_CHANNEL = "FibreChannel";
-    public static final String FIRMWARE_BUNDLE = "firmware-bundles";
+    public static final String AUTH_HEADER = "Auth";
     public static final String HTTPS = "https://";
-
-    public static final int PERCENTAGE_100 = 100;
-    public static final int NO_TASK_TIMEOUT = 0;
-
-    public static final String SERVER_HARDWARE = "server-hardware";
-    public static final String SERVER_PROFILE = "server-profile";
-    public static final String SERVER_PROFILES = SERVER_PROFILE + "s";
     public static final String SSL_VERSION = "TLSv1.2";
-    public static final String UPLINKSET = "uplink-set";
+    public static final String X_API_VERSION_HEADER = "X-Api-Version";
+    public static final String X_TASK_URI_HEADER = "X-Task-Uri";
 
-    public static final String JSON_TO_OBJECT_CONVERSION = "Json-to-object";
-    public static final String TASK_MONITOR = "task-monitor";
+    public static final int NO_TASK_TIMEOUT = 0;
+    public static final int PERCENTAGE_100 = 100;
 
 }

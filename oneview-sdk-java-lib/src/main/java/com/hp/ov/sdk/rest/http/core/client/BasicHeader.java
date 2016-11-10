@@ -14,38 +14,38 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.rest.http.core;
+package com.hp.ov.sdk.rest.http.core.client;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.http.Header;
+import org.apache.http.HeaderElement;
+import org.apache.http.ParseException;
 
-public class UrlParameter {
+public class BasicHeader implements Header {
 
-    private final String key;
+    private final String name;
     private final String value;
 
-    public UrlParameter(String key, String value) {
-        this.key = key;
+    public BasicHeader(String name, String value) {
+        this.name = name;
         this.value = value;
     }
 
-    public String getKey() {
-        return key;
+    @Override
+    public String getName() {
+        return this.name;
     }
 
+    @Override
     public String getValue() {
-        return value;
+        return this.value;
     }
 
-    public static UrlParameter getFilterByNameParameter(String name) {
-        // Commas are known to cause problems on filters, so we replace it with a "any char" value (_)
-        String nameWithoutCommas = name.replaceAll(",", "_");
-        return new UrlParameter("filter", "name matches '" + nameWithoutCommas + "'");
-    }
-
-    public static UrlParameter getCountParameter(int count) {
-        return new UrlParameter("count", String.valueOf(count));
+    @Override
+    public HeaderElement[] getElements() throws ParseException {
+        return new HeaderElement[0];
     }
 
     @Override
@@ -62,4 +62,5 @@ public class UrlParameter {
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
+
 }

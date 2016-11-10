@@ -29,21 +29,21 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.google.common.reflect.Reflection;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FirmwareBundleClientTest {
 
-    @Mock
-    private BaseClient baseClient;
-
-    @InjectMocks
-    private FirmwareBundleClient client;
-
+    private BaseClient baseClient = mock(BaseClient.class);
+    private FirmwareBundleClient client = Reflection.newProxy(FirmwareBundleClient.class,
+            new ClientRequestHandler<>(baseClient, FirmwareBundleClient.class));
     @Test
     public void shouldAddFirmwareBundle() {
         File firmwareBundleFile = mock(File.class);
@@ -51,13 +51,13 @@ public class FirmwareBundleClientTest {
         given(firmwareBundleFile.exists()).willReturn(Boolean.TRUE);
         given(firmwareBundleFile.isFile()).willReturn(Boolean.TRUE);
 
-        client.add(firmwareBundleFile, false);
+        client.upload(firmwareBundleFile, TaskTimeout.of(12345));
 
         Request expectedRequest = new Request(HttpMethod.POST,
                 FIRMWARE_BUNDLE_URI, firmwareBundleFile);
 
         expectedRequest.setContentType(ContentType.MULTIPART_FORM_DATA);
-        expectedRequest.setTimeout(300000);
+        expectedRequest.setTimeout(12345);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
@@ -69,7 +69,7 @@ public class FirmwareBundleClientTest {
         given(firmwareBundleFile.exists()).willReturn(Boolean.FALSE);
         given(firmwareBundleFile.isFile()).willReturn(Boolean.TRUE);
 
-        client.add(firmwareBundleFile, false);
+        client.upload(firmwareBundleFile);
     }
 
     @Test(expected = SDKInvalidArgumentException.class)
@@ -79,7 +79,7 @@ public class FirmwareBundleClientTest {
         given(firmwareBundleFile.exists()).willReturn(Boolean.TRUE);
         given(firmwareBundleFile.isFile()).willReturn(Boolean.FALSE);
 
-        client.add(firmwareBundleFile, false);
+        client.upload(firmwareBundleFile);
     }
 
 }

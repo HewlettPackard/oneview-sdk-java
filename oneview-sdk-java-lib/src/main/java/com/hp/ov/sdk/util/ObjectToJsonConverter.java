@@ -17,7 +17,6 @@ package com.hp.ov.sdk.util;
 
 import java.lang.reflect.Type;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -35,7 +34,6 @@ import com.hp.ov.sdk.adaptors.PortTelemetrySerializationAdapter;
 import com.hp.ov.sdk.adaptors.ScmbMessageDeserializer;
 import com.hp.ov.sdk.adaptors.StorageCapabilitiesDeserializer;
 import com.hp.ov.sdk.adaptors.StoragePoolSerializationAdapter;
-import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.PortTelemetry;
 import com.hp.ov.sdk.dto.ResourceCollection;
@@ -77,21 +75,23 @@ public class ObjectToJsonConverter {
 
     public Object jsonToResource(final String jsonInput, Type resourceType) {
         try {
-            LOGGER.info("JSON successfully converted to a Resource of type {}", resourceType);
+            LOGGER.info("JSON successfully converted to a resource of type {}", resourceType);
 
             return this.gson().fromJson(jsonInput, resourceType);
         } catch (final JsonParseException e) {
-            throw new SDKInternalException(SDKErrorEnum.internalError, SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
+            throw new SDKInternalException(SDKErrorEnum.internalError,
+                    "An error occurred while converting JSON input to resource", e);
         }
     }
 
     public <T> T jsonToResource(final String jsonInput, final Class<T> resourceType) {
         try {
-            LOGGER.info("JSON successfully converted to a Resource of type {}", resourceType.getSimpleName());
+            LOGGER.info("JSON successfully converted to a resource of type {}", resourceType.getSimpleName());
 
             return this.gson().fromJson(jsonInput, resourceType);
         } catch (final JsonParseException e) {
-            throw new SDKInternalException(SDKErrorEnum.internalError, SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
+            throw new SDKInternalException(SDKErrorEnum.internalError,
+                    "An error occurred while converting JSON input to resource", e);
         }
     }
 
@@ -100,36 +100,13 @@ public class ObjectToJsonConverter {
             Type type = new TypeToken<ResourceCollection<T>>() {}
                     .where(new TypeParameter<T>() {}, TypeToken.of(resourceType)).getType();
 
-            LOGGER.info("JSON successfully converted to a ResourceCollection of {}", resourceType.getSimpleName());
+            LOGGER.info("JSON successfully converted to a resource collection of {}", resourceType.getSimpleName());
 
             return this.gson().fromJson(jsonInput, type);
         } catch (final JsonParseException e) {
-            throw new SDKInternalException(SDKErrorEnum.internalError, SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
+            throw new SDKInternalException(SDKErrorEnum.internalError,
+                    "An error occurred while converting JSON input to resource collection", e);
         }
-    }
-
-    public <T> List<T> jsonToList(String jsonInput, Class<T> resourceType) {
-        try {
-            Type type = new TypeToken<List<T>>() {}
-                    .where(new TypeParameter<T>() {}, TypeToken.of(resourceType)).getType();
-
-            LOGGER.info("JSON successfully converted to a List of {}", resourceType.getSimpleName());
-
-            return this.gson().fromJson(jsonInput, type);
-        } catch (final JsonParseException e) {
-            throw new SDKInternalException(SDKErrorEnum.internalError, SdkConstants.JSON_TO_OBJECT_CONVERSION, e);
-        }
-    }
-
-    /**
-     * Processes the JSON string received from HPE OneView to remove or include unsupported characters.
-     *
-     * @param inputJson the JSON string received from OneView.
-     *
-     * @return string with some characters replaced and properly formatted to execute the deserialization process.
-     */
-    public String processJsonFromOneView(String inputJson) {
-        return this.gson().toJson(inputJson);
     }
 
     private Gson gson() {

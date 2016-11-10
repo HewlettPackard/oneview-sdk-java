@@ -18,6 +18,7 @@ package com.hp.ov.sdk.rest.client.networking;
 
 import java.util.List;
 
+import com.google.common.reflect.Parameter;
 import com.hp.ov.sdk.dto.EnvironmentalConfiguration;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.Port;
@@ -29,7 +30,10 @@ import com.hp.ov.sdk.rest.client.common.PatchableResource;
 import com.hp.ov.sdk.rest.client.common.RemovableResource;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.client.common.UpdatableResource;
+import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.RequestInterceptor;
+import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 import com.hp.ov.sdk.rest.reflect.Api;
 import com.hp.ov.sdk.rest.reflect.BodyParam;
@@ -50,6 +54,8 @@ public interface SwitchClient extends
     String SWITCHES_STATISTICS_URI = "/statistics";
     String SWITCHES_UPDATE_PORTS_URI = "/update-ports";
 
+    Object EMPTY_OBJECT_BODY = new Object();
+
     /**
      * Requests a refresh for the specified switch.
      *
@@ -61,8 +67,19 @@ public interface SwitchClient extends
      * @return {@link TaskResource} containing the task status for the
      *         process.
      */
-    @Endpoint(uri = "/{resourceId}" + SWITCHES_REFRESH_URI, method = HttpMethod.PATCH)
+    @Endpoint(uri = "/{resourceId}" + SWITCHES_REFRESH_URI, method = HttpMethod.PATCH,
+            requestInterceptor = SwitchRefreshRequestInterceptor.class)
     TaskResource refresh(@PathParam("resourceId") String resourceId, RequestOption... options);
+
+    class SwitchRefreshRequestInterceptor implements RequestInterceptor {
+        @Override
+        public Request intercept(Request request, List<Parameter> params, Object[] args) {
+            request.setEntity(EMPTY_OBJECT_BODY);
+            request.setContentType(ContentType.APPLICATION_JSON_PATCH);
+
+            return request;
+        }
+    }
 
     /**
      * Retrieves the environmental configuration for the specified switch.

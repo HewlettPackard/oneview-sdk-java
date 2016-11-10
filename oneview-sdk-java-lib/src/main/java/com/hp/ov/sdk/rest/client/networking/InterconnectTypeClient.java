@@ -15,13 +15,18 @@
  */
 package com.hp.ov.sdk.rest.client.networking;
 
+import java.util.List;
+
+import com.google.common.reflect.Parameter;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.interconnect.InterconnectType;
 import com.hp.ov.sdk.dto.networking.interconnect.InterconnectTypeName;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
+import com.hp.ov.sdk.rest.http.core.RequestInterceptor;
+import com.hp.ov.sdk.rest.http.core.UrlParameter;
+import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.reflect.Api;
 import com.hp.ov.sdk.rest.reflect.Endpoint;
-import com.hp.ov.sdk.rest.reflect.QueryParam;
 
 @Api(InterconnectTypeClient.INTERCONNECT_TYPE_URI)
 public interface InterconnectTypeClient extends SearchableResource<InterconnectType> {
@@ -42,7 +47,17 @@ public interface InterconnectTypeClient extends SearchableResource<InterconnectT
      * @return {@link ResourceCollection} paginated collection containing the details for the
      * available resources that match the filter.
      */
-    @Endpoint
-    ResourceCollection<InterconnectType> getByName(@QueryParam InterconnectTypeName name);
+    @Endpoint(requestInterceptor = GetByNameRequestInterceptor.class)
+    ResourceCollection<InterconnectType> getByName(InterconnectTypeName name);
 
+    class GetByNameRequestInterceptor implements RequestInterceptor {
+        @Override
+        public Request intercept(Request request, List<Parameter> params, Object[] args) {
+            InterconnectTypeName name = (InterconnectTypeName) args[0];
+
+            request.addQuery(UrlParameter.getFilterByNameParameter(name.getValue()));
+
+            return request;
+        }
+    }
 }
