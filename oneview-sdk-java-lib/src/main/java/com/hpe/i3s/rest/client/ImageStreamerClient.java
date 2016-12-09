@@ -22,6 +22,7 @@ import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.hpe.core.AbstractClient;
 import com.hpe.i3s.client.deployment.ArtifactsBundleClient;
 import com.hpe.i3s.client.deployment.DeploymentPlanClient;
+import com.hpe.i3s.client.deployment.DeploymentGroupClient;
 import com.hpe.i3s.client.deployment.GoldenImageClient;
 import com.hpe.i3s.client.deployment.OsBuildPlanClient;
 import com.hpe.i3s.client.deployment.PlanScriptClient;
@@ -62,6 +63,16 @@ public class ImageStreamerClient extends AbstractClient {
         return getProxy(DeploymentPlanClient.class);
     }
 
+    /**
+     * Creates or retrieves an existing instance of {@link DeploymentGroupClient}.
+     * This client provides an interface for managing deployment groups.
+     *
+     * @return an interface to the deployment group REST API.
+     */
+    public synchronized DeploymentGroupClient deploymentGroup() {
+        return getProxy(DeploymentGroupClient.class);
+    }
+    
     /**
      * Creates or retrieves an existing instance of {@link OsBuildPlanClient}.
      * This client provides an interface for managing OS build plans.

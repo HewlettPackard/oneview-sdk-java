@@ -55,6 +55,7 @@ public class ArtifactsBundleClientTest {
     private static final String ANY_RESOURCE_NAME = "random-Name";
     private static final String ANY_FILE_PATH = "random-file-path";
     private static final String ANY_TASK_URI = "/rest/tasks/4545db75-1861-45a2-8468-f11ff07381rf";
+    private static final String DEPLOYMENT_GROUP_RESOURCE_ID = "40ca28c0-d7cd-4312-be24-46f57e5737e4";
 
     private BaseClient baseClient = mock(BaseClient.class);
     private ArtifactsBundleClient client = Reflection.newProxy(ArtifactsBundleClient.class,
@@ -145,12 +146,17 @@ public class ArtifactsBundleClientTest {
     @Test
     public void shouldCreateBackupArchiveBundle() {
         File file = new File(ANY_FILE_PATH);
-        client.createBackupArchiveBundle(file, DownloadPath.at(ANY_FILE_PATH));
+
+        String deploymentGrpUri = DeploymentGroupClient.DEPLOYMENT_GROUP_URI + "/" + DEPLOYMENT_GROUP_RESOURCE_ID;
+        UrlParameter query = new UrlParameter("deploymentGrpUri", deploymentGrpUri);
+        client.createBackupArchiveBundle(file, deploymentGrpUri, DownloadPath.at(ANY_FILE_PATH));
 
         String expectedUri = ARTIFACTS_BUNDLE_URI
                 + ARTIFACTS_BUNDLE_BACKUPS_URI
                 + ARTIFACTS_BUNDLE_ARCHIVE_URI;
+        
         Request expectedRequest = new Request(HttpMethod.POST, expectedUri, file);
+        expectedRequest.addQuery(query);
         expectedRequest.setDownloadPath(ANY_FILE_PATH);
         expectedRequest.setContentType(ContentType.MULTIPART_FORM_DATA);
         expectedRequest.setForceReturnTask(true);

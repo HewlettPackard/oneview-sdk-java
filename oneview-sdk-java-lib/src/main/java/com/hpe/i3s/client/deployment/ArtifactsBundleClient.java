@@ -18,8 +18,6 @@ package com.hpe.i3s.client.deployment;
 import java.io.File;
 import java.util.List;
 
-import org.apache.http.HttpHeaders;
-
 import com.google.common.reflect.Parameter;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
@@ -29,13 +27,13 @@ import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.http.core.ContentType;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.RequestInterceptor;
-import com.hp.ov.sdk.rest.http.core.client.BasicHeader;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 import com.hp.ov.sdk.rest.reflect.Api;
 import com.hp.ov.sdk.rest.reflect.BodyParam;
 import com.hp.ov.sdk.rest.reflect.Endpoint;
 import com.hp.ov.sdk.rest.reflect.PathParam;
+import com.hp.ov.sdk.rest.reflect.QueryParam;
 import com.hpe.i3s.dto.deployment.artifactsbundle.ArtifactsBundle;
 import com.hpe.i3s.dto.deployment.artifactsbundle.CreateArtifactsBundle;
 import com.hpe.i3s.dto.deployment.artifactsbundle.TaskUri;
@@ -91,6 +89,7 @@ public interface ArtifactsBundleClient extends
      * Uploads a backup bundle from a local drive and extract all the artifacts present in the uploaded file.
      *
      * @param file {@link File} instance containing the backup artifacts bundle file.
+     * @param deploymentGrpUri deployment group uri.
      * @param options varargs of {@link RequestOption} which can be used to specify
      *                some request options.
      *
@@ -98,7 +97,9 @@ public interface ArtifactsBundleClient extends
      */
     @Endpoint(uri = ARTIFACTS_BUNDLE_BACKUPS_URI + ARTIFACTS_BUNDLE_ARCHIVE_URI,
             method = HttpMethod.POST, forceReturnTask = true)
-    TaskResource createBackupArchiveBundle(@BodyParam(type = ContentType.MULTIPART_FORM_DATA) File file,
+    TaskResource createBackupArchiveBundle(@BodyParam(type = ContentType.MULTIPART_FORM_DATA) File file, 
+    		@QueryParam(key = "deploymentGrpUri") String deploymentGrpUri,  
+    		
             RequestOption... options);
 
     /**

@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.exceptions.SDKPropertiesFileException;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 
 public class OneViewClientSample {
@@ -55,14 +56,14 @@ public class OneViewClientSample {
     }
 
     /* SDKConfiguration can also be build programmatically */
-    /*
-    public SDKConfiguration getSDKConfiguration() {
+    
+    /*public SDKConfiguration getSDKConfiguration() {
         if (config == null) {
             try {
                 config = SDKConfiguration.create()
                     .withOneViewHostname("10.10.10.10")
+                    .withTrustStoreEnabled(false)
                     .withOneViewUser("administrator", "admin")
-                    .withOneViewDomain("local")
                     .withOneViewApiVersion(ApiVersion.V_300)
                     .build();
             } catch (SDKPropertiesFileException e) {
@@ -70,7 +71,6 @@ public class OneViewClientSample {
             }
         }
         return this.config;
-    }
-    */
+    }*/
 
 }

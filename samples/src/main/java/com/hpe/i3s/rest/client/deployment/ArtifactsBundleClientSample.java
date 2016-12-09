@@ -26,11 +26,13 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.http.core.client.DownloadPath;
 import com.hpe.i3s.client.deployment.ArtifactsBundleClient;
+import com.hpe.i3s.client.deployment.DeploymentGroupClient;
 import com.hpe.i3s.dto.deployment.artifactsbundle.ArtifactsBundle;
 import com.hpe.i3s.dto.deployment.artifactsbundle.CreateArtifactsBundle;
 import com.hpe.i3s.dto.deployment.artifactsbundle.InputArtifacts;
 import com.hpe.i3s.dto.deployment.artifactsbundle.TaskUri;
 import com.hpe.i3s.dto.deployment.artifactsbundle.UserBackupParams;
+import com.hpe.i3s.dto.deployment.deploymentgroup.DeploymentGroup;
 import com.hpe.i3s.rest.client.ImageStreamerClient;
 
 public class ArtifactsBundleClientSample {
@@ -46,16 +48,16 @@ public class ArtifactsBundleClientSample {
     private static final String ARTIFACTS_BUNDLE_FILE_PATH =  "/home/user/Downloads/bundle-file.zip";
     private static final String ARTIFACTS_BUNDLE_BACKUP_FILE_PATH =  "/home/user/Downloads/bundle-file-backup.zip";
     private static final String ARTIFACTS_BUNDLE_BACKUP_DOWNLOAD_PATH =  "/home/user/Downloads";
-    private static final String DEPLOYMENT_GROUP_RESOURCE_ID = "40ca28c0-d7cd-4312-be24-46f57e5737e4";
     // ================================
 
 
     private final ArtifactsBundleClient artifactsBundleClient;
-
+    private final ImageStreamerClient i3sClient;
+    
     public ArtifactsBundleClientSample() {
-        ImageStreamerClient i3sClient = new ImageStreamerClientSample().getImageStreamerClient();
+        this.i3sClient = new ImageStreamerClientSample().getImageStreamerClient();
 
-        this.artifactsBundleClient = i3sClient.artifactsBundle();
+        this.artifactsBundleClient = this.i3sClient.artifactsBundle();
     }
 
     private void getArtifactsBundleById() {
@@ -115,8 +117,11 @@ public class ArtifactsBundleClientSample {
     }
 
     private void createBackupBundle() {
+        DeploymentGroupClient deploymentGroupClient = this.i3sClient.deploymentGroup();
+        ResourceCollection<DeploymentGroup> deploymentGroups = deploymentGroupClient.getAll();
+
         UserBackupParams backupParams = new UserBackupParams();
-        backupParams.setDeploymentGroupURI("/rest/deployment-groups/" + DEPLOYMENT_GROUP_RESOURCE_ID);
+        backupParams.setDeploymentGroupURI(deploymentGroups.get(0).getUri());
 
         TaskResource task = this.artifactsBundleClient.createBackupBundle(backupParams);
 
@@ -124,10 +129,14 @@ public class ArtifactsBundleClientSample {
     }
 
     private void extractBackupBundle() {
-        UserBackupParams backupParams = new UserBackupParams();
-        backupParams.setDeploymentGroupURI("/rest/deployment-groups/" + DEPLOYMENT_GROUP_RESOURCE_ID);
+        DeploymentGroupClient deploymentGroupClient = this.i3sClient.deploymentGroup();
+        ResourceCollection<DeploymentGroup> deploymentGroups = deploymentGroupClient.getAll();
 
-        TaskResource task = this.artifactsBundleClient.extractBackupBundle(ARTIFACTS_BUNDLE_BACKUP_RESOURCE_ID, backupParams);
+        UserBackupParams backupParams = new UserBackupParams();
+        backupParams.setDeploymentGroupURI(deploymentGroups.get(0).getUri());
+
+        TaskResource task = this.artifactsBundleClient.extractBackupBundle(ARTIFACTS_BUNDLE_BACKUP_RESOURCE_ID,
+                backupParams);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
@@ -162,7 +171,12 @@ public class ArtifactsBundleClientSample {
     private void createBackupArchiveBundle() {
         File file = new File(ARTIFACTS_BUNDLE_BACKUP_FILE_PATH);
 
-        TaskResource task = this.artifactsBundleClient.createBackupArchiveBundle(file);
+        DeploymentGroupClient deploymentGroupClient = this.i3sClient.deploymentGroup();
+        ResourceCollection<DeploymentGroup> deploymentGroups = deploymentGroupClient.getAll();
+
+        String deploymentGrpUri = deploymentGroups.get(0).getUri();
+
+        TaskResource task = this.artifactsBundleClient.createBackupArchiveBundle(file, deploymentGrpUri);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
