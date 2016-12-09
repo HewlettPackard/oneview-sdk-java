@@ -86,6 +86,7 @@ For example, the `samples` module uses the `log4j` as the underlying logging fra
 <dependency>
   <groupId>org.slf4j</groupId>
   <artifactId>slf4j-log4j12</artifactId>
+  <version>1.7.21</version>
 </dependency>
 ```
 
