@@ -26,6 +26,7 @@ import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StackingMode;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
+import com.hp.ov.sdk.dto.servers.IpAddressingMode;
 import com.hp.ov.sdk.dto.servers.enclosuregroup.EnclosureGroup;
 import com.hp.ov.sdk.dto.servers.enclosuregroup.InterconnectBayMapping;
 import com.hp.ov.sdk.rest.client.OneViewClient;
@@ -51,6 +52,7 @@ public class EnclosureGroupClientSample {
 
     private static final String ENCLOSURE_GROUP_NAME_UPDATED = ENCLOSURE_GROUP_NAME + "_Updated";
     private static final String ENCLOSURE_SCRIPT_DATA = "name=Enclosure_test";
+    private static final String ENCLOSURE_TYPES_SY12000 = "/rest/enclosure-types/SY12000";
     // ================================
 
     public EnclosureGroupClientSample() {
@@ -82,6 +84,14 @@ public class EnclosureGroupClientSample {
 
     private void createEnclosureGroup() {
         EnclosureGroup enclosureGroup = this.buildEnclosureGroup();
+
+        EnclosureGroup created = this.enclosureGroupClient.create(enclosureGroup);
+
+        LOGGER.info("EnclosureGroup object returned to client : " + created.toJsonString());
+    }
+
+    private void createEnclosureGroupSynergy() {
+        EnclosureGroup enclosureGroup = this.buildEnclosureGroupSynergy();
 
         EnclosureGroup created = this.enclosureGroupClient.create(enclosureGroup);
 
@@ -133,7 +143,8 @@ public class EnclosureGroupClientSample {
         dto.setStackingMode(StackingMode.Enclosure);
 
         List<InterconnectBayMapping> interconnectBayMappings = new ArrayList<>();
-        LogicalInterconnectGroup lig = this.interconnectGroupClient.getByName(LogicalInterconnectGroupClientSample.RESOURCE_NAME).get(0);
+        LogicalInterconnectGroup lig = this.interconnectGroupClient
+                .getByName(LogicalInterconnectGroupClientSample.RESOURCE_NAME).get(0);
 
         for (int i = 0; i < 8; i++) {
             InterconnectBayMapping interconnectBayMapping = new InterconnectBayMapping();
@@ -154,10 +165,45 @@ public class EnclosureGroupClientSample {
         return dto;
     }
 
+    private EnclosureGroup buildEnclosureGroupSynergy() {
+        EnclosureGroup dto = new EnclosureGroup();
+
+        int enclosureCount = 2;
+        int interconnectBay = 3;
+        int interconnectBayMappingCount = 2;
+        
+        dto.setType(ResourceCategory.RC_ENCLOSURE_GROUP_V300);
+        dto.setName(ENCLOSURE_GROUP_NAME);
+        dto.setStackingMode(StackingMode.Enclosure);
+        dto.setEnclosureTypeUri(ENCLOSURE_TYPES_SY12000);
+        dto.setIpAddressingMode(IpAddressingMode.DHCP);
+        dto.setEnclosureCount(enclosureCount);
+
+        List<InterconnectBayMapping> interconnectBayMappings = new ArrayList<>();
+
+        LogicalInterconnectGroup lig = this.interconnectGroupClient
+                .getByName(LogicalInterconnectGroupClientSample.RESOURCE_NAME).get(0);
+
+        for (int i = 0; i < interconnectBayMappingCount; i++) {
+            InterconnectBayMapping interconnectBayMapping = new InterconnectBayMapping();
+
+            interconnectBayMapping.setInterconnectBay(interconnectBay + 3 * i);
+            interconnectBayMapping.setLogicalInterconnectGroupUri(lig.getUri());
+            interconnectBayMappings.add(interconnectBayMapping);
+        }
+        
+        dto.setInterconnectBayMappings(interconnectBayMappings);
+        dto.setInterconnectBayMappingCount(interconnectBayMappingCount);
+
+        return dto;
+    }
+
     public static void main(final String[] args) throws Exception {
         EnclosureGroupClientSample sample = new EnclosureGroupClientSample();
 
         sample.createEnclosureGroup();
+
+        sample.createEnclosureGroupSynergy();
 
         sample.getEnclosureGroup();
         sample.getAllEnclosureGroups();
