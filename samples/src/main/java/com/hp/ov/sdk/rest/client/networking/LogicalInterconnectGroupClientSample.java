@@ -27,11 +27,13 @@ import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
+import com.hp.ov.sdk.dto.networking.EnclosureType;
 import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
 import com.hp.ov.sdk.dto.networking.NetworkType;
 import com.hp.ov.sdk.dto.networking.interconnect.InterconnectTypeName;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.InterconnectMapEntryTemplate;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
+import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup.RedundancyType;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.dto.samples.UplinkSetValue;
 import com.hp.ov.sdk.rest.client.OneViewClient;
@@ -56,8 +58,10 @@ public class LogicalInterconnectGroupClientSample {
     private static final String RESOURCE_NAME_UPDATED = RESOURCE_NAME + "_Updated";
     private static final InterconnectTypeName permittedInterconnectType = InterconnectTypeName.HP_VC_FlexFabric_20_40_F8_Module;
     private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402", "Prod_403");
-    private static final List<String> logicalInterconnectGroupName_A = Arrays.asList(FcNetworkClientSample.FC_NETWORK_NAME_A);
-    private static final List<String> logicalInterconnectGroupName_B = Arrays.asList(FcNetworkClientSample.FC_NETWORK_NAME_B);
+    private static final List<String> logicalInterconnectGroupName_A = Arrays
+            .asList(FcNetworkClientSample.FC_NETWORK_NAME_A);
+    private static final List<String> logicalInterconnectGroupName_B = Arrays
+            .asList(FcNetworkClientSample.FC_NETWORK_NAME_B);
     private static final List<String> ethPort = Arrays.asList("X5", "X6");
     private static final List<String> fcPort = Arrays.asList("X2");
 
@@ -65,6 +69,8 @@ public class LogicalInterconnectGroupClientSample {
     private static final String fcAUplinkSetName = "FCUplinkSetA";
     private static final String fcBUplinkSetName = "FCUplinkSetB";
     private static final String SETTING_ID = "dcd89c40-57b6-4551-9486-acc9090785fa";
+    private static final String FABRIC_URI = "/rest/fabrics/a7896ce7-c11d-4658-829d-142bc66a85e4";
+    private static final String LOGICAL_DOWNLINK_URI = "/rest/logical-downlinks/2ece260c-7997-441d-b1b9-d3296fe89505";
     // ================================
 
     private final LogicalInterconnectGroupClient client;
@@ -103,9 +109,20 @@ public class LogicalInterconnectGroupClientSample {
     private void createLogicalInterconnectGroup() {
         LogicalInterconnectGroup logicalInterconnectGroup = this.buildTestLogicalInterconnectGroup();
         logicalInterconnectGroup.setName(RESOURCE_NAME);
-        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP); //v120
-        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200); //v200
-        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300); //v300
+        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP); // v120
+        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200); // v200
+        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300); // v300
+
+        TaskResource task = this.client.create(logicalInterconnectGroup);
+
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
+    }
+
+    private void createLogicalInterconnectGroupSynergy() {
+        LogicalInterconnectGroup logicalInterconnectGroup = this.buildTestLogicalInterconnectGroupSynergy();
+        logicalInterconnectGroup.setName(RESOURCE_NAME);
+        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300); // v300
+        logicalInterconnectGroup.setEnclosureType(EnclosureType.SY12000);
 
         TaskResource task = this.client.create(logicalInterconnectGroup);
 
@@ -127,7 +144,8 @@ public class LogicalInterconnectGroupClientSample {
     }
 
     private void deleteLogicalInterconnectGroup() {
-        ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client.getByName(RESOURCE_NAME_UPDATED);
+        ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = client
+                .getByName(RESOURCE_NAME_UPDATED);
         LogicalInterconnectGroup logicalInterconnectGroup = logicalInterconnectGroups.getMembers().get(0);
         TaskResource task = this.client.delete(logicalInterconnectGroup.getResourceId());
 
@@ -143,12 +161,14 @@ public class LogicalInterconnectGroupClientSample {
     private void getInterconnectSettings() {
         LogicalInterconnectGroup logicalInterconnectGroup = client.getByName(RESOURCE_NAME).get(0);
 
-        // To run getInterconnectSettings on OneView 1.2, you need settingID and resourceID of LIG
+        // To run getInterconnectSettings on OneView 1.2, you need settingID and
+        // resourceID of LIG
         // for OV 2.0 & 3.0, you just need the resourceID
-        // InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(
-        //         logicalInterconnectGroup.getResourceId(), SETTING_ID);
-        InterconnectSettingsV2 interconnectSettingsDto = client.getInterconnectSettings(
-                logicalInterconnectGroup.getResourceId());
+        // InterconnectSettingsV2 interconnectSettingsDto =
+        // client.getInterconnectSettings(
+        // logicalInterconnectGroup.getResourceId(), SETTING_ID);
+        InterconnectSettingsV2 interconnectSettingsDto = client
+                .getInterconnectSettings(logicalInterconnectGroup.getResourceId());
 
         LOGGER.info("Interconnect settings returned to client : " + interconnectSettingsDto.toJsonString());
     }
@@ -159,16 +179,39 @@ public class LogicalInterconnectGroupClientSample {
         bayPermittedInterconnectMaps.put(interconnectEntries.get(0), permittedInterconnectType);
         bayPermittedInterconnectMaps.put(interconnectEntries.get(1), permittedInterconnectType);
 
-        LogicalInterconnectGroup group = resourceDtoUtils.buildLogicalInterconnectGroupDto(RESOURCE_NAME, bayPermittedInterconnectMaps);
+        LogicalInterconnectGroup group = resourceDtoUtils.buildLogicalInterconnectGroupDto(RESOURCE_NAME,
+                bayPermittedInterconnectMaps);
         group.setEnclosureIndexes(Arrays.asList(1));
         group.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP);
         group.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200);
         group.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300);
 
-        for (InterconnectMapEntryTemplate entry : group.getInterconnectMapTemplate().getInterconnectMapEntryTemplates()) {
+        for (InterconnectMapEntryTemplate entry : group.getInterconnectMapTemplate()
+                .getInterconnectMapEntryTemplates()) {
             entry.setEnclosureIndex(1);
         }
-        return  group;
+        return group;
+    }
+
+    private LogicalInterconnectGroup buildTestLogicalInterconnectGroupSynergy() {
+        int interconnectBaySet = 3;
+
+        LogicalInterconnectGroup group = resourceDtoUtils.buildLogicalInterconnectGroupSynergyDto(RESOURCE_NAME,
+                InterconnectTypeName.Virtual_Connect_SE_40Gb_F8_Module_for_Synergy, interconnectBaySet,
+                LOGICAL_DOWNLINK_URI);
+
+        group.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300);
+        group.setRedundancyType(RedundancyType.Redundant);
+        group.setCategory("logical-interconnect-groups");
+        group.setFabricUri(FABRIC_URI);
+
+        group.setEnclosureIndexes(Arrays.asList(1));
+
+        for (InterconnectMapEntryTemplate entry : group.getInterconnectMapTemplate()
+                .getInterconnectMapEntryTemplates()) {
+            entry.setEnclosureIndex(1);
+        }
+        return group;
     }
 
     private List<UplinkSetGroup> buildUplinkSetGroupDto() {
@@ -218,8 +261,8 @@ public class LogicalInterconnectGroupClientSample {
 
         for (UplinkSetValue uplinkSetValue : uplinkSetValues) {
             uplinkSetGroupDto.add(resourceDtoUtils.buildUplinkSetDto(uplinkSetValue.getLigName(),
-                    uplinkSetValue.getUplinkSetName(), uplinkSetValue.getUplinkSetType(), uplinkSetValue.getBayPortMap(),
-                    uplinkSetValue.getNetworkNames()));
+                    uplinkSetValue.getUplinkSetName(), uplinkSetValue.getUplinkSetType(),
+                    uplinkSetValue.getBayPortMap(), uplinkSetValue.getNetworkNames()));
         }
 
         return uplinkSetGroupDto;
@@ -230,6 +273,8 @@ public class LogicalInterconnectGroupClientSample {
 
         client.createLogicalInterconnectGroup();
 
+        client.createLogicalInterconnectGroupSynergy();
+
         client.getAllLogicalInterconnectGroups();
         client.getLogicalInterconnectGroup();
         client.getLogicalInterconnectGroupByName();
@@ -239,4 +284,5 @@ public class LogicalInterconnectGroupClientSample {
         client.updateLogicalInterconnectGroup();
         client.deleteLogicalInterconnectGroup();
     }
+
 }

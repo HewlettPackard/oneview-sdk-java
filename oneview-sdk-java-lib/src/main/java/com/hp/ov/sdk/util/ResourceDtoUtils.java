@@ -173,6 +173,53 @@ public class ResourceDtoUtils {
         return dto;
     }
 
+    public LogicalInterconnectGroup buildLogicalInterconnectGroupSynergyDto(String logicalInterconnectGroupName,
+            InterconnectTypeName interconnectTypeName, int interconnectBaySet, String uriDownLink) {
+        
+        int i, j;
+        final LogicalInterconnectGroup dto = new LogicalInterconnectGroup();
+
+        dto.setName(logicalInterconnectGroupName);
+        dto.setState(ACTIVE);
+
+        dto.setInterconnectBaySet(interconnectBaySet);
+
+        final List<InterconnectMapEntryTemplate> interconnectMapEntryTemplatesDto = new ArrayList<InterconnectMapEntryTemplate>();
+
+        for (i = 0; i < 2; i++) {
+            final InterconnectMapEntryTemplate interconnectMapEntryTemplateDto = new InterconnectMapEntryTemplate();
+            final List<LogicalLocationEntry> locationEntriesDto = new ArrayList<LogicalLocationEntry>();
+            for (j = 0; j < 2; j++) {
+                final LogicalLocationEntry locationEntryDto = new LogicalLocationEntry();
+                if (j == 0) {
+                    locationEntryDto.setRelativeValue(interconnectBaySet + (3 * i));
+                    locationEntryDto.setType(LocationType.Bay);
+                } else {
+                    locationEntryDto.setRelativeValue(j);
+                    locationEntryDto.setType(LocationType.Enclosure);
+                }
+                locationEntriesDto.add(locationEntryDto);
+            }
+            LogicalLocation logicalLocationDto = new LogicalLocation();
+
+            logicalLocationDto.setLocationEntries(locationEntriesDto);
+            interconnectMapEntryTemplateDto.setLogicalLocation(logicalLocationDto);
+
+            String interconnectTypeUri = oneViewClient.interconnectType().getByName(interconnectTypeName).get(0).getUri();
+
+            interconnectMapEntryTemplateDto.setPermittedInterconnectTypeUri(interconnectTypeUri);
+            interconnectMapEntryTemplateDto.setLogicalDownlinkUri(uriDownLink);
+            
+            interconnectMapEntryTemplatesDto.add(interconnectMapEntryTemplateDto);
+        }
+     
+        final InterconnectMapTemplate interconnectMapTemplateDto = new InterconnectMapTemplate();
+        interconnectMapTemplateDto.setInterconnectMapEntryTemplates(interconnectMapEntryTemplatesDto);
+        dto.setInterconnectMapTemplate(interconnectMapTemplateDto);
+
+        return dto;
+    }
+    
     public UplinkSetGroup buildUplinkSetDto(final String ligName, final String uplinkSetName,
             final NetworkType uplinkSetType, final HashMap<Integer, List<String>> bayPortMap, final List<String> networkNames) {
 
