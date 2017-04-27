@@ -84,6 +84,7 @@ public class FabricClientSample {
         client.getFabric();
         client.getFabricByName();
 
+        /*These methods are available only on HPE Synergy*/
         client.getReservedVlanRange();
         client.updateReservedVlanRange();
     }
