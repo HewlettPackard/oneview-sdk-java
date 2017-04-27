@@ -86,7 +86,6 @@ public class SwitchClientSample {
         Switch aSwitch = this.switchClient.getByName(SWITCH_NAME).get(0);
         String resourceId = aSwitch.getResourceId();
 
-
         SwitchManagementConnection switchManagementConnection = new SwitchManagementConnection();
         List<ConnectionProperty> connectionProperties = new ArrayList<>();
 
@@ -111,8 +110,8 @@ public class SwitchClientSample {
         e.setValueType(ValueType.String);
         connectionProperties.add(e2);
 
-        switchManagementConnection.setConnectionProperties(connectionProperties );
-        aSwitch.setSwitchManagementConnection(switchManagementConnection );
+        switchManagementConnection.setConnectionProperties(connectionProperties);
+        aSwitch.setSwitchManagementConnection(switchManagementConnection);
 
         // FIXME no changes due to problems after executing an update
 
@@ -142,7 +141,8 @@ public class SwitchClientSample {
         EnvironmentalConfiguration environmentalConfiguration = this.switchClient
                 .getEnvironmentalConfiguration(aSwitch.getResourceId());
 
-        LOGGER.info("EnvironmentalConfiguration object returned to client: {}", environmentalConfiguration.toJsonString());
+        LOGGER.info("EnvironmentalConfiguration object returned to client: {}",
+                environmentalConfiguration.toJsonString());
     }
 
     private void getSwitchStatistics() {
@@ -196,6 +196,8 @@ public class SwitchClientSample {
     }
 
     public static void main(String[] args) {
+        
+        /* This resource is available only on C7000 */
         SwitchClientSample client = new SwitchClientSample();
 
         client.getSwitch();

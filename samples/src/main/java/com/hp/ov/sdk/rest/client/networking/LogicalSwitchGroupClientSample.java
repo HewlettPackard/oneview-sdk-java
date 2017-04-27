@@ -142,6 +142,8 @@ public class LogicalSwitchGroupClientSample {
     }
 
     public static void main(String[] args) {
+        
+        /* This resource is available only on C7000 */
         LogicalSwitchGroupClientSample sample = new LogicalSwitchGroupClientSample();
 
         sample.createLogicalSwitchGroup();

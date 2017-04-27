@@ -166,6 +166,8 @@ public class LogicalSwitchClientSample {
     }
 
     public static void main(String[] args) {
+        
+        /* This resource is available only on C7000 */
         LogicalSwitchClientSample sample = new LogicalSwitchClientSample();
 
         sample.createLogicalSwitch();
