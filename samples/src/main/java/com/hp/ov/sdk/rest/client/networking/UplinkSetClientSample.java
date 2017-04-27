@@ -65,6 +65,11 @@ public class UplinkSetClientSample {
     private static final List<String> FC_NETWORK_NAME = Arrays.asList("FC_Network_A");
     private static final String PORT_VALUE = "X3";
     private static final String BAY_VALUE = "2";
+
+    private static final String ENCLOSURE_SYNERGY_NAME = "0000A66101";
+    private static final String LOGICAL_INTERCONNECT_NAME = "LOGICAL_INTERCONNECT";
+    private static final String PORT_VALUE_SYNERGY = "Q1";
+    private static final String BAY_VALUE_SYNERGY = "2";
     // ================================
 
     private UplinkSetClientSample() {
@@ -96,7 +101,18 @@ public class UplinkSetClientSample {
     }
 
     private void createUplinkSet() {
-        UplinkSet uplinkSet = buildUplinkSet();
+        UplinkSet uplinkSet = buildUplinkSet(BAY_VALUE, PORT_VALUE, EnclosureClientSample.RESOURCE_NAME);
+
+        TaskResource task = this.uplinkSetClient.create(uplinkSet);
+
+        LOGGER.info("Task object returned to client: {}", task.toJsonString());
+    }
+
+    private void createUplinkSetSynergy() {
+        UplinkSet uplinkSet = buildUplinkSet(BAY_VALUE_SYNERGY, PORT_VALUE_SYNERGY, ENCLOSURE_SYNERGY_NAME);
+
+        String LIG_URI = oneViewClient.logicalInterconnect().getByName(LOGICAL_INTERCONNECT_NAME).get(0).getUri();
+        uplinkSet.setLogicalInterconnectUri(LIG_URI);
 
         TaskResource task = this.uplinkSetClient.create(uplinkSet);
 
@@ -121,23 +137,24 @@ public class UplinkSetClientSample {
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
     }
 
-    private UplinkSet buildUplinkSet() {
+    private UplinkSet buildUplinkSet(String bay_value, String port_value, String enclosureName) {
         String resourceId = null;
         UplinkSet uplinkSetsDto = new UplinkSet();
 
         uplinkSetsDto.setCategory(ResourceCategory.RC_LOGICAL_INTERCONNECTS);
 
-        Enclosure enclosuresDto = enclosureClient.getByName(EnclosureClientSample.RESOURCE_NAME).get(0);
+        Enclosure enclosuresDto = enclosureClient.getByName(enclosureName).get(0);
 
         for (int i = 0; i < enclosuresDto.getInterconnectBayCount(); i++) {
-            if (Integer.parseInt(BAY_VALUE) == enclosuresDto.getInterconnectBays().get(i).getBayNumber()) {
-                uplinkSetsDto.setLogicalInterconnectUri(enclosuresDto.getInterconnectBays().get(0).getLogicalInterconnectUri());
+            if (Integer.parseInt(bay_value) == enclosuresDto.getInterconnectBays().get(i).getBayNumber()) {
+                uplinkSetsDto.setLogicalInterconnectUri(
+                        enclosuresDto.getInterconnectBays().get(0).getLogicalInterconnectUri());
             }
         }
 
-        uplinkSetsDto.setType(ResourceCategory.RC_UPLINKS_SETS); //OV 1.2
-        uplinkSetsDto.setType(ResourceCategory.RC_UPLINKS_SETS_V200); //OV 2.0
-        uplinkSetsDto.setType(ResourceCategory.RC_UPLINKS_SETS_V300); //OV 3.0
+        uplinkSetsDto.setType(ResourceCategory.RC_UPLINKS_SETS); // OV 1.2
+        uplinkSetsDto.setType(ResourceCategory.RC_UPLINKS_SETS_V200); // OV 2.0
+        uplinkSetsDto.setType(ResourceCategory.RC_UPLINKS_SETS_V300); // OV 3.0
         uplinkSetsDto.setConnectionMode(ConnectionMode.Auto);
         uplinkSetsDto.setEthernetNetworkType(EthernetNetworkType.NotApplicable);
         uplinkSetsDto.setNetworkType(NetworkType.FibreChannel);
@@ -154,14 +171,15 @@ public class UplinkSetClientSample {
         portConfigInfo.setDesiredSpeed(OpSpeed.Auto);
 
         for (int i = 0; i < enclosuresDto.getInterconnectBayCount(); i++) {
-            if (Integer.parseInt(BAY_VALUE) == enclosuresDto.getInterconnectBays().get(i).getBayNumber()) {
+            if (Integer.parseInt(bay_value) == enclosuresDto.getInterconnectBays().get(i).getBayNumber()) {
                 if (null != enclosuresDto.getInterconnectBays().get(i).getInterconnectUri()) {
-                    resourceId = URIUtils.getResourceIdFromUri(enclosuresDto.getInterconnectBays().get(i).getInterconnectUri());
+                    resourceId = URIUtils
+                            .getResourceIdFromUri(enclosuresDto.getInterconnectBays().get(i).getInterconnectUri());
                 }
 
                 Interconnect interconnectsDto = interconnectClient.getById(resourceId);
                 for (int j = 0; j < interconnectsDto.getPortCount(); j++) {
-                    if (interconnectsDto.getPorts().get(j).getPortName().equalsIgnoreCase(PORT_VALUE)) {
+                    if (interconnectsDto.getPorts().get(j).getPortName().equalsIgnoreCase(port_value)) {
                         portConfigInfo.setPortUri(interconnectsDto.getPorts().get(j).getUri());
                     }
                 }
@@ -176,12 +194,12 @@ public class UplinkSetClientSample {
         locationEntry_one.setType(LocationType.Enclosure);
         locationEntries.add(locationEntry_one);
 
-        locationEntry_two.setValue(BAY_VALUE);
+        locationEntry_two.setValue(bay_value);
         locationEntry_two.setType(LocationType.Bay);
         locationEntries.add(locationEntry_two);
 
         LocationEntry locationEntry_three = new LocationEntry();
-        locationEntry_three.setValue(PORT_VALUE);
+        locationEntry_three.setValue(port_value);
         locationEntry_three.setType(LocationType.Port);
         locationEntries.add(locationEntry_three);
 
@@ -197,6 +215,8 @@ public class UplinkSetClientSample {
         UplinkSetClientSample client = new UplinkSetClientSample();
 
         client.createUplinkSet();
+
+        client.createUplinkSetSynergy();
 
         client.getUplinkSetById();
         client.getAllUplinkSets();
