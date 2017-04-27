@@ -139,7 +139,8 @@ public class FcSansManagedSanClientSample {
         client.createFcSanManagedSanEndpointsCsv();
         client.createFcSanManagedSanIssuesReport();
 
-        client.updateFcSanManagedSan();
+        /*method only available in previous than 3.0*/
+        client.updateFcSanManagedSan(); 
 
         client.getFcSanManagedSanWwnAssociations();
     }
