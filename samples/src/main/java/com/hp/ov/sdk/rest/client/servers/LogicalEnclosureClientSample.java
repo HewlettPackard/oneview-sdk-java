@@ -15,7 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.servers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,6 +96,14 @@ public class LogicalEnclosureClientSample {
 
         TaskResource taskResource = this.logicalEnclosureClient.create(addLogicalEnclosure,
                 TaskTimeout.of(300000));
+
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
+    }
+    
+    private void createMultipleLogicalEnclosure() {
+        AddLogicalEnclosure addMultipleLogicalEnclosure = buildMultipleAddLogicalEnclosure();
+
+        TaskResource taskResource = this.logicalEnclosureClient.create(addMultipleLogicalEnclosure);
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
@@ -198,6 +208,32 @@ public class LogicalEnclosureClientSample {
         return addLogicalEnclosure;
     }
 
+    private AddLogicalEnclosure buildMultipleAddLogicalEnclosure() {
+        String enclosureGroupUri = enclosureGroupClient.getByName(EnclosureGroupClientSample.ENCLOSURE_GROUP_NAME).get(0).getUri();
+        
+        String enclosureURI1 = enclosureClient.getByName("0000A66101").get(0).getUri();
+        String enclosureURI2 = enclosureClient.getByName("0000A66102").get(0).getUri();
+        String enclosureURI3 = enclosureClient.getByName("0000A66103").get(0).getUri();
+        
+        String firmwareDriverUri = firmwareDriverClient.getByName(FIRMWARE_NAME).get(0).getUri();
+
+        AddLogicalEnclosure addLogicalEnclosure = new AddLogicalEnclosure();
+
+        addLogicalEnclosure.setName(RESOURCE_NAME);
+        addLogicalEnclosure.setEnclosureGroupUri(enclosureGroupUri);
+        addLogicalEnclosure.setFirmwareBaselineUri(firmwareDriverUri);
+        addLogicalEnclosure.setForceInstallFirmware(false);
+        
+        List<String> enclosureUris = new ArrayList<String>();
+        enclosureUris.add(enclosureURI1);
+        enclosureUris.add(enclosureURI2);
+        enclosureUris.add(enclosureURI3);
+        
+        addLogicalEnclosure.setEnclosureUris(enclosureUris);
+
+        return addLogicalEnclosure;
+    }
+    
     public static void main(final String[] args) throws Exception {
         LogicalEnclosureClientSample client = new LogicalEnclosureClientSample();
 
@@ -216,6 +252,7 @@ public class LogicalEnclosureClientSample {
         client.updateLogicalEnclosure();
 
         client.createLogicalEnclosure(); // only in 3.0 with Synergy
+        client.createMultipleLogicalEnclosure(); // only in 3.0 with Synergy
         client.deleteLogicalEnclosure(); // only in 3.0 with Synergy
     }
 }
