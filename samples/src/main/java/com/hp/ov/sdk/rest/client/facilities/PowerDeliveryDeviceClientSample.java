@@ -15,6 +15,8 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.facilities;
 
+import java.util.Arrays;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,9 +28,12 @@ import com.hp.ov.sdk.dto.UtilizationData;
 import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.ImportPdd;
 import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.Light;
 import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.OutletState;
+import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.PhaseType;
 import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.Power;
+import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.PowerConnection;
 import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.PowerDeliveryDevice;
 import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.PowerDeliveryDeviceRefreshRequest;
+import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.PowerDeliveryDeviceType;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
@@ -46,6 +51,15 @@ public class PowerDeliveryDeviceClientSample {
     private static final String HOSTNAME = "172.18.8.12";
     private static final String USERNAME = "dcs";
     private static final String PASSWORD = "dcs";
+    
+    private static final int DEVICE_CONNECTION = 6;
+    private static final String CONNECTION_URI = "/rest/enclosures/0000000000A66101";
+    private static final String SERIAL_NUMBER = "SERIE1";
+    private static final String PART_NUMBER = "1";
+    private static final String FEED_ID = "A";
+    private static final int LINE_VOLTAGE = 110;
+    private static final int RATED_CAPACITY = 266;
+    private static final String MODEL = "Model";
     // ================================
 
     private final PowerDeliveryDeviceClient client;
@@ -78,6 +92,29 @@ public class PowerDeliveryDeviceClientSample {
         PowerDeliveryDevice powerDeliveryDevice = new PowerDeliveryDevice();
         powerDeliveryDevice.setName(SAMPLE_RESOURCE_NAME);
         powerDeliveryDevice.setRatedCapacity(40);
+
+        PowerDeliveryDevice addedPowerDeliveryDevice = this.client.add(powerDeliveryDevice);
+
+        LOGGER.info("PowerDeliveryDevice object returned to client: {}", addedPowerDeliveryDevice.toJsonString());
+    }
+    
+    private void addPowerDeliveryDeviceWithPowerConnection() {
+        PowerDeliveryDevice powerDeliveryDevice = new PowerDeliveryDevice();
+        powerDeliveryDevice.setName(SAMPLE_RESOURCE_NAME);
+        
+        powerDeliveryDevice.setDeviceType(PowerDeliveryDeviceType.PowerStrip);
+        powerDeliveryDevice.setModel(MODEL);
+        powerDeliveryDevice.setRatedCapacity(RATED_CAPACITY);
+        powerDeliveryDevice.setLineVoltage(LINE_VOLTAGE);
+        powerDeliveryDevice.setPhaseType(PhaseType.SinglePhase);
+        powerDeliveryDevice.setFeedIdentifier(FEED_ID);
+        powerDeliveryDevice.setPartNumber(PART_NUMBER);
+        powerDeliveryDevice.setSerialNumber(SERIAL_NUMBER);
+        
+        PowerConnection powerConnection = new PowerConnection();
+        powerConnection.setConnectionUri(CONNECTION_URI);
+        powerConnection.setDeviceConnection(DEVICE_CONNECTION);
+        powerDeliveryDevice.setPowerConnections(Arrays.asList(powerConnection));
 
         PowerDeliveryDevice addedPowerDeliveryDevice = this.client.add(powerDeliveryDevice);
 
@@ -193,8 +230,10 @@ public class PowerDeliveryDeviceClientSample {
         PowerDeliveryDeviceClientSample client = new PowerDeliveryDeviceClientSample();
 
         client.addPowerDeliveryDevice();
+        
         client.addPowerDeliveryDeviceByDiscover();
-
+        client.addPowerDeliveryDeviceWithPowerConnection();
+        
         client.getPowerDeliveryDeviceById();
 
         client.getAllPowerDeliveryDevices();
