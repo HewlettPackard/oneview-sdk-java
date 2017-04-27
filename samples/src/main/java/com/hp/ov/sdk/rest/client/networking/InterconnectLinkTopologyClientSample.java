@@ -61,6 +61,7 @@ public class InterconnectLinkTopologyClientSample {
     }
 
     public static void main(String[] args) {
+        /* This resource is available only on HPE Synergy */
         InterconnectLinkTopologyClientSample sample = new InterconnectLinkTopologyClientSample();
 
         sample.getAllInterconnectLinkTopologies();

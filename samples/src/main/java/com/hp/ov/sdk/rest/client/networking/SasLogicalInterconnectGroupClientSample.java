@@ -144,6 +144,7 @@ public class SasLogicalInterconnectGroupClientSample {
     }
 
     public static void main(String[] args) {
+        /* This resource is available only on HPE Synergy */
         SasLogicalInterconnectGroupClientSample sample = new SasLogicalInterconnectGroupClientSample();
 
         sample.createSasLogicalInterconnectGroup();

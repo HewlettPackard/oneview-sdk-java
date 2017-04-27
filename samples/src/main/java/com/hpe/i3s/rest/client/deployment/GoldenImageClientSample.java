@@ -127,6 +127,7 @@ public class GoldenImageClientSample {
     }
 
     public static void main(String[] args) {
+        /* This resource is available only on HPE Synergy */
         GoldenImageClientSample sample = new GoldenImageClientSample();
 
         sample.createGoldenImage();

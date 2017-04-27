@@ -51,6 +51,7 @@ public class DeploymentGroupClientSample {
     }
 
     public static void main(String[] args) {
+        /* This resource is available only on HPE Synergy */
         DeploymentGroupClientSample sample = new DeploymentGroupClientSample();
 
         sample.getAllDeploymentGroups();

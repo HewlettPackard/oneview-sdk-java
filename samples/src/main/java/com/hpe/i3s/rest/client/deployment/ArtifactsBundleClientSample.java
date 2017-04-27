@@ -228,6 +228,7 @@ public class ArtifactsBundleClientSample {
     }
 
     public static void main(String[] args) {
+        /* This resource is available only on HPE Synergy */
         ArtifactsBundleClientSample sample = new ArtifactsBundleClientSample();
 
         sample.createArtifactsBundle();

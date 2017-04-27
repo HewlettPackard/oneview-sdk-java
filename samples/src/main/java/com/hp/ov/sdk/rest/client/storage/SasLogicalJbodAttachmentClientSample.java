@@ -63,6 +63,7 @@ public class SasLogicalJbodAttachmentClientSample {
     }
 
     public static void main(String[] args) {
+        /* This resource is available only on HPE Synergy */
         SasLogicalJbodAttachmentClientSample sample = new SasLogicalJbodAttachmentClientSample();
 
         sample.getAllSasLogicalJbodAttachments();

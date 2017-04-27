@@ -68,6 +68,7 @@ public class OsVolumeClientSample {
     }
 
     public static void main(String[] args) {
+        /* This resource is available only on HPE Synergy */
         OsVolumeClientSample sample = new OsVolumeClientSample();
 
         sample.getOsVolumeByName();

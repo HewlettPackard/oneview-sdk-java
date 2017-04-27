@@ -69,6 +69,7 @@ public class SasInterconnectTypesClientSample {
     }
 
     public static void main(final String[] args) {
+        /* This resource is available only on HPE Synergy */
         SasInterconnectTypesClientSample client = new SasInterconnectTypesClientSample();
 
         client.getAllSasInterconnectTypes();

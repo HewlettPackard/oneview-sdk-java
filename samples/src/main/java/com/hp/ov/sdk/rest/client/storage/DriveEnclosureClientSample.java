@@ -99,6 +99,7 @@ public class DriveEnclosureClientSample {
     }
 
     public static void main(final String[] args) throws Exception {
+        /* This resource is available only on HPE Synergy */
         DriveEnclosureClientSample client = new DriveEnclosureClientSample();
 
         client.getAllDriveEnclosures();

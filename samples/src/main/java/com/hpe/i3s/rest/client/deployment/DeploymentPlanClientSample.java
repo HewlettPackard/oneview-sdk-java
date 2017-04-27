@@ -90,6 +90,7 @@ public class DeploymentPlanClientSample {
     }
 
     public static void main(String[] args) {
+        /* This resource is available only on HPE Synergy */
         DeploymentPlanClientSample sample = new DeploymentPlanClientSample();
 
         sample.createDeploymentPlan();

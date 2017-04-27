@@ -105,6 +105,7 @@ public class PlanScriptClientSample {
     }
 
     public static void main(String[] args) {
+        /* This resource is available only on HPE Synergy */
         PlanScriptClientSample sample = new PlanScriptClientSample();
 
         sample.createPlanScript();

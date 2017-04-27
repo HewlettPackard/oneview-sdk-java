@@ -72,6 +72,7 @@ public class SasLogicalJbodClientSample {
     }
 
     public static void main(String[] args) {
+        /* This resource is available only on HPE Synergy */
         SasLogicalJbodClientSample sample = new SasLogicalJbodClientSample();
 
         sample.getSasLogicalJbodById();

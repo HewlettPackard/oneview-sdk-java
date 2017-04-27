@@ -93,6 +93,7 @@ public class OsBuildPlanClientSample {
     }
 
     public static void main(String[] args) {
+        /* This resource is available only on HPE Synergy */
         OsBuildPlanClientSample sample = new OsBuildPlanClientSample();
 
         sample.createOsBuildPlan();
