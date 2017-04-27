@@ -22,10 +22,10 @@ import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.hpe.core.AbstractClient;
 import com.hpe.i3s.client.deployment.ArtifactsBundleClient;
 import com.hpe.i3s.client.deployment.DeploymentPlanClient;
-import com.hpe.i3s.client.deployment.DeploymentGroupClient;
 import com.hpe.i3s.client.deployment.GoldenImageClient;
 import com.hpe.i3s.client.deployment.OsBuildPlanClient;
 import com.hpe.i3s.client.deployment.PlanScriptClient;
+import com.hpe.i3s.client.uncategorized.DeploymentGroupClient;
 import com.hpe.i3s.client.statelessserver.OsVolumeClient;
 
 public class ImageStreamerClient extends AbstractClient {

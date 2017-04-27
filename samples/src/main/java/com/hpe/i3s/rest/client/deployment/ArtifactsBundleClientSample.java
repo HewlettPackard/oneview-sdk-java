@@ -26,14 +26,15 @@ import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.rest.http.core.client.DownloadPath;
 import com.hpe.i3s.client.deployment.ArtifactsBundleClient;
-import com.hpe.i3s.client.deployment.DeploymentGroupClient;
+import com.hpe.i3s.client.uncategorized.DeploymentGroupClient;
 import com.hpe.i3s.dto.deployment.artifactsbundle.ArtifactsBundle;
 import com.hpe.i3s.dto.deployment.artifactsbundle.CreateArtifactsBundle;
 import com.hpe.i3s.dto.deployment.artifactsbundle.InputArtifacts;
 import com.hpe.i3s.dto.deployment.artifactsbundle.TaskUri;
 import com.hpe.i3s.dto.deployment.artifactsbundle.UserBackupParams;
-import com.hpe.i3s.dto.deployment.deploymentgroup.DeploymentGroup;
 import com.hpe.i3s.rest.client.ImageStreamerClient;
+import com.hpe.i3s.dto.uncategorized.deploymentgroup.DeploymentGroup;
+
 
 public class ArtifactsBundleClientSample {
 

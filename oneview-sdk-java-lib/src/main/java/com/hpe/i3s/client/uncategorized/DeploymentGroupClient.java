@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hpe.i3s.client.deployment;
+package com.hpe.i3s.client.uncategorized;
 
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.reflect.Api;
 
-import com.hpe.i3s.dto.deployment.deploymentgroup.DeploymentGroup;
+import com.hpe.i3s.dto.uncategorized.deploymentgroup.DeploymentGroup;
 
 @Api(DeploymentGroupClient.DEPLOYMENT_GROUP_URI)
 public interface DeploymentGroupClient extends  SearchableResource<DeploymentGroup> {

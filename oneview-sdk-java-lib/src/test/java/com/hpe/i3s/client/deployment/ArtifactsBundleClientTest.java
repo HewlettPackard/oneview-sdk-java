@@ -20,6 +20,7 @@ import static com.hpe.i3s.client.deployment.ArtifactsBundleClient.ARTIFACTS_BUND
 import static com.hpe.i3s.client.deployment.ArtifactsBundleClient.ARTIFACTS_BUNDLE_DOWNLOAD_URI;
 import static com.hpe.i3s.client.deployment.ArtifactsBundleClient.ARTIFACTS_BUNDLE_STOP_ARTIFACT_CREATE_URI;
 import static com.hpe.i3s.client.deployment.ArtifactsBundleClient.ARTIFACTS_BUNDLE_URI;
+import static com.hpe.i3s.client.uncategorized.DeploymentGroupClient.DEPLOYMENT_GROUP_URI;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
@@ -47,6 +48,7 @@ import com.hpe.i3s.dto.deployment.artifactsbundle.ArtifactsBundle;
 import com.hpe.i3s.dto.deployment.artifactsbundle.CreateArtifactsBundle;
 import com.hpe.i3s.dto.deployment.artifactsbundle.TaskUri;
 import com.hpe.i3s.dto.deployment.artifactsbundle.UserBackupParams;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class ArtifactsBundleClientTest {
@@ -147,7 +149,7 @@ public class ArtifactsBundleClientTest {
     public void shouldCreateBackupArchiveBundle() {
         File file = new File(ANY_FILE_PATH);
 
-        String deploymentGrpUri = DeploymentGroupClient.DEPLOYMENT_GROUP_URI + "/" + DEPLOYMENT_GROUP_RESOURCE_ID;
+        String deploymentGrpUri = DEPLOYMENT_GROUP_URI + "/" + DEPLOYMENT_GROUP_RESOURCE_ID;
         UrlParameter query = new UrlParameter("deploymentGrpUri", deploymentGrpUri);
         client.createBackupArchiveBundle(file, deploymentGrpUri, DownloadPath.at(ANY_FILE_PATH));
 

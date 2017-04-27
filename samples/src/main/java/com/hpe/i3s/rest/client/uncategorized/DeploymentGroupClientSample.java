@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hpe.i3s.rest.client.deployment;
+package com.hpe.i3s.rest.client.uncategorized;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hpe.i3s.client.deployment.DeploymentGroupClient;
-import com.hpe.i3s.dto.deployment.deploymentgroup.DeploymentGroup;
+import com.hpe.i3s.client.uncategorized.DeploymentGroupClient;
+import com.hpe.i3s.dto.uncategorized.deploymentgroup.DeploymentGroup;
 import com.hpe.i3s.rest.client.ImageStreamerClient;
+import com.hpe.i3s.rest.client.deployment.ImageStreamerClientSample;
 
 public class DeploymentGroupClientSample {
 

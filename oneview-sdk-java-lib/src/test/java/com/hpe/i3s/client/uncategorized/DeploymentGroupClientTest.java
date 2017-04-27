@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hpe.i3s.client.deployment;
+package com.hpe.i3s.client.uncategorized;
 
-import static com.hpe.i3s.client.deployment.DeploymentGroupClient.DEPLOYMENT_GROUP_URI;
+import static com.hpe.i3s.client.uncategorized.DeploymentGroupClient.DEPLOYMENT_GROUP_URI;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
@@ -34,7 +34,7 @@ import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
-import com.hpe.i3s.dto.deployment.deploymentgroup.DeploymentGroup;
+import com.hpe.i3s.dto.uncategorized.deploymentgroup.DeploymentGroup;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DeploymentGroupClientTest {
