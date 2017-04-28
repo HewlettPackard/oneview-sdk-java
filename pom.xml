@@ -43,6 +43,7 @@
   <modules>
     <module>oneview-sdk-java-lib</module>
     <module>samples</module>
+    <module>automated-tests</module>
   </modules>
 
   <properties>
