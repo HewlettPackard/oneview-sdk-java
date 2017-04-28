@@ -244,8 +244,8 @@ public class LogicalEnclosureClientSample {
         client.updateLogicalEnclosureFromGroup();
         client.updateLogicalEnclosureConfiguration();
 
-        client.getLogicalEnclosureConfigurationScript();
-        client.updateLogicalEnclosureConfigurationScript();
+        client.getLogicalEnclosureConfigurationScript(); // only available on C7K
+        client.updateLogicalEnclosureConfigurationScript(); // only available on C7K
         client.createLogicalEnclosureSupportDump();
 
         client.patchLogicalEnclosure();
