@@ -137,7 +137,9 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
     @SuppressWarnings("unchecked")
     private ResourceCollection<Object> handleGetAll(Request request, Type returnType) {
         ResourceCollection<Object> resources = new ResourceCollection<>();
-
+        boolean hasMoreItems = false;
+        boolean hasNextPage = false;
+        
         do {
             ResourceCollection<Object> response = (ResourceCollection<Object>)
                     this.baseClient.executeRequest(request, returnType);
@@ -146,7 +148,10 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
             resources.setTotal(response.getTotal());
 
             request = new Request(HttpMethod.GET, response.getNextPageUri());
-        } while (resources.getCount() < resources.getTotal());
+            
+            hasMoreItems = resources.getCount() < resources.getTotal(); 
+            hasNextPage = resources.getNextPageUri() != null;
+        } while (hasMoreItems && hasNextPage);
 
         return resources;
     }
