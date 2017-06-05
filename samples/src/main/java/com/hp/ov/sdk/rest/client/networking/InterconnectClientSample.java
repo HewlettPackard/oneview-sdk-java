@@ -105,7 +105,7 @@ public class InterconnectClientSample {
 
     private void updateInterconnectPorts() {
         Interconnect interconnect = this.interconnectClient.getByName(RESOURCE_NAME).get(0);
-        Port port = interconnect.getPorts().get(16);
+        Port port = interconnect.getPorts().get(10);
 
         port.setEnabled(!port.getEnabled());
 
