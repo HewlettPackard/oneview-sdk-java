@@ -147,8 +147,9 @@ public class LogicalInterconnectResource extends BasicResource implements Create
 
     public String getTelemetryConfiguration(String id) {
         LogicalInterconnect logicalInterconnect = client.getById(id);
-        return objToString(
-                client.getTelemetryConfiguration(id, logicalInterconnect.getTelemetryConfiguration().getUri()));
+        String telemetryUri = logicalInterconnect.getTelemetryConfiguration().getUri();
+        String telemetryId = telemetryUri.substring(telemetryUri.lastIndexOf('/') + 1);
+        return objToString(client.getTelemetryConfiguration(id, telemetryId));
     }
 
     public String getInternalVlans(String id) {
