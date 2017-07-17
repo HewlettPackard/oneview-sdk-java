@@ -40,13 +40,20 @@ public class FcSanDeviceManagerClientSample {
     // test values - user input
     // ================================
     private static final String RESOURCE_ID = "2e1fabc7-88eb-4884-899b-a6740130d094";
-    private static final String RESOURCE_NAME = "172.18.15.1";
+    private static final String RESOURCE_NAME = "172.18.20.1";
     private static final String HOSTNAME = "Host";
-    private static final String HOSTNAME_VALUE = "172.18.15.1";
+    private static final String HOSTNAME_VALUE = "172.18.20.1";
     private static final String PASSWORD = "Password";
     private static final String PASSWORD_VALUE = "dcs";
     // ================================
 
+    // ========== Synergy values - Cisco ============
+    private static final String SNMPAUTHSTRING = "SnmpAuthString";
+    private static final String SNMPAUTHSTRING_PASSWORD = "hpinvent!";
+    private static final String SNMPPORT = "SnmpPort";
+    private static final Integer SNMP_PORT_VALUE = 161;
+    // ================================
+	
     private FcSanDeviceManagerClientSample() {
         OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
@@ -82,6 +89,18 @@ public class FcSanDeviceManagerClientSample {
 
         LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
     }
+    
+    private void updateFcSanDeviceManagerSynergy() {
+        DeviceManagerResponse deviceManagerSynergy = this.fcSanDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
+
+        deviceManagerSynergy = updateHostConnectionDetailsForSynergy(deviceManagerSynergy);
+        deviceManagerSynergy.setRefreshState(RefreshState.RefreshPending);
+
+        TaskResource taskResource = fcSanDeviceManagerClient.update(deviceManagerSynergy.getResourceId(),
+				deviceManagerSynergy);
+
+        LOGGER.info("Task object returned to client: {}", taskResource.toJsonString());
+    }
 
     private void removeFcSanDeviceManager() {
         DeviceManagerResponse deviceManager = this.fcSanDeviceManagerClient.getByName(RESOURCE_NAME).get(0);
@@ -108,6 +127,21 @@ public class FcSanDeviceManagerClientSample {
         }
         return deviceManager;
     }
+    
+    private DeviceManagerResponse updateHostConnectionDetailsForSynergy(DeviceManagerResponse deviceManagerSynergy) {
+        for (Property property : deviceManagerSynergy.getConnectionInfo()) {
+            if (property.getName().equalsIgnoreCase(HOSTNAME)) {
+                property.setValue(HOSTNAME_VALUE);
+            }
+            if (property.getName().equalsIgnoreCase(SNMPAUTHSTRING)) {
+                property.setValue(SNMPAUTHSTRING_PASSWORD);
+            }
+            if (property.getName().equalsIgnoreCase(SNMPPORT)) {
+                property.setValue(SNMP_PORT_VALUE);
+            }
+        }
+        return deviceManagerSynergy;
+    }
 
     public static void main(final String[] args) throws Exception {
         FcSanDeviceManagerClientSample client = new FcSanDeviceManagerClientSample();
@@ -116,7 +150,10 @@ public class FcSanDeviceManagerClientSample {
         client.getAllFcSanDeviceManagers();
         client.getFcSanDeviceManagerByName();
         client.updateFcSanDeviceManager();
-
+        
+        // OneView 3.0
+        client.updateFcSanDeviceManagerSynergy();
+        
         //  OneView 1.2 & 2.0
         client.removeFcSanDeviceManager120_200();
 

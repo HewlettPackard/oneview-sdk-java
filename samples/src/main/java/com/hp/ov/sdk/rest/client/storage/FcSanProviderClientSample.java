@@ -42,10 +42,10 @@ public class FcSanProviderClientSample {
 
     // test values - user input
     // ================================
-    private static final String RESOURCE_ID = "0aa1f4e1-3b5e-4233-af1a-f849dc64da69";
-    private static final String RESOURCE_NAME = "Brocade San Plugin";
+    private static final String RESOURCE_ID = "848c191d-c995-4cd5-a7ba-e627435dd5f2";
+    private static final String RESOURCE_NAME = "Cisco";
     private static final String HOSTNAME = "Host";
-    private static final String HOSTNAME_VALUE = "172.18.15.1";
+    private static final String HOSTNAME_VALUE = "172.18.20.1";
     private static final String USERNAME = "Username";
     private static final String USERNAME_VALUE = "dcs";
     private static final String PASSWORD = "Password";
@@ -54,7 +54,20 @@ public class FcSanProviderClientSample {
     private static final String USE_SSL = "UseSsl";
     private static final String USE_SSL_VALUE = "true";
     // ================================
-
+    
+    // ========== Synergy values - Cisco ============ //
+    private static final String SNMPUSERNAME = "SnmpUserName";
+    private static final String SNMPUSERNAME_VALUE = "dcs-SHA";
+    private static final String SNMPAUTHLEVEL = "SnmpAuthLevel";
+    private static final String SNMPAUTHLEVEL_VALUE = "AUTHNOPRIV";
+    private static final String SNMPAUTHPROTOCOL = "SnmpAuthProtocol";
+    private static final String SNMPAUTHPROTOCOL_VALUE = "SHA";
+    private static final String SNMPAUTHSTRING = "SnmpAuthString";
+    private static final String SNMPAUTHSTRING_PASSWORD = "hpinvent!";
+    private static final String SNMPPORT = "SnmpPort";
+    private static final Integer SNMP_PORT_VALUE = 161;
+    // ================================
+    
     private FcSanProviderClientSample() {
         OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
@@ -88,10 +101,19 @@ public class FcSanProviderClientSample {
         LOGGER.info("Task object returned to the client: {}", taskResource.toJsonString());
     }
 
+    private void addFcSanManagerSynergy() {
+        SanProviderResponse provider = this.fcSanProviderClient.getById(RESOURCE_ID);
+  
+        DeviceManagerResponse deviceManagerSynergy = this.buildDeviceManagerSynergy(provider);
+        TaskResource taskResource = this.fcSanProviderClient.addSanManager(provider.getResourceId(), deviceManagerSynergy);
+  
+        LOGGER.info("Task object returned to the client: {}", taskResource.toJsonString());
+    }
+
     private DeviceManagerResponse buildDeviceManager(SanProviderResponse sanProviderResponse) {
         DeviceManagerResponse deviceManagerResponseDto = new DeviceManagerResponse();
         List<Property> connectionInfo = new ArrayList<>();
-        String portValue = "";
+        Object portValue = "";
         for (Property property : sanProviderResponse.getDefaultConnectionInfo()) {
             if (property.getDisplayName().contains("Port")) {
                 portValue = property.getValue();
@@ -128,14 +150,57 @@ public class FcSanProviderClientSample {
 
         return deviceManagerResponseDto;
     }
+    
+    private DeviceManagerResponse buildDeviceManagerSynergy(SanProviderResponse sanProviderResponse) {
+        DeviceManagerResponse deviceManagerResponseDtoSynergy = new DeviceManagerResponse();
+        List<Property> connectionInfo = new ArrayList<>();
+  
+        Property host = new Property();
+        host.setName(HOSTNAME);
+        host.setValue(HOSTNAME_VALUE);
+  
+        Property snmpPort = new Property();
+        snmpPort.setName(SNMPPORT);
+        snmpPort.setValue(SNMP_PORT_VALUE);
+  
+        Property user = new Property();
+        user.setName(SNMPUSERNAME);
+        user.setValue(SNMPUSERNAME_VALUE);
+  
+        Property authLevel = new Property();
+        authLevel.setName(SNMPAUTHLEVEL);
+        authLevel.setValue(SNMPAUTHLEVEL_VALUE);
+  
+        Property authProtocol = new Property();
+        authProtocol.setName(SNMPAUTHPROTOCOL);
+        authProtocol.setValue(SNMPAUTHPROTOCOL_VALUE);
+  
+        Property password = new Property();
+        password.setName(SNMPAUTHSTRING);
+        password.setValue(SNMPAUTHSTRING_PASSWORD);
+  
+        connectionInfo.add(host);
+        connectionInfo.add(snmpPort);
+        connectionInfo.add(user);
+        connectionInfo.add(authLevel);
+        connectionInfo.add(authProtocol);
+        connectionInfo.add(password);
+  
+        deviceManagerResponseDtoSynergy.setConnectionInfo(connectionInfo);
+  
+        System.out.println(deviceManagerResponseDtoSynergy.toJsonString());
+        return deviceManagerResponseDtoSynergy;
+    }
 
     public static void main(final String[] args) throws Exception {
         FcSanProviderClientSample client = new FcSanProviderClientSample();
 
+        client.addFcSanManagerSynergy();
         client.addFcSanManager();
-
-        client.getFcSanProviderById();
+        
         client.getAllFcSanProviders();
+        client.getFcSanProviderById();
         client.getFcSanProviderByName();
+        
     }
 }

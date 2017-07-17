@@ -31,11 +31,13 @@ import com.google.gson.JsonParseException;
 import com.hp.ov.sdk.adaptors.DateAdapter;
 import com.hp.ov.sdk.adaptors.PatchSerializer;
 import com.hp.ov.sdk.adaptors.PortTelemetrySerializationAdapter;
+import com.hp.ov.sdk.adaptors.PropertySerializer;
 import com.hp.ov.sdk.adaptors.ScmbMessageDeserializer;
 import com.hp.ov.sdk.adaptors.StorageCapabilitiesDeserializer;
 import com.hp.ov.sdk.adaptors.StoragePoolSerializationAdapter;
 import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.PortTelemetry;
+import com.hp.ov.sdk.dto.Property;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.servers.serverhardwaretype.StorageCapabilities;
 import com.hp.ov.sdk.dto.storage.StoragePool;
@@ -54,6 +56,7 @@ public class ObjectToJsonConverter {
             .put(ScmbMessage.class, new ScmbMessageDeserializer())
             .put(Date.class, new DateAdapter())
             .put(Patch.class, new PatchSerializer())
+            .put(Property.class, new PropertySerializer())
             .build();
 
     private Gson gson;
@@ -125,7 +128,6 @@ public class ObjectToJsonConverter {
 
     private GsonBuilder gsonBuilder() {
         GsonBuilder builder = new GsonBuilder();
-
         for (Map.Entry<Class<?>, Object> adapter : GSON_TYPE_ADAPTERS.entrySet()) {
             builder.registerTypeAdapter(adapter.getKey(), adapter.getValue());
         }

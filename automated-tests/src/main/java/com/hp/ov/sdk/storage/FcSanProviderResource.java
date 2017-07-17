@@ -82,7 +82,7 @@ public class FcSanProviderResource extends BasicResource implements CreateResour
 
         DeviceManagerResponse deviceManagerResponseDto = new DeviceManagerResponse();
         List<Property> connectionInfo = new ArrayList<>();
-        String portValue = "";
+        Object portValue = "";
         for (Property property : sanProvider.getDefaultConnectionInfo()) {
             if (property.getDisplayName().contains("Port")) {
                 portValue = property.getValue();

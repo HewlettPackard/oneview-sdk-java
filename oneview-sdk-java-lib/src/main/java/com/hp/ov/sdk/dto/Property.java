@@ -35,7 +35,7 @@ public class Property implements Serializable {
 
     private String displayName;
     private Boolean required;
-    private String value;
+    private Object value;
     private ValueFormat valueFormat;
     private ValueType valueType;
     private String name;
@@ -56,11 +56,11 @@ public class Property implements Serializable {
         this.required = required;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
-    public void setValue(final String value) {
+    public void setValue(final Object value) {
         this.value = value;
     }
 
