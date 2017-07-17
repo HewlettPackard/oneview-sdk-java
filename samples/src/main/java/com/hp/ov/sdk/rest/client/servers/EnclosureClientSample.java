@@ -65,6 +65,8 @@ public class EnclosureClientSample {
     private static final String USERNAME = "dcs";
     private static final String PASSWORD = "dcs";
     private static final String FIRMWARE = "Service Pack for ProLiant";
+    
+    private static final String IPV6_FRAME_LINK = "fe80::2:0:9:1%eth2";
     // ================================
 
     private EnclosureClientSample() {
@@ -280,6 +282,15 @@ public class EnclosureClientSample {
         return refreshStateConfig;
     }
 
+    private void addRemoteEnclosure() {
+        AddEnclosure addRemoteEnclosure = new AddEnclosure();
+        addRemoteEnclosure.setHostname(IPV6_FRAME_LINK);
+        
+        TaskResource taskResource = this.enclosureClient.add(addRemoteEnclosure);
+
+        LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
+    }
+
     public static void main(final String[] args) throws Exception {
         EnclosureClientSample client = new EnclosureClientSample();
 
@@ -306,6 +317,8 @@ public class EnclosureClientSample {
         client.getEnclosureUtilization();
 
         client.updateEnclosure(); // For 2.0 use patchEnclosure() method
+        
+        client.addRemoteEnclosure(); // Only add remote enclosure for Synergy
 
         client.patchEnclosure();
         client.removeEnclosure();
