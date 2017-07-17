@@ -63,10 +63,10 @@ import com.hp.ov.sdk.dto.networking.logicalinterconnects.PortMonitor;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.QosAggregatedConfiguration;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
 import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
+import com.hp.ov.sdk.util.ResourceDtoUtils;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LogicalInterconnectClientTest {
@@ -80,6 +80,8 @@ public class LogicalInterconnectClientTest {
     private BaseClient baseClient = mock(BaseClient.class);
     private LogicalInterconnectClient client = Reflection.newProxy(LogicalInterconnectClient.class,
             new ClientRequestHandler<>(baseClient, LogicalInterconnectClient.class));
+    private final ResourceDtoUtils resourceDtoUtils = mock(ResourceDtoUtils.class);
+
 
     @Test
     public void shouldGetLogicalInterconnectById() {
@@ -105,13 +107,11 @@ public class LogicalInterconnectClientTest {
 
     @Test
     public void shouldGetLogicalInterconnectByName() {
-        client.getByName(ANY_RESOURCE_NAME);
+        given(this.resourceDtoUtils.getLogicalInterconnectByName(ANY_RESOURCE_NAME)).willReturn(new LogicalInterconnect());
 
-        Request expectedRequest = new Request(HttpMethod.GET, LOGICAL_INTERCONNECT_URI);
-        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
-
-        then(baseClient).should().executeRequest(expectedRequest,
-                new TypeToken<ResourceCollection<LogicalInterconnect>>() {}.getType());
+        resourceDtoUtils.getLogicalInterconnectByName(ANY_RESOURCE_NAME);
+        
+        then(resourceDtoUtils).should().getLogicalInterconnectByName(ANY_RESOURCE_NAME);
     }
 
     @Test

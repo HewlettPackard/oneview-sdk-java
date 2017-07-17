@@ -41,6 +41,7 @@ import com.hp.ov.sdk.dto.servers.enclosure.Enclosure;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureClient;
 import com.hp.ov.sdk.rest.client.servers.EnclosureClientSample;
+import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.URIUtils;
 
 /*
@@ -56,6 +57,7 @@ public class UplinkSetClientSample {
     private final EnclosureClient enclosureClient;
     private final InterconnectClient interconnectClient;
     private final OneViewClient oneViewClient;
+    private final ResourceDtoUtils resourceDtoUtils;
 
     // These are variables to be defined by user
     // ================================
@@ -78,6 +80,7 @@ public class UplinkSetClientSample {
         uplinkSetClient = oneViewClient.uplinkSet();
         enclosureClient = oneViewClient.enclosure();
         interconnectClient = oneViewClient.interconnect();
+        resourceDtoUtils = new ResourceDtoUtils(oneViewClient);
     }
 
     private void getUplinkSetById() {
@@ -111,7 +114,7 @@ public class UplinkSetClientSample {
     private void createUplinkSetSynergy() {
         UplinkSet uplinkSet = buildUplinkSet(BAY_VALUE_SYNERGY, PORT_VALUE_SYNERGY, ENCLOSURE_SYNERGY_NAME);
 
-        String LIG_URI = oneViewClient.logicalInterconnect().getByName(LOGICAL_INTERCONNECT_NAME).get(0).getUri();
+        String LIG_URI = resourceDtoUtils.getLogicalInterconnectByName(LOGICAL_INTERCONNECT_NAME).getUri();
         uplinkSet.setLogicalInterconnectUri(LIG_URI);
 
         TaskResource task = this.uplinkSetClient.create(uplinkSet);

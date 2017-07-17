@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.hp.ov.sdk.constants.ResourceCategory;
+import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.PortInfo;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.LocationType;
@@ -38,6 +39,7 @@ import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.InterconnectMapTemp
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalPortConfigInfo;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
+import com.hp.ov.sdk.dto.networking.logicalinterconnects.LogicalInterconnect;
 import com.hp.ov.sdk.dto.networking.networkset.NetworkSet;
 import com.hp.ov.sdk.dto.servers.AssignmentType;
 import com.hp.ov.sdk.dto.servers.Bios;
@@ -59,6 +61,7 @@ import com.hp.ov.sdk.dto.storage.StorageTargetPort;
 import com.hp.ov.sdk.dto.storage.StorageVolume;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
+import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.client.networking.InterconnectTypeClient;
 import com.hp.ov.sdk.rest.http.core.client.ApiVersion;
@@ -458,6 +461,19 @@ public class ResourceDtoUtils {
 
     public String getServerHardwareTypeUri(String serverHardwareName) {
         return oneViewClient.serverHardware().getByName(serverHardwareName).get(0).getServerHardwareTypeUri();
+    }
+    
+    public LogicalInterconnect getLogicalInterconnectByName(String resourceName) {
+        
+        ResourceCollection<LogicalInterconnect> logicalInterconnects = oneViewClient.logicalInterconnect().getAll();
+        
+        for(LogicalInterconnect logicalInterconnect : logicalInterconnects.getMembers())
+        {
+            if (logicalInterconnect.getName().equals(resourceName)) {
+                return logicalInterconnect;
+            }
+        }
+        throw new SDKResourceNotFoundException(SDKErrorEnum.resourceNotFound, SdkConstants.APPLIANCE);
     }
 
 }

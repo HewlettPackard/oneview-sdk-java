@@ -49,6 +49,7 @@ import com.hp.ov.sdk.rest.client.server.EnclosureClient;
 import com.hp.ov.sdk.rest.client.servers.EnclosureClientSample;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
+import com.hp.ov.sdk.util.ResourceDtoUtils;
 
 /*
  * LogicalInterconnectClientSample, sample program consumes the available networks through the interconnect uplinks and
@@ -63,6 +64,7 @@ public class LogicalInterconnectClientSample {
     private final FirmwareDriverClient firmwareDriverClient;
     private final EnclosureClient enclosureClient;
     private final OneViewClient oneViewClient;
+    private final ResourceDtoUtils resourceDtoUtils;
 
     // These are variables to be defined by user
     // ================================
@@ -83,6 +85,7 @@ public class LogicalInterconnectClientSample {
         this.enclosureClient = oneViewClient.enclosure();
         this.logicalInterconnectClient = oneViewClient.logicalInterconnect();
         this.firmwareDriverClient = oneViewClient.firmwareDriver();
+        this.resourceDtoUtils = new ResourceDtoUtils(oneViewClient);
     }
 
     private void getLogicalInterconnectById() {
@@ -92,7 +95,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getLogicalInterconnectByName() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         LOGGER.info("LogicalInterconnect object returned to client : " + logicalInterconnect.toJsonString());
     }
@@ -104,7 +107,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void updateLogicalInterconnectSnmpConfiguration() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         logicalInterconnect.getSnmpConfiguration().setReadCommunity("private");
 
@@ -115,7 +118,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void updateLogicalInterconnectCompliance() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         TaskResource task = logicalInterconnectClient.updateCompliance(logicalInterconnect.getResourceId());
 
@@ -123,7 +126,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void updateLogicalInterconnectFirmware() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         LiFirmware liFirmware = new LiFirmware();
 
@@ -138,7 +141,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getLogicalInterconnectFirmware() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         LiFirmware liFirmware = logicalInterconnectClient.getFirmware(logicalInterconnect.getResourceId());
 
@@ -146,7 +149,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void updateLogicalInterconnectFirmwareActive() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         LiFirmware liFirmware = logicalInterconnectClient.getFirmware(logicalInterconnect.getResourceId());
 
@@ -185,7 +188,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void updateLogicalInterconnectFirmwareUpdate() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         LiFirmware liFirmware = new LiFirmware();
         liFirmware.setCommand(Command.Update);
@@ -199,7 +202,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getLogicalInterconnectForwardingInformationBase() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         ResourceCollection<InterconnectFibDataEntry> fibData = logicalInterconnectClient.getForwardingInformationBase(
                 logicalInterconnect.getResourceId());
@@ -208,7 +211,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void createLogicalInterconnectForwardingInformationBase() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         InterconnectFibDataInfo fibData = logicalInterconnectClient.createForwardingInformationBase(
                 logicalInterconnect.getResourceId());
@@ -217,7 +220,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getLogicalInterconnectSnmpConfiguration() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         SnmpConfiguration snmpConfiguration = logicalInterconnectClient.getSnmpConfiguration(
                 logicalInterconnect.getResourceId());
@@ -226,7 +229,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getLogicalInterconnectUnassignedUplinkPortsForPortMonitor() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         ResourceCollection<PortMonitorUplinkPort> uplinkPorts
                 = logicalInterconnectClient.getUnassignedUplinkPortsForPortMonitor(logicalInterconnect.getResourceId());
@@ -235,7 +238,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void updateLogicalInterconnectConfiguration() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         TaskResource task = logicalInterconnectClient.updateConfiguration(logicalInterconnect.getResourceId());
 
@@ -243,7 +246,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getLogicalInterconnectPortMonitorConfiguration() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         PortMonitor portMonitor = logicalInterconnectClient.getPortMonitorConfiguration(
                 logicalInterconnect.getResourceId());
@@ -252,7 +255,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void updateLogicalInterconnectPortMonitorConfiguration() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         PortMonitor portMonitor = logicalInterconnectClient.getPortMonitorConfiguration(
                 logicalInterconnect.getResourceId());
@@ -265,7 +268,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getLogicalInterconnectTelemetryConfiguration() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         TelemetryConfiguration telemetryConfiguration = logicalInterconnectClient.getTelemetryConfiguration(
                 logicalInterconnect.getResourceId(), TELEMETRY_ID);
@@ -274,7 +277,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void updateLogicalInterconnectTelemetryConfiguration() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         TelemetryConfiguration telemetryConfiguration = logicalInterconnectClient.getTelemetryConfiguration(
                 logicalInterconnect.getResourceId(), TELEMETRY_ID);
@@ -287,7 +290,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void updateLogicalInterconnectTelemetryConfigurationV200() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         TelemetryConfiguration telemetryConfiguration = logicalInterconnectClient.getTelemetryConfiguration(
                 logicalInterconnect.getResourceId(), TELEMETRY_ID);
@@ -300,7 +303,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void updateEthernetSettings() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         EthernetInterconnectSettingsV2 ethSettingsDto = logicalInterconnect.getEthernetSettings();
         ethSettingsDto.setEnablePauseFloodProtection(!ethSettingsDto.getEnablePauseFloodProtection());
@@ -342,7 +345,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void updateLogicalInterconnectInternalNetworks() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         String networkUri = oneViewClient.ethernetNetwork().getByName(NETWORK_NAME).get(0).getUri();
 
@@ -353,7 +356,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getLogicalInterconnectInternalVlans() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         ResourceCollection<InternalVlanAssociation> vlans = logicalInterconnectClient.getInternalVlans(
                 logicalInterconnect.getResourceId());
@@ -362,7 +365,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void getLogicalInterconnectQosAggregatedConfiguration() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         QosAggregatedConfiguration qosConfiguration = logicalInterconnectClient.getQosAggregatedConfiguration(
                 logicalInterconnect.getResourceId());
@@ -371,7 +374,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void updateLogicalInterconnectQosAggregatedConfiguration() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         QosAggregatedConfiguration qosConfiguration = logicalInterconnectClient.getQosAggregatedConfiguration(
                 logicalInterconnect.getResourceId());
@@ -384,7 +387,7 @@ public class LogicalInterconnectClientSample {
     }
 
     private void updateLogicalInterconnectSettings() {
-        LogicalInterconnect logicalInterconnect = logicalInterconnectClient.getByName(RESOURCE_NAME).get(0);
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         InterconnectSettingsV2 settings = new InterconnectSettingsV2();
         settings.setType(ResourceCategory.RC_LOGICAL_INTERCONNECT_SETTINGS_V200);

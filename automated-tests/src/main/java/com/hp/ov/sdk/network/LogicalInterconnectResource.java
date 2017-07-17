@@ -47,12 +47,15 @@ import com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
 import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
+import com.hp.ov.sdk.util.ResourceDtoUtils;
 
 public class LogicalInterconnectResource extends BasicResource implements CreateResource, RemoveResource {
 
     private static LogicalInterconnectResource instance;
 
     private LogicalInterconnectClient client;
+    
+    private final ResourceDtoUtils resourceDtoUtils;
 
     private FirmwareDriverClient firmwareDriverClient;
 
@@ -68,6 +71,7 @@ public class LogicalInterconnectResource extends BasicResource implements Create
         firmwareDriverClient = oneViewClient.firmwareDriver();
         ethernetNetworkClient = oneViewClient.ethernetNetwork();
         fcNetworkClient = oneViewClient.fcNetwork();
+        resourceDtoUtils = new ResourceDtoUtils(oneViewClient);
     }
 
     public static LogicalInterconnectResource getInstance() {
@@ -84,7 +88,7 @@ public class LogicalInterconnectResource extends BasicResource implements Create
 
     @Override
     public String findByName(String name) {
-        LogicalInterconnect logicalInterconnect = (LogicalInterconnect) getResource(client.getByName(name));
+        LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(name);
         return logicalInterconnect == null ? "" : logicalInterconnect.getResourceId();
     }
 
