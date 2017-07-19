@@ -41,10 +41,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.google.common.collect.Lists;
 import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.PortMonitorUplinkPort;
@@ -61,7 +63,9 @@ import com.hp.ov.sdk.dto.networking.logicalinterconnects.LiFirmware;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.LogicalInterconnect;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.PortMonitor;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.QosAggregatedConfiguration;
+import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.rest.client.BaseClient;
+import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
@@ -80,8 +84,10 @@ public class LogicalInterconnectClientTest {
     private BaseClient baseClient = mock(BaseClient.class);
     private LogicalInterconnectClient client = Reflection.newProxy(LogicalInterconnectClient.class,
             new ClientRequestHandler<>(baseClient, LogicalInterconnectClient.class));
-    private final ResourceDtoUtils resourceDtoUtils = mock(ResourceDtoUtils.class);
-
+    private LogicalInterconnectClient logicalInterconnectClient = mock(LogicalInterconnectClient.class);
+    private ResourceCollection<LogicalInterconnect> resourceCollection = new ResourceCollection<LogicalInterconnect>();
+    private OneViewClient oneViewClient = mock(OneViewClient.class);
+    private ResourceDtoUtils resourceDtoUtils = new ResourceDtoUtils(oneViewClient);
 
     @Test
     public void shouldGetLogicalInterconnectById() {
@@ -107,11 +113,26 @@ public class LogicalInterconnectClientTest {
 
     @Test
     public void shouldGetLogicalInterconnectByName() {
-        given(this.resourceDtoUtils.getLogicalInterconnectByName(ANY_RESOURCE_NAME)).willReturn(new LogicalInterconnect());
-
-        resourceDtoUtils.getLogicalInterconnectByName(ANY_RESOURCE_NAME);
+        LogicalInterconnect logicalInterconnect = new LogicalInterconnect();
+        logicalInterconnect.setName(ANY_RESOURCE_NAME);
+        resourceCollection.addMembers(Lists.newArrayList(logicalInterconnect));
         
-        then(resourceDtoUtils).should().getLogicalInterconnectByName(ANY_RESOURCE_NAME);
+        given(logicalInterconnectClient.getAll()).willReturn(resourceCollection);
+
+        given(oneViewClient.logicalInterconnect()).willReturn(logicalInterconnectClient);
+        
+        LogicalInterconnect logicalInterconnectByName = resourceDtoUtils.getLogicalInterconnectByName(ANY_RESOURCE_NAME);
+        
+        Assert.assertNotNull(logicalInterconnectByName);
+    }
+    
+    @Test(expected=SDKResourceNotFoundException.class)
+    public void shouldThrowExceptionWhenTryingToGetLogicalInterconnectByNameWhenElementIsNotFound() {
+        given(logicalInterconnectClient.getAll()).willReturn(resourceCollection);
+
+        given(oneViewClient.logicalInterconnect()).willReturn(logicalInterconnectClient);
+        
+        resourceDtoUtils.getLogicalInterconnectByName(ANY_RESOURCE_NAME);
     }
 
     @Test
