@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.resources.network;
+package com.hp.ov.sdk.resources.server;
 
 import org.junit.runner.RunWith;
 
@@ -24,8 +24,8 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
     glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/network/switchType.feature", 
-    tags = "@getAll, @get")
-public class SwitchTypeBDDTest {
+    features = "classpath:cucumber/server/serverHardwareTypeC7000.feature",
+    tags = "@getAll, @get, @edit")
+public class ServerHardwareTypeBDDTestC7000 {
 
 }

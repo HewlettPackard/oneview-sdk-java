@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.resources.network;
+package com.hp.ov.sdk.resources.facilities;
 
 import org.junit.runner.RunWith;
 
@@ -22,10 +22,10 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/network/switchType.feature", 
-    tags = "@getAll, @get")
-public class SwitchTypeBDDTest {
+@CucumberOptions(format = { "pretty", "html:target/cucumber" },
+        glue = {"com.hp.ov.sdk.resources" },
+        features = "classpath:cucumber/facilities/powerDeliveryDeviceC7000.feature",
+        tags = "@create, @createByDiscover, @getAll, @get, @update, @remove, @removeByFilter")
+public class PowerDeliveryDeviceBDDTestC7000 {
 
 }

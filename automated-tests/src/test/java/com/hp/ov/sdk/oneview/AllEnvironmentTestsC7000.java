@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.resources.server;
+package com.hp.ov.sdk.oneview;
 
 import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-import cucumber.api.CucumberOptions;
-import cucumber.api.junit.Cucumber;
-
-@RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-	glue = {"com.hp.ov.sdk.resources" }, 
-	features = "classpath:cucumber/server/enclosureSynergy.feature", 
-	tags =  "@create, @getAll, @get, @patch, @edit, @refresh")
-public class EnclosureSynergyBDDTest {
+@RunWith(Suite.class)
+@SuiteClasses({ 
+    EnvironmentCreationTestsC7000.class,
+    EnvironmentDestructionTestsC7000.class
+    })
+public class AllEnvironmentTestsC7000 {
 
 }

@@ -75,4 +75,9 @@ public class PowerDeliveryDeviceBDDStep extends Background {
         status = PowerDeliveryDeviceResource.getInstance().removeSynchronously(resourceID);
     }
 
+    @When("^OneView runs Power Delivery Synergy creation$")
+    public void oneview_runs_Power_Delivery_Synergy_creation() throws Throwable {
+        PowerDeliveryDeviceResource.getInstance().createSynergy();
+    }
+
 }

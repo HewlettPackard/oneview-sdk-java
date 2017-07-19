@@ -55,4 +55,9 @@ public class EnclosureGroupBDDStep extends Background {
         ((EnclosureGroupResource) OneView.getResource()).updateConfigurationScript(resourceID, configurationScript);
     }
 
+    @When("^OneView runs Enclosure Synergy creation$")
+    public void oneview_runs_Enclosure_Synergy_creation() throws Throwable {
+        ((EnclosureGroupResource) OneView.getResource()).createSynergy();
+    }
+
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.resources.storage;
+package com.hp.ov.sdk.resources.network;
 
 import org.junit.runner.RunWith;
 
@@ -22,10 +22,10 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/storage/fcSansManagedSan.feature", 
-    tags = "@create, @getAll, @get, @update, @remove")
-public class FcSansManagedSanBDDTest {
+@CucumberOptions(format = { "pretty", "html:target/cucumber" },
+        glue = {"com.hp.ov.sdk.resources" },
+        features = "classpath:cucumber/network/logicalInterconnectC7000.feature",
+        tags = "@create, @getAll, @get, @update, @onlyOV2, @remove")
+public class LogicalInterconnectBDDTestC7000 {
 
 }

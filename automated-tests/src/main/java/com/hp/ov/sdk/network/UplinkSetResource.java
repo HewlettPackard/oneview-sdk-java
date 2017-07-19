@@ -97,6 +97,10 @@ public class UplinkSetResource extends BasicResource implements CreateResource, 
         client.create(builder());
     }
 
+    public void createSynergy() {
+        client.create(builderSynergy());
+    }
+
     @Override
     public UplinkSet builder() {
         String resourceId = null;
@@ -107,23 +111,23 @@ public class UplinkSetResource extends BasicResource implements CreateResource, 
         Enclosure enclosuresDto = enclosureClient.getByName(resourceProperties.get("enclosure")).get(0);
 
         for (int i = 0; i < enclosuresDto.getInterconnectBayCount(); i++) {
-            if (Integer.parseInt(resourceProperties.get("bay")) == enclosuresDto.getInterconnectBays().get(i)
-                    .getBayNumber()) {
-                uplinkSets.setLogicalInterconnectUri(
-                        enclosuresDto.getInterconnectBays().get(0).getLogicalInterconnectUri());
+            if (Integer.parseInt(resourceProperties.get("bay")) == enclosuresDto.getInterconnectBays()
+                    .get(i).getBayNumber()) {
+                uplinkSets.setLogicalInterconnectUri(enclosuresDto.getInterconnectBays()
+                        .get(0).getLogicalInterconnectUri());
             }
         }
 
         uplinkSets.setName(resourceProperties.get("name"));
 
         uplinkSets.setType(getCategory());
-
         uplinkSets.setConnectionMode(ConnectionMode.valueOf(resourceProperties.get("connectionMode")));
         uplinkSets.setEthernetNetworkType(EthernetNetworkType.valueOf(resourceProperties.get("ethernetNetworkType")));
         uplinkSets.setNetworkType(NetworkType.valueOf(resourceProperties.get("networkType")));
 
         uplinkSets.setManualLoginRedistributionState(
                 ManualLoginRedistributionState.valueOf(resourceProperties.get("manualLoginRedistributionState")));
+
         List<String> networkUris = new ArrayList<>();
         List<String> FC_NETWORK_NAME = Arrays.asList(resourceProperties.get("fc_network"));
         for (int i = 0; i < FC_NETWORK_NAME.size(); i++) {
@@ -142,7 +146,6 @@ public class UplinkSetResource extends BasicResource implements CreateResource, 
                     resourceId = URIUtils
                             .getResourceIdFromUri(enclosuresDto.getInterconnectBays().get(i).getInterconnectUri());
                 }
-
                 Interconnect interconnectsDto = interconnectClient.getById(resourceId);
                 for (int j = 0; j < interconnectsDto.getPortCount(); j++) {
                     if (interconnectsDto.getPorts().get(j).getPortName()
@@ -150,7 +153,88 @@ public class UplinkSetResource extends BasicResource implements CreateResource, 
                         portConfigInfo.setPortUri(interconnectsDto.getPorts().get(j).getUri());
                     }
                 }
+            }
+        }
 
+        Location location = new Location();
+        List<LocationEntry> locationEntries = new ArrayList<>();
+        LocationEntry locationEntry_two = new LocationEntry();
+        LocationEntry locationEntry_one = new LocationEntry();
+        locationEntry_one.setValue(enclosuresDto.getUri());
+        locationEntry_one.setType(LocationType.Enclosure);
+        locationEntries.add(locationEntry_one);
+
+        locationEntry_two.setValue(resourceProperties.get("bay"));
+        locationEntry_two.setType(LocationType.Bay);
+        locationEntries.add(locationEntry_two);
+
+        LocationEntry locationEntry_three = new LocationEntry();
+        locationEntry_three.setValue(resourceProperties.get("port"));
+        locationEntry_three.setType(LocationType.Port);
+        locationEntries.add(locationEntry_three);
+
+        location.setLocationEntries(locationEntries);
+        portConfigInfo.setLocation(location);
+        portConfigInfos.add(portConfigInfo);
+        uplinkSets.setPortConfigInfos(portConfigInfos);
+
+        return uplinkSets;
+    }
+
+    public UplinkSet builderSynergy() {
+        String resourceId = null;
+        UplinkSet uplinkSets = new UplinkSet();
+
+        uplinkSets.setCategory(resourceProperties.get("category"));
+
+        Enclosure enclosuresDto = enclosureClient.getByName(resourceProperties.get("enclosure")).get(0);
+
+        for (int i = 0; i < enclosuresDto.getInterconnectBayCount(); i++) {
+            if (Integer.parseInt(resourceProperties.get("bay")) == enclosuresDto.getInterconnectBays()
+                    .get(i).getBayNumber()) {
+                uplinkSets.setLogicalInterconnectUri(enclosuresDto.getInterconnectBays()
+                        .get(0).getLogicalInterconnectUri());
+            }
+        }
+
+        uplinkSets.setName(resourceProperties.get("name"));
+        uplinkSets.setType(getCategory());
+        uplinkSets.setConnectionMode(ConnectionMode.valueOf(resourceProperties.get("connectionMode")));
+        uplinkSets.setEthernetNetworkType(EthernetNetworkType.valueOf(resourceProperties.get("ethernetNetworkType")));
+        uplinkSets.setNetworkType(NetworkType.valueOf(resourceProperties.get("networkType")));
+
+        uplinkSets.setManualLoginRedistributionState(
+                ManualLoginRedistributionState.valueOf(resourceProperties.get("manualLoginRedistributionState")));
+
+        String LIG_URI = oneViewClient.logicalInterconnect().getById(resourceProperties.get("logicalInterconnectUri")).getUri();
+        uplinkSets.setLogicalInterconnectUri(LIG_URI);
+
+        List<String> networkUris = new ArrayList<>();
+        List<String> FC_NETWORK_NAME = Arrays.asList(resourceProperties.get("fc_network"));
+        for (int i = 0; i < FC_NETWORK_NAME.size(); i++) {
+            networkUris.add(oneViewClient.fcNetwork().getByName(FC_NETWORK_NAME.get(i)).get(0).getUri());
+        }
+
+        uplinkSets.setFcNetworkUris(networkUris);
+
+        List<PortConfigInfo> portConfigInfos = new ArrayList<>();
+        PortConfigInfo portConfigInfo = new PortConfigInfo();
+        portConfigInfo.setDesiredSpeed(OpSpeed.valueOf(resourceProperties.get("desiredSpeed")));
+
+        for (int i = 0; i < enclosuresDto.getInterconnectBayCount(); i++) {
+            if (Integer.parseInt(resourceProperties.get("bay")) == enclosuresDto.getInterconnectBays().get(i)
+                    .getBayNumber()) {
+                if (null != enclosuresDto.getInterconnectBays().get(i).getInterconnectUri()) {
+                    resourceId = URIUtils
+                            .getResourceIdFromUri(enclosuresDto.getInterconnectBays().get(i).getInterconnectUri());
+                }
+                Interconnect interconnectsDto = interconnectClient.getById(resourceId);
+                for (int j = 0; j < interconnectsDto.getPortCount(); j++) {
+                    if (interconnectsDto.getPorts().get(j).getPortName()
+                            .equalsIgnoreCase(resourceProperties.get("port"))) {
+                        portConfigInfo.setPortUri(interconnectsDto.getPorts().get(j).getUri());
+                    }
+                }
             }
         }
 

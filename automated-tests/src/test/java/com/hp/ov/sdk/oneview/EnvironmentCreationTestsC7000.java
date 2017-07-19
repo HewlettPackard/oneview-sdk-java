@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.resources.facilities;
+package com.hp.ov.sdk.oneview;
 
 import org.junit.runner.RunWith;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
+
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, glue = {
-        "com.hp.ov.sdk.resources" }, features = "classpath:cucumber/facilities/powerDeliveryDevice.feature", tags = "@create, @getAll, @update, @remove")
-public class PowerDeliveryDeviceBDDTest {
+@CucumberOptions(
+    format = { "pretty", "html:target/cucumber" }, 
+    glue = {"com.hp.ov.sdk.resources" }, 
+    features = {"classpath:cucumber/environmentCreationC7000.feature"},
+    tags = "@create")
+public class EnvironmentCreationTestsC7000 {
 
 }

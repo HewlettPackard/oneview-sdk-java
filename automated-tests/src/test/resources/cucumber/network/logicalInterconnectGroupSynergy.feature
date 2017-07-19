@@ -34,6 +34,7 @@ Feature:
       | baySet         |         1 |
       | redundancyType | Redundant |
       | enclosureType  | SY12000   |
+      | enclosureIndex |         1 |
     And interconnection values as follows:
       | entries | type                                          |
       |       1 | Virtual Connect SE 40Gb F8 Module for Synergy |

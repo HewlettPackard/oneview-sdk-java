@@ -79,6 +79,10 @@ public class FcSanDeviceManagerResource extends BasicResource implements RemoveR
         return taskToString(client.update(id, builderUpdate(client.getById(id))));
     }
 
+    public String updateSynergy(String id) {
+        return taskToString(client.update(id, builderUpdateSynergy(client.getById(id))));
+    }
+
     public DeviceManagerResponse builderUpdate(DeviceManagerResponse deviceManager) {
         for (Property property : deviceManager.getConnectionInfo()) {
             if (property.getName().equalsIgnoreCase("host")) {
@@ -93,4 +97,19 @@ public class FcSanDeviceManagerResource extends BasicResource implements RemoveR
 
     }
 
+    public DeviceManagerResponse builderUpdateSynergy(DeviceManagerResponse deviceManager) {
+        for (Property property : deviceManager.getConnectionInfo()) {
+            if (property.getName().equalsIgnoreCase("host")) {
+                property.setValue(resourceProperties.get("name"));
+            }
+            if (property.getName().equalsIgnoreCase("SnmpPort")) {
+                property.setValue(resourceProperties.get("snmpPort"));
+            }
+            if (property.getName().equalsIgnoreCase("SnmpAuthString")) {
+                property.setValue(resourceProperties.get("password"));
+            }
+        }
+        deviceManager.setRefreshState(RefreshState.valueOf(resourceProperties.get("refreshState")));
+        return deviceManager;
+    }
 }

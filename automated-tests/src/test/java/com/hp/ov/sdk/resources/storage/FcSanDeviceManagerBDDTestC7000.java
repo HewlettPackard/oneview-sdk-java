@@ -22,8 +22,10 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, glue = {
-        "com.hp.ov.sdk.resources" }, features = "classpath:cucumber/storage/fcSanProvider.feature", tags = "@create, @getAll, @get")
-public class FcSanProviderBDDTest {
+@CucumberOptions(format = { "pretty", "html:target/cucumber" },
+        glue = {"com.hp.ov.sdk.resources" },
+        features = "classpath:cucumber/storage/fcSanDeviceManagerC7000.feature",
+        tags = "@create, @getAll, @get, @update, @remove")
+public class FcSanDeviceManagerBDDTestC7000 {
 
 }

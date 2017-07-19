@@ -21,6 +21,7 @@ import com.hp.ov.sdk.oneview.Background;
 import com.hp.ov.sdk.oneview.OneView;
 
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.When;
 
 public class UplinkSetBDDStep extends Background {
 
@@ -29,4 +30,8 @@ public class UplinkSetBDDStep extends Background {
         OneView.setResource(UplinkSetResource.getInstance());
     }
 
+    @When("^OneView runs Uplink Set creation$")
+    public void oneview_runs_Uplink_Set_creation() throws Throwable {
+        UplinkSetResource.getInstance().createSynergy();
+    }
 }

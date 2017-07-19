@@ -21,6 +21,7 @@ import com.hp.ov.sdk.oneview.OneView;
 import com.hp.ov.sdk.storage.FcSanDeviceManagerResource;
 
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.When;
 
 public class FcSanDeviceManagerBDDStep extends Background {
 
@@ -29,4 +30,8 @@ public class FcSanDeviceManagerBDDStep extends Background {
         OneView.setResource(FcSanDeviceManagerResource.getInstance());
     }
 
+    @When("^OneView edit Fc San Device Manager Synergy$")
+    public void oneview_edit_Fc_San_Device_Manager_Synergy() throws Throwable {
+        status = FcSanDeviceManagerResource.getInstance().updateSynergy(resourceID);
+    }
 }

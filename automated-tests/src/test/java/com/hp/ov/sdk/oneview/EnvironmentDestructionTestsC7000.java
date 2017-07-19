@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.resources.network;
+package com.hp.ov.sdk.oneview;
 
 import org.junit.runner.RunWith;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
+
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
+@CucumberOptions(
+    format = { "pretty", "html:target/cucumber" }, 
     glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/network/switchType.feature", 
-    tags = "@getAll, @get")
-public class SwitchTypeBDDTest {
+    features = {"classpath:cucumber/environmentDestructionC7000.feature"},
+    tags = "@remove")
+public class EnvironmentDestructionTestsC7000 {
 
 }

@@ -16,23 +16,16 @@
 
 package com.hp.ov.sdk.resources.storage;
 
-import com.hp.ov.sdk.oneview.Background;
-import com.hp.ov.sdk.oneview.OneView;
-import com.hp.ov.sdk.storage.FcSanProviderResource;
+import org.junit.runner.RunWith;
 
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.When;
+import cucumber.api.CucumberOptions;
+import cucumber.api.junit.Cucumber;
 
-public class FcSanProviderBDDStep extends Background {
-
-    @Given("^an instance of Fc San Provider$")
-    public void an_instance_of_Fc_San_Provider() throws Throwable {
-        OneView.setResource(FcSanProviderResource.getInstance());
-    }
-
-    @When("^OneView runs Fc San Provider Synergy creation$")
-    public void oneview_runs_Fc_San_Provider_Synergy_creation() throws Throwable {
-        FcSanProviderResource.getInstance().createSynergy();
-    }
+@RunWith(Cucumber.class)
+@CucumberOptions(format = { "pretty", "html:target/cucumber" },
+        glue = {"com.hp.ov.sdk.resources" },
+        features = "classpath:cucumber/storage/fcSanProviderC7000.feature",
+        tags = "@create, @getAll, @get")
+public class FcSanProviderBDDTestC7000 {
 
 }

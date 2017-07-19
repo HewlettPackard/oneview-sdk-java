@@ -21,12 +21,19 @@ import org.junit.runner.RunWith;
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
+/**
+ * The appliances Synergy could two difference between multiple and one logical
+ * enclosure A multiple logical enclosure put a tag calling @createMultiple
+ * only. No need @create and it changes the names (logical enclosure group and
+ * enclosure group) in resource values on feature. Create one logical enclosure
+ * put a tag calling @createOne and it need all @create too.
+ */
+
 @RunWith(Cucumber.class)
-@CucumberOptions(
-        format = { "pretty", "html:target/cucumber" }, 
-        glue = {"com.hp.ov.sdk.resources" }, 
-        features = "classpath:cucumber/server/logicalEnclosureSynergy.feature", 
-        tags = "@getAll, @get, @update, @remove")
+@CucumberOptions(format = { "pretty", "html:target/cucumber" },
+        glue = {"com.hp.ov.sdk.resources" },
+        features = "classpath:cucumber/server/logicalEnclosureSynergy.feature",
+        tags = "@create, @createOne, @getAll, @get, @update, @remove")
 public class LogicalEnclosureBDDTestSynergy {
 
 }

@@ -22,10 +22,10 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/network/switchType.feature", 
-    tags = "@getAll, @get")
-public class SwitchTypeBDDTest {
+@CucumberOptions(format = { "pretty", "html:target/cucumber" },
+        glue = {"com.hp.ov.sdk.resources" },
+        features = "classpath:cucumber/network/uplinkSetC7000.feature",
+        tags = "@create, @getAll, @get, @edit, @remove")
+public class UplinkSetBDDTestC7000 {
 
 }

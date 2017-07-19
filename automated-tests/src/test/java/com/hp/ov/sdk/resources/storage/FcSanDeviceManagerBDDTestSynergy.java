@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.resources.server;
+package com.hp.ov.sdk.resources.storage;
 
 import org.junit.runner.RunWith;
 
@@ -22,10 +22,10 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/server/serverHardwareTypeSynergy.feature", 
-    tags = "@getAll, @get, @edit")
-public class ServerHardwareTypeBDDTest {
+@CucumberOptions(format = { "pretty", "html:target/cucumber" },
+        glue = {"com.hp.ov.sdk.resources" },
+        features = "classpath:cucumber/storage/fcSanDeviceManagerSynergy.feature",
+        tags = "@create, @getAll, @get, @update, @remove")
+public class FcSanDeviceManagerBDDTestSynergy {
 
 }

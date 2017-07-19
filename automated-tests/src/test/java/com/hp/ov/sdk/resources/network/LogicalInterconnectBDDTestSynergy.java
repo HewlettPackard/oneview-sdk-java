@@ -22,10 +22,10 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/network/switchType.feature", 
-    tags = "@getAll, @get")
-public class SwitchTypeBDDTest {
+@CucumberOptions(format = { "pretty", "html:target/cucumber" },
+        glue = {"com.hp.ov.sdk.resources" },
+        features = "classpath:cucumber/network/logicalInterconnectSynergy.feature",
+        tags = "@create, @createMultiple, @getAll, @get, @update, @remove")
+public class LogicalInterconnectBDDTestSynergy {
 
 }

@@ -101,6 +101,11 @@ public class LogicalEnclosureResource extends BasicResource implements CreateRes
         return id;
     }
 
+    public String createOneLogicalEnclosure(String id) {
+        client.create(buildOneAddLogicalEnclosure());
+        return id;
+    }
+
     @Override
     public AddLogicalEnclosure builder() {
         EnclosureGroup enclosureGroup = (EnclosureGroup) getResource(
@@ -147,6 +152,29 @@ public class LogicalEnclosureResource extends BasicResource implements CreateRes
         return addLogicalEnclosure;
     }
 
+    public AddLogicalEnclosure buildOneAddLogicalEnclosure() {
+        EnclosureGroup enclosureGroup = (EnclosureGroup) getResource(
+                enclosureGroupClient.getByName(resourceProperties.get("enclosureGroup")));
+
+        String enclosureUri1 = enclosureClient.getByName(resourceProperties.get("enclosureURI1")).get(0).getUri();
+
+        FwBaseline firmware = (FwBaseline) getResource(
+                firmwareDriverClient.getByName(resourceProperties.get("firmware")));
+
+        AddLogicalEnclosure addLogicalEnclosure = new AddLogicalEnclosure();
+        addLogicalEnclosure.setName(resourceProperties.get("name"));
+        addLogicalEnclosure.setEnclosureGroupUri(enclosureGroup.getUri());
+
+        List<String> enclosureUris = new ArrayList<String>();
+
+        enclosureUris.add(enclosureUri1);
+
+        addLogicalEnclosure.setEnclosureUris(enclosureUris);
+        addLogicalEnclosure.setFirmwareBaselineUri(firmware.getUri());
+        addLogicalEnclosure.setForceInstallFirmware(false);
+
+        return addLogicalEnclosure;
+    }
 
     public String createSupportDump(String id) {
         SupportDump supportDump = new SupportDump(resourceProperties.get("supportDump"), true, false);
@@ -158,7 +186,7 @@ public class LogicalEnclosureResource extends BasicResource implements CreateRes
     }
 
     public String updateLogicalEnclosureConfiguration(String id) {
-        return taskToString(client.updateConfiguration(id, TaskTimeout.of(300000)));
+        return taskToString(client.updateConfiguration(id, TaskTimeout.of(700000)));
     }
 
     public String getLogicalEnclosureConfigurationScript(String id) {

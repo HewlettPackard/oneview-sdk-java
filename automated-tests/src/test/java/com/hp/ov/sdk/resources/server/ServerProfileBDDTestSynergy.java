@@ -22,8 +22,10 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, glue = {
-        "com.hp.ov.sdk.resources" }, features = "classpath:cucumber/server/serverProfile.feature", tags = "@create, @getAll, @get, @edit, @remove")
-public class ServerProfileBDDTest {
+@CucumberOptions(format = { "pretty", "html:target/cucumber" },
+        glue = {"com.hp.ov.sdk.resources" },
+        features = "classpath:cucumber/server/serverProfileSynergy.feature",
+        tags = "@create, @getAll, @get, @edit, @remove")
+public class ServerProfileBDDTestSynergy {
 
 }

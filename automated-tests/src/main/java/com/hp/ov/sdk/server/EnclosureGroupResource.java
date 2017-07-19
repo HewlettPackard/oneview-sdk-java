@@ -23,6 +23,7 @@ import java.util.Map;
 
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.StackingMode;
+import com.hp.ov.sdk.dto.servers.IpAddressingMode;
 import com.hp.ov.sdk.dto.servers.enclosuregroup.EnclosureGroup;
 import com.hp.ov.sdk.dto.servers.enclosuregroup.InterconnectBayMapping;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
@@ -97,6 +98,10 @@ public class EnclosureGroupResource extends BasicResource implements CreateResou
         client.create(builder());
     }
 
+    public void createSynergy() {
+        client.create(builderSynergy());
+    }
+
     @Override
     public String update(String id) {
         EnclosureGroup enclosureGroup = client.getById(id);
@@ -145,4 +150,37 @@ public class EnclosureGroupResource extends BasicResource implements CreateResou
         return interconnectBayMappings;
     }
 
+    public EnclosureGroup builderSynergy() {
+        EnclosureGroup enclosure = new EnclosureGroup();
+        enclosure.setName(resourceProperties.get("name"));
+        enclosure.setType(getCategory());
+        enclosure.setStackingMode(StackingMode.valueOf(resourceProperties.get("stackingMode")));
+        enclosure.setEnclosureCount(Integer.parseInt(resourceProperties.get("enclosureCount")));
+        enclosure.setIpAddressingMode(IpAddressingMode.valueOf(resourceProperties.get("ipAddressingMode")));
+        enclosure.setInterconnectBayMappings(builderInterconnectBaySynergy());
+        enclosure.setInterconnectBayMappingCount(enclosure.getInterconnectBayMappings().size());
+        return enclosure;
+    }
+
+    private List<InterconnectBayMapping> builderInterconnectBaySynergy() {
+
+        int interconnectBayMappingCount = 6;
+
+        List<InterconnectBayMapping> interconnectBayMappings = new ArrayList<InterconnectBayMapping>();
+        String logicalInterconnectGroupUri = ligUri;
+        List<Integer> interconnectEntries = Arrays.asList(Integer.valueOf(resourceProperties.
+                get("entryBayOne")), Integer.valueOf(Integer.valueOf(resourceProperties.get("entryBayTwo"))));
+        for (int i = 0; i < interconnectBayMappingCount; i++) {
+            InterconnectBayMapping interconnectBayMapping = new InterconnectBayMapping();
+            int interconnectBay = i + 1;
+
+            interconnectBayMapping.setInterconnectBay(interconnectBay);
+
+            if (interconnectEntries.contains(Integer.valueOf(interconnectBay))) {
+                interconnectBayMapping.setLogicalInterconnectGroupUri(logicalInterconnectGroupUri);
+            }
+            interconnectBayMappings.add(interconnectBayMapping);
+        }
+        return interconnectBayMappings;
+    }
 }

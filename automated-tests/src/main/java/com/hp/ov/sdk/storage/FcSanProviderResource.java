@@ -76,6 +76,11 @@ public class FcSanProviderResource extends BasicResource implements CreateResour
         client.addSanManager(sanProvider.getResourceId(), builder());
     }
 
+    public void createSynergy() {
+        SanProviderResponse sanProviderSynergy = (SanProviderResponse) client.getById(resourceProperties.get("provider"));
+        client.addSanManager(sanProviderSynergy.getResourceId(), builderSynergy());
+    }
+
     @Override
     public DeviceManagerResponse builder() {
         SanProviderResponse sanProvider = (SanProviderResponse) getResource(client.getByName(resourceProperties.get("provider")));
@@ -119,5 +124,45 @@ public class FcSanProviderResource extends BasicResource implements CreateResour
 
         return deviceManagerResponseDto;
     }
+    public DeviceManagerResponse builderSynergy() {
 
+        DeviceManagerResponse deviceManagerResponseDtoSynergy = new DeviceManagerResponse();
+        List<Property> connectionInfo = new ArrayList<>();
+
+        Property host = new Property();
+        host.setName(resourceProperties.get("hostname"));
+        host.setValue(resourceProperties.get("name"));
+
+        Property port = new Property();
+        port.setName("SnmpPort");
+        port.setValue(resourceProperties.get("snmpPort"));
+
+        Property user = new Property();
+        user.setName("SnmpUserName");
+        user.setValue(resourceProperties.get("snmpUsername"));
+
+        Property authLevel = new Property();
+        authLevel.setName("SnmpAuthLevel");
+        authLevel.setValue(resourceProperties.get("securityLevel"));
+
+        Property authProtocol = new Property();
+        authProtocol.setName("SnmpAuthProtocol");
+        authProtocol.setValue(resourceProperties.get("authProtocol"));
+
+        Property password = new Property();
+        password.setName("SnmpAuthString");
+        password.setValue(resourceProperties.get("password"));
+
+
+        connectionInfo.add(host);
+        connectionInfo.add(port);
+        connectionInfo.add(user);
+        connectionInfo.add(authLevel);
+        connectionInfo.add(authProtocol);
+        connectionInfo.add(password);
+
+        deviceManagerResponseDtoSynergy.setConnectionInfo(connectionInfo);
+
+        return deviceManagerResponseDtoSynergy;
+    }
 }

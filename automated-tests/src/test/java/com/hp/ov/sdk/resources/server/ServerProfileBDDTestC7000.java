@@ -22,10 +22,10 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-	glue = {"com.hp.ov.sdk.resources" }, 
-	features = "classpath:cucumber/server/enclosureSynergy.feature", 
-	tags =  "@create, @getAll, @get, @patch, @edit, @refresh")
-public class EnclosureSynergyBDDTest {
+@CucumberOptions(format = { "pretty", "html:target/cucumber" },
+        glue = {"com.hp.ov.sdk.resources" },
+        features = "classpath:cucumber/server/serverProfileC7000.feature",
+        tags = "@create, @getAll, @get, @edit, @remove")
+public class ServerProfileBDDTestC7000 {
 
 }

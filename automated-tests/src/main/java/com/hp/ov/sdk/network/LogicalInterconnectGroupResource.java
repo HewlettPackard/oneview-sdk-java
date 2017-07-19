@@ -199,13 +199,13 @@ public class LogicalInterconnectGroupResource extends BasicResource
         lig.setEnclosureType(EnclosureType.valueOf(resourceProperties.get("enclosureType")));
         lig.setInterconnectBaySet(Integer.parseInt(resourceProperties.get("baySet")));
         lig.setRedundancyType(RedundancyType.valueOf(resourceProperties.get("redundancyType")));
-        lig.setEnclosureIndexes(Arrays.asList(1));
+        lig.setEnclosureIndexes(Arrays.asList(Integer.parseInt(resourceProperties.get("enclosureIndex"))));
 
         Iterator<Entry<Integer, InterconnectTypeName>> interator = interconnectionValues.entrySet().iterator();
         for (InterconnectMapEntryTemplate entry : lig.getInterconnectMapTemplate().getInterconnectMapEntryTemplates()) {
             String interconnectType = interator.next().getValue().toString();
             String interconnectTypeUri = oneViewClient.interconnectType().getByName(interconnectType).get(0).getUri();
-            entry.setEnclosureIndex(1);
+            entry.setEnclosureIndex(Integer.parseInt(resourceProperties.get("enclosureIndex")));
             entry.setPermittedInterconnectTypeUri(interconnectTypeUri);
         }
         return lig;

@@ -30,6 +30,16 @@ public class LogicalEnclosureBDDStep extends Background {
         OneView.setResource(LogicalEnclosureResource.getInstance());
     }
 
+    @Given("^an instance of Logical Enclosure Multiple$")
+    public void an_instance_of_Logical_Enclosure_Multiple() throws Throwable {
+        OneView.setResource(LogicalEnclosureResource.getInstance());
+    }
+
+    @Given("^an instance of Logical Enclosure One$")
+    public void an_instance_of_Logical_Enclosure_One() throws Throwable {
+        OneView.setResource(LogicalEnclosureResource.getInstance());
+    }
+
     @When("^OneView gets Logical Enclosure Configuration Script$")
     public void oneview_gets_Logical_Enclosure_Configuration_Script() throws Throwable {
         resourceStr = LogicalEnclosureResource.getInstance().getLogicalEnclosureConfigurationScript(resourceID);
@@ -63,5 +73,10 @@ public class LogicalEnclosureBDDStep extends Background {
     @When("^OneView runs Multiple  enclosures creation$")
     public void oneview_runs_Multiple_enclosures_creation() throws Throwable {
         status = LogicalEnclosureResource.getInstance().createMultipleLogicalEnclosure(resourceID);
+    }
+
+    @When("^OneView runs One enclosures creation$")
+    public void oneview_runs_One_enclosures_creation() throws Throwable {
+        status = LogicalEnclosureResource.getInstance().createOneLogicalEnclosure(resourceID);
     }
 }

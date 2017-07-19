@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.resources.network;
+package com.hp.ov.sdk.resources.facilities;
 
 import org.junit.runner.RunWith;
 
@@ -22,8 +22,10 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, glue = {
-        "com.hp.ov.sdk.resources" }, features = "classpath:cucumber/network/uplinkSet.feature", tags = "@getAll")
-public class UplinkSetBDDTest {
+@CucumberOptions(format = { "pretty", "html:target/cucumber" },
+        glue = {"com.hp.ov.sdk.resources" },
+        features = "classpath:cucumber/facilities/powerDeliveryDeviceSynergy.feature",
+        tags = "@create, @getAll, @get, @update, @remove, @removeByFilter")
+public class PowerDeliveryDeviceBDDTestSynergy {
 
 }

@@ -26,6 +26,12 @@ Feature:
     When OneView lists all
     Then I get a count
 
+  @create
+  Scenario: Add an Remote Enclosure Synergy
+    Given Resource values as follows:
+      | hostname | fe80::2:0:9:1%eth2 |
+    When OneView runs Remote Enclosure creation
+
   @get
   Scenario: Get an Enclosure by Name
     Given name "0000A66101" for Resource

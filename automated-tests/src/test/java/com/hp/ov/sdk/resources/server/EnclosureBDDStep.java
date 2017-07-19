@@ -54,14 +54,19 @@ public class EnclosureBDDStep extends Background {
     public void gets_Enclosure_Utilization() throws Throwable {
         resourceStr = ((EnclosureResource) OneView.getResource()).getEnclosurelUtilization(resourceID);
     }
-    
+
     @When("^OneView runs Enclosure patch$")
     public void oneview_runs_Enclosure_patch() throws Throwable {
         resourceStr = EnclosureResource.getInstance().patch(resourceID);
     }
-    
+
     @When("^Oneview runs Enclosure refresh$")
     public void oneview_runs_Enclosure_refresh() throws Throwable {
         resourceStr = EnclosureResource.getInstance().refresh(resourceID);
+    }
+
+    @When("^OneView runs Remote Enclosure creation$")
+    public void oneview_runs_Remote_Enclosure_creation() throws Throwable {
+        EnclosureResource.getInstance().addRemoteEnclosure();
     }
 }

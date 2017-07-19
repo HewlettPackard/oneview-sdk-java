@@ -213,4 +213,12 @@ public class EnclosureResource extends BasicResource implements CreateResource, 
         refreshStateConfig.setRefreshState(RefreshState.valueOf(resourceProperties.get("refreshState")));
         return taskToString(client.updateRefreshState(id, refreshStateConfig));
     }
+
+    public String addRemoteEnclosure() {
+        AddEnclosure addRemoteEnclosure = new AddEnclosure();
+        addRemoteEnclosure.setHostname(resourceProperties.get("hostname"));
+
+        TaskResource task = this.client.add(addRemoteEnclosure);
+        return objToString(task);
+    }
 }

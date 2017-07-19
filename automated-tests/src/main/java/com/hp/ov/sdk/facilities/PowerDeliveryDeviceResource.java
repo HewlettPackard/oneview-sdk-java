@@ -26,6 +26,7 @@ import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.PhaseType;
 import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.Power;
 import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.PowerDeliveryDevice;
 import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.PowerDeliveryDeviceRefreshRequest;
+import com.hp.ov.sdk.dto.facilities.powerdeliverydevice.PowerDeliveryDeviceType;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.oneview.BasicResource;
 import com.hp.ov.sdk.oneview.CreateResource;
@@ -81,6 +82,10 @@ public class PowerDeliveryDeviceResource extends BasicResource
         client.add(builder());
     }
 
+    public void createSynergy() {
+        client.add(builderSynergy());
+    }
+
     @Override
     public PowerDeliveryDevice builder() {
         PowerDeliveryDevice powerDeliveryDevice = new PowerDeliveryDevice();
@@ -90,6 +95,22 @@ public class PowerDeliveryDeviceResource extends BasicResource
         powerDeliveryDevice.setLineVoltage(Integer.parseInt(resourceProperties.get("lineVoltage")));
         powerDeliveryDevice.setPhaseType(PhaseType.SinglePhase);
         
+        return powerDeliveryDevice;
+    }
+
+    private PowerDeliveryDevice builderSynergy() {
+        PowerDeliveryDevice powerDeliveryDevice = new PowerDeliveryDevice();
+
+        powerDeliveryDevice.setDeviceType(PowerDeliveryDeviceType.valueOf(resourceProperties.get("type")));
+        powerDeliveryDevice.setName(resourceProperties.get("name"));
+        powerDeliveryDevice.setModel(resourceProperties.get("model"));
+        powerDeliveryDevice.setRatedCapacity(Integer.parseInt(resourceProperties.get("ratedCapacity")));
+        powerDeliveryDevice.setLineVoltage(Integer.parseInt(resourceProperties.get("lineVoltage")));
+        powerDeliveryDevice.setPhaseType(PhaseType.valueOf(resourceProperties.get("volts")));
+        powerDeliveryDevice.setFeedIdentifier(resourceProperties.get("feed"));
+        powerDeliveryDevice.setPartNumber(resourceProperties.get("partNumber"));
+        powerDeliveryDevice.setSerialNumber(resourceProperties.get("serialNumber"));
+
         return powerDeliveryDevice;
     }
 

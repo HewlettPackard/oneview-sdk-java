@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.resources.network;
+package com.hp.ov.sdk.resources.server;
 
 import org.junit.runner.RunWith;
 
@@ -22,7 +22,10 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, glue = {"com.hp.ov.sdk.resources"},features = "classpath:cucumber/network/interconnect.feature", tags = "@getAll")
-public class InterconnectBDDTest {
+@CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
+    glue = {"com.hp.ov.sdk.resources" }, 
+    features = "classpath:cucumber/server/serverHardwareTypeSynergy.feature", 
+    tags = "@getAll, @get, @edit")
+public class ServerHardwareTypeBDDTestSynergy {
 
 }
