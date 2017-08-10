@@ -67,7 +67,7 @@ import com.hp.ov.sdk.rest.client.storage.StorageSystemClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeAttachmentClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeClient;
 import com.hp.ov.sdk.rest.client.storage.StorageVolumeTemplateClient;
-import com.hp.ov.sdk.rest.client.uncategorized.DeploymentPlanClient;
+import com.hp.ov.sdk.rest.client.uncategorized.OsDeploymentPlanClient;
 import com.hp.ov.sdk.rest.http.core.client.SDKConfiguration;
 import com.hp.ov.sdk.util.OneViewConnector;
 import com.hpe.core.AbstractClient;
@@ -600,13 +600,13 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link DeploymentPlanClient}.
+     * Creates or retrieves an existing instance of {@link OsDeploymentPlanClient}.
      * This client provides an interface for managing OS deployment plans.
      *
      * @return an interface to the OS deployment plans REST API.
      */
-    public synchronized DeploymentPlanClient deploymentPlan() {
-        return getProxy(DeploymentPlanClient.class);
+    public synchronized OsDeploymentPlanClient osDeploymentPlan() {
+        return getProxy(OsDeploymentPlanClient.class);
     }
 
     /**

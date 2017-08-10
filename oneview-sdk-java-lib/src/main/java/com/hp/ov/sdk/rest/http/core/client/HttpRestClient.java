@@ -15,6 +15,8 @@
  */
 package com.hp.ov.sdk.rest.http.core.client;
 
+import static com.hp.ov.sdk.rest.client.uncategorized.OsDeploymentPlanClient.OS_DEPLOYMENT_PLAN_URI;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -321,6 +323,10 @@ public class HttpRestClient {
     private URI buildURI(Request request) throws SDKBadRequestException {
         try {
             String uriString = String.format(SdkConstants.HTTPS + "%s%s", request.getHostname(), request.getUri());
+
+            if (OS_DEPLOYMENT_PLAN_URI.equals(request.getUri()) && request.getQuery().isEmpty()) {
+                uriString+="/";
+            }
 
             URIBuilder uri = new URIBuilder(uriString);
 

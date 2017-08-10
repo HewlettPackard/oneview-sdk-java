@@ -16,10 +16,13 @@
 
 package com.hp.ov.sdk.rest.reflect;
 
+import static com.hp.ov.sdk.rest.client.uncategorized.OsDeploymentPlanClient.OS_DEPLOYMENT_PLAN_URI;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.google.common.reflect.AbstractInvocationHandler;
 import com.google.common.reflect.Parameter;
 import com.google.common.reflect.TypeToken;
@@ -27,6 +30,7 @@ import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.storage.FcSansManagedSanTask;
+import com.hp.ov.sdk.dto.uncategorized.OsDeploymentPlan;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.RequestInterceptor;
@@ -39,6 +43,7 @@ import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 public class ClientRequestHandler<T> extends AbstractInvocationHandler {
 
     private static final String GET_ALL_METHOD = "getAll";
+    private static final String GET_BY_NAME_METHOD = "getByName";
 
     private final BaseClient baseClient;
     private final String baseUri;
@@ -56,6 +61,8 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
 
         if (GET_ALL_METHOD.equals(method.getName())) {
             return this.handleGetAll(request, this.token.method(method).getReturnType().getType());
+        } else if (OS_DEPLOYMENT_PLAN_URI.equals(request.getUri()) && GET_BY_NAME_METHOD.equals(method.getName())) {
+            return this.handleGetOsDeploymentPlanByName(request, this.token.method(method).getReturnType().getType(), args);
         } else {
             if (TaskResource.class.equals(method.getReturnType())) {
                 return this.baseClient.executeMonitorableRequest(request);
@@ -156,4 +163,34 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
         return resources;
     }
 
+    private ResourceCollection<OsDeploymentPlan> handleGetOsDeploymentPlanByName(Request request, Type returnType, Object[] args) {
+        ResourceCollection<OsDeploymentPlan> resources = new ResourceCollection<>();
+        boolean hasMoreItems = false;
+        boolean hasNextPage = false;
+
+        do {
+            @SuppressWarnings("unchecked")
+            ResourceCollection<OsDeploymentPlan> response = (ResourceCollection<OsDeploymentPlan>)
+                    this.baseClient.executeRequest(request, returnType);
+
+            resources.addMembers(response.getMembers());
+            resources.setTotal(response.getTotal());
+
+            request = new Request(HttpMethod.GET, response.getNextPageUri());
+            hasMoreItems = resources.getCount() < resources.getTotal();
+            hasNextPage = resources.getNextPageUri() != null;
+        } while (hasMoreItems && hasNextPage);
+
+        ResourceCollection<OsDeploymentPlan> osDeploymentPlans = new ResourceCollection<>();
+
+        for (OsDeploymentPlan osDeploymentPlan : resources.getMembers()) {
+            for (int i = 0; i < args.length; i++) {
+                if (osDeploymentPlan.getName().equals(args[i].toString())) {
+                    osDeploymentPlans.addMembers(Lists.newArrayList(osDeploymentPlan));
+                }
+            }
+        }
+
+        return osDeploymentPlans;
+    }
 }

@@ -25,7 +25,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.uncategorized.CustomAttribute;
 
-public class DeploymentPlan extends BaseModelResource {
+public class OsDeploymentPlan extends BaseModelResource {
 
     private static final long serialVersionUID = 5120623722702146755L;
 

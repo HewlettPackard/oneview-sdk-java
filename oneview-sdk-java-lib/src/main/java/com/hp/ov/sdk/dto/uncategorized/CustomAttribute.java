@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2017 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class CustomAttribute implements Serializable {
 
-    private static final long serialVersionUID = -8637096502643865261L;
+    private static final long serialVersionUID = 2392380825639965752L;
 
     private String caConstraints;
     private String description;
@@ -152,4 +152,5 @@ public class CustomAttribute implements Serializable {
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
+
 }

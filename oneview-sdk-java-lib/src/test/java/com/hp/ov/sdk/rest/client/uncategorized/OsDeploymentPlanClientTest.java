@@ -15,7 +15,7 @@
  */
 package com.hp.ov.sdk.rest.client.uncategorized;
 
-import static com.hp.ov.sdk.rest.client.uncategorized.DeploymentPlanClient.DEPLOYMENT_PLAN_URI;
+import static com.hp.ov.sdk.rest.client.uncategorized.OsDeploymentPlanClient.OS_DEPLOYMENT_PLAN_URI;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
@@ -23,65 +23,69 @@ import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Type;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.google.common.collect.Lists;
 import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.uncategorized.DeploymentPlan;
+import com.hp.ov.sdk.dto.uncategorized.OsDeploymentPlan;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DeploymentPlanClientTest {
+public class OsDeploymentPlanClientTest {
 
     private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_NAME = "random-Name";
 
     private BaseClient baseClient = mock(BaseClient.class);
-    private DeploymentPlanClient client = Reflection.newProxy(DeploymentPlanClient.class,
-            new ClientRequestHandler<>(baseClient, DeploymentPlanClient.class));
+    private OsDeploymentPlanClient client = Reflection.newProxy(OsDeploymentPlanClient.class,
+            new ClientRequestHandler<>(baseClient, OsDeploymentPlanClient.class));
 
     @Test
-    public void shouldGetDeploymentPlan() {
+    public void shouldGetOsDeploymentPlan() {
         client.getById(ANY_RESOURCE_ID);
 
-        String expectedUri = DEPLOYMENT_PLAN_URI + "/" + ANY_RESOURCE_ID;
+        String expectedUri = OS_DEPLOYMENT_PLAN_URI + "/" + ANY_RESOURCE_ID;
         Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().executeRequest(expectedRequest,
-                TypeToken.of(DeploymentPlan.class).getType());
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(OsDeploymentPlan.class).getType());
     }
 
     @SuppressWarnings("serial")
     @Test
     public void shouldGetAllDeploymentPlans() {
         given(this.baseClient.executeRequest(any(Request.class), any(Type.class)))
-        .willReturn(new ResourceCollection<>());
+                .willReturn(new ResourceCollection<>());
 
         client.getAll();
 
-        Request expectedRequest = new Request(HttpMethod.GET, DEPLOYMENT_PLAN_URI);
+        Request expectedRequest = new Request(HttpMethod.GET, OS_DEPLOYMENT_PLAN_URI);
 
         then(baseClient).should().executeRequest(expectedRequest,
-                new TypeToken<ResourceCollection<DeploymentPlan>>() {}.getType());
+                new TypeToken<ResourceCollection<OsDeploymentPlan>>() {
+                }.getType());
     }
 
-    @SuppressWarnings("serial")
     @Test
     public void shouldGetDeploymentPlanByName() {
-        client.getByName(ANY_RESOURCE_NAME);
+        OsDeploymentPlan osDeploymentPlan = new OsDeploymentPlan();
+        osDeploymentPlan.setName(ANY_RESOURCE_NAME);
 
-        Request expectedRequest = new Request(HttpMethod.GET, DEPLOYMENT_PLAN_URI);
-        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+        ResourceCollection<OsDeploymentPlan> osDeploymentPlans = new ResourceCollection<>();
+        osDeploymentPlans.addMembers(Lists.newArrayList(osDeploymentPlan));
 
-        then(baseClient).should().executeRequest(expectedRequest,
-                new TypeToken<ResourceCollection<DeploymentPlan>>() {}.getType());
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(osDeploymentPlans);
+
+        ResourceCollection<OsDeploymentPlan> name = client.getByName(ANY_RESOURCE_NAME);
+
+        Assert.assertEquals(name.get(0).getName(), ANY_RESOURCE_NAME);
     }
 
 }
