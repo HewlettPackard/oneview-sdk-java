@@ -32,7 +32,7 @@ public class OsDeploymentPlanClientSample {
     // These are variables to be defined by the user
     // =============================================
     private static final String OS_DEPLOYMENT_PLAN_RESOURCE_ID = "aaaba8d8-f181-433b-95fa-d5359e8b5082";
-    private static final String OS_DEPLOYMENT_PLAN_NAME = "HPE-Foundation 1.0 -Create Empty OS Volume";
+    private static final String OS_DEPLOYMENT_PLAN_NAME = "OS Deployment Plan Name";
     // =============================================
 
     public OsDeploymentPlanClientSample() {

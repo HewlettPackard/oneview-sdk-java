@@ -20,6 +20,7 @@ import static com.hp.ov.sdk.rest.client.uncategorized.OsDeploymentPlanClient.OS_
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -182,16 +183,18 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
             hasNextPage = resources.getNextPageUri() != null;
         } while (hasMoreItems && hasNextPage);
 
-        ResourceCollection<OsDeploymentPlan> osDeploymentPlans = new ResourceCollection<>();
+        ResourceCollection<OsDeploymentPlan> osDeploymentPlanResourceCollection = new ResourceCollection<>();
+        List<OsDeploymentPlan> osDeploymentPlans = new ArrayList<>();
 
         for (OsDeploymentPlan osDeploymentPlan : resources.getMembers()) {
             for (int i = 0; i < args.length; i++) {
                 if (osDeploymentPlan.getName().equals(args[i].toString())) {
-                    osDeploymentPlans.addMembers(Lists.newArrayList(osDeploymentPlan));
+                    osDeploymentPlans.add(osDeploymentPlan);
+                    osDeploymentPlanResourceCollection.addMembers(osDeploymentPlans);
                 }
             }
         }
 
-        return osDeploymentPlans;
+        return osDeploymentPlanResourceCollection;
     }
 }
