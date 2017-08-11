@@ -16,6 +16,8 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.settings.ScopeClient.SCOPES_URI;
+
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -23,6 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
+import com.hp.ov.sdk.dto.Patch;
+import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.EthernetNetworkType;
@@ -47,6 +51,8 @@ public class EthernetNetworkClientSample {
 
     public static final String ETHERNET_NETWORK_PROD_401 = "Prod_401";
     public static final String ETHERNET_NETWORK_PROD_402 = "Prod_402";
+
+    private static final String SCOPE_ID = "3cadbda5-45eb-4e0f-bdb6-2e9101317b77";
     // ================================
 
     private final EthernetNetworkClient client;
@@ -63,7 +69,7 @@ public class EthernetNetworkClientSample {
         network.setName(ETHERNET_NETWORK_NAME);
         network.setType(ResourceCategory.RC_NETWORK); //120
         network.setType(ResourceCategory.RC_NETWORK_V200); //200
-        network.setType(ResourceCategory.RC_NETWORK_V300); //300
+        network.setType(ResourceCategory.RC_NETWORK_V300); //300 or 500
         network.setVlanId(Integer.valueOf(400));
         network.setSmartLink(true);
         network.setPrivateNetwork(false);
@@ -88,7 +94,7 @@ public class EthernetNetworkClientSample {
     private void getAllEthernetNetworks() {
         ResourceCollection<Network> networks = client.getAll();
 
-        LOGGER.info("Number of ethernet networks returned to client (count): {}", networks.getCount());
+        LOGGER.info("Ethernet networks returned to client : {}", networks.toJsonString());
     }
 
     private void getAllEthernetNetworksWithCount() {
@@ -112,6 +118,23 @@ public class EthernetNetworkClientSample {
         Network network = client.getByName(ETHERNET_NETWORK_NAME).get(0);
 
         LOGGER.info("Ethernet network returned to client: {}", network.toJsonString());
+    }
+
+    private void patchEthernetNetwork() {
+        Network network = client.getByName(ETHERNET_NETWORK_NAME).get(0);
+
+        Patch patch = new Patch();
+
+        // Ethernet Network patch supports the update of scopeUris
+        patch.setOp(PatchOperation.replace);
+        patch.setPath("/scopeUris");
+        List<String> scopeUris = network.getScopeUris(); // Gets the current scope(s)
+        scopeUris.add(SCOPES_URI + "/" + SCOPE_ID);
+        patch.setValue(scopeUris); // Assigns network to new a scope
+
+        TaskResource taskResource = this.client.patch(network.getResourceId(), patch);
+
+        LOGGER.info("Task object returned to client: " + taskResource.toJsonString());
     }
 
     private void updateEthernetNetwork() {
@@ -180,6 +203,7 @@ public class EthernetNetworkClientSample {
         sample.getAssociatedProfiles();
         sample.getAssociatedUplinkGroups();
 
+        sample.patchEthernetNetwork();
         sample.updateEthernetNetwork();
         sample.deleteEthernetNetwork();
 

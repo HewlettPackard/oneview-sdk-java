@@ -16,14 +16,14 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.ASSOCIATED_PROFILES;
+import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.ASSOCIATED_UPLINK_GROUPS;
+import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.BULK_ETHERNET_URI;
+import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.ETHERNET_URI;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
-import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.ETHERNET_URI;
-import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.BULK_ETHERNET_URI;
-import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.ASSOCIATED_UPLINK_GROUPS;
-import static com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient.ASSOCIATED_PROFILES;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -34,6 +34,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
@@ -41,6 +42,7 @@ import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
 import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -108,6 +110,20 @@ public class EthernetNetworkClientTest {
 
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
         expectedRequest.setEntity(network);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
+    }
+
+    @Test
+    public void shouldPatchEthernetNetwork() {
+        Patch patch = new Patch();
+
+        client.patch(ANY_ETHERNET_RESOURCE_ID, patch, TaskTimeout.of(123));
+
+        String expectedUri = ETHERNET_URI + "/" + ANY_ETHERNET_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri, patch);
+
+        expectedRequest.setTimeout(123);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }

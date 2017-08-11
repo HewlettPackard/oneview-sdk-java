@@ -47,10 +47,11 @@ public class ResourceCategory {
     public static final String RC_SAS_LOGICAL_INTERCONNECT_GROUP = "sas-logical-interconnect-group";
     public static final String RC_SERVER_PROFILES = "server-profiles";
     public static final String RC_SERVER_PROFILE = "ServerProfileV4";
-    public static final String RC_SERVER_PROFILE_TEMPLATE = "ServerProfileTemplateV1";
-    public static final String RC_SERVER_PROFILE_TEMPLATE_V300 = "ServerProfileTemplateV2";
     public static final String RC_SERVER_PROFILE_V200 = "ServerProfileV5";
     public static final String RC_SERVER_PROFILE_V300 = "ServerProfileV6";
+    public static final String RC_SERVER_PROFILE_V500 = "ServerProfileV7";
+    public static final String RC_SERVER_PROFILE_TEMPLATE = "ServerProfileTemplateV1";
+    public static final String RC_SERVER_PROFILE_TEMPLATE_V300 = "ServerProfileTemplateV2";
     public static final String RC_SERVERHARDWARE = "server-hardware";
     public static final String RC_STORAGE_POOL = "StoragePool";
     public static final String RC_STORAGE_POOL_V200 = "StoragePoolV2";
