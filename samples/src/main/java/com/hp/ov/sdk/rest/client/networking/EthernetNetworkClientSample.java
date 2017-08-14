@@ -129,8 +129,9 @@ public class EthernetNetworkClientSample {
         patch.setOp(PatchOperation.replace);
         patch.setPath("/scopeUris");
         List<String> scopeUris = network.getScopeUris(); // Gets the current scope(s)
-        scopeUris.add(SCOPES_URI + "/" + SCOPE_ID);
-        patch.setValue(scopeUris); // Assigns network to new a scope
+        scopeUris.add(SCOPES_URI + "/" + SCOPE_ID); // Assigns Ethernet network to new a scope
+        //scopeUris.remove(SCOPES_URI + "/" + SCOPE_ID); // Unassigns Ethernet network from a scope
+        patch.setValue(scopeUris);
 
         TaskResource taskResource = this.client.patch(network.getResourceId(), patch);
 
