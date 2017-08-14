@@ -18,6 +18,7 @@ package com.hp.ov.sdk.rest.client.networking;
 import com.hp.ov.sdk.dto.networking.fcoenetworks.FcoeNetwork;
 import com.hp.ov.sdk.rest.client.common.CreatableResource;
 import com.hp.ov.sdk.rest.client.common.DeletableResource;
+import com.hp.ov.sdk.rest.client.common.PatchableResource;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.client.common.UpdatableResource;
 import com.hp.ov.sdk.rest.reflect.Api;
@@ -27,6 +28,7 @@ public interface FcoeNetworkClient extends
         SearchableResource<FcoeNetwork>,
         CreatableResource<FcoeNetwork>,
         UpdatableResource<FcoeNetwork>,
+        PatchableResource,
         DeletableResource {
 
     String FCOE_NETWORK_URI = "/rest/fcoe-networks";

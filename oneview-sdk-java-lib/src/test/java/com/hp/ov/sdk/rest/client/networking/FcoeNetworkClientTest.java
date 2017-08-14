@@ -30,6 +30,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.fcoenetworks.FcoeNetwork;
 import com.hp.ov.sdk.rest.client.BaseClient;
@@ -89,6 +90,19 @@ public class FcoeNetworkClientTest {
         client.create(fcoeNetwork, TaskTimeout.of(123));
 
         Request expectedRequest = new Request(HttpMethod.POST, FCOE_NETWORK_URI, fcoeNetwork);
+        expectedRequest.setTimeout(123);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
+    }
+
+    @Test
+    public void shouldPatchFcoeNetwork() {
+        Patch patch = new Patch();
+
+        client.patch(ANY_FCOE_RESOURCE_ID, patch, TaskTimeout.of(123));
+
+        String expectedUri = FCOE_NETWORK_URI + "/" + ANY_FCOE_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri, patch);
         expectedRequest.setTimeout(123);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest);
