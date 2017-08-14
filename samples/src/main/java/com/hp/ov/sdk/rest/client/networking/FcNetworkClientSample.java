@@ -95,8 +95,9 @@ public class FcNetworkClientSample {
         patch.setOp(PatchOperation.replace);
         patch.setPath("/scopeUris");
         List<String> scopeUris = fcNetwork.getScopeUris(); // Gets the current scope(s)
-        scopeUris.add(SCOPES_URI + "/" + SCOPE_ID);
-        patch.setValue(scopeUris); // Assigns FC network to a new scope
+        scopeUris.add(SCOPES_URI + "/" + SCOPE_ID); // Assigns FC network to a new scope
+        //scopeUris.remove(SCOPES_URI + "/" + SCOPE_ID); // Unassigns FC network from a scope
+        patch.setValue(scopeUris);
 
         TaskResource taskResource = this.client.patch(fcNetwork.getResourceId(), patch);
 
