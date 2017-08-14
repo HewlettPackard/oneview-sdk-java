@@ -16,11 +16,17 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.settings.ScopeClient.SCOPES_URI;
+
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
+import com.hp.ov.sdk.dto.Patch;
+import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
@@ -36,6 +42,8 @@ public class FcNetworkClientSample {
     public static final String FC_NETWORK_NAME_B = "FC_Network_B";
 
     private static final String FC_NETWORK_NAME_UPDATED = FC_NETWORK_NAME_A + "_Updated";
+
+    private static final String SCOPE_ID = "c22a15d1-3d5b-46bb-83be-bc9a9049866b";
     // ================================
 
     private final FcNetworkClient client;
@@ -50,8 +58,8 @@ public class FcNetworkClientSample {
         FcNetwork fcNetwork = new FcNetwork();
 
         fcNetwork.setName(FC_NETWORK_NAME_A);
-        fcNetwork.setType(ResourceCategory.RC_FCNETWORK); //v200
-        fcNetwork.setType(ResourceCategory.RC_FCNETWORK_V300); //v300
+        fcNetwork.setType(ResourceCategory.RC_FCNETWORK); // v200
+        fcNetwork.setType(ResourceCategory.RC_FCNETWORK_V300); // v300 or v500
 
         TaskResource task = this.client.create(fcNetwork);
 
@@ -76,6 +84,23 @@ public class FcNetworkClientSample {
         FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME_A).get(0);
 
         LOGGER.info("FC network object returned to client : " + fcNetwork.toJsonString());
+    }
+
+    private void patchFcNetwork() {
+        FcNetwork fcNetwork = client.getByName(FC_NETWORK_NAME_A).get(0);
+
+        Patch patch = new Patch();
+
+        // FC network patch supports the update of scopeUris
+        patch.setOp(PatchOperation.replace);
+        patch.setPath("/scopeUris");
+        List<String> scopeUris = fcNetwork.getScopeUris(); // Gets the current scope(s)
+        scopeUris.add(SCOPES_URI + "/" + SCOPE_ID);
+        patch.setValue(scopeUris); // Assigns FC network to a new scope
+
+        TaskResource taskResource = this.client.patch(fcNetwork.getResourceId(), patch);
+
+        LOGGER.info("Task object returned to client : " + taskResource.toJsonString());
     }
 
     private void updateFcNetwork() {
@@ -104,6 +129,7 @@ public class FcNetworkClientSample {
         sample.getAllFcNetworks();
         sample.getFcNetwork();
         sample.getFcNetworkByName();
+        sample.patchFcNetwork();
         sample.updateFcNetwork();
         sample.deleteFcNetwork();
     }

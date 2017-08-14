@@ -29,13 +29,15 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
-import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
+import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
+import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FcNetworkClientTest {
@@ -88,6 +90,19 @@ public class FcNetworkClientTest {
 
         Request expectedRequest = new Request(HttpMethod.POST, FcNetworkClient.FC_NETWORK_URI);
         expectedRequest.setEntity(fcNetwork);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
+    }
+
+    @Test
+    public void shouldPatchFcNetwork() {
+        Patch patch = new Patch();
+
+        client.patch(ANY_RESOURCE_ID, patch, TaskTimeout.of(123));
+
+        String expectedUri = FcNetworkClient.FC_NETWORK_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri, patch);
+        expectedRequest.setTimeout(123);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest);
     }
