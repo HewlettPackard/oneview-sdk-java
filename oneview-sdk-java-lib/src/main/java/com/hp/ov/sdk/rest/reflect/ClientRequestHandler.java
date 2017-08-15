@@ -190,9 +190,11 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
             for (int i = 0; i < args.length; i++) {
                 if (osDeploymentPlan.getName().equals(args[i].toString())) {
                     osDeploymentPlans.add(osDeploymentPlan);
-                    osDeploymentPlanResourceCollection.addMembers(osDeploymentPlans);
                 }
             }
+        }
+        if (!osDeploymentPlans.isEmpty()) {
+            osDeploymentPlanResourceCollection.addMembers(osDeploymentPlans);
         }
 
         return osDeploymentPlanResourceCollection;
