@@ -39,6 +39,7 @@ import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 public class ClientRequestHandler<T> extends AbstractInvocationHandler {
 
     private static final String GET_ALL_METHOD = "getAll";
+
     private final BaseClient baseClient;
     private final String baseUri;
     private final TypeToken<T> token;
