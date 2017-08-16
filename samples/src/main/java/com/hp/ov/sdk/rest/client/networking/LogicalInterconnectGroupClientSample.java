@@ -56,14 +56,15 @@ public class LogicalInterconnectGroupClientSample {
     public static final String RESOURCE_NAME = "LIG_PROD";
 
     private static final String RESOURCE_NAME_UPDATED = RESOURCE_NAME + "_Updated";
-    private static final InterconnectTypeName permittedInterconnectType = InterconnectTypeName.HP_VC_FlexFabric_20_40_F8_Module;
+    private static final InterconnectTypeName permittedInterconnectType = InterconnectTypeName.Virtual_Connect_SE_16Gb_FC_Module_for_Synergy;
+    private static final InterconnectTypeName interconnectType = permittedInterconnectType;
     private static final List<String> networkNames = Arrays.asList("Prod_401", "Prod_402", "Prod_403");
     private static final List<String> logicalInterconnectGroupName_A = Arrays
             .asList(FcNetworkClientSample.FC_NETWORK_NAME_A);
     private static final List<String> logicalInterconnectGroupName_B = Arrays
             .asList(FcNetworkClientSample.FC_NETWORK_NAME_B);
     private static final List<String> ethPort = Arrays.asList("X5", "X6");
-    private static final List<String> fcPort = Arrays.asList("X2");
+    private static final List<String> fcPort = Arrays.asList("Q1:1", "Q1:2");
 
     private static final String ethUplinkSetName = "EthernetUplinkSet";
     private static final String fcAUplinkSetName = "FCUplinkSetA";
@@ -194,22 +195,27 @@ public class LogicalInterconnectGroupClientSample {
     }
 
     private LogicalInterconnectGroup buildTestLogicalInterconnectGroupSynergy() {
-        int interconnectBaySet = 3;
+        int interconnectBaySet = 1;
+        int enclosureIndex = 1;
+
+        if (InterconnectTypeName.Virtual_Connect_SE_16Gb_FC_Module_for_Synergy.equals(interconnectType)) {
+            interconnectBaySet = 2;
+            enclosureIndex = -1;
+        }
 
         LogicalInterconnectGroup group = resourceDtoUtils.buildLogicalInterconnectGroupSynergyDto(RESOURCE_NAME,
-                InterconnectTypeName.Virtual_Connect_SE_40Gb_F8_Module_for_Synergy, interconnectBaySet,
-                LOGICAL_DOWNLINK_URI);
+                interconnectType, interconnectBaySet, LOGICAL_DOWNLINK_URI);
 
         group.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300);
         group.setRedundancyType(RedundancyType.Redundant);
         group.setCategory("logical-interconnect-groups");
         group.setFabricUri(FABRIC_URI);
 
-        group.setEnclosureIndexes(Arrays.asList(1));
+        group.setEnclosureIndexes(Arrays.asList(enclosureIndex));
 
         for (InterconnectMapEntryTemplate entry : group.getInterconnectMapTemplate()
                 .getInterconnectMapEntryTemplates()) {
-            entry.setEnclosureIndex(1);
+            entry.setEnclosureIndex(enclosureIndex);
         }
         return group;
     }
@@ -221,9 +227,9 @@ public class LogicalInterconnectGroupClientSample {
         ethBayPortMap.put(1, ethPort);
         ethBayPortMap.put(2, ethPort);
         final HashMap<Integer, List<String>> fcBayPortMapA = new HashMap<>();
-        fcBayPortMapA.put(1, fcPort);
+        fcBayPortMapA.put(2, fcPort);
         final HashMap<Integer, List<String>> fcBayPortMapB = new HashMap<>();
-        fcBayPortMapB.put(2, fcPort);
+        fcBayPortMapB.put(5, fcPort);
 
         final List<UplinkSetValue> uplinkSetValues = new ArrayList<UplinkSetValue>();
         final UplinkSetValue ethUplinkSetValue = new UplinkSetValue();

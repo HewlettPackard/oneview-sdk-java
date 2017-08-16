@@ -262,7 +262,16 @@ public class ResourceDtoUtils {
                 locationEntries12.setRelativeValue(portNumber);
                 locationEntries12.setType(LocationType.Port);
                 final LogicalLocationEntry locationEntries13 = new LogicalLocationEntry();
-                locationEntries13.setRelativeValue(1);
+                ResourceCollection<LogicalInterconnectGroup> logicalInterconnectGroups = oneViewClient.logicalInterconnectGroup().getByName(ligName);
+                if (!logicalInterconnectGroups.isEmpty()) {
+                    List<Integer> enclosureIndexes = logicalInterconnectGroups.getMembers().get(0).getEnclosureIndexes();
+                    if (!enclosureIndexes.isEmpty() && enclosureIndexes.get(0).equals(-1)) {
+                        locationEntries13.setRelativeValue(-1); // "Virtual_Connect_SE_16Gb_FC_Module_for_Synergy"
+                    }
+                }
+                if (locationEntries13.getRelativeValue() == null) {
+                    locationEntries13.setRelativeValue(1); // Not "Virtual_Connect_SE_16Gb_FC_Module_for_Synergy"
+                }
                 locationEntries13.setType(LocationType.Enclosure);
                 locationEntriesList.add(locationEntries11);
                 locationEntriesList.add(locationEntries12);
