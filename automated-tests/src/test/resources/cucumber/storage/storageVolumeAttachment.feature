@@ -127,10 +127,12 @@ Feature: In order to manage Storage Volume Attachments
   @update
   Scenario: Update a Logical Interconnect Group Adding an Uplink Set 
     Given an instance of Logical Interconnect Group
-      And name "lig-bdd-sva" for Resource
+      And Resource values as follows:
+      | name           | lig-bdd-sva |
+      | baySet         |           2 |
       And Uplink values as follows:
       | name         | type         | networks            | bayPort |
-      | FCUplinkSet1 | FibreChannel | fc-network-bdd-sva1 | X1      |
+      | FCUplinkSet1 | FibreChannel | fc-network-bdd-sva1 | Q1:1    |
     When OneView gets Resource by Name
       And OneView runs Resource update
       And OneView gets Resource by ID
@@ -139,10 +141,12 @@ Feature: In order to manage Storage Volume Attachments
   @update
   Scenario: Update a Logical Interconnect Group Adding an Uplink Set
     Given an instance of Logical Interconnect Group
-      And name "lig-bdd-sva" for Resource
+      And Resource values as follows:
+      | name           | lig-bdd-sva |
+      | baySet         |           5 |
       And Uplink values as follows:
       | name         | type         | networks            | bayPort |
-      | FCUplinkSet2 | FibreChannel | fc-network-bdd-sva2 | X2      |
+      | FCUplinkSet2 | FibreChannel | fc-network-bdd-sva2 | Q1:2    |
     When OneView gets Resource by Name
       And OneView runs Resource update
       And OneView gets Resource by ID

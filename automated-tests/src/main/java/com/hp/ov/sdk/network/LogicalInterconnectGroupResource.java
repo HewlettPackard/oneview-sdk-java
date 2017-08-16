@@ -94,7 +94,8 @@ public class LogicalInterconnectGroupResource extends BasicResource
             NetworkType uplinkSetType = NetworkType.valueOf(map.get("type"));
             List<String> networkNames = Arrays.asList(map.get("networks").replaceAll(" ", "").split(","));
             HashMap<Integer, List<String>> bayPortMap = new HashMap<Integer, List<String>>();
-            int i = 1;
+
+            int i = Integer.valueOf(resourceProperties.get("baySet"));
             for (String bay : Arrays.asList(map.get("bayPort").replaceAll(" ", "").split(","))) {
                 bayPortMap.put(i++, Arrays.asList(bay));
             }
@@ -102,7 +103,6 @@ public class LogicalInterconnectGroupResource extends BasicResource
             this.uplinkList
                     .add(dtoUtils.buildUplinkSetDto(ligName, uplinkSetName, uplinkSetType, bayPortMap, networkNames));
         }
-
     }
 
     @Override

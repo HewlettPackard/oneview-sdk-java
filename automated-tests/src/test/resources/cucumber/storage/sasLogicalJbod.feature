@@ -71,6 +71,17 @@ Feature: In order to manage SAS Logical JBODs
       And OneView gets Resource by Name
     Then I get an ID
 
+  @update
+  Scenario: Update a Server Hardware Power State
+    Given an instance of Server Hardware
+      And name "0000A66101, bay 5" for Resource
+      And Resource values will be updated as follows:
+      | powerControl | PressAndHold |
+      | powerState   | Off          |
+    When OneView gets Resource by Name
+      And OneView runs Server Hardware Power State update
+    Then I get a success status
+
   @create
   Scenario: Creation of a new SAS Logical JBOD
     Given an instance of Server Profile
