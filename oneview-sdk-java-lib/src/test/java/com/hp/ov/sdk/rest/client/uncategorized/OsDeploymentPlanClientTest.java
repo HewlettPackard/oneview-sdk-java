@@ -23,18 +23,17 @@ import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Type;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.collect.Lists;
 import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.uncategorized.OsDeploymentPlan;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.reflect.ClientRequestHandler;
 
@@ -73,19 +72,17 @@ public class OsDeploymentPlanClientTest {
                 }.getType());
     }
 
+    @SuppressWarnings("serial")
     @Test
     public void shouldGetDeploymentPlanByName() {
-        OsDeploymentPlan osDeploymentPlan = new OsDeploymentPlan();
-        osDeploymentPlan.setName(ANY_RESOURCE_NAME);
+        client.getByName(ANY_RESOURCE_NAME);
 
-        ResourceCollection<OsDeploymentPlan> osDeploymentPlans = new ResourceCollection<>();
-        osDeploymentPlans.addMembers(Lists.newArrayList(osDeploymentPlan));
+        Request expectedRequest = new Request(HttpMethod.GET, OS_DEPLOYMENT_PLAN_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
 
-        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(osDeploymentPlans);
-
-        ResourceCollection<OsDeploymentPlan> name = client.getByName(ANY_RESOURCE_NAME);
-
-        Assert.assertEquals(name.get(0).getName(), ANY_RESOURCE_NAME);
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<OsDeploymentPlan>>() {
+                }.getType());
     }
 
 }

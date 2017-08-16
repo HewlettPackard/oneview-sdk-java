@@ -15,18 +15,13 @@
  */
 package com.hp.ov.sdk.rest.client.uncategorized;
 
-import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.uncategorized.OsDeploymentPlan;
-import com.hp.ov.sdk.rest.client.common.RetrievableResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.reflect.Api;
-import com.hp.ov.sdk.rest.reflect.Endpoint;
 
 @Api(OsDeploymentPlanClient.OS_DEPLOYMENT_PLAN_URI)
-public interface OsDeploymentPlanClient extends RetrievableResource<OsDeploymentPlan> {
+public interface OsDeploymentPlanClient extends SearchableResource<OsDeploymentPlan> {
 
     String OS_DEPLOYMENT_PLAN_URI = "/rest/os-deployment-plans";
-
-    @Endpoint
-    ResourceCollection<OsDeploymentPlan> getByName(String name);
 
 }

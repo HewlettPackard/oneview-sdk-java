@@ -324,7 +324,7 @@ public class HttpRestClient {
         try {
             String uriString = String.format(SdkConstants.HTTPS + "%s%s", request.getHostname(), request.getUri());
 
-            if (OS_DEPLOYMENT_PLAN_URI.equals(request.getUri()) && request.getQuery().isEmpty()) {
+            if (OS_DEPLOYMENT_PLAN_URI.equals(request.getUri())) {
                 uriString+="/";
             }
 
