@@ -22,8 +22,13 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, glue = {
-        "com.hp.ov.sdk.resources" }, features = "classpath:cucumber/network/logicalSwitch.feature", tags = "@getAll")
+@CucumberOptions(
+    format = { "pretty", "html:target/cucumber" },
+    glue = { "com.hp.ov.sdk.resources" },
+    features = "classpath:cucumber/network/logicalSwitch.feature",
+    monochrome = true,
+    tags = "@create, @refresh, @getAll, @get, @update, @remove")
+
 public class LogicalSwitchBDDTest {
 
 }

@@ -25,19 +25,22 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(
     format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = {"classpath:cucumber/storage/driveEnclosure.feature",
-            "classpath:cucumber/storage/fcSanDeviceManager.feature",
-            "classpath:cucumber/storage/fcSanProvider.feature",
-            "classpath:cucumber/storage/fcSansManagedSan.feature",
-            "classpath:cucumber/storage/sasLogicalJbod.feature",
-            "classpath:cucumber/storage/sasLogicalJbodAttachment.feature",
+    glue = { "com.hp.ov.sdk.resources" }, 
+    features = { "classpath:cucumber/storage/driveEnclosure.feature",
+            "classpath:cucumber/storage/fcSanDeviceManagerSynergy.feature",
+            "classpath:cucumber/storage/fcSanProviderSynergy.feature",
+            "classpath:cucumber/storage/fcSansManagedSanSynergy.feature",
             "classpath:cucumber/storage/storagePool.feature",
             "classpath:cucumber/storage/storageSystem.feature",
             "classpath:cucumber/storage/storageVolume.feature",
-            "classpath:cucumber/storage/storageVolumeAttachment.feature",
-            "classpath:cucumber/storage/storageVolumeTemplate.feature"},
-    tags = "@getAll")
+            "classpath:cucumber/storage/storageVolumeTemplate.feature",
+            "classpath:cucumber/storage/sasLogicalJbod.feature",
+            "classpath:cucumber/storage/sasLogicalJbodAttachment.feature",
+            "classpath:cucumber/storage/storageVolumeAttachment.feature" },
+    monochrome = true,
+    tags = { "@getAll, @get, @create, @createMultiple, @createOne, @update, @patch, @repair, @refresh, @synergy, @onlyOV310, @remove",
+            "~@C7000", "~@disabled", "~@onlyOV3" })
+
 public class AllStorageTestsSynergy {
 
 }

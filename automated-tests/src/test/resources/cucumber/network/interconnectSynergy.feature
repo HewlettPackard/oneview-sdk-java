@@ -13,16 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Interconnect
+Feature: In order to manage Interconnects
 
   Background: 
     Given an instance of OneView
-    And OneView credentials located in "src/test/resources/oneView.properties"
-    And an instance of Interconnect
+      And OneView credentials located in "src/test/resources/oneView.properties"
+      And an instance of Interconnect
 
   @getAll
-  Scenario: Get all Interconnect
+  Scenario: Get all Interconnects
     When OneView lists all
     Then I get a count
 
@@ -36,65 +35,65 @@ Feature:
   Scenario: Get an Interconnect by Id
     Given name "0000A66101, interconnect 2" for Resource
     When OneView gets Resource by Name
-    And OneView gets Resource by ID
+      And OneView gets Resource by ID
     Then I get a Resource Name
 
-  @get
+  @get @C7000
   Scenario: Get Interconnect Statistics
     Given name "0000A66101, interconnect 2" for Resource
     When OneView gets Resource by Name
-    And OneView gets Interconnect Statistics
+      And OneView gets Interconnect Statistics
     Then I get a Resource Name
 
-  @get
+  @get @C7000
   Scenario: Get Interconnect Port Statistics
     Given Resource values as follows:
       | name    | 0000A66101, interconnect 2 |
       | port    | d1                         |
       | subport |                          1 |
     When OneView gets Resource by Name
-    And OneView gets Interconnect Port Statistics
+      And OneView gets Interconnect Port Statistics
     Then Resource is found
 
   @get
   Scenario: Get Interconnect Named Servers
     Given name "0000A66101, interconnect 2" for Resource
     When OneView gets Resource by Name
-    And OneView gets Interconnect Named Servers
+      And OneView gets Interconnect Named Servers
     Then Resource is found
 
   @update
-  Scenario: Update by Patch
+  Scenario: Update Interconnect by Patch
     Given name "0000A66101, interconnect 2" for Resource
-    And Resource values will be updated as follows:
+      And Resource values will be updated as follows:
       | op    | replace     |
       | path  | /powerState |
       | value | Off         |
     When OneView gets Resource by Name
-    And OneView runs Interconnect patch
+      And OneView runs Interconnect patch
     Then Resource is found
 
-  @update
+  @reset
   Scenario: Reset Interconnect Port Protection
     Given name "0000A66101, interconnect 2" for Resource
     When OneView gets Resource by Name
-    And OneView runs Interconnect Port Protection reset
+      And OneView runs Interconnect Port Protection reset
     Then I get a success status
 
-  @update
+  @update @C7000
   Scenario: Update Interconnect Port
-    Given name "0000A66101, interconnect 2" for Resource
-    And Resource values will be updated as follows:
+    Given name "0000A66101, interconnect 1" for Resource
+      And Resource values will be updated as follows:
       | portEnable | false |
     When OneView gets Resource by Name
-    And OneView runs update interconnect port
+      And OneView runs update interconnect port
     Then Resource is found
 
-  @update
+  @update @C7000
   Scenario: Update Interconnect Ports
     Given name "0000A66101, interconnect 5" for Resource
-    And Resource values will be updated as follows:
+      And Resource values will be updated as follows:
       | portEnable | false |
     When OneView gets Resource by Name
-    And OneView runs update interconnect ports
+      And OneView runs update interconnect ports
     Then Resource is found

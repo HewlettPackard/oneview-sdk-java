@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Switch Type
+Feature: In order to manage Switch Types
 
   Background: 
     Given an instance of OneView
@@ -22,19 +21,19 @@ Feature:
       And an instance of Switch Type
 
   @getAll 
-  Scenario: Get all Switch Type
+  Scenario: Get all Switch Types
     When OneView lists all
     Then I get a count
 
   @get
   Scenario: Get a Switch Type by Name
     Given name "Cisco Nexus 55xx" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
   Scenario: Get a Switch Type by Id
     Given name "Cisco Nexus 55xx" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name

@@ -25,15 +25,18 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(
     format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = {"classpath:cucumber/server/enclosureSynergy.feature",
+    glue = { "com.hp.ov.sdk.resources" }, 
+    features = { "classpath:cucumber/server/enclosureSynergy.feature",
             "classpath:cucumber/server/enclosureGroupSynergy.feature",
-            "classpath:cucumber/server/logicalEnclosure.feature",
-            "classpath:cucumber/server/serverHardware.feature",
-            "classpath:cucumber/server/serverHardwareType.feature",
-            "classpath:cucumber/server/serverProfile.feature",
-            "classpath:cucumber/server/serverProfileTemplate.feature"},
-    tags = "@getAll")
+            "classpath:cucumber/server/serverHardwareSynergy.feature",
+            "classpath:cucumber/server/serverHardwareTypeSynergy.feature",
+            "classpath:cucumber/server/serverProfileTemplateSynergy.feature",
+            "classpath:cucumber/server/serverProfileSynergy.feature",
+            "classpath:cucumber/server/logicalEnclosureSynergy.feature" },
+    monochrome = true,
+    tags = { "@getAll, @get, @create, @createMultiple, @createOne, @update, @patch, @onlyOV3, @refresh, @remove", 
+            "~@disabled" })
+
 public class AllServerTestsSynergy {
 
 }

@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Internal Link Set
+Feature: In order to manage Internal Link Sets
 
   Background: 
     Given an instance of OneView
@@ -22,7 +21,7 @@ Feature:
       And an instance of Internal Link Set
 
   @getAll
-  Scenario: Get all Internal Link Set
+  Scenario: Get all Internal Link Sets
     When OneView lists all
     Then I get a count
 

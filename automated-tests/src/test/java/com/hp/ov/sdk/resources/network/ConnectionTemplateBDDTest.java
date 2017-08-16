@@ -22,7 +22,11 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, glue = {"com.hp.ov.sdk.resources"}, features = "classpath:cucumber/network/connectionTemplate.feature", tags="@getAll, @get, @edit")
+@CucumberOptions(format = { "pretty", "html:target/cucumber" },
+    glue = {"com.hp.ov.sdk.resources"},
+    features = "classpath:cucumber/network/connectionTemplate.feature",
+    monochrome = true,
+    tags="@getAll, @get, @update")
 public class ConnectionTemplateBDDTest {
 
 }

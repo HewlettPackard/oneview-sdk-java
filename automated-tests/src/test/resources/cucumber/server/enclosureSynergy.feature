@@ -13,21 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Enclosure
+Feature: In order to manage Enclosures
 
   Background: 
     Given an instance of OneView
-    And OneView credentials located in "src/test/resources/oneView.properties"
-    And an instance of Enclosure
+      And OneView credentials located in "src/test/resources/oneView.properties"
+      And an instance of Enclosure
 
   @getAll
-  Scenario: Get all Enclosure
+  Scenario: Get all Enclosures
     When OneView lists all
     Then I get a count
 
   @create
-  Scenario: Add an Remote Enclosure Synergy
+  Scenario: Add a Remote Enclosure Synergy
     Given Resource values as follows:
       | hostname | fe80::2:0:9:1%eth2 |
     When OneView runs Remote Enclosure creation
@@ -42,51 +41,51 @@ Feature:
   Scenario: Get an Enclosure by Id
     Given name "0000A66101" for Resource
     When OneView gets Resource by Name
-    When OneView gets Resource by ID
+      And OneView gets Resource by ID
     Then I get a Resource Name
 
   @get
   Scenario: Get Enclosure Environmental Configuration
     Given name "0000A66101" for Resource
     When OneView gets Resource by Name
-    And OneView gets Resource by ID
-    And gets Enclosure Environmental Configuration
+      And OneView gets Resource by ID
+      And gets Enclosure Environmental Configuration
     Then Resource is found
 
   @get
   Scenario: Get Enclosure Utilization
     Given name "0000A66101" for Resource
-    And OneView gets Resource by Name
-    And OneView gets Resource by ID
-    And gets Enclosure Utilization
+      And OneView gets Resource by Name
+      And OneView gets Resource by ID
+      And gets Enclosure Utilization
     Then Resource is found
 
   @patch
-  Scenario: Update by Patch
+  Scenario: Update an Enclosure by Patch
     Given name "0000A66101" for Resource
-    And Resource values will be updated as follows:
+      And Resource values will be updated as follows:
       | op    | replace              |
       | path  | /name                |
       | value | update-enclosure-bdd |
     When OneView gets Resource by Name
-    And OneView runs Enclosure patch
+      And OneView runs Enclosure patch
     Then Resource is found
 
-  @edit
-  Scenario: Edit an Enclosure
+  @update
+  Scenario: Update an Enclosure
     Given Resource values will be updated as follows:
       | name | 0000A66101 |
     When name "update-enclosure-bdd" for Resource
-    And OneView gets Resource by Name
-    And OneView runs Resource update
-    And OneView gets Resource properties
+      And OneView gets Resource by Name
+      And OneView runs Resource update
+      And OneView gets Resource properties
     Then I get previous values in Resource
 
   @refresh
   Scenario: Refresh an Enclosure
     Given name "0000A66101" for Resource
-    And Resource values will be updated as follows:
+      And Resource values will be updated as follows:
       | refreshState | RefreshPending |
     When OneView gets Resource by Name
-    And Oneview runs Enclosure refresh
+      And Oneview runs Enclosure refresh
     Then Resource is found

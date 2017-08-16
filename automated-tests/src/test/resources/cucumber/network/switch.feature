@@ -13,10 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-
-
-Feature: 
-  In order to manage Switch
+Feature: In order to manage Switches
 
   Background: 
     Given an instance of OneView
@@ -64,7 +61,7 @@ Feature:
      Then I get an ID
 
   @getAll
-  Scenario: Get all Logical Switch
+  Scenario: Get all Logical Switches
     When OneView lists all
     Then I get a count
 

@@ -13,10 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-
-
-Feature: 
-  In order to manage Logical Switch Group
+Feature: In order to manage Logical Switch Groups
 
   Background: 
     Given an instance of OneView
@@ -36,7 +33,7 @@ Feature:
      Then I get an ID
 
   @getAll
-  Scenario: Get all Logical Switch Group
+  Scenario: Get all Logical Switch Groups
     When OneView lists all
     Then I get a count
 
@@ -53,8 +50,8 @@ Feature:
       And OneView gets Resource by ID
      Then I get a Resource Name
 
-  @edit
-  Scenario: Edit a Logical Switch Group
+  @update
+  Scenario: Update a Logical Switch Group
     Given Resource values as follows:
       | name          | lsg-bdd          |
       | switchType    | Cisco Nexus 55xx |

@@ -30,10 +30,14 @@ import cucumber.api.junit.Cucumber;
  */
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" },
-        glue = {"com.hp.ov.sdk.resources" },
+@CucumberOptions(
+        format = { "pretty", "html:target/cucumber" },
+        glue = { "com.hp.ov.sdk.resources" },
         features = "classpath:cucumber/server/logicalEnclosureSynergy.feature",
-        tags = "@create, @createOne, @getAll, @get, @update, @remove")
+        monochrome = true,
+        tags = { "@create, @createOne, @createMultiple, @getAll, @get, @update, @remove",
+                "~@disabled" })
+
 public class LogicalEnclosureBDDTestSynergy {
 
 }

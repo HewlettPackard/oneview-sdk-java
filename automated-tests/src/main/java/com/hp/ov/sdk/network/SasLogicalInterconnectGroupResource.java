@@ -143,4 +143,8 @@ public class SasLogicalInterconnectGroupResource extends BasicResource
         return interconnectGroup;
     }
 
+    public SasLogicalInterconnectGroup getByName(String name) {
+        return (SasLogicalInterconnectGroup) getResource(client.getByName(name));
+    }
+    
 }

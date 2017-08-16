@@ -25,7 +25,10 @@ import cucumber.api.junit.Cucumber;
 @CucumberOptions(format = { "pretty", "html:target/cucumber" },
         glue = {"com.hp.ov.sdk.resources" },
         features = "classpath:cucumber/server/serverProfileSynergy.feature",
-        tags = "@create, @getAll, @get, @edit, @remove")
+        monochrome = true,
+        tags = { "@create, @createMultiple, @createOne, @getAll, @get, @update, @remove",
+                "~@disabled" })
+
 public class ServerProfileBDDTestSynergy {
 
 }

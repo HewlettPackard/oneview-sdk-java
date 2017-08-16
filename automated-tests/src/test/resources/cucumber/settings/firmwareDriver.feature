@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Firmware
+Feature: In order to manage Firmware Drivers
 
   Background: 
     Given an instance of OneView
@@ -22,19 +21,19 @@ Feature:
       And an instance of Firmware Driver
 
   @getAll
-  Scenario: Get all Firmware
+  Scenario: Get all Firmware Drivers
     When OneView lists all
     Then I get a count
 
   @get
-  Scenario: Get a Firmware by Name
+  Scenario: Get a Firmware Driver by Name
     Given name "Service Pack for ProLiant" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
-  Scenario: Get a Firmware by Id
+  Scenario: Get a Firmware Driver by Id
     Given name "Service Pack for ProLiant" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name

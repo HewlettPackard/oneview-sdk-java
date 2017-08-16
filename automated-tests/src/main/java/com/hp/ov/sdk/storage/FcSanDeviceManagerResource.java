@@ -103,7 +103,7 @@ public class FcSanDeviceManagerResource extends BasicResource implements RemoveR
                 property.setValue(resourceProperties.get("name"));
             }
             if (property.getName().equalsIgnoreCase("SnmpPort")) {
-                property.setValue(resourceProperties.get("snmpPort"));
+                property.setValue(Integer.valueOf(resourceProperties.get("snmpPort")));
             }
             if (property.getName().equalsIgnoreCase("SnmpAuthString")) {
                 property.setValue(resourceProperties.get("password"));

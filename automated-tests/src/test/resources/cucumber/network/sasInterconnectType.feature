@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Sas Interconnect Type
+Feature: In order to manage Sas Interconnect Types
 
   Background: 
     Given an instance of OneView
@@ -22,19 +21,19 @@ Feature:
       And an instance of Sas Interconnect Type
 
   @getAll
-  Scenario: Get all Sas Interconnect Type
+  Scenario: Get all Sas Interconnect Types
     When OneView lists all
     Then I get a count
 
   @get
   Scenario: Get a Sas Interconnect Type by Name
     Given name "Synergy 12Gb SAS Connection Module" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
   Scenario: Get a Sas Interconnect Type by Id
     Given name "Synergy 12Gb SAS Connection Module" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name

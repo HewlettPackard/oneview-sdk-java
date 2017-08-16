@@ -41,6 +41,7 @@ import com.hp.ov.sdk.oneview.RemoveResource;
 import com.hp.ov.sdk.oneview.UpdateResource;
 import com.hp.ov.sdk.rest.client.server.EnclosureClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
+import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
 
 public class EnclosureResource extends BasicResource implements CreateResource, RemoveResource, UpdateResource {
 
@@ -211,7 +212,7 @@ public class EnclosureResource extends BasicResource implements CreateResource, 
         refreshForceOptions.setPassword(password);
         refreshStateConfig.setRefreshForceOptions(refreshForceOptions);
         refreshStateConfig.setRefreshState(RefreshState.valueOf(resourceProperties.get("refreshState")));
-        return taskToString(client.updateRefreshState(id, refreshStateConfig));
+        return taskToString(client.updateRefreshState(id, refreshStateConfig, TaskTimeout.of(3600000)));
     }
 
     public String addRemoteEnclosure() {

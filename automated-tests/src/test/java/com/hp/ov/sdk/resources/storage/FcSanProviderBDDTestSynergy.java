@@ -23,9 +23,12 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" },
-        glue = {"com.hp.ov.sdk.resources" },
+        glue = { "com.hp.ov.sdk.resources" },
         features = "classpath:cucumber/storage/fcSanProviderSynergy.feature",
-        tags = "@create, @getAll, @get")
+        monochrome = true,
+        tags = { "@create, @getAll, @get, @onlyOV310, @remove",
+                "~@onlyOV3", "~@disabled" })
+
 public class FcSanProviderBDDTestSynergy {
 
 }

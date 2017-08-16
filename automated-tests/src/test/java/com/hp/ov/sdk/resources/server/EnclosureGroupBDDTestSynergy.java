@@ -23,9 +23,11 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/server/enclosureGroupSynergy.feature", 
+    glue = { "com.hp.ov.sdk.resources" }, 
+    features = "classpath:cucumber/server/enclosureGroupSynergy.feature",
+    monochrome = true,
     tags =  "@getAll, @create, @get, @update, @remove")
+
 public class EnclosureGroupBDDTestSynergy {
 
 }

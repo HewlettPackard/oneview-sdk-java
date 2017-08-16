@@ -72,7 +72,7 @@ public class SasInterconnectResource extends BasicResource implements Resource {
 
     public String refresh(String id) {
         SasInterConnectRefreshRequest refresh = new SasInterConnectRefreshRequest();
-        refresh.setRefreshState(RefreshState.valueOf(resourceProperties.get("refreshState")));
+        refresh.setRefreshState(RefreshState.RefreshPending);
         return taskToString(client.refreshState(id, refresh));
     }
 

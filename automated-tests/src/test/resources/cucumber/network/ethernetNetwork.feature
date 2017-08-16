@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Ethernet Networks
+Feature: In order to manage Ethernet Networks
 
   Background: 
     Given an instance of OneView
@@ -33,9 +32,9 @@ Feature:
       And bandwidth values as follows:
       | maxBandwidth     | 8000 |
       | typicalBandwidth | 3000 |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @getAll
   Scenario: Get all Ethernet Networks
@@ -45,34 +44,34 @@ Feature:
   @get
   Scenario: Get an Ethernet Network by Name
     Given name "network-bdd" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
   Scenario: Get an Ethernet Network by Id
     Given name "network-bdd" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
 
   @list
   Scenario: List Associated Profile for Network
     Given name "network-bdd" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-      And OneView gets the Assoicated Profile List
-     Then I get a count
+      And OneView gets the Associated Profile List
+    Then I get a count
 
   @list
   Scenario: List Associated Profile Uplink Groups for Network
     Given name "network-bdd" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-      And OneView gets the Assoicated Uplink Groups
-     Then I get a count
+      And OneView gets the Associated Uplink Groups
+    Then I get a count
 
-  @edit
-  Scenario: Edit an Ethernet Network
+  @update
+  Scenario: Update an Ethernet Network
     Given name "network-bdd" for Resource
       And Resource values will be updated as follows:
       | name                | network-bdd_updated |
@@ -80,14 +79,15 @@ Feature:
       | purpose             | VMMigration         |
       | privateNetwork      | false               |
       | smartLink           | true                |
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Resource update
-     Then I get a success status
+    Then I get a success status
 
   @remove
   Scenario: Remove an Ethernet Network
     Given name "network-bdd_updated" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found
+    

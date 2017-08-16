@@ -23,9 +23,12 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-	glue = {"com.hp.ov.sdk.resources" }, 
+	glue = { "com.hp.ov.sdk.resources" }, 
 	features = "classpath:cucumber/storage/sasLogicalJbod.feature", 
-	tags = "@getAll, @get")
+	monochrome = true,
+	tags = { "@create, @createMultiple, @createOne, @getAll, @get, @remove",
+	        "~@disabled" })
+
 public class SasLogicalJbodBDDTest {
 
 }

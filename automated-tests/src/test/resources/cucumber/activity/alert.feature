@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Alert
+Feature: In order to manage Alerts
 
   Background: 
     Given an instance of OneView
@@ -22,23 +21,23 @@ Feature:
       And an instance of Alert
 
   @getAll
-  Scenario: Get all Alert
+  Scenario: Get all Alerts
     When OneView lists all
     Then I get a count
 
   @get
   Scenario: Get an Alert by Id
     When OneView gets Id of First Alert
-     And OneView gets Resource by ID
+      And OneView gets Resource by ID
     Then I get a Resource Name
 
-  @edit
-  Scenario: Edit an Ethernet Network
+  @update
+  Scenario: Update an Alert
     Given Resource values will be updated as follows:
       | notes | Sample notes. |
-     When OneView gets Id of First Alert
+    When OneView gets Id of First Alert
       And OneView runs Resource update
-     Then I get a success status
+    Then I get a success status
 
   @remove
   Scenario: Remove an Alert Change Log
@@ -49,11 +48,11 @@ Feature:
   Scenario: Remove an Alert By Filter
     Given Resource values as follows:
       | alertUrgency | Medium |
-     When OneView deletes Alert by filter
-     Then I get a success status
+    When OneView deletes Alert by filter
+    Then I get a success status
 
   @remove
   Scenario: Remove an Alert
     When OneView gets Id of First Alert
-     And OneView deletes the Resource
+      And OneView deletes the Resource
     Then I get a success status

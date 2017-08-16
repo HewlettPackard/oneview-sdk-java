@@ -13,74 +13,105 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Logical Enclosure
+Feature: In order to manage Logical Enclosures
 
   Background: 
     Given an instance of OneView
-    And OneView credentials located in "src/test/resources/oneView.properties"
-    And an instance of Logical Enclosure
+      And OneView credentials located in "src/test/resources/oneView.properties"
+      And an instance of Logical Enclosure
 
   @create
   Scenario: Creation of a new Logical Interconnect Group
     Given an instance of Logical Interconnect Group
-    Given Resource values as follows:
+    And Resource values as follows:
       | name           | lig-bdd-le |
       | state          | ACTIVE     |
-      | baySet         |          3 |
+      | baySet         |          2 |
       | redundancyType | Redundant  |
       | enclosureType  | SY12000    |
-      | enclosureIndex |          1 |
-    And interconnection values as follows:
+      | enclosureIndex |         -1 |
+      And interconnection values as follows:
       | entries | type                                          |
-      |       3 | Virtual Connect SE 40Gb F8 Module for Synergy |
-      |       6 | Virtual Connect SE 40Gb F8 Module for Synergy |
+      |       2 | Virtual Connect SE 16Gb FC Module for Synergy |
+      |       5 | Virtual Connect SE 16Gb FC Module for Synergy |
     When OneView runs Logical Interconnect Group Synergy creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
   Scenario: Creation of a new Enclosure Group
     Given an instance of Enclosure Groups
-    Given Resource values as follows:
+      And Resource values as follows:
       | name             | enclosure-group-bdd |
       | lig              | lig-bdd-le          |
       | stackingMode     | Enclosure           |
-      | enclosureCount   |                   1 |
+      | enclosureCount   |                   3 |
       | ipAddressingMode | DHCP                |
-      | entryBayOne      |                   3 |
-      | entryBayTwo      |                   6 |
+      | entryBayOne      |                   5 |
+      | entryBayTwo      |                   2 |
     When Enclosure Group sets Uris
-    And OneView runs Enclosure Synergy creation
-    And OneView gets Resource by Name
+      And OneView runs Enclosure Synergy creation
+      And OneView gets Resource by Name
     Then I get an ID
 
   @createMultiple
   Scenario: Creation of a new Logical Enclosure Multiple
-    Given Resource values as follows:
+    Given an instance of Logical Enclosure Multiple
+      And Resource values as follows:
       | name           | logical_enclosure_bdd     |
       | enclosureGroup | enclosure-group-bdd       |
       | enclosureURI1  | 0000A66101                |
       | enclosureURI2  | 0000A66102                |
       | enclosureURI3  | 0000A66103                |
       | firmware       | Service Pack for ProLiant |
-    When OneView runs Multiple  enclosures creation
-    And OneView gets Resource by Name
+    When OneView runs Multiple enclosures creation
+      And OneView gets Resource by Name
     Then I get an ID
 
-  @createOne
+  @createOne @disabled
   Scenario: Creation of a new Logical Enclosure One
-    Given Resource values as follows:
+  	Given an instance of Logical Enclosure One
+      And Resource values as follows:
       | name           | logical_enclosure_bdd     |
       | enclosureGroup | enclosure-group-bdd       |
       | enclosureURI1  | 0000A66101                |
       | firmware       | Service Pack for ProLiant |
     When OneView runs One enclosures creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
+  
+  @refresh
+  Scenario: Refresh an Enclosure
+    Given an instance of Enclosure
+      And name "0000A66101" for Resource
+      And Resource values will be updated as follows:
+      | refreshState | RefreshPending |
+    When OneView gets Resource by Name
+      And Oneview runs Enclosure refresh
+    Then Resource is found
 
+  @refresh
+  Scenario: Refresh an Enclosure
+    Given an instance of Enclosure
+      And name "0000A66102" for Resource
+      And Resource values will be updated as follows:
+      | refreshState | RefreshPending |
+    When OneView gets Resource by Name
+      And Oneview runs Enclosure refresh
+    Then Resource is found
+    
+  @refresh
+  Scenario: Refresh an Enclosure
+    Given an instance of Enclosure
+      And name "0000A66103" for Resource
+      And Resource values will be updated as follows:
+      | refreshState | RefreshPending |
+    When OneView gets Resource by Name
+      And Oneview runs Enclosure refresh
+    Then Resource is found
+    
   @getAll
-  Scenario: Get all Logical Enclosure
+  Scenario: Get all Logical Enclosures
     When OneView lists all
     Then I get a count
 
@@ -94,25 +125,25 @@ Feature:
   Scenario: Get a Logical Enclosure by Id
     Given name "logical_enclosure_bdd" for Resource
     When OneView gets Resource by Name
-    And OneView gets Resource by ID
+      And OneView gets Resource by ID
     Then I get a Resource Name
 
-  @update
-  Scenario: Update by Patch
+  @patch
+  Scenario: Update a Logical Enclosure by Patch
     Given name "logical_enclosure_bdd" for Resource
-    And Resource values will be updated as follows:
+      And Resource values will be updated as follows:
       | op    | replace       |
       | path  | /firmware     |
       | value | EnclosureOnly |
     When OneView gets Resource by Name
-    And OneView runs Logical Enclosure patch
+      And OneView runs Logical Enclosure patch
     Then I get a success status
 
   @update
   Scenario: Update a Logical Enclosure from Group
     Given name "logical_enclosure_bdd" for Resource
     When OneView gets Resource by Name
-    And OneView updates Logical Enclosure from Group
+      And OneView updates Logical Enclosure from Group
     Then I get a success status
 
   @create
@@ -121,48 +152,108 @@ Feature:
       | name        | logical_enclosure_bdd |
       | supportDump | testDump01            |
     When OneView gets Resource by Name
-    And OneView create a Logical Enclosure Support Dump
+      And OneView create a Logical Enclosure Support Dump
     Then I get a success status
 
+  @refresh
+  Scenario: Refresh an Enclosure
+    Given an instance of Enclosure
+      And name "0000A66101" for Resource
+      And Resource values will be updated as follows:
+      | refreshState | RefreshPending |
+    When OneView gets Resource by Name
+      And Oneview runs Enclosure refresh
+    Then Resource is found
+
+  @refresh
+  Scenario: Refresh an Enclosure
+    Given an instance of Enclosure
+      And name "0000A66102" for Resource
+      And Resource values will be updated as follows:
+      | refreshState | RefreshPending |
+    When OneView gets Resource by Name
+      And Oneview runs Enclosure refresh
+    Then Resource is found
+    
+  @refresh
+  Scenario: Refresh an Enclosure
+    Given an instance of Enclosure
+      And name "0000A66103" for Resource
+      And Resource values will be updated as follows:
+      | refreshState | RefreshPending |
+    When OneView gets Resource by Name
+      And Oneview runs Enclosure refresh
+    Then Resource is found
+    
   @update
   Scenario: Update a Logical Enclosure Configuration
     Given name "logical_enclosure_bdd" for Resource
     When OneView gets Resource by Name
-    And OneView updates Logical Enclosure Configuration
+      And OneView updates Logical Enclosure Configuration
     Then I get a success status
 
+  @refresh
+  Scenario: Refresh an Enclosure
+    Given an instance of Enclosure
+      And name "0000A66101" for Resource
+      And Resource values will be updated as follows:
+      | refreshState | RefreshPending |
+    When OneView gets Resource by Name
+      And Oneview runs Enclosure refresh
+    Then Resource is found
+
+  @refresh
+  Scenario: Refresh an Enclosure
+    Given an instance of Enclosure
+      And name "0000A66102" for Resource
+      And Resource values will be updated as follows:
+      | refreshState | RefreshPending |
+    When OneView gets Resource by Name
+      And Oneview runs Enclosure refresh
+    Then Resource is found
+    
+  @refresh
+  Scenario: Refresh an Enclosure
+    Given an instance of Enclosure
+      And name "0000A66103" for Resource
+      And Resource values will be updated as follows:
+      | refreshState | RefreshPending |
+    When OneView gets Resource by Name
+      And Oneview runs Enclosure refresh
+    Then Resource is found
+    
   @update
   Scenario: Update a Logical Enclosure
     Given name "logical_enclosure_bdd" for Resource
-    And Resource values will be updated as follows:
+      And Resource values will be updated as follows:
       | name | logical_enclosure_bdd_Updated |
     When OneView gets Resource by Name
-    And OneView runs Resource update
-    And OneView gets Resource properties
+      And OneView runs Resource update
+      And OneView gets Resource properties
     Then I get previous values in Resource
 
   @remove
   Scenario: Remove a Logical Enclosure
     Given name "logical_enclosure_bdd_Updated" for Resource
     When OneView gets Resource by Name
-    And OneView deletes the Resource
-    And OneView gets Resource by ID
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found
 
   @remove
-  Scenario: Remove an Enclosure Groups
+  Scenario: Remove an Enclosure Group
     Given an instance of Enclosure Groups
-    Given name "enclosure-group-bdd" for Resource
+      And name "enclosure-group-bdd" for Resource
     When OneView gets Resource by Name
-    And OneView deletes the Resource
-    And OneView gets Resource by ID
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found
 
   @remove
   Scenario: Remove a Logical Interconnect Group
     Given an instance of Logical Interconnect Group
-    And name "lig-bdd-le" for Resource
+      And name "lig-bdd-le" for Resource
     When OneView gets Resource by Name
-    And OneView deletes the Resource
-    And OneView gets Resource by ID
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found

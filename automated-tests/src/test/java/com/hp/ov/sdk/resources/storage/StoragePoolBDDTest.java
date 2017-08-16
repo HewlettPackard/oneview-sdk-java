@@ -23,9 +23,10 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" },
-    glue = {"com.hp.ov.sdk.resources" },
+    glue = { "com.hp.ov.sdk.resources" },
     features = "classpath:cucumber/storage/storagePool.feature",
-    tags = "@synergy, @create, @getAll")
+    monochrome = true,
+    tags = "@create, @update, @getAll, @get, @remove")
 
 public class StoragePoolBDDTest {
 

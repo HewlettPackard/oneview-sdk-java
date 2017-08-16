@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Sas Logical Interconnect
+Feature: In order to manage Sas Logical Interconnects
 
   Background: 
     Given an instance of OneView
@@ -22,7 +21,7 @@ Feature:
       And an instance of Sas Logical Interconnect
 
   @getAll
-  Scenario: Get all Sas Logical Interconnect
+  Scenario: Get all Sas Logical Interconnects
     When OneView lists all
     Then I get a count
 

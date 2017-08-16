@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hp.ov.sdk.dto.Property;
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.fcsans.DeviceManagerResponse;
 import com.hp.ov.sdk.dto.fcsans.SanProviderResponse;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
@@ -76,9 +77,15 @@ public class FcSanProviderResource extends BasicResource implements CreateResour
         client.addSanManager(sanProvider.getResourceId(), builder());
     }
 
-    public void createSynergy() {
-        SanProviderResponse sanProviderSynergy = (SanProviderResponse) client.getById(resourceProperties.get("provider"));
-        client.addSanManager(sanProviderSynergy.getResourceId(), builderSynergy());
+    public void createSynergy() {      
+        ResourceCollection<SanProviderResponse> sanProviders = client.getAll();
+                
+        for(SanProviderResponse sanProvider : sanProviders.getMembers())
+        {
+            if (sanProvider.getName().equals(resourceProperties.get("type"))) {
+                client.addSanManager(sanProvider.getResourceId(), builderSynergy());
+            }
+        }        
     }
 
     @Override
@@ -130,29 +137,29 @@ public class FcSanProviderResource extends BasicResource implements CreateResour
         List<Property> connectionInfo = new ArrayList<>();
 
         Property host = new Property();
-        host.setName(resourceProperties.get("hostname"));
+        
+        host.setName("Host");
         host.setValue(resourceProperties.get("name"));
 
         Property port = new Property();
         port.setName("SnmpPort");
-        port.setValue(resourceProperties.get("snmpPort"));
+        port.setValue(Integer.valueOf(resourceProperties.get("snmpPort")));
 
         Property user = new Property();
-        user.setName("SnmpUserName");
-        user.setValue(resourceProperties.get("snmpUsername"));
+        user.setName("snmpUserName");
+        user.setValue(resourceProperties.get("snmpUserName"));
 
         Property authLevel = new Property();
-        authLevel.setName("SnmpAuthLevel");
+        authLevel.setName("snmpAuthLevel");
         authLevel.setValue(resourceProperties.get("securityLevel"));
 
         Property authProtocol = new Property();
-        authProtocol.setName("SnmpAuthProtocol");
+        authProtocol.setName("snmpAuthProtocol");
         authProtocol.setValue(resourceProperties.get("authProtocol"));
 
         Property password = new Property();
-        password.setName("SnmpAuthString");
+        password.setName("snmpAuthString");
         password.setValue(resourceProperties.get("password"));
-
 
         connectionInfo.add(host);
         connectionInfo.add(port);

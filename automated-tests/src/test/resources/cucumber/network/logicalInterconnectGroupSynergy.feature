@@ -13,18 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Logical Interconnect Group
+Feature: In order to manage Logical Interconnect Groups
 
   Background: 
     Given an instance of OneView
-    And OneView credentials located in "src/test/resources/oneView.properties"
-    And an instance of Logical Interconnect Group
-
-  @getAll
-  Scenario: Get all Logical Interconnect Group
-    When OneView lists all
-    Then I get a count
+      And OneView credentials located in "src/test/resources/oneView.properties"
+      And an instance of Logical Interconnect Group
 
   @create
   Scenario: Creation of a new Logical Interconnect Group
@@ -35,60 +29,65 @@ Feature:
       | redundancyType | Redundant |
       | enclosureType  | SY12000   |
       | enclosureIndex |         1 |
-    And interconnection values as follows:
+      And interconnection values as follows:
       | entries | type                                          |
       |       1 | Virtual Connect SE 40Gb F8 Module for Synergy |
       |       4 | Virtual Connect SE 40Gb F8 Module for Synergy |
     When OneView runs Logical Interconnect Group Synergy creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
   Scenario: Creation of a new Ethernet Network
     Given an instance of Ethernet Network
-    And Resource values as follows:
+      And Resource values as follows:
       | name         | network-bdd-1 |
       | ethernetType | Tagged        |
       | vlanId       |           301 |
       | purpose      | General       |
       | private      | false         |
       | smartLink    | true          |
-    And bandwidth values as follows:
+      And bandwidth values as follows:
       | maxBandwidth     | 8000 |
       | typicalBandwidth | 3000 |
     When OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
   Scenario: Creation of a new Ethernet Network
     Given an instance of Ethernet Network
-    And Resource values as follows:
+      And Resource values as follows:
       | name         | network-bdd-2 |
       | ethernetType | Tagged        |
       | vlanId       |           302 |
       | purpose      | General       |
       | private      | false         |
       | smartLink    | true          |
-    And bandwidth values as follows:
+      And bandwidth values as follows:
       | maxBandwidth     | 8000 |
       | typicalBandwidth | 3000 |
     When OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
   Scenario: Creation of a new FC Network
     Given an instance of FC Network
-    And Resource values as follows:
+      And Resource values as follows:
       | name                    | fc-network-bdd-1 |
       | fabricType              | FabricAttach     |
       | linkStabilityTime       |               30 |
       | autoLoginRedistribution | true             |
     When OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
+  @getAll
+  Scenario: Get all Logical Interconnect Groups
+    When OneView lists all
+    Then I get a count
+    
   @get
   Scenario: Get a Logical Interconnect Group by Name
     Given name "lig-bdd-1" for Resource
@@ -99,7 +98,7 @@ Feature:
   Scenario: Get a Logical Interconnect Group by Id
     Given name "lig-bdd-1" for Resource
     When OneView gets Resource by Name
-    And OneView gets Resource by ID
+      And OneView gets Resource by ID
     Then I get a Resource Name
 
   @get
@@ -111,53 +110,53 @@ Feature:
   Scenario: Get Id of an Interconnect Settings
     Given name "lig-bdd-1" for Resource
     When OneView gets Default Interconnect Settings
-    And OneView gets Resource by Name
-    And OneView gets Interconnect Settings
+      And OneView gets Resource by Name
+      And OneView gets Interconnect Settings
     Then I get a Resource Name
 
-  @edit
-  Scenario: Edit a Logical Interconnect Group
+  @update
+  Scenario: Update a Logical Interconnect Group
     Given name "lig-bdd-1" for Resource
-    And Uplink values as follows:
+      And Uplink values as follows:
       | name              | type         | networks         | bayPort |
       | EthernetUplinkSet | Ethernet     | network-bdd-1    | Q1:1    |
       | FCUplinkSet       | FibreChannel | fc-network-bdd-1 | Q2:3    |
     When OneView gets Resource by Name
-    And OneView runs Resource update
-    And OneView gets Resource by ID
+      And OneView runs Resource update
+      And OneView gets Resource by ID
     Then I get an ID
 
   @remove
   Scenario: Remove a Logical Interconnect Group
     Given name "lig-bdd-1" for Resource
     When OneView gets Resource by Name
-    And OneView deletes the Resource
-    And OneView gets Resource by ID
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found
 
   @remove
   Scenario: Remove an Ethernet Network
     Given an instance of Ethernet Network
-    And name "network-bdd-1" for Resource
+      And name "network-bdd-1" for Resource
     When OneView gets Resource by Name
-    And OneView deletes the Resource
-    And OneView gets Resource by ID
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found
 
   @remove
   Scenario: Remove an Ethernet Network
     Given an instance of Ethernet Network
-    And name "network-bdd-2" for Resource
+      And name "network-bdd-2" for Resource
     When OneView gets Resource by Name
-    And OneView deletes the Resource
-    And OneView gets Resource by ID
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found
 
   @remove
   Scenario: Remove a FC Network
     Given an instance of FC Network
-    And name "fc-network-bdd-1" for Resource
+      And name "fc-network-bdd-1" for Resource
     When OneView gets Resource by Name
-    And OneView deletes the Resource
-    And OneView gets Resource by ID
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found

@@ -23,9 +23,11 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/network/ethernetNetwork.feature", 
-    tags = "@create, @getAll, @get, @list, @edit, @remove")
+    glue = { "com.hp.ov.sdk.resources" }, 
+    features = "classpath:cucumber/network/ethernetNetwork.feature",
+    monochrome = true,
+    tags = "@create, @getAll, @get, @list, @update, @remove")
+
 public class EthernetNetworkBDDTest {
 
 }

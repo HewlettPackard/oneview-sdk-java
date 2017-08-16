@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage FC Networks
+Feature: In order to manage FC Networks
 
   Background: 
     Given an instance of OneView
@@ -28,9 +27,9 @@ Feature:
       | fabricType              | FabricAttach   |
       | linkStabilityTime       |             30 |
       | autoLoginRedistribution | true           |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @getAll
   Scenario: Get all FC Networks
@@ -40,32 +39,32 @@ Feature:
   @get
   Scenario: Get a FC Network by Name
     Given name "fc-network-bdd" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
   Scenario: Get a FC Network by Id
     Given name "fc-network-bdd" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
 
-  @edit
-  Scenario: Edit a FC Network
+  @update
+  Scenario: Update a FC Network
     Given name "fc-network-bdd" for Resource
       And Resource values will be updated as follows:
       | name                    | fc-network-bdd_updated |
       | linkStabilityTime       |                     50 |
       | autoLoginRedistribution | true                   |
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Resource update
       And OneView gets Resource properties
-     Then I get previous values in Resource
+    Then I get previous values in Resource
 
   @remove
   Scenario: Remove a FC Network
     Given name "fc-network-bdd_updated" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found

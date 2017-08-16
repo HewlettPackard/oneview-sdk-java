@@ -17,7 +17,9 @@
 package com.hp.ov.sdk.resources.server;
 
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
+import com.hp.ov.sdk.dto.networking.saslogicalinterconnectgroup.SasLogicalInterconnectGroup;
 import com.hp.ov.sdk.network.LogicalInterconnectGroupResource;
+import com.hp.ov.sdk.network.SasLogicalInterconnectGroupResource;
 import com.hp.ov.sdk.oneview.Background;
 import com.hp.ov.sdk.oneview.OneView;
 import com.hp.ov.sdk.server.EnclosureGroupResource;
@@ -41,8 +43,13 @@ public class EnclosureGroupBDDStep extends Background {
 
     @When("^Enclosure Group sets Uris$")
     public void enclosure_Group_sets_Uris() throws Throwable {
-        LogicalInterconnectGroup lig = LogicalInterconnectGroupResource.getInstance().getByName(inputProperties.get("lig"));
-        ((EnclosureGroupResource) OneView.getResource()).setLigUri(lig.getUri());
+        if (inputProperties.containsKey("lig")) {
+            LogicalInterconnectGroup lig = LogicalInterconnectGroupResource.getInstance().getByName(inputProperties.get("lig"));
+            ((EnclosureGroupResource) OneView.getResource()).setLigUri(lig.getUri());
+        }else if (inputProperties.containsKey("sasLig")) {
+            SasLogicalInterconnectGroup sasLig = SasLogicalInterconnectGroupResource.getInstance().getByName(inputProperties.get("sasLig"));
+            ((EnclosureGroupResource) OneView.getResource()).setLigUri(sasLig.getUri());
+        }
     }
 
     @When("^gets Configuration Script of Enclosure Group$")

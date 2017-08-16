@@ -25,30 +25,29 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(
     format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = {"classpath:cucumber/network/connectionTemplate.feature",
+    glue = { "com.hp.ov.sdk.resources" }, 
+    features = { "classpath:cucumber/network/connectionTemplate.feature",
             "classpath:cucumber/network/ethernetNetwork.feature",
             "classpath:cucumber/network/fabric.feature",
             "classpath:cucumber/network/fcNetwork.feature",
             "classpath:cucumber/network/fcoeNetwork.feature",
-            "classpath:cucumber/network/interconnect.feature",
+            "classpath:cucumber/network/interconnectSynergy.feature",
             "classpath:cucumber/network/interconnectLinkTopology.feature",
-            "classpath:cucumber/network/interconnectType.feature",
-            "classpath:cucumber/network/internalLinkSet.feature",
+            "classpath:cucumber/network/interconnectTypeSynergy.feature",
             "classpath:cucumber/network/logicalDownlink.feature",
-            "classpath:cucumber/network/logicalInterconnect.feature",
+            "classpath:cucumber/network/logicalInterconnectSynergy.feature",
             "classpath:cucumber/network/logicalInterconnectGroupSynergy.feature",
-            "classpath:cucumber/network/logicalSwitch.feature",
-            "classpath:cucumber/network/logicalSwitchGroup.feature",
             "classpath:cucumber/network/networkSet.feature",
             "classpath:cucumber/network/sasInterconnect.feature",
             "classpath:cucumber/network/sasInterconnectType.feature",
-            "classpath:cucumber/network/sasLogicalInterconnect.feature",
+            /* "classpath:cucumber/network/sasLogicalInterconnect.feature", Disabled until endpoints are fully implemented in SDK */
             "classpath:cucumber/network/sasLogicalInterconnectGroup.feature",
-            "classpath:cucumber/network/switch.feature",
             "classpath:cucumber/network/switchType.feature",
-            "classpath:cucumber/network/uplinkSet.feature"},
-    tags = "@getAll")
+            "classpath:cucumber/network/uplinkSetSynergy.feature" },
+    monochrome = true,
+    tags = { "@create, @createMultiple, @createOne, @refresh, @getAll, @get, @reset, @list, @update, @patch, @remove",
+            "~@C7000", "~@disabled" })
+
 public class AllNetworkTestsSynergy {
 
 }

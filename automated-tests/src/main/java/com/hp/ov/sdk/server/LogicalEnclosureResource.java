@@ -93,16 +93,16 @@ public class LogicalEnclosureResource extends BasicResource implements CreateRes
 
     @Override
     public void create() {
-        client.create(builder(), TaskTimeout.of(300000));
+        client.create(builder(), TaskTimeout.of(5400000));
     }
 
     public String createMultipleLogicalEnclosure(String id) {
-        client.create(buildMultipleAddLogicalEnclosure());
+        client.create(buildMultipleAddLogicalEnclosure(), TaskTimeout.of(5400000));
         return id;
     }
 
     public String createOneLogicalEnclosure(String id) {
-        client.create(buildOneAddLogicalEnclosure());
+        client.create(buildOneAddLogicalEnclosure(), TaskTimeout.of(5400000));
         return id;
     }
 
@@ -195,7 +195,7 @@ public class LogicalEnclosureResource extends BasicResource implements CreateRes
 
     public String updateLogicalEnclosureConfigurationScript(String id) {
         String script = resourceProperties.get("script");
-        return objToString(client.updateConfigurationScript(id, script, TaskTimeout.of(300000)));
+        return objToString(client.updateConfigurationScript(id, script, TaskTimeout.of(3600000)));
     }
 
     public String patch(String id) {
@@ -206,19 +206,19 @@ public class LogicalEnclosureResource extends BasicResource implements CreateRes
         patch.setValue(new PatchFirmwareValue(logicalEnclosure.getFirmware().getFirmwareBaselineUri(),
                 FirmwareUpdateOn.valueOf(resourceProperties.get("value")), true));
 
-        return taskToString(client.patch(id, patch, TaskTimeout.of(700000)));
+        return taskToString(client.patch(id, patch, TaskTimeout.of(3600000)));
     }
 
     @Override
     public String update(String id) {
         LogicalEnclosure logicalEnclosure = client.getById(id);
         logicalEnclosure.setName(resourceProperties.get("name"));
-        return taskToString(client.update(id, logicalEnclosure, TaskTimeout.of(300000)));
+        return taskToString(client.update(id, logicalEnclosure, TaskTimeout.of(3600000)));
     }
 
     @Override
     public String remove(String id) {
-        return taskToString(client.delete(id, TaskTimeout.of(900000)));
+        return taskToString(client.delete(id, TaskTimeout.of(5400000)));
     }
 
 }

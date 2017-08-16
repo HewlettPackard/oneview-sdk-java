@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Sas Logical Interconnect Group
+Feature: In order to manage Sas Logical Interconnect Groups
 
   Background: 
     Given an instance of OneView
@@ -25,42 +24,42 @@ Feature:
   Scenario: Creation of a new Sas Logical Interconnect Group
     Given Resource values as follows:
       | name | SAS-Logical-Interconnect-Group-BDD |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @getAll
-  Scenario: Get all Sas Logical Interconnect Group
+  Scenario: Get all Sas Logical Interconnect Groups
     When OneView lists all
     Then I get a count
 
   @get
   Scenario: Get a Sas Logical Interconnect Group by Name
     Given name "SAS-Logical-Interconnect-Group-BDD" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
   Scenario: Get a Sas Logical Interconnect Group by Id
     Given name "SAS-Logical-Interconnect-Group-BDD" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
 
-  @edit
-  Scenario: Edit a Sas Logical Interconnect Group
+  @update
+  Scenario: Update a Sas Logical Interconnect Group
     Given name "SAS-Logical-Interconnect-Group-BDD" for Resource
       And Resource values will be updated as follows:
       | name | SAS-Logical-Interconnect-Group-BDD_updated |
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Resource update
       And OneView gets Resource properties
-     Then I get previous values in Resource
+    Then I get previous values in Resource
 
   @remove
   Scenario: Remove a Sas Logical Interconnect Group
     Given name "SAS-Logical-Interconnect-Group-BDD_updated" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found

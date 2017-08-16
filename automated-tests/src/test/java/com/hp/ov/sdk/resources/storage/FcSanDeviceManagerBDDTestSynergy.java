@@ -23,9 +23,12 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" },
-        glue = {"com.hp.ov.sdk.resources" },
-        features = "classpath:cucumber/storage/fcSanDeviceManagerSynergy.feature",
-        tags = "@create, @getAll, @get, @update, @remove")
+    glue = {"com.hp.ov.sdk.resources" },
+    features = "classpath:cucumber/storage/fcSanDeviceManagerSynergy.feature",
+    monochrome = true,
+    tags = { "@create, @getAll, @get, @update, @refresh, @onlyOV310, @remove", 
+            "~@onlyOV3", "~@disabled" })
+
 public class FcSanDeviceManagerBDDTestSynergy {
 
 }

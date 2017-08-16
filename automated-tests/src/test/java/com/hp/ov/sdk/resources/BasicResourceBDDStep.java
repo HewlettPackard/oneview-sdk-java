@@ -19,6 +19,7 @@ package com.hp.ov.sdk.resources;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.hp.ov.sdk.oneview.Background;
 import com.hp.ov.sdk.oneview.CreateResource;
@@ -82,6 +83,11 @@ public class BasicResourceBDDStep extends Background {
         resourceID = OneView.getResource().findByName(resourceName);
     }
 
+    @When("^I wait for (\\d+) seconds$")
+    public void wait_for_in_seconds(Long seconds) throws InterruptedException {
+        TimeUnit.SECONDS.sleep(seconds);
+    }
+    
     @Then("^I get an ID$")
     public void i_get_an_ID() {
         assertTrue(!resourceID.isEmpty());
@@ -102,7 +108,7 @@ public class BasicResourceBDDStep extends Background {
         status = ((UpdateResource) OneView.getResource()).update(resourceID);
     }
 
-    @When("^OneView deletes the Resource$")
+    @When(value="^OneView deletes the Resource$", timeout=5400000)
     public void oneview_deletes_the_Resource() {
         status = ((RemoveResource) OneView.getResource()).remove(resourceID);
     }

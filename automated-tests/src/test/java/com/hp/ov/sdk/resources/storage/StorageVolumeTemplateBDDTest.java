@@ -23,9 +23,11 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" },
-    glue = {"com.hp.ov.sdk.resources" },
+    glue = { "com.hp.ov.sdk.resources" },
     features = "classpath:cucumber/storage/storageVolumeTemplate.feature",
-    tags = "@create, @get, @update, @remove")
+    monochrome = true,
+    tags = "@create, @getAll, @get, @update, @remove")
+
 public class StorageVolumeTemplateBDDTest {
 
 }

@@ -23,9 +23,12 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" },
-        glue = {"com.hp.ov.sdk.resources" },
+        glue = { "com.hp.ov.sdk.resources" },
         features = "classpath:cucumber/network/uplinkSetSynergy.feature",
-        tags = "@create, @getAll, @get, @edit, @remove")
+        monochrome = true,
+        tags = { "@create, @createMultiple, @createOne, @getAll, @get, @update, @remove",
+                "~@disabled" })
+
 public class UplinkSetBDDTestSynergy {
 
 }

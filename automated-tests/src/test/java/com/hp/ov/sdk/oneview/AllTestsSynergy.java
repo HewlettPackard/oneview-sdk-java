@@ -20,18 +20,32 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import com.hp.ov.sdk.resources.activity.AlertBDDTest;
+import com.hp.ov.sdk.resources.facilities.AllFacilitiesTestsSynergy;
 import com.hp.ov.sdk.resources.network.AllNetworkTestsSynergy;
 import com.hp.ov.sdk.resources.server.AllServerTestsSynergy;
+import com.hp.ov.sdk.resources.settings.FirmwareDriverBDDTest;
 import com.hp.ov.sdk.resources.storage.AllStorageTestsSynergy;
 
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
-    OneViewCredentialsBDDTest.class, 
+    /* OneViewCredentialsBDDTest.class,
+     * Enable this one if you want to have oneview_java_sdk_config.properties file configured using the .feature file */
+    AllFacilitiesTestsSynergy.class,
+    FirmwareDriverBDDTest.class,
     AllNetworkTestsSynergy.class,
     AllServerTestsSynergy.class,
-    AllStorageTestsSynergy.class
+    AllStorageTestsSynergy.class,
+    AlertBDDTest.class
     })
+
 public class AllTestsSynergy {
+
+    /** To run the tests use: 
+     * - DCS appliance: Synergy
+     * - Schematic: synergy_3encl_demo
+     * - Manually create a fw bundle  
+     */
 
 }

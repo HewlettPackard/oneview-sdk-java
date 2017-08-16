@@ -23,9 +23,11 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/storage/driveEnclosure.feature", 
+    glue = { "com.hp.ov.sdk.resources" }, 
+    features = "classpath:cucumber/storage/driveEnclosure.feature",
+    monochrome = true,
     tags = "@getAll, @get, @patch, @update")
+
 public class DriveEnclosureBDDTest {
 
 }

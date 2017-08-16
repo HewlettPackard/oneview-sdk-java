@@ -24,8 +24,10 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
 	glue = {"com.hp.ov.sdk.resources"},
-	features = "classpath:cucumber/network/sasInterconnect.feature", 
+	features = "classpath:cucumber/network/sasInterconnect.feature",
+	monochrome = true,
 	tags = "@getAll, @get, @patch, @refresh")
+
 public class SasInterconnectBDDTest {
 
 }

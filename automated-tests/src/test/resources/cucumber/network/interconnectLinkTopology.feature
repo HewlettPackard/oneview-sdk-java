@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Interconnect Link Topology
+Feature: In order to manage Interconnect Link Topology
 
   Background: 
     Given an instance of OneView
@@ -22,19 +21,33 @@ Feature:
       And an instance of Interconnect Link Topology
 
   @getAll
-  Scenario: Get all Interconnect Link Topology
+  Scenario: Get all Interconnect Link Topologies
     When OneView lists all
     Then I get a count
 
   @get
   Scenario: Get an Interconnect Link Topology by Name
-    Given name "name1958952731-1484765491815" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
-
+    Given OneView gets Name of First Interconnect Link Topology
+    When OneView gets Resource by Name
+    Then I get an ID
+      
   @get
   Scenario: Get an Interconnect Link Topology by Id
-    Given name "name1958952731-1484765491815" for Resource
-     When OneView gets Resource by Name
+    Given OneView gets Name of First Interconnect Link Topology
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
+
+#Enable the scenarios below if you want to test manually specifying a resource name
+  @get @disabled
+  Scenario: Get an Interconnect Link Topology by Name
+    Given name "name-252849714-1500500997422" for Resource
+    When OneView gets Resource by Name
+    Then I get an ID
+     
+  @get @disabled
+  Scenario: Get an Interconnect Link Topology by Id
+    Given name "name-252849714-1500500997422" for Resource
+    When OneView gets Resource by Name
+      And OneView gets Resource by ID
+    Then I get a Resource Name

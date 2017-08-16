@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2017 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use file except in compliance with the License.
@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.resources.network;
+package com.hp.ov.sdk.resources.facilities;
 
 import org.junit.runner.RunWith;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
-@RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-    glue = { "com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/network/fabric.feature",
-    monochrome = true,
-    tags = " @getAll, @get, @update")
 
-public class FabricBDDTest {
+@RunWith(Cucumber.class)
+@CucumberOptions(
+    format = { "pretty", "html:target/cucumber" }, 
+    glue = { "com.hp.ov.sdk.resources" }, 
+    features = {"classpath:cucumber/facilities/dataCenter.feature",
+            "classpath:cucumber/facilities/powerDeliveryDevicesynergy.feature",
+            "classpath:cucumber/facilities/rack.feature",
+            "classpath:cucumber/facilities/unmanagedDevice.feature"},
+    monochrome = true,
+    tags = "@create, @getAll, @get, @update, @remove, @removeByFilter")
+
+public class AllFacilitiesTestsSynergy {
 
 }

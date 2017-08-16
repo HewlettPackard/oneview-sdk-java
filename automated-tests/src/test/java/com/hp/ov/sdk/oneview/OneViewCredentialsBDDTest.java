@@ -22,8 +22,11 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty",
-        "html:target/cucumber" }, features = "classpath:cucumber/oneViewCredentials.feature")
+@CucumberOptions(
+        format = { "pretty", "html:target/cucumber" }, 
+        features = "classpath:cucumber/oneViewCredentials.feature",
+        monochrome = true)
+
 public class OneViewCredentialsBDDTest {
 
 }

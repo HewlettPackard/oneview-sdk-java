@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Unmanaged Device
+Feature: In order to manage Unmanaged Devices
 
   Background: 
     Given an instance of OneView
@@ -29,56 +28,56 @@ Feature:
       | deviceType  | Server               |
       | ipv4Address |          192.168.0.2 |
       | mac         | 68:a5:99:az:71:wc    |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @getAll
-  Scenario: Get all Unmanaged Device
+  Scenario: Get all Unmanaged Devices
     When OneView lists all
     Then I get a count
 
   @get
   Scenario: Get an Unmanaged Device by Name
     Given name "Unmanaged Device BDD" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
   Scenario: Get an Unmanaged Device by Id
     Given name "Unmanaged Device BDD" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
 
   @get
   Scenario: Get an Environmental Configuration
     Given name "Unmanaged Device BDD" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets an Environmental Configuration
-     Then Resource is found
+    Then Resource is found
 
   @update
   Scenario: Update an Unmanaged Device
     Given name "Unmanaged Device BDD" for Resource
       And Resource values will be updated as follows:
       | deviceType | Blade System |
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Resource update
       And OneView gets Resource properties
-     Then I get previous values in Resource
+    Then I get previous values in Resource
 
   @remove
   Scenario: Remove an Unmanaged Device
     Given name "Unmanaged Device BDD" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found
 
   @removeByFilter
   Scenario: Remove an Unmanaged Device by Filter
     Given Resource values as follows:
       | name | Unmanaged Device BDD |
-     When OneView deletes Unmanaged Device by Filter
-     Then I get a success status
+    When OneView deletes Unmanaged Device by Filter
+    Then I get a success status

@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Sas Interconnect
+Feature: In order to manage SAS Interconnects
 
   Background: 
     Given an instance of OneView
@@ -22,37 +21,37 @@ Feature:
       And an instance of Sas Interconnect
 
   @getAll
-  Scenario: Get all Sas Interconnect
+  Scenario: Get all SAS Interconnects
     When OneView lists all
     Then I get a count
 
   @get
-  Scenario: Get a Sas Interconnect by Name
+  Scenario: Get a SAS Interconnect by Name
     Given name "0000A66101, interconnect 1" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
-  Scenario: Get a Sas Interconnect by Id
+  Scenario: Get a SAS Interconnect by Id
     Given name "0000A66101, interconnect 1" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
 
   @patch
-  Scenario: Update Sas Interconnect by Patch
+  Scenario: Update SAS Interconnect by Patch
     Given name "0000A66101, interconnect 1" for Resource
       And Resource values will be updated as follows:
       | op    | replace     |
       | path  | /powerState |
       | value | On          |
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Sas Interconnect patch
-     Then I get a success status
+    Then I get a success status
 
   @refresh
-  Scenario: Refresh a Sas Interconnect
+  Scenario: Refresh a SAS Interconnect
     Given name "0000A66101, interconnect 1" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Sas Interconnect refresh
-     Then I get a success status
+    Then I get a success status

@@ -24,8 +24,10 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
     glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/server/serverHardwareTypeSynergy.feature", 
-    tags = "@getAll, @get, @edit")
+    features = "classpath:cucumber/server/serverHardwareTypeSynergy.feature",
+    monochrome = true,
+    tags = "@getAll, @get, @update, @remove")
+
 public class ServerHardwareTypeBDDTestSynergy {
 
 }

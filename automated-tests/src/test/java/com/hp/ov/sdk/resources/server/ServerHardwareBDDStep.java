@@ -80,7 +80,7 @@ public class ServerHardwareBDDStep extends Background {
         resourceStr = ((ServerHardwareResource) ServerHardwareResource.getInstance()).updateEnvironmentConfiguration(resourceID);
     }
     
-    @When("^OneView runs  Mp Firmware Version update$")
+    @When("^OneView runs Mp Firmware Version update$")
     public void oneview_runs_Mp_Firmware_Version_update() throws Throwable {
         status = ((ServerHardwareResource) ServerHardwareResource.getInstance()).updateMpFirmwareVersion(resourceID);
     }

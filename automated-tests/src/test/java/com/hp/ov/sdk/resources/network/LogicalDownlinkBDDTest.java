@@ -22,8 +22,12 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, glue = {
-        "com.hp.ov.sdk.resources" }, features = "classpath:cucumber/network/logicalDownlink.feature", tags = "@getAll, @get")
+@CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
+    glue = { "com.hp.ov.sdk.resources" },
+    features = "classpath:cucumber/network/logicalDownlink.feature",
+    monochrome = true,
+    tags = "@create, @getAll, @get, @remove")
+
 public class LogicalDownlinkBDDTest {
 
 }

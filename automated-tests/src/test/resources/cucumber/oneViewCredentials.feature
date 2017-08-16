@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to set OneView credentials
+Feature: In order to set OneView credentials in "oneview_java_sdk_config.properties" file
 
   Scenario: Creation of OneView properties
     Given an instance of Credentials
@@ -22,7 +21,7 @@ Feature:
       And a VERSION "V_300"
       And a FILE_SDK_CONFIG "src/test/resources/oneview_java_sdk_config.properties"
       And OneView credentials as follows:
-      | hostname |   10.10.10.10 |
+      | hostname | 10.10.10.10   |
       | username | administrator |
       | password | serveradmin   |
       And Enclosure credentials as follows:
@@ -35,3 +34,4 @@ Feature:
       | password | dcs         |
      When credentials are written at "src/test/resources/oneView.properties"
      Then there is a file "src/test/resources/oneView.properties"
+     

@@ -142,7 +142,7 @@ Feature:
   Scenario: Update a Mp Firmware Version
     Given name "172.18.6.8" for Resource
     When OneView gets Resource by Name
-    And OneView runs  Mp Firmware Version update
+    And OneView runs Mp Firmware Version update
     Then I get a success status
 
   @patch

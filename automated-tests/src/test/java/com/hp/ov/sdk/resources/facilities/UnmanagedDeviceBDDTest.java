@@ -24,7 +24,8 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
     glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/facilities/unmanagedDevice.feature", 
+    features = "classpath:cucumber/facilities/unmanagedDevice.feature",
+    monochrome = true,
     tags = "@create, @getAll, @get, @update, @remove, @removeByFilter")
 public class UnmanagedDeviceBDDTest {
 

@@ -30,7 +30,8 @@ import cucumber.api.junit.Cucumber;
             "classpath:cucumber/facilities/powerDeliveryDevice.feature",
             "classpath:cucumber/facilities/rack.feature",
             "classpath:cucumber/facilities/unmanagedDevice.feature"},
-    tags = "@getAll")
-public class AllFacilitiesTests {
+    tags = "@create, @getAll, @get, @update, @remove, @removeByFilter")
+
+public class AllFacilitiesTestsC7000 {
 
 }

@@ -37,13 +37,13 @@ public class EthernetNetworkBDDStep extends Background {
         ((EthernetNetworkResource) OneView.getResource()).setBandwidthValues(map);
     }
 
-    @When("^OneView gets the Assoicated Profile List$")
-    public void oneview_gets_the_Assoicated_Profile_List() throws Throwable {
+    @When("^OneView gets the Associated Profile List$")
+    public void oneview_gets_the_Associated_Profile_List() throws Throwable {
         count = ((EthernetNetworkResource) OneView.getResource()).getAssociatedProfiles(resourceID);
     }
 
-    @When("^OneView gets the Assoicated Uplink Groups$")
-    public void oneview_gets_the_Assoicated_Uplink_Groups() throws Throwable {
+    @When("^OneView gets the Associated Uplink Groups$")
+    public void oneview_gets_the_Associated_Uplink_Groups() throws Throwable {
         count = ((EthernetNetworkResource) OneView.getResource()).getAssociatedUplinkGroups(resourceID);
     }
 }

@@ -66,4 +66,8 @@ public class InterconnectLinkTopologyResource extends BasicResource implements R
         return getCount(client.getAll());
     }
 
+    public String getNameFirstInterconnectLinkTopology() {
+        InterconnectLinkTopology interconnectLinkTopology = (InterconnectLinkTopology) getResource(client.getAll());
+        return interconnectLinkTopology == null ? "" : interconnectLinkTopology.getName();
+    }
 }

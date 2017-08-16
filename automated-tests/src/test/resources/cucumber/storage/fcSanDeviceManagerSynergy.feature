@@ -13,33 +13,46 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Fc San Device Manager
+Feature: In order to manage Fc San Device Managers
 
   Background: 
     Given an instance of OneView
-    And OneView credentials located in "src/test/resources/oneView.properties"
-    And an instance of Fc San Device Manager
+      And OneView credentials located in "src/test/resources/oneView.properties"
+      And an instance of Fc San Device Manager
 
-  @create
-  Scenario: Creation of a new Fc Provider
+  @create @onlyOV310
+  Scenario: Creation of a new Fc San Manager Under the Specified Provider
     Given an instance of Fc San Provider
-    And Resource values as follows:
-      | type          | Cisco                                |
-      | provider      | 848c191d-c995-4cd5-a7ba-e627435dd5f2 |
-      | name          | 172.18.20.1                          |
-      | hostname      | Host                                 |
-      | snmpPort      |                                  161 |
-      | snmpUsername  | dcs-SHA                              |
-      | securityLevel | AUTHNOPRIV                           |
-      | authProtocol  | SHA                                  |
-      | password      | hpinvent!                            |
+      And Resource values as follows:
+      | type          | Cisco San Plugin |
+      | name          | 172.18.20.1      |
+      | snmpPort      |              161 |
+      | snmpUserName  | dcs-SHA          |
+      | securityLevel | AUTHNOPRIV       |
+      | authProtocol  | SHA              |
+      | password      | dcsdcsdcs        | 
     When OneView runs Fc San Provider Synergy creation
-    And OneView lists all
+      And OneView lists all
+    Then I get a count
+
+  @create @onlyOV3 @disabled
+  Scenario: Creation of a new Fc San Manager Under the Specified Provider
+    Given an instance of Fc San Provider
+      And Resource values as follows:
+      | type          | Cisco San Plugin |
+      | name          | 172.18.20.1      |
+      | hostname      | Host             |
+      | snmpPort      |              161 |
+      | snmpUserName  | dcs-SHA          |
+      | securityLevel | AUTHNOPRIV       |
+      | authProtocol  | SHA              |
+      | password      | hpinvent!        | 
+    When OneView runs Fc San Provider Synergy creation
+      And OneView lists all
     Then I get a count
 
   @getAll
-  Scenario: Get all Fc San Device Manager
+  Scenario: Get all Fc San Device Managers
     When OneView lists all
     Then I get a count
 
@@ -53,24 +66,35 @@ Feature:
   Scenario: Get a Fc San Device Manager by Id
     Given name "172.18.20.1" for Resource
     When OneView gets Resource by Name
-    And OneView gets Resource by ID
+      And OneView gets Resource by ID
     Then I get a Resource Name
 
-  @update
-  Scenario: Edit a Fc San Device Manager
+  @update @refresh @onlyOV310
+  Scenario: Update/Refresh a Fc San Device Manager
+    Given Resource values as follows:
+      | name         | 172.18.20.1    |
+      | snmpPort     |            161 |
+      | password     | dcsdcsdcs      |
+      | refreshState | RefreshPending |
+    When OneView gets Resource by Name
+      And OneView edit Fc San Device Manager Synergy
+    Then I get a success status
+
+  @update @refresh @onlyOV3 @disabled
+  Scenario: Update/Refresh a Fc San Device Manager
     Given Resource values as follows:
       | name         | 172.18.20.1    |
       | snmpPort     |            161 |
       | password     | hpinvent!      |
       | refreshState | RefreshPending |
     When OneView gets Resource by Name
-    And OneView edit Fc San Device Manager Synergy
+      And OneView edit Fc San Device Manager Synergy
     Then I get a success status
-
+    
   @remove
   Scenario: Remove a Fc San Device Manager
     Given name "172.18.20.1" for Resource
     When OneView gets Resource by Name
-    And OneView deletes the Resource
-    And OneView gets Resource by ID
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found

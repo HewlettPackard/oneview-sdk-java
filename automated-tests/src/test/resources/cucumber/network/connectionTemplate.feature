@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Connection Template
+Feature: In order to manage Connection Templates
 
   Background: 
     Given an instance of OneView
@@ -22,21 +21,21 @@ Feature:
       And an instance of Connection Template
 
   @getAll
-  Scenario: Get all Connection Template
+  Scenario: Get all Connection Templates
     When OneView lists all
     Then I get a count
 
   @get
   Scenario: Get a Connection Template by Name
     When OneView gets Name of First Connection Template
-     And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @get
   Scenario: Get a Connection Template by Id
     When OneView gets Name of First Connection Template
-     And OneView gets Resource by Name
-     And OneView gets Resource by ID
+      And OneView gets Resource by Name
+      And OneView gets Resource by ID
     Then I get a Resource Name
 
   @get
@@ -44,12 +43,13 @@ Feature:
     When OneView gets Default Connection Template
     Then Resource is found
 
-  @edit
-  Scenario: Edit a Connection Template
+  @update
+  Scenario: Update a Connection Template
     Given Resource values will be updated as follows:
       | maxBandwidth     | 7000 |
       | typicalBandwidth | 2000 |
-     When OneView gets Name of First Connection Template
+    When OneView gets Name of First Connection Template
       And OneView gets Resource by Name
       And OneView runs Resource update
-     Then I get a success status
+    Then I get a success status
+    

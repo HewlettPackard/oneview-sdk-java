@@ -13,30 +13,47 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Logical Downlink
+Feature: In order to manage Logical Downlinks
 
   Background: 
     Given an instance of OneView
       And OneView credentials located in "src/test/resources/oneView.properties"
       And an instance of Logical Downlink
 
+  @create
+  Scenario: Creation of a new Logical Interconnect Group
+    Given an instance of Logical Interconnect Group
+      And Resource values as follows:
+      | name           | lig-bdd-2 |
+      | state          | ACTIVE    |
+      | baySet         |         1 |
+      | redundancyType | Redundant |
+      | enclosureType  | SY12000   |
+      | enclosureIndex |         1 |
+      And interconnection values as follows:
+      | entries | type                                          |
+      |       1 | Virtual Connect SE 40Gb F8 Module for Synergy |
+      |       4 | Virtual Connect SE 40Gb F8 Module for Synergy |
+    When OneView runs Logical Interconnect Group Synergy creation
+      And OneView gets Resource by Name
+    Then I get an ID
+    
   @getAll
-  Scenario: Get all Logical Downlink
+  Scenario: Get all Logical Downlinks
     When OneView lists all
     Then I get a count
 
   @get
   Scenario: Get a Logical Downlink by Name
     When OneView gets Name of First Logical Downlink
-     And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @get
   Scenario: Get a Logical Downlink by Id
     When OneView gets Name of First Logical Downlink
-     And OneView gets Resource by Name
-     And OneView gets Resource by ID
+      And OneView gets Resource by Name
+      And OneView gets Resource by ID
     Then I get a Resource Name
 
   @get
@@ -47,6 +64,16 @@ Feature:
   @get
   Scenario: Get a Logical Downlink by Id Without Ethernet
     When OneView gets Name of First Logical Downlink
-     And OneView gets Resource by Name
-     And OneView gets Logical Downlink by ID Without Ethernet
+      And OneView gets Resource by Name
+      And OneView gets Logical Downlink by ID Without Ethernet
     Then I get a Resource Name
+
+  @remove
+  Scenario: Remove a Logical Interconnect Group
+    Given an instance of Logical Interconnect Group
+      And name "lig-bdd-2" for Resource
+    When OneView gets Resource by Name
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
+    Then Resource is not found
+    

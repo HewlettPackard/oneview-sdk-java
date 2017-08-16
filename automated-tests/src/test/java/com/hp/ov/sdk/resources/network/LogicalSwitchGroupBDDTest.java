@@ -22,8 +22,12 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, glue = {
-        "com.hp.ov.sdk.resources" }, features = "classpath:cucumber/network/logicalSwitchGroup.feature", tags = "@getAll")
+@CucumberOptions(
+    format = { "pretty", "html:target/cucumber" },
+    glue = { "com.hp.ov.sdk.resources" },
+    features = "classpath:cucumber/network/logicalSwitchGroup.feature",
+    tags = "@getAll, @get, @create, @update, @remove")
+
 public class LogicalSwitchGroupBDDTest {
 
 }

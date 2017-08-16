@@ -21,12 +21,18 @@ import com.hp.ov.sdk.oneview.Background;
 import com.hp.ov.sdk.oneview.OneView;
 
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.When;
 
 public class InterconnectLinkTopologyBDDStep extends Background {
 
     @Given("^an instance of Interconnect Link Topology$")
     public void an_instance_of_Interconnect_Link_Topology() throws Throwable {
         OneView.setResource(InterconnectLinkTopologyResource.getInstance());
+    }
+    
+    @When("^OneView gets Name of First Interconnect Link Topology$")
+    public void oneview_gets_Name_of_First_Interconnect_Link_Topology() throws Throwable {
+        resourceName = InterconnectLinkTopologyResource.getInstance().getNameFirstInterconnectLinkTopology();
     }
 
 }

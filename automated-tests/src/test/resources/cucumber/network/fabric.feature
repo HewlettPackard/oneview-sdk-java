@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Fabric
+Feature: In order to manage Fabrics
 
   Background: 
     Given an instance of OneView
@@ -22,33 +21,33 @@ Feature:
       And an instance of Fabric
 
   @getAll
-  Scenario: Get all Connection Template
+  Scenario: Get all Fabrics
     When OneView lists all
     Then I get a count
 
   @get
   Scenario: Get a Fabric by Name
     Given name "DefaultFabric" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
   Scenario: Get a Fabric by Id
     Given name "DefaultFabric" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
 
   @get
   Scenario: Get Reserved Vlan Range
     Given name "DefaultFabric" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Reserved Vlan Range for Fabric
-     Then Resource is found
+    Then Resource is found
 
-  @edit
-  Scenario: Edit a Reserved Vlan Range
+  @update
+  Scenario: Update a Reserved Vlan Range
     Given name "DefaultFabric" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Resource update
-     Then I get a success status
+    Then I get a success status

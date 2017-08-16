@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Drive Enclosure
+Feature: In order to manage Drive Enclosures
 
   Background: 
     Given an instance of OneView
@@ -22,47 +21,47 @@ Feature:
       And an instance of Drive Enclosure
 
   @getAll
-  Scenario: Get all Drive Enclosure
+  Scenario: Get all Drive Enclosures
     When OneView lists all
     Then I get a count
 
   @get
   Scenario: Get a Drive Enclosure by Name
     Given name "0000A66101, bay 1" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
   Scenario: Get a Drive Enclosure by Id
     Given name "0000A66101, bay 1" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
 
   @get
   Scenario: Get Port Map of Drive Enclosure
     Given name "0000A66101, bay 1" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
       And OneView gets Port Map of Drive Enclosure
-     Then I get a Resource Name
+    Then I get a Resource Name
 
   @patch
-  Scenario: Update by Patch
+  Scenario: Update a Drive Enclosure by Patch
     Given name "0000A66101, bay 1" for Resource
       And Resource values will be updated as follows:
       | op    | replace     |
       | path  | /powerState |
       | value | On          |
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Drive Enclosure patch
-     Then I get a success status
+    Then I get a success status
 
   @update
-  Scenario: Edit a Drive Enclosure
+  Scenario: Update a Drive Enclosure
     Given Resource values will be updated as follows:
       | name         | "0000A66101, bay 1" |
       | refreshState | RefreshPending      |
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Resource update
-     Then I get a success status
+    Then I get a success status

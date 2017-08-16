@@ -41,6 +41,7 @@ import com.hp.ov.sdk.oneview.UpdateResource;
 import com.hp.ov.sdk.rest.client.networking.InterconnectClient;
 import com.hp.ov.sdk.rest.client.networking.UplinkSetClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureClient;
+import com.hp.ov.sdk.util.ResourceDtoUtils;
 import com.hp.ov.sdk.util.URIUtils;
 
 public class UplinkSetResource extends BasicResource implements CreateResource, RemoveResource, UpdateResource {
@@ -206,7 +207,8 @@ public class UplinkSetResource extends BasicResource implements CreateResource, 
         uplinkSets.setManualLoginRedistributionState(
                 ManualLoginRedistributionState.valueOf(resourceProperties.get("manualLoginRedistributionState")));
 
-        String LIG_URI = oneViewClient.logicalInterconnect().getById(resourceProperties.get("logicalInterconnectUri")).getUri();
+        ResourceDtoUtils resourceDto = new ResourceDtoUtils(oneViewClient);
+        String LIG_URI = resourceDto.getLogicalInterconnectByName(resourceProperties.get("logicalInterconnectName")).getUri();
         uplinkSets.setLogicalInterconnectUri(LIG_URI);
 
         List<String> networkUris = new ArrayList<>();

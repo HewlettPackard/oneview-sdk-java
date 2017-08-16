@@ -23,9 +23,14 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" },
-        glue = {"com.hp.ov.sdk.resources" },
-        features = "classpath:cucumber/network/logicalInterconnectSynergy.feature",
-        tags = "@create, @createMultiple, @getAll, @get, @update, @remove")
-public class LogicalInterconnectBDDTestSynergy {
+    glue = {"com.hp.ov.sdk.resources" },
+    features = "classpath:cucumber/network/logicalInterconnectSynergy.feature",
+    monochrome = true,
+    tags = {"@create, @createOne, @createMultiple, @getAll, @get, @update, @remove",
+            "~@disabled"})
 
+public class LogicalInterconnectBDDTestSynergy {
+    /** NOTE:
+    If your appliance has 1 only enclosure, then add @disabled to scenario @createMultiple
+    and remove it from @createOne in the .feature file */
 }

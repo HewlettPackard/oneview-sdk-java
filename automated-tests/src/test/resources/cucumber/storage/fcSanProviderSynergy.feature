@@ -13,32 +13,44 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Fc San Provider
+Feature: In order to manage Fc San Providers
 
   Background: 
     Given an instance of OneView
-    And OneView credentials located in "src/test/resources/oneView.properties"
-    And an instance of Fc San Provider
-
-  @create
-  Scenario: Creation of a new Fc Provider Synergy
+      And OneView credentials located in "src/test/resources/oneView.properties"
+      And an instance of Fc San Provider
+    
+  @create @onlyOV310
+  Scenario: Creation of a new Fc San Manager Under the Specified Provider
     Given Resource values as follows:
-      | type          | Cisco                                |
-      | provider      | 848c191d-c995-4cd5-a7ba-e627435dd5f2 |
-      | name          | 172.18.20.1                          |
-      | hostname      | Host                                 |
-      | snmpPort      |                                  161 |
-      | snmpUsername  | dcs-SHA                              |
-      | securityLevel | AUTHNOPRIV                           |
-      | authProtocol  | SHA                                  |
-      | password      | hpinvent!                            |
+      | type          | Cisco San Plugin |
+      | name          | 172.18.20.1      |
+      | snmpPort      |              161 |
+      | snmpUserName  | dcs-SHA          |
+      | securityLevel | AUTHNOPRIV       |
+      | authProtocol  | SHA              |
+      | password      | dcsdcsdcs        | 
     When OneView runs Fc San Provider Synergy creation
-    And OneView lists all
+      And OneView lists all
+    Then I get a count    
+
+  @create @onlyOV3 @disabled
+  Scenario: Creation of a new Fc San Manager Under the Specified Provider
+    Given Resource values as follows:
+      | type          | Cisco San Plugin |
+      | name          | 172.18.20.1      |
+      | hostname      | Host             |
+      | snmpPort      |              161 |
+      | snmpUserName  | dcs-SHA          |
+      | securityLevel | AUTHNOPRIV       |
+      | authProtocol  | SHA              |
+      | password      | hpinvent!        | 
+    When OneView runs Fc San Provider Synergy creation
+      And OneView lists all
     Then I get a count
 
   @getAll
-  Scenario: Get all Fc San Provider
+  Scenario: Get all Fc San Providers
     When OneView lists all
     Then I get a count
 
@@ -54,3 +66,13 @@ Feature:
     When OneView gets Resource by Name
     And OneView gets Resource by ID
     Then I get a Resource Name
+
+  @remove
+  Scenario: Remove a Fc San Device Manager
+    Given an instance of Fc San Device Manager
+      And name "172.18.20.1" for Resource
+    When OneView gets Resource by Name
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
+    Then Resource is not found
+    

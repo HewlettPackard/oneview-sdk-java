@@ -60,7 +60,7 @@ public class EnclosureBDDStep extends Background {
         resourceStr = EnclosureResource.getInstance().patch(resourceID);
     }
 
-    @When("^Oneview runs Enclosure refresh$")
+    @When(value="^Oneview runs Enclosure refresh$", timeout=3600000)
     public void oneview_runs_Enclosure_refresh() throws Throwable {
         resourceStr = EnclosureResource.getInstance().refresh(resourceID);
     }

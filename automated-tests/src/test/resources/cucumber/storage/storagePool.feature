@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Storage Pool
+Feature: In order to manage Storage Pools
 
   Background: 
     Given an instance of OneView
@@ -36,105 +35,74 @@ Feature:
       | fabricType              | FabricAttach                |
       | linkStabilityTime       |                          30 |
       | autoLoginRedistribution | true                        |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
-  @create @c700
-  Scenario: Update Storage System
+  @update
+  Scenario: Update a Storage System
     Given an instance of Storage System
       And Resource values as follows:
       | fc-network | fc-network-bdd-storage-pool |
       | port       | 0:1:1                       |
       | domain     | TestDomain                  |
-     When OneView gets Storage Name
+    When OneView gets Storage Name
       And OneView gets Resource by Name
       And OneView gets Resource by ID
       And OneView runs Resource update
       And OneView lists all
-     Then I get a count
+    Then I get a count
 
-  @create @c700
+  @create
   Scenario: Creation of a new Storage Pool
     Given Resource values as follows:
       | name | FST_CPG1 |
       And a Storage System Uri
-     When StoragePool sets Uris
+    When StoragePool sets Uris
       And OneView runs Resource creation
       And OneView lists all
-     Then I get a count
-
-  @create @synergy
-  Scenario: Creation of a new Storage Pool
-    Given Resource values as follows:
-      | name | ScaleTestingDomain_CPG_35 |
-      And a Storage System Uri
-     When StoragePool sets Uris
-      And OneView runs Resource creation
-      And OneView lists all
-     Then I get a count
+    Then I get a count
 
   @getAll
-  Scenario: Get all Storage Pool
+  Scenario: Get all Storage Pools
     When OneView lists all
     Then I get a count
 
-  @get @c700
+  @get
   Scenario: Get a Storage Pool by Name
     Given name "FST_CPG1" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
-  @get @synergy
-  Scenario: Get a Storage Pool by Name
-    Given name "ScaleTestingDomain_CPG_35" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
-
-  @get @c700
+  @get
   Scenario: Get a Storage Pool by Id
     Given name "FST_CPG1" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
 
-  @get @synergy
-  Scenario: Get a Storage Pool by Id
-    Given name "ScaleTestingDomain_CPG_35" for Resource
-     When OneView gets Resource by Name
-      And OneView gets Resource by ID
-     Then I get a Resource Name
-
-  @remove @c700
+  @remove
   Scenario: Remove a Storage Pool
     Given name "FST_CPG1" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
-
-  @remove @synergy
-  Scenario: Remove a Storage Pool
-    Given name "ScaleTestingDomain_CPG_3" for Resource
-     When OneView gets Resource by Name
-      And OneView deletes the Resource
-      And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found
 
   @remove
   Scenario: Remove a Storage System
     Given an instance of Storage System
-     When OneView gets Storage Name
+    When OneView gets Storage Name
       And OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found
 
   @remove
   Scenario: Remove a FC Network
     Given an instance of FC Network
       And name "fc-network-bdd-storage-pool" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found

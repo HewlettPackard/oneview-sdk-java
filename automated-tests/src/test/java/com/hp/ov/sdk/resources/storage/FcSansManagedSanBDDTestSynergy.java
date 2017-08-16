@@ -24,8 +24,11 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
     glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/storage/fcSansManagedSanSynergy.feature", 
-    tags = "@create, @getAll, @get, @update, @remove")
+    features = "classpath:cucumber/storage/fcSansManagedSanSynergy.feature",
+    monochrome = true,
+    tags = { "@create, @onlyOV310, @getAll, @get, @update, @remove",
+            "~@disabled", "~@onlyOV3" })
+
 public class FcSansManagedSanBDDTestSynergy {
 
 }

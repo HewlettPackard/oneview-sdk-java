@@ -22,8 +22,13 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, glue = {
-        "com.hp.ov.sdk.resources" }, features = "classpath:cucumber/activity/alert.feature", tags = "@getAll, @get, @edit, @remove")
+@CucumberOptions(
+    format = { "pretty", "html:target/cucumber" },
+    glue = { "com.hp.ov.sdk.resources" },
+    features = "classpath:cucumber/activity/alert.feature",
+    monochrome = true,
+    tags = "@getAll, @get, @update, @remove")
+
 public class AlertBDDTest {
 
 }

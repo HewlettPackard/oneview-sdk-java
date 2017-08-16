@@ -13,10 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-
-
-Feature: 
-  In order to manage Logical Switch
+Feature: In order to manage Logical Switches
 
   Background: 
     Given an instance of OneView
@@ -53,7 +50,7 @@ Feature:
      Then I get an ID
 
   @getAll
-  Scenario: Get all Logical Switch
+  Scenario: Get all Logical Switches
     When OneView lists all
     Then I get a count
 
@@ -70,8 +67,8 @@ Feature:
       And OneView gets Resource by ID
      Then I get a Resource Name
 
-  @edit
-  Scenario: Edit a Logical Switch
+  @update
+  Scenario: Update a Logical Switch
     Given Resource values as follows:
       | name     | switch-bdd |
       | user     | dcs        |

@@ -22,7 +22,12 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" }, glue = {"com.hp.ov.sdk.resources"}, features = "classpath:cucumber/settings/firmwareDriver.feature", tags="@getAll, @get")
+@CucumberOptions(format = { "pretty", "html:target/cucumber" },
+    glue = {"com.hp.ov.sdk.resources"}, 
+    features = "classpath:cucumber/settings/firmwareDriver.feature",
+    monochrome = true,
+    tags="@getAll, @get")
+
 public class FirmwareDriverBDDTest {
 
 }

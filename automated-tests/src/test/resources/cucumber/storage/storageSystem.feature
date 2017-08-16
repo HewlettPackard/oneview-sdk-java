@@ -13,38 +13,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-
-
-Feature: 
-  In order to manage Storage System
+Feature: In order to manage Storage Systems
 
   Background: 
     Given an instance of OneView
       And OneView credentials located in "src/test/resources/oneView.properties"
       And an instance of Storage System
-
+    
   @create
   Scenario: Creation of a new Storage System
+    Given an instance of Storage System
     When OneView runs Resource creation
-     And OneView lists all
+      And OneView lists all
     Then I get a count
 
   @getAll
-  Scenario: Get all Storage System
+  Scenario: Get all Storage Systems
     When OneView lists all
     Then I get a count
 
   @get
   Scenario: Get a Storage System by Name
+    Given an instance of Storage System
     When OneView gets Storage Name
-     And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @get
   Scenario: Get a Storage System by Id
     When OneView gets Storage Name
-     And OneView gets Resource by Name
-     And OneView gets Resource by ID
+      And OneView gets Resource by Name
+      And OneView gets Resource by ID
     Then I get a Resource Name
 
   @create
@@ -55,37 +54,37 @@ Feature:
       | fabricType              | FabricAttach               |
       | linkStabilityTime       |                         30 |
       | autoLoginRedistribution | true                       |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
-  @create
-  Scenario: Update Storage System
+  @update
+  Scenario: Update a Storage System
     Given Resource values as follows:
       | fc-network | fc-network-bdd-storage-sys |
       | port       | 0:1:1                      |
       | domain     | TestDomain                 |
-     When OneView gets Storage Name
+    When OneView gets Storage Name
       And OneView gets Resource by Name
       And OneView gets Resource by ID
       And OneView runs Resource update
       And OneView lists all
-     Then I get a count
+    Then I get a count
 
   @get
-  Scenario: Get a Storage System Managed Ports
+  Scenario: Get Storage System Managed Ports
     When OneView gets Storage Name
-     And OneView gets Resource by Name
-     And OneView gets Resource by ID
-     And gets Storage System Managed Ports
+      And OneView gets Resource by Name
+      And OneView gets Resource by ID
+      And gets Storage System Managed Ports
     Then I get a count
 
   @get
   Scenario: Get a Storage System Managed Port
     When OneView gets Storage Name
-     And OneView gets Resource by Name
-     And OneView gets Resource by ID
-     And gets Storage System Managed Port
+      And OneView gets Resource by Name
+      And OneView gets Resource by ID
+      And gets Storage System Managed Port
     Then Resource is found
 
   @get
@@ -96,16 +95,16 @@ Feature:
   @remove
   Scenario: Remove a Storage System
     When OneView gets Storage Name
-     And OneView gets Resource by Name
-     And OneView deletes the Resource
-     And OneView gets Resource by ID
+      And OneView gets Resource by Name
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found
 
   @remove
   Scenario: Remove a FC Network
     Given an instance of FC Network
       And name "fc-network-bdd-storage-sys" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found
