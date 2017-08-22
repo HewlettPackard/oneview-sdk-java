@@ -115,8 +115,10 @@ Feature: In order to manage Logical Interconnect Groups
     Then I get a Resource Name
 
   @update
-  Scenario: Update a Logical Interconnect Group
-    Given name "lig-bdd-1" for Resource
+  Scenario: Update a Logical Interconnect Group Adding an Uplink Set
+    Given Resource values as follows:
+      | name   | lig-bdd-1 |
+      | baySet |         1 |
       And Uplink values as follows:
       | name              | type         | networks         | bayPort |
       | EthernetUplinkSet | Ethernet     | network-bdd-1    | Q1:1    |

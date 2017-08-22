@@ -26,7 +26,8 @@ import cucumber.api.junit.Cucumber;
 	glue = {"com.hp.ov.sdk.resources" }, 
 	features = "classpath:cucumber/network/sasLogicalInterconnect.feature",
 	monochrome = true,
-	tags = "@getAll, @get, @update")
+	tags = { "@create, @createMultiple, @createOne, @getAll, @get, @update, @remove",
+	        "~@disabled" } )
 
 public class SasLogicalInterconnectBDDTest {
 
