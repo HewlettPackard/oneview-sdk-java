@@ -234,9 +234,9 @@ Feature: In order to manage Logical Interconnects
   @update
   Scenario: Update a Logical Interconnect Settings
     Given Resource values as follows:
-      | name               | Encl1-lig-bdd-logical-interconnect  |
-      | type               | InterconnectSettingsV201            |
-      | macRefreshInterval |                                   6 |
+      | name               | Encl1-lig-bdd-logical-interconnect |
+      | type               | InterconnectSettingsV201           |
+      | macRefreshInterval |                                  6 |
     When OneView gets Resource by Name
       And OneView runs Logical Interconnect Settings update
     Then I get a success status
