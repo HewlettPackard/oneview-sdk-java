@@ -25,12 +25,14 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(
     format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = {"classpath:cucumber/facilities/dataCenter.feature",
-            "classpath:cucumber/facilities/powerDeliveryDevice.feature",
+    glue = { "com.hp.ov.sdk.resources" },
+    features = { "classpath:cucumber/facilities/dataCenter.feature",
+            "classpath:cucumber/facilities/powerDeliveryDeviceC7000.feature",
             "classpath:cucumber/facilities/rack.feature",
-            "classpath:cucumber/facilities/unmanagedDevice.feature"},
-    tags = "@create, @getAll, @get, @update, @remove, @removeByFilter")
+            "classpath:cucumber/facilities/unmanagedDevice.feature" },
+    monochrome = true,
+    tags = { "@create, @createByDiscover, @getAll, @get, @update, @updatePowerState, @updateRefresh, @updateUid, @remove, @removeByFilter, @removeSynchronously",
+            "~@disabled" })
 
 public class AllFacilitiesTestsC7000 {
 

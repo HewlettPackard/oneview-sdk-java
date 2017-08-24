@@ -25,7 +25,10 @@ import cucumber.api.junit.Cucumber;
 @CucumberOptions(format = { "pretty", "html:target/cucumber" },
         glue = {"com.hp.ov.sdk.resources" },
         features = "classpath:cucumber/facilities/powerDeliveryDeviceC7000.feature",
-        tags = "@create, @createByDiscover, @getAll, @get, @update, @remove, @removeByFilter")
+        monochrome = true,
+        tags = { "@create, @createByDiscover, @getAll, @get, @update, @updatePowerState, @updateRefresh, @updateUid, @remove, @removeByFilter, @removeSynchronously",
+                "~@disabled" })
+
 public class PowerDeliveryDeviceBDDTestC7000 {
 
 }

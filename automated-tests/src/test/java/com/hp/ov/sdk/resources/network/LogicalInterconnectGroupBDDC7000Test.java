@@ -23,9 +23,10 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-	glue = {"com.hp.ov.sdk.resources" }, 
+	glue = { "com.hp.ov.sdk.resources" }, 
 	features = "classpath:cucumber/network/logicalInterconnectGroupC7000.feature",
-	tags =  "@getAll, @get, @create, @edit,@remove")
+	monochrome = true,
+	tags =  "@create, @getAll, @get, @update, @remove")
 
 public class LogicalInterconnectGroupBDDC7000Test {
 

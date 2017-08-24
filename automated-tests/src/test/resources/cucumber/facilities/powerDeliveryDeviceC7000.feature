@@ -13,14 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-
-Feature: 
-  In order to manage Power Delivery Device
+Feature: In order to manage Power Delivery Devices
 
   Background: 
     Given an instance of OneView
-    And OneView credentials located in "src/test/resources/oneView.properties"
-    And an instance of Power Delivery Device
+      And OneView credentials located in "src/test/resources/oneView.properties"
+      And an instance of Power Delivery Device
 
   @create
   Scenario: Creation of a new Power Delivery Device
@@ -30,10 +28,11 @@ Feature:
       | ratedCapacity |                        40 |
       | lineVoltage   |                        40 |
     When OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
-  @createByDiscover
+  #Disabled because there's no available resource to discover in OV3.10
+  @createByDiscover @disabled
   Scenario: Creation of a new Power Delivery Device by Discover
     Given Resource values as follows:
       | hostname | 172.18.8.11 |
@@ -44,7 +43,7 @@ Feature:
     Then I get a success status
 
   @getAll
-  Scenario: Get all Power Delivery Device
+  Scenario: Get all Power Delivery Devices
     When OneView lists all
     Then I get a count
 
@@ -58,86 +57,111 @@ Feature:
   Scenario: Get a Power Delivery Device by Id
     Given name "Power Delivery Device BDD" for Resource
     When OneView gets Resource by Name
-    And OneView gets Resource by ID
+      And OneView gets Resource by ID
     Then I get a Resource Name
 
-  @get
+  #Disabled because of @createByDiscover
+  @get @disabled
   Scenario: Get a Power State of Power Delivery Device
     Given name "172.18.8.11, PDU 1, L6,Outlet1" for Resource
     When OneView gets Resource by Name
-    And OneView gets a Power State of Power Delivery Device
+      And OneView gets a Power State of Power Delivery Device
     Then Resource is found
 
-  @get
+  #Disabled because of @createByDiscover
+  @get @disabled
   Scenario: Get an Uid State of Power Delivery Device
     Given name "172.18.8.11, PDU 1, L6,Outlet1" for Resource
     When OneView gets Resource by Name
-    And OneView gets an Uid State of Power Delivery Device
+      And OneView gets an Uid State of Power Delivery Device
     Then Resource is found
 
   @get
   Scenario: Get Power Delivery Device Utilization
-    Given name "172.18.8.11, PDU 1, L6,Outlet1" for Resource
+    Given name "Power Delivery Device BDD" for Resource
     When OneView gets Resource by Name
-    And OneView gets Power Delivery Device Utilization
+      And OneView gets Power Delivery Device Utilization
     Then Resource is found
 
   @updatePowerState
   Scenario: Update Power State of a Power Delivery Device
-    Given name "172.18.8.11, PDU 1, L6,Outlet1" for Resource
-    And Resource values will be updated as follows:
+    Given name "Power Delivery Device BDD" for Resource
+      And Resource values will be updated as follows:
       | powerState | On |
     When OneView gets Resource by Name
-    And OneView runs update Power State
+      And OneView runs update Power State
     Then I get a success status
 
-  @updateRefresh
+  #Disabled because of @createByDiscover
+  @updateRefresh @disabled
   Scenario: Update Refresh State of a Power Delivery Device
     Given name "172.18.8.11, PDU 1, L6,Outlet1" for Resource
-    And Resource values will be updated as follows:
+      And Resource values will be updated as follows:
       | refreshState | RefreshPending |
     When OneView gets Resource by Name
-    And OneView runs update Refresh State
+      And OneView runs update Refresh State
     Then I get a success status
 
   @updateUid
   Scenario: Update Uid State of a Power Delivery Device
-    Given name "172.18.8.11, PDU 1, L6,Outlet1" for Resource
-    And Resource values will be updated as follows:
+    Given name "Power Delivery Device BDD" for Resource
+      And Resource values will be updated as follows:
       | uidState | On |
     When OneView gets Resource by Name
-    And OneView runs update Uid State
+      And OneView runs update Uid State
     Then I get a success status
 
   @update
   Scenario: Update a Power Delivery Device
     Given name "Power Delivery Device BDD" for Resource
-    And Resource values will be updated as follows:
+      And Resource values will be updated as follows:
       | name  | Power Delivery Device BDD Update |
       | model | Model BDD Update                 |
     When OneView gets Resource by Name
-    And OneView runs Resource update
-    And OneView gets Resource properties
+      And OneView runs Resource update
+      And OneView gets Resource properties
     Then I get previous values in Resource
 
   @remove
   Scenario: Remove a Power Delivery Device
     Given name "Power Delivery Device BDD Update" for Resource
     When OneView gets Resource by Name
-    And OneView deletes the Resource
-    And OneView gets Resource by ID
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found
+
+  @create
+  Scenario: Creation of a new Power Delivery Device
+    Given Resource values as follows:
+      | name          | Power Delivery Device BDD 2 |
+      | model         | Model BDD                   |
+      | ratedCapacity |                          40 |
+      | lineVoltage   |                          40 |
+    When OneView runs Resource creation
+      And OneView gets Resource by Name
+    Then I get an ID
 
   @removeByFilter
   Scenario: Remove a Power Delivery Device by Filter
     Given Resource values as follows:
-      | name | Power Delivery Device BDD |
+      | name | Power Delivery Device BDD 2 |
     When OneView deletes Power Delivery Device by Filter
     Then I get a success status
 
+  @create
+  Scenario: Creation of a new Power Delivery Device
+    Given Resource values as follows:
+      | name          | Power Delivery Device BDD 3 |
+      | model         | Model BDD                   |
+      | ratedCapacity |                          40 |
+      | lineVoltage   |                          40 |
+    When OneView runs Resource creation
+      And OneView gets Resource by Name
+    Then I get an ID
+
   @removeSynchronously
   Scenario: Remove a Power Delivery Device Synchronously
-    Given name "Power Delivery Device BDD" for Resource
+    Given name "Power Delivery Device BDD 3" for Resource
     When OneView gets Resource by Name
-    And OneView deletes Power Delivery Device Synchronously
+      And OneView deletes Power Delivery Device Synchronously
     Then I get a success status

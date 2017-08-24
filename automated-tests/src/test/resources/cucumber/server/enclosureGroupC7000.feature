@@ -13,100 +13,97 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-
-
-Feature: 
-  In order to manage Enclosure Groups
+Feature: In order to manage Enclosure Groups
 
   Background: 
     Given an instance of OneView
       And OneView credentials located in "src/test/resources/oneView.properties"
       And an instance of Enclosure Groups
 
-  @get
-  Scenario: Get all Enclosure Groups
-    When OneView lists all
-    Then I get a count
-
   @create
   Scenario: Creation of a new Logical Interconnect Group
     Given an instance of Logical Interconnect Group
-    Given Resource values as follows:
-      | name  | lig-bdd-2 |
-      | state | ACTIVE    |
+      And Resource values as follows:
+      | name  | lig-bdd-enclosure-group |
+      | state | ACTIVE                  |
       And interconnection values as follows:
       | entries | type                                 |
       |       1 | HP VC FlexFabric 10Gb/24-Port Module |
       |       2 | HP VC FlexFabric 10Gb/24-Port Module |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @create
   Scenario: Creation of a new Enclosure Group
     Given Resource values as follows:
-      | name         | enclosure-group-bdd-2 |
-      | lig          | lig-bdd-2             |
-      | stackingMode | Enclosure             |
-     When Enclosure Group sets Uris
+      | name         | enclosure-group-bdd     |
+      | lig          | lig-bdd-enclosure-group |
+      | stackingMode | Enclosure               |
+    When Enclosure Group sets Uris
       And OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
+
+  @getAll
+  Scenario: Get all Enclosure Groups
+    When OneView lists all
+    Then I get a count
 
   @get
-  Scenario: Get an Enclosure Groups by Name
-    Given name "enclosure-group-bdd-2" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+  Scenario: Get an Enclosure Group by Name
+    Given name "enclosure-group-bdd" for Resource
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
-  Scenario: Get an Enclosure Groups by Id
-    Given name "enclosure-group-bdd-2" for Resource
-     When OneView gets Resource by Name
+  Scenario: Get an Enclosure Group by Id
+    Given name "enclosure-group-bdd" for Resource
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
 
   @get
   Scenario: Get Configuration Script of Enclosure Group
-    Given name "enclosure-group-bdd-2" for Resource
-     When OneView gets Resource by Name
+    Given name "enclosure-group-bdd" for Resource
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
       And gets Configuration Script of Enclosure Group
-     Then Resource is found
+    Then Resource is found
 
   @update
   Scenario: Update Configuration Script of Enclosure Group
-    Given name "enclosure-group-bdd-2" for Resource
+    Given name "enclosure-group-bdd" for Resource
       And a Configuration Script "name=resource" for Enclosure Group
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
       And Enclosure Group updates its Configuration Script
       And gets Configuration Script of Enclosure Group
-     Then Resource is found
+    Then Resource is found
 
   @update
-  Scenario: Edit an Enclosure Groups
-    Given name "enclosure-group-bdd-2" for Resource
+  Scenario: Update an Enclosure Group
+    Given name "enclosure-group-bdd" for Resource
       And Resource values will be updated as follows:
-      | name | enclosure-group-bdd-2_updated |
-     When OneView gets Resource by Name
+      | name | enclosure-group-bdd_updated |
+    When OneView gets Resource by Name
       And OneView runs Resource update
       And OneView gets Resource properties
-     Then I get previous values in Resource
+    Then I get previous values in Resource
 
   @remove
-  Scenario: Remove an Enclosure Groups
-    Given name "enclosure-group-bdd-2_updated" for Resource
-     When OneView gets Resource by Name
+  Scenario: Remove an Enclosure Group
+    Given name "enclosure-group-bdd_updated" for Resource
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found
 
   @remove
   Scenario: Remove a Logical Interconnect Group
     Given an instance of Logical Interconnect Group
-      And name "lig-bdd-2" for Resource
-     When OneView gets Resource by Name
+      And name "lig-bdd-enclosure-group" for Resource
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found

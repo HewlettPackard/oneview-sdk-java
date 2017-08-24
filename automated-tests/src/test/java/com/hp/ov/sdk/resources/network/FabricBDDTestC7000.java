@@ -22,12 +22,13 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" },
-        glue = { "com.hp.ov.sdk.resources" },
-        features = "classpath:cucumber/network/uplinkSetC7000.feature",
-        monochrome = true,
-        tags = "@create, @getAll, @get, @update, @remove")
+@CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
+    glue = { "com.hp.ov.sdk.resources" }, 
+    features = "classpath:cucumber/network/fabric.feature",
+    monochrome = true,
+    tags = { "@getAll, @get, @update",
+            "~@synergy" })
 
-public class UplinkSetBDDTestC7000 {
+public class FabricBDDTestC7000 {
 
 }

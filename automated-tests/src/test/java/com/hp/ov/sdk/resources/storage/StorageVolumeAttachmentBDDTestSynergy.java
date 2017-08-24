@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.resources.network;
+package com.hp.ov.sdk.resources.storage;
 
 import org.junit.runner.RunWith;
 
@@ -24,10 +24,11 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
     glue = { "com.hp.ov.sdk.resources" },
-    features = "classpath:cucumber/network/logicalDownlink.feature",
+    features = "classpath:cucumber/storage/storageVolumeAttachmentSynergy.feature",
     monochrome = true,
-    tags = "@create, @getAll, @get, @remove")
+    tags = { "@create, @createOne, @createMultiple, @getAll, @get, @update, @repair, @remove",
+            "~@disabled" })
 
-public class LogicalDownlinkBDDTest {
+public class StorageVolumeAttachmentBDDTestSynergy {
 
 }

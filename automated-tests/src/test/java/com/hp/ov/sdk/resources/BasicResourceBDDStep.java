@@ -73,7 +73,7 @@ public class BasicResourceBDDStep extends Background {
         OneView.getResource().setResourceProperties(map);
     }
 
-    @When("^OneView runs Resource creation$")
+    @When(value="^OneView runs Resource creation$", timeout=5400000)
     public void oneview_runs_Resource_creation() {
         ((CreateResource) OneView.getResource()).create();
     }
@@ -87,7 +87,7 @@ public class BasicResourceBDDStep extends Background {
     public void wait_for_in_seconds(Long seconds) throws InterruptedException {
         TimeUnit.SECONDS.sleep(seconds);
     }
-    
+
     @Then("^I get an ID$")
     public void i_get_an_ID() {
         assertTrue(!resourceID.isEmpty());

@@ -23,9 +23,11 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/storage/fcSansManagedSanC7000.feature", 
+    glue = { "com.hp.ov.sdk.resources" },
+    features = "classpath:cucumber/storage/fcSansManagedSanC7000.feature",
+    monochrome = true,
     tags = "@create, @getAll, @get, @update, @remove")
+
 public class FcSansManagedSanBDDTestC7000 {
 
 }

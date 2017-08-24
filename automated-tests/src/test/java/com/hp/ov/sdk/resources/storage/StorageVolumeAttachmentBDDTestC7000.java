@@ -24,11 +24,11 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
     glue = { "com.hp.ov.sdk.resources" },
-    features = "classpath:cucumber/storage/storageVolumeAttachment.feature",
+    features = "classpath:cucumber/storage/storageVolumeAttachmentC7000.feature",
     monochrome = true,
-    tags = { "@create, @createOne, @createMultiple, @getAll, @get, @update, @repair, @remove",
+    tags = { "@create, @getAll, @get, @update, @repair, @remove",
             "~@disabled" })
 
-public class StorageVolumeAttachmentBDDTest {
+public class StorageVolumeAttachmentBDDTestC7000 {
 
 }

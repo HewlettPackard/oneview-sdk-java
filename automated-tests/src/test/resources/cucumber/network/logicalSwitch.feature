@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
+######## C7000 only ########
 Feature: In order to manage Logical Switches
 
   Background: 
@@ -29,9 +30,9 @@ Feature: In order to manage Logical Switches
       | state         | active           |
       | locationEntry |                1 |
       | locationType  | StackingMemberId |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @create
   Scenario: Creation of a new Logical Switch
@@ -42,12 +43,12 @@ Feature: In order to manage Logical Switches
       | snmpPort        |           161 |
       | snmpVersion     | SNMPv1        |
       | managementLevel | BASIC_MANAGED |
-      | managementHost  |   172.18.16.1 |
+      | managementHost  | 172.18.16.1   |
       | user            | dcs           |
       | password        | dcs           |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @getAll
   Scenario: Get all Logical Switches
@@ -57,46 +58,47 @@ Feature: In order to manage Logical Switches
   @get
   Scenario: Get a Logical Switch by Name
     Given name "switch-bdd" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
   Scenario: Get a Logical Switch by Id
     Given name "switch-bdd" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
 
-  @update
+  #Disabled because of issue #317 in SDK
+  @update @disabled
   Scenario: Update a Logical Switch
     Given Resource values as follows:
       | name     | switch-bdd |
       | user     | dcs        |
       | password | dcs        |
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Resource update
-     Then I get a success status
+    Then I get a success status
 
   @refresh
   Scenario: Refresh a Logical Switch
     Given name "switch-bdd" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Logical Switch refresh
-     Then I get a success status
+    Then I get a success status
 
   @remove
   Scenario: Remove a Logical Switch
     Given name "switch-bdd" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found
 
   @remove
   Scenario: Remove a Logical Switch Group
     Given an instance of Logical Switch Group
       And name "lsg-bdd" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found

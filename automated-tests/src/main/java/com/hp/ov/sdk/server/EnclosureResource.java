@@ -109,7 +109,7 @@ public class EnclosureResource extends BasicResource implements CreateResource, 
 
     @Override
     public void create() {
-        TaskResource task = client.add(builder());
+        TaskResource task = client.add(builder(), TaskTimeout.of(5400000));
         resourceName = task.getAssociatedResource().getResourceName();
     }
 
@@ -120,7 +120,7 @@ public class EnclosureResource extends BasicResource implements CreateResource, 
 
     @Override
     public String remove(String id) {
-        return taskToString(client.remove(id));
+        return taskToString(client.remove(id, TaskTimeout.of(5400000)));
     }
 
     private Enclosure getEnclosure() {

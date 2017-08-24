@@ -24,9 +24,11 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         format = { "pretty", "html:target/cucumber" }, 
-        glue = {"com.hp.ov.sdk.resources" }, 
-        features = "classpath:cucumber/server/logicalEnclosureC7000.feature", 
-        tags = "@getAll, @get, @update, @remove")
+        glue = { "com.hp.ov.sdk.resources" },
+        features = "classpath:cucumber/server/logicalEnclosureC7000.feature",
+        monochrome = true,
+        tags = "@create, @getAll, @get, @update, @patch, @remove")
+
 public class LogicalEnclosureBDDTestC7000 {
 
 }

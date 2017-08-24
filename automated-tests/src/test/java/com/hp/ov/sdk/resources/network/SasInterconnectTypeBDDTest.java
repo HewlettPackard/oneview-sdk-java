@@ -28,6 +28,9 @@ import cucumber.api.junit.Cucumber;
 	monochrome = true,
 	tags = "@getAll, @get")
 
+/*
+ * Synergy only
+ */
 public class SasInterconnectTypeBDDTest {
 
 }

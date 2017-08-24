@@ -43,7 +43,7 @@ Feature: In order to manage Storage Volume Attachments
     When OneView runs Resource creation
       And OneView gets Resource by Name
     Then I get an ID
-    
+
   @create
   Scenario: Creation of a new Storage System
     Given an instance of Storage System
@@ -78,7 +78,7 @@ Feature: In order to manage Storage Volume Attachments
       And OneView runs Resource update
       And OneView lists all
     Then I get a count
-    
+
   @create
   Scenario: Creation of a new Storage Pool
     Given an instance of Storage Pool
@@ -151,7 +151,7 @@ Feature: In order to manage Storage Volume Attachments
       And OneView runs Resource update
       And OneView gets Resource by ID
     Then I get an ID
-        
+
   @create
   Scenario: Creation of a new Enclosure Group
     Given an instance of Enclosure Groups
@@ -296,7 +296,7 @@ Feature: In order to manage Storage Volume Attachments
     And OneView deletes the Resource
     And OneView gets Resource by ID
     Then Resource is not found
-    
+
   @remove
   Scenario: Remove an Enclosure Group
     Given an instance of Enclosure Groups
@@ -314,7 +314,7 @@ Feature: In order to manage Storage Volume Attachments
       And OneView deletes the Resource
       And OneView gets Resource by ID
     Then Resource is not found
-    
+
   @remove
   Scenario: Remove a Storage Volume
     Given an instance of Storage volume
@@ -359,4 +359,3 @@ Feature: In order to manage Storage Volume Attachments
       And OneView deletes the Resource
       And OneView gets Resource by ID
     Then Resource is not found
-    

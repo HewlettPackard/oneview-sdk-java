@@ -80,9 +80,26 @@ Feature: In order to manage Data Centers
       And OneView gets Resource by ID
     Then Resource is not found
 
+  @create
+  Scenario: Creation of a new Data Center
+    Given Resource values as follows:
+      | name                    | Data Center BDD 2 |
+      | coolingCapacity         |                 5 |
+      | costPerKilowattHour     |               0.5 |
+      | currency                | USD               |
+      | deratingType            | NaJp              |
+      | deratingPercentage      |              20.0 |
+      | defaultPowerLineVoltage |               220 |
+      | coolingMultiplier       |               1.5 |
+      | width                   |              4000 |
+      | depth                   |              5000 |
+    When OneView runs Resource creation
+      And OneView gets Resource by Name
+    Then I get an ID
+    
   @removeByFilter
   Scenario: Remove a Data Center by Filter
     Given Resource values as follows:
-      | name | Data Center BDD |
+      | name | Data Center BDD 2 |
     When OneView deletes Data Center by Filter
     Then I get a success status

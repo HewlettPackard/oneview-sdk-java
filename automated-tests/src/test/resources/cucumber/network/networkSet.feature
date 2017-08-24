@@ -20,21 +20,16 @@ Feature: In order to manage Network Sets
       And OneView credentials located in "src/test/resources/oneView.properties"
       And an instance of Network Set
 
-  @getAll
-  Scenario: Get all Network Sets
-    When OneView lists all
-    Then I get a count
-
   @create
   Scenario: Creation of a new Ethernet Network
     Given an instance of Ethernet Network
       And Resource values as follows:
-      | name         | network-bdd-1 |
-      | ethernetType | Tagged        |
-      | vlanId       |           301 |
-      | purpose      | General       |
-      | private      | false         |
-      | smartLink    | true          |
+      | name         | network1-bdd-network-set |
+      | ethernetType | Tagged                   |
+      | vlanId       |                      301 |
+      | purpose      | General                  |
+      | private      | false                    |
+      | smartLink    | true                     |
       And bandwidth values as follows:
       | maxBandwidth     | 8000 |
       | typicalBandwidth | 3000 |
@@ -46,12 +41,12 @@ Feature: In order to manage Network Sets
   Scenario: Creation of a new Ethernet Network
     Given an instance of Ethernet Network
       And Resource values as follows:
-      | name         | network-bdd-2 |
-      | ethernetType | Tagged        |
-      | vlanId       |           302 |
-      | purpose      | General       |
-      | private      | false         |
-      | smartLink    | true          |
+      | name         | network2-bdd-network-set |
+      | ethernetType | Tagged                   |
+      | vlanId       |                      302 |
+      | purpose      | General                  |
+      | private      | false                    |
+      | smartLink    | true                     |
       And bandwidth values as follows:
       | maxBandwidth     | 8000 |
       | typicalBandwidth | 3000 |
@@ -64,11 +59,16 @@ Feature: In order to manage Network Sets
     Given Resource values as follows:
       | name | network-set-bdd |
       And Ethernet Network names as follows:
-      | network-bdd-1 |
-      | network-bdd-2 |
+      | network1-bdd-network-set |
+      | network2-bdd-network-set |
     When OneView runs Resource creation
       And OneView gets Resource by Name
     Then I get an ID
+
+  @getAll
+  Scenario: Get all Network Sets
+    When OneView lists all
+    Then I get a count
 
   @get
   Scenario: Get a Network Set by Name
@@ -104,7 +104,7 @@ Feature: In order to manage Network Sets
   @remove
   Scenario: Remove an Ethernet Network
     Given an instance of Ethernet Network
-      And name "network-bdd-1" for Resource
+      And name "network1-bdd-network-set" for Resource
     When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
@@ -113,7 +113,7 @@ Feature: In order to manage Network Sets
   @remove
   Scenario: Remove an Ethernet Network
     Given an instance of Ethernet Network
-      And name "network-bdd-2" for Resource
+      And name "network2-bdd-network-set" for Resource
     When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID

@@ -23,9 +23,12 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/server/serverHardwareC7000.feature", 
-    tags = "@create, @getAll, @get, @onlyOV3, @update, @onlyUnmanagedDevices, @patch, @remove")
+    glue = { "com.hp.ov.sdk.resources" },
+    features = "classpath:cucumber/server/serverHardwareC7000.feature",
+    monochrome = true,
+    tags = { "@create, @getAll, @get, @onlyOV3, @update, @onlyUnmanagedDevices, @refresh, @patch, @remove",
+            "~@disabled"})
+
 public class ServerHardwareBDDTestC7000 {
 
 }

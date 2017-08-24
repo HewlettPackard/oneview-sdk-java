@@ -25,7 +25,13 @@ import cucumber.api.junit.Cucumber;
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
     glue = {"com.hp.ov.sdk.resources" }, 
     features = "classpath:cucumber/server/serverHardwareTypeC7000.feature",
-    tags = "@getAll, @get, @edit")
+    monochrome = true,
+    tags = "@getAll, @get, @update, @remove")
+
+/**
+ * To execute only this test, you need to manually create Server Hardware Types
+ * (Add an enclosure before and then remove it)
+ */
 public class ServerHardwareTypeBDDTestC7000 {
 
 }

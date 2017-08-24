@@ -28,6 +28,9 @@ import cucumber.api.junit.Cucumber;
     monochrome = true,
     tags = "@getAll, @get, @patch, @update")
 
+/*
+ * Synergy only
+ */
 public class DriveEnclosureBDDTest {
 
 }

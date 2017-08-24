@@ -13,18 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Fc Sans Managed San
+Feature: In order to manage FC SANs Managed SANs
 
   Background: 
     Given an instance of OneView
-    And OneView credentials located in "src/test/resources/oneView.properties"
-    And an instance of Fc Sans Managed San
+      And OneView credentials located in "src/test/resources/oneView.properties"
+      And an instance of Fc Sans Managed San
 
   @create
-  Scenario: Creation of a new Fc San Device Manager
+  Scenario: Creation of a new FC SAN Device Manager
     Given an instance of Fc San Provider
-    And Resource values as follows:
+      And Resource values as follows:
       | name          | 172.18.15.1             |
       | hostname      | Host                    |
       | port          | Port                    |
@@ -34,116 +33,116 @@ Feature:
       | user          | dcs                     |
       | password      | dcs                     |
     When OneView runs Resource creation
-    And OneView lists all
+      And OneView lists all
     Then I get a count
 
   @create
-  Scenario: Creation of a new Fc Sans Managed San Endpoints Csv
+  Scenario: Creation of a new FC SANs Managed SAN Endpoints Csv
     Given Resource values as follows:
       | name | SAN1_0 |
     When OneView gets Resource by Name
-    And OneView runs Fc Sans Managed San Endpoints Csv creation
+      And OneView runs Fc Sans Managed San Endpoints Csv creation
     Then Resource is found
 
   @create
-  Scenario: Creation of a new Fc Sans Managed San Issues Report
+  Scenario: Creation of a new FC SANs Managed SAN Issues Report
     Given Resource values as follows:
       | name | SAN1_0 |
     When OneView gets Resource by Name
-    And OneView runs Fc Sans Managed San Issues Report creation
+      And OneView runs Fc Sans Managed San Issues Report creation
     Then Resource is found
 
   @getAll
-  Scenario: Get all Fc Sans Managed San
+  Scenario: Get all FC SANs Managed SAN
     When OneView lists all
     Then I get a count
 
   @get
-  Scenario: Get a Fc Sans Managed San by Name
+  Scenario: Get a FC SANs Managed SAN by Name
     Given name "SAN1_0" for Resource
     When OneView gets Resource by Name
     Then I get an ID
 
   @get
-  Scenario: Get a Fc Sans Managed San by Id
+  Scenario: Get a FC SANs Managed SAN by Id
     Given name "SAN1_0" for Resource
     When OneView gets Resource by Name
-    And OneView gets Resource by ID
+      And OneView gets Resource by ID
     Then I get a Resource Name
 
   @get
-  Scenario: Get a Fc Sans Managed San Endpoints
+  Scenario: Get a FC SANs Managed SAN Endpoints
     Given name "SAN1_0" for Resource
     When OneView gets Fc Sans Managed San Endpoints
     Then Resource is found
 
   @get
-  Scenario: Get a Fc Sans Managed San Wwn Associations
+  Scenario: Get a FC SANs Managed SAN Wwn Associations
     Given name "SAN1_0" for Resource
     When OneView gets Fc Sans Managed San Wwn Associations
     Then I get a count
 
-  @update
+  @create
   Scenario: Creation of a new FC Network
     Given an instance of FC Network
-    And Resource values as follows:
-      | name                    | fc-san1-bdd  |
-      | fabricType              | FabricAttach |
-      | linkStabilityTime       |           30 |
-      | autoLoginRedistribution | true         |
-      | fc_sans_managed         | "SAN1_0"     |
-    And OneView sets FC Sans Managed San uri to FC Network
+      And Resource values as follows:
+      | name                    | fcnet1-bdd-fcsansmanaged |
+      | fabricType              | FabricAttach             |
+      | linkStabilityTime       |                       30 |
+      | autoLoginRedistribution | true                     |
+      | fc_sans_managed         | "SAN1_0"                 |
+      And OneView sets FC Sans Managed San uri to FC Network
     When OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
+    Then I get an ID
+
+  @create
+  Scenario: Creation of a new FC Network
+    Given an instance of FC Network
+      And Resource values as follows:
+      | name                    | fcnet2-bdd-fcsansmanaged |
+      | fabricType              | FabricAttach             |
+      | linkStabilityTime       |                       30 |
+      | autoLoginRedistribution | true                     |
+      | fc_sans_managed         | "SAN1_1"                 |
+      And OneView sets FC Sans Managed San uri to FC Network
+    When OneView runs Resource creation
+      And OneView gets Resource by Name
     Then I get an ID
 
   @update
-  Scenario: Creation of a new FC Network
-    Given an instance of FC Network
-    And Resource values as follows:
-      | name                    | fc-san2-bdd  |
-      | fabricType              | FabricAttach |
-      | linkStabilityTime       |           30 |
-      | autoLoginRedistribution | true         |
-      | fc_sans_managed         | "SAN1_1"     |
-    And OneView sets FC Sans Managed San uri to FC Network
-    When OneView runs Resource creation
-    And OneView gets Resource by Name
-    Then I get an ID
-
-  @update
-  Scenario: Edit a Fc Sans Managed San
+  Scenario: Update a FC SANs Managed SAN
     Given Resource values as follows:
       | name           | SAN1_0                    |
       | enableAliasing | true                      |
       | zoningPolicy   | SingleInitiatorAllTargets |
     When OneView gets Resource by Name
-    And OneView runs Resource update
+      And OneView runs Resource update
     Then I get a success status
 
   @remove
   Scenario: Remove a FC Network
     Given an instance of FC Network
-    And name "fc-san1-bdd" for Resource
+      And name "fcnet1-bdd-fcsansmanaged" for Resource
     When OneView gets Resource by Name
-    And OneView deletes the Resource
-    And OneView gets Resource by ID
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found
 
   @remove
   Scenario: Remove a FC Network
     Given an instance of FC Network
-    And name "fc-san2-bdd" for Resource
+      And name "fcnet2-bdd-fcsansmanaged" for Resource
     When OneView gets Resource by Name
-    And OneView deletes the Resource
-    And OneView gets Resource by ID
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found
 
   @remove
-  Scenario: Remove a Fc San Device Manager
+  Scenario: Remove a FC SAN Device Manager
     Given an instance of Fc San Device Manager
-    And name "172.18.15.1" for Resource
+      And name "172.18.15.1" for Resource
     When OneView gets Resource by Name
-    And OneView deletes the Resource
-    And OneView gets Resource by ID
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found

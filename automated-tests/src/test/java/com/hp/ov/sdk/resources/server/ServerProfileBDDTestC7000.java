@@ -23,9 +23,11 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" },
-        glue = {"com.hp.ov.sdk.resources" },
+        glue = { "com.hp.ov.sdk.resources" },
         features = "classpath:cucumber/server/serverProfileC7000.feature",
-        tags = "@create, @getAll, @get, @edit, @remove")
+        monochrome = true,
+        tags = "@create, @getAll, @get, @update, @remove")
+
 public class ServerProfileBDDTestC7000 {
 
 }

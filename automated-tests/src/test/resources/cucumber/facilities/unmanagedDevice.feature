@@ -26,7 +26,7 @@ Feature: In order to manage Unmanaged Devices
       | name        | Unmanaged Device BDD |
       | model       | Procurve 4200VL      |
       | deviceType  | Server               |
-      | ipv4Address |          192.168.0.2 |
+      | ipv4Address | 192.168.0.2          |
       | mac         | 68:a5:99:az:71:wc    |
     When OneView runs Resource creation
       And OneView gets Resource by Name
@@ -75,9 +75,21 @@ Feature: In order to manage Unmanaged Devices
       And OneView gets Resource by ID
     Then Resource is not found
 
+  @create
+  Scenario: Creation of a new Unmanaged Device
+    Given Resource values as follows:
+      | name        | Unmanaged Device BDD 2 |
+      | model       | Procurve 4200VL        |
+      | deviceType  | Server                 |
+      | ipv4Address | 192.168.0.2            |
+      | mac         | 68:a5:99:az:71:wc      |
+    When OneView runs Resource creation
+      And OneView gets Resource by Name
+    Then I get an ID
+
   @removeByFilter
   Scenario: Remove an Unmanaged Device by Filter
     Given Resource values as follows:
-      | name | Unmanaged Device BDD |
+      | name | Unmanaged Device BDD 2 |
     When OneView deletes Unmanaged Device by Filter
     Then I get a success status
