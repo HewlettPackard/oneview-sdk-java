@@ -25,29 +25,28 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(
     format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = {"classpath:cucumber/network/connectionTemplate.feature",
+    glue = { "com.hp.ov.sdk.resources" },
+    features = { "classpath:cucumber/network/connectionTemplate.feature",
             "classpath:cucumber/network/ethernetNetwork.feature",
             "classpath:cucumber/network/fabric.feature",
             "classpath:cucumber/network/fcNetwork.feature",
             "classpath:cucumber/network/fcoeNetwork.feature",
-            "classpath:cucumber/network/interconnect.feature",
-            "classpath:cucumber/network/interconnectType.feature",
+            "classpath:cucumber/network/interconnectC7000.feature",
+            "classpath:cucumber/network/interconnectTypeC7000.feature",
             "classpath:cucumber/network/internalLinkSet.feature",
             "classpath:cucumber/network/logicalDownlink.feature",
-            "classpath:cucumber/network/logicalInterconnect.feature",
+            "classpath:cucumber/network/logicalInterconnectC7000.feature",
             "classpath:cucumber/network/logicalInterconnectGroupC7000.feature",
-            "classpath:cucumber/network/logicalSwitch.feature",
-            "classpath:cucumber/network/logicalSwitchGroup.feature",
+            "classpath:cucumber/network/logicalSwitch.feature", // C7000 only
+            "classpath:cucumber/network/logicalSwitchGroup.feature", //C7000 only
             "classpath:cucumber/network/networkSet.feature",
-            "classpath:cucumber/network/sasInterconnect.feature",
-            "classpath:cucumber/network/sasInterconnectType.feature",
-            "classpath:cucumber/network/sasLogicalInterconnect.feature",
-            "classpath:cucumber/network/sasLogicalInterconnectGroup.feature",
-            "classpath:cucumber/network/switch.feature",
+            "classpath:cucumber/network/switch.feature", // C7000 only
             "classpath:cucumber/network/switchType.feature",
-            "classpath:cucumber/network/uplinkSet.feature"},
-    tags = "@getAll")
+            "classpath:cucumber/network/uplinkSetC7000.feature" },
+    monochrome = true,
+    tags = { "@getAll, @get, @create, @list, @update, @patch, @reset, @refresh, @remove, @onlyOV2, @onlyOV3, @C7000",
+            "~@disabled", "~@synergy", "~@onlyOV1.2" })
+
 public class AllNetworkTestsC7000 {
 
 }

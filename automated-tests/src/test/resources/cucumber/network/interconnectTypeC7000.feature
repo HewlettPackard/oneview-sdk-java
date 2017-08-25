@@ -13,16 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Interconnect Type
+Feature: In order to manage Interconnect Types
 
   Background: 
     Given an instance of OneView
-    And OneView credentials located in "src/test/resources/oneView.properties"
-    And an instance of Interconnect Type
+      And OneView credentials located in "src/test/resources/oneView.properties"
+      And an instance of Interconnect Type
 
   @getAll
-  Scenario: Get all Interconnect Type
+  Scenario: Get all Interconnect Types
     When OneView lists all
     Then I get a count
 
@@ -36,5 +35,5 @@ Feature:
   Scenario: Get an Interconnect Type by Id
     Given name "HP_VC_FlexFabric_20_40_F8_Module" for Resource
     When OneView gets Resource by Name
-    And OneView gets Resource by ID
+      And OneView gets Resource by ID
     Then I get a Resource Name

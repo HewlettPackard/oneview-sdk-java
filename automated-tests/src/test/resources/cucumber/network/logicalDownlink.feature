@@ -20,7 +20,21 @@ Feature: In order to manage Logical Downlinks
       And OneView credentials located in "src/test/resources/oneView.properties"
       And an instance of Logical Downlink
 
-  @create
+  @create @C7000
+  Scenario: Creation of a new Logical Interconnect Group
+    Given an instance of Logical Interconnect Group
+      And Resource values as follows:
+      | name  | lig-bdd-2 |
+      | state | ACTIVE    |
+      And interconnection values as follows:
+      | entries | type                             |
+      |       1 | HP VC FlexFabric-20/40 F8 Module |
+      |       2 | HP VC FlexFabric-20/40 F8 Module |
+    When OneView runs Resource creation
+      And OneView gets Resource by Name
+    Then I get an ID
+
+  @create @synergy
   Scenario: Creation of a new Logical Interconnect Group
     Given an instance of Logical Interconnect Group
       And Resource values as follows:

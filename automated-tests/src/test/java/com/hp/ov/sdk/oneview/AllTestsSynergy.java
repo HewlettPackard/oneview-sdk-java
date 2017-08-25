@@ -40,12 +40,15 @@ import com.hp.ov.sdk.resources.storage.AllStorageTestsSynergy;
     AlertBDDTest.class
     })
 
+/* 
+ * To run this test suite use: 
+ *   DCS appliance: Synergy
+ *   Schematic: synergy_3encl_demo
+ *   Manually add a firmware bundle before
+ * Recommended VM configuration:
+ *   Memory: 12GB
+ *   CPUs: 8 cores
+ */
 public class AllTestsSynergy {
-
-    /** To run the tests use: 
-     * - DCS appliance: Synergy
-     * - Schematic: synergy_3encl_demo
-     * - Manually create a fw bundle  
-     */
 
 }

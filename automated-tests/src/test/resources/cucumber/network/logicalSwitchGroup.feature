@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
+######## C7000 only ########
 Feature: In order to manage Logical Switch Groups
 
   Background: 
@@ -28,9 +29,9 @@ Feature: In order to manage Logical Switch Groups
       | state         | active           |
       | locationEntry |                1 |
       | locationType  | StackingMemberId |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @getAll
   Scenario: Get all Logical Switch Groups
@@ -40,15 +41,15 @@ Feature: In order to manage Logical Switch Groups
   @get
   Scenario: Get a Logical Switch Group by Name
     Given name "lsg-bdd" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
   Scenario: Get a Logical Switch Group by Id
     Given name "lsg-bdd" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
 
   @update
   Scenario: Update a Logical Switch Group
@@ -57,16 +58,14 @@ Feature: In order to manage Logical Switch Groups
       | switchType    | Cisco Nexus 55xx |
       | locationEntry |                2 |
       | locationType  | StackingMemberId |
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Resource update
-     Then I get a success status
+    Then I get a success status
 
   @remove
   Scenario: Remove a Logical Switch Group
     Given name "lsg-bdd" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
-     
-     
+    Then Resource is not found

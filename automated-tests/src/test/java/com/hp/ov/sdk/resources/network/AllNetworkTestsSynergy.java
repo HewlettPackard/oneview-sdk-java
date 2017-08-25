@@ -34,18 +34,19 @@ import cucumber.api.junit.Cucumber;
             "classpath:cucumber/network/interconnectSynergy.feature",
             "classpath:cucumber/network/interconnectLinkTopology.feature",
             "classpath:cucumber/network/interconnectTypeSynergy.feature",
+            "classpath:cucumber/network/internalLinkSet.feature",
             "classpath:cucumber/network/logicalDownlink.feature",
             "classpath:cucumber/network/logicalInterconnectSynergy.feature",
             "classpath:cucumber/network/logicalInterconnectGroupSynergy.feature",
             "classpath:cucumber/network/networkSet.feature",
-            "classpath:cucumber/network/sasInterconnect.feature",
-            "classpath:cucumber/network/sasInterconnectType.feature",
-            /* "classpath:cucumber/network/sasLogicalInterconnect.feature", Disabled until endpoints are fully implemented in SDK */
-            "classpath:cucumber/network/sasLogicalInterconnectGroup.feature",
+            "classpath:cucumber/network/sasInterconnect.feature", // Synergy only
+            "classpath:cucumber/network/sasInterconnectType.feature", // Synergy only
+            /* "classpath:cucumber/network/sasLogicalInterconnect.feature", Disabled until endpoints are fully implemented in SDK */ // Synergy only
+            "classpath:cucumber/network/sasLogicalInterconnectGroup.feature", // Synergy only
             "classpath:cucumber/network/switchType.feature",
             "classpath:cucumber/network/uplinkSetSynergy.feature" },
     monochrome = true,
-    tags = { "@create, @createMultiple, @createOne, @refresh, @getAll, @get, @reset, @list, @update, @patch, @remove",
+    tags = { "@create, @createMultiple, @createOne, @refresh, @getAll, @get, @reset, @list, @update, @patch, @remove, @synergy",
             "~@C7000", "~@disabled" })
 
 public class AllNetworkTestsSynergy {

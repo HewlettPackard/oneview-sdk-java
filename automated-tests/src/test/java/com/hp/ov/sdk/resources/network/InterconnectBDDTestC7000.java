@@ -23,9 +23,11 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" },
-        glue = {"com.hp.ov.sdk.resources"},
+        glue = { "com.hp.ov.sdk.resources" },
         features = "classpath:cucumber/network/interconnectC7000.feature",
-        tags = "@create, @getAll, @get, @update")
+        monochrome = true,
+        tags = "@create, @getAll, @get, @patch, @update, @reset, @remove")
+
 public class InterconnectBDDTestC7000 {
 
 }

@@ -27,8 +27,12 @@ import cucumber.api.junit.Cucumber;
     glue = { "com.hp.ov.sdk.resources" },
     features = "classpath:cucumber/network/switch.feature",
     monochrome = true,
-    tags = "@getAll, @get, @create, @onlyOV3, @remove")
+    tags = { "@create, @getAll, @get, @update, @remove, @onlyOV3, @onlyOV2",
+            "~@onlyOV1.2", "~@disabled" })
 
+/*
+ * C7000 only
+ */
 public class SwitchBDDTest {
 
 }

@@ -23,10 +23,15 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-	glue = {"com.hp.ov.sdk.resources"},
+	glue = { "com.hp.ov.sdk.resources" },
 	features = "classpath:cucumber/network/internalLinkSet.feature",
 	monochrome = true,
 	tags = "@getAll, @get")
+
+/*
+ * Since Internal Link Sets cannot be created in DCS,
+ * tests only validate that endpoints are working
+ */
 public class InternalLinkSetBDDTest {
 
 }

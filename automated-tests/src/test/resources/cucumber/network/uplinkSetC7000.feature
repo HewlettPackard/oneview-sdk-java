@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Uplink Set
+Feature: In order to manage Uplink Sets
 
   Background: 
     Given an instance of OneView
@@ -25,59 +24,59 @@ Feature:
   Scenario: Creation of a new FC Network
     Given an instance of FC Network
       And Resource values as follows:
-      | name                    | fc-uplink-bdd |
-      | fabricType              | FabricAttach  |
-      | linkStabilityTime       |            30 |
-      | autoLoginRedistribution | true          |
-     When OneView runs Resource creation
+      | name                    | fc-bdd-uplink-set |
+      | fabricType              | FabricAttach      |
+      | linkStabilityTime       |                30 |
+      | autoLoginRedistribution | true              |
+    When OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @create
   Scenario: Creation of a new Logical Interconnect Group
     Given an instance of Logical Interconnect Group
       And Resource values as follows:
-      | name  | lig-uplink-bdd |
-      | state | ACTIVE         |
+      | name  | lig-bdd-uplink-set |
+      | state | ACTIVE             |
       And interconnection values as follows:
       | entries | type                                 |
       |       1 | HP VC FlexFabric 10Gb/24-Port Module |
       |       2 | HP VC FlexFabric 10Gb/24-Port Module |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @create
-  Scenario: Creation of a new Enclosure Groups
+  Scenario: Creation of a new Enclosure Group
     Given an instance of Enclosure Groups
       And Resource values as follows:
-      | name         | enclosure-uplink-bdd |
-      | lig          | lig-uplink-bdd       |
-      | stackingMode | Enclosure            |
-     When Enclosure Group sets Uris
+      | name         | eg-bdd-uplink-set  |
+      | lig          | lig-bdd-uplink-set |
+      | stackingMode | Enclosure          |
+    When Enclosure Group sets Uris
       And OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @create
   Scenario: Addition of a new Enclosure
     Given an instance of Enclosure
       And Resource values as follows:
-      | enclosureGroup       | enclosure-uplink-bdd      |
+      | enclosureGroup       | eg-bdd-uplink-set         |
       | licensing            | OneView                   |
       | force                | false                     |
       | firmware             | Service Pack for ProLiant |
       | updateFirmware       | EnclosureOnly             |
       | forceInstallFirmware | false                     |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView gets Enclosure Name
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @create
-  Scenario: Creation of an new Uplink Set
+  Scenario: Creation of a new Uplink Set
     Given Resource values as follows:
-      | name                           | uplink-bdd            |
+      | name                           | uplink-set-bdd        |
       | category                       | logical-interconnects |
       | enclosure                      | Encl1                 |
       | bay                            |                     2 |
@@ -86,80 +85,80 @@ Feature:
       | ethernetNetworkType            | NotApplicable         |
       | networkType                    | FibreChannel          |
       | manualLoginRedistributionState | Supported             |
-      | fc_network                     | fc-uplink-bdd         |
+      | fc_network                     | fc-bdd-uplink-set     |
       | desiredSpeed                   | Auto                  |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @getAll
-  Scenario: Get all Uplink Set
+  Scenario: Get all Uplink Sets
     When OneView lists all
     Then I get a count
 
   @get
-  Scenario: Get an Uplink Set
-    Given name "uplink-bdd" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+  Scenario: Get an Uplink Set by Name
+    Given name "uplink-set-bdd" for Resource
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
-  Scenario: Get an Uplink Set
-    Given name "uplink-bdd" for Resource
-     When OneView gets Resource by Name
+  Scenario: Get an Uplink Set by Id
+    Given name "uplink-set-bdd" for Resource
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
 
-  @edit
-  Scenario: Edit an Uplink Set
-    Given name "uplink-bdd" for Resource
+  @update
+  Scenario: Update an Uplink Set
+    Given name "uplink-set-bdd" for Resource
       And Resource values will be updated as follows:
-      | name | uplink-bdd_updated |
-     When OneView gets Resource by Name
+      | name | uplink-set-bdd_updated |
+    When OneView gets Resource by Name
       And OneView runs Resource update
       And OneView gets Resource properties
-     Then I get previous values in Resource
+    Then I get previous values in Resource
 
   @remove
   Scenario: Remove an Uplink Set
-    Given name "uplink-bdd_updated" for Resource
-     When OneView gets Resource by Name
+    Given name "uplink-set-bdd_updated" for Resource
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found
 
   @remove
   Scenario: Remove an Enclosure
     Given an instance of Enclosure
-     When OneView gets Enclosure Name
+    When OneView gets Enclosure Name
       And OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found
 
   @remove
-  Scenario: Remove an Enclosure Groups
+  Scenario: Remove an Enclosure Group
     Given an instance of Enclosure Groups
-      And name "enclosure-uplink-bdd" for Resource
-     When OneView gets Resource by Name
+      And name "eg-bdd-uplink-set" for Resource
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found
 
   @remove
   Scenario: Remove a Logical Interconnect Group
     Given an instance of Logical Interconnect Group
-      And name "lig-uplink-bdd" for Resource
-     When OneView gets Resource by Name
+      And name "lig-bdd-uplink-set" for Resource
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found
 
   @remove
   Scenario: Remove a FC Network
     Given an instance of FC Network
-      And name "fc-uplink-bdd" for Resource
-     When OneView gets Resource by Name
+      And name "fc-bdd-uplink-set" for Resource
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found

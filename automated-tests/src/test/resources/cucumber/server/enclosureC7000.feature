@@ -13,155 +13,155 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Enclosure
+Feature: In order to manage Enclosures
 
   Background: 
     Given an instance of OneView
-    And OneView credentials located in "src/test/resources/oneView.properties"
-    And an instance of Enclosure
+      And OneView credentials located in "src/test/resources/oneView.properties"
+      And an instance of Enclosure
 
   @create
   Scenario: Creation of a new Logical Interconnect Group
     Given an instance of Logical Interconnect Group
-    And Resource values as follows:
+      And Resource values as follows:
       | name  | lig-bdd-enclosure |
       | state | ACTIVE            |
-    And interconnection values as follows:
+      And interconnection values as follows:
       | entries | type                             |
       |       1 | HP VC FlexFabric-20/40 F8 Module |
       |       2 | HP VC FlexFabric-20/40 F8 Module |
     When OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
-  Scenario: Creation of a new Enclosure Groups
+  Scenario: Creation of a new Enclosure Group
     Given an instance of Enclosure Groups
-    And Resource values as follows:
-      | name         | enclosure-group-bdd-enclosure |
-      | lig          | lig-bdd-enclosure             |
-      | stackingMode | Enclosure                     |
+      And Resource values as follows:
+      | name         | eg-bdd-enclosure  |
+      | lig          | lig-bdd-enclosure |
+      | stackingMode | Enclosure         |
     When Enclosure Group sets Uris
-    And OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView runs Resource creation
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
   Scenario: Addition of a new Enclosure
     Given Resource values as follows:
-      | enclosureGroup       | enclosure-group-bdd-enclosure |
-      | licensing            | OneView                       |
-      | force                | false                         |
-      | firmware             | Service Pack for ProLiant     |
-      | updateFirmware       | EnclosureOnly                 |
-      | forceInstallFirmware | false                         |
+      | enclosureGroup       | eg-bdd-enclosure          |
+      | licensing            | OneView                   |
+      | force                | false                     |
+      | firmware             | Service Pack for ProLiant |
+      | updateFirmware       | EnclosureOnly             |
+      | forceInstallFirmware | false                     |
     When OneView runs Resource creation
-    And OneView gets Enclosure Name
-    And OneView gets Resource by Name
+      And OneView gets Enclosure Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @getAll
-  Scenario: Get all Enclosure
+  Scenario: Get all Enclosures
     When OneView lists all
     Then I get a count
 
   @get
   Scenario: Get an Enclosure by Name
     When OneView gets Enclosure Name
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @get
   Scenario: Get an Enclosure by Id
     When OneView gets Enclosure Name
-    And OneView gets Resource by Name
-    And OneView gets Resource by ID
+      And OneView gets Resource by Name
+      And OneView gets Resource by ID
     Then I get a Resource Name
 
   @get
   Scenario: Get Enclosure Environmental Configuration
     When OneView gets Enclosure Name
-    And OneView gets Resource by Name
-    And OneView gets Resource by ID
-    And gets Enclosure Environmental Configuration
+      And OneView gets Resource by Name
+      And OneView gets Resource by ID
+      And gets Enclosure Environmental Configuration
     Then Resource is found
 
   @get
   Scenario: Get Enclosure Script Configuration
     When OneView gets Enclosure Name
-    And OneView gets Resource by Name
-    And OneView gets Resource by ID
-    And gets Enclosure Script Configuration
+      And OneView gets Resource by Name
+      And OneView gets Resource by ID
+      And gets Enclosure Script Configuration
     Then Resource is found
 
   @get
   Scenario: Get Enclosure Active Oa Sso Url
     When OneView gets Enclosure Name
-    And OneView gets Resource by Name
-    And OneView gets Resource by ID
-    And gets Enclosure Active Oa Sso Url
+      And OneView gets Resource by Name
+      And OneView gets Resource by ID
+      And gets Enclosure Active Oa Sso Url
     Then Resource is found
 
   @get
   Scenario: Get Enclosure Utilization
     When OneView gets Enclosure Name
-    And OneView gets Resource by Name
-    And OneView gets Resource by ID
-    And gets Enclosure Utilization
+      And OneView gets Resource by Name
+      And OneView gets Resource by ID
+      And gets Enclosure Utilization
     Then Resource is found
 
-  @edit
-  Scenario: Edit an Enclosure
+  @update
+  Scenario: Update an Enclosure
     Given Resource values will be updated as follows:
       | name | enclosure-bdd_updated |
     When OneView gets Enclosure Name
-    And OneView gets Resource by Name
-    And OneView runs Resource update
-    And OneView gets Resource properties
+      And OneView gets Resource by Name
+      And OneView runs Resource update
+      And OneView gets Resource properties
     Then I get previous values in Resource
 
-  @edit
-  Scenario: Edit an Enclosure
+  #Returns to default name
+  @update
+  Scenario: Update an Enclosure
     Given Resource values will be updated as follows:
-      | name | enclosure-bdd |
+      | name | Encl1 |
     When OneView gets Enclosure Name
-    And OneView gets Resource by Name
-    And OneView runs Resource update
-    And OneView gets Resource properties
+      And OneView gets Resource by Name
+      And OneView runs Resource update
+      And OneView gets Resource properties
     Then I get previous values in Resource
 
   @refresh
   Scenario: Refresh an Enclosure
-    Given name "enclosure-bdd" for Resource
-    And Resource values will be updated as follows:
+    Given OneView gets Enclosure Name
+      And Resource values will be updated as follows:
       | refreshState | RefreshPending |
     When OneView gets Resource by Name
-    And Oneview runs Enclosure refresh
+      And Oneview runs Enclosure refresh
     Then Resource is found
 
   @remove
   Scenario: Remove an Enclosure
     When OneView gets Enclosure Name
-    And OneView gets Resource by Name
-    And OneView deletes the Resource
-    And OneView gets Resource by ID
+      And OneView gets Resource by Name
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found
 
   @remove
   Scenario: Remove an Enclosure Group
     Given an instance of Enclosure Groups
-    And name "enclosure-group-bdd-enclosure" for Resource
+      And name "eg-bdd-enclosure" for Resource
     When OneView gets Resource by Name
-    And OneView deletes the Resource
-    And OneView gets Resource by ID
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found
 
   @remove
   Scenario: Remove a Logical Interconnect Group
     Given an instance of Logical Interconnect Group
-    And name "lig-bdd-enclosure" for Resource
+      And name "lig-bdd-enclosure" for Resource
     When OneView gets Resource by Name
-    And OneView deletes the Resource
-    And OneView gets Resource by ID
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
     Then Resource is not found

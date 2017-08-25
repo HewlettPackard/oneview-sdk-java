@@ -27,13 +27,13 @@ Feature: In order to manage Internal Link Sets
 
   @get
   Scenario: Get an Internal Link Set by Name
-    Given name "bug" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    Given name "ResourceName" for Resource
+    When OneView gets Resource by Name
+    Then I get a count
 
   @get
   Scenario: Get an Internal Link Set by Id
-    Given name "bug" for Resource
-     When OneView gets Resource by Name
+    Given name "ResourceName" for Resource
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a count

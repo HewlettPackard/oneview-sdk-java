@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Logical Enclosure
+Feature: In order to manage Logical Enclosures
 
   Background: 
     Given an instance of OneView
@@ -25,163 +24,157 @@ Feature:
   Scenario: Creation of a new Logical Interconnect Group
     Given an instance of Logical Interconnect Group
       And Resource values as follows:
-      | name  | lig-bdd-le |
-      | state | ACTIVE     |
+      | name  | lig-bdd-logical-enclosure |
+      | state | ACTIVE                    |
       And interconnection values as follows:
       | entries | type                                 |
       |       1 | HP VC FlexFabric 10Gb/24-Port Module |
       |       2 | HP VC FlexFabric 10Gb/24-Port Module |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @create
-  Scenario: Creation of a new Enclosure Groups
+  Scenario: Creation of a new Enclosure Group
     Given an instance of Enclosure Groups
       And Resource values as follows:
-      | name         | enclosure-group-bdd-le |
-      | lig          | lig-bdd-le             |
-      | stackingMode | Enclosure              |
-     When Enclosure Group sets Uris
+      | name         | eg-bdd-logical-enclosure  |
+      | lig          | lig-bdd-logical-enclosure |
+      | stackingMode | Enclosure                 |
+    When Enclosure Group sets Uris
       And OneView runs Resource creation
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @create
   Scenario: Addition of a new Enclosure
     Given an instance of Enclosure
       And Resource values as follows:
-      | enclosureGroup       | enclosure-group-bdd-le    |
+      | enclosureGroup       | eg-bdd-logical-enclosure  |
       | licensing            | OneView                   |
       | force                | false                     |
       | firmware             | Service Pack for ProLiant |
       | updateFirmware       | EnclosureOnly             |
       | forceInstallFirmware | false                     |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView gets Enclosure Name
       And OneView gets Resource by Name
-     Then I get an ID
+    Then I get an ID
 
   @getAll
-  Scenario: Get all Logical Enclosure
+  Scenario: Get all Logical Enclosures
     When OneView lists all
     Then I get a count
 
   @get
   Scenario: Get a Logical Enclosure by Name
     Given name "Encl1" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
   Scenario: Get a Logical Enclosure by Id
     Given name "Encl1" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
 
   @get
   Scenario: Get a Logical Enclosure Configuration Script
     Given name "Encl1" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Logical Enclosure Configuration Script
-     Then Resource is found
+    Then Resource is found
 
   @update
   Scenario: Update a Logical Enclosure from Group
     Given name "Encl1" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView updates Logical Enclosure from Group
-     Then I get a success status
+    Then I get a success status
 
   @update
   Scenario: Update a Logical Enclosure Configuration
     Given name "Encl1" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView updates Logical Enclosure Configuration
-     Then I get a success status
+    Then I get a success status
 
-  @update
-  Scenario: Update a Logical Enclosure Configuration Script
-    Given Resource values will be updated as follows:
-      | name   | Encl1                            |
-      | script | \\"name=Enclosure_test_script\\" |
-     When OneView gets Resource by Name
-      And OneView updates Logical Enclosure Configuration Script
-     Then I get a success status
-
-  @update
+  @create
   Scenario: Creation a Logical Enclosure Support Dump
-    Given Resource values as follows:
+    Given name "Encl1" for Resource
+      And Resource values as follows:
       | name        | Encl1      |
       | supportDump | testDump01 |
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView create a Logical Enclosure Support Dump
-     Then I get a success status
+    Then I get a success status
 
-  @update
-  Scenario: Update by Patch
+  @patch
+  Scenario: Update a Logical Enclosure by Patch
     Given name "Encl1" for Resource
       And Resource values will be updated as follows:
       | op    | replace       |
       | path  | /firmware     |
       | value | EnclosureOnly |
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Logical Enclosure patch
-     Then I get a success status
+    Then I get a success status
 
   @update
   Scenario: Update a Logical Enclosure
     Given name "Encl1" for Resource
       And Resource values will be updated as follows:
       | name | Encl1_Updated |
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Resource update
       And OneView gets Resource properties
-     Then I get previous values in Resource
+    Then I get previous values in Resource
 
-  @oneView3 @synergy
-  Scenario: Creation of a new Logical Enclosure
-    Given Resource values as follows:
-      | name           | Logical_Encl1                 |
-      | enclosureGroup | enclosure-group-bdd-enclosure |
-      | enclosure      | Encl1                         |
-      | firmware       | Service Pack for ProLiant     |
-     When OneView runs Resource creation
-      And OneView gets Resource by Name
-     Then I get an ID
+  #Returns to the default name
+  @update
+  Scenario: Update a Logical Enclosure
+    Given name "Encl1_Updated" for Resource
+      And Resource values will be updated as follows:
+      | name | Encl1 |
+    When OneView gets Resource by Name
+      And OneView runs Resource update
+      And OneView gets Resource properties
+    Then I get previous values in Resource
 
-  @oneView3 @synergy
-  Scenario: Remove a Logical Enclosure
-    Given name "Logical_Encl1" for Resource
-     When OneView gets Resource by Name
-      And OneView deletes the Resource
-      And OneView gets Resource by ID
-     Then Resource is not found
+  @update
+  Scenario: Update a Logical Enclosure Configuration Script
+    Given name "Encl1" for Resource
+      And Resource values will be updated as follows:
+      | name   | Encl1                            |
+      | script | \\"name=Enclosure_test_script\\" |
+    When OneView gets Resource by Name
+      And OneView updates Logical Enclosure Configuration Script
+    Then I get a success status
 
   @remove
   Scenario: Remove an Enclosure
     Given an instance of Enclosure
-     When OneView gets Enclosure Name
+    When OneView gets Enclosure Name
       And OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found
 
   @remove
-  Scenario: Remove an Enclosure Groups
+  Scenario: Remove an Enclosure Group
     Given an instance of Enclosure Groups
-      And name "enclosure-group-bdd-le" for Resource
-     When OneView gets Resource by Name
+      And name "eg-bdd-logical-enclosure" for Resource
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found
 
   @remove
   Scenario: Remove a Logical Interconnect Group
     Given an instance of Logical Interconnect Group
-      And name "lig-bdd-le" for Resource
-     When OneView gets Resource by Name
+      And name "lig-bdd-logical-enclosure" for Resource
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found

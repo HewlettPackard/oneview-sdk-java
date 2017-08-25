@@ -23,9 +23,11 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-	glue = {"com.hp.ov.sdk.resources"},
-	features = "classpath:cucumber/network/interconnectTypeC7000.feature", 
+	glue = { "com.hp.ov.sdk.resources" },
+	features = "classpath:cucumber/network/interconnectTypeC7000.feature",
+	monochrome = true,
 	tags = "@getAll, @get")
+
 public class InterconnectTypeBDDC7000Test {
 
 }

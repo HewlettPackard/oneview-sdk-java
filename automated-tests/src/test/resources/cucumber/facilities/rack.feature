@@ -71,9 +71,17 @@ Feature: In order to manage Racks
       And OneView gets Resource by ID
     Then Resource is not found
 
+  @create
+  Scenario: Creation of a new Rack
+    Given Resource values as follows:
+      | name | Rack BDD 2 |
+    When OneView runs Resource creation
+      And OneView gets Resource by Name
+    Then I get an ID
+
   @removeByFilter
   Scenario: Remove a Remove a Rack by Filter
     Given Resource values as follows:
-      | name | Rack BDD |
+      | name | Rack BDD 2 |
     When OneView deletes Rack by Filter
     Then I get a success status

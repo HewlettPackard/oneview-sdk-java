@@ -23,11 +23,12 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-    glue = { "com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/network/fabric.feature",
+    glue = { "com.hp.ov.sdk.resources" },
+    features = "classpath:cucumber/network/logicalDownlink.feature",
     monochrome = true,
-    tags = " @getAll, @get, @update")
+    tags = { "@create, @getAll, @get, @remove",
+            "~@synergy" })
 
-public class FabricBDDTest {
+public class LogicalDownlinkBDDTestC7000 {
 
 }

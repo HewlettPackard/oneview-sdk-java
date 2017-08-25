@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2017 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.resources.storage;
+package com.hp.ov.sdk.resources.network;
 
 import org.junit.runner.RunWith;
 
@@ -24,11 +24,11 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
     glue = { "com.hp.ov.sdk.resources" },
-    features = "classpath:cucumber/storage/storageVolumeAttachment.feature",
+    features = "classpath:cucumber/network/logicalDownlink.feature",
     monochrome = true,
-    tags = { "@create, @createOne, @createMultiple, @getAll, @get, @update, @repair, @remove",
-            "~@disabled" })
+    tags = { "@create, @getAll, @get, @remove",
+            "~@C7000" })
 
-public class StorageVolumeAttachmentBDDTest {
+public class LogicalDownlinkBDDTestSynergy {
 
 }

@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Fc San Provider
+Feature: In order to manage FC SAN Providers
 
   Background: 
     Given an instance of OneView
@@ -22,9 +21,9 @@ Feature:
       And an instance of Fc San Provider
 
   @create
-  Scenario: Creation of a new Fc Provider
+  Scenario: Creation of a new FC SAN Provider
     Given Resource values as follows:
-      | name          |             172.18.15.1 |
+      | name          | 172.18.15.1             |
       | hostname      | Host                    |
       | port          | Port                    |
       | provider      | Brocade Network Advisor |
@@ -37,19 +36,28 @@ Feature:
      Then I get a count
 
   @getAll
-  Scenario: Get all Fc San Provider
+  Scenario: Get all FC SAN Providers
     When OneView lists all
     Then I get a count
 
   @get
-  Scenario: Get a Fc San Provider by Name
+  Scenario: Get a FC SAN Provider by Name
     Given name "172.18.15.1" for Resource
      When OneView gets Resource by Name
      Then I get an ID
 
   @get
-  Scenario: Get a Fc San Provider by Id
+  Scenario: Get a FC SAN Provider by Id
     Given name "172.18.15.1" for Resource
      When OneView gets Resource by Name
       And OneView gets Resource by ID
      Then I get a Resource Name
+
+  @remove
+  Scenario: Remove a FC SAN Device Manager
+    Given an instance of Fc San Device Manager
+      And name "172.18.15.1" for Resource
+    When OneView gets Resource by Name
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
+    Then Resource is not found

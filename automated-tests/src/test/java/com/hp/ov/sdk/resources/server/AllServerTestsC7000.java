@@ -24,16 +24,19 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-    format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = {"classpath:cucumber/server/enclosureC7000.feature",
-            "classpath:cucumber/server/enclosureGroupC7000.feature",
-            "classpath:cucumber/server/logicalEnclosure.feature",
-            "classpath:cucumber/server/serverHardware.feature",
-            "classpath:cucumber/server/serverHardwareType.feature",
-            "classpath:cucumber/server/serverProfile.feature",
-            "classpath:cucumber/server/serverProfileTemplate.feature"},
-    tags = "@getAll")
+    format = { "pretty", "html:target/cucumber" },
+    glue = { "com.hp.ov.sdk.resources" },
+    features = { "classpath:cucumber/server/enclosureGroupC7000.feature",
+            "classpath:cucumber/server/serverHardwareC7000.feature",
+            "classpath:cucumber/server/serverProfileC7000.feature",
+            "classpath:cucumber/server/serverProfileTemplateC7000.feature",
+            "classpath:cucumber/server/enclosureC7000.feature",
+            "classpath:cucumber/server/logicalEnclosureC7000.feature",
+            "classpath:cucumber/server/serverHardwareTypeC7000.feature" },
+    monochrome = true,
+    tags = { "@create, @getAll, @get, @update, @patch, @refresh, @onlyOV3, @onlyUnmanagedDevices, @remove",
+            "~@disabled"})
+
 public class AllServerTestsC7000 {
 
 }

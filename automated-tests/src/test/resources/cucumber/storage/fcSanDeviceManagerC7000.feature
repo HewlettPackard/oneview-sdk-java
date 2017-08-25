@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Fc San Device Manager
+Feature: In order to manage FC SAN Device Managers
 
   Background: 
     Given an instance of OneView
@@ -22,10 +21,10 @@ Feature:
       And an instance of Fc San Device Manager
 
   @create
-  Scenario: Creation of a new Fc Provider
+  Scenario: Creation of a new FC SAN Provider
     Given an instance of Fc San Provider
       And Resource values as follows:
-      | name          |             172.18.15.1 |
+      | name          | 172.18.15.1             |
       | hostname      | Host                    |
       | port          | Port                    |
       | provider      | Brocade Network Advisor |
@@ -33,42 +32,42 @@ Feature:
       | use_ssl_value | true                    |
       | user          | dcs                     |
       | password      | dcs                     |
-     When OneView runs Resource creation
+    When OneView runs Resource creation
       And OneView lists all
-     Then I get a count
+    Then I get a count
 
   @getAll
-  Scenario: Get all Fc San Device Manager
+  Scenario: Get all FC SAN Device Managers
     When OneView lists all
     Then I get a count
 
   @get
-  Scenario: Get a Fc San Device Manager by Name
+  Scenario: Get a FC SAN Device Manager by Name
     Given name "172.18.15.1" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
-  Scenario: Get a Fc San Device Manager by Id
+  Scenario: Get a FC SAN Device Manager by Id
     Given name "172.18.15.1" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
 
   @update
-  Scenario: Edit a Fc San Device Manager
+  Scenario: Update a FC SAN Device Manager
     Given Resource values as follows:
       | name         |    172.18.15.1 |
       | password     | dcs            |
       | refreshState | RefreshPending |
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Resource update
-     Then I get a success status
+    Then I get a success status
 
   @remove
-  Scenario: Remove a Fc San Device Manager
+  Scenario: Remove a FC SAN Device Manager
     Given name "172.18.15.1" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID
-     Then Resource is not found
+    Then Resource is not found

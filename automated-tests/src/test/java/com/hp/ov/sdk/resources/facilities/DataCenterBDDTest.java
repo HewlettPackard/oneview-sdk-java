@@ -23,8 +23,8 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = "classpath:cucumber/facilities/dataCenter.feature", 
+    glue = { "com.hp.ov.sdk.resources" },
+    features = "classpath:cucumber/facilities/dataCenter.feature",
     monochrome = true,
     tags = "@create, @getAll, @get, @remove, @removeByFilter")
 

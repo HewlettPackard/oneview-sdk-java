@@ -28,6 +28,9 @@ import cucumber.api.junit.Cucumber;
 	monochrome = true,
 	tags = "@create, @getAll, @get, @update, @remove")
 
+/*
+ * Synergy only
+ */
 public class SasLogicalInterconnectGroupBDDTest {
 
 }

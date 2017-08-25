@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2017 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.resources.network;
+package com.hp.ov.sdk.resources.storage;
 
 import org.junit.runner.RunWith;
 
@@ -22,12 +22,13 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" },
-        glue = { "com.hp.ov.sdk.resources" },
-        features = "classpath:cucumber/network/uplinkSetC7000.feature",
-        monochrome = true,
-        tags = "@create, @getAll, @get, @update, @remove")
+@CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
+    glue = { "com.hp.ov.sdk.resources" },
+    features = "classpath:cucumber/storage/storageVolumeAttachmentC7000.feature",
+    monochrome = true,
+    tags = { "@create, @getAll, @get, @update, @repair, @remove",
+            "~@disabled" })
 
-public class UplinkSetBDDTestC7000 {
+public class StorageVolumeAttachmentBDDTestC7000 {
 
 }

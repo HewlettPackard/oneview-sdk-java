@@ -26,8 +26,12 @@ import cucumber.api.junit.Cucumber;
     format = { "pretty", "html:target/cucumber" },
     glue = { "com.hp.ov.sdk.resources" },
     features = "classpath:cucumber/network/logicalSwitchGroup.feature",
-    tags = "@getAll, @get, @create, @update, @remove")
+    monochrome = true,
+    tags = "@create, @getAll, @get, @update, @remove")
 
+/*
+ * C7000 only
+ */
 public class LogicalSwitchGroupBDDTest {
 
 }

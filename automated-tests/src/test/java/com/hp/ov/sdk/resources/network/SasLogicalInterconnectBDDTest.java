@@ -29,6 +29,9 @@ import cucumber.api.junit.Cucumber;
 	tags = { "@create, @createMultiple, @createOne, @getAll, @get, @update, @remove",
 	        "~@disabled" } )
 
+/*
+ * Synergy only
+ */
 public class SasLogicalInterconnectBDDTest {
 
 }

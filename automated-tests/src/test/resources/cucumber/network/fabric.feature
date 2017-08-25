@@ -38,14 +38,14 @@ Feature: In order to manage Fabrics
       And OneView gets Resource by ID
     Then I get a Resource Name
 
-  @get
+  @get @synergy
   Scenario: Get Reserved Vlan Range
     Given name "DefaultFabric" for Resource
     When OneView gets Resource by Name
       And OneView gets Reserved Vlan Range for Fabric
     Then Resource is found
 
-  @update
+  @update @synergy
   Scenario: Update a Reserved Vlan Range
     Given name "DefaultFabric" for Resource
     When OneView gets Resource by Name

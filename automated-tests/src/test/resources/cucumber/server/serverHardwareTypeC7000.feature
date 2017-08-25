@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to manage Server Hardware
+Feature: In order to manage Server Hardware Types
 
   Background: 
     Given an instance of OneView
@@ -22,35 +21,35 @@ Feature:
       And an instance of Server Hardware Type
 
   @getAll
-  Scenario: Get all Server Hardware Type
+  Scenario: Get all Server Hardware Types
     When OneView lists all
     Then I get a count
 
   @get
   Scenario: Get a Server Hardware Type by Name
     Given name "BL460c Gen8 1" for Resource
-     When OneView gets Resource by Name
-     Then I get an ID
+    When OneView gets Resource by Name
+    Then I get an ID
 
   @get
   Scenario: Get a Server Hardware Type by Id
     Given name "BL460c Gen8 1" for Resource
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView gets Resource by ID
-     Then I get a Resource Name
+    Then I get a Resource Name
 
-  @edit
-  Scenario: Edit a Server Hardware Type
-    Given Resource values will be updated as follows:
-      | name        | "BL460c Gen8 1"        |
+  @update
+  Scenario: Update a Server Hardware Type
+    Given name "BL460c Gen8 1" for Resource
+      And Resource values will be updated as follows:
       | description | BDD description update |
-     When OneView gets Resource by Name
+    When OneView gets Resource by Name
       And OneView runs Resource update
-     Then I get a success status
+    Then I get a success status
 
   @remove
   Scenario: Remove a Server Hardware Type
-    Given name "BL460c Gen8 1" for Resource
-     When OneView gets Resource by Name
+    Given name "DL380p Gen8 1" for Resource
+    When OneView gets Resource by Name
       And OneView deletes the Resource
-     Then I get a success status
+    Then I get a success status
