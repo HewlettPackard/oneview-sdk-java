@@ -49,12 +49,14 @@ import com.hp.ov.sdk.dto.servers.Firmware;
 import com.hp.ov.sdk.dto.servers.FunctionType;
 import com.hp.ov.sdk.dto.servers.ProfileAffinity;
 import com.hp.ov.sdk.dto.servers.SanStorage;
+import com.hp.ov.sdk.dto.servers.SourceType;
 import com.hp.ov.sdk.dto.servers.StoragePath;
 import com.hp.ov.sdk.dto.servers.StorageTargetType;
 import com.hp.ov.sdk.dto.servers.VolumeAttachment;
 import com.hp.ov.sdk.dto.servers.serverprofile.BootControl;
 import com.hp.ov.sdk.dto.servers.serverprofile.ConnectionBoot;
 import com.hp.ov.sdk.dto.servers.serverprofile.LocalStorage;
+import com.hp.ov.sdk.dto.servers.serverprofile.OsDeploymentSettings;
 import com.hp.ov.sdk.dto.servers.serverprofile.ProfileConnection;
 import com.hp.ov.sdk.dto.servers.serverprofile.ServerProfile;
 import com.hp.ov.sdk.dto.storage.StorageTargetPort;
@@ -315,10 +317,14 @@ public class ResourceDtoUtils {
 
     public ProfileConnection buildProfileConnection(final Integer j, final String networkName,
             final String requestedMbps, final Integer allocatedMbps, final Integer maximumMbps,
-            final FunctionType functionType, final BootControl bootControl) {
+            final FunctionType functionType, final ConnectionBoot connectionBoot, final String connectionName) {
         final ProfileConnection connection = new ProfileConnection();
         connection.setId(j);
-        connection.setName(networkName);
+        if (connectionName != null) {
+            connection.setName(connectionName);
+        } else {
+            connection.setName(networkName);
+        }
         connection.setFunctionType(functionType);
         if (functionType.toString().equalsIgnoreCase("Ethernet")) {
             ResourceCollection<Network> ethNetworks = oneViewClient.ethernetNetwork().getByName(networkName);
@@ -334,9 +340,8 @@ public class ResourceDtoUtils {
         connection.setRequestedMbps(requestedMbps);
         connection.setAllocatedMbps(allocatedMbps);
         connection.setMaximumMbps(maximumMbps);
-        final ConnectionBoot connBoot = new ConnectionBoot();
-        connBoot.setPriority(bootControl);
-        connection.setBoot(connBoot);
+        connection.setBoot(connectionBoot);
+
         return connection;
     }
 
@@ -389,10 +394,10 @@ public class ResourceDtoUtils {
 
     public ServerProfile buildServerProfile(ApiVersion apiVersion, final String profileName, final String serverHardwareName,
             final Boolean useBayNameForServerHardwareUri, final String enclosureGroupName,
-            final ProfileAffinity affinity, final AssignmentType wwnType,
-            final AssignmentType macType, final AssignmentType serialNumberType,
-            final SanStorage sanStorage, final List<ProfileConnection> connections, final LocalStorage localStorage,
-            final Boot boot, final Bios bios, final Firmware firmware) {
+            final ProfileAffinity affinity, final AssignmentType wwnType, final AssignmentType macType,
+            final AssignmentType serialNumberType, final SanStorage sanStorage,
+            final List<ProfileConnection> connections, final LocalStorage localStorage, final Boot boot,
+            final Bios bios, final Firmware firmware, final OsDeploymentSettings osDeploymentSettings) {
         final ServerProfile serverProfileDto = new ServerProfile();
         serverProfileDto.setDescription("profile");
 
@@ -451,6 +456,8 @@ public class ResourceDtoUtils {
         serverProfileDto.setLocalStorage(localStorage);
 
         serverProfileDto.setSanStorage(sanStorage);
+
+        serverProfileDto.setOsDeploymentSettings(osDeploymentSettings);
 
         return serverProfileDto;
     }

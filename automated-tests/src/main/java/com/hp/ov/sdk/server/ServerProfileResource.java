@@ -218,7 +218,7 @@ public class ServerProfileResource extends BasicResource implements CreateResour
         int j = 1;
         for (String networkName : networks) {
             ProfileConnection profileConnection = resourceDtoUtils.buildProfileConnection(j++, networkName, mbps,
-                    Integer.parseInt(mbps), Integer.parseInt(mbps), functionType, null);
+                    Integer.parseInt(mbps), Integer.parseInt(mbps), functionType, null, null);
 
             profileConnection.setPortId("Auto");
             profileConnection.setRequestedMbps(mbps);
