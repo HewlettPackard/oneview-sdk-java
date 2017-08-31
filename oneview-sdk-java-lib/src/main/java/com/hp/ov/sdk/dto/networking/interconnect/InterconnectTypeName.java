@@ -20,6 +20,7 @@ public enum InterconnectTypeName {
     Cisco_Fabric_Extender_for_HP_BladeSystem("Cisco Fabric Extender for HP BladeSystem"),
     HP_VC_8Gb_20_Port_FC_Module("HP VC 8Gb 20-Port FC Module"),
     HP_VC_8Gb_24_Port_FC_Module("HP VC 8Gb 24-Port FC Module"),
+    HP_VC_16b_24_Port_FC_Module("HP VC 16Gb 24-Port FC Module"),
     HP_VC_Flex_10_Enet_Module("HP VC Flex-10 Enet Module"),
     HP_VC_Flex_10_10D_Module("HP VC Flex-10/10D Module"),
     HP_VC_FlexFabric_10Gb_24_Port_Module("HP VC FlexFabric 10Gb/24-Port Module"),
