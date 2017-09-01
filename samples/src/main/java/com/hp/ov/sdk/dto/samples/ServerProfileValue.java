@@ -21,8 +21,9 @@ import com.hp.ov.sdk.dto.servers.AssignmentType;
 import com.hp.ov.sdk.dto.servers.Bios;
 import com.hp.ov.sdk.dto.servers.Boot;
 import com.hp.ov.sdk.dto.servers.Firmware;
-import com.hp.ov.sdk.dto.servers.serverprofile.LocalStorage;
 import com.hp.ov.sdk.dto.servers.ProfileAffinity;
+import com.hp.ov.sdk.dto.servers.serverprofile.LocalStorage;
+import com.hp.ov.sdk.dto.servers.serverprofile.OsDeploymentSettings;
 
 public class ServerProfileValue {
 
@@ -41,6 +42,7 @@ public class ServerProfileValue {
     private AssignmentType macType;
     private AssignmentType wwnType;
     private AssignmentType serialNumberType;
+    private OsDeploymentSettings osDeploymentSettings;
 
     public String getTemplateName() {
         return templateName;
@@ -160,6 +162,14 @@ public class ServerProfileValue {
 
     public void setSerialNumberType(final AssignmentType serialNumberType) {
         this.serialNumberType = serialNumberType;
+    }
+
+    public OsDeploymentSettings getOsDeploymentSettings() {
+        return osDeploymentSettings;
+    }
+
+    public void setOsDeploymentSettings(final OsDeploymentSettings osDeploymentSettings) {
+        this.osDeploymentSettings = osDeploymentSettings;
     }
 
 }

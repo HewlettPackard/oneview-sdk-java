@@ -47,7 +47,7 @@ public class ResourceDtoUtilsWrapper {
                 connections.add(resourceDtoUtils.buildProfileConnection(j, networkForServerProfile.getNetworkName(),
                         networkForServerProfile.getRequestedMbps(), networkForServerProfile.getAllocatedMbps(),
                         networkForServerProfile.getMaximumMbps(), networkForServerProfile.getNetworkType(),
-                        networkForServerProfile.getBoot()));
+                        networkForServerProfile.getBoot(), networkForServerProfile.getConnectionName()));
                 if ((networkForServerProfile.getNetworkType().toString()).equalsIgnoreCase("FibreChannel")) {
                     fcId.put(networkForServerProfile.getNetworkName(), j);
                 }
@@ -74,6 +74,7 @@ public class ResourceDtoUtilsWrapper {
                 serverProfileValue.getUseBayNameForServerHardwareUri(), serverProfileValue.getEnclosureGroupName(),
                 serverProfileValue.getAffinity(), serverProfileValue.getWwnType(), serverProfileValue.getMacType(),
                 serverProfileValue.getSerialNumberType(), sanStorage, connections, serverProfileValue.getLocalStorage(),
-                serverProfileValue.getBoot(), serverProfileValue.getBios(), serverProfileValue.getFirmware());
+                serverProfileValue.getBoot(), serverProfileValue.getBios(), serverProfileValue.getFirmware(),
+                serverProfileValue.getOsDeploymentSettings());
     }
 }

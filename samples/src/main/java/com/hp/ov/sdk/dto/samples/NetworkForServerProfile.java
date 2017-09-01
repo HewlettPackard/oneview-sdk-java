@@ -15,7 +15,7 @@
  *******************************************************************************/
 package com.hp.ov.sdk.dto.samples;
 
-import com.hp.ov.sdk.dto.servers.serverprofile.BootControl;
+import com.hp.ov.sdk.dto.servers.serverprofile.ConnectionBoot;
 import com.hp.ov.sdk.dto.servers.FunctionType;
 
 public class NetworkForServerProfile {
@@ -24,7 +24,8 @@ public class NetworkForServerProfile {
     private Integer allocatedMbps;
     private Integer maximumMbps;
     private FunctionType networkType;
-    private BootControl boot;
+    private ConnectionBoot boot;
+    private String connectionName;
 
     public String getNetworkName() {
         return networkName;
@@ -66,12 +67,20 @@ public class NetworkForServerProfile {
         this.networkType = networkType;
     }
 
-    public BootControl getBoot() {
+    public ConnectionBoot getBoot() {
         return boot;
     }
 
-    public void setBoot(final BootControl boot) {
+    public void setBoot(final ConnectionBoot boot) {
         this.boot = boot;
+    }
+
+    public String getConnectionName() {
+        return connectionName;
+    }
+
+    public void setConnectionName(final String connectionName) {
+        this.connectionName = connectionName;
     }
 
 }
