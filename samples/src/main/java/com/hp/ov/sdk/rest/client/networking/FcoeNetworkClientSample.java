@@ -16,11 +16,17 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.settings.ScopeClient.SCOPES_URI;
+
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
+import com.hp.ov.sdk.dto.Patch;
+import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.fcoenetworks.FcoeNetwork;
@@ -34,6 +40,8 @@ public class FcoeNetworkClientSample {
     // ================================
     private static final String FCOE_NETWORK_NAME = "FCoE-Network_SAMPLE";
     private static final String FCOE_NETWORK_NAME_UPDATED = FCOE_NETWORK_NAME + "_Updated";
+
+    private static final String SCOPE_ID = "c22a15d1-3d5b-46bb-83be-bc9a9049866b";
     // ================================
 
     private final FcoeNetworkClient client;
@@ -48,8 +56,8 @@ public class FcoeNetworkClientSample {
         FcoeNetwork fcoeNetwork = new FcoeNetwork();
 
         fcoeNetwork.setName(FCOE_NETWORK_NAME);
-        fcoeNetwork.setType(ResourceCategory.RC_FCOE_NETWORK); //v200
-        fcoeNetwork.setType(ResourceCategory.RC_FCOE_NETWORK_V300); //v300
+        fcoeNetwork.setType(ResourceCategory.RC_FCOE_NETWORK); // v200
+        fcoeNetwork.setType(ResourceCategory.RC_FCOE_NETWORK_V300); // v300 or v500
         fcoeNetwork.setVlanId(Integer.valueOf(400));
 
         TaskResource task = this.client.create(fcoeNetwork);
@@ -77,6 +85,24 @@ public class FcoeNetworkClientSample {
         LOGGER.info("FcoeNetwork object returned to client : " + fcoeNetwork.toJsonString());
     }
 
+    private void patchFcoeNetwork() {
+        FcoeNetwork fcoeNetwork = client.getByName(FCOE_NETWORK_NAME).get(0);
+
+        Patch patch = new Patch();
+
+        // FCoE network patch supports the update of scopeUris
+        patch.setOp(PatchOperation.replace);
+        patch.setPath("/scopeUris");
+        List<String> scopeUris = fcoeNetwork.getScopeUris(); // Gets the current scope(s)
+        scopeUris.add(SCOPES_URI + "/" + SCOPE_ID); // Assigns FCoE network to a new scope
+        //scopeUris.remove(SCOPES_URI + "/" + SCOPE_ID); // Unassigns FCoE network from a scope
+        patch.setValue(scopeUris);
+
+        TaskResource task = this.client.patch(fcoeNetwork.getResourceId(), patch);
+
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
+    }
+
     private void updateFcoeNetwork() {
         FcoeNetwork fcoeNetwork = client.getByName(FCOE_NETWORK_NAME).get(0);
 
@@ -102,6 +128,7 @@ public class FcoeNetworkClientSample {
         sample.getFcoeNetwork();
         sample.getFcoeNetworkByName();
         sample.getAllFcoeNetworks();
+        sample.patchFcoeNetwork();
         sample.updateFcoeNetwork();
         sample.deleteFcoeNetwork();
     }
