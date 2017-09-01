@@ -18,6 +18,7 @@ package com.hp.ov.sdk.rest.client.networking;
 
 import com.hp.ov.sdk.rest.client.common.CreatableResource;
 import com.hp.ov.sdk.rest.client.common.DeletableResource;
+import com.hp.ov.sdk.rest.client.common.PatchableResource;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.client.common.UpdatableResource;
 import com.hp.ov.sdk.rest.reflect.Api;
@@ -28,6 +29,7 @@ public interface FcNetworkClient extends
         CreatableResource<FcNetwork>,
         SearchableResource<FcNetwork>,
         UpdatableResource<FcNetwork>,
+        PatchableResource,
         DeletableResource {
 
     String FC_NETWORK_URI = "/rest/fc-networks";
