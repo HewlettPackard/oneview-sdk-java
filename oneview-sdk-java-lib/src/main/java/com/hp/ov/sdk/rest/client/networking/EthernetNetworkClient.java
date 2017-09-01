@@ -23,6 +23,7 @@ import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.rest.client.common.CreatableResource;
 import com.hp.ov.sdk.rest.client.common.DeletableResource;
+import com.hp.ov.sdk.rest.client.common.PatchableResource;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.client.common.UpdatableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
@@ -37,6 +38,7 @@ public interface EthernetNetworkClient extends
         CreatableResource<Network>,
         SearchableResource<Network>,
         UpdatableResource<Network>,
+        PatchableResource,
         DeletableResource {
 
     String ETHERNET_URI = "/rest/ethernet-networks";

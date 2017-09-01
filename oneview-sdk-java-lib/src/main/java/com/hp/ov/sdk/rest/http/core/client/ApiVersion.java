@@ -22,7 +22,8 @@ public enum ApiVersion {
     V_120 (120),
     V_200 (200),
     V_201 (201),
-    V_300 (300);
+    V_300 (300),
+    V_500 (500);
 
     private final int value;
 
