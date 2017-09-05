@@ -44,6 +44,10 @@ public class InterconnectType extends BaseModelResource {
     private InterconnectCapabilities interconnectCapabilities;
     @Since(200)
     private DownlinkPortCapability downlinkPortCapability;
+    @Since(500)
+    private Boolean taaCompliant;
+    @Since(500)
+    private List<OtherFamilyMember> otherFamilyMembers = new ArrayList<>();
 
     public List<DownlinkCapability> getDownlinkCapabilities() {
         return downlinkCapabilities;
@@ -117,6 +121,22 @@ public class InterconnectType extends BaseModelResource {
         this.downlinkPortCapability = downlinkPortCapability;
     }
 
+    public Boolean getTaaCompliant() {
+        return taaCompliant;
+    }
+
+    public void setTaaCompliant(Boolean taaCompliant) {
+        this.taaCompliant = taaCompliant;
+    }
+
+    public List<OtherFamilyMember> getOtherFamilyMembers() {
+        return otherFamilyMembers;
+    }
+
+    public void setOtherFamilyMembers(List<OtherFamilyMember> otherFamilyMembers) {
+        this.otherFamilyMembers = otherFamilyMembers;
+    }
+
     @Override
     public final boolean equals(Object obj) {
         if (this == obj) return true;
@@ -135,6 +155,8 @@ public class InterconnectType extends BaseModelResource {
                     .append(partNumber, that.partNumber)
                     .append(portInfos, that.portInfos)
                     .append(unsupportedCapabilities, that.unsupportedCapabilities)
+                    .append(taaCompliant, that.taaCompliant)
+                    .append(otherFamilyMembers, that.otherFamilyMembers)
                     .isEquals();
         }
         return false;
@@ -153,6 +175,8 @@ public class InterconnectType extends BaseModelResource {
                 .append(partNumber)
                 .append(portInfos)
                 .append(unsupportedCapabilities)
+                .append(taaCompliant)
+                .append(otherFamilyMembers)
                 .toHashCode();
     }
 
@@ -169,6 +193,8 @@ public class InterconnectType extends BaseModelResource {
                 .append("partNumber", partNumber)
                 .append("portInfos", portInfos)
                 .append("unsupportedCapabilities", unsupportedCapabilities)
+                .append("taaCompliant", taaCompliant)
+                .append("otherFamilyMembers", otherFamilyMembers)
                 .toString();
     }
 }
