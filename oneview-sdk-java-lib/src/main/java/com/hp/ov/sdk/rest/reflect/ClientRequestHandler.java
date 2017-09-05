@@ -153,7 +153,6 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
             resources.setPrevPageUri(response.getPrevPageUri());
             resources.setTotal(response.getTotal());
             resources.setType(response.getType());
-            resources.setUri(response.getUri());
 
             request = new Request(HttpMethod.GET, response.getNextPageUri());
             
