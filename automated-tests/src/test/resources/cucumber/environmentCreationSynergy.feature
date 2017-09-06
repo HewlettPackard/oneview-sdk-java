@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to create an environment
+Feature: In order to create an environment
 
   Background: 
     Given an instance of OneView
@@ -223,62 +222,75 @@ Feature:
     And OneView gets Resource by Name
     Then I get an ID
 
-  @Not_yet_for_resolved
-  Scenario: Creation of a new Fc Provider
+  @create
+  Scenario: Creation of a new Fc San Manager Under the Specified Provider
     Given an instance of Fc San Provider
-    And Resource values as follows:
-      | provider          | Cisco          |
-      | name              | 172.18.20.1    |
-      | hostname          | Host           |
-      | snmp_port         | SnmpPort       |
-      | snmp_username     | dcs-SHA        |
-      | security_level    | Authentication |
-      | security_lv_value | true           |
-      | auth_protocol     | SHA            |
-      | auth_password     | hpinvent!      |
-    When OneView runs Resource creation
-    And OneView lists all
+      And Resource values as follows:
+      | type          | Cisco San Plugin |
+      | name          | 172.18.20.1      |
+      | hostname      | Host             |
+      | snmpPort      |              161 |
+      | snmpUserName  | dcs-SHA          |
+      | securityLevel | AUTHNOPRIV       |
+      | authProtocol  | SHA              |
+      | password      | hpinvent!        |
+    When OneView runs Fc San Provider Synergy creation
+      And OneView lists all
     Then I get a count
 
-  @Not_yet_for_resolved
+  @create @onlyOV310 @disabled
+  Scenario: Creation of a new Fc San Manager Under the Specified Provider
+    Given an instance of Fc San Provider
+    Given Resource values as follows:
+      | type          | Cisco San Plugin |
+      | name          | 172.18.20.1      |
+      | snmpPort      |              161 |
+      | snmpUserName  | dcs-SHA          |
+      | securityLevel | AUTHNOPRIV       |
+      | authProtocol  | SHA              |
+      | password      | dcsdcsdcs        |
+    When OneView runs Fc San Provider Synergy creation
+      And OneView lists all
+    Then I get a count
+
+  @create
   Scenario: Creation of a new Fc Sans Managed San Endpoints Csv
-    Given an instance of Fc Sans Managed San
     Given Resource values as follows:
       | name | VSAN1 |
     When OneView gets Resource by Name
-    And OneView runs Fc Sans Managed San Endpoints Csv creation
+      And OneView runs Fc Sans Managed San Endpoints Csv creation
     Then Resource is found
 
-  @Not_yet_for_resolved
+  @create
   Scenario: Creation of a new Fc Sans Managed San Issues Report
-    Given an instance of Fc Sans Managed San
     Given Resource values as follows:
       | name | VSAN1 |
     When OneView gets Resource by Name
-    And OneView runs Fc Sans Managed San Issues Report creation
+      And OneView runs Fc Sans Managed San Issues Report creation
     Then Resource is found
 
   @create
   Scenario: Creation of a new Logical Interconnect Group
     Given an instance of Logical Interconnect Group
-    And Resource values as follows:
-      | name           | lig-bdd-4-sp |
-      | state          | ACTIVE       |
-      | baySet         |            3 |
-      | redundancyType | Redundant    |
-      | enclosureType  | SY12000      |
-    And interconnection values as follows:
+      And Resource values as follows:
+      | name           | lig-bdd-all |
+      | state          | ACTIVE      |
+      | baySet         |           2 |
+      | redundancyType | Redundant   |
+      | enclosureType  | SY12000     |
+      | enclosureIndex |          -1 |
+      And interconnection values as follows:
       | entries | type                                          |
-      |       3 | Virtual Connect SE 40Gb F8 Module for Synergy |
-      |       6 | Virtual Connect SE 40Gb F8 Module for Synergy |
+      |       2 | Virtual Connect SE 16Gb FC Module for Synergy |
+      |       5 | Virtual Connect SE 16Gb FC Module for Synergy |
     When OneView runs Logical Interconnect Group Synergy creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @Not_yet_for_resolved
   Scenario: Edit a Logical Interconnect Group
     Given an instance of Logical Interconnect Group
-    Given name "lig-bdd-4-sp" for Resource
+    Given name "lig-bdd-all" for Resource
     And Uplink values as follows:
       | name              | type         | networks      | bayPort |
       | FCUplinkSet       | FibreChannel | all-fc-bdd-1  | Q2:3    |
@@ -288,25 +300,41 @@ Feature:
     Then I get an ID
 
   @create
-  Scenario: Creation of a new Enclosure Groups
+  Scenario: Creation of a new Enclosure Group
     Given an instance of Enclosure Groups
-    And Resource values as follows:
-      | name             | enclosure-group-bdd-4-sp |
-      | lig              | lig-bdd-4-sp             |
-      | stackingMode     | Enclosure                |
-      | enclosureCount   |                        1 |
-      | ipAddressingMode | DHCP                     |
+      And Resource values as follows:
+      | name             | enclosure-group-bdd-all |
+      | lig              | lig-bdd-all             |
+      | stackingMode     | Enclosure               |
+      | enclosureCount   |                      3  |
+      | ipAddressingMode | DHCP                    |
+      | entryBayOne      |                      5  |
+      | entryBayTwo      |                      2  |
     When Enclosure Group sets Uris
-    And OneView runs Enclosure Synergy creation
-    And OneView gets Resource by Name
+      And OneView runs Enclosure Synergy creation
+      And OneView gets Resource by Name
     Then I get an ID
 
-  @create
+  @createMultiple
+  Scenario: Creation of a new Logical Enclosure Multiple
+    Given an instance of Logical Enclosure Multiple
+      And Resource values as follows:
+      | name           | logical_enclosure_bdd-all |
+      | enclosureGroup | enclosure-group-bdd-all   |
+      | enclosureURI1  | 0000A66101                |
+      | enclosureURI2  | 0000A66102                |
+      | enclosureURI3  | 0000A66103                |
+      | firmware       | Service Pack for ProLiant |
+    When OneView runs Multiple enclosures creation
+      And OneView gets Resource by Name
+    Then I get an ID
+
+  @create @disabled
   Scenario: Creation of a new Logical Enclosure
     Given an instance of Logical Enclosure
     Given Resource values as follows:
-      | name           | logical_enclosure_bdd     |
-      | enclosureGroup | enclosure-group-bdd-4-sp  |
+      | name           | logical_enclosure_bdd-all |
+      | enclosureGroup | enclosure-group-bdd-all   |
       | enclosureURI1  | 0000A66101                |
       | firmware       | Service Pack for ProLiant |
     When OneView runs One enclosures creation
@@ -317,12 +345,12 @@ Feature:
   Scenario: Creation of a new Server Profile Template
     Given an instance of Server Profile Template
     Given Resource values as follows:
-      | name             | spt-bdd                  |
-      | enclosureGroup   | enclosure-group-bdd-4-sp |
-      | serialNumberType | Virtual                  |
-      | macType          | Virtual                  |
-      | wwnType          | Virtual                  |
-      | affinity         | Bay                      |
+      | name             | spt-bdd                 |
+      | enclosureGroup   | enclosure-group-bdd-all |
+      | serialNumberType | Virtual                 |
+      | macType          | Virtual                 |
+      | wwnType          | Virtual                 |
+      | affinity         | Bay                     |
     And an Enclosure Group Uri
     When Server Profile Template sets Uris
     And OneView runs Resource creation
@@ -340,7 +368,7 @@ Feature:
       | macType            | UserDefined               |
       | wwnType            | UserDefined               |
       | serialNumberType   | Physical                  |
-      | enclosureGroup     | enclosure-group-bdd-4-sp  |
+      | enclosureGroup     | enclosure-group-bdd-all   |
       | serverHardware     | 0000A66101, bay 4         |
       | serverHardwareType | SY 660 Gen9 1             |
       | volume             | volume-bdd-storage-volume |

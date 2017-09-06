@@ -27,7 +27,8 @@ import cucumber.api.junit.Cucumber;
     format = { "pretty", "html:target/cucumber" }, 
     glue = {"com.hp.ov.sdk.resources" }, 
     features = {"classpath:cucumber/environmentCreationSynergy.feature"},
-    tags = "@create")
+    monochrome = true,
+    tags = { "@create, @createMultiple" , "~@disabled" })
 public class EnvironmentCreationTestsSynergy {
 
 }

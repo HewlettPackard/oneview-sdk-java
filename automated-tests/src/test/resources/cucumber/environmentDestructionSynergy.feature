@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to destroy an environment
+Feature: In order to destroy an environment
 
   Background: 
     Given an instance of OneView
@@ -65,7 +64,7 @@ Feature:
     And OneView gets Resource by ID
     Then Resource is not found
 
-  @Not_yet_for_resolved
+  @remove
   Scenario: Remove a Fc San Device Manager
     Given an instance of Fc San Device Manager
     And name "172.18.20.1" for Resource
@@ -202,3 +201,21 @@ Feature:
     And OneView deletes the Resource
     And OneView gets Resource by ID
     Then Resource is not found
+
+  @remove
+  Scenario: Remove an Alert Change Log
+    When OneView deletes Alert Change Log
+    Then I get a success status
+
+  @remove
+  Scenario: Remove an Alert By Filter
+    Given Resource values as follows:
+      | alertUrgency | Medium |
+    When OneView deletes Alert by filter
+    Then I get a success status
+
+  @remove
+  Scenario: Remove an Alert
+    When OneView gets Id of First Alert
+      And OneView deletes the Resource
+    Then I get a success status

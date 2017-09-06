@@ -27,6 +27,7 @@ import cucumber.api.junit.Cucumber;
     format = { "pretty", "html:target/cucumber" }, 
     glue = {"com.hp.ov.sdk.resources" }, 
     features = {"classpath:cucumber/environmentCreationC7000.feature"},
+    monochrome = true,
     tags = "@create")
 public class EnvironmentCreationTestsC7000 {
 

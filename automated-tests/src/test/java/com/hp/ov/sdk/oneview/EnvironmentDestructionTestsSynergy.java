@@ -27,6 +27,7 @@ import cucumber.api.junit.Cucumber;
     format = { "pretty", "html:target/cucumber" }, 
     glue = {"com.hp.ov.sdk.resources" }, 
     features = {"classpath:cucumber/environmentDestructionSynergy.feature"},
+    monochrome = true,
     tags = "@remove")
 public class EnvironmentDestructionTestsSynergy {
 

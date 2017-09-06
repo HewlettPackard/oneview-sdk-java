@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-Feature: 
-  In order to create an environment
+Feature: In order to create an environment
 
   Background: 
     Given an instance of OneView
