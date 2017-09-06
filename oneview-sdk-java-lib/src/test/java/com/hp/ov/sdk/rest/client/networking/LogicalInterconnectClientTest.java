@@ -51,8 +51,8 @@ import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.dto.PortMonitorUplinkPort;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettingsV2;
-import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettings;
+import com.hp.ov.sdk.dto.networking.InterconnectSettings;
 import com.hp.ov.sdk.dto.networking.Location;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
@@ -357,7 +357,7 @@ public class LogicalInterconnectClientTest {
 
     @Test
     public void shouldUpdateLogicalInterconnectSettings() {
-        InterconnectSettingsV2 settings = new InterconnectSettingsV2();
+        InterconnectSettings settings = new InterconnectSettings();
 
         client.updateSettings(ANY_RESOURCE_ID, settings, TaskTimeout.of(321));
 
@@ -385,7 +385,7 @@ public class LogicalInterconnectClientTest {
 
     @Test
     public void shouldUpdateLogicalInterconnectEthernetSettings() {
-        EthernetInterconnectSettingsV2 settings = new EthernetInterconnectSettingsV2();
+        EthernetInterconnectSettings settings = new EthernetInterconnectSettings();
 
         client.updateEthernetSettings(ANY_RESOURCE_ID, settings, TaskTimeout.of(321));
 

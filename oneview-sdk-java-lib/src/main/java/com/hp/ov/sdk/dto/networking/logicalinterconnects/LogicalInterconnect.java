@@ -26,7 +26,7 @@ import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.networking.Compliance;
 import com.hp.ov.sdk.dto.networking.EnclosureType;
-import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettings;
 import com.hp.ov.sdk.dto.networking.IcmLicensesDto;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 import com.hp.ov.sdk.dto.networking.StackingHealth;
@@ -52,7 +52,7 @@ public class LogicalInterconnect extends BaseModelResource {
     @Since(200)
     private EnclosureType enclosureType;
     private List<String> enclosureUris = new ArrayList<String>();
-    private EthernetInterconnectSettingsV2 ethernetSettings;
+    private EthernetInterconnectSettings ethernetSettings;
     @Since(200)
     private FcoeInterconnectSettings fcoeSettings;
     @Since(300)
@@ -126,14 +126,14 @@ public class LogicalInterconnect extends BaseModelResource {
     /**
      * @return the ethernetSettings
      */
-    public EthernetInterconnectSettingsV2 getEthernetSettings() {
+    public EthernetInterconnectSettings getEthernetSettings() {
         return ethernetSettings;
     }
 
     /**
      * @param ethernetSettings the ethernetSettings to set
      */
-    public void setEthernetSettings(EthernetInterconnectSettingsV2 ethernetSettings) {
+    public void setEthernetSettings(EthernetInterconnectSettings ethernetSettings) {
         this.ethernetSettings = ethernetSettings;
     }
 

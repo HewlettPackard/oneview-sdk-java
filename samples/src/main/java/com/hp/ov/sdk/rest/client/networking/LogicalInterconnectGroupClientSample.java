@@ -15,6 +15,8 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.settings.ScopeClient.SCOPES_URI;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,10 +27,12 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
+import com.hp.ov.sdk.dto.Patch;
+import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.EnclosureType;
-import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.InterconnectSettings;
 import com.hp.ov.sdk.dto.networking.NetworkType;
 import com.hp.ov.sdk.dto.networking.interconnect.InterconnectTypeName;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.InterconnectMapEntryTemplate;
@@ -72,6 +76,7 @@ public class LogicalInterconnectGroupClientSample {
     private static final String SETTING_ID = "dcd89c40-57b6-4551-9486-acc9090785fa";
     private static final String FABRIC_URI = "/rest/fabrics/a7896ce7-c11d-4658-829d-142bc66a85e4";
     private static final String LOGICAL_DOWNLINK_URI = "/rest/logical-downlinks/2ece260c-7997-441d-b1b9-d3296fe89505";
+    private static final String SCOPE_ID = "2d108000-f8d1-4104-8457-7a5aa3c1bb40";
     // ================================
 
     private final LogicalInterconnectGroupClient client;
@@ -112,7 +117,7 @@ public class LogicalInterconnectGroupClientSample {
         logicalInterconnectGroup.setName(RESOURCE_NAME);
         logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP); // v120
         logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200); // v200
-        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300); // v300
+        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300); // v300 or v500
 
         TaskResource task = this.client.create(logicalInterconnectGroup);
 
@@ -122,10 +127,28 @@ public class LogicalInterconnectGroupClientSample {
     private void createLogicalInterconnectGroupSynergy() {
         LogicalInterconnectGroup logicalInterconnectGroup = this.buildTestLogicalInterconnectGroupSynergy();
         logicalInterconnectGroup.setName(RESOURCE_NAME);
-        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300); // v300
+        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300); // v300 or v500
         logicalInterconnectGroup.setEnclosureType(EnclosureType.SY12000);
 
         TaskResource task = this.client.create(logicalInterconnectGroup);
+
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
+    }
+
+    private void patchLogicalInterconnectGroup() {
+        LogicalInterconnectGroup logicalInterconnectGroup = client.getByName(RESOURCE_NAME).get(0);
+
+        Patch patch = new Patch();
+
+        // Logical Interconnect Group patch supports the update of scopeUris
+        patch.setOp(PatchOperation.replace);
+        patch.setPath("/scopeUris");
+        List<String> scopeUris = logicalInterconnectGroup.getScopeUris(); // Gets the current scope(s)
+        scopeUris.add(SCOPES_URI + "/" + SCOPE_ID); // Assigns Logical Interconnect Group to a new scope
+        // scopeUris.remove(SCOPES_URI + "/" + SCOPE_ID); // Unassigns Logical Interconnect Group from a scope
+        patch.setValue(scopeUris);
+
+        TaskResource task = this.client.patch(logicalInterconnectGroup.getResourceId(), patch);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -154,7 +177,7 @@ public class LogicalInterconnectGroupClientSample {
     }
 
     private void getDefaultInterconnectSettings() {
-        InterconnectSettingsV2 interconnectSettingsDto = client.getDefaultInterconnectSettings();
+        InterconnectSettings interconnectSettingsDto = client.getDefaultInterconnectSettings();
 
         LOGGER.info("Interconnect settings returned to client : " + interconnectSettingsDto.toJsonString());
     }
@@ -168,7 +191,7 @@ public class LogicalInterconnectGroupClientSample {
         // InterconnectSettingsV2 interconnectSettingsDto =
         // client.getInterconnectSettings(
         // logicalInterconnectGroup.getResourceId(), SETTING_ID);
-        InterconnectSettingsV2 interconnectSettingsDto = client
+        InterconnectSettings interconnectSettingsDto = client
                 .getInterconnectSettings(logicalInterconnectGroup.getResourceId());
 
         LOGGER.info("Interconnect settings returned to client : " + interconnectSettingsDto.toJsonString());
@@ -285,8 +308,9 @@ public class LogicalInterconnectGroupClientSample {
         client.getLogicalInterconnectGroup();
         client.getLogicalInterconnectGroupByName();
         client.getDefaultInterconnectSettings();
-
         client.getInterconnectSettings();
+
+        client.patchLogicalInterconnectGroup();
         client.updateLogicalInterconnectGroup();
         client.deleteLogicalInterconnectGroup();
     }

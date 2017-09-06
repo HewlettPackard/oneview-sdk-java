@@ -15,10 +15,11 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.networking;
 
-import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.InterconnectSettings;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
 import com.hp.ov.sdk.rest.client.common.CreatableResource;
 import com.hp.ov.sdk.rest.client.common.DeletableResource;
+import com.hp.ov.sdk.rest.client.common.PatchableResource;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.client.common.UpdatableResource;
 import com.hp.ov.sdk.rest.reflect.Api;
@@ -30,6 +31,7 @@ public interface LogicalInterconnectGroupClient extends
         SearchableResource<LogicalInterconnectGroup>,
         CreatableResource<LogicalInterconnectGroup>,
         UpdatableResource<LogicalInterconnectGroup>,
+        PatchableResource,
         DeletableResource {
 
     String LOGICAL_INTERCONNECT_GROUPS_URI = "/rest/logical-interconnect-groups";
@@ -40,10 +42,10 @@ public interface LogicalInterconnectGroupClient extends
      * The module aids in fetching the default interconnect settings details for
      * the logical interconnect group found under the current HPE OneView.
      *
-     * @return {@link InterconnectSettingsV2} containing the interconnect setting details.
+     * @return {@link InterconnectSettings} containing the interconnect setting details.
      */
     @Endpoint(uri = LOGICAL_INTERCONNECT_GROUPS_DEFAULT_SETTINGS_URI)
-    InterconnectSettingsV2 getDefaultInterconnectSettings();
+    InterconnectSettings getDefaultInterconnectSettings();
 
     /**
      * The module aids in fetching the interconnect settings details for the
@@ -51,12 +53,12 @@ public interface LogicalInterconnectGroupClient extends
      *
      * @param resourceId
      *            The resource identifier for logical interconnect group as seen in HPE OneView.
-     * @return {@link InterconnectSettingsV2} containing the interconnect setting details.
+     * @return {@link InterconnectSettings} containing the interconnect setting details.
      *
      * @since HPE OneView 2.0
      */
     @Endpoint(uri = "/{resourceId}" + LOGICAL_INTERCONNECT_GROUPS_SETTINGS_URI)
-    InterconnectSettingsV2 getInterconnectSettings(@PathParam("resourceId") String resourceId);
+    InterconnectSettings getInterconnectSettings(@PathParam("resourceId") String resourceId);
 
     /**
      * The module aids in fetching the interconnect settings details for the
@@ -66,10 +68,10 @@ public interface LogicalInterconnectGroupClient extends
      *            The resource identifier for logical interconnect group as seen in HPE OneView.
      * @param settingsId
      *            The settingsId for logical interconnect group as seen in HPE OneView.
-     * @return {@link InterconnectSettingsV2} containing the interconnect setting details.
+     * @return {@link InterconnectSettings} containing the interconnect setting details.
      */
     @Endpoint(uri = "/{resourceId}" + LOGICAL_INTERCONNECT_GROUPS_SETTINGS_URI + "/{settingsId}")
-    InterconnectSettingsV2 getInterconnectSettings_V120(@PathParam("resourceId") String resourceId,
+    InterconnectSettings getInterconnectSettings_V120(@PathParam("resourceId") String resourceId,
             @PathParam("settingsId") String settingsId);
 
 }
