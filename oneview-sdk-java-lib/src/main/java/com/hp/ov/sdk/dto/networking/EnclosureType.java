@@ -19,6 +19,7 @@ public enum EnclosureType {
 
     C7000,
     NotApplicable,
+    SDX,
     SY12000,
     Unknown;
 

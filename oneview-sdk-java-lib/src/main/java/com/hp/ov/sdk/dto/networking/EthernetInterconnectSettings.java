@@ -18,11 +18,8 @@ package com.hp.ov.sdk.dto.networking;
 import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
 
-public class EthernetInterconnectSettingsV2 extends BaseModelResource {
+public class EthernetInterconnectSettings extends BaseModelResource {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     private String dependentResourceUri;
@@ -32,9 +29,15 @@ public class EthernetInterconnectSettingsV2 extends BaseModelResource {
     private Boolean enablePauseFloodProtection;
     @Since(200)
     private Boolean enableRichTLV;
+    @Since(300)
+    private Boolean enableTaggedLldp;
     private String id;
     private Integer igmpIdleTimeoutInterval;
     private NetworkType interconnectType;
+    @Since(300)
+    private String lldpIpv4Address;
+    @Since(300)
+    private String lldpIpv6Address;
     private Integer macRefreshInterval;
 
     /**
@@ -143,17 +146,17 @@ public class EthernetInterconnectSettingsV2 extends BaseModelResource {
     }
 
     /**
-     * @return the networkType
+     * @return the interconnectType
      */
-    public NetworkType getNetworkType() {
+    public NetworkType getInterconnectType() {
         return interconnectType;
     }
 
     /**
      * @param interconnectType
-     *            the networkType to set
+     *            the interconnectType to set
      */
-    public void setNetworkType(final NetworkType interconnectType) {
+    public void setInterconnectType(final NetworkType interconnectType) {
         this.interconnectType = interconnectType;
     }
 
@@ -180,10 +183,56 @@ public class EthernetInterconnectSettingsV2 extends BaseModelResource {
     }
 
     /**
-     * @param enableRichTLV the enableRichTLV to set
+     * @param enableRichTLV
+     *            the enableRichTLV to set
      */
-    public void setEnableRichTLV(Boolean enableRichTLV) {
+    public void setEnableRichTLV(final Boolean enableRichTLV) {
         this.enableRichTLV = enableRichTLV;
+    }
+
+    /**
+     * @return the enableTaggedLldp
+     */
+    public Boolean getEnableTaggedLldp() {
+        return enableTaggedLldp;
+    }
+
+    /**
+     * @param enableTaggedLldp
+     *            the enableTaggedLldp to set
+     */
+    public void setEnableTaggedLldp(final Boolean enableTaggedLldp) {
+        this.enableTaggedLldp = enableTaggedLldp;
+    }
+
+    /**
+     * @return the lldpIpv4Address
+     */
+    public String getLldpIpv4Address() {
+        return lldpIpv4Address;
+    }
+
+    /**
+     * @param lldpIpv4Address
+     *            the lldpIpv4Address to set
+     */
+    public void setLldpIpv4Address(final String lldpIpv4Address) {
+        this.lldpIpv4Address = lldpIpv4Address;
+    }
+
+    /**
+     * @return the lldpIpv6Address
+     */
+    public String getLldpIpv6Address() {
+        return lldpIpv6Address;
+    }
+
+    /**
+     * @param lldpIpv6Address
+     *            the lldpIpv6Address to set
+     */
+    public void setLldpIpv6Address(final String lldpIpv6Address) {
+        this.lldpIpv6Address = lldpIpv6Address;
     }
 
 }

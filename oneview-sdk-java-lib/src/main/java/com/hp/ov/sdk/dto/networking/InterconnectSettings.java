@@ -19,14 +19,11 @@ import com.google.gson.annotations.Since;
 import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.networking.logicalinterconnects.FcoeInterconnectSettings;
 
-public class InterconnectSettingsV2 extends BaseModelResource {
+public class InterconnectSettings extends BaseModelResource {
 
-    /**
-	 *
-	 */
     private static final long serialVersionUID = 1L;
 
-    private EthernetInterconnectSettingsV2 ethernetSettings;
+    private EthernetInterconnectSettings ethernetSettings;
     @Since(200)
     private FcoeInterconnectSettings fcoeSettings;
 
@@ -34,16 +31,16 @@ public class InterconnectSettingsV2 extends BaseModelResource {
      *
      * @return The ethernetSettings
      */
-    public EthernetInterconnectSettingsV2 getEthernetSettings() {
+    public EthernetInterconnectSettings getEthernetSettings() {
         return ethernetSettings;
     }
 
     /**
      *
      * @param ethernetSettings
-     *            The ethernetSettings
+     *            The ethernetSettings to set
      */
-    public void setEthernetSettings(final EthernetInterconnectSettingsV2 ethernetSettings) {
+    public void setEthernetSettings(final EthernetInterconnectSettings ethernetSettings) {
         this.ethernetSettings = ethernetSettings;
     }
 

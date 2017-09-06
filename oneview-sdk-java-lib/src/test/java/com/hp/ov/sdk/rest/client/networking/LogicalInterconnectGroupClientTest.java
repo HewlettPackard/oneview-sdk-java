@@ -31,8 +31,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.reflect.Reflection;
 import com.google.common.reflect.TypeToken;
+import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.InterconnectSettings;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
@@ -97,6 +98,18 @@ public class LogicalInterconnectGroupClientTest {
     }
 
     @Test
+    public void shouldPatchLogicalInterconnectGroup() {
+        Patch patch = new Patch();
+
+        client.patch(ANY_RESOURCE_ID, patch);
+
+        String expectedUri = LOGICAL_INTERCONNECT_GROUPS_URI + "/" + ANY_RESOURCE_ID;
+        Request expectedRequest = new Request(HttpMethod.PATCH, expectedUri, patch);
+
+        then(baseClient).should().executeMonitorableRequest(expectedRequest);
+    }
+
+    @Test
     public void shouldUpdateLogicalInterconnectGroup() {
         LogicalInterconnectGroup logicalInterconnectGroup = new LogicalInterconnectGroup();
 
@@ -125,7 +138,7 @@ public class LogicalInterconnectGroupClientTest {
         String expectedUri = LOGICAL_INTERCONNECT_GROUPS_URI + LOGICAL_INTERCONNECT_GROUPS_DEFAULT_SETTINGS_URI;
         Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(InterconnectSettingsV2.class).getType());
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(InterconnectSettings.class).getType());
     }
 
     @Test
@@ -137,7 +150,7 @@ public class LogicalInterconnectGroupClientTest {
                 + LOGICAL_INTERCONNECT_GROUPS_SETTINGS_URI;
         Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(InterconnectSettingsV2.class).getType());
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(InterconnectSettings.class).getType());
     }
 
     @Test
@@ -150,7 +163,7 @@ public class LogicalInterconnectGroupClientTest {
                 + "/" + ANY_SETTING_ID;
         Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
-        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(InterconnectSettingsV2.class).getType());
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(InterconnectSettings.class).getType());
     }
 
 }
