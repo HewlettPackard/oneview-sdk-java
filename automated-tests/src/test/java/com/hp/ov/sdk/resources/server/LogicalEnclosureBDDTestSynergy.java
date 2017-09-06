@@ -35,7 +35,7 @@ import cucumber.api.junit.Cucumber;
         glue = { "com.hp.ov.sdk.resources" },
         features = "classpath:cucumber/server/logicalEnclosureSynergy.feature",
         monochrome = true,
-        tags = { "@create, @createOne, @createMultiple, @getAll, @get, @update, @remove",
+        tags = { "@create, @createOne, @createMultiple, @getAll, @get, @patch, @refresh, @update, @remove",
                 "~@disabled" })
 
 public class LogicalEnclosureBDDTestSynergy {
