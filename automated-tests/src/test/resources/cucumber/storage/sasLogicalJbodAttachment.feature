@@ -87,23 +87,23 @@ Feature: In order to manage SAS Logical JBOD Attachments
   Scenario: Creation of a new SAS Logical JBOD
     Given an instance of Server Profile
       And Resource values as follows:
-      | name               | Sas-Logical-JBOD-Att-bdd                    |
-      | description        | Sas L JBOD                                  |
-      | firmware           | Service Pack for ProLiant version 2017.07.0 |
-      | affinity           | Bay                                         |
-      | macType            | UserDefined                                 |
-      | wwnType            | UserDefined                                 |
-      | serialNumberType   | Physical                                    |
-      | enclosureGroup     | EG-bdd-JBOD-ATT                             |
-      | serverHardware     | 0000A66101, bay 5                           |
-      | serverHardwareType | SY 480 Gen9 3                               |
-      | sasLogicalJbodName | sasLogicalJbodAtt-bdd                       |
-      | deviceSlot         | Mezz 1                                      |
-      | numPhysicalDrives  |                                           1 |
-      | driveMinSizeGB     |                                           1 |
-      | driveMaxSizeGB     |                                        1000 |
-      | driveTechnology    | SasHdd                                      |     
-      | id                 |                                           1 |
+      | name               | Sas-Logical-JBOD-Att-bdd          |
+      | description        | Sas L JBOD                        |
+      | firmware           | Service Pack for ProLiant version |
+      | affinity           | Bay                               |
+      | macType            | UserDefined                       |
+      | wwnType            | UserDefined                       |
+      | serialNumberType   | Physical                          |
+      | enclosureGroup     | EG-bdd-JBOD-ATT                   |
+      | serverHardware     | 0000A66101, bay 5                 |
+      | serverHardwareType | SY 480 Gen9 3                     |
+      | sasLogicalJbodName | sasLogicalJbodAtt-bdd             |
+      | deviceSlot         | Mezz 1                            |
+      | numPhysicalDrives  |                                 1 |
+      | driveMinSizeGB     |                                 1 |
+      | driveMaxSizeGB     |                              1000 |
+      | driveTechnology    | SasHdd                            |
+      | id                 |                                 1 |
       And an Enclosure Group Uri
     When Server Profile sets Uris
       And OneView runs Resource creation
