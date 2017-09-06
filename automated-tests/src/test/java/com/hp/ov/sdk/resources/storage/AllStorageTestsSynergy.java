@@ -26,7 +26,8 @@ import cucumber.api.junit.Cucumber;
 @CucumberOptions(
     format = { "pretty", "html:target/cucumber" }, 
     glue = { "com.hp.ov.sdk.resources" }, 
-    features = { "classpath:cucumber/storage/driveEnclosure.feature", // Synergy only
+    features = { 
+            "classpath:cucumber/storage/driveEnclosure.feature", // Synergy only
             "classpath:cucumber/storage/fcSanDeviceManagerSynergy.feature",
             "classpath:cucumber/storage/fcSanProviderSynergy.feature",
             "classpath:cucumber/storage/fcSansManagedSanSynergy.feature",
@@ -36,9 +37,11 @@ import cucumber.api.junit.Cucumber;
             "classpath:cucumber/storage/storageVolumeTemplate.feature",
             "classpath:cucumber/storage/sasLogicalJbod.feature", // Synergy only
             "classpath:cucumber/storage/sasLogicalJbodAttachment.feature", // Synergy only
-            "classpath:cucumber/storage/storageVolumeAttachmentSynergy.feature" },
+            "classpath:cucumber/storage/storageVolumeAttachmentSynergy.feature" 
+            },
     monochrome = true,
-    tags = { "@getAll, @get, @create, @createMultiple, @createOne, @update, @patch, @repair, @refresh, @synergy, @onlyOV310, @remove",
+    tags = { "@getAll, @get, @create, @createMultiple, @createOne, @update, @patch, "
+            + "@repair, @refresh, @synergy, @onlyOV310, @remove",
             "~@C7000", "~@disabled", "~@onlyOV3" })
 
 public class AllStorageTestsSynergy {

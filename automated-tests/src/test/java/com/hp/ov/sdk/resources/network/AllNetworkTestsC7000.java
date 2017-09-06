@@ -44,7 +44,8 @@ import cucumber.api.junit.Cucumber;
             "classpath:cucumber/network/switchType.feature",
             "classpath:cucumber/network/uplinkSetC7000.feature" },
     monochrome = true,
-    tags = { "@getAll, @get, @create, @list, @update, @patch, @reset, @refresh, @remove, @onlyOV2, @onlyOV3, @C7000",
+    tags = { "@getAll, @get, @create, @list, @update, @patch, @reset, @refresh, @remove, "
+            + "@onlyOV2, @onlyOV3, @C7000",
             "~@disabled", "~@synergy", "~@onlyOV1.2" })
 
 public class AllNetworkTestsC7000 {
