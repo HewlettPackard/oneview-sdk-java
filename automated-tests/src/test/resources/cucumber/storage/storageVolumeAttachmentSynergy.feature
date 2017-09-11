@@ -224,7 +224,7 @@ Feature: In order to manage Storage Volume Attachments
       And Resource values as follows:
       | name               | sp-bdd-sva                              |
       | description        | sp-bdd                                  |
-      | firmware           | Service Pack for ProLiant 2017.07.0     |
+      | firmware           | Service Pack for ProLiant               |
       | affinity           | Bay                                     |
       | macType            | UserDefined                             |
       | wwnType            | UserDefined                             |
