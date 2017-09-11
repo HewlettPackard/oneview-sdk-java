@@ -188,7 +188,7 @@ public class LogicalInterconnectGroupClientSample {
         // To run getInterconnectSettings on OneView 1.2, you need settingID and
         // resourceID of LIG
         // for OV 2.0 & 3.0, you just need the resourceID
-        // InterconnectSettingsV2 interconnectSettingsDto =
+        // InterconnectSettings interconnectSettingsDto =
         // client.getInterconnectSettings(
         // logicalInterconnectGroup.getResourceId(), SETTING_ID);
         InterconnectSettings interconnectSettingsDto = client
