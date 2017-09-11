@@ -34,7 +34,8 @@ import cucumber.api.junit.Cucumber;
             "classpath:cucumber/server/serverProfileSynergy.feature",
             "classpath:cucumber/server/logicalEnclosureSynergy.feature" },
     monochrome = true,
-    tags = { "@getAll, @get, @create, @createMultiple, @createOne, @update, @patch, @onlyOV3, @refresh, @remove", 
+    tags = { "@getAll, @get, @create, @createMultiple, @createOne, @update, @patch, "
+            + "@onlyOV3, @refresh, @remove",
             "~@disabled" })
 
 public class AllServerTestsSynergy {

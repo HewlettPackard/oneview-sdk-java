@@ -31,7 +31,8 @@ import cucumber.api.junit.Cucumber;
             "classpath:cucumber/facilities/rack.feature",
             "classpath:cucumber/facilities/unmanagedDevice.feature" },
     monochrome = true,
-    tags = { "@create, @createByDiscover, @getAll, @get, @update, @updatePowerState, @updateRefresh, @updateUid, @remove, @removeByFilter, @removeSynchronously",
+    tags = { "@create, @createByDiscover, @getAll, @get, @update, @updatePowerState, "
+            + "@updateRefresh, @updateUid, @remove, @removeByFilter, @removeSynchronously",
             "~@disabled" })
 
 public class AllFacilitiesTestsC7000 {
