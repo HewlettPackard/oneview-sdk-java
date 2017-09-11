@@ -232,6 +232,16 @@ Feature: In order to manage Logical Enclosures
       And OneView gets Resource properties
     Then I get previous values in Resource
 
+  @refresh
+  Scenario: Refresh an Enclosure
+    Given an instance of Enclosure
+      And name "0000A66101" for Resource
+      And Resource values will be updated as follows:
+      | refreshState | RefreshPending |
+    When OneView gets Resource by Name
+      And Oneview runs Enclosure refresh
+    Then Resource is found
+
   @remove
   Scenario: Remove a Logical Enclosure
     Given name "logical_enclosure_bdd_Updated" for Resource
