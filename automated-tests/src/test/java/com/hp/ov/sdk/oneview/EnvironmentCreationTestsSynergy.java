@@ -24,11 +24,21 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-    format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = {"classpath:cucumber/environmentCreationSynergy.feature"},
+    format = { "pretty", "html:target/cucumber" },
+    glue = { "com.hp.ov.sdk.resources" },
+    features = { "classpath:cucumber/environmentCreationSynergy.feature" },
     monochrome = true,
-    tags = { "@create, @createMultiple" , "~@disabled" })
+    tags = "@create, @update")
+
+/*
+ * To run this test suite use:
+ *   DCS appliance: Synergy
+ *   Schematic: synergy_3encl_demo
+ *   Manually add a firmware bundle before
+ * Recommended VM configuration:
+ *   Memory: 12GB
+ *   CPUs: 8 cores
+ */
 public class EnvironmentCreationTestsSynergy {
 
 }

@@ -25,10 +25,20 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(
     format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = {"classpath:cucumber/environmentCreationC7000.feature"},
+    glue = { "com.hp.ov.sdk.resources" },
+    features = { "classpath:cucumber/environmentCreationC7000.feature" },
     monochrome = true,
-    tags = "@create")
+    tags = "@create, @update")
+
+/*
+ * To run this test suite use:
+ *   DCS appliance: C7000
+ *   Schematic: C7000_4Encl
+ *   Manually add a firmware bundle before
+ * Recommended VM configuration:
+ *   Memory: 12GB
+ *   CPUs: 8 cores
+ */
 public class EnvironmentCreationTestsC7000 {
 
 }

@@ -24,11 +24,12 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-    format = { "pretty", "html:target/cucumber" }, 
-    glue = {"com.hp.ov.sdk.resources" }, 
-    features = {"classpath:cucumber/environmentDestructionSynergy.feature"},
+    format = { "pretty", "html:target/cucumber" },
+    glue = { "com.hp.ov.sdk.resources" },
+    features = { "classpath:cucumber/environmentDestructionSynergy.feature" },
     monochrome = true,
     tags = "@remove")
+
 public class EnvironmentDestructionTestsSynergy {
 
 }

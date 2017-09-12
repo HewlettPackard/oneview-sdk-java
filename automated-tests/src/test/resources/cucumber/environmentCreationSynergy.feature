@@ -17,140 +17,140 @@ Feature: In order to create an environment
 
   Background: 
     Given an instance of OneView
-    And OneView credentials located in "src/test/resources/oneView.properties"
+      And OneView credentials located in "src/test/resources/oneView.properties"
 
   @create
   Scenario: Creation of a new Ethernet Network
     Given an instance of Ethernet Network
-    And Resource values as follows:
+      And Resource values as follows:
       | name         | all-net-bdd-1 |
       | ethernetType | Tagged        |
       | vlanId       |           301 |
       | purpose      | General       |
       | private      | false         |
       | smartLink    | true          |
-    And bandwidth values as follows:
+      And bandwidth values as follows:
       | maxBandwidth     | 8000 |
       | typicalBandwidth | 3000 |
     When OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
   Scenario: Creation of a new Ethernet Network
     Given an instance of Ethernet Network
-    And Resource values as follows:
+      And Resource values as follows:
       | name         | all-net-bdd-2 |
       | ethernetType | Tagged        |
       | vlanId       |           302 |
       | purpose      | General       |
       | private      | false         |
       | smartLink    | true          |
-    And bandwidth values as follows:
+      And bandwidth values as follows:
       | maxBandwidth     | 8000 |
       | typicalBandwidth | 3000 |
     When OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
   Scenario: Creation of a new FC Network
     Given an instance of FC Network
-    And Resource values as follows:
+      And Resource values as follows:
       | name                    | all-fc-bdd-1 |
       | fabricType              | FabricAttach |
       | linkStabilityTime       |           30 |
       | autoLoginRedistribution | true         |
     When OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
   Scenario: Creation of a new FC Network
     Given an instance of FC Network
-    And Resource values as follows:
+      And Resource values as follows:
       | name                    | all-fc-bdd-2 |
       | fabricType              | FabricAttach |
       | linkStabilityTime       |           30 |
       | autoLoginRedistribution | true         |
     When OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
   Scenario: Creation of a new FCoE Network
     Given an instance of FCoE Network
-    Given Resource values as follows:
+      And Resource values as follows:
       | name   | all-fcoe-bdd |
       | vlanID |          400 |
     When OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
   Scenario: Creation of a new Network Set
     Given an instance of Network Set
-    Given Resource values as follows:
+      And Resource values as follows:
       | name | all-network-set-bdd |
-    And Ethernet Network names as follows:
+      And Ethernet Network names as follows:
       | all-net-bdd-1 |
       | all-net-bdd-2 |
     When OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
   Scenario: Creation of a new Storage System
     Given an instance of Storage System
     When OneView runs Resource creation
-    And OneView lists all
+      And OneView lists all
     Then I get a count
 
-  @create
+  @update
   Scenario: Update Storage System
     Given an instance of Storage System
-    And Resource values as follows:
+      And Resource values as follows:
       | fc-network | all-fc-bdd-1, all-fc-bdd-2 |
       | port       | 0:1:1, 0:1:2               |
       | domain     | TestDomain                 |
     When OneView gets Storage Name
-    And OneView gets Resource by Name
-    And OneView gets Resource by ID
-    And OneView runs Resource update
-    And OneView lists all
+      And OneView gets Resource by Name
+      And OneView gets Resource by ID
+      And OneView runs Resource update
+      And OneView lists all
     Then I get a count
 
   @create
   Scenario: Creation of a new Storage Pool
     Given an instance of Storage Pool
-    And Resource values as follows:
+      And Resource values as follows:
       | name | FST_CPG1 |
-    And a Storage System Uri
+      And a Storage System Uri
     When StoragePool sets Uris
-    And OneView runs Resource creation
-    And OneView lists all
+      And OneView runs Resource creation
+      And OneView lists all
     Then I get a count
 
   @create
   Scenario: Creation of a new Storage Volume
     Given an instance of Storage volume
-    And Resource values as follows:
+      And Resource values as follows:
       | name          | volume-bdd-storage-volume |
       | description   | Storage Volume BDD        |
       | provisionType | Full                      |
       | shareable     | true                      |
       | capacity      |               20480000000 |
-    And a Storage System Uri
-    And a Storage Pool Uri
+      And a Storage System Uri
+      And a Storage Pool Uri
     When StorageVolume sets Uris
-    And OneView runs Resource creation
-    And OneView lists all
+      And OneView runs Resource creation
+      And OneView lists all
     Then I get a count
 
   @create
   Scenario: Creation of a new Storage Volume Template
     Given an instance of Storage Volume Template
-    Given Resource values as follows:
+      And Resource values as follows:
       | name          | all-svt-bdd      |
       | state         | Normal           |
       | description   | Example Template |
@@ -158,17 +158,17 @@ Feature: In order to create an environment
       | provisionType | Thin             |
       | shareable     | true             |
       | capacity      |     235834383322 |
-    And a Storage System Uri
-    And a Storage Pool Uri
+      And a Storage System Uri
+      And a Storage Pool Uri
     When Storage Volume Template sets Uris
-    And OneView runs Resource creation
-    And OneView lists all
+      And OneView runs Resource creation
+      And OneView lists all
     Then I get a count
 
   @create
   Scenario: Creation of a new Data Center
     Given an instance of Data Center
-    Given Resource values as follows:
+      And Resource values as follows:
       | name                    | Data Center BDD |
       | coolingCapacity         |               5 |
       | costPerKilowattHour     |             0.5 |
@@ -180,13 +180,13 @@ Feature: In order to create an environment
       | width                   |            4000 |
       | depth                   |            5000 |
     When OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
   Scenario: Creation of a new Power Delivery Device Synergy
     Given an instance of Power Delivery Device
-    Given Resource values as follows:
+      And Resource values as follows:
       | type          | PowerStrip                |
       | name          | Power Delivery Device BDD |
       | model         | Model BDD                 |
@@ -197,29 +197,29 @@ Feature: In order to create an environment
       | partNumber    |                         1 |
       | serialNumber  | SERIE1                    |
     When OneView runs Power Delivery Synergy creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
   Scenario: Creation of a new Rack
     Given an instance of Rack
-    Given Resource values as follows:
+      And Resource values as follows:
       | name | Rack BDD |
     When OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
   Scenario: Creation of a new Unmanaged Device
     Given an instance of Unmanaged Device
-    Given Resource values as follows:
+      And Resource values as follows:
       | name        | Unmanaged Device BDD |
       | model       | Procurve 4200VL      |
       | deviceType  | Server               |
       | ipv4Address | 192.168.0.2          |
       | mac         | 68:a5:99:az:71:wc    |
     When OneView runs Resource creation
-    And OneView gets Resource by Name
+      And OneView gets Resource by Name
     Then I get an ID
 
   @create
@@ -238,10 +238,10 @@ Feature: In order to create an environment
       And OneView lists all
     Then I get a count
 
-  @create @onlyOV310 @disabled
+  @create @onlyOV310
   Scenario: Creation of a new Fc San Manager Under the Specified Provider
     Given an instance of Fc San Provider
-    Given Resource values as follows:
+      And Resource values as follows:
       | type          | Cisco San Plugin |
       | name          | 172.18.20.1      |
       | snmpPort      |              161 |
@@ -255,7 +255,8 @@ Feature: In order to create an environment
 
   @create
   Scenario: Creation of a new Fc Sans Managed San Endpoints Csv
-    Given Resource values as follows:
+    Given an instance of Fc Sans Managed San
+       And Resource values as follows:
       | name | VSAN1 |
     When OneView gets Resource by Name
       And OneView runs Fc Sans Managed San Endpoints Csv creation
@@ -287,16 +288,18 @@ Feature: In order to create an environment
       And OneView gets Resource by Name
     Then I get an ID
 
-  @Not_yet_for_resolved
-  Scenario: Edit a Logical Interconnect Group
+  @update
+  Scenario: Update a Logical Interconnect Group Adding an Uplink Set
     Given an instance of Logical Interconnect Group
-    Given name "lig-bdd-all" for Resource
-    And Uplink values as follows:
+      And Resource values as follows:
+      | name   | lig-bdd-all |
+      | baySet |           1 |
+      And Uplink values as follows:
       | name              | type         | networks      | bayPort |
       | FCUplinkSet       | FibreChannel | all-fc-bdd-1  | Q2:3    |
     When OneView gets Resource by Name
-    And OneView runs Resource update
-    And OneView gets Resource by ID
+      And OneView runs Resource update
+      And OneView gets Resource by ID
     Then I get an ID
 
   @create
@@ -315,7 +318,7 @@ Feature: In order to create an environment
       And OneView gets Resource by Name
     Then I get an ID
 
-  @createMultiple
+  @create
   Scenario: Creation of a new Logical Enclosure Multiple
     Given an instance of Logical Enclosure Multiple
       And Resource values as follows:
@@ -329,38 +332,26 @@ Feature: In order to create an environment
       And OneView gets Resource by Name
     Then I get an ID
 
-  @create @disabled
-  Scenario: Creation of a new Logical Enclosure
-    Given an instance of Logical Enclosure
-    Given Resource values as follows:
-      | name           | logical_enclosure_bdd-all |
-      | enclosureGroup | enclosure-group-bdd-all   |
-      | enclosureURI1  | 0000A66101                |
-      | firmware       | Service Pack for ProLiant |
-    When OneView runs One enclosures creation
-    And OneView gets Resource by Name
-    Then I get an ID
-
   @create
   Scenario: Creation of a new Server Profile Template
     Given an instance of Server Profile Template
-    Given Resource values as follows:
+      And Resource values as follows:
       | name             | spt-bdd                 |
       | enclosureGroup   | enclosure-group-bdd-all |
       | serialNumberType | Virtual                 |
       | macType          | Virtual                 |
       | wwnType          | Virtual                 |
       | affinity         | Bay                     |
-    And an Enclosure Group Uri
+      And an Enclosure Group Uri
     When Server Profile Template sets Uris
-    And OneView runs Resource creation
-    And OneView lists all
+      And OneView runs Resource creation
+      And OneView lists all
     Then I get a count
 
   @create
   Scenario: Creation of a new Server Profile
     Given an instance of Server Profile
-    Given Resource values as follows:
+      And Resource values as follows:
       | name               | sp-bdd                    |
       | description        | sp-bdd                    |
       | firmware           | Service Pack for ProLiant |
@@ -374,8 +365,8 @@ Feature: In order to create an environment
       | volume             | volume-bdd-storage-volume |
       | hostOSType         | Windows 2012 / WS2012 R2  |
       | requestBandwidth   |                     16000 |
-    And an Enclosure Group Uri
+      And an Enclosure Group Uri
     When Server Profile sets Uris
-    And OneView runs Resource creation
-    And OneView lists all
+      And OneView runs Resource creation
+      And OneView lists all
     Then I get a count
