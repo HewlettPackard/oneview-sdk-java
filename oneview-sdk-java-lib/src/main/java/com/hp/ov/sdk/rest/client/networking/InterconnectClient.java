@@ -18,6 +18,7 @@ package com.hp.ov.sdk.rest.client.networking;
 
 import java.util.List;
 
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.InterconnectsStatistics;
 import com.hp.ov.sdk.dto.networking.Port;
@@ -88,6 +89,29 @@ public interface InterconnectClient extends
      */
     @Endpoint(uri = "/{resourceId}" + INTERCONNECT_RESET_PORT_PROTECTION_URI, method = HttpMethod.PUT)
     TaskResource resetPortProtection(@PathParam("resourceId") String resourceId, RequestOption... options);
+
+    /**
+     * Retrieves the collection of ports of an interconnect
+     * for the specified interconnect resource identifier.
+     *
+     * @param resourceId resource identifier for interconnect as seen in HPE OneView
+     *
+     * @return {@link ResourceCollection}&lt;{@link Port}&gt; containing the interconnect port details
+     */
+    @Endpoint(uri = "/{resourceId}" + INTERCONNECT_PORTS_URI)
+    ResourceCollection<Port> getPorts(@PathParam("resourceId") String resourceId);
+
+    /**
+     * Retrieves the port of an interconnect for the specified
+     * interconnect resource identifier and portId.
+     *
+     * @param resourceId resource identifier for interconnect as seen in HPE OneView
+     * @param portId id of the interconnect port as seen in HPE OneView
+     *
+     * @return {@link Port} containing the interconnect port details
+     */
+    @Endpoint(uri = "/{resourceId}" + INTERCONNECT_PORTS_URI + "/{portId}")
+    Port getPort(@PathParam("resourceId") String resourceId, @PathParam("portId") String portId);
 
     /**
      * Retrieve the statistics of an interconnect for the specified

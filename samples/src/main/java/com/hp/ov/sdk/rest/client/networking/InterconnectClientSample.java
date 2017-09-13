@@ -124,6 +124,39 @@ public class InterconnectClientSample {
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
 
+    private void getInterconnectPorts() {
+        Interconnect interconnect = this.interconnectClient.getByName(RESOURCE_NAME).get(0);
+
+        ResourceCollection<Port> ports = this.interconnectClient.getPorts(interconnect.getResourceId());
+
+        LOGGER.info("Ports returned to client :" + JsonPrettyPrinter.print(ports));
+    }
+
+    private void getInterconnectPort() {
+        Interconnect interconnect = this.interconnectClient.getByName(RESOURCE_NAME).get(0);
+
+        Port port = this.interconnectClient.getPort(interconnect.getResourceId(), interconnect.getPorts().get(0).getPortId());
+
+        LOGGER.info("Port object returned to client :" + JsonPrettyPrinter.print(port));
+    }
+
+    private void getInterconnectPortByName() {
+        Interconnect interconnect = this.interconnectClient.getByName(RESOURCE_NAME).get(0);
+
+        String portId = "";
+        List<Port> ports = interconnect.getPorts();
+        for (Port port : ports) {
+            if (PORT_NAME.equals(port.getPortName())) {
+              portId = port.getPortId();
+              break;
+            }
+        }
+
+        Port port = this.interconnectClient.getPort(interconnect.getResourceId(), portId);
+
+        LOGGER.info("Port object returned to client :" + JsonPrettyPrinter.print(port));
+    }
+
     private void getInterconnectStatistics() {
         Interconnect interconnect = this.interconnectClient.getByName(RESOURCE_NAME).get(0);
 
@@ -168,6 +201,10 @@ public class InterconnectClientSample {
         client.updateInterconnectPort();
         client.updateInterconnectPorts();
         client.resetInterconnectPortProtection();
+
+        client.getInterconnectPorts();
+        client.getInterconnectPort();
+        client.getInterconnectPortByName();
 
         client.getInterconnectStatistics();
         client.getInterconnectPortStatistics();

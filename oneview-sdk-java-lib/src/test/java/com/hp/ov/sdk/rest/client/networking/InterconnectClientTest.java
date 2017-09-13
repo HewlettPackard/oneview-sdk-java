@@ -58,6 +58,7 @@ public class InterconnectClientTest {
     private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_NAME = "random-Name";
     private static final String ANY_PORT_NAME = "random-Port-Name";
+    private static final String ANY_PORT_ID = "random-Port-Id";
     private static final int ANY_SUBPORT_NUMBER = 1;
 
     private BaseClient baseClient = mock(BaseClient.class);
@@ -150,6 +151,33 @@ public class InterconnectClientTest {
         Request expectedRequest = new Request(HttpMethod.PUT, expectedUri);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest);
+    }
+
+    @SuppressWarnings("serial")
+    @Test
+    public void shouldGetInterconnectPorts() {
+        client.getPorts(ANY_RESOURCE_ID);
+
+        String expectedUri = INTERCONNECT_URI
+                + "/" + ANY_RESOURCE_ID
+                + INTERCONNECT_PORTS_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<Port>>() {}.getType());
+    }
+
+    @Test
+    public void shouldGetInterconnectPort() {
+        client.getPort(ANY_RESOURCE_ID, ANY_PORT_ID);
+
+        String expectedUri = INTERCONNECT_URI
+                + "/" + ANY_RESOURCE_ID
+                + INTERCONNECT_PORTS_URI
+                + "/" + ANY_PORT_ID;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Port.class).getType());
     }
 
     @Test
