@@ -35,7 +35,6 @@ public class AlertBDDStep extends Background {
         resourceID = ActivityAlertResource.getInstance().getFirstAlertId();
     }
 
-
     @When("^OneView deletes Alert Change Log$")
     public void oneview_deletes_Alert_Change_Log() throws Throwable {
         status = ActivityAlertResource.getInstance().removeChangeLog();
