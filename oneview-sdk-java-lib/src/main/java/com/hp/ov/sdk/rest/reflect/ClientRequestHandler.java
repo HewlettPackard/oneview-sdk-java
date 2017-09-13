@@ -145,8 +145,14 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
                     this.baseClient.executeRequest(request, returnType);
 
             resources.addMembers(response.getMembers());
-            resources.setTotal(response.getTotal());
+            resources.setCategory(response.getCategory());
+            resources.setCreated(response.getCreated());
+            resources.setETag(response.getETag());
+            resources.setModified(response.getModified());
             resources.setNextPageUri(response.getNextPageUri());
+            resources.setPrevPageUri(response.getPrevPageUri());
+            resources.setTotal(response.getTotal());
+            resources.setType(response.getType());
 
             request = new Request(HttpMethod.GET, response.getNextPageUri());
             
