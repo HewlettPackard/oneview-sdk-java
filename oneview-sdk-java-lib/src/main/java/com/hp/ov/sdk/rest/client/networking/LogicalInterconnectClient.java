@@ -299,7 +299,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
     /**
      * This module aids in fetching the ethernet settings for a logical interconnect.
      *
-     * @param resourceId resource identifier for logical interconnect as seen in HPE OneView
+     * @param resourceId resource identifier for logical interconnect as seen in HPE OneView.
      *
      * @return {@link EthernetInterconnectSettingsV2} containing the logical interconnect
      * ethernet settings details.
