@@ -116,22 +116,22 @@ public class LogicalInterconnectClientTest {
         LogicalInterconnect logicalInterconnect = new LogicalInterconnect();
         logicalInterconnect.setName(ANY_RESOURCE_NAME);
         resourceCollection.addMembers(Lists.newArrayList(logicalInterconnect));
-        
+
         given(logicalInterconnectClient.getAll()).willReturn(resourceCollection);
 
         given(oneViewClient.logicalInterconnect()).willReturn(logicalInterconnectClient);
-        
+
         LogicalInterconnect logicalInterconnectByName = resourceDtoUtils.getLogicalInterconnectByName(ANY_RESOURCE_NAME);
-        
+
         Assert.assertNotNull(logicalInterconnectByName);
     }
-    
+
     @Test(expected=SDKResourceNotFoundException.class)
     public void shouldThrowExceptionWhenTryingToGetLogicalInterconnectByNameWhenElementIsNotFound() {
         given(logicalInterconnectClient.getAll()).willReturn(resourceCollection);
 
         given(oneViewClient.logicalInterconnect()).willReturn(logicalInterconnectClient);
-        
+
         resourceDtoUtils.getLogicalInterconnectByName(ANY_RESOURCE_NAME);
     }
 
@@ -368,6 +368,19 @@ public class LogicalInterconnectClientTest {
         expectedRequest.setTimeout(321);
 
         then(baseClient).should().executeMonitorableRequest(expectedRequest);
+    }
+
+    @Test
+    public void shouldGetLogicalInterconnectEthernetSettings() {
+        client.getEthernetSettings(ANY_RESOURCE_ID);
+
+        String expectedUri = LOGICAL_INTERCONNECT_URI
+                + "/" + ANY_RESOURCE_ID
+                + LOGICAL_INTERCONNECT_ETHERNET_SETTINGS_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                TypeToken.of(EthernetInterconnectSettingsV2.class).getType());
     }
 
     @Test
