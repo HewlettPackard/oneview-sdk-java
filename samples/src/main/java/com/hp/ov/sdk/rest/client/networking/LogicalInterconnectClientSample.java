@@ -310,7 +310,7 @@ public class LogicalInterconnectClientSample {
         LOGGER.info("EthernetInterconnectSettings object returned to client :" + JsonPrettyPrinter.print(ethernetSettings));
     }
 
-    private void updateEthernetSettings() {
+    private void updateLogicalInterconnectEthernetSettings() {
         LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
         EthernetInterconnectSettingsV2 ethSettingsDto = logicalInterconnect.getEthernetSettings();
@@ -438,7 +438,7 @@ public class LogicalInterconnectClientSample {
         client.updateLogicalInterconnectTelemetryConfigurationV200(); //OneView 2.0
 
         client.getLogicalInterconnectEthernetSettings();
-        client.updateEthernetSettings();
+        client.updateLogicalInterconnectEthernetSettings();
 
         client.createLogicalInterconnect();
         client.deleteLogicalInterconnect();
