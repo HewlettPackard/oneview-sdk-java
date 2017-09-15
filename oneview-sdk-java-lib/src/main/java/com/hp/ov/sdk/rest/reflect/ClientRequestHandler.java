@@ -16,8 +16,11 @@
 
 package com.hp.ov.sdk.rest.reflect;
 
+import static com.hp.ov.sdk.rest.client.settings.ScopeClient.SCOPES_URI;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.reflect.AbstractInvocationHandler;
@@ -26,6 +29,7 @@ import com.google.common.reflect.TypeToken;
 import com.hp.ov.sdk.adaptors.ResourceAdaptor;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
+import com.hp.ov.sdk.dto.settings.Scope;
 import com.hp.ov.sdk.dto.storage.FcSansManagedSanTask;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
@@ -39,6 +43,7 @@ import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 public class ClientRequestHandler<T> extends AbstractInvocationHandler {
 
     private static final String GET_ALL_METHOD = "getAll";
+    private static final String GET_BY_NAME_METHOD = "getByName";
 
     private final BaseClient baseClient;
     private final String baseUri;
@@ -56,6 +61,8 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
 
         if (GET_ALL_METHOD.equals(method.getName())) {
             return this.handleGetAll(request, this.token.method(method).getReturnType().getType());
+        } else if (SCOPES_URI.equals(request.getUri()) && GET_BY_NAME_METHOD.equals(method.getName())) {
+            return this.handleGetScopeByName(request, this.token.method(method).getReturnType().getType(), args);
         } else {
             if (TaskResource.class.equals(method.getReturnType())) {
                 return this.baseClient.executeMonitorableRequest(request);
@@ -139,7 +146,7 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
         ResourceCollection<Object> resources = new ResourceCollection<>();
         boolean hasMoreItems = false;
         boolean hasNextPage = false;
-        
+
         do {
             ResourceCollection<Object> response = (ResourceCollection<Object>)
                     this.baseClient.executeRequest(request, returnType);
@@ -155,12 +162,32 @@ public class ClientRequestHandler<T> extends AbstractInvocationHandler {
             resources.setType(response.getType());
 
             request = new Request(HttpMethod.GET, response.getNextPageUri());
-            
-            hasMoreItems = resources.getCount() < resources.getTotal(); 
+
+            hasMoreItems = resources.getCount() < resources.getTotal();
             hasNextPage = resources.getNextPageUri() != null;
         } while (hasMoreItems && hasNextPage);
 
         return resources;
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private ResourceCollection<Scope> handleGetScopeByName(Request request, Type returnType, Object[] args) {
+        ResourceCollection<Scope> allScopes = (ResourceCollection<Scope>) (ResourceCollection) this
+                .handleGetAll(request, returnType);
+
+        ResourceCollection<Scope> scopeResourceCollection = new ResourceCollection<>();
+        List<Scope> scopes = new ArrayList<>();
+
+        for (Scope scope : allScopes.getMembers()) {
+            for (Object o: args) {
+                if (scope.getName().equals(o.toString())) {
+                    scopes.add(scope);
+                }
+            }
+        }
+        scopeResourceCollection.addMembers(scopes);
+
+        return scopeResourceCollection;
     }
 
 }

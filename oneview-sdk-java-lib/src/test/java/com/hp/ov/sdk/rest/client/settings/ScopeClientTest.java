@@ -19,9 +19,9 @@ package com.hp.ov.sdk.rest.client.settings;
 import static com.hp.ov.sdk.rest.client.settings.ScopeClient.RESOURCE_ASSIGNMENTS;
 import static com.hp.ov.sdk.rest.client.settings.ScopeClient.SCOPES_URI;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.mock;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.any;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Type;
 
@@ -37,6 +37,7 @@ import com.hp.ov.sdk.dto.settings.ResourceAssignment;
 import com.hp.ov.sdk.dto.settings.Scope;
 import com.hp.ov.sdk.rest.client.BaseClient;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
+import com.hp.ov.sdk.rest.http.core.UrlParameter;
 import com.hp.ov.sdk.rest.http.core.client.BasicHeader;
 import com.hp.ov.sdk.rest.http.core.client.Request;
 import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
@@ -47,6 +48,7 @@ public class ScopeClientTest {
 
     private static final String ANY_RESOURCE_ID = "random-UUID";
     private static final String ANY_RESOURCE_ETAG = "random-ETag";
+    private static final String ANY_RESOURCE_NAME = "random-Name";
 
     private BaseClient baseClient = mock(BaseClient.class);
     private ScopeClient client = Reflection.newProxy(ScopeClient.class,
@@ -60,6 +62,21 @@ public class ScopeClientTest {
         Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
         then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(Scope.class).getType());
+    }
+
+    @SuppressWarnings("serial")
+    @Test
+    public void shouldGetScopeByName() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class)))
+        .willReturn(new ResourceCollection<>());
+
+        client.getByName(ANY_RESOURCE_NAME);
+
+        Request expectedRequest = new Request(HttpMethod.GET, SCOPES_URI);
+        expectedRequest.addQuery(UrlParameter.getFilterByNameParameter(ANY_RESOURCE_NAME));
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<Scope>>() {}.getType());
     }
 
     @Test

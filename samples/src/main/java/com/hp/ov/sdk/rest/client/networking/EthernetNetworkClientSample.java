@@ -16,6 +16,7 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.settings.ScopeClientSample.SCOPE_NAME;
 import static com.hp.ov.sdk.rest.client.settings.ScopeClient.SCOPES_URI;
 
 import java.util.List;
@@ -34,7 +35,9 @@ import com.hp.ov.sdk.dto.networking.ethernet.Bandwidth;
 import com.hp.ov.sdk.dto.networking.ethernet.BulkEthernetNetwork;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.dto.networking.ethernet.Purpose;
+import com.hp.ov.sdk.dto.settings.Scope;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.settings.ScopeClient;
 import com.hp.ov.sdk.rest.http.core.BasicURIQuery;
 import com.hp.ov.sdk.rest.http.core.URIQuery;
 import com.hp.ov.sdk.util.JsonPrettyPrinter;
@@ -51,15 +54,12 @@ public class EthernetNetworkClientSample {
 
     public static final String ETHERNET_NETWORK_PROD_401 = "Prod_401";
     public static final String ETHERNET_NETWORK_PROD_402 = "Prod_402";
-
-    private static final String SCOPE_ID = "3cadbda5-45eb-4e0f-bdb6-2e9101317b77";
     // ================================
 
     private final EthernetNetworkClient client;
+    private final OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
     private EthernetNetworkClientSample() {
-        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
-
         this.client = oneViewClient.ethernetNetwork();
     }
 
@@ -129,8 +129,8 @@ public class EthernetNetworkClientSample {
         patch.setOp(PatchOperation.replace);
         patch.setPath("/scopeUris");
         List<String> scopeUris = network.getScopeUris(); // Gets the current scope(s)
-        scopeUris.add(SCOPES_URI + "/" + SCOPE_ID); // Assigns Ethernet network to new a scope
-        //scopeUris.remove(SCOPES_URI + "/" + SCOPE_ID); // Unassigns Ethernet network from a scope
+        scopeUris.add(SCOPES_URI + "/" + getScopeId(SCOPE_NAME)); // Assigns Ethernet network to new a scope
+        // scopeUris.remove(SCOPES_URI + "/" + getScopeId(SCOPE_NAME)); // Unassigns Ethernet network from a scope
         patch.setValue(scopeUris);
 
         TaskResource taskResource = this.client.patch(network.getResourceId(), patch);
@@ -191,6 +191,14 @@ public class EthernetNetworkClientSample {
         TaskResource task = this.client.createInBulk(network);
 
         LOGGER.info("Task object returned to client: {}", task.toJsonString());
+    }
+
+    private String getScopeId(String scopeName) {
+        ScopeClient scopeClient = oneViewClient.scope();
+
+        Scope scope = scopeClient.getByName(scopeName).get(0);
+
+        return scope.getResourceId();
     }
 
     public static void main(String[] args) {
