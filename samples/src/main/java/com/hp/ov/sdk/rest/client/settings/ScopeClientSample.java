@@ -35,7 +35,7 @@ public class ScopeClientSample {
 
     // This is the variable to be defined by the user
     // ================================
-    public static final String SCOPE_NAME = "SCOPEB";
+    public static final String SCOPE_NAME = "Sample Scope";
     // ================================
 
     private final ScopeClient client;
