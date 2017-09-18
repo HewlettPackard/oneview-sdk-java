@@ -75,6 +75,20 @@ public class NetworkSetClientSample {
         LOGGER.info("NetworkSet object returned to client: {}", networkSet.toJsonString());
     }
 
+    private void getAllNetworkSetWithoutEthernet() {
+        ResourceCollection<NetworkSet> networkSet = client.getAllWithoutEthernet();
+
+        LOGGER.info("Network Sets returned to client: {}", networkSet.toJsonString());
+    }
+
+    private void getNetworkSetByIdWithoutEthernet() {
+        String resourceId = client.getByName(RESOURCE_NAME).get(0).getResourceId();
+
+        NetworkSet networkSet = client.getByIdWithoutEthernet(resourceId);
+
+        LOGGER.info("NetworkSet object returned to client: {}", networkSet.toJsonString());
+    }
+
     private void createNetworkSet() {
         NetworkSet networkSet = resourceDtoUtils.buildNetworkSetDto(RESOURCE_NAME, NETWORK_NAMES);
 
@@ -113,6 +127,9 @@ public class NetworkSetClientSample {
         client.getAllNetworkSet();
         client.getNetworkSetById();
         client.getNetworkSetByName();
+        client.getAllNetworkSetWithoutEthernet();
+        client.getNetworkSetByIdWithoutEthernet();
+
         client.updateNetworkSet();
         client.deleteNetworkSet();
     }

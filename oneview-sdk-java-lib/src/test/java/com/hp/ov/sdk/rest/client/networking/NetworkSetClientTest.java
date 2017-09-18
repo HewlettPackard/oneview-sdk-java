@@ -17,6 +17,7 @@
 package com.hp.ov.sdk.rest.client.networking;
 
 import static com.hp.ov.sdk.rest.client.networking.NetworkSetClient.NETWORK_SET_URI;
+import static com.hp.ov.sdk.rest.client.networking.NetworkSetClient.WITHOUT_ETHERNET_URI;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Matchers.any;
@@ -79,6 +80,30 @@ public class NetworkSetClientTest {
 
         then(baseClient).should().executeRequest(expectedRequest,
                 new TypeToken<ResourceCollection<NetworkSet>>() {}.getType());
+    }
+
+    @SuppressWarnings("serial")
+    @Test
+    public void shouldGetAllNetworkSetWithoutEthernet() {
+        given(this.baseClient.executeRequest(any(Request.class), any(Type.class))).willReturn(new ResourceCollection<>());
+
+        client.getAllWithoutEthernet();
+
+        String expectedUri = NETWORK_SET_URI + WITHOUT_ETHERNET_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest,
+                new TypeToken<ResourceCollection<NetworkSet>>() {}.getType());
+    }
+
+    @Test
+    public void shouldGetNetworkSetByIdWithoutEthernet() {
+        client.getByIdWithoutEthernet(ANY_NETWORK_SET_RESOURCE_ID);
+
+        String expectedUri = NETWORK_SET_URI + "/" + ANY_NETWORK_SET_RESOURCE_ID + WITHOUT_ETHERNET_URI;
+        Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
+
+        then(baseClient).should().executeRequest(expectedRequest, TypeToken.of(NetworkSet.class).getType());
     }
 
     @Test

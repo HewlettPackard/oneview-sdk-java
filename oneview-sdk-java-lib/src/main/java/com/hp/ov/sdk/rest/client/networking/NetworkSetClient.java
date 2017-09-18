@@ -15,14 +15,17 @@
  */
 package com.hp.ov.sdk.rest.client.networking;
 
+import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.networking.networkset.NetworkSet;
 import com.hp.ov.sdk.rest.client.common.CreatableResource;
 import com.hp.ov.sdk.rest.client.common.DeletableResource;
 import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.client.common.UpdatableResource;
 import com.hp.ov.sdk.rest.reflect.Api;
+import com.hp.ov.sdk.rest.reflect.Endpoint;
+import com.hp.ov.sdk.rest.reflect.PathParam;
 
-@Api("/rest/network-sets")
+@Api(NetworkSetClient.NETWORK_SET_URI)
 public interface NetworkSetClient extends
         CreatableResource<NetworkSet>,
         SearchableResource<NetworkSet>,
@@ -30,5 +33,28 @@ public interface NetworkSetClient extends
         DeletableResource {
 
     String NETWORK_SET_URI = "/rest/network-sets";
+    String WITHOUT_ETHERNET_URI = "/withoutEthernet";
+
+    /**
+     * Retrieves the {@link ResourceCollection}&lt;{@link NetworkSet}&gt;
+     * containing details for all available network sets found under
+     * the current HPE OneView, excluding any Ethernet networks.
+     *
+     * @return {@link ResourceCollection}&lt;{@link NetworkSet}&gt; containing
+     * the details for all network sets found
+     */
+    @Endpoint(uri = WITHOUT_ETHERNET_URI)
+    public ResourceCollection<NetworkSet> getAllWithoutEthernet();
+
+    /**
+     * Retrieves the {@link NetworkSet} details for the specified network set,
+     * excluding any Ethernet networks.
+     *
+     * @param resourceId network set resource identifier as seen in HPE OneView
+     *
+     * @return {@link NetworkSet} object containing the details
+     */
+    @Endpoint(uri = "/{resourceId}" + WITHOUT_ETHERNET_URI)
+    public NetworkSet getByIdWithoutEthernet(@PathParam("resourceId") String resourceId);
 
 }
