@@ -16,6 +16,7 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.settings.ScopeClientSample.SCOPE_NAME;
 import static com.hp.ov.sdk.rest.client.settings.ScopeClient.SCOPES_URI;
 
 import java.util.List;
@@ -30,7 +31,9 @@ import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
+import com.hp.ov.sdk.dto.settings.Scope;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.settings.ScopeClient;
 
 public class FcNetworkClientSample {
 
@@ -42,15 +45,12 @@ public class FcNetworkClientSample {
     public static final String FC_NETWORK_NAME_B = "FC_Network_B";
 
     private static final String FC_NETWORK_NAME_UPDATED = FC_NETWORK_NAME_A + "_Updated";
-
-    private static final String SCOPE_ID = "c22a15d1-3d5b-46bb-83be-bc9a9049866b";
     // ================================
 
     private final FcNetworkClient client;
+    private final OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
     private FcNetworkClientSample() {
-        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
-
         this.client = oneViewClient.fcNetwork();
     }
 
@@ -95,8 +95,8 @@ public class FcNetworkClientSample {
         patch.setOp(PatchOperation.replace);
         patch.setPath("/scopeUris");
         List<String> scopeUris = fcNetwork.getScopeUris(); // Gets the current scope(s)
-        scopeUris.add(SCOPES_URI + "/" + SCOPE_ID); // Assigns FC network to a new scope
-        //scopeUris.remove(SCOPES_URI + "/" + SCOPE_ID); // Unassigns FC network from a scope
+        scopeUris.add(SCOPES_URI + "/" + getScopeId(SCOPE_NAME)); // Assigns FC network to a new scope
+        // scopeUris.remove(SCOPES_URI + "/" + getScopeId(SCOPE_NAME)); // Unassigns FC network from a scope
         patch.setValue(scopeUris);
 
         TaskResource taskResource = this.client.patch(fcNetwork.getResourceId(), patch);
@@ -120,6 +120,14 @@ public class FcNetworkClientSample {
         TaskResource task = this.client.delete(fcNetwork.getResourceId());
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
+    }
+
+    private String getScopeId(String scopeName) {
+        ScopeClient scopeClient = oneViewClient.scope();
+
+        Scope scope = scopeClient.getByName(scopeName).get(0);
+
+        return scope.getResourceId();
     }
 
     public static void main(String[] args) {

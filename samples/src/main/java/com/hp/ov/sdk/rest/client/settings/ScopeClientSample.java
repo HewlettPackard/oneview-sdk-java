@@ -33,10 +33,9 @@ public class ScopeClientSample {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScopeClientSample.class);
 
-    // These are variables to be defined by the user
+    // This is the variable to be defined by the user
     // ================================
     public static final String SCOPE_NAME = "Sample Scope";
-    public static final String SCOPE_RESOURCE_ID = "b9962a0a-85e3-4268-ae85-7d4d466ba2b6";
     // ================================
 
     private final ScopeClient client;
@@ -75,8 +74,14 @@ public class ScopeClientSample {
         LOGGER.info("Scope object returned to client : " + scope.toJsonString());
     }
 
+    private void getScopeByName() {
+        Scope scope = client.getByName(SCOPE_NAME).get(0);
+
+        LOGGER.info("Scope object returned to client : " + scope.toJsonString());
+    }
+
     private void updateScope() {
-        Scope scope = this.client.getById(SCOPE_RESOURCE_ID);
+        Scope scope = this.client.getByName(SCOPE_NAME).get(0);
 
         scope.setDescription("Sample description updated!");
 
@@ -86,7 +91,7 @@ public class ScopeClientSample {
     }
 
     private void deleteScope() {
-        Scope scope = this.client.getById(SCOPE_RESOURCE_ID);
+        Scope scope = this.client.getByName(SCOPE_NAME).get(0);
 
         TaskResource task = this.client.delete(scope.getResourceId(), scope.getETag());
 
@@ -94,7 +99,7 @@ public class ScopeClientSample {
     }
 
     private void patchScope() {
-        Scope scope = this.client.getById(SCOPE_RESOURCE_ID);
+        Scope scope = this.client.getByName(SCOPE_NAME).get(0);
         FcNetwork fcNetwork = this.fcNetworkClient.getByName(FcNetworkClientSample.FC_NETWORK_NAME_A).get(0);
 
         ResourceAssignment assignment = new ResourceAssignment();
@@ -111,6 +116,7 @@ public class ScopeClientSample {
         sample.createScope();
         sample.getAllScopes();
         sample.getScopeById();
+        sample.getScopeByName();
         sample.updateScope();
         sample.patchScope();
         sample.deleteScope();

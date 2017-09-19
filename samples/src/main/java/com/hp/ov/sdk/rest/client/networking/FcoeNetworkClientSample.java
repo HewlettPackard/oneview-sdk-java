@@ -16,6 +16,7 @@
 
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.settings.ScopeClientSample.SCOPE_NAME;
 import static com.hp.ov.sdk.rest.client.settings.ScopeClient.SCOPES_URI;
 
 import java.util.List;
@@ -30,7 +31,9 @@ import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.fcoenetworks.FcoeNetwork;
+import com.hp.ov.sdk.dto.settings.Scope;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.settings.ScopeClient;
 
 public class FcoeNetworkClientSample {
 
@@ -40,15 +43,12 @@ public class FcoeNetworkClientSample {
     // ================================
     private static final String FCOE_NETWORK_NAME = "FCoE-Network_SAMPLE";
     private static final String FCOE_NETWORK_NAME_UPDATED = FCOE_NETWORK_NAME + "_Updated";
-
-    private static final String SCOPE_ID = "c22a15d1-3d5b-46bb-83be-bc9a9049866b";
     // ================================
 
     private final FcoeNetworkClient client;
+    private final OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
     private FcoeNetworkClientSample() {
-        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
-
         this.client = oneViewClient.fcoeNetwork();
     }
 
@@ -94,8 +94,8 @@ public class FcoeNetworkClientSample {
         patch.setOp(PatchOperation.replace);
         patch.setPath("/scopeUris");
         List<String> scopeUris = fcoeNetwork.getScopeUris(); // Gets the current scope(s)
-        scopeUris.add(SCOPES_URI + "/" + SCOPE_ID); // Assigns FCoE network to a new scope
-        //scopeUris.remove(SCOPES_URI + "/" + SCOPE_ID); // Unassigns FCoE network from a scope
+        scopeUris.add(SCOPES_URI + "/" + getScopeId(SCOPE_NAME)); // Assigns FCoE network to a new scope
+        // scopeUris.remove(SCOPES_URI + "/" + getScopeId(SCOPE_NAME)); // Unassigns FCoE network from a scope
         patch.setValue(scopeUris);
 
         TaskResource task = this.client.patch(fcoeNetwork.getResourceId(), patch);
@@ -119,6 +119,14 @@ public class FcoeNetworkClientSample {
         TaskResource task = this.client.delete(fcoeNetwork.getResourceId());
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
+    }
+
+    private String getScopeId(String scopeName) {
+        ScopeClient scopeClient = oneViewClient.scope();
+
+        Scope scope = scopeClient.getByName(scopeName).get(0);
+
+        return scope.getResourceId();
     }
 
     public static void main(String[] args) {

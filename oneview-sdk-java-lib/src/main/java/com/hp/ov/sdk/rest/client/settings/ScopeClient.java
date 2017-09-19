@@ -25,6 +25,7 @@ import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.settings.ResourceAssignment;
 import com.hp.ov.sdk.dto.settings.Scope;
 import com.hp.ov.sdk.rest.client.common.RetrievableResource;
+import com.hp.ov.sdk.rest.client.common.SearchableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
 import com.hp.ov.sdk.rest.http.core.RequestInterceptor;
 import com.hp.ov.sdk.rest.http.core.client.BasicHeader;
@@ -38,6 +39,7 @@ import com.hp.ov.sdk.rest.reflect.PathParam;
 
 @Api(ScopeClient.SCOPES_URI)
 public interface ScopeClient extends
+        SearchableResource<Scope>,
         RetrievableResource<Scope> {
 
     String SCOPES_URI = "/rest/scopes";
