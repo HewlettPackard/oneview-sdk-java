@@ -54,6 +54,7 @@ import com.hp.ov.sdk.rest.client.server.ServerProfileClient;
 import com.hp.ov.sdk.rest.client.server.ServerProfileTemplateClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareBundleClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
+import com.hp.ov.sdk.rest.client.settings.LicenseClient;
 import com.hp.ov.sdk.rest.client.settings.ScopeClient;
 import com.hp.ov.sdk.rest.client.settings.VersionClient;
 import com.hp.ov.sdk.rest.client.storage.DriveEnclosureClient;
@@ -607,6 +608,16 @@ public class OneViewClient extends AbstractClient {
      */
     public synchronized OsDeploymentPlanClient osDeploymentPlan() {
         return getProxy(OsDeploymentPlanClient.class);
+    }
+
+    /**
+     * Creates or retrieves an existing instance of {@link LicenseClient}.
+     * This client provides an interface for managing licenses.
+     *
+     * @return an interface to the Licenses REST API.
+     */
+    public synchronized LicenseClient license() {
+        return getProxy(LicenseClient.class);
     }
 
     /**
