@@ -24,6 +24,7 @@ import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.settings.License;
+import com.hp.ov.sdk.dto.settings.LicenseType;
 import com.hp.ov.sdk.rest.client.OneViewClient;
 import com.hp.ov.sdk.rest.http.core.BasicURIQuery;
 import com.hp.ov.sdk.rest.http.core.URIQuery;
@@ -36,7 +37,7 @@ public class LicenseClientSample {
     // ================================
     // Make sure to scape double quotes (") in the key with \
     private static final String LICENSE_KEY = "9AQC DQAA H9PY 8HUY V2B4 HWWV Y9JL KMPL 89SC PAN9 DXAU 2CSM GHTG L762 TX72 VSFM KJVT D5KM EFVW TSNJ P499 65GC UP29 9EG6 4JR7 TWC5 H2PG 47F7 SZ6Z LADY JH7D HNYD JV8M M428 T84U R42A E8K5 XAKD EKSB T4AN XZLU FMXS FKS6 KKCE 4NMU FGN5 N8CG Z2HX SSTP 4F9G NQT8 2UYW N88K HX9E \"424828246 N3R43A_NFR Synergy_8Gb_FC_Upgrade_License_NFR E7EAADYC3AYU\"";
-    private static final String LICENSE_TYPE = "Evaluation";
+    private static final LicenseType LICENSE_TYPE = LicenseType.Evaluation;
     private static final String PRODUCT = "Synergy 8Gb FC Upgrade";
     // ================================
 
