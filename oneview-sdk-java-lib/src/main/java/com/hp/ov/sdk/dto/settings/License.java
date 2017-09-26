@@ -17,6 +17,7 @@
 package com.hp.ov.sdk.dto.settings;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Since;
+import com.google.gson.annotations.Until;
 import com.hp.ov.sdk.util.URIUtils;
 
 public class License implements Serializable {
@@ -38,9 +41,20 @@ public class License implements Serializable {
     private Date modified;
     private String type;
     private String uri;
+    @Until(199)
+    private Integer consumedCapacity;
+    @Until(199)
+    private Integer hwm;
+    @Until(199)
+    private BigDecimal hwmPercentageCompliance;
+    @Until(199)
+    private BigDecimal percentageCompliance;
+    @Until(199)
+    private Integer unlicensedCount;
     private List<String> additionalKeys = new ArrayList<>();
     private Integer availableCapacity;
     private String eon;
+    @Since(200)
     private String expiryDate;
     private String key;
     private LicenseType licenseType;
@@ -139,6 +153,81 @@ public class License implements Serializable {
      */
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    /**
+     * @return the consumedCapacity
+     */
+    public Integer getConsumedCapacity() {
+        return consumedCapacity;
+    }
+
+    /**
+     * @param consumedCapacity
+     *            the consumedCapacity to set
+     */
+    public void setConsumedCapacity(Integer consumedCapacity) {
+        this.consumedCapacity = consumedCapacity;
+    }
+
+    /**
+     * @return the hwm
+     */
+    public Integer getHwm() {
+        return hwm;
+    }
+
+    /**
+     * @param hwm
+     *            the hwm to set
+     */
+    public void setHwm(Integer hwm) {
+        this.hwm = hwm;
+    }
+
+    /**
+     * @return the hwmPercentageCompliance
+     */
+    public BigDecimal getHwmPercentageCompliance() {
+        return hwmPercentageCompliance;
+    }
+
+    /**
+     * @param hwmPercentageCompliance
+     *            the hwmPercentageCompliance to set
+     */
+    public void setHwmPercentageCompliance(BigDecimal hwmPercentageCompliance) {
+        this.hwmPercentageCompliance = hwmPercentageCompliance;
+    }
+
+    /**
+     * @return the percentageCompliance
+     */
+    public BigDecimal getPercentageCompliance() {
+        return percentageCompliance;
+    }
+
+    /**
+     * @param percentageCompliance
+     *            the percentageCompliance to set
+     */
+    public void setPercentageCompliance(BigDecimal percentageCompliance) {
+        this.percentageCompliance = percentageCompliance;
+    }
+
+    /**
+     * @return the unlicensedCount
+     */
+    public Integer getUnlicensedCount() {
+        return unlicensedCount;
+    }
+
+    /**
+     * @param unlicensedCount
+     *            the unlicensedCount to set
+     */
+    public void setUnlicensedCount(Integer unlicensedCount) {
+        this.unlicensedCount = unlicensedCount;
     }
 
     /**
@@ -321,6 +410,10 @@ public class License implements Serializable {
         this.totalCapacity = totalCapacity;
     }
 
+    /**
+     * @return the licenseId
+     *            used to identify a license
+     */
     public String getLicenseId() {
         return URIUtils.getResourceIdFromUri(this.getUri());
     }
@@ -355,6 +448,11 @@ public class License implements Serializable {
                 .append(modified, that.modified)
                 .append(type, that.type)
                 .append(uri, that.uri)
+                .append(consumedCapacity, that.consumedCapacity)
+                .append(hwm, that.hwm)
+                .append(hwmPercentageCompliance, that.hwmPercentageCompliance)
+                .append(percentageCompliance, that.percentageCompliance)
+                .append(unlicensedCount, that.unlicensedCount)
                 .append(additionalKeys, that.additionalKeys)
                 .append(availableCapacity, that.availableCapacity)
                 .append(eon, that.eon)
@@ -379,6 +477,11 @@ public class License implements Serializable {
                 .append(modified)
                 .append(type)
                 .append(uri)
+                .append(consumedCapacity)
+                .append(hwm)
+                .append(hwmPercentageCompliance)
+                .append(percentageCompliance)
+                .append(unlicensedCount)
                 .append(additionalKeys)
                 .append(availableCapacity)
                 .append(eon)

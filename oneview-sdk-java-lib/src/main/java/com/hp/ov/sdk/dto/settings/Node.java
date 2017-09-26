@@ -22,13 +22,17 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.google.gson.annotations.Since;
+
 public class Node implements Serializable {
 
     private static final long serialVersionUID = -643183378943090508L;
 
     private String appliedDate;
+    @Since(200)
     private String eTag;
     private String nodeId;
+    @Since(200)
     private Boolean nodeManaged;
     private String nodeName;
     private String nodeUri;
