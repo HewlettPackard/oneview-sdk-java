@@ -59,7 +59,7 @@ public class HttpRestClientTest {
         Mockito.when(sdkConfiguration.getClientMaxNumberOfConnections()).thenReturn(20);
         Mockito.when(sdkConfiguration.getClientSocketTimeout()).thenReturn(60);
         Mockito.when(sdkConfiguration.getOneViewHostname()).thenReturn("1.1.1.1");
-        Mockito.when(sdkConfiguration.getOneViewApiVersion()).thenReturn(ApiVersion.V_500);
+        Mockito.when(sdkConfiguration.getOneViewApiVersion()).thenReturn(ApiVersion.V_300);
 
         Mockito.when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenReturn(response);
         Mockito.when(response.getStatusLine()).thenReturn(responseStatus);

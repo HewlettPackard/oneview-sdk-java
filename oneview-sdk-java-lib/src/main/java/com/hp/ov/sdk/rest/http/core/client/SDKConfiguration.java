@@ -30,7 +30,7 @@ import com.hp.ov.sdk.exceptions.SDKPropertiesFileException;
 public class SDKConfiguration {
 
     private static final int DEFAULT_MESSAGE_BUS_PORT = 5671;
-    private static final ApiVersion DEFAULT_API_VERSION = ApiVersion.V_500;
+    private static final ApiVersion DEFAULT_API_VERSION = ApiVersion.V_300;
     private static final String DEFAULT_DOMAIN = "LOCAL";
 
     private static final String[] MANDATORY_FIELDS = {
