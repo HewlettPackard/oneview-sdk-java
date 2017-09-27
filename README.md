@@ -20,7 +20,7 @@ The SDK is available in the Apache Maven Central Repository (back then known as 
 <dependency>
   <groupId>com.hpe.oneview</groupId>
   <artifactId>oneview-sdk-java</artifactId>
-  <version>3.2.1</version>
+  <version>4.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
