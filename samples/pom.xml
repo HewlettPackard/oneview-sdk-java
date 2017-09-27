@@ -19,7 +19,7 @@
   <parent>
     <groupId>com.hpe.oneview</groupId>
     <artifactId>oneview-sdk-java-pom</artifactId>
-    <version>3.2.0</version>
+    <version>3.2.1</version>
   </parent>
 
   <groupId>com.hpe.oneview</groupId>
@@ -45,7 +45,7 @@
     <dependency>
       <groupId>com.hpe.oneview</groupId>
       <artifactId>oneview-sdk-java</artifactId>
-      <version>3.2.0</version>
+      <version>3.2.1</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
