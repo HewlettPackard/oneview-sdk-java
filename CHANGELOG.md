@@ -9,7 +9,7 @@
 #### Bug fixes:
 
 ## v3.2.1
-This release sets API 300 as default.
+This release sets back API 300 as default.
 
 ## v3.2.0
 
