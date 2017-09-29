@@ -16,11 +16,9 @@
 
 package com.hp.ov.sdk.rest.client.settings;
 
-import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.settings.License;
 import com.hp.ov.sdk.rest.client.common.RetrievableResource;
 import com.hp.ov.sdk.rest.http.core.HttpMethod;
-import com.hp.ov.sdk.rest.http.core.client.RequestOption;
 import com.hp.ov.sdk.rest.reflect.Api;
 import com.hp.ov.sdk.rest.reflect.BodyParam;
 import com.hp.ov.sdk.rest.reflect.Endpoint;
@@ -47,12 +45,10 @@ public interface LicenseClient extends
      * Deletes the license identified by the provided <code>licenseId</code>.
      *
      * @param licenseId license identifier as seen in HPE OneView
-     * @param options <code>varargs</code> of {@link RequestOption},
-     * which can be used to specify some request options
      *
-     * @return {@link TaskResource} task containing the result of this request
+     * @return {@link String} containing the response of the process
      */
     @Endpoint(uri = "/{licenseId}", method = HttpMethod.DELETE)
-    TaskResource delete(@PathParam("licenseId") String licenseId, RequestOption... options);
+    String delete(@PathParam("licenseId") String licenseId);
 
 }

@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.ResourceCollection;
-import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.settings.License;
 import com.hp.ov.sdk.dto.settings.LicenseType;
 import com.hp.ov.sdk.rest.client.OneViewClient;
@@ -123,9 +122,9 @@ public class LicenseClientSample {
     public void deleteLicense() {
         License license = client.getAll().get(0);
 
-        TaskResource task = client.delete(license.getLicenseId());
+        String response = client.delete(license.getLicenseId());
 
-        LOGGER.info("Task object returned to client : " + task.toJsonString());
+        LOGGER.info("Response returned to client : " + response);
     }
 
     public static void main(String[] args) {
