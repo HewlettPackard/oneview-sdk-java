@@ -54,6 +54,36 @@ $ keytool -import -v -trustcacerts -alias myservercert -file default-server.crt 
 
 Inside the project's `bin` folder you can find a bash script (`build-truststore.sh`) that  can be used to automate the creation of the TrustStore file. It can also serve as reference if you decide to run the commands manually.
 
+#### Image Streamer ####
+To use the SDK with an Image Streamer, repeat the steps above to fetch server CA certificate and generate the TrustStore pointing to the Image Streamer appliance.
+
+Example:
+```sh
+$ openssl s_client -showcerts -host <image_streamer_host> -port 443
+```
+Example:
+```sh
+$ keytool -import -v -trustcacerts -alias myservercert -file default-server.crt -keystore TrustStore
+```
+> Note: Choose the *yes* option, when prompted to trust the certificate.
+
+### Setting your OneView version ###
+The OneView Java SDK supports the API endpoints `120, 200, 201, 300, 500 (partially)`.
+The current `default` API version used by the Java SDK is `300`.
+
+To change the API to execute the samples, you must set the API version on the [sdk-config-sample.properties](oneview-sdk-java/samples/src/main/resources/sdk-config-sample.properties):
+
+```
+oneview.api_version=500
+```
+
+The API list is as follows:
+
+- HPE OneView 1.20 API version: `120`
+- HPE OneView 2.00 API version: `200`
+- HPE OneView 3.00 API version: `300`
+- HPE OneView 3.10 API version: `500`
+
 ### Example programs ###
 The SDK comes with several sample programs inside the `samples` module. For each of the supported resource types, there is a corresponding sample file. To run one of them, we recommend the use of an IDE ([Eclipse](https://eclipse.org/downloads/) or [IntelliJ](https://www.jetbrains.com/idea/download/)).
 
@@ -76,6 +106,9 @@ $ curl -X POST -H "Auth:{AUTHORIZATION_TOKEN}" \
 -k https://{HOST}/rest/certificates/client/rabbitmq
 ```
 
+## API Implementation ##
+A status of the HPE OneView REST interfaces that have been implemented in this Java library can be found in the [endpoints-support.md](https://github.com/HewlettPackard/oneview-sdk-java/blob/master/endpoints-support.md).
+
 ## SDK Logging Configuration ##
 The OneView SDK for Java uses the Simple Logging Facade for Java (SLF4J) for logging. The SLF4J serves as a simple facade or abstraction for various logging frameworks, such as `java.util.logging`, `logback` and `log4j`. SLF4J allows the end-user to plug in the desired logging framework at deployment time.
 
@@ -89,6 +122,45 @@ For example, the `samples` module uses the `log4j` as the underlying logging fra
   <version>1.7.21</version>
 </dependency>
 ```
+
+## Contributing ##
+You know the drill. Fork it, branch it, change it, commit it, and pull-request it.
+We are passionate about improving this project, and are glad to accept help to make it better. However, keep the following in mind:
+
+We reserve the right to reject changes that we feel do not fit the scope of this project. For feature additions, please open an issue to discuss your ideas before doing the work.
+
+#### Naming Convention for OneView Resources ####
+The following summarizes code structure and naming conventions for the Java SDK.
+
+- **Packages:** The package is named according to the **HPE OneView API Reference** group, with all characters in lowercase, separated by dots, as the standard Java package naming convention, for example: `com.hp.ov.sdk.rest.client.networking`.
+- **Classes:** We are using camel case to define the class name, for example: **FcNetwork.java**.
+- **Client classes:** Clients are named using format `<ClassName>Client.java`, for example: **FcNetworkClient.java**.
+- **Examples:** Samples are named using format `<ClassNameClient>Sample.java`, for example: **FcNetworkClientSample.java**.
+- **Tests:**  The unit tests are named using format `<ClassNameClient>Test.java`, for example: **FcNetworkClientTest.java**.
+
+## Testing ##
+When contributing code to this project, we require tests to accompany the code being delivered.
+That ensures a higher standing of quality, and also helps to avoid minor mistakes and future regressions.
+
+### Unit Tests ###
+To write unit tests we use [JUnit](http://junit.org/) and [Mockito](http://site.mockito.org/). 
+
+It is important that all methods implemented in SDK should have a correspondent test method.
+Method names should start with `should`.
+
+To execute unit tests for a class, just run it as JUnit Test.
+
+### BDD (Behavior Driven Development) Tests ###
+We are using [Cucumber](https://cucumber.io/docs/reference/jvm) as the BDD framework to develop functional tests.
+
+The test artifacts are at [Automated Test Folder](https://github.com/HewlettPackard/oneview-sdk-java/tree/master/automated-tests).
+
+There are 2 test suites, one for C7000 (com.hp.ov.sdk.oneview.AllTestsC7000) and other for Synergy (com.hp.ov.sdk.oneview.AllTestsSynergy) that are responsible for executing tests for all the resources implemented.
+
+For more information please check the comments in the test suite files.
+
+## Feature Requests ##
+If you have a need not being met by the current implementation, please let us know (via a new issue). This feedback is crucial for us to deliver a useful product. Do not assume that we have already thought of everything, because we assure you that is not the case.
 
 ## License ##
 The OneView SDK for Java is released under version 2.0 of the [Apache License](http://www.apache.org/licenses/LICENSE-2.0).
