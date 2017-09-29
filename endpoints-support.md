@@ -516,53 +516,54 @@
 | Endpoints                                               | Verb    | V300               |
 | --------------------------------------------------------------------------------- | ------- | :----------------: |
 |     **Artifacts Bundle**                                                                                         |
-|<sub>	/rest/artifact-bundles	</sub>                                                  | GET |  |
-|<sub>	/rest/artifact-bundles	</sub>                                       |  POST(create)  |  |
-|<sub>	/rest/artifact-bundles	</sub>                                       |  POST(upload)  |  |
-|<sub>	/rest/artifact-bundles/backups	</sub>                                          | GET |  |
-|<sub>	/rest/artifact-bundles/backups	</sub>                                 | POST(create) |  |
-|<sub>	/rest/artifact-bundles/backups/archive	</sub>                         | POST(upload) |  |
-|<sub>	/rest/artifact-bundles/backups/archive/{id}	</sub>                          | GET |  |
-|<sub>	/rest/artifact-bundles/backups/{id}	</sub>                                  | GET |  |
-|<sub>	/rest/artifact-bundles/backups/{id}	</sub>                                  | PUT |  |
-|<sub>	/rest/artifact-bundles/download/{id}	</sub>                                  | GET |  |
-|<sub>	/rest/artifact-bundles/{id}	</sub>                                          | GET |  |
-|<sub>	/rest/artifact-bundles/{id}	</sub>                             | PUT(extract)     |  |
-|<sub>	/rest/artifact-bundles/{id}	</sub>                             | PUT(update attr) |  |
-|<sub>	/rest/artifact-bundles/{id}	</sub>                             | DELETE           |  |
-|<sub>	/rest/artifact-bundles/{id}/stopArtifactCreate	</sub>             | PUT              |  |
+|<sub>	/rest/artifact-bundles	</sub>                                                  | GET | :white_check_mark: |
+|<sub>	/rest/artifact-bundles	</sub>                                       |  POST(create)  | :white_check_mark: |
+|<sub>	/rest/artifact-bundles	</sub>                                       |  POST(upload)  | :white_check_mark: |
+|<sub>	/rest/artifact-bundles/backups	</sub>                                          | GET | :white_check_mark: |
+|<sub>	/rest/artifact-bundles/backups	</sub>                                 | POST(create) | :white_check_mark: |
+|<sub>	/rest/artifact-bundles/backups/archive	</sub>                         | POST(upload) | :white_check_mark: |
+|<sub>	/rest/artifact-bundles/backups/archive/{id}	</sub>                          | GET | :white_check_mark: |
+|<sub>	/rest/artifact-bundles/backups/{id}	</sub>                                  | GET | :white_check_mark: |
+|<sub>	/rest/artifact-bundles/backups/{id}	</sub>                                  | PUT | :white_check_mark: |
+|<sub>	/rest/artifact-bundles/download/{id}	</sub>                                  | GET | :white_check_mark: |
+|<sub>	/rest/artifact-bundles/{id}	</sub>                                          | GET | :white_check_mark: |
+|<sub>	/rest/artifact-bundles/{id}	</sub>                             | PUT(extract)     | :white_check_mark: |
+|<sub>	/rest/artifact-bundles/{id}	</sub>                             | PUT(update attr) | :white_check_mark: |
+|<sub>	/rest/artifact-bundles/{id}	</sub>                             | DELETE           | :white_check_mark: |
+|<sub>	/rest/artifact-bundles/{id}/stopArtifactCreate	</sub>             | PUT              | :white_check_mark: |
 |     **Deployment Plans**                                                                                         |
-|<sub> /rest/deployment-plans </sub>                                       | POST             |  |
-|<sub> /rest/deployment-plans </sub>                                       | GET              |  |
-|<sub> /rest/deployment-plans/{id} </sub>                                  | GET              |  |
-|<sub> /rest/deployment-plans/{id} </sub>                                  | PUT              |  |
-|<sub> /rest/deployment-plans/{id} </sub>                                  | DELETE           |  |
+|<sub> /rest/deployment-plans </sub>                                       | POST             | :white_check_mark: |
+|<sub> /rest/deployment-plans </sub>                                       | GET              | :white_check_mark: |
+|<sub> /rest/deployment-plans/{id} </sub>                                  | GET              | :white_check_mark: |
+|<sub> /rest/deployment-plans/{id} </sub>                                  | PUT              | :white_check_mark: |
+|<sub> /rest/deployment-plans/{id} </sub>                                  | DELETE           | :white_check_mark: |
 |     **Deployment Groups**                                                                                        |
-|<sub> /rest/deployment-groups</sub>                                       | GET              |  |
-|<sub> /rest/deployment-groups/{id}</sub>                                  | GET              |  |
+|<sub> /rest/deployment-groups</sub>                                       | GET              | :white_check_mark: |
+|<sub> /rest/deployment-groups/{id}</sub>                                  | GET              | :white_check_mark: |
 |     **Golden Images**                                                                                            |
-|<sub> /rest/golden-images</sub>                                           | POST(create)     |  |
-|<sub> /rest/golden-images</sub>                                           | POST(upload)     |  |
-|<sub> /rest/golden-images</sub>                                           | GET              |  |
-|<sub> /rest/golden-images/{id}</sub>                                      | GET              |  |
-|<sub> /rest/golden-images/archive/{id}</sub>                              | GET              |  |
-|<sub> /rest/golden-images/download/{id}</sub>                             | GET              |  |
-|<sub> /rest/golden-images/{id}</sub>                                      | PUT              |  |
-|<sub> /rest/golden-images/{id}</sub>                                      | DELETE           |  |
+|<sub> /rest/golden-images</sub>                                           | POST(create)     | :white_check_mark: |
+|<sub> /rest/golden-images</sub>                                           | POST(upload)     | :white_check_mark: |
+|<sub> /rest/golden-images</sub>                                           | GET              | :white_check_mark: |
+|<sub> /rest/golden-images/{id}</sub>                                      | GET              | :white_check_mark: |
+|<sub> /rest/golden-images/archive/{id}</sub>                              | GET              | :white_check_mark: |
+|<sub> /rest/golden-images/download/{id}</sub>                             | GET              | :white_check_mark: |
+|<sub> /rest/golden-images/{id}</sub>                                      | PUT              | :white_check_mark: |
+|<sub> /rest/golden-images/{id}</sub>                                      | DELETE           | :white_check_mark: |
 |     **OS Build Plan**                                                                                            |
-|<sub> /rest/build-plans</sub>                                             | POST             |  |
-|<sub> /rest/build-plans</sub>                                             | GET              |  |
-|<sub> /rest/build-plans/{id}</sub>                                        | GET              |  |
-|<sub> /rest/build-plans/{id}</sub>                                        | PUT              |  |
-|<sub> /rest/build-plans/{id}</sub>                                        | DELETE           |  |
+|<sub> /rest/build-plans</sub>                                             | POST             | :white_check_mark: |
+|<sub> /rest/build-plans</sub>                                             | GET              | :white_check_mark: |
+|<sub> /rest/build-plans/{id}</sub>                                        | GET              | :white_check_mark: |
+|<sub> /rest/build-plans/{id}</sub>                                        | PUT              | :white_check_mark: |
+|<sub> /rest/build-plans/{id}</sub>                                        | DELETE           | :white_check_mark: |
 |     **OS Volumes**                                                                                               |
-|<sub> /rest/os-volumes</sub>                                              | GET              |  |
-|<sub> /rest/os-volumes/{id}</sub>                                         | GET              |  |
-|<sub> /rest/os-volumes/archive/{id}</sub>                                 | GET              |  |
+|<sub> /rest/os-volumes</sub>                                              | GET              | :white_check_mark: |
+|<sub> /rest/os-volumes/{id}</sub>                                         | GET              | :white_check_mark: |
+|<sub> /rest/os-volumes/archive/{id}</sub>                                 | GET              | :white_check_mark: |
 |     **Plan Scripts**                                                                                             |
-|<sub> /rest/plan-scripts</sub>                                            | POST             |  |
-|<sub> /rest/plan-scripts/differences/{id}</sub>                           | POST             |  |
-|<sub> /rest/plan-scripts</sub>                                            | GET              |  |
-|<sub> /rest/plan-scripts/{id}</sub>                                       | GET              |  |
-|<sub> /rest/plan-scripts/{id}</sub>                                       | PUT              |  |
-|<sub> /rest/plan-scripts/{id}</sub>                                       | DELETE           |  |
+|<sub> /rest/plan-scripts</sub>                                            | POST             | :white_check_mark: |
+|<sub> /rest/plan-scripts/differences/{id}</sub>                           | POST             | :white_check_mark: |
+|<sub> /rest/plan-scripts</sub>                                            | GET              | :white_check_mark: |
+|<sub> /rest/plan-scripts/{id}</sub>                                       | GET              | :white_check_mark: |
+|<sub> /rest/plan-scripts/{id}</sub>                                       | PUT              | :white_check_mark: |
+|<sub> /rest/plan-scripts/{id}</sub>                                       | DELETE           | :white_check_mark: |
+
