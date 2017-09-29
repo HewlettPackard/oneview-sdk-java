@@ -10,6 +10,6 @@
 ---
 #### Check List
 - [ ] New functionality includes testing
+- [ ] New functionality has been thoroughly documented in the examples
+- [ ] New functionality has been documented in the CHANGELOG if applicable
 - [ ] New functionality has been documented in the README if applicable
-  - [ ] New functionality has been thoroughly documented in the examples (please include helpful comments)
-  
