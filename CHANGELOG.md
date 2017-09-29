@@ -1,10 +1,12 @@
 ## v4.0.0 (Unreleased)
 
-Enhancements:
+#### New Resources:
 
+#### New Features:
 
-Bug fixes:
+#### Enhancements:
 
+#### Bug fixes:
 
 ## v3.2.1
 This release sets API 300 as default.
