@@ -16,6 +16,7 @@
 package com.hp.ov.sdk.rest.client.networking;
 
 import static com.hp.ov.sdk.rest.client.settings.ScopeClient.SCOPES_URI;
+import static com.hp.ov.sdk.rest.client.settings.ScopeClientSample.SCOPE_NAME;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,7 +41,9 @@ import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnect
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup.RedundancyType;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.dto.samples.UplinkSetValue;
+import com.hp.ov.sdk.dto.settings.Scope;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.settings.ScopeClient;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 
 /*
@@ -76,15 +79,14 @@ public class LogicalInterconnectGroupClientSample {
     private static final String SETTING_ID = "dcd89c40-57b6-4551-9486-acc9090785fa";
     private static final String FABRIC_URI = "/rest/fabrics/a7896ce7-c11d-4658-829d-142bc66a85e4";
     private static final String LOGICAL_DOWNLINK_URI = "/rest/logical-downlinks/2ece260c-7997-441d-b1b9-d3296fe89505";
-    private static final String SCOPE_ID = "2d108000-f8d1-4104-8457-7a5aa3c1bb40";
     // ================================
 
     private final LogicalInterconnectGroupClient client;
+    private final OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
     private ResourceDtoUtils resourceDtoUtils;
 
     private LogicalInterconnectGroupClientSample() {
-        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
         this.client = oneViewClient.logicalInterconnectGroup();
 
         resourceDtoUtils = new ResourceDtoUtils(oneViewClient);
@@ -144,8 +146,8 @@ public class LogicalInterconnectGroupClientSample {
         patch.setOp(PatchOperation.replace);
         patch.setPath("/scopeUris");
         List<String> scopeUris = logicalInterconnectGroup.getScopeUris(); // Gets the current scope(s)
-        scopeUris.add(SCOPES_URI + "/" + SCOPE_ID); // Assigns Logical Interconnect Group to a new scope
-        // scopeUris.remove(SCOPES_URI + "/" + SCOPE_ID); // Unassigns Logical Interconnect Group from a scope
+        scopeUris.add(SCOPES_URI + "/" + getScopeId(SCOPE_NAME)); // Assigns Logical Interconnect Group to a new scope
+        // scopeUris.remove(SCOPES_URI + "/" + getScopeId(SCOPE_NAME)); // Unassigns Logical Interconnect Group from a scope
         patch.setValue(scopeUris);
 
         TaskResource task = this.client.patch(logicalInterconnectGroup.getResourceId(), patch);
@@ -295,6 +297,14 @@ public class LogicalInterconnectGroupClientSample {
         }
 
         return uplinkSetGroupDto;
+    }
+
+    private String getScopeId(String scopeName) {
+        ScopeClient scopeClient = oneViewClient.scope();
+
+        Scope scope = scopeClient.getByName(scopeName).get(0);
+
+        return scope.getResourceId();
     }
 
     public static void main(final String[] args) throws Exception {

@@ -301,11 +301,11 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
      *
      * @param resourceId resource identifier for logical interconnect as seen in HPE OneView.
      *
-     * @return {@link EthernetInterconnectSettingsV2} containing the logical interconnect
+     * @return {@link EthernetInterconnectSettings} containing the logical interconnect
      * ethernet settings details.
      */
     @Endpoint(uri = "/{resourceId}" + LOGICAL_INTERCONNECT_ETHERNET_SETTINGS_URI)
-    EthernetInterconnectSettingsV2 getEthernetSettings(@PathParam("resourceId") String resourceId);
+    EthernetInterconnectSettings getEthernetSettings(@PathParam("resourceId") String resourceId);
 
     /**
      * This method aids in updating the ethernet interconnect settings for the logical interconnect.

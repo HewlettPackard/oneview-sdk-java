@@ -380,7 +380,7 @@ public class LogicalInterconnectClientTest {
         Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
         then(baseClient).should().executeRequest(expectedRequest,
-                TypeToken.of(EthernetInterconnectSettingsV2.class).getType());
+                TypeToken.of(EthernetInterconnectSettings.class).getType());
     }
 
     @Test

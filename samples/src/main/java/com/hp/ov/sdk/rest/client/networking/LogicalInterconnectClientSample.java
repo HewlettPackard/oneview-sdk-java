@@ -305,7 +305,7 @@ public class LogicalInterconnectClientSample {
     private void getLogicalInterconnectEthernetSettings() {
         LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
-        EthernetInterconnectSettingsV2 ethernetSettings = logicalInterconnectClient.getEthernetSettings(logicalInterconnect.getResourceId());
+        EthernetInterconnectSettings ethernetSettings = logicalInterconnectClient.getEthernetSettings(logicalInterconnect.getResourceId());
 
         LOGGER.info("EthernetInterconnectSettings object returned to client :" + JsonPrettyPrinter.print(ethernetSettings));
     }
