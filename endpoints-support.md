@@ -183,6 +183,11 @@
 |<sub>/rest/labels/resources/**</sub>                                                     | PUT      |    |    |
 |<sub>/rest/labels/resources/**</sub>                                                     | DELETE   |    |    |
 |<sub>/rest/labels/resources/{id}</sub>                                                   | GET      |    |    |
+|     **License**                                                                                                                        |
+|<sub>/rest/licenses</sub>                                                                |GET       |    |    | :white_check_mark: |
+|<sub>/rest/licenses</sub>                                                                |POST      |    |    | :white_check_mark: |
+|<sub>/rest/licenses/{id}</sub>                                                           |GET       |    |    | :white_check_mark: |
+|<sub>/rest/licenses/{licenseId}</sub>                                                    |GET       |    |    | :white_check_mark: |
 |     **Logical Downlink**                                                                                                                         |
 |<sub>/rest/logical-downlinks</sub>                                                       |GET       |    |    |    |
 |<sub>/rest/logical-downlinks/withoutEthernet</sub>                                       |GET       |    |    |    |
