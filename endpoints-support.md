@@ -227,13 +227,14 @@
 |<sub>/rest/logical-interconnects/{id}/port-monitor</sub>                                 | PUT      |    |    |    |
 |<sub>/rest/logical-interconnects/{id}/telemetry-configurations/{tcId}</sub>              | GET      |    |    |    |
 |     **Logical Interconnect Group**                                                                                                               |
-|<sub>/rest/logical-interconnect-groups</sub>                                             | GET      |    |    |    |
-|<sub>/rest/logical-interconnect-groups</sub>                                             | POST     |    |    |    |
-|<sub>/rest/logical-interconnect-groups/defaultSettings</sub>                             | GET      |    |    |    |
-|<sub>/rest/logical-interconnect-groups/{id}</sub>                                        | GET      |    |    |    |
-|<sub>/rest/logical-interconnect-groups/{id}</sub>                                        | PUT      |    |    |    |
-|<sub>/rest/logical-interconnect-groups/{id}</sub>                                        | DELETE   |    |    |    |
-|<sub>/rest/logical-interconnect-groups/{id}/settings</sub>                               | GET      |    |    |    |
+|<sub>/rest/logical-interconnect-groups</sub>                                             | GET      |    |    | :white_check_mark: |
+|<sub>/rest/logical-interconnect-groups</sub>                                             | POST     |    |    | :white_check_mark: |
+|<sub>/rest/logical-interconnect-groups/defaultSettings</sub>                             | GET      |    |    | :white_check_mark: |
+|<sub>/rest/logical-interconnect-groups/{id}</sub>                                        | GET      |    |    | :white_check_mark: |
+|<sub>/rest/logical-interconnect-groups/{id}</sub>                                        | PUT      |    |    | :white_check_mark: |
+|<sub>/rest/logical-interconnect-groups/{id}</sub>                                        | PATCH    |    |    | :white_check_mark: |
+|<sub>/rest/logical-interconnect-groups/{id}</sub>                                        | DELETE   |    |    | :white_check_mark: |
+|<sub>/rest/logical-interconnect-groups/{id}/settings</sub>                               | GET      |    |    | :white_check_mark: |
 |     **Logical Switch Group**                                                                                                                     |
 |<sub>/rest/logical-switch-groups</sub>                                                   | GET      |    |    |    |
 |<sub>/rest/logical-switch-groups</sub>                                                   |POST      |    |    |    |
