@@ -3,8 +3,13 @@
 #### New Resources:
 
 #### New Features:
+This release adds support to OneView Rest API version 500 to the already existing features:
+  - Logical Interconnect Group
 
 #### Enhancements:
+Refactoring:
+  - ```EthernetInterconnectSettingsV2``` updated to ```EthernetInterconnectSettings```
+  - ```InterconnectSettingsV2``` updated to ```InterconnectSettings```
 
 #### Bug fixes:
 
@@ -19,13 +24,13 @@ This release sets back API 300 as default.
 #### New Features:
 This release adds support to new endpoints to OneView Rest API version 300 to the already existing features:
   - Logical Interconnect
-    - _GET_ ethernetSettings
+    - _GET_ ```ethernetSettings```
   - Interconnect
-    - _GET_ ports
-    - _GET_ ports/{portId:.+}
+    - _GET_ ```ports```
+    - _GET_ ```ports/{portId:.+}```
   - Network Sets
-    - _GET_ withoutEthernet
-    - _GET_ {id}/withoutEthernet
+    - _GET_ ```withoutEthernet```
+    - _GET_ ```{id}/withoutEthernet```
 
 This release adds support to OneView Rest API version 500 to the already existing features:
   - Ethernet Network
