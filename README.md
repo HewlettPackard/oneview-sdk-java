@@ -165,6 +165,39 @@ The tests are independent among resources, so it is possible to test a single re
 
 For more information about requirements please check the comments in the test suite files.
 
+#### Setting configuration properties for tests ####
+There are 2 `.properties ` files required to execute BDD tests:
+
+##### [oneview_java_sdk_config.properties](https://github.com/HewlettPackard/oneview-sdk-java/blob/master/automated-tests/src/test/resources/oneview_java_sdk_config.properties) #####
+This file has the same properties found in [sdk-config-sample.properties](oneview-sdk-java/samples/src/main/resources/sdk-config-sample.properties) used for samples. You should set attributes as TrustStore, OneView credentials, and the API version:
+
+```properties
+truststore.file=src/main/resources/TrustStore
+oneview.api_version=300
+oneview.hostname=10.10.10.10
+oneview.username=administrator
+oneview.password=admin
+oneview.domain=local
+```
+
+##### [oneView.properties](https://github.com/HewlettPackard/oneview-sdk-java/blob/master/automated-tests/src/test/resources/oneView.properties) #####
+This file has additional attributes such as Storage and Enclosure credentials that are used by tests:
+
+```properties
+storageSystemHostname=10.10.10.10
+storageSystemPassword=dcs
+enclosureHostname=10.10.10.10
+domain=LOCAL
+username=administrator
+enclosurePassword=dcs
+file_sdk_config=src/test/resources/oneview_java_sdk_config.properties
+version=V_300
+storageSystemUsername=dcs
+hostname=10.10.10.10
+password=rainforest
+enclosureUsername=dcs
+```
+
 ## Feature Requests ##
 If you have a need not being met by the current implementation, please let us know (via a new issue). This feedback is crucial for us to deliver a useful product. Do not assume that we have already thought of everything, because we assure you that is not the case.
 
