@@ -16,22 +16,28 @@
 
 package com.hp.ov.sdk.network;
 
+import static com.hp.ov.sdk.rest.client.settings.ScopeClient.SCOPES_URI;
+
 import java.util.List;
 import java.util.Map;
 
+import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.networking.EthernetNetworkType;
 import com.hp.ov.sdk.dto.networking.ethernet.Bandwidth;
 import com.hp.ov.sdk.dto.networking.ethernet.ConnectionTemplate;
 import com.hp.ov.sdk.dto.networking.ethernet.Network;
 import com.hp.ov.sdk.dto.networking.ethernet.Purpose;
+import com.hp.ov.sdk.dto.settings.Scope;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.oneview.BasicResource;
 import com.hp.ov.sdk.oneview.CreateResource;
+import com.hp.ov.sdk.oneview.PatchResource;
 import com.hp.ov.sdk.oneview.RemoveResource;
 import com.hp.ov.sdk.oneview.UpdateResource;
 import com.hp.ov.sdk.rest.client.networking.EthernetNetworkClient;
+import com.hp.ov.sdk.rest.client.settings.ScopeClient;
 
-public class EthernetNetworkResource extends BasicResource implements CreateResource, RemoveResource, UpdateResource {
+public class EthernetNetworkResource extends BasicResource implements CreateResource, RemoveResource, UpdateResource, PatchResource {
 
     private static EthernetNetworkResource instance;
 
@@ -87,6 +93,11 @@ public class EthernetNetworkResource extends BasicResource implements CreateReso
     }
 
     @Override
+    public String patch(String id) {
+        return taskToString(client.patch(id, builderPatch(client.getById(id))));
+    }
+
+    @Override
     public String update(String id) {
         return taskToString(client.update(id, builderUpdate(client.getById(id))));
     }
@@ -121,7 +132,6 @@ public class EthernetNetworkResource extends BasicResource implements CreateReso
         network.setPurpose(Purpose.valueOf(resourceProperties.get("purpose")));
         network.setPrivateNetwork(Boolean.parseBoolean(resourceProperties.get("private")));
         network.setSmartLink(Boolean.parseBoolean(resourceProperties.get("smartLink")));
-        
         return network;
     }
 
@@ -144,4 +154,19 @@ public class EthernetNetworkResource extends BasicResource implements CreateReso
         return connectionTemplate;
     }
 
+    private Patch builderPatch(Network network) {
+        Patch patch = new Patch();
+        patch.setOp(Patch.PatchOperation.valueOf(resourceProperties.get("op")));
+        patch.setPath(resourceProperties.get("path"));
+        List<String> scopeUris = network.getScopeUris();
+        scopeUris.add(SCOPES_URI + "/" + getScopeId(resourceProperties.get("value")));
+        patch.setValue(scopeUris);
+        return patch;
+	}
+
+    private String getScopeId(String scopeName) {
+        ScopeClient scopeClient = oneViewClient.scope();
+        Scope scope = scopeClient.getByName(scopeName).get(0);
+        return scope == null ? "" : scope.getResourceId();
+    }
 }

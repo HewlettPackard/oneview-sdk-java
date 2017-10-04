@@ -114,6 +114,27 @@ Feature: In order to manage Logical Interconnect Groups
       And OneView gets Interconnect Settings
     Then I get a Resource Name
 
+  @create
+  Scenario: Creation of a new Scope
+    Given an instance of Scope
+      And Resource values as follows:
+      | name        | BDD Scope             |
+      | description | BDD Scope description |
+    When OneView runs Resource creation
+      And OneView gets Resource by Name
+    Then I get an ID
+
+  @patch
+  Scenario: Update Logical Interconnect Group by Patch
+    Given name "lig-bdd-1" for Resource
+      And Resource values will be updated as follows:
+      | op    | replace    |
+      | path  | /scopeUris |
+      | value | BDD Scope  |
+    When OneView gets Resource by Name
+      And OneView runs Resource patch
+    Then I get a success status
+
   @update
   Scenario: Update a Logical Interconnect Group Adding an Uplink Set
     Given Resource values as follows:
@@ -158,6 +179,15 @@ Feature: In order to manage Logical Interconnect Groups
   Scenario: Remove a FC Network
     Given an instance of FC Network
       And name "fc-network-bdd-1" for Resource
+    When OneView gets Resource by Name
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
+    Then Resource is not found
+
+  @remove
+  Scenario: Remove a Scope
+    Given an instance of Scope
+      And name "BDD Scope" for Resource
     When OneView gets Resource by Name
       And OneView deletes the Resource
       And OneView gets Resource by ID

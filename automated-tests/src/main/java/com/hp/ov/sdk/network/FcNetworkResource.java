@@ -16,18 +16,25 @@
 
 package com.hp.ov.sdk.network;
 
+import static com.hp.ov.sdk.rest.client.settings.ScopeClient.SCOPES_URI;
+
+import java.util.List;
 import java.util.Map;
 
+import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.networking.fcnetworks.FabricType;
 import com.hp.ov.sdk.dto.networking.fcnetworks.FcNetwork;
+import com.hp.ov.sdk.dto.settings.Scope;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.oneview.BasicResource;
 import com.hp.ov.sdk.oneview.CreateResource;
+import com.hp.ov.sdk.oneview.PatchResource;
 import com.hp.ov.sdk.oneview.RemoveResource;
 import com.hp.ov.sdk.oneview.UpdateResource;
 import com.hp.ov.sdk.rest.client.networking.FcNetworkClient;
+import com.hp.ov.sdk.rest.client.settings.ScopeClient;
 
-public class FcNetworkResource extends BasicResource implements CreateResource, RemoveResource, UpdateResource {
+public class FcNetworkResource extends BasicResource implements CreateResource, RemoveResource, UpdateResource, PatchResource {
 
     private static FcNetworkResource instance;
 
@@ -87,6 +94,11 @@ public class FcNetworkResource extends BasicResource implements CreateResource, 
     }
 
     @Override
+    public String patch(String id) {
+        return taskToString(client.patch(id, builderPatch(client.getById(id))));
+    }
+
+    @Override
     public String update(String id) {
         return taskToString(client.update(id, builderUpdate(client.getById(id))));
     }
@@ -115,4 +127,19 @@ public class FcNetworkResource extends BasicResource implements CreateResource, 
         return fcNetwork;
     }
 
+    private Patch builderPatch(FcNetwork fcNetwork) {
+        Patch patch = new Patch();
+        patch.setOp(Patch.PatchOperation.valueOf(resourceProperties.get("op")));
+        patch.setPath(resourceProperties.get("path"));
+        List<String> scopeUris = fcNetwork.getScopeUris();
+        scopeUris.add(SCOPES_URI + "/" + getScopeId(resourceProperties.get("value")));
+        patch.setValue(scopeUris);
+        return patch;
+    }
+
+    private String getScopeId(String scopeName) {
+        ScopeClient scopeClient = oneViewClient.scope();
+        Scope scope = scopeClient.getByName(scopeName).get(0);
+        return scope == null ? "" : scope.getResourceId();
+    }
 }

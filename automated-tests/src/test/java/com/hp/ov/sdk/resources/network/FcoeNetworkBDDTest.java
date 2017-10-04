@@ -25,7 +25,7 @@ import cucumber.api.junit.Cucumber;
 @CucumberOptions(format = { "pretty", "html:target/cucumber" }, 
     glue = { "com.hp.ov.sdk.resources" },
     features = "classpath:cucumber/network/fcoeNetwork.feature",
-    tags = "@create, @getAll, @get, @update, @remove")
+    tags = "@create, @getAll, @get, @patch, @update, @remove")
 
 public class FcoeNetworkBDDTest {
 

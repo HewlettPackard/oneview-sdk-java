@@ -26,7 +26,7 @@ import cucumber.api.junit.Cucumber;
 	glue = { "com.hp.ov.sdk.resources" }, 
 	features = "classpath:cucumber/network/logicalInterconnectGroupSynergy.feature",
 	monochrome = true,
-	tags =  "@getAll, @create, @get, @update, @remove")
+	tags =  "@getAll, @create, @get, @patch, @update, @remove")
 
 public class LogicalInterconnectGroupBDDSynergyTest {
 

@@ -36,5 +36,4 @@ public class FcNetworkBDDStep extends Background {
         String sanUri = FcSansManagedSanResource.getInstance().getUri(sanName);
         FcNetworkResource.getInstance().setSanUri(sanUri);
     }
-
 }

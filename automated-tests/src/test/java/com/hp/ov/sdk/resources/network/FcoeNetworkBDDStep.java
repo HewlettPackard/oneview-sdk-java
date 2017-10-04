@@ -28,5 +28,4 @@ public class FcoeNetworkBDDStep extends Background {
     public void an_instance_of_FCoE_Network() throws Throwable {
         OneView.setResource(FcoeNetworkResource.getInstance());
     }
-    
 }

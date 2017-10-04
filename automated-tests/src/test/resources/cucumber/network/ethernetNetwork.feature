@@ -70,6 +70,27 @@ Feature: In order to manage Ethernet Networks
       And OneView gets the Associated Uplink Groups
     Then I get a count
 
+  @create
+  Scenario: Creation of a new Scope
+    Given an instance of Scope
+      And Resource values as follows:
+      | name        | BDD Scope             |
+      | description | BDD Scope description |
+    When OneView runs Resource creation
+      And OneView gets Resource by Name
+    Then I get an ID
+
+  @patch
+  Scenario: Update an Ethernet Network by Patch
+    Given name "network-bdd" for Resource
+      And Resource values will be updated as follows:
+      | op     | replace      |
+      | path   | /scopeUris   |
+      | value  | BDD Scope    |
+    When OneView gets Resource by Name
+      And OneView runs Resource patch
+    Then I get a success status
+
   @update
   Scenario: Update an Ethernet Network
     Given name "network-bdd" for Resource
@@ -90,4 +111,12 @@ Feature: In order to manage Ethernet Networks
       And OneView deletes the Resource
       And OneView gets Resource by ID
     Then Resource is not found
-    
+
+  @remove
+  Scenario: Remove a Scope
+    Given an instance of Scope
+      And name "BDD Scope" for Resource
+    When OneView gets Resource by Name
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
+    Then Resource is not found

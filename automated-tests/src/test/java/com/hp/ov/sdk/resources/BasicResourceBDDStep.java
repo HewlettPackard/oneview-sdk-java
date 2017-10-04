@@ -25,6 +25,7 @@ import com.hp.ov.sdk.oneview.Background;
 import com.hp.ov.sdk.oneview.CreateResource;
 import com.hp.ov.sdk.oneview.Credential;
 import com.hp.ov.sdk.oneview.OneView;
+import com.hp.ov.sdk.oneview.PatchResource;
 import com.hp.ov.sdk.oneview.RemoveResource;
 import com.hp.ov.sdk.oneview.UpdateResource;
 
@@ -140,4 +141,8 @@ public class BasicResourceBDDStep extends Background {
         assertTrue(!status.isEmpty());
     }
 
+    @When("^OneView runs Resource patch$")
+    public void oneview_runs_Resource_patch() throws Throwable {
+        status = ((PatchResource) OneView.getResource()).patch(resourceID);
+    }
 }
