@@ -1,6 +1,7 @@
 ## v4.0.0 (Unreleased)
 
 #### New Resources:
+  - Licenses
 
 #### New Features:
 
