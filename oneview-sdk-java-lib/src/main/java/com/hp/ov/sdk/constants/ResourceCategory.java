@@ -27,6 +27,9 @@ public class ResourceCategory {
     public static final String RC_FCOE_NETWORK = "fcoe-network";
     public static final String RC_FCOE_NETWORK_V300 = "fcoe-networkV300";
     public static final String RC_GOLDEN_IMAGE = "GoldenImage";
+    public static final String RC_LICENSE = "License";
+    public static final String RC_LICENSE_V200 = "LicenseV200";
+    public static final String RC_LICENSE_V500 = "LicenseV500";
     public static final String RC_LOGICAL_ENCLOSURE = "LogicalEnclosure";
     public static final String RC_LOGICAL_ENCLOSURE_V300 = "LogicalEnclosureV300";
     public static final String RC_LOGICAL_SWITCH_GROUP = "logical-switch-group";
