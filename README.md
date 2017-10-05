@@ -163,6 +163,8 @@ Test scenarios are described in `.feature` files, for example [fcNetwork.feature
 
 The tests are independent among resources, so it is possible to test a single resource. To execute the **FC Network** test scenarios, for example, just run [FcNetworkBDDTest.java](https://github.com/HewlettPackard/oneview-sdk-java/blob/master/automated-tests/src/test/java/com/hp/ov/sdk/resources/network/FcNetworkBDDTest.java) as a `JUnit` Test.
 
+**Note:** BDD tests cover `OneView` resources supported (not including `Image Streamer` resources) and can be run against real hardware or using a DCS.
+
 For more information about requirements please check the comments in the test suite files.
 
 #### Setting configuration properties for tests ####
