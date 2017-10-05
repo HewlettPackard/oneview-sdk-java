@@ -14,7 +14,7 @@ The project Javadocs are available at [http://hewlettpackard.github.io/oneview-s
 * OpenSSL
 
 ### Add as Maven dependency ###
-The SDK is available in the Apache Maven Central Repository (back then known as Maven Central). Thus, the recommended way to use the OneView SDK for Java in your project is to consume it from Maven. You can add the **HPE OneView Java SDK** as a dependency of your project by adding the following lines to your `pom.xml`:
+The SDK is available in the [Apache Maven Central Repository](https://search.maven.org/) (back then known as Maven Central). Thus, the recommended way to use the OneView SDK for Java in your project is to consume it from Maven. You can add the **HPE OneView Java SDK** as a dependency of your project by adding the following lines to your `pom.xml`:
 
 ```xml
 <dependency>
@@ -52,10 +52,10 @@ $ keytool -import -v -trustcacerts -alias myservercert -file default-server.crt 
 ```
 > Note: Choose the *yes* option, when prompted to trust the certificate.
 
-Inside the project's `bin` folder you can find a bash script (`build-truststore.sh`) that  can be used to automate the creation of the TrustStore file. It can also serve as reference if you decide to run the commands manually.
+Inside the project's `bin` folder you can find a bash script (`build-truststore.sh`) that  can be used to automate the creation of the `TrustStore` file. It can also serve as reference if you decide to run the commands manually.
 
 #### Image Streamer ####
-To use the SDK with an Image Streamer, repeat the steps above to fetch server CA certificate and generate the TrustStore pointing to the Image Streamer appliance.
+To use the SDK with an Image Streamer, repeat the steps above to fetch server CA certificate and generate the `TrustStore` pointing to the Image Streamer appliance.
 
 Example:
 ```sh
@@ -73,7 +73,7 @@ The current `default` API version used by the Java SDK is `300`.
 
 To change the API to execute the samples, you must set the API version on the [sdk-config-sample.properties](oneview-sdk-java/samples/src/main/resources/sdk-config-sample.properties):
 
-```
+```properties
 oneview.api_version=500
 ```
 
@@ -93,7 +93,7 @@ The file `oneview_java_sdk_config.properties` must be updated to contain the fol
 * Path for the `TrustStore` file and its password
 * OneView credentials and host information
 
-> Note: Instead of changing the location of your TrustStore file, you can just place it inside the directory `samples/src/main/resources`.
+> Note: Instead of changing the location of your `TrustStore` file, you can just place it inside the directory `samples/src/main/resources`.
 
 #### Message Bus samples ####
 Before running the Message Bus samples, it is necessary to execute a HTTP POST request to the OneView server in order to generate the RabbitMQ certificate files.
@@ -148,16 +148,57 @@ To write unit tests we use [JUnit](http://junit.org/) and [Mockito](http://site.
 It is important that all methods implemented in SDK should have a correspondent test method.
 Method names should start with `should`.
 
-To execute unit tests for a class, just run it as JUnit Test.
+To execute unit tests for a class, just run it as `JUnit` Test.
 
 ### BDD (Behavior Driven Development) Tests ###
 We are using [Cucumber](https://cucumber.io/docs/reference/jvm) as the BDD framework to develop functional tests.
 
 The test artifacts are at [Automated Test Folder](https://github.com/HewlettPackard/oneview-sdk-java/tree/master/automated-tests).
 
-There are 2 test suites, one for C7000 (com.hp.ov.sdk.oneview.AllTestsC7000) and other for Synergy (com.hp.ov.sdk.oneview.AllTestsSynergy) that are responsible for executing tests for all the resources implemented.
+There are 2 test suites, one for **C7000** [AllTestsC7000.java](https://github.com/HewlettPackard/oneview-sdk-java/blob/master/automated-tests/src/test/java/com/hp/ov/sdk/oneview/AllTestsC7000.java) and other for **Synergy** [AllTestsSynergy.java](https://github.com/HewlettPackard/oneview-sdk-java/blob/master/automated-tests/src/test/java/com/hp/ov/sdk/oneview/AllTestsSynergy.java) that are responsible for executing tests for all the resources implemented.
 
-For more information please check the comments in the test suite files.
+To execute the test suite, just run it as `JUnit` Test.
+
+Test scenarios are described in `.feature` files, for example [fcNetwork.feature](https://github.com/HewlettPackard/oneview-sdk-java/blob/master/automated-tests/src/test/resources/cucumber/network/fcNetwork.feature).
+
+The tests are independent among resources, so it is possible to test a single resource. To execute the **FC Network** test scenarios, for example, just run [FcNetworkBDDTest.java](https://github.com/HewlettPackard/oneview-sdk-java/blob/master/automated-tests/src/test/java/com/hp/ov/sdk/resources/network/FcNetworkBDDTest.java) as a `JUnit` Test.
+
+**Note:** BDD tests cover `OneView` resources supported (not including `Image Streamer` resources) and can be run against real hardware or using a DCS.
+
+For more information about requirements please check the comments in the test suite files.
+
+#### Setting configuration properties for tests ####
+There are 2 `.properties ` files required to execute BDD tests:
+
+##### [oneview_java_sdk_config.properties](https://github.com/HewlettPackard/oneview-sdk-java/blob/master/automated-tests/src/test/resources/oneview_java_sdk_config.properties) #####
+This file has the same properties found in [sdk-config-sample.properties](oneview-sdk-java/samples/src/main/resources/sdk-config-sample.properties) used for samples. You should set attributes as TrustStore, OneView credentials, and the API version:
+
+```properties
+truststore.file=src/main/resources/TrustStore
+oneview.api_version=300
+oneview.hostname=10.10.10.10
+oneview.username=administrator
+oneview.password=admin
+oneview.domain=local
+```
+
+##### [oneView.properties](https://github.com/HewlettPackard/oneview-sdk-java/blob/master/automated-tests/src/test/resources/oneView.properties) #####
+This file has additional attributes such as Storage and Enclosure credentials that are used by tests:
+
+```properties
+storageSystemHostname=10.10.10.10
+storageSystemPassword=dcs
+enclosureHostname=10.10.10.10
+domain=LOCAL
+username=administrator
+enclosurePassword=dcs
+file_sdk_config=src/test/resources/oneview_java_sdk_config.properties
+version=V_300
+storageSystemUsername=dcs
+hostname=10.10.10.10
+password=rainforest
+enclosureUsername=dcs
+```
 
 ## Feature Requests ##
 If you have a need not being met by the current implementation, please let us know (via a new issue). This feedback is crucial for us to deliver a useful product. Do not assume that we have already thought of everything, because we assure you that is not the case.
