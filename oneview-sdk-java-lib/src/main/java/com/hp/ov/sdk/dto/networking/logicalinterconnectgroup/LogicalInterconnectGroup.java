@@ -28,7 +28,7 @@ import com.google.gson.annotations.Until;
 import com.hp.ov.sdk.dto.BaseModelResource;
 import com.hp.ov.sdk.dto.StackingMode;
 import com.hp.ov.sdk.dto.networking.EnclosureType;
-import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettings;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 import com.hp.ov.sdk.dto.networking.StackingHealth;
 import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
@@ -50,7 +50,7 @@ public class LogicalInterconnectGroup extends BaseModelResource {
     private List<Integer> enclosureIndexes = new ArrayList<Integer>();
     @Since(200)
     private EnclosureType enclosureType;
-    private EthernetInterconnectSettingsV2 ethernetSettings;
+    private EthernetInterconnectSettings ethernetSettings;
     @Since(200)
     private String fabricUri;
     @Until(299)
@@ -102,14 +102,14 @@ public class LogicalInterconnectGroup extends BaseModelResource {
     /**
      * @return the ethernetSettings
      */
-    public EthernetInterconnectSettingsV2 getEthernetSettings() {
+    public EthernetInterconnectSettings getEthernetSettings() {
         return ethernetSettings;
     }
 
     /**
      * @param ethernetSettings the ethernetSettings to set
      */
-    public void setEthernetSettings(EthernetInterconnectSettingsV2 ethernetSettings) {
+    public void setEthernetSettings(EthernetInterconnectSettings ethernetSettings) {
         this.ethernetSettings = ethernetSettings;
     }
 

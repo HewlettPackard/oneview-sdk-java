@@ -21,8 +21,8 @@ import java.util.List;
 import com.hp.ov.sdk.dto.PortMonitorUplinkPort;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
-import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettingsV2;
-import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettings;
+import com.hp.ov.sdk.dto.networking.InterconnectSettings;
 import com.hp.ov.sdk.dto.networking.Location;
 import com.hp.ov.sdk.dto.networking.SnmpConfiguration;
 import com.hp.ov.sdk.dto.networking.TelemetryConfiguration;
@@ -294,18 +294,18 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
      */
     @Endpoint(uri = "/{resourceId}" + LOGICAL_INTERCONNECT_SETTINGS_URI, method = HttpMethod.PUT)
     TaskResource updateSettings(@PathParam("resourceId") String resourceId,
-            @BodyParam InterconnectSettingsV2 interconnectSettings, RequestOption... options);
+            @BodyParam InterconnectSettings interconnectSettings, RequestOption... options);
 
     /**
      * This module aids in fetching the ethernet settings for a logical interconnect.
      *
      * @param resourceId resource identifier for logical interconnect as seen in HPE OneView.
      *
-     * @return {@link EthernetInterconnectSettingsV2} containing the logical interconnect
+     * @return {@link EthernetInterconnectSettings} containing the logical interconnect
      * ethernet settings details.
      */
     @Endpoint(uri = "/{resourceId}" + LOGICAL_INTERCONNECT_ETHERNET_SETTINGS_URI)
-    EthernetInterconnectSettingsV2 getEthernetSettings(@PathParam("resourceId") String resourceId);
+    EthernetInterconnectSettings getEthernetSettings(@PathParam("resourceId") String resourceId);
 
     /**
      * This method aids in updating the ethernet interconnect settings for the logical interconnect.
@@ -319,7 +319,7 @@ public interface LogicalInterconnectClient extends SearchableResource<LogicalInt
      */
     @Endpoint(uri = "/{resourceId}" + LOGICAL_INTERCONNECT_ETHERNET_SETTINGS_URI, method = HttpMethod.PUT)
     TaskResource updateEthernetSettings(@PathParam("resourceId") String resourceId,
-            @BodyParam EthernetInterconnectSettingsV2 ethernetSettings, RequestOption... options);
+            @BodyParam EthernetInterconnectSettings ethernetSettings, RequestOption... options);
 
     /**
      * This module aids in fetching a logical interconnect to a consistent state. The current logical

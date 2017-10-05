@@ -27,8 +27,8 @@ import com.hp.ov.sdk.constants.ResourceCategory;
 import com.hp.ov.sdk.dto.PortMonitorUplinkPort;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
-import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettingsV2;
-import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettings;
+import com.hp.ov.sdk.dto.networking.InterconnectSettings;
 import com.hp.ov.sdk.dto.networking.Location;
 import com.hp.ov.sdk.dto.networking.LocationEntry;
 import com.hp.ov.sdk.dto.networking.LocationType;
@@ -305,7 +305,7 @@ public class LogicalInterconnectClientSample {
     private void getLogicalInterconnectEthernetSettings() {
         LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
-        EthernetInterconnectSettingsV2 ethernetSettings = logicalInterconnectClient.getEthernetSettings(logicalInterconnect.getResourceId());
+        EthernetInterconnectSettings ethernetSettings = logicalInterconnectClient.getEthernetSettings(logicalInterconnect.getResourceId());
 
         LOGGER.info("EthernetInterconnectSettings object returned to client :" + JsonPrettyPrinter.print(ethernetSettings));
     }
@@ -313,7 +313,7 @@ public class LogicalInterconnectClientSample {
     private void updateLogicalInterconnectEthernetSettings() {
         LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
-        EthernetInterconnectSettingsV2 ethSettingsDto = logicalInterconnect.getEthernetSettings();
+        EthernetInterconnectSettings ethSettingsDto = logicalInterconnect.getEthernetSettings();
         ethSettingsDto.setEnablePauseFloodProtection(!ethSettingsDto.getEnablePauseFloodProtection());
 
         TaskResource task = logicalInterconnectClient.updateEthernetSettings(logicalInterconnect.getResourceId(),
@@ -397,7 +397,7 @@ public class LogicalInterconnectClientSample {
     private void updateLogicalInterconnectSettings() {
         LogicalInterconnect logicalInterconnect = resourceDtoUtils.getLogicalInterconnectByName(RESOURCE_NAME);
 
-        InterconnectSettingsV2 settings = new InterconnectSettingsV2();
+        InterconnectSettings settings = new InterconnectSettings();
         settings.setType(ResourceCategory.RC_LOGICAL_INTERCONNECT_SETTINGS_V200);
         settings.setType(ResourceCategory.RC_LOGICAL_INTERCONNECT_SETTINGS_V300);
         settings.setEthernetSettings(logicalInterconnect.getEthernetSettings());

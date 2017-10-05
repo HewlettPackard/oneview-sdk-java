@@ -15,6 +15,9 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.networking;
 
+import static com.hp.ov.sdk.rest.client.settings.ScopeClient.SCOPES_URI;
+import static com.hp.ov.sdk.rest.client.settings.ScopeClientSample.SCOPE_NAME;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,10 +28,12 @@ import org.slf4j.LoggerFactory;
 
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.constants.ResourceCategory;
+import com.hp.ov.sdk.dto.Patch;
+import com.hp.ov.sdk.dto.Patch.PatchOperation;
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.networking.EnclosureType;
-import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.InterconnectSettings;
 import com.hp.ov.sdk.dto.networking.NetworkType;
 import com.hp.ov.sdk.dto.networking.interconnect.InterconnectTypeName;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.InterconnectMapEntryTemplate;
@@ -36,7 +41,9 @@ import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnect
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup.RedundancyType;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.dto.samples.UplinkSetValue;
+import com.hp.ov.sdk.dto.settings.Scope;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.client.settings.ScopeClient;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 
 /*
@@ -75,11 +82,11 @@ public class LogicalInterconnectGroupClientSample {
     // ================================
 
     private final LogicalInterconnectGroupClient client;
+    private final OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
 
     private ResourceDtoUtils resourceDtoUtils;
 
     private LogicalInterconnectGroupClientSample() {
-        OneViewClient oneViewClient = new OneViewClientSample().getOneViewClient();
         this.client = oneViewClient.logicalInterconnectGroup();
 
         resourceDtoUtils = new ResourceDtoUtils(oneViewClient);
@@ -112,7 +119,7 @@ public class LogicalInterconnectGroupClientSample {
         logicalInterconnectGroup.setName(RESOURCE_NAME);
         logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP); // v120
         logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V200); // v200
-        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300); // v300
+        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300); // v300 or v500
 
         TaskResource task = this.client.create(logicalInterconnectGroup);
 
@@ -122,10 +129,28 @@ public class LogicalInterconnectGroupClientSample {
     private void createLogicalInterconnectGroupSynergy() {
         LogicalInterconnectGroup logicalInterconnectGroup = this.buildTestLogicalInterconnectGroupSynergy();
         logicalInterconnectGroup.setName(RESOURCE_NAME);
-        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300); // v300
+        logicalInterconnectGroup.setType(ResourceCategory.RC_LOGICALINTERCONNECTGROUP_V300); // v300 or v500
         logicalInterconnectGroup.setEnclosureType(EnclosureType.SY12000);
 
         TaskResource task = this.client.create(logicalInterconnectGroup);
+
+        LOGGER.info("Task object returned to client : " + task.toJsonString());
+    }
+
+    private void patchLogicalInterconnectGroup() {
+        LogicalInterconnectGroup logicalInterconnectGroup = client.getByName(RESOURCE_NAME).get(0);
+
+        Patch patch = new Patch();
+
+        // Logical Interconnect Group patch supports the update of scopeUris
+        patch.setOp(PatchOperation.replace);
+        patch.setPath("/scopeUris");
+        List<String> scopeUris = logicalInterconnectGroup.getScopeUris(); // Gets the current scope(s)
+        scopeUris.add(SCOPES_URI + "/" + getScopeId(SCOPE_NAME)); // Assigns Logical Interconnect Group to a new scope
+        // scopeUris.remove(SCOPES_URI + "/" + getScopeId(SCOPE_NAME)); // Unassigns Logical Interconnect Group from a scope
+        patch.setValue(scopeUris);
+
+        TaskResource task = this.client.patch(logicalInterconnectGroup.getResourceId(), patch);
 
         LOGGER.info("Task object returned to client : " + task.toJsonString());
     }
@@ -154,7 +179,7 @@ public class LogicalInterconnectGroupClientSample {
     }
 
     private void getDefaultInterconnectSettings() {
-        InterconnectSettingsV2 interconnectSettingsDto = client.getDefaultInterconnectSettings();
+        InterconnectSettings interconnectSettingsDto = client.getDefaultInterconnectSettings();
 
         LOGGER.info("Interconnect settings returned to client : " + interconnectSettingsDto.toJsonString());
     }
@@ -165,10 +190,10 @@ public class LogicalInterconnectGroupClientSample {
         // To run getInterconnectSettings on OneView 1.2, you need settingID and
         // resourceID of LIG
         // for OV 2.0 & 3.0, you just need the resourceID
-        // InterconnectSettingsV2 interconnectSettingsDto =
+        // InterconnectSettings interconnectSettingsDto =
         // client.getInterconnectSettings(
         // logicalInterconnectGroup.getResourceId(), SETTING_ID);
-        InterconnectSettingsV2 interconnectSettingsDto = client
+        InterconnectSettings interconnectSettingsDto = client
                 .getInterconnectSettings(logicalInterconnectGroup.getResourceId());
 
         LOGGER.info("Interconnect settings returned to client : " + interconnectSettingsDto.toJsonString());
@@ -274,6 +299,14 @@ public class LogicalInterconnectGroupClientSample {
         return uplinkSetGroupDto;
     }
 
+    private String getScopeId(String scopeName) {
+        ScopeClient scopeClient = oneViewClient.scope();
+
+        Scope scope = scopeClient.getByName(scopeName).get(0);
+
+        return scope.getResourceId();
+    }
+
     public static void main(final String[] args) throws Exception {
         LogicalInterconnectGroupClientSample client = new LogicalInterconnectGroupClientSample();
 
@@ -285,8 +318,9 @@ public class LogicalInterconnectGroupClientSample {
         client.getLogicalInterconnectGroup();
         client.getLogicalInterconnectGroupByName();
         client.getDefaultInterconnectSettings();
-
         client.getInterconnectSettings();
+
+        client.patchLogicalInterconnectGroup();
         client.updateLogicalInterconnectGroup();
         client.deleteLogicalInterconnectGroup();
     }

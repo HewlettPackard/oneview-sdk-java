@@ -23,8 +23,8 @@ import java.util.Map;
 
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.firmware.FwBaseline;
-import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettingsV2;
-import com.hp.ov.sdk.dto.networking.InterconnectSettingsV2;
+import com.hp.ov.sdk.dto.networking.EthernetInterconnectSettings;
+import com.hp.ov.sdk.dto.networking.InterconnectSettings;
 import com.hp.ov.sdk.dto.networking.Location;
 import com.hp.ov.sdk.dto.networking.LocationEntry;
 import com.hp.ov.sdk.dto.networking.LocationType;
@@ -195,7 +195,7 @@ public class LogicalInterconnectResource extends BasicResource implements Create
 
     public String updateEthernetSettings(String id) {
         LogicalInterconnect logicalInterconnect = client.getById(id);
-        EthernetInterconnectSettingsV2 ethSettings = logicalInterconnect.getEthernetSettings();
+        EthernetInterconnectSettings ethSettings = logicalInterconnect.getEthernetSettings();
         ethSettings
                 .setEnablePauseFloodProtection(Boolean.valueOf(resourceProperties.get("enablePauseFloodProtection")));
         return taskToString(client.updateEthernetSettings(id, ethSettings));
@@ -226,7 +226,7 @@ public class LogicalInterconnectResource extends BasicResource implements Create
     public String updateLogicalInterconnectSettings(String id) {
         LogicalInterconnect logicalInterconnect = client.getById(id);
 
-        InterconnectSettingsV2 settings = new InterconnectSettingsV2();
+        InterconnectSettings settings = new InterconnectSettings();
         settings.setType(resourceProperties.get("type"));
         settings.setEthernetSettings(logicalInterconnect.getEthernetSettings());
         settings.setFcoeSettings(logicalInterconnect.getFcoeSettings());
