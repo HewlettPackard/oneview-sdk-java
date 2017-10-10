@@ -55,7 +55,7 @@ $ keytool -import -v -trustcacerts -alias myservercert -file default-server.crt 
 Inside the project's `bin` folder you can find a bash script (`build-truststore.sh`) that  can be used to automate the creation of the `TrustStore` file. It can also serve as a reference, if you decide to run the commands manually.
 
 #### 3. Image Streamer ####
-To use the SDK with an Image Streamer, repeat the previous steps to fetch the server CA certificate, and generate the `TrustStore` pointing to the Image Streamer appliance.
+To use the SDK with an Image Streamer, add the Image Streamer certificate in the generated `TrustStore` file. For that, repeat the previous steps pointing to the Image Streamer appliance.
 
 Example:
 ```sh
