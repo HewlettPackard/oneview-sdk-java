@@ -68,8 +68,7 @@ Feature: In order to manage Logical Switches
       And OneView gets Resource by ID
     Then I get a Resource Name
 
-  #Disabled because of issue #317 in SDK
-  @update @disabled
+  @update
   Scenario: Update a Logical Switch
     Given Resource values as follows:
       | name     | switch-bdd |

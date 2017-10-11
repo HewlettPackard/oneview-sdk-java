@@ -27,8 +27,7 @@ import cucumber.api.junit.Cucumber;
     glue = { "com.hp.ov.sdk.resources" },
     features = "classpath:cucumber/network/logicalSwitch.feature",
     monochrome = true,
-    tags = { "@create, @getAll, @get, @update, @refresh, @remove",
-            "~@disabled"})
+    tags = "@create, @getAll, @get, @update, @refresh, @remove")
 
 /*
  * C7000 only
