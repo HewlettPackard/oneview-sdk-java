@@ -86,11 +86,11 @@ public class StorageVolumeAttachmentResource extends BasicResource implements Re
     }
 
     public int getAllAttachmentPath(String id) {
-        return client.getAllAttachmentPaths(id).size();
+        return client.getAllAttachmentPaths(id).getMembers().size();
     }
 
     public String getVolumeAttachmentPath(String id) {
-        List<StorageVolumeAttachmentPath> paths = client.getAllAttachmentPaths(id);
+        List<StorageVolumeAttachmentPath> paths = client.getAllAttachmentPaths(id).getMembers();
         StorageVolumeAttachmentPath path = null;
         for (StorageVolumeAttachmentPath p : paths) {
             if (p.getUri().contains(id)) {

@@ -13,6 +13,7 @@ Refactoring:
   - ```InterconnectSettingsV2``` updated to ```InterconnectSettings```
 
 #### Bug fixes:
+- [#26](https://github.com/HewlettPackard/oneview-sdk-java/issues/26) Exception in `getAllAttachmentPaths` method
 
 ## v3.2.1
 This release sets back API 300 as default.

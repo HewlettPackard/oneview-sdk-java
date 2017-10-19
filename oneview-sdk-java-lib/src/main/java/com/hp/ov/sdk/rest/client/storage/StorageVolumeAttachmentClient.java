@@ -15,8 +15,6 @@
  */
 package com.hp.ov.sdk.rest.client.storage;
 
-import java.util.List;
-
 import com.hp.ov.sdk.dto.ResourceCollection;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.dto.storage.ExtraStorageVolume;
@@ -58,10 +56,10 @@ public interface StorageVolumeAttachmentClient extends SearchableResource<Storag
      *
      * @param attachmentId storage volume attachment identifier as seen in HPE OneView.
      *
-     * @return {@link List} of {@link StorageVolumeAttachmentPath} containing the details.
+     * @return {@link ResourceCollection}&lt;{@link StorageVolumeAttachmentPath}&gt; containing the details.
      */
     @Endpoint(uri = "/{attachmentId}" + STORAGE_VOLUME_ATTACHMENT_PATH_URI)
-    List<StorageVolumeAttachmentPath> getAllAttachmentPaths(@PathParam("attachmentId") String attachmentId);
+    ResourceCollection<StorageVolumeAttachmentPath> getAllAttachmentPaths(@PathParam("attachmentId") String attachmentId);
 
     /**
      * Returns the extra storage volume details for all the available extra storage volumes

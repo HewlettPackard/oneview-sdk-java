@@ -100,7 +100,7 @@ public class StorageVolumeAttachmentClientTest {
         Request expectedRequest = new Request(HttpMethod.GET, expectedUri);
 
         then(baseClient).should().executeRequest(expectedRequest,
-                new TypeToken<List<StorageVolumeAttachmentPath>>() {}.getType());
+                new TypeToken<ResourceCollection<StorageVolumeAttachmentPath>>() {}.getType());
     }
 
     @Test

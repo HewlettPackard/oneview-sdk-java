@@ -15,8 +15,6 @@
  *******************************************************************************/
 package com.hp.ov.sdk.rest.client.storage;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +69,7 @@ public class StorageVolumeAttachmentClientSample {
     }
 
     private void getAllStorageVolumeAttachmentPaths() {
-        List<StorageVolumeAttachmentPath> storageVolumeAttachmentPaths
+        ResourceCollection<StorageVolumeAttachmentPath> storageVolumeAttachmentPaths
                 = this.storageVolumeAttachmentClient.getAllAttachmentPaths(STORAGE_VOLUME_ATTACHMENT_ID);
 
         LOGGER.info("Storage volume attachment paths returned to client: {}",
