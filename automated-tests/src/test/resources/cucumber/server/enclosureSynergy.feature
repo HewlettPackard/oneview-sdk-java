@@ -68,9 +68,10 @@ Feature: In order to manage Enclosures
       | path  | /name                |
       | value | update-enclosure-bdd |
     When OneView gets Resource by Name
-      And OneView runs Enclosure patch
-    Then Resource is found
+      And OneView runs Resource patch
+    Then I get a success status
 
+  #Returns to default name
   @update
   Scenario: Update an Enclosure
     Given Resource values will be updated as follows:

@@ -25,10 +25,11 @@ import com.hp.ov.sdk.dto.networking.Port;
 import com.hp.ov.sdk.dto.networking.interconnect.Interconnect;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.oneview.BasicResource;
+import com.hp.ov.sdk.oneview.PatchResource;
 import com.hp.ov.sdk.oneview.Resource;
 import com.hp.ov.sdk.rest.client.networking.InterconnectClient;
 
-public class InterconnectResource extends BasicResource implements Resource {
+public class InterconnectResource extends BasicResource implements Resource, PatchResource {
 
     private static InterconnectResource instance;
 
@@ -70,6 +71,11 @@ public class InterconnectResource extends BasicResource implements Resource {
         return getCount(client.getAll());
     }
 
+    @Override
+    public String patch(String id){
+        return taskToString(client.patch(id, builderPatch(client.getById(id))));
+    }
+
     public String getStatistics(String id) {
         return objToString(client.getStatistics(id));
     }
@@ -89,14 +95,6 @@ public class InterconnectResource extends BasicResource implements Resource {
         return objToString(client.getNamedServers(id));
     }
 
-    public String patch(String id) {
-        Patch patch = new Patch();
-        patch.setOp(Patch.PatchOperation.valueOf(resourceProperties.get("op")));
-        patch.setPath(resourceProperties.get("path"));
-        patch.setValue(resourceProperties.get("value"));
-        return objToString(client.patch(id, patch));
-    }
-
     public String resetInterconnectPortProtection(String id) {
         return taskToString(client.resetPortProtection(id));
     }
@@ -114,6 +112,14 @@ public class InterconnectResource extends BasicResource implements Resource {
         port.setEnabled(Boolean.valueOf(resourceProperties.get("portEnable")));
         List<Port> ports = Arrays.asList(port);
         return taskToString(client.updatePorts(id, ports));
+    }
+
+    public Patch builderPatch(Interconnect interconnect) {
+        Patch patch = new Patch();
+        patch.setOp(Patch.PatchOperation.valueOf(resourceProperties.get("op")));
+        patch.setPath(resourceProperties.get("path"));
+        patch.setValue(resourceProperties.get("value"));
+        return patch;
     }
 
 }

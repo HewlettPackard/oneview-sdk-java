@@ -30,15 +30,9 @@ public class DriveEnclosureBDDStep extends Background {
         OneView.setResource(DriveEnclosureResource.getInstance());
     }
 
-
     @When("^OneView gets Port Map of Drive Enclosure$")
     public void oneview_gets_Port_Map_of_Drive_Enclosure() throws Throwable {
         resourceStr = DriveEnclosureResource.getInstance().getPortMap(resourceID);
     }
 
-    @When("^OneView runs Drive Enclosure patch$")
-    public void oneview_runs_Drive_Enclosure_patch() throws Throwable {
-        status = DriveEnclosureResource.getInstance().patch(resourceID);
-    }
-    
 }

@@ -29,11 +29,6 @@ public class SasInterconnectBDDStep extends Background {
     public void an_instance_of_Sas_Interconnect() throws Throwable {
         OneView.setResource(SasInterconnectResource.getInstance());
     }
-    
-    @When("^OneView runs Sas Interconnect patch$")
-    public void oneview_runs_Sas_Interconnect_patch() throws Throwable {
-        status = SasInterconnectResource.getInstance().patch(resourceID);
-    }
 
     @When("^OneView runs Sas Interconnect refresh$")
     public void oneview_runs_Sas_Interconnect_refresh() throws Throwable {

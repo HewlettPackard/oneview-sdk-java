@@ -34,6 +34,7 @@ import com.hp.ov.sdk.dto.servers.logicalenclosure.SupportDump;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.oneview.BasicResource;
 import com.hp.ov.sdk.oneview.CreateResource;
+import com.hp.ov.sdk.oneview.PatchResource;
 import com.hp.ov.sdk.oneview.RemoveResource;
 import com.hp.ov.sdk.oneview.UpdateResource;
 import com.hp.ov.sdk.rest.client.server.EnclosureClient;
@@ -42,7 +43,7 @@ import com.hp.ov.sdk.rest.client.server.LogicalEnclosureClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
 
-public class LogicalEnclosureResource extends BasicResource implements CreateResource, UpdateResource, RemoveResource {
+public class LogicalEnclosureResource extends BasicResource implements CreateResource, UpdateResource, RemoveResource, PatchResource {
 
     private static LogicalEnclosureResource instance;
 
@@ -198,15 +199,9 @@ public class LogicalEnclosureResource extends BasicResource implements CreateRes
         return objToString(client.updateConfigurationScript(id, script, TaskTimeout.of(3600000)));
     }
 
+    @Override
     public String patch(String id) {
-        LogicalEnclosure logicalEnclosure = client.getById(id);
-        Patch patch = new Patch();
-        patch.setOp(PatchOperation.valueOf(resourceProperties.get("op")));
-        patch.setPath(resourceProperties.get("path"));
-        patch.setValue(new PatchFirmwareValue(logicalEnclosure.getFirmware().getFirmwareBaselineUri(),
-                FirmwareUpdateOn.valueOf(resourceProperties.get("value")), true));
-
-        return taskToString(client.patch(id, patch, TaskTimeout.of(3600000)));
+        return taskToString(client.patch(id, builderPatch(id), TaskTimeout.of(3600000)));
     }
 
     @Override
@@ -221,4 +216,13 @@ public class LogicalEnclosureResource extends BasicResource implements CreateRes
         return taskToString(client.delete(id, TaskTimeout.of(5400000)));
     }
 
+    public Patch builderPatch(String id) {
+        LogicalEnclosure logicalEnclosure = client.getById(id);
+        Patch patch = new Patch();
+        patch.setOp(PatchOperation.valueOf(resourceProperties.get("op")));
+        patch.setPath(resourceProperties.get("path"));
+        patch.setValue(new PatchFirmwareValue(logicalEnclosure.getFirmware().getFirmwareBaselineUri(),
+                FirmwareUpdateOn.valueOf(resourceProperties.get("value")), true));
+        return patch;
+    }
 }

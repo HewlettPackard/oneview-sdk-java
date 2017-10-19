@@ -47,7 +47,7 @@ Feature: In order to manage SAS Interconnects
       | path  | /powerState |
       | value | On          |
     When OneView gets Resource by Name
-      And OneView runs Sas Interconnect patch
+      And OneView runs Resource patch
     Then I get a success status
 
   @refresh

@@ -25,11 +25,12 @@ import com.hp.ov.sdk.dto.storage.driveenclosures.DriveEnclosure;
 import com.hp.ov.sdk.dto.storage.driveenclosures.DriveEnclosureRefreshRequest;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.oneview.BasicResource;
+import com.hp.ov.sdk.oneview.PatchResource;
 import com.hp.ov.sdk.oneview.Resource;
 import com.hp.ov.sdk.oneview.UpdateResource;
 import com.hp.ov.sdk.rest.client.storage.DriveEnclosureClient;
 
-public class DriveEnclosureResource extends BasicResource implements Resource, UpdateResource {
+public class DriveEnclosureResource extends BasicResource implements Resource, UpdateResource, PatchResource {
 
     private static DriveEnclosureResource instance;
 
@@ -82,13 +83,17 @@ public class DriveEnclosureResource extends BasicResource implements Resource, U
         return objToString(client.getPortMap(id));
     }
 
+    @Override
     public String patch(String id) {
+        return taskToString(client.patch(id, buildPatch(id)));
+    }
+
+    public Patch buildPatch(String id) {
         Patch patch = new Patch();
         patch.setOp(PatchOperation.valueOf(resourceProperties.get("op")));
         patch.setPath(resourceProperties.get("path"));
         patch.setValue(resourceProperties.get("value"));
-
-        return taskToString(client.patch(id, patch));
+        return patch;
     }
 
 }

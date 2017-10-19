@@ -62,7 +62,7 @@ Feature: In order to manage Interconnects
       And OneView gets Interconnect Named Servers
     Then Resource is found
 
-  @update
+  @patch
   Scenario: Update Interconnect by Patch
     Given name "0000A66101, interconnect 2" for Resource
       And Resource values will be updated as follows:
@@ -70,7 +70,7 @@ Feature: In order to manage Interconnects
       | path  | /powerState |
       | value | Off         |
     When OneView gets Resource by Name
-      And OneView runs Interconnect patch
+      And OneView runs Resource patch
     Then Resource is found
 
   @reset

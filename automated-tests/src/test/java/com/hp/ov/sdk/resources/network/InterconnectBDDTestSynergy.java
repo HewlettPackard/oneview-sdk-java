@@ -26,7 +26,7 @@ import cucumber.api.junit.Cucumber;
     glue = {"com.hp.ov.sdk.resources"},
     features = "classpath:cucumber/network/interconnectSynergy.feature",
     monochrome = true,
-    tags = {"@getAll, @get, @reset, @update",
+    tags = {"@getAll, @get, @reset, @patch",
             "~@C7000"})
 
 public class InterconnectBDDTestSynergy {

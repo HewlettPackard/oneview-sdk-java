@@ -139,5 +139,5 @@ Feature: In order to manage Server Hardwares
       | path  | /mpState |
       | value | Reset    |
     When OneView gets Resource by Name
-      And OneView runs ServerHardware patch
+      And OneView runs Resource patch
     Then I get a success status
