@@ -14,6 +14,7 @@ Refactoring:
 
 #### Bug fixes:
 - [#28](https://github.com/HewlettPackard/oneview-sdk-java/issues/28) `CRM_INCORRECT_VALUE_IN_READONLY_FIELD` returned when updating Logical Switch
+- [#26](https://github.com/HewlettPackard/oneview-sdk-java/issues/26) Exception in `getAllAttachmentPaths` method
 
 ## v3.2.1
 This release sets back API 300 as default.

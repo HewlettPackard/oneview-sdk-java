@@ -253,8 +253,7 @@ Feature: In order to manage Storage Volume Attachments
     When OneView gets Resource by Name
     Then I get an ID
 
-  #Disabled because of issue #305 in SDK
-  @getAll @disabled
+  @getAll
   Scenario: Get all Storage Volume Attachment Paths
     Given name "storage-volume-bdd-sva" for Resource
     When OneView gets Resource by Name
