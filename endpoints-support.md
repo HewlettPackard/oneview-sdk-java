@@ -17,194 +17,194 @@
 | Endpoints                                                                               | Verb     | V200                 | V300                 | V500                 |
 | --------------------------------------------------------------------------------------- | -------- | :------------------: | :------------------: | :------------------: |
 |     **Alerts**                                                                                                                                   |
-|<sub>/rest/alerts	</sub>                                                                |GET       |    |    |
-|<sub>/rest/alerts	</sub>                                                                |DELETE    |    |    |
-|<sub>/rest/alerts/{id}	</sub>                                                            |GET       |    |    |
-|<sub>/rest/alerts/{id}	</sub>                                                            |PUT       |    |    |
-|<sub>/rest/alerts/{id}	</sub>                                                            |DELETE    |    |    |
-|<sub>/rest/alerts/AlertChangeLog/{id}</sub>                                              |DELETE    |    |    |
+|<sub>/rest/alerts	</sub>                                                                |GET       | :white_check_mark:  | :white_check_mark: | 
+|<sub>/rest/alerts	</sub>                                                                |DELETE    | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/alerts/{id}	</sub>                                                            |GET       | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/alerts/{id}	</sub>                                                            |PUT       | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/alerts/{id}	</sub>                                                            |DELETE    | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/alerts/AlertChangeLog/{id}</sub>                                              |DELETE    | :white_check_mark: | :white_check_mark: |
 |     **Appliance Time and Locale Configuration**                                                                                                                         |
-|<sub>/rest/appliance/configuration/time-locale</sub>                                     |GET       |    |    |    |
-|<sub>/rest/appliance/configuration/time-locale</sub>                                     |POST      |    |    |    |
+|<sub>/rest/appliance/configuration/time-locale</sub>                                     |GET       | :heavy_minus_sign: | :heavy_minus_sign: |    |
+|<sub>/rest/appliance/configuration/time-locale</sub>                                     |POST      | :heavy_minus_sign: | :heavy_minus_sign: |    |
 |     **Backups**                                                                                                                                  |
-|<sub>/rest/backups</sub>                                                                 |GET       |    |    |
-|<sub>/rest/backups</sub>                                                                 |POST      |    |    |
-|<sub>/rest/backups/archive</sub>                                                         |POST      |    |    |
-|<sub>/rest/backups/archive/{id}</sub>                                                    |GET       |    |    |
-|<sub>/rest/backups/config</sub>                                                          |GET       |    |    |
-|<sub>/rest/backups/config</sub>                                                          |PUT       |    |    |
-|<sub>/rest/backups/remotearchive/{id}</sub>                                              |PUT       |    |    |
-|<sub>/rest/backups/remotearchive/{id}</sub>                                              |DELETE    |    |    |
-|<sub>/rest/backups/{id}</sub>                                                            |GET       |    |    |
-|<sub>/rest/backups/{id}</sub>                                                            |DELETE    |    |    |
+|<sub>/rest/backups</sub>                                                                 |GET       | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/backups</sub>                                                                 |POST      | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/backups/archive</sub>                                                         |POST      | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/backups/archive/{id}</sub>                                                    |GET       | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/backups/config</sub>                                                          |GET       | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/backups/config</sub>                                                          |PUT       | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/backups/remotearchive/{id}</sub>                                              |PUT       | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/backups/remotearchive/{id}</sub>                                              |DELETE    | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/backups/{id}</sub>                                                            |GET       | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/backups/{id}</sub>                                                            |DELETE    | :heavy_minus_sign: | :heavy_minus_sign: |
 |     **Certificate Authority**                                                                                                                    |
-|<sub>/rest/certificates/ca</sub>                                                         |GET       |    |    |
-|<sub>/rest/certificates/ca/crl</sub>                                                     |GET       |    |    |
-|<sub>/rest/certificates/ca/{aliasName}</sub>                                             |DELETE    |    |    |
+|<sub>/rest/certificates/ca</sub>                                                         |GET       | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/certificates/ca/crl</sub>                                                     |GET       | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/certificates/ca/{aliasName}</sub>                                             |DELETE    | :heavy_minus_sign: | :heavy_minus_sign: |
 |     **Certificates Client RabbitMq**                                                                                                             |
-|<sub>/rest/certificates/client/rabbitmq</sub>                                            |POST      |    |    |
-|<sub>/rest/certificates/client/rabbitmq/keypair/{aliasName}</sub>                        |GET       |    |    |
-|<sub>/rest/certificates/client/rabbitmq/keys/{aliasName}</sub>                           |GET       |    |    |
-|<sub>/rest/certificates/client/rabbitmq/{aliasName}</sub>                                |GET       |    |    |
+|<sub>/rest/certificates/client/rabbitmq</sub>                                            |POST      | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/certificates/client/rabbitmq/keypair/{aliasName}</sub>                        |GET       | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/certificates/client/rabbitmq/keys/{aliasName}</sub>                           |GET       | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/certificates/client/rabbitmq/{aliasName}</sub>                                |GET       | :heavy_minus_sign: | :heavy_minus_sign: |
 |     **Connection Template**                                                                                                                      |
-|<sub>/rest/connection-templates</sub>                                                    |GET       |    |    |    |
-|<sub>/rest/connection-templates/defaultConnectionTemplate</sub>                          |GET       |    |    |    |
-|<sub>/rest/connection-templates/{id}</sub>                                               |GET       |    |    |    |
-|<sub>/rest/connection-templates/{id}</sub>                                               |PUT       |    |    |    |
+|<sub>/rest/connection-templates</sub>                                                    |GET       | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/connection-templates/defaultConnectionTemplate</sub>                          |GET       | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/connection-templates/{id}</sub>                                               |GET       | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/connection-templates/{id}</sub>                                               |PUT       | :white_check_mark: | :white_check_mark: |    |
 |     **Datacenter**                                                                                                                               |
-|<sub>/rest/datacenters</sub>                                                             | GET      |    |    |    |
-|<sub>/rest/datacenters</sub>                                                             | POST     |    |    |    |
-|<sub>/rest/datacenters</sub>                                                             | DELETE   |    |    |    |
-|<sub>/rest/datacenters/{id}</sub>                                                        | GET      |    |    |    |
-|<sub>/rest/datacenters/{id}</sub>                                                        | PUT      |    |    |    |
-|<sub>/rest/datacenters/{id}</sub>                                                        | DELETE   |    |    |    |
-|<sub>/rest/datacenters/{id}/visualContent</sub>                                          | GET      |    |    |    |
+|<sub>/rest/datacenters</sub>                                                             | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/datacenters</sub>                                                             | POST     | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/datacenters</sub>                                                             | DELETE   | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/datacenters/{id}</sub>                                                        | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/datacenters/{id}</sub>                                                        | PUT      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/datacenters/{id}</sub>                                                        | DELETE   | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/datacenters/{id}/visualContent</sub>                                          | GET      | :white_check_mark: | :white_check_mark: |    |
 |     **Drive Enclosures**                                                                                                                         |
-|<sub>/rest/drive-enclosures</sub>                                                        | GET      |    |    |    |
-|<sub>/rest/drive-enclosures/{id}</sub>                                                   | GET      |    |    |    |
-|<sub>/rest/drive-enclosures/{id}</sub>                                                   | PATCH    |    |    |    |
-|<sub>/rest/drive-enclosures/{id}/port-map</sub>                                          | GET      |    |    |    |
-|<sub>/rest/drive-enclosures/{id}/refreshState</sub>                                      | PUT      |    |    |    |
+|<sub>/rest/drive-enclosures</sub>                                                        | GET      | :white_check_mark:  | :white_check_mark: |    |
+|<sub>/rest/drive-enclosures/{id}</sub>                                                   | GET      | :white_check_mark:  | :white_check_mark: |    |
+|<sub>/rest/drive-enclosures/{id}</sub>                                                   | PATCH    | :white_check_mark:  | :white_check_mark: |    |
+|<sub>/rest/drive-enclosures/{id}/port-map</sub>                                          | GET      | :white_check_mark:  | :white_check_mark: |    |
+|<sub>/rest/drive-enclosures/{id}/refreshState</sub>                                      | PUT      | :white_check_mark:  | :white_check_mark: |    |
 |     **Enclosure**                                                                                                                                |
-|<sub>/rest/enclosures</sub>                                                              | GET      |    |    |    |
-|<sub>/rest/enclosures</sub>                                                              | POST     |    |    |    |
-|<sub>/rest/enclosures/{id}</sub>                                                         | DELETE   |    |    |    |
-|<sub>/rest/enclosures/{id}</sub>                                                         | PATCH    |    |    |    |
-|<sub>/rest/enclosures/{id}</sub>                                                         | DELETE   |    |    |    |
-|<sub>/rest/enclosures/{id}/configuration</sub>                                           | PUT      |    |    |    |
-|<sub>/rest/enclosures/{id}/environmentalConfiguration</sub>                              | GET      |    |    |    |
-|<sub>/rest/enclosures/{id}/environmentalConfiguration</sub>                              | PUT      |    |    |    |
-|<sub>/rest/enclosures/{id}/refreshState</sub>                                            | PUT      |    |    |    |
-|<sub>/rest/enclosures/{id}/script</sub>                                                  | GET      |    |    |    |
-|<sub>/rest/enclosures/{id}/sso</sub>                                                     | GET      |    |    |    |
-|<sub>/rest/enclosures/{id}/utilization</sub>                                             | GET      |    |    |    |
+|<sub>/rest/enclosures</sub>                                                              | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosures</sub>                                                              | POST     | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosures/{id}</sub>                                                         | DELETE   | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosures/{id}</sub>                                                         | PATCH    | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosures/{id}</sub>                                                         | DELETE   | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosures/{id}/configuration</sub>                                           | PUT      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosures/{id}/environmentalConfiguration</sub>                              | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosures/{id}/environmentalConfiguration</sub>                              | PUT      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosures/{id}/refreshState</sub>                                            | PUT      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosures/{id}/script</sub>                                                  | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosures/{id}/sso</sub>                                                     | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosures/{id}/utilization</sub>                                             | GET      | :white_check_mark: | :white_check_mark:  |    |
 |     **Enclosure Group**                                                                                                                          |
-|<sub>/rest/enclosure-groups</sub>                                                        | GET      |    |    |    |
-|<sub>/rest/enclosure-groups</sub>                                                        | POST     |    |    |    |
-|<sub>/rest/enclosure-groups/{id}</sub>                                                   | GET      |    |    |    |
-|<sub>/rest/enclosure-groups/{id}</sub>                                                   | PUT      |    |    |    |
-|<sub>/rest/enclosure-groups/{id}</sub>                                                   | DELETE   |    |    |    |
-|<sub>/rest/enclosure-groups/script</sub>                                                 | GET      |    |    |    |
-|<sub>/rest/enclosure-groups/script</sub>                                                 | PUT      |    |    |    |
+|<sub>/rest/enclosure-groups</sub>                                                        | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosure-groups</sub>                                                        | POST     | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosure-groups/{id}</sub>                                                   | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosure-groups/{id}</sub>                                                   | PUT      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosure-groups/{id}</sub>                                                   | DELETE   | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosure-groups/script</sub>                                                 | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/enclosure-groups/script</sub>                                                 | PUT      | :white_check_mark: | :white_check_mark: |    |
 |     **Endpoints**                                                                                                                                |
-|<sub>/rest/fc-sans/endpoints</sub>                                                       | GET      |    |    |
+|<sub>/rest/fc-sans/endpoints</sub>                                                       | GET      | :heavy_minus_sign: | :heavy_minus_sign: |
 |     **Ethernet Network**                                                                                                                         |
-|<sub>/rest/ethernet-networks</sub>                                                       | GET      |    |    |    |
-|<sub>/rest/ethernet-networks</sub>                                                       | POST     |    |    |    |
-|<sub>/rest/ethernet-networks/bulk</sub>                                                  | POST     |    |    |    |
-|<sub>/rest/ethernet-networks/{id}</sub>                                                  | GET      |    |    |    |
-|<sub>/rest/ethernet-networks/{id}</sub>                                                  | PUT      |    |    |    |
-|<sub>/rest/ethernet-networks/{id}</sub>                                                  | DELETE   |    |    |    |
-|<sub>/rest/ethernet-networks/{id}/associatedProfiles</sub>                               | GET      |    |    |    |
-|<sub>/rest/ethernet-networks/{id}/associatedUplinkGroups</sub>                           | GET      |    |    |    |
+|<sub>/rest/ethernet-networks</sub>                                                       | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/ethernet-networks</sub>                                                       | POST     | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/ethernet-networks/bulk</sub>                                                  | POST     | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/ethernet-networks/{id}</sub>                                                  | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/ethernet-networks/{id}</sub>                                                  | PUT      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/ethernet-networks/{id}</sub>                                                  | DELETE   | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/ethernet-networks/{id}/associatedProfiles</sub>                               | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/ethernet-networks/{id}/associatedUplinkGroups</sub>                           | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 |     **Events**                                                                                                                         |
-|<sub>/rest/events</sub>                                                                  | GET      |    |    |    |
-|<sub>/rest/events</sub>                                                                  | POST     |    |    |    |
-|<sub>/rest/events/{id}</sub>                                                             | GET      |    |    |    |
+|<sub>/rest/events</sub>                                                                  | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
+|<sub>/rest/events</sub>                                                                  | POST     | :heavy_minus_sign: | :heavy_minus_sign: |    |
+|<sub>/rest/events/{id}</sub>                                                             | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
 |     **Fabric**                                                                                                                                   |
-|<sub>/rest/fabrics</sub>                                                                 | GET      |    |    |    |
-|<sub>/rest/fabrics/{id}</sub>                                                            | GET      |    |    |    |
-|<sub>/rest/fabrics/{id}/reserved-vlan-range</sub>                                        | GET      |    |    |    |
-|<sub>/rest/fabrics/{id}/reserved-vlan-range</sub>                                        | GET      |    |    |    |
+|<sub>/rest/fabrics</sub>                                                                 | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/fabrics/{id}</sub>                                                            | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/fabrics/{id}/reserved-vlan-range</sub>                                        | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/fabrics/{id}/reserved-vlan-range</sub>                                        | GET      | :white_check_mark: | :white_check_mark: |    |
 |     **FC Network**                                                                                                                               |
-|<sub>/rest/fc-networks</sub>                                                             | GET      |    |    |    |
-|<sub>/rest/fc-networks</sub>                                                             | POST     |    |    |    |
-|<sub>/rest/fc-networks/{id}</sub>                                                        | GET      |    |    |    |
-|<sub>/rest/fc-networks/{id}</sub>                                                        | PUT      |    |    |    |
-|<sub>/rest/fc-networks/{id}</sub>                                                        | DELETE   |    |    |    |
+|<sub>/rest/fc-networks</sub>                                                             | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/fc-networks</sub>                                                             | POST     | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/fc-networks/{id}</sub>                                                        | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/fc-networks/{id}</sub>                                                        | PUT      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/fc-networks/{id}</sub>                                                        | DELETE   | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 |     **FCoE Network**                                                                                                                             |
-|<sub>/rest/fcoe-networks</sub>                                                           | GET      |    |    |    |
-|<sub>/rest/fcoe-networks</sub>                                                           | POST     |    |    |    |
-|<sub>/rest/fcoe-networks/{id}</sub>                                                      | GET      |    |    |    |
-|<sub>/rest/fcoe-networks/{id}</sub>                                                      | PUT      |    |    |    |
-|<sub>/rest/fcoe-networks/{id}</sub>                                                      | DELETE   |    |    |    |
+|<sub>/rest/fcoe-networks</sub>                                                           | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/fcoe-networks</sub>                                                           | POST     | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/fcoe-networks/{id}</sub>                                                      | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/fcoe-networks/{id}</sub>                                                      | PUT      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/fcoe-networks/{id}</sub>                                                      | DELETE   | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 |     **Firmware Bundle**                                                                                                                          |
-|<sub>/rest/firmware-bundles/{id}/script</sub>                                            | POST     |    |    |    |
+|<sub>/rest/firmware-bundles/{id}/script</sub>                                            | POST     | :white_check_mark: | :white_check_mark: |    |
 |     **Firmware Driver**                                                                                                                          |
-|<sub>/rest/firmware-drivers/</sub>                                                       | GET      |    |    |    |
-|<sub>/rest/firmware-drivers/</sub>                                                       | POST     |    |    |    |
-|<sub>/rest/firmware-drivers/{id}</sub>                                                   | GET      |    |    |    |
-|<sub>/rest/firmware-drivers/{id}</sub>                                                   | DELETE   |    |    |    |
+|<sub>/rest/firmware-drivers/</sub>                                                       | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/firmware-drivers/</sub>                                                       | POST     | :heavy_minus_sign: | :heavy_minus_sign: |    |
+|<sub>/rest/firmware-drivers/{id}</sub>                                                   | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/firmware-drivers/{id}</sub>                                                   | DELETE   | :white_check_mark: | :white_check_mark: |    |
 |     **Id Pools vMAC Range**                                                                                                                      |
-|<sub>/rest/id-pools/vmac/ranges</sub>                                                    | POST     |    |    |
-|<sub>/rest/id-pools/vmac/ranges/{id}</sub>                                               | GET      |    |    |
-|<sub>/rest/id-pools/vmac/ranges/{id}</sub>                                               | PUT      |    |    |
-|<sub>/rest/id-pools/vmac/ranges/{id}</sub>                                               | DELETE   |    |    |
-|<sub>/rest/id-pools/vmac/ranges/{id}/allocated-fragments</sub>                           | GET      |    |    |
-|<sub>/rest/id-pools/vmac/ranges/{id}/allocator</sub>                                     |PUT       |    |    |
-|<sub>/rest/id-pools/vmac/ranges/{id}/collector</sub>                                     | PUT      |    |    |
-|<sub>/rest/id-pools/vmac/ranges/{id}/free-fragments</sub>                                | GET      |    |    |
+|<sub>/rest/id-pools/vmac/ranges</sub>                                                    | POST     | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vmac/ranges/{id}</sub>                                               | GET      | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vmac/ranges/{id}</sub>                                               | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vmac/ranges/{id}</sub>                                               | DELETE   | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vmac/ranges/{id}/allocated-fragments</sub>                           | GET      | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vmac/ranges/{id}/allocator</sub>                                     |PUT       | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vmac/ranges/{id}/collector</sub>                                     | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vmac/ranges/{id}/free-fragments</sub>                                | GET      | :heavy_minus_sign: | :heavy_minus_sign: |
 |     **Id Pools vSN Range**                                                                                                                       |
-|<sub>/rest/id-pools/vsn/ranges</sub>                                                     | POST     |    |    |
-|<sub>/rest/id-pools/vsn/ranges/{id}</sub>                                                | GET      |    |    |
-|<sub>/rest/id-pools/vsn/ranges/{id}</sub>                                                | PUT      |    |    |
-|<sub>/rest/id-pools/vsn/ranges/{id}</sub>                                                | DELETE   |    |    |
-|<sub>/rest/id-pools/vsn/ranges/{id}/allocated-fragments</sub>                            | GET      |    |    |
-|<sub>/rest/id-pools/vsn/ranges/{id}/allocator</sub>                                      |PUT       |    |    |
-|<sub>/rest/id-pools/vsn/ranges/{id}/collector</sub>                                      | PUT      |    |    |
-|<sub>/rest/id-pools/vsn/ranges/{id}/free-fragments</sub>                                 | GET      |    |    |
+|<sub>/rest/id-pools/vsn/ranges</sub>                                                     | POST     | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vsn/ranges/{id}</sub>                                                | GET      | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vsn/ranges/{id}</sub>                                                | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vsn/ranges/{id}</sub>                                                | DELETE   | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vsn/ranges/{id}/allocated-fragments</sub>                            | GET      | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vsn/ranges/{id}/allocator</sub>                                      |PUT       | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vsn/ranges/{id}/collector</sub>                                      | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vsn/ranges/{id}/free-fragments</sub>                                 | GET      | :heavy_minus_sign: | :heavy_minus_sign: |
 |     **Id Pools vWWN Range**                                                                                                                      |
-|<sub>/rest/id-pools/vwwn/ranges</sub>                                                    | POST     |    |    |
-|<sub>/rest/id-pools/vwwn/ranges/{id}</sub>                                               | GET      |    |    |
-|<sub>/rest/id-pools/vwwn/ranges/{id}</sub>                                               | PUT      |    |    |
-|<sub>/rest/id-pools/vwwn/ranges/{id}</sub>                                               | DELETE   |    |    |
-|<sub>/rest/id-pools/vwwn/ranges/{id}/allocated-fragments</sub>                           | GET      |    |    |
-|<sub>/rest/id-pools/vwwn/ranges/{id}/allocator</sub>                                     |PUT       |    |    |
-|<sub>/rest/id-pools/vwwn/ranges/{id}/collector</sub>                                     | PUT      |    |    |
-|<sub>/rest/id-pools/vwwn/ranges/{id}/free-fragments</sub>                                | GET      |    |    |
+|<sub>/rest/id-pools/vwwn/ranges</sub>                                                    | POST     | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vwwn/ranges/{id}</sub>                                               | GET      | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vwwn/ranges/{id}</sub>                                               | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vwwn/ranges/{id}</sub>                                               | DELETE   | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vwwn/ranges/{id}/allocated-fragments</sub>                           | GET      | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vwwn/ranges/{id}/allocator</sub>                                     |PUT       | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vwwn/ranges/{id}/collector</sub>                                     | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |
+|<sub>/rest/id-pools/vwwn/ranges/{id}/free-fragments</sub>                                | GET      | :heavy_minus_sign: | :heavy_minus_sign: |
 |     **Internal Link Sets**                                                                                                                       |
-|<sub>/rest/internal-link-sets</sub>                                                      | GET      |    |    |    |
-|<sub>/rest/internal-link-sets/{id}</sub>                                                 | PUT      |    |    |    |
+|<sub>/rest/internal-link-sets</sub>                                                      | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/internal-link-sets/{id}</sub>                                                 | PUT      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 |     **Interconnect Link Topologies**                                                                                                                       |
-|<sub>/rest/interconnect-link-topologies</sub>                                            | GET      |    |    |    |
-|<sub>/rest/interconnect-link-topologies{id}</sub>                                        | GET      |    |    |    |
+|<sub>/rest/interconnect-link-topologies</sub>                                            | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/interconnect-link-topologies{id}</sub>                                        | GET      | :white_check_mark: | :white_check_mark: |    |
 |     **Interconnect Type**                                                                                                                        |
-|<sub>/rest/interconnect-types</sub>                                                      | GET      |    |    |    |
-|<sub>/rest/interconnect-types/{id}</sub>                                                 | GET      |    |    |    |
+|<sub>/rest/interconnect-types</sub>                                                      | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/interconnect-types/{id}</sub>                                                 | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 |     **Interconnects**                                                                                                                            |
-|<sub>/rest/interconnects</sub>                                                           | GET      |    |    |    |
-|<sub>/rest/interconnects/{id}</sub>                                                      | GET      |    |    |    |
-|<sub>/rest/interconnects/{id}</sub>                                                      | PATCH    |    |    |    |
-|<sub>/rest/interconnects/{id}/configuration</sub>                                        | PUT      |    |    |    |
-|<sub>/rest/interconnects/{id}/pluggableModuleInformation</sub>                           | GET      |    |    |    |
-|<sub>/rest/interconnects/{id}/ports</sub>                                                | GET      |    |    |    |
-|<sub>/rest/interconnects/{id}/ports</sub>                                                | PUT      |    |    |    |
-|<sub>/rest/interconnects/{id}/ports/{portId:.+}</sub>                                    | GET      |    |    |    |
-|<sub>/rest/interconnects/{id}/resetportprotection</sub>                                  | PUT      |    |    |    |
-|<sub>/rest/interconnects/{id}/statistics</sub>                                           | PUT      |    |    |    |
-|<sub>/rest/interconnects/{id}/statistics/{portName:.+}</sub>                             | GET      |    |    |    |
-|<sub>/rest/interconnects/{id}/statistics/{portName:.+}/subport/{subportNum}</sub>        | GET      |    |    |    |
-|<sub>/rest/interconnects/{id}/update-ports</sub>                                         | PUT      |    |    |    |
-|<sub>/rest/interconnects/{id}/nameServers</sub>                                          | GET      |    |    |    |
+|<sub>/rest/interconnects</sub>                                                           | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/interconnects/{id}</sub>                                                      | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/interconnects/{id}</sub>                                                      | PATCH    | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/interconnects/{id}/configuration</sub>                                        | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |    |
+|<sub>/rest/interconnects/{id}/pluggableModuleInformation</sub>                           | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
+|<sub>/rest/interconnects/{id}/ports</sub>                                                | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/interconnects/{id}/ports</sub>                                                | PUT      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/interconnects/{id}/ports/{portId:.+}</sub>                                    | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/interconnects/{id}/resetportprotection</sub>                                  | PUT      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/interconnects/{id}/statistics</sub>                                           | PUT      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/interconnects/{id}/statistics/{portName:.+}</sub>                             | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/interconnects/{id}/statistics/{portName:.+}/subport/{subportNum}</sub>        | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/interconnects/{id}/update-ports</sub>                                         | PUT      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/interconnects/{id}/nameServers</sub>                                          | GET      | :white_check_mark: | :white_check_mark: |    |
 |     **Labels**                                                                                                                                   |
-|<sub>/rest/labels</sub>                                                                  | GET      |    |    |
-|<sub>/rest/labels/resources</sub>                                                        | POST     |    |    |
-|<sub>/rest/labels/resources/**</sub>                                                     | GET      |    |    |
-|<sub>/rest/labels/resources/**</sub>                                                     | PUT      |    |    |
-|<sub>/rest/labels/resources/**</sub>                                                     | DELETE   |    |    |
-|<sub>/rest/labels/resources/{id}</sub>                                                   | GET      |    |    |
-|     **License**                                                                                                                        |
+|<sub>/rest/labels</sub>                                                                  | GET      | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/labels/resources</sub>                                                        | POST     | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/labels/resources/**</sub>                                                     | GET      | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/labels/resources/**</sub>                                                     | PUT      | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/labels/resources/**</sub>                                                     | DELETE   | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/labels/resources/{id}</sub>                                                   | GET      | :white_check_mark: | :white_check_mark: |
+|     **License**                                                                                                                                 |
 |<sub>/rest/licenses</sub>                                                                |GET       |    |    | :white_check_mark: |
 |<sub>/rest/licenses</sub>                                                                |POST      |    |    | :white_check_mark: |
 |<sub>/rest/licenses/{id}</sub>                                                           |GET       |    |    | :white_check_mark: |
 |<sub>/rest/licenses/{licenseId}</sub>                                                    |GET       |    |    | :white_check_mark: |
 |     **Logical Downlink**                                                                                                                         |
-|<sub>/rest/logical-downlinks</sub>                                                       |GET       |    |    |    |
-|<sub>/rest/logical-downlinks/withoutEthernet</sub>                                       |GET       |    |    |    |
-|<sub>/rest/logical-downlinks/{id}</sub>                                                  |GET       |    |    |    |
-|<sub>/rest/logical-downlinks/{id}/withoutEthernet</sub>                                  |GET       |    |    |    |
+|<sub>/rest/logical-downlinks</sub>                                                       |GET       | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-downlinks/withoutEthernet</sub>                                       |GET       | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-downlinks/{id}</sub>                                                  |GET       | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-downlinks/{id}/withoutEthernet</sub>                                  |GET       | :white_check_mark: | :white_check_mark: |    |
 |     **Logical Enclosures**                                                                                                                        |
-|<sub>/rest/logical-enclosures</sub>                                                      | GET      |    |    |    |
-|<sub>/rest/logical-enclosures</sub>                                                      | POST     |    |    |    |
-|<sub>/rest/logical-enclosures/{id}</sub>                                                 | GET      |    |    |    |
-|<sub>/rest/logical-enclosures/{id}</sub>                                                 | PUT      |    |    |    |
-|<sub>/rest/logical-enclosures/{id}</sub>                                                 | PATCH    |    |    |    |
-|<sub>/rest/logical-enclosures/{id}</sub>                                                 | DELETE   |    |    |    |
-|<sub>/rest/logical-enclosures/{id}/configuration</sub>                                   | PUT      |    |    |    |
-|<sub>/rest/logical-enclosures/{id}/script</sub>                                          | GET      |    |    |    |
-|<sub>/rest/logical-enclosures/{id}/script</sub>                                          | PUT      |    |    |    |
-|<sub>/rest/logical-enclosures/{id}/support-dumps</sub>                                   | POST     |    |    |    |
-|<sub>/rest/logical-enclosures/{id}/updateFromGroup</sub>                                 | PUT      |    |    |    |
+|<sub>/rest/logical-enclosures</sub>                                                      | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-enclosures</sub>                                                      | POST     | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-enclosures/{id}</sub>                                                 | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-enclosures/{id}</sub>                                                 | PUT      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-enclosures/{id}</sub>                                                 | PATCH    | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-enclosures/{id}</sub>                                                 | DELETE   | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-enclosures/{id}/configuration</sub>                                   | PUT      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-enclosures/{id}/script</sub>                                          | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-enclosures/{id}/script</sub>                                          | PUT      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-enclosures/{id}/support-dumps</sub>                                   | POST     | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-enclosures/{id}/updateFromGroup</sub>                                 | PUT      | :white_check_mark: | :white_check_mark: |    |
 |     **Logical Interconnects**                                                                                                                     |
 |<sub>/rest/logical-interconnects</sub>                                                   | GET      |    |    |    |
 |<sub>/rest/logical-interconnects/locations/interconnects</sub>                           | POST     |    |    |    |
