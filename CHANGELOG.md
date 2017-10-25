@@ -13,6 +13,7 @@ Refactoring:
   - `InterconnectSettingsV2` updated to `InterconnectSettings`
 
 #### Bug fixes:
+- [#17](https://github.com/HewlettPackard/oneview-sdk-java/issues/17) Sample method created to guarantee all alerts will be returned from `get(@QueryParam URIQuery query)`
 - [#28](https://github.com/HewlettPackard/oneview-sdk-java/issues/28) `CRM_INCORRECT_VALUE_IN_READONLY_FIELD` returned when updating Logical Switch
 - [#26](https://github.com/HewlettPackard/oneview-sdk-java/issues/26) Exception in `getAllAttachmentPaths` method
 
