@@ -211,7 +211,7 @@
 |<sub>/rest/logical-interconnects/locations/interconnects</sub>                           | DELETE   | :white_check_mark: | |    |
 |<sub>/rest/logical-interconnects/{id}</sub>                                              | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/logical-interconnects/{id}/compliance</sub>                                   | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/logical-interconnects/{id}/ethernetSettings</sub>                             | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
+|<sub>/rest/logical-interconnects/{id}/ethernetSettings</sub>                             | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/logical-interconnects/{id}/ethernetSettings</sub>                             | PUT      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/logical-interconnects/{id}/firmware</sub>                                     | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/logical-interconnects/{id}/firmware</sub>                                     | PUT      | :white_check_mark: | :white_check_mark: |    |
