@@ -60,11 +60,11 @@
 |<sub>/rest/datacenters/{id}</sub>                                                        | DELETE   | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/datacenters/{id}/visualContent</sub>                                          | GET      | :white_check_mark: | :white_check_mark: |    |
 |     **Drive Enclosures**                                                                                                                         |
-|<sub>/rest/drive-enclosures</sub>                                                        | GET      | :white_check_mark:  | :white_check_mark: |    |
-|<sub>/rest/drive-enclosures/{id}</sub>                                                   | GET      | :white_check_mark:  | :white_check_mark: |    |
-|<sub>/rest/drive-enclosures/{id}</sub>                                                   | PATCH    | :white_check_mark:  | :white_check_mark: |    |
-|<sub>/rest/drive-enclosures/{id}/port-map</sub>                                          | GET      | :white_check_mark:  | :white_check_mark: |    |
-|<sub>/rest/drive-enclosures/{id}/refreshState</sub>                                      | PUT      | :white_check_mark:  | :white_check_mark: |    |
+|<sub>/rest/drive-enclosures</sub>                                                        | GET      | :heavy_minus_sign:  | :white_check_mark: |    |
+|<sub>/rest/drive-enclosures/{id}</sub>                                                   | GET      | :heavy_minus_sign:  | :white_check_mark: |    |
+|<sub>/rest/drive-enclosures/{id}</sub>                                                   | PATCH    | :heavy_minus_sign:  | :white_check_mark: |    |
+|<sub>/rest/drive-enclosures/{id}/port-map</sub>                                          | GET      | :heavy_minus_sign:  | :white_check_mark: |    |
+|<sub>/rest/drive-enclosures/{id}/refreshState</sub>                                      | PUT      | :heavy_minus_sign:  | :white_check_mark: |    |
 |     **Enclosure**                                                                                                                                |
 |<sub>/rest/enclosures</sub>                                                              | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/enclosures</sub>                                                              | POST     | :white_check_mark: | :white_check_mark: |    |
@@ -104,8 +104,8 @@
 |     **Fabric**                                                                                                                                   |
 |<sub>/rest/fabrics</sub>                                                                 | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/fabrics/{id}</sub>                                                            | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/fabrics/{id}/reserved-vlan-range</sub>                                        | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/fabrics/{id}/reserved-vlan-range</sub>                                        | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/fabrics/{id}/reserved-vlan-range</sub>                                        | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/fabrics/{id}/reserved-vlan-range</sub>                                        | GET      | :heavy_minus_sign: | :white_check_mark: |    |
 |     **FC Network**                                                                                                                               |
 |<sub>/rest/fc-networks</sub>                                                             | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 |<sub>/rest/fc-networks</sub>                                                             | POST     | :white_check_mark: | :white_check_mark: | :white_check_mark: |
@@ -153,11 +153,11 @@
 |<sub>/rest/id-pools/vwwn/ranges/{id}/collector</sub>                                     | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |
 |<sub>/rest/id-pools/vwwn/ranges/{id}/free-fragments</sub>                                | GET      | :heavy_minus_sign: | :heavy_minus_sign: |
 |     **Internal Link Sets**                                                                                                                       |
-|<sub>/rest/internal-link-sets</sub>                                                      | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-|<sub>/rest/internal-link-sets/{id}</sub>                                                 | PUT      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/internal-link-sets</sub>                                                      | GET      | :heavy_minus_sign: | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/internal-link-sets/{id}</sub>                                                 | GET      | :heavy_minus_sign: | :white_check_mark: | :white_check_mark: |
 |     **Interconnect Link Topologies**                                                                                                                       |
-|<sub>/rest/interconnect-link-topologies</sub>                                            | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/interconnect-link-topologies{id}</sub>                                        | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/interconnect-link-topologies</sub>                                            | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/interconnect-link-topologies{id}</sub>                                        | GET      | :heavy_minus_sign: | :white_check_mark: |    |
 |     **Interconnect Type**                                                                                                                        |
 |<sub>/rest/interconnect-types</sub>                                                      | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 |<sub>/rest/interconnect-types/{id}</sub>                                                 | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
@@ -167,9 +167,9 @@
 |<sub>/rest/interconnects/{id}</sub>                                                      | PATCH    | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/interconnects/{id}/configuration</sub>                                        | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |    |
 |<sub>/rest/interconnects/{id}/pluggableModuleInformation</sub>                           | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/interconnects/{id}/ports</sub>                                                | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/interconnects/{id}/ports</sub>                                                | GET      | :heavy_minus_sign: | :white_check_mark: |    |
 |<sub>/rest/interconnects/{id}/ports</sub>                                                | PUT      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/interconnects/{id}/ports/{portId:.+}</sub>                                    | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/interconnects/{id}/ports/{portId:.+}</sub>                                    | GET      | :heavy_minus_sign: | :white_check_mark: |    |
 |<sub>/rest/interconnects/{id}/resetportprotection</sub>                                  | PUT      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/interconnects/{id}/statistics</sub>                                           | PUT      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/interconnects/{id}/statistics/{portName:.+}</sub>                             | GET      | :white_check_mark: | :white_check_mark: |    |
@@ -190,9 +190,9 @@
 |<sub>/rest/licenses/{licenseId}</sub>                                                    |GET       |    |    | :white_check_mark: |
 |     **Logical Downlink**                                                                                                                         |
 |<sub>/rest/logical-downlinks</sub>                                                       |GET       | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/logical-downlinks/withoutEthernet</sub>                                       |GET       | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-downlinks/withoutEthernet</sub>                                       |GET       | :white_check_mark: | :heavy_minus_sign: |    |
 |<sub>/rest/logical-downlinks/{id}</sub>                                                  |GET       | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/logical-downlinks/{id}/withoutEthernet</sub>                                  |GET       | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-downlinks/{id}/withoutEthernet</sub>                                  |GET       | :white_check_mark: | :heavy_minus_sign: |    |
 |     **Logical Enclosures**                                                                                                                        |
 |<sub>/rest/logical-enclosures</sub>                                                      | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/logical-enclosures</sub>                                                      | POST     | :white_check_mark: | :white_check_mark: |    |
@@ -211,7 +211,7 @@
 |<sub>/rest/logical-interconnects/locations/interconnects</sub>                           | DELETE   | :white_check_mark: | |    |
 |<sub>/rest/logical-interconnects/{id}</sub>                                              | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/logical-interconnects/{id}/compliance</sub>                                   | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/logical-interconnects/{id}/ethernetSettings</sub>                             | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/logical-interconnects/{id}/ethernetSettings</sub>                             | GET      | :heavy_minus_sign: | :white_check_mark: |    |
 |<sub>/rest/logical-interconnects/{id}/ethernetSettings</sub>                             | PUT      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/logical-interconnects/{id}/firmware</sub>                                     | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/logical-interconnects/{id}/firmware</sub>                                     | PUT      | :white_check_mark: | :white_check_mark: |    |
@@ -258,11 +258,11 @@
 |     **Managed SANs**                                                                                                                             |
 |<sub>/rest/fc-sans/managed-sans</sub>                                                    | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/fc-sans/managed-sans/{id}</sub>                                               | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/fc-sans/managed-sans/{id}</sub>                                               | PUT      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/fc-sans/managed-sans/{id}</sub>                                               | PUT      | :white_check_mark: | :heavy_minus_sign: |    |
 |<sub>/rest/fc-sans/managed-sans/{id}/endpoints</sub>                                     | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/fc-sans/managed-sans/{id}/endpoints</sub>                                     | POST     | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/fc-sans/managed-sans/{id}/issues</sub>                                        | POST     | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/fc-sans/managed-sans/WWN+</sub>                                               | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/fc-sans/managed-sans/WWN+</sub>                                               | GET      | :heavy_minus_sign: | :white_check_mark: |    |
 |     **Metric Streaming**                                                                                                                         |
 |<sub>/rest/metrics/capability</sub>                                                      | GET      | :heavy_minus_sign:  | :heavy_minus_sign: |    |
 |<sub>/rest/metrics/configuration</sub>                                                   | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
@@ -282,8 +282,8 @@
 |<sub>/rest/network-sets/{id}</sub>                                                       | DELETE   | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/network-sets/{id}/withoutEthernet</sub>                                       | GET      | :white_check_mark: | :white_check_mark: |    |
 |     **OS Deployment Plans**                                                                                                                      |
-|<sub>/rest/os-deployment-plans/</sub>                                                    | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/os-deployment-plans/{id}</sub>                                                | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/os-deployment-plans/</sub>                                                    | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/os-deployment-plans/{id}</sub>                                                | GET      | :heavy_minus_sign: | :white_check_mark: |    |
 |     **OS Deployment Servers**                                                                                                                      |
 |<sub>/rest/os-deployment-servers/</sub>                                                  | GET      | :heavy_minus_sign: | :heavy_minus_sign: |                      |
 |<sub>/rest/os-deployment-servers/</sub>                                                  | POST     | :heavy_minus_sign: | :heavy_minus_sign: |                      |
@@ -326,49 +326,49 @@
 |<sub>/rest/roles</sub>                                                                   | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
 |<sub>/rest/roles/{roleName}</sub>                                                        | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
 |     **SAN Managers**                                                                                                                             |
-|<sub>/rest/fc-sans/device-managers</sub>                                                 | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/fc-sans/device-managers/{id}</sub>                                            | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/fc-sans/device-managers</sub>                                                 | GET      | :white_check_mark: | :heavy_minus_sign: |    |
+|<sub>/rest/fc-sans/device-managers/{id}</sub>                                            | GET      | :white_check_mark: | :heavy_minus_sign: |    |
 |<sub>/rest/fc-sans/device-managers/{id}</sub>                                            | PUT      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/fc-sans/device-managers/{id}</sub>                                            | DELETE   | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/fc-sans/providers/{id}/device-managers</sub>                                  | POST     | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/fc-sans/providers/{id}/device-managers</sub>                                  | POST     | :white_check_mark: | :heavy_minus_sign: |    |
 |     **SAS Interconnect Types**                                                                                                                   |
-|<sub>/rest/sas-interconnect-types</sub>                                                  | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-interconnect-types/{id}</sub>                                             | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/sas-interconnect-types</sub>                                                  | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-interconnect-types/{id}</sub>                                             | GET      | :heavy_minus_sign: | :white_check_mark: |    |
 |     **SAS Interconnects**                                                                                                                        |
-|<sub>/rest/sas-interconnects</sub>                                                       | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-interconnects/{id}</sub>                                                  | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-interconnects/{id}</sub>                                                  | PATCH    | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-interconnects/{id}/refreshState</sub>                                     | PUT      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/sas-interconnects/{id}</sub>                                                  | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-interconnects/{id}</sub>                                                  | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-interconnects/{id}</sub>                                                  | PATCH    | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-interconnects/{id}/refreshState</sub>                                     | PUT      | :heavy_minus_sign: | :white_check_mark: |    |
 |     **SAS Logical Interconnect Groups**                                                                                                          |
-|<sub>/rest/sas-logical-interconnect-groups</sub>                                         | POST     | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-logical-interconnect-groups</sub>                                         | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-logical-interconnect-groups/{id}</sub>                                    | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-logical-interconnect-groups/{id}</sub>                                    | PUT      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-logical-interconnect-groups/{id}</sub>                                    | DELETE   | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-interconnect-groups</sub>                                         | POST     | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-interconnect-groups</sub>                                         | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-interconnect-groups/{id}</sub>                                    | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-interconnect-groups/{id}</sub>                                    | PUT      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-interconnect-groups/{id}</sub>                                    | DELETE   | :heavy_minus_sign: | :white_check_mark: |    |
 |     **SAS Logical Interconnects**                                                                                                                |
-|<sub>/rest/sas-logical-interconnects</sub>                                               | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-logical-interconnects/{id}</sub>                                          | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-logical-interconnects/{id}/firmware</sub>                                 | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-logical-interconnects/{id}/firmware</sub>                                 | PUT      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-logical-interconnects/compliance</sub>                                    | PUT      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-logical-interconnects/{id}/compliance</sub>                               | PUT      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-logical-interconnects/{lsId}/configuration</sub>                          | PUT      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-logical-interconnects/{id}/replaceDriveEnclosure</sub>                    | POST     | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-interconnects</sub>                                               | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-interconnects/{id}</sub>                                          | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-interconnects/{id}/firmware</sub>                                 | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-interconnects/{id}/firmware</sub>                                 | PUT      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-interconnects/compliance</sub>                                    | PUT      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-interconnects/{id}/compliance</sub>                               | PUT      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-interconnects/{lsId}/configuration</sub>                          | PUT      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-interconnects/{id}/replaceDriveEnclosure</sub>                    | POST     | :heavy_minus_sign: | :white_check_mark: |    |
 |     **SAS Logical JBOD Attachments**                                                                                                             |
-|<sub>/rest/sas-logical-jbod-attachments</sub>                                            | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-logical-jbod-attachments/{id}</sub>                                       | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-jbod-attachments</sub>                                            | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-jbod-attachments/{id}</sub>                                       | GET      | :heavy_minus_sign: | :white_check_mark: |    |
 |     **SAS Logical JBODs**                                                                                                                        |
-|<sub>/rest/sas-logical-jbods</sub>                                                       | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-logical-jbods/{id}</sub>                                                  | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/sas-logical-jbods/{id}/drives</sub>                                           | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-jbods</sub>                                                       | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-jbods/{id}</sub>                                                  | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/sas-logical-jbods/{id}/drives</sub>                                           | GET      | :heavy_minus_sign: | :white_check_mark: |    |
 |     **Scopes**                                                                                                                                   |
-|<sub>/rest/scopes/ </sub>                                                                | POST     | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/scopes/</sub>                                                                 | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/scopes/{id}</sub>                                                             | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/scopes/{id}</sub>                                                             | PUT      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/scopes/{id}</sub>                                                             | PATCH    | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/scopes/{id}</sub>                                                             | DELETE   | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/scopes/{id}/resource-assignments</sub>                                        | PATCH    | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/scopes/ </sub>                                                                | POST     | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/scopes/</sub>                                                                 | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/scopes/{id}</sub>                                                             | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/scopes/{id}</sub>                                                             | PUT      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/scopes/{id}</sub>                                                             | PATCH    | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/scopes/{id}</sub>                                                             | DELETE   | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/scopes/{id}/resource-assignments</sub>                                        | PATCH    | :heavy_minus_sign: | :white_check_mark: |    |
 |     **Server Hardware**                                                                                                                          |
 |<sub>/rest/server-hardware</sub>                                                         | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-hardware</sub>                                                         | POST     | :white_check_mark: | :white_check_mark: |    |
@@ -385,9 +385,9 @@
 |<sub>/rest/server-hardware/{id}/refreshState</sub>                                       | PUT      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-hardware/{id}/remoteConsoleUrl</sub>                                   | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-hardware/{id}/utilization</sub>                                        | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/server-hardware/{id}                                                          | PATCH    | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/server-hardware/*/firmware                                                    | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/server-hardware/{id}/firmware                                                 | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/server-hardware/{id}                                                          | PATCH    | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/server-hardware/*/firmware                                                    | GET      | :heavy_minus_sign: | :white_check_mark: |    |
+|<sub>/rest/server-hardware/{id}/firmware                                                 | GET      | :heavy_minus_sign: | :white_check_mark: |    |
 |     **Server Hardware Type**                                                                                                                     |
 |<sub>/rest/server-hardware-types</sub>                                                   | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-hardware-types/{id}</sub>                                              | GET      | :white_check_mark: | :white_check_mark: |    |
