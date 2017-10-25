@@ -87,7 +87,7 @@ The API list is as follows:
 ### Example programs ###
 The SDK comes with several sample programs inside the `samples` module. For each of the supported resource types, there is a corresponding sample file. To run one of them, we recommend using an IDE ([Eclipse](https://eclipse.org/downloads/) or [IntelliJ](https://www.jetbrains.com/idea/download/)).
 
-> Note: If you choose to use Eclipse IDE, you will need to generate the Eclipse IDE files (`\*.classpath`, `\*.project`, `\*.wtpmodules` and the `.settings` folder). You can generate these files using the Maven Eclipse Plugin with the command `mvn clean eclipse:clean eclipse:eclipse`.
+> Note: If you choose to use Eclipse IDE, you can optionally generate the Eclipse IDE files (`\*.classpath`, `\*.project`, `\*.wtpmodules` and the `.settings` folder). You can generate these files using the Maven Eclipse Plugin with the command `mvn clean eclipse:clean eclipse:eclipse`.
 
 The file [`oneview_java_sdk_config.properties`](https://github.com/HewlettPackard/oneview-sdk-java/blob/master/automated-tests/src/test/resources/oneview_java_sdk_config.properties) must be updated to contain the following information:
 * Path for the `TrustStore` file and its password
