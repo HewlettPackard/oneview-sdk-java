@@ -26,6 +26,9 @@ import com.hp.ov.sdk.dto.alerts.AlertResource;
 import com.hp.ov.sdk.dto.alerts.AlertUpdate;
 import com.hp.ov.sdk.dto.alerts.AlertUrgency;
 import com.hp.ov.sdk.rest.client.OneViewClient;
+import com.hp.ov.sdk.rest.http.core.BasicURIQuery;
+import com.hp.ov.sdk.rest.http.core.URIQuery;
+import com.hp.ov.sdk.rest.http.core.UrlParameter;
 
 public class AlertClientSample {
 
@@ -55,6 +58,16 @@ public class AlertClientSample {
         ResourceCollection<AlertResource> alertResources = this.client.getAll();
 
         LOGGER.info("Alerts returned to client (count): {}", alertResources.getCount());
+    }
+
+    private void getAllAlertsByState() {
+        BasicURIQuery basicUriQuery = new BasicURIQuery();
+        basicUriQuery.addParameter(URIQuery.FILTER, "alertState='Active'"); //Filters alerts by Active state
+        basicUriQuery.addParameter(UrlParameter.getCountParameter(this.client.getAll().getCount())); //It guarantees all alerts will be returned
+
+        ResourceCollection<AlertResource> alerts = this.client.get(basicUriQuery);
+
+        LOGGER.info("Active alerts returned to client: {}", alerts.toJsonString());
     }
 
     private void updateAlert() {
@@ -93,6 +106,7 @@ public class AlertClientSample {
         AlertClientSample sample = new AlertClientSample();
 
         sample.getAllAlerts();
+        sample.getAllAlertsByState();
         sample.getAlertById();
         sample.updateAlert();
 
