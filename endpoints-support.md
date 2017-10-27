@@ -1,11 +1,12 @@
 ***Legend***
 
 | Item | Meaning |
-| ------------------     | --------------------------------------------- |
+| ---------------------- | -------------------------------------------------------------------- |
 |  :white_check_mark:    | Endpoint implemented in the Java SDK and tested for this API version |
-|  :black_square_button: | Endpoint to be implemented |
-|  :heavy_minus_sign:    | Endpoint not available for this API Version |
-|  :black_circle:        | Endpoint considered as 'out-of-scope' for the Java SDK |
+|  :black_square_button: | Endpoint to be implemented                                           |
+|  :black_circle:        | Endpoint considered as 'out-of-scope' for the Java SDK               |
+|  :heavy_minus_sign:    | Endpoint not available for this API Version                          |
+
 
 
 <br />
@@ -408,17 +409,18 @@
 |<sub>/rest/server-hardware/{id}                                                          | PATCH    | :heavy_minus_sign: | :white_check_mark: |    |
 |<sub>/rest/server-hardware/*/firmware                                                    | GET      | :heavy_minus_sign: | :white_check_mark: |    |
 |<sub>/rest/server-hardware/{id}/firmware                                                 | GET      | :heavy_minus_sign: | :white_check_mark: |    |
-|     **Server Hardware Type**                                                                                                                     |
+|     **Server Hardware Types**                                                                                                                     |
 |<sub>/rest/server-hardware-types</sub>                                                   | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-hardware-types/{id}</sub>                                              | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-hardware-types/{id}</sub>                                              | PUT      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-hardware-types/{id}</sub>                                              | DELETE   | :white_check_mark: | :white_check_mark: |    |
-|     **Server Profile**                                                                                                                           |
+|     **Server Profiles**                                                                                                                           |
 |<sub>/rest/server-profiles</sub>                                                         | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-profiles</sub>                                                         | POST     | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-profiles</sub>                                                         | DELETE   | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-profiles/available-networks</sub>                                      | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-profiles/available-servers</sub>                                       | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/server-profiles/available-storage-system</sub>                                | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-profiles/available-storage-systems</sub>                               | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-profiles/available-targets</sub>                                       | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-profiles/profile-ports</sub>                                           | GET      | :white_check_mark: | :white_check_mark: |    |
@@ -430,7 +432,7 @@
 |<sub>/rest/server-profiles/{id}/new-profile-template</sub>                               | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
 |<sub>/rest/server-profiles/{id}/messages</sub>                                           | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-profiles/{id}/transformation</sub>                                     | GET      | :white_check_mark: | :white_check_mark: |    |
-|     **Server Profile Template**                                                                                                                  |
+|     **Server Profile Templates**                                                                                                                  |
 |<sub>/rest/server-profile-templates</sub>                                                | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-profile-templates</sub>                                                | POST     | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-profile-templates/{id}</sub>                                           | GET      | :white_check_mark: | :white_check_mark: |    |
@@ -445,7 +447,7 @@
 |<sub>/rest/storage-pools/{id}</sub>                                                      | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/storage-pools/{id}</sub>                                                      | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |    |
 |<sub>/rest/storage-pools/{id}</sub>                                                      | DELETE   | :white_check_mark: | :white_check_mark: |    |
-|     **Storage System**                                                                                                                           |
+|     **Storage Systems**                                                                                                                           |
 |<sub>/rest/storage-systems</sub>                                                         | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/storage-systems</sub>                                                         | POST     | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/storage-systems/host-types</sub>                                              | GET      | :white_check_mark: | :white_check_mark: |    |
@@ -457,14 +459,14 @@
 |<sub>/rest/storage-systems/{id}/managedPorts/{portId}</sub>                              | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/storage-systems/{id}/reachable-ports</sub>                                    | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
 |<sub>/rest/storage-systems/{id}/templates</sub>                                          | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|     **Storage Volume Attachment**                                                                                                                |
+|     **Storage Volume Attachments**                                                                                                                |
 |<sub>/rest/storage-volume-attachments</sub>                                              | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/storage-volume-attachments/{id}</sub>                                         | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/storage-volume-attachments/repair</sub>                                       | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/storage-volume-attachments/repair</sub>                                       | POST     | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/storage-volume-attachments/{id}/paths</sub>                                   | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/storage-volume-attachments/{attachmentId}/paths</sub>                                   | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/storage-volume-attachments/{attachmentId)/paths/{id}</sub>                    | GET      | :white_check_mark: | :white_check_mark: |    |
-|     **Storage Volume Template**                                                                                                                  |
+|     **Storage Volume Templates**                                                                                                                  |
 |<sub>/rest/storage-volume-templates</sub>                                                | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/storage-volume-templates</sub>                                                | POST     | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/storage-volume-templates/connectable-volume-templates</sub>                   | GET      | :white_check_mark: | :white_check_mark: |    |
@@ -474,52 +476,53 @@
 |<sub>/rest/storage-volume-templates/{id}</sub>                                           | DELETE   | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/storage-volume-templates/{id}/compatible-systems</sub>                        | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
 |     **Users**                                                                                                                                   |
-|<sub>/rest/users</sub>                                                                   | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/users</sub>                                                                   | POST     | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/users</sub>                                                                   | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/users</sub>                                                                   | DELETE   | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/users/administrator/resetPassword</sub>                                       | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/users/changePassword</sub>                                                    | POST     | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/users/role/{userName}</sub>                                                   | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/users/roles</sub>                                                             | DELETE   | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/users/roles/users/{role}</sub>                                                | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/users/validateLoginName/{userName}</sub>                                      | POST     | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/users/validateUserName/{fullName}</sub>                                       | POST     | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/users/{userName}</sub>                                                        | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/users/{userName}</sub>                                                        | DELETE   | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/users/{userName}/roles</sub>                                                  | POST     | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/users/{userName}/roles</sub>                                                  | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|     **Volume**                                                                                                                                   |
-|<sub>/rest/storage-volumes</sub>                                                         | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/storage-volumes</sub>                                                         | POST     | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/storage-volumes/attachable-volumes</sub>                                      | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
+|<sub>/rest/users</sub>                                                                   | GET      | :black_square_button: | :black_square_button: |    |
+|<sub>/rest/users</sub>                                                                   | POST     | :black_square_button: | :black_square_button: |    |
+|<sub>/rest/users</sub>                                                                   | POST     | :black_square_button: | :black_square_button: |    |
+|<sub>/rest/users</sub>                                                                   | PUT      | :black_square_button: | :black_square_button: |    |
+|<sub>/rest/users</sub>                                                                   | DELETE   | :black_square_button: | :black_square_button: |    |
+|<sub>/rest/users/administrator/resetPassword</sub>                                       | PUT      | :black_square_button: | :black_square_button: |    |
+|<sub>/rest/users/changePassword</sub>                                                    | POST     | :black_square_button: | :black_square_button: |    |
+|<sub>/rest/users/role/{userName}</sub>                                                   | GET      | :black_square_button: | :black_square_button: |    |
+|<sub>/rest/users/roles</sub>                                                             | DELETE   | :black_square_button: | :black_square_button: |    |
+|<sub>/rest/users/roles/users/{role}</sub>                                                | GET      | :black_square_button: | :black_square_button: |    |
+|<sub>/rest/users/validateLoginName/{userName}</sub>                                      | POST     | :black_square_button: | :black_square_button: |    |
+|<sub>/rest/users/validateUserName/{fullName}</sub>                                       | POST     | :black_square_button: | :black_square_button: |    |
+|<sub>/rest/users/{userName}</sub>                                                        | GET      | :black_square_button: | :black_square_button: |    |
+|<sub>/rest/users/{userName}</sub>                                                        | DELETE   | :black_square_button: | :black_square_button: |    |
+|<sub>/rest/users/{userName}/roles</sub>                                                  | POST     | :black_square_button: | :black_square_button: |    |
+|<sub>/rest/users/{userName}/roles</sub>                                                  | PUT      | :black_square_button: | :black_square_button: |    |
+|     **Volumes**                                                                                                                                   |
+|<sub>/rest/storage-volumes</sub>                                                         | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/storage-volumes</sub>                                                         | POST     | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/storage-volumes/attachable-volumes</sub>                                      | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/storage-volumes/from-existing</sub>                                           | POST     | :heavy_minus_sign: | :heavy_minus_sign: |    |
 |<sub>/rest/storage-volumes/from-snapshot</sub>                                           | POST     | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/storage-volumes/repair</sub>                                                  | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/storage-volumes/repair</sub>                                                  | POST     | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/storage-volumes/{id}</sub>                                                    | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/storage-volumes/{id}</sub>                                                    | PUT      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/storage-volumes/{id}</sub>                                                    | DELETE   | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/storage-volumes/{id}/snapshots</sub>                                          | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/storage-volumes/{id}/snapshots</sub>                                          | POST     | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/storage-volumes/{id}/snapshots/{snapshotId}</sub>                             | GET      | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|<sub>/rest/storage-volumes/{id}/snapshots/{snapshotId}</sub>                             | DELETE   | :heavy_minus_sign: | :heavy_minus_sign: |    |
-|     **Switch**                                                                                                                                   |
+|<sub>/rest/storage-volumes/repair</sub>                                                  | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/storage-volumes/repair</sub>                                                  | POST     | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/storage-volumes/{id}</sub>                                                    | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/storage-volumes/{id}</sub>                                                    | PUT      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/storage-volumes/{id}</sub>                                                    | DELETE   | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/storage-volumes/{id}/snapshots</sub>                                          | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/storage-volumes/{id}/snapshots</sub>                                          | POST     | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/storage-volumes/{id}/snapshots/{snapshotId}</sub>                             | GET      | :white_check_mark: | :white_check_mark: |    |
+|<sub>/rest/storage-volumes/{id}/snapshots/{snapshotId}</sub>                             | DELETE   | :white_check_mark: | :white_check_mark: |    |
+|     **Switches**                                                                                                                                   |
 |<sub>/rest/switches</sub>                                                                | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/switches/{id}</sub>                                                           | GET      | :white_check_mark: | :white_check_mark: |    |
-|<sub>/rest/switches/{id}</sub>                                                           | PATCH    | :heavy_minus_sign: | :heavy_minus_sign: |    |
+|<sub>/rest/switches/{id}</sub>                                                           | PATCH    | :black_square_button: | :black_square_button: |    |
 |<sub>/rest/switches/{id}</sub>                                                           | DELETE   | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/switches/{id}/environmentalConfiguration</sub>                                | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/switches/{id}/statistics</sub>                                                | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/switches/{id}/statistics/{portName:.+}</sub>                                  | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/switches/{id}/update-ports</sub>                                              | PUT      | :heavy_minus_sign: | :white_check_mark: |    |
-|     **Switch Type**                                                                                                                              |
+|     **Switch Types**                                                                                                                              |
 |<sub>/rest/switch-types</sub>                                                            | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/switch-types/{id}</sub>                                                       | GET      | :white_check_mark: | :white_check_mark: |    |
-|     **Task**                                                                                                                                     |
+|     **Tasks**                                                                                                                                     |
 |<sub>/rest/tasks</sub>                                                                   | GET      | :white_check_mark: | :white_check_mark: |
 |<sub>/rest/tasks/{id}</sub>                                                              | GET      | :white_check_mark: | :white_check_mark: |
-|     **Unmanaged Device**                                                                                                                         |
+|     **Unmanaged Devices**                                                                                                                         |
 |<sub>/rest/unmanaged-devices</sub>                                                       | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/unmanaged-devices</sub>                                                       | POST     | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/unmanaged-devices</sub>                                                       | DELETE   | :white_check_mark: | :white_check_mark: |    |
@@ -534,7 +537,7 @@
 |<sub>/rest/uplink-sets/{id}</sub>                                                        | PUT      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/uplink-sets/{id}</sub>                                                        | DELETE   | :white_check_mark: | :white_check_mark: |    |
 |     **Version**                                                                                                                         |
-|<sub>/rest/version</sub>                                                                 | GET      | :heavy_minus_sign: | :heavy_minus_sign: |                      |
+|<sub>/rest/version</sub>                                                                 | GET      | :black_square_button: | :black_square_button: |                      |
 
 
 ## HPE Synergy Image Streamer
