@@ -409,7 +409,7 @@
 |<sub>/rest/server-hardware/{id}                                                          | PATCH    | :heavy_minus_sign: | :white_check_mark: |    |
 |<sub>/rest/server-hardware/*/firmware                                                    | GET      | :heavy_minus_sign: | :white_check_mark: |    |
 |<sub>/rest/server-hardware/{id}/firmware                                                 | GET      | :heavy_minus_sign: | :white_check_mark: |    |
-|     **Server Hardware Types**                                                                                                                     |
+| **Server Hardware Types**                                                                                           |
 |<sub>/rest/server-hardware-types</sub>                                                   | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-hardware-types/{id}</sub>                                              | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/server-hardware-types/{id}</sub>                                              | PUT      | :white_check_mark: | :white_check_mark: |    |
