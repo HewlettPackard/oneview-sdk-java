@@ -8,12 +8,13 @@ This release adds support to OneView Rest API version 500 to the already existin
   - Logical Interconnect Group
 
 #### Enhancements:
-Refactoring:
+- Workaround for [#17](https://github.com/HewlettPackard/oneview-sdk-java/issues/17): Sample method created to guarantee all alerts will be returned from `get(@QueryParam URIQuery query)`
+- Refactoring:
   - `EthernetInterconnectSettingsV2` updated to `EthernetInterconnectSettings`
   - `InterconnectSettingsV2` updated to `InterconnectSettings`
 
+
 #### Bug fixes:
-- [#17](https://github.com/HewlettPackard/oneview-sdk-java/issues/17) Sample method created to guarantee all alerts will be returned from `get(@QueryParam URIQuery query)`
 - [#28](https://github.com/HewlettPackard/oneview-sdk-java/issues/28) `CRM_INCORRECT_VALUE_IN_READONLY_FIELD` returned when updating Logical Switch
 - [#26](https://github.com/HewlettPackard/oneview-sdk-java/issues/26) Exception in `getAllAttachmentPaths` method
 
