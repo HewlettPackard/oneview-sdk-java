@@ -55,7 +55,7 @@ Feature: In order to manage Drive Enclosures
       | path  | /powerState |
       | value | On          |
     When OneView gets Resource by Name
-      And OneView runs Drive Enclosure patch
+      And OneView runs Resource patch
     Then I get a success status
 
   @update

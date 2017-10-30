@@ -145,16 +145,35 @@ Feature: In order to manage Server Hardwares
       And OneView runs Mp Firmware Version update
     Then I get a success status
 
+  @create
+  Scenario: Creation of a new Scope
+    Given an instance of Scope
+      And Resource values as follows:
+      | name        | BDD Scope             |
+      | description | BDD Scope description |
+    When OneView runs Resource creation
+      And OneView gets Resource by Name
+    Then I get an ID
+
   @patch
   Scenario: Update a Server Hardware by Patch
     Given name "172.18.6.8" for Resource
       And Resource values will be updated as follows:
-      | op    | add                                               |
-      | path  | /scopeUris/-                                      |
-      | value | /rest/scopes/4f383d9a-31cd-4d48-87a3-5d930b5a70d0 |
+      | op    | replace    |
+      | path  | /scopeUris |
+      | value | BDD Scope  |
     When OneView gets Resource by Name
-      And OneView runs ServerHardware patch
+      And OneView runs Resource patch
     Then I get a success status
+
+  @remove
+  Scenario: Remove a Scope
+    Given an instance of Scope
+      And name "BDD Scope" for Resource
+    When OneView gets Resource by Name
+      And OneView deletes the Resource
+      And OneView gets Resource by ID
+    Then Resource is not found
 
   @remove
   Scenario: Remove a Server Hardware

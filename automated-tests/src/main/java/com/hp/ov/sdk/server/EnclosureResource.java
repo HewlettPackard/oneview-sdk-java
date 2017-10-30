@@ -37,13 +37,14 @@ import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.oneview.BasicResource;
 import com.hp.ov.sdk.oneview.CreateResource;
 import com.hp.ov.sdk.oneview.Credential;
+import com.hp.ov.sdk.oneview.PatchResource;
 import com.hp.ov.sdk.oneview.RemoveResource;
 import com.hp.ov.sdk.oneview.UpdateResource;
 import com.hp.ov.sdk.rest.client.server.EnclosureClient;
 import com.hp.ov.sdk.rest.client.settings.FirmwareDriverClient;
 import com.hp.ov.sdk.rest.http.core.client.TaskTimeout;
 
-public class EnclosureResource extends BasicResource implements CreateResource, RemoveResource, UpdateResource {
+public class EnclosureResource extends BasicResource implements CreateResource, RemoveResource, UpdateResource, PatchResource {
 
     private static EnclosureResource instance;
 
@@ -115,7 +116,12 @@ public class EnclosureResource extends BasicResource implements CreateResource, 
 
     @Override
     public String update(String id) {
-        return taskToString(client.patch(id, builderPatch()));
+        return taskToString(client.patch(id, builderUpdate()));
+    }
+
+    @Override
+    public String patch(String id) {
+        return taskToString(client.patch(id, builderPatch(id)));
     }
 
     @Override
@@ -186,7 +192,7 @@ public class EnclosureResource extends BasicResource implements CreateResource, 
         return enclosure;
     }
 
-    private Patch builderPatch() {
+    private Patch builderUpdate() {
         resourceName = resourceProperties.get("name");
         Patch patch = new Patch();
         patch.setOp(PatchOperation.replace);
@@ -195,12 +201,12 @@ public class EnclosureResource extends BasicResource implements CreateResource, 
         return patch;
     }
 
-    public String patch(String id) {
+    private Patch builderPatch(String id) {
         Patch patch = new Patch();
         patch.setOp(Patch.PatchOperation.valueOf(resourceProperties.get("op")));
         patch.setPath(resourceProperties.get("path"));
         patch.setValue(resourceProperties.get("value"));
-        return objToString(client.patch(id, patch));
+        return patch;
     }
 
     public String refresh(String id) {

@@ -30,11 +30,6 @@ public class InterconnectBDDStep extends Background {
         OneView.setResource(InterconnectResource.getInstance());
     }
 
-    @When("^OneView runs Interconnect patch$")
-    public void oneview_runs_Interconnect_patch() throws Throwable {
-        resourceStr = InterconnectResource.getInstance().patch(resourceID);
-    }
-
     @When("^OneView gets Interconnect Statistics$")
     public void oneview_gets_Interconnect_Statistics() throws Throwable {
         resourceStr = InterconnectResource.getInstance().getStatistics(resourceID);

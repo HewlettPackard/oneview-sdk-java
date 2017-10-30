@@ -25,10 +25,11 @@ import com.hp.ov.sdk.dto.networking.sasinterconnect.SasInterConnectRefreshReques
 import com.hp.ov.sdk.dto.networking.sasinterconnect.SasInterconnect;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.oneview.BasicResource;
+import com.hp.ov.sdk.oneview.PatchResource;
 import com.hp.ov.sdk.oneview.Resource;
 import com.hp.ov.sdk.rest.client.networking.SasInterconnectClient;
 
-public class SasInterconnectResource extends BasicResource implements Resource {
+public class SasInterconnectResource extends BasicResource implements Resource, PatchResource {
 
     private static SasInterconnectResource instance;
 
@@ -76,13 +77,17 @@ public class SasInterconnectResource extends BasicResource implements Resource {
         return taskToString(client.refreshState(id, refresh));
     }
 
+    @Override
     public String patch(String id) {
+        return taskToString(client.patch(id, builderPatch(client.getById(id))));
+    }
+
+    public Patch builderPatch(SasInterconnect sasInterconnect) {
         Patch patch = new Patch();
         patch.setOp(PatchOperation.valueOf(resourceProperties.get("op")));
         patch.setPath(resourceProperties.get("path"));
         patch.setValue(resourceProperties.get("value"));
-
-        return taskToString(client.patch(id, patch));
+        return patch;
     }
 
 }

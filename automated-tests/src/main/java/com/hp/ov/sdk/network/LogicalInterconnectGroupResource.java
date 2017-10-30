@@ -16,6 +16,8 @@
 
 package com.hp.ov.sdk.network;
 
+import static com.hp.ov.sdk.rest.client.settings.ScopeClient.SCOPES_URI;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.hp.ov.sdk.dto.Patch;
 import com.hp.ov.sdk.dto.networking.EnclosureType;
 import com.hp.ov.sdk.dto.networking.LocationType;
 import com.hp.ov.sdk.dto.networking.LogicalLocation;
@@ -34,17 +37,20 @@ import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.InterconnectMapEntr
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.InterconnectMapTemplate;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.LogicalInterconnectGroup.RedundancyType;
+import com.hp.ov.sdk.dto.settings.Scope;
 import com.hp.ov.sdk.dto.networking.logicalinterconnectgroup.UplinkSetGroup;
 import com.hp.ov.sdk.exceptions.SDKResourceNotFoundException;
 import com.hp.ov.sdk.oneview.BasicResource;
 import com.hp.ov.sdk.oneview.CreateResource;
+import com.hp.ov.sdk.oneview.PatchResource;
 import com.hp.ov.sdk.oneview.RemoveResource;
 import com.hp.ov.sdk.oneview.UpdateResource;
 import com.hp.ov.sdk.rest.client.networking.LogicalInterconnectGroupClient;
+import com.hp.ov.sdk.rest.client.settings.ScopeClient;
 import com.hp.ov.sdk.util.ResourceDtoUtils;
 
 public class LogicalInterconnectGroupResource extends BasicResource
-        implements CreateResource, RemoveResource, UpdateResource {
+        implements CreateResource, RemoveResource, UpdateResource, PatchResource {
 
     private static LogicalInterconnectGroupResource instance;
 
@@ -132,6 +138,11 @@ public class LogicalInterconnectGroupResource extends BasicResource
 
     public void createSynergy() {
         client.create(builderSynergy());
+    }
+
+    @Override
+    public String patch(String id) {
+        return taskToString(client.patch(id, builderPatch(client.getById(id))));
     }
 
     @Override
@@ -259,5 +270,20 @@ public class LogicalInterconnectGroupResource extends BasicResource
 
         return dtoSynergy;
     }
-    
+
+    private Patch builderPatch(LogicalInterconnectGroup logicalInterconnectGroup) {
+        Patch patch = new Patch();
+        patch.setOp(Patch.PatchOperation.valueOf(resourceProperties.get("op")));
+        patch.setPath(resourceProperties.get("path"));
+        List<String> scopeUris = logicalInterconnectGroup.getScopeUris();
+        scopeUris.add(SCOPES_URI + "/" + getScopeId(resourceProperties.get("value")));
+        patch.setValue(scopeUris);
+        return patch;
+	}
+
+    private String getScopeId(String scopeName) {
+        ScopeClient scopeClient = oneViewClient.scope();
+        Scope scope = scopeClient.getByName(scopeName).get(0);
+        return scope == null ? "" : scope.getResourceId();
+    }
 }

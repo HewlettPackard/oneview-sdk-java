@@ -26,7 +26,7 @@ import cucumber.api.junit.Cucumber;
 	glue = { "com.hp.ov.sdk.resources" }, 
 	features = "classpath:cucumber/network/logicalInterconnectGroupC7000.feature",
 	monochrome = true,
-	tags =  "@create, @getAll, @get, @update, @remove")
+	tags =  "@create, @getAll, @get, @patch, @update, @remove")
 
 public class LogicalInterconnectGroupBDDC7000Test {
 

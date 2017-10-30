@@ -121,8 +121,8 @@ Feature: In order to manage Interconnects
       | path  | /powerState |
       | value | Off         |
     When OneView gets Resource by Name
-      And OneView runs Interconnect patch
-    Then Resource is found
+      And OneView runs Resource patch
+    Then I get a success status
 
   @reset
   Scenario: Reset Interconnect Port Protection

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2017 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use file except in compliance with the License.
@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.resources.network;
+package com.hp.ov.sdk.resources.settings;
 
-import org.junit.runner.RunWith;
+import com.hp.ov.sdk.oneview.Background;
+import com.hp.ov.sdk.oneview.OneView;
+import com.hp.ov.sdk.settings.ScopeResource;
 
-import cucumber.api.CucumberOptions;
-import cucumber.api.junit.Cucumber;
+import cucumber.api.java.en.Given;
 
-@RunWith(Cucumber.class)
-@CucumberOptions(format = { "pretty", "html:target/cucumber" },
-    glue = {"com.hp.ov.sdk.resources"},
-    features = "classpath:cucumber/network/interconnectSynergy.feature",
-    monochrome = true,
-    tags = {"@getAll, @get, @reset, @patch",
-            "~@C7000"})
+public class ScopeBDDStep extends Background {
 
-public class InterconnectBDDTestSynergy {
+    @Given("^an instance of Scope$")
+    public void an_instance_of_Scope() throws Throwable {
+        OneView.setResource(ScopeResource.getInstance());
+    }
 
 }

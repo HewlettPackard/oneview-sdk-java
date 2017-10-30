@@ -65,11 +65,6 @@ public class LogicalEnclosureBDDStep extends Background {
         status = LogicalEnclosureResource.getInstance().createSupportDump(resourceID);
     }
 
-    @When(value="^OneView runs Logical Enclosure patch$", timeout=3600000)
-    public void oneview_runs_Logical_Enclosure_patch() throws Throwable {
-        status = LogicalEnclosureResource.getInstance().patch(resourceID);
-    }
-
     @When(value="^OneView runs Multiple enclosures creation$", timeout=5400000)
     public void oneview_runs_Multiple_enclosures_creation() throws Throwable {
         status = LogicalEnclosureResource.getInstance().createMultipleLogicalEnclosure(resourceID);

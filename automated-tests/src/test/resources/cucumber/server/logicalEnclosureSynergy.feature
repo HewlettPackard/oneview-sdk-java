@@ -136,7 +136,7 @@ Feature: In order to manage Logical Enclosures
       | path  | /firmware     |
       | value | EnclosureOnly |
     When OneView gets Resource by Name
-      And OneView runs Logical Enclosure patch
+      And OneView runs Resource patch
     Then I get a success status
 
   @update

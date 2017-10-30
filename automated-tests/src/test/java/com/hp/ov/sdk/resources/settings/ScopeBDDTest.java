@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2017 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hp.ov.sdk.resources.network;
+package com.hp.ov.sdk.resources.settings;
 
 import org.junit.runner.RunWith;
 
@@ -23,12 +23,11 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(format = { "pretty", "html:target/cucumber" },
-    glue = {"com.hp.ov.sdk.resources"},
-    features = "classpath:cucumber/network/interconnectSynergy.feature",
+    glue = {"com.hp.ov.sdk.resources"}, 
+    features = "classpath:cucumber/settings/scope.feature",
     monochrome = true,
-    tags = {"@getAll, @get, @reset, @patch",
-            "~@C7000"})
+    tags = "@create, @getAll, @get, @patch, @update, @remove")
 
-public class InterconnectBDDTestSynergy {
+public class ScopeBDDTest {
 
 }
