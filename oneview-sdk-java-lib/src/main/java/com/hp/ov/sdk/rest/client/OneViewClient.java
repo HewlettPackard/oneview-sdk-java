@@ -288,6 +288,16 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
+     * Creates or retrieves an existing instance of {@link LicenseClient}.
+     * This client provides an interface for managing licenses.
+     *
+     * @return an interface to the Licenses REST API.
+     */
+    public synchronized LicenseClient license() {
+        return getProxy(LicenseClient.class);
+    }
+
+    /**
      * Creates or retrieves an existing instance of {@link LogicalDownlinkClient}.
      * This client provides an interface for managing logical downlinks.
      *
@@ -378,6 +388,16 @@ public class OneViewClient extends AbstractClient {
      */
     public synchronized NetworkSetClient networkSet() {
         return getProxy(NetworkSetClient.class);
+    }
+
+    /**
+     * Creates or retrieves an existing instance of {@link OsDeploymentPlanClient}.
+     * This client provides an interface for managing OS deployment plans.
+     *
+     * @return an interface to the OS deployment plans REST API.
+     */
+    public synchronized OsDeploymentPlanClient osDeploymentPlan() {
+        return getProxy(OsDeploymentPlanClient.class);
     }
 
     /**
@@ -598,26 +618,6 @@ public class OneViewClient extends AbstractClient {
      */
     public synchronized UplinkSetClient uplinkSet() {
         return getProxy(UplinkSetClient.class);
-    }
-
-    /**
-     * Creates or retrieves an existing instance of {@link OsDeploymentPlanClient}.
-     * This client provides an interface for managing OS deployment plans.
-     *
-     * @return an interface to the OS deployment plans REST API.
-     */
-    public synchronized OsDeploymentPlanClient osDeploymentPlan() {
-        return getProxy(OsDeploymentPlanClient.class);
-    }
-
-    /**
-     * Creates or retrieves an existing instance of {@link LicenseClient}.
-     * This client provides an interface for managing licenses.
-     *
-     * @return an interface to the Licenses REST API.
-     */
-    public synchronized LicenseClient license() {
-        return getProxy(LicenseClient.class);
     }
 
     /**
