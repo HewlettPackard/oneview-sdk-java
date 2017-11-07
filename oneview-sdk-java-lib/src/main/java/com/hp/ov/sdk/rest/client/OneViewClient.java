@@ -43,6 +43,7 @@ import com.hp.ov.sdk.rest.client.networking.SasLogicalInterconnectGroupClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchClient;
 import com.hp.ov.sdk.rest.client.networking.SwitchTypeClient;
 import com.hp.ov.sdk.rest.client.networking.UplinkSetClient;
+import com.hp.ov.sdk.rest.client.security.LoginDetailClient;
 import com.hp.ov.sdk.rest.client.security.LoginSessionClient;
 import com.hp.ov.sdk.rest.client.security.MessagingCertificateClient;
 import com.hp.ov.sdk.rest.client.server.EnclosureClient;
@@ -630,4 +631,13 @@ public class OneViewClient extends AbstractClient {
         return getProxy(VersionClient.class);
     }
 
+    /**
+     * Creates or retrieves an existing instance of {@link LoginDetailClient}.
+     * This client provides an interface for retrieving login details.
+     *
+     * @return an interface to the Login Detail REST API.
+     */
+    public synchronized LoginDetailClient loginDetail() {
+        return getProxy(LoginDetailClient.class);
+    }
 }
