@@ -19,11 +19,9 @@ package com.hp.ov.sdk.oneview;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
-
 import com.hp.ov.sdk.resources.activity.AlertBDDTest;
 import com.hp.ov.sdk.resources.facilities.AllFacilitiesTestsSynergy;
 import com.hp.ov.sdk.resources.network.AllNetworkTestsSynergy;
-import com.hp.ov.sdk.resources.security.AllSecurityTestsC7000;
 import com.hp.ov.sdk.resources.security.AllSecurityTestsSynergy;
 import com.hp.ov.sdk.resources.server.AllServerTestsSynergy;
 import com.hp.ov.sdk.resources.settings.FirmwareDriverBDDTest;
