@@ -357,6 +357,16 @@ public class OneViewClient extends AbstractClient {
     public synchronized LogicalSwitchGroupClient logicalSwitchGroup() {
         return getProxy(LogicalSwitchGroupClient.class);
     }
+    
+    /**
+     * Creates or retrieves an existing instance of {@link LoginDetailClient}.
+     * This client provides an interface for retrieving login details.
+     *
+     * @return an interface to the Login Detail REST API.
+     */
+    public synchronized LoginDetailClient loginDetail() {
+        return getProxy(LoginDetailClient.class);
+    }
 
     /**
      * Creates or retrieves an existing instance of {@link LoginSessionClient}.
@@ -630,14 +640,5 @@ public class OneViewClient extends AbstractClient {
     private synchronized VersionClient versionClient() {
         return getProxy(VersionClient.class);
     }
-
-    /**
-     * Creates or retrieves an existing instance of {@link LoginDetailClient}.
-     * This client provides an interface for retrieving login details.
-     *
-     * @return an interface to the Login Detail REST API.
-     */
-    public synchronized LoginDetailClient loginDetail() {
-        return getProxy(LoginDetailClient.class);
-    }
+    
 }
