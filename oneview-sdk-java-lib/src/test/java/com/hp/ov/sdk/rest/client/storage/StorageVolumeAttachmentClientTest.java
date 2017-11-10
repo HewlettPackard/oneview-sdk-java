@@ -25,7 +25,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -18,7 +18,6 @@ package com.hp.ov.sdk.rest.http.core.client;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;

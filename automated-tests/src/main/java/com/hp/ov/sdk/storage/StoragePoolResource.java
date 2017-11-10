@@ -16,7 +16,6 @@
 
 package com.hp.ov.sdk.storage;
 
-import java.util.List;
 import java.util.Map;
 
 import com.hp.ov.sdk.dto.ResourceCollection;

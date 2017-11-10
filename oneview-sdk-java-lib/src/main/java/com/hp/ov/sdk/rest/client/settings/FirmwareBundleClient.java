@@ -20,7 +20,6 @@ import java.io.File;
 import java.util.List;
 
 import com.google.common.reflect.Parameter;
-import com.hp.ov.sdk.constants.SdkConstants;
 import com.hp.ov.sdk.dto.TaskResource;
 import com.hp.ov.sdk.exceptions.SDKErrorEnum;
 import com.hp.ov.sdk.exceptions.SDKInvalidArgumentException;
