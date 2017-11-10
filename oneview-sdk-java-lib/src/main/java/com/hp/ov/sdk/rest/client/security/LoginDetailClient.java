@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2017 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -16,23 +16,22 @@
 
 package com.hp.ov.sdk.rest.client.security;
 
-
 import com.hp.ov.sdk.dto.security.login.LoginDetail;
 import com.hp.ov.sdk.rest.reflect.Api;
 import com.hp.ov.sdk.rest.reflect.Endpoint;
 
-@Api(LoginDetailClient.LOGIN_DETAILSS_URI)
+@Api(LoginDetailClient.LOGIN_DETAILS_URI)
 public interface LoginDetailClient {
 
-    String LOGIN_DETAILSS_URI = "/rest/logindetails";
+    String LOGIN_DETAILS_URI = "/rest/logindetails";
 
     /**
-     * Returns the list of login details. The response contains the allowLocalLogin, 
+     * Returns the list of login details. The response contains the allowLocalLogin,
      * list of configuredLoginDomain, loginMessage.
      *
      * @return {@link LoginDetail} containing the list of login details.
      */
     @Endpoint
     LoginDetail getLoginDetails();
-
+    
 }

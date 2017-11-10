@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2016 Hewlett Packard Enterprise Development LP
+ * (C) Copyright 2017 Hewlett Packard Enterprise Development LP
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * You may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package com.hp.ov.sdk.rest.client.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.hp.ov.sdk.OneViewClientSample;
 import com.hp.ov.sdk.dto.security.login.LoginDetail;
 import com.hp.ov.sdk.rest.client.OneViewClient;
@@ -38,15 +37,11 @@ public class LoginDetailClientSample {
         LoginDetail loginDetail = this.loginDetailClient.getLoginDetails();
 
         LOGGER.info("Login Detail object returned to client: {}", loginDetail.toJsonString());
-    } 
+    }
 
-    public static void main(String[] args) {
-        
-        /* This resource is available only on C7000 */
+    public static void main(String[] args) {        
         LoginDetailClientSample client = new LoginDetailClientSample();
 
         client.getLoginDetails();
-        
     }
-
 }
