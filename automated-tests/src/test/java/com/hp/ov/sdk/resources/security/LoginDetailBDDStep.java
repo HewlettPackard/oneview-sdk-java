@@ -18,23 +18,24 @@ package com.hp.ov.sdk.resources.security;
 
 import com.hp.ov.sdk.dto.security.login.LoginDetail;
 import com.hp.ov.sdk.oneview.Background;
-import com.hp.ov.sdk.oneview.OneView;
 import com.hp.ov.sdk.security.LoginDetailResource;
+
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 
 public class LoginDetailBDDStep extends Background {
-    
-    public static LoginDetail loginDetail;  
-    
+
+    public static LoginDetail loginDetail;
+    public LoginDetailResource resource;
+
     @Given("^an instance of Login Detail$")
     public void an_instance_of_Login_Detail() throws Throwable {
-        OneView.setResource(LoginDetailResource.getInstance());
+        resource = LoginDetailResource.getInstance();
     }
-        
+
     @When("^OneView gets Login Details$")
     public void gets_Login_Details() throws Throwable {
-        resourceStr = LoginDetailResource.getInstance().getLoginDetail();
+        resourceStr = resource.getLoginDetail();
     }
 
 }

@@ -83,8 +83,7 @@ public class OneViewClient extends AbstractClient {
     public OneViewClient(SDKConfiguration config) {
         this.baseClient = new BaseClient(config, config.getOneViewHostname());
 
-        OneViewConnector connector = new OneViewConnector(
-                config, this.versionClient(), this.loginClient());
+        OneViewConnector connector = new OneViewConnector(config, this.versionClient(), this.loginClient());
 
         this.baseClient.setSessionId(connector.connect());
     }
@@ -99,8 +98,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link AlertClient}.
-     * This client provides an interface for managing alerts.
+     * Creates or retrieves an existing instance of {@link AlertClient}. This client
+     * provides an interface for managing alerts.
      *
      * @return an interface to the alerts REST API.
      */
@@ -109,8 +108,9 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link ConnectionTemplateClient}.
-     * This client provides an interface for managing connection templates.
+     * Creates or retrieves an existing instance of
+     * {@link ConnectionTemplateClient}. This client provides an interface for
+     * managing connection templates.
      *
      * @return an interface to the connection templates REST API.
      */
@@ -119,8 +119,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link DataCenterClient}.
-     * This client provides an interface for managing datacenters.
+     * Creates or retrieves an existing instance of {@link DataCenterClient}. This
+     * client provides an interface for managing datacenters.
      *
      * @return an interface to the datacenters REST API.
      */
@@ -139,8 +139,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link EnclosureClient}.
-     * This client provides an interface for managing enclosures.
+     * Creates or retrieves an existing instance of {@link EnclosureClient}. This
+     * client provides an interface for managing enclosures.
      *
      * @return an interface to the enclosures REST API.
      */
@@ -169,8 +169,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link FabricClient}.
-     * This client provides an interface for managing fabrics.
+     * Creates or retrieves an existing instance of {@link FabricClient}. This
+     * client provides an interface for managing fabrics.
      *
      * @return an interface to the fabrics REST API.
      */
@@ -179,8 +179,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link FcNetworkClient}.
-     * This client provides an interface for managing FC networks.
+     * Creates or retrieves an existing instance of {@link FcNetworkClient}. This
+     * client provides an interface for managing FC networks.
      *
      * @return an interface to the FC networks REST API.
      */
@@ -189,8 +189,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link FcoeNetworkClient}.
-     * This client provides an interface for managing FCoE networks.
+     * Creates or retrieves an existing instance of {@link FcoeNetworkClient}. This
+     * client provides an interface for managing FCoE networks.
      *
      * @return an interface to the FCoE networks REST API.
      */
@@ -199,8 +199,9 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link FcSanDeviceManagerClient}.
-     * This client provides an interface for managing SAN managers.
+     * Creates or retrieves an existing instance of
+     * {@link FcSanDeviceManagerClient}. This client provides an interface for
+     * managing SAN managers.
      *
      * @return an interface to the SAN managers REST API.
      */
@@ -249,8 +250,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link InterconnectClient}.
-     * This client provides an interface for managing interconnects.
+     * Creates or retrieves an existing instance of {@link InterconnectClient}. This
+     * client provides an interface for managing interconnects.
      *
      * @return an interface to the interconnects REST API.
      */
@@ -259,8 +260,9 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link InterconnectLinkTopologyClient}.
-     * This client provides an interface for managing interconnect link topologies.
+     * Creates or retrieves an existing instance of
+     * {@link InterconnectLinkTopologyClient}. This client provides an interface for
+     * managing interconnect link topologies.
      *
      * @return an interface to the interconnect link topologies REST API.
      */
@@ -289,8 +291,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link LicenseClient}.
-     * This client provides an interface for managing licenses.
+     * Creates or retrieves an existing instance of {@link LicenseClient}. This
+     * client provides an interface for managing licenses.
      *
      * @return an interface to the Licenses REST API.
      */
@@ -319,8 +321,9 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link LogicalInterconnectClient}.
-     * This client provides an interface for managing logical interconnects.
+     * Creates or retrieves an existing instance of
+     * {@link LogicalInterconnectClient}. This client provides an interface for
+     * managing logical interconnects.
      *
      * @return an interface to the logical interconnects REST API.
      */
@@ -329,8 +332,9 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link LogicalInterconnectGroupClient}.
-     * This client provides an interface for managing logical interconnect groups.
+     * Creates or retrieves an existing instance of
+     * {@link LogicalInterconnectGroupClient}. This client provides an interface for
+     * managing logical interconnect groups.
      *
      * @return an interface to the logical interconnect groups REST API.
      */
@@ -349,18 +353,19 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link LogicalSwitchGroupClient}.
-     * This client provides an interface for managing logical switch groups.
+     * Creates or retrieves an existing instance of
+     * {@link LogicalSwitchGroupClient}. This client provides an interface for
+     * managing logical switch groups.
      *
      * @return an interface to the logical switch groups REST API.
      */
     public synchronized LogicalSwitchGroupClient logicalSwitchGroup() {
         return getProxy(LogicalSwitchGroupClient.class);
     }
-    
+
     /**
-     * Creates or retrieves an existing instance of {@link LoginDetailClient}.
-     * This client provides an interface for retrieving login details.
+     * Creates or retrieves an existing instance of {@link LoginDetailClient}. This
+     * client provides an interface for retrieving login details.
      *
      * @return an interface to the Login Detail REST API.
      */
@@ -369,8 +374,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link LoginSessionClient}.
-     * This client provides an interface for execute the authentication of an user.
+     * Creates or retrieves an existing instance of {@link LoginSessionClient}. This
+     * client provides an interface for execute the authentication of an user.
      *
      * @return an interface to the login session REST API.
      */
@@ -379,8 +384,9 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link MessagingCertificateClient}.
-     * This client provides an interface for managing certificates.
+     * Creates or retrieves an existing instance of
+     * {@link MessagingCertificateClient}. This client provides an interface for
+     * managing certificates.
      *
      * @return an interface to the certificates REST API.
      */
@@ -392,8 +398,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link NetworkSetClient}.
-     * This client provides an interface for managing networks sets.
+     * Creates or retrieves an existing instance of {@link NetworkSetClient}. This
+     * client provides an interface for managing networks sets.
      *
      * @return an interface to the networks sets REST API.
      */
@@ -412,8 +418,9 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link PowerDeliveryDeviceClient}.
-     * This client provides an interface for managing power delivery devices.
+     * Creates or retrieves an existing instance of
+     * {@link PowerDeliveryDeviceClient}. This client provides an interface for
+     * managing power delivery devices.
      *
      * @return an interface to the power delivery devices REST API.
      */
@@ -422,8 +429,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link RackClient}.
-     * This client provides an interface for managing racks.
+     * Creates or retrieves an existing instance of {@link RackClient}. This client
+     * provides an interface for managing racks.
      *
      * @return an interface to the racks REST API.
      */
@@ -442,8 +449,9 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link SasInterconnectTypeClient}.
-     * This client provides an interface for managing SAS interconnect types.
+     * Creates or retrieves an existing instance of
+     * {@link SasInterconnectTypeClient}. This client provides an interface for
+     * managing SAS interconnect types.
      *
      * @return an interface to the SAS interconnect types REST API.
      */
@@ -452,8 +460,9 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link SasLogicalInterconnectClient}.
-     * This client provides an interface for managing SAS logical interconnects.
+     * Creates or retrieves an existing instance of
+     * {@link SasLogicalInterconnectClient}. This client provides an interface for
+     * managing SAS logical interconnects.
      *
      * @return an interface to the SAS logical interconnects REST API.
      */
@@ -462,8 +471,9 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link SasLogicalInterconnectGroupClient}.
-     * This client provides an interface for managing SAS logical interconnect groups.
+     * Creates or retrieves an existing instance of
+     * {@link SasLogicalInterconnectGroupClient}. This client provides an interface
+     * for managing SAS logical interconnect groups.
      *
      * @return an interface to the SAS logical interconnect groups REST API.
      */
@@ -472,8 +482,9 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link SasLogicalJbodAttachmentClient}.
-     * This client provides an interface for managing SAS logical JBOD attachments.
+     * Creates or retrieves an existing instance of
+     * {@link SasLogicalJbodAttachmentClient}. This client provides an interface for
+     * managing SAS logical JBOD attachments.
      *
      * @return an interface to the SAS logical JBOD attachments REST API.
      */
@@ -492,8 +503,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link ScopeClient}.
-     * This client provides an interface for managing scopes.
+     * Creates or retrieves an existing instance of {@link ScopeClient}. This client
+     * provides an interface for managing scopes.
      *
      * @return an interface to the Scopes REST API.
      */
@@ -512,8 +523,9 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link ServerHardwareTypeClient}.
-     * This client provides an interface for managing server hardware types.
+     * Creates or retrieves an existing instance of
+     * {@link ServerHardwareTypeClient}. This client provides an interface for
+     * managing server hardware types.
      *
      * @return an interface to the server hardware types REST API.
      */
@@ -532,8 +544,9 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link ServerProfileTemplateClient}.
-     * This client provides an interface for managing server profile templates.
+     * Creates or retrieves an existing instance of
+     * {@link ServerProfileTemplateClient}. This client provides an interface for
+     * managing server profile templates.
      *
      * @return an interface to the server profile templates REST API.
      */
@@ -542,8 +555,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link StoragePoolClient}.
-     * This client provides an interface for managing storage pools.
+     * Creates or retrieves an existing instance of {@link StoragePoolClient}. This
+     * client provides an interface for managing storage pools.
      *
      * @return an interface to the storage pools REST API.
      */
@@ -572,8 +585,9 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link StorageVolumeAttachmentClient}.
-     * This client provides an interface for managing storage volume attachments.
+     * Creates or retrieves an existing instance of
+     * {@link StorageVolumeAttachmentClient}. This client provides an interface for
+     * managing storage volume attachments.
      *
      * @return an interface to the storage volume attachments REST API.
      */
@@ -582,8 +596,9 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link StorageVolumeTemplateClient}.
-     * This client provides an interface for managing storage volume templates.
+     * Creates or retrieves an existing instance of
+     * {@link StorageVolumeTemplateClient}. This client provides an interface for
+     * managing storage volume templates.
      *
      * @return an interface to the storage volume templates REST API.
      */
@@ -592,8 +607,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link SwitchClient}.
-     * This client provides an interface for managing switches.
+     * Creates or retrieves an existing instance of {@link SwitchClient}. This
+     * client provides an interface for managing switches.
      *
      * @return an interface to the switches REST API.
      */
@@ -602,8 +617,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link SwitchTypeClient}.
-     * This client provides an interface for managing switch types.
+     * Creates or retrieves an existing instance of {@link SwitchTypeClient}. This
+     * client provides an interface for managing switch types.
      *
      * @return an interface to the switch types REST API.
      */
@@ -622,8 +637,8 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link UplinkSetClient}.
-     * This client provides an interface for managing uplink sets.
+     * Creates or retrieves an existing instance of {@link UplinkSetClient}. This
+     * client provides an interface for managing uplink sets.
      *
      * @return an interface to the uplink sets REST API.
      */
@@ -632,13 +647,13 @@ public class OneViewClient extends AbstractClient {
     }
 
     /**
-     * Creates or retrieves an existing instance of {@link VersionClient}.
-     * This client provides an interface for retrieving version information.
+     * Creates or retrieves an existing instance of {@link VersionClient}. This
+     * client provides an interface for retrieving version information.
      *
      * @return an interface to the version REST API.
      */
     private synchronized VersionClient versionClient() {
         return getProxy(VersionClient.class);
     }
-    
+
 }

@@ -16,21 +16,17 @@
 
 package com.hp.ov.sdk.security;
 
-import java.util.Map;
-
 import com.hp.ov.sdk.dto.security.login.LoginDetail;
 import com.hp.ov.sdk.oneview.BasicResource;
-import com.hp.ov.sdk.oneview.Resource;
 import com.hp.ov.sdk.rest.client.security.LoginDetailClient;
 
-public class LoginDetailResource extends BasicResource implements Resource {
+public class LoginDetailResource extends BasicResource {
 
     private static LoginDetailResource instance;
     private LoginDetailClient client;
-   
 
-    public LoginDetailResource(){
-        client = oneViewClient.loginDetail();        
+    public LoginDetailResource() {
+        client = oneViewClient.loginDetail();
     }
 
     public static LoginDetailResource getInstance() {
@@ -39,39 +35,10 @@ public class LoginDetailResource extends BasicResource implements Resource {
         }
         return instance;
     }
-  
+
     public String getLoginDetail() {
-        try {
-            LoginDetail loginDetail = client.getLoginDetails();
-            return loginDetail != null ? loginDetail.toString() : "not-found";
-        }
-        catch (Exception e) {
-            return "not-found";
-        }
+        LoginDetail loginDetail = client.getLoginDetails();
+        return loginDetail != null ? loginDetail.toString() : "not-found";
     }
 
-    @Override
-    public Map<String, String> getResourceProperties(String id) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public String findByName(String name) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public String findById(String id) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public int count() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-   
 }
