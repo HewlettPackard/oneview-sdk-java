@@ -20,11 +20,11 @@
 | Endpoints                                                                               | Verb     | V200                 | V300                 | V500                 |
 | --------------------------------------------------------------------------------------- | -------- | :------------------: | :------------------: | :------------------: |
 |     **Alerts**                                                                                                                                   |
-|<sub>/rest/alerts	</sub>                                                                |GET       | :white_check_mark: | :white_check_mark: |
-|<sub>/rest/alerts	</sub>                                                                |DELETE    | :white_check_mark: | :white_check_mark: |
-|<sub>/rest/alerts/{id}	</sub>                                                            |GET       | :white_check_mark: | :white_check_mark: |
-|<sub>/rest/alerts/{id}	</sub>                                                            |PUT       | :white_check_mark: | :white_check_mark: |
-|<sub>/rest/alerts/{id}	</sub>                                                            |DELETE    | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/alerts  </sub>                                                                |GET       | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/alerts  </sub>                                                                |DELETE    | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/alerts/{id} </sub>                                                            |GET       | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/alerts/{id} </sub>                                                            |PUT       | :white_check_mark: | :white_check_mark: |
+|<sub>/rest/alerts/{id} </sub>                                                            |DELETE    | :white_check_mark: | :white_check_mark: |
 |<sub>/rest/alerts/AlertChangeLog/{id}</sub>                                              |DELETE    | :white_check_mark: | :white_check_mark: |
 |     **Appliance Time and Locale Configuration**                                                                                                                         |
 |<sub>/rest/appliance/configuration/time-locale</sub>                                     |GET       | :heavy_multiplication_x: | :heavy_multiplication_x: |    |
@@ -288,8 +288,7 @@
 |<sub>/rest/logical-switches/{id}</sub>                                                   | DELETE   | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/logical-switches/{id}/refresh</sub>                                           | PUT      | :white_check_mark: | :white_check_mark: |    |
 |     **Login Details**                                                                                                                             |
-|<sub>/rest/logindetails</sub>                                                            | GET      | :white_check_mark: | :white_check_mark: |:white_check_mark:  |
-
+|<sub>/rest/logindetails</sub>                                                            | GET      | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 |     **Managed SANs**                                                                                                                             |
 |<sub>/rest/fc-sans/managed-sans</sub>                                                    | GET      | :white_check_mark: | :white_check_mark: |    |
 |<sub>/rest/fc-sans/managed-sans/{id}</sub>                                               | GET      | :white_check_mark: | :white_check_mark: |    |
@@ -564,21 +563,21 @@
 | Endpoints                                               | Verb    | V300               |
 | --------------------------------------------------------------------------------- | ------- | :----------------: |
 |     **Artifacts Bundle**                                                                                         |
-|<sub>	/rest/artifact-bundles	</sub>                                                  | GET | :white_check_mark: |
-|<sub>	/rest/artifact-bundles	</sub>                                       |  POST(create)  | :white_check_mark: |
-|<sub>	/rest/artifact-bundles	</sub>                                       |  POST(upload)  | :white_check_mark: |
-|<sub>	/rest/artifact-bundles/backups	</sub>                                          | GET | :white_check_mark: |
-|<sub>	/rest/artifact-bundles/backups	</sub>                                 | POST(create) | :white_check_mark: |
-|<sub>	/rest/artifact-bundles/backups/archive	</sub>                         | POST(upload) | :white_check_mark: |
-|<sub>	/rest/artifact-bundles/backups/archive/{id}	</sub>                          | GET | :white_check_mark: |
-|<sub>	/rest/artifact-bundles/backups/{id}	</sub>                                  | GET | :white_check_mark: |
-|<sub>	/rest/artifact-bundles/backups/{id}	</sub>                                  | PUT | :white_check_mark: |
-|<sub>	/rest/artifact-bundles/download/{id}	</sub>                                  | GET | :white_check_mark: |
-|<sub>	/rest/artifact-bundles/{id}	</sub>                                          | GET | :white_check_mark: |
-|<sub>	/rest/artifact-bundles/{id}	</sub>                             | PUT(extract)     | :white_check_mark: |
-|<sub>	/rest/artifact-bundles/{id}	</sub>                             | PUT(update attr) | :white_check_mark: |
-|<sub>	/rest/artifact-bundles/{id}	</sub>                             | DELETE           | :white_check_mark: |
-|<sub>	/rest/artifact-bundles/{id}/stopArtifactCreate	</sub>             | PUT              | :white_check_mark: |
+|<sub>  /rest/artifact-bundles  </sub>                                                  | GET | :white_check_mark: |
+|<sub>  /rest/artifact-bundles  </sub>                                       |  POST(create)  | :white_check_mark: |
+|<sub>  /rest/artifact-bundles  </sub>                                       |  POST(upload)  | :white_check_mark: |
+|<sub>  /rest/artifact-bundles/backups  </sub>                                          | GET | :white_check_mark: |
+|<sub>  /rest/artifact-bundles/backups  </sub>                                 | POST(create) | :white_check_mark: |
+|<sub>  /rest/artifact-bundles/backups/archive  </sub>                         | POST(upload) | :white_check_mark: |
+|<sub>  /rest/artifact-bundles/backups/archive/{id} </sub>                          | GET | :white_check_mark: |
+|<sub>  /rest/artifact-bundles/backups/{id} </sub>                                  | GET | :white_check_mark: |
+|<sub>  /rest/artifact-bundles/backups/{id} </sub>                                  | PUT | :white_check_mark: |
+|<sub>  /rest/artifact-bundles/download/{id}    </sub>                                  | GET | :white_check_mark: |
+|<sub>  /rest/artifact-bundles/{id} </sub>                                          | GET | :white_check_mark: |
+|<sub>  /rest/artifact-bundles/{id} </sub>                             | PUT(extract)     | :white_check_mark: |
+|<sub>  /rest/artifact-bundles/{id} </sub>                             | PUT(update attr) | :white_check_mark: |
+|<sub>  /rest/artifact-bundles/{id} </sub>                             | DELETE           | :white_check_mark: |
+|<sub>  /rest/artifact-bundles/{id}/stopArtifactCreate  </sub>             | PUT              | :white_check_mark: |
 |     **Deployment Groups**                                                                                        |
 |<sub> /rest/deployment-groups</sub>                                       | GET              | :white_check_mark: |
 |<sub> /rest/deployment-groups/{id}</sub>                                  | GET              | :white_check_mark: |
