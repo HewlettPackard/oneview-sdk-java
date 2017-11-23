@@ -17,19 +17,17 @@
 package com.hp.ov.sdk.resources.security;
 
 import org.junit.runner.RunWith;
+
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
-
 @RunWith(Cucumber.class)
-@CucumberOptions(
-    format = { "pretty", "html:target/cucumber" }, 
-    glue = { "com.hp.ov.sdk.resources" }, 
-    features = { "classpath:cucumber/security/loginDetailSynergy.feature"
-             },
+@CucumberOptions(format = { "pretty", "html:target/cucumber" },
+    glue = {"com.hp.ov.sdk.resources"}, 
+    features = "classpath:cucumber/security/loginDetail.feature",
     monochrome = true,
-    tags = { "@get" })
+    tags = "@get")
 
-public class AllSecurityTestsSynergy {
+public class LoginDetailBDDTest {
 
 }

@@ -26,11 +26,10 @@ import cucumber.api.junit.Cucumber;
 @CucumberOptions(
     format = { "pretty", "html:target/cucumber" },
     glue = { "com.hp.ov.sdk.resources" },
-    features = { "classpath:cucumber/security/loginDetailC7000.feature"
-             },
+    features = { "classpath:cucumber/security/loginDetail.feature"},
     monochrome = true,
     tags = { "@get"})
 
-public class AllSecurityTestsC7000 {
+public class AllSecurityTests {
 
 }
