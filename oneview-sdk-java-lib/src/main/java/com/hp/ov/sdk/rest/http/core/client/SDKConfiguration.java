@@ -30,7 +30,7 @@ public class SDKConfiguration {
 
     private static final int DEFAULT_MESSAGE_BUS_PORT = 5671;
     private static final ApiVersion DEFAULT_API_VERSION = ApiVersion.V_300;
-    private static final String DEFAULT_DOMAIN = "LOCAL";
+    //private static final String DEFAULT_DOMAIN = "LOCAL";
 
     private static final String[] MANDATORY_FIELDS = {
             SDKConfiguration.USERNAME,
@@ -121,7 +121,7 @@ public class SDKConfiguration {
     }
 
     public String getOneViewDomain() {
-        return this.properties.getProperty(DOMAIN, DEFAULT_DOMAIN);
+        return this.properties.getProperty(DOMAIN, null);
     }
 
     public static SDKConfiguration fromFile(String filePath) {
