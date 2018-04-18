@@ -15,6 +15,7 @@ This release adds support to OneView Rest API version 500 to the already existin
 
 
 #### Bug fixes:
+- [#39](https://github.com/HewlettPackard/oneview-sdk-java/issues/39) authLoginDomain should not be "Local" by default
 - [#28](https://github.com/HewlettPackard/oneview-sdk-java/issues/28) `CRM_INCORRECT_VALUE_IN_READONLY_FIELD` returned when updating Logical Switch
 - [#26](https://github.com/HewlettPackard/oneview-sdk-java/issues/26) Exception in `getAllAttachmentPaths` method
 
