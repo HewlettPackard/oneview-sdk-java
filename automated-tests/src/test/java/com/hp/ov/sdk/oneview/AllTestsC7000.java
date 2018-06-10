@@ -19,10 +19,10 @@ package com.hp.ov.sdk.oneview;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
-
 import com.hp.ov.sdk.resources.activity.AlertBDDTest;
 import com.hp.ov.sdk.resources.facilities.AllFacilitiesTestsC7000;
 import com.hp.ov.sdk.resources.network.AllNetworkTestsC7000;
+import com.hp.ov.sdk.resources.security.AllSecurityTests;
 import com.hp.ov.sdk.resources.server.AllServerTestsC7000;
 import com.hp.ov.sdk.resources.settings.FirmwareDriverBDDTest;
 import com.hp.ov.sdk.resources.storage.AllStorageTestsC7000;
@@ -35,6 +35,7 @@ import com.hp.ov.sdk.resources.storage.AllStorageTestsC7000;
     AllFacilitiesTestsC7000.class,
     FirmwareDriverBDDTest.class,
     AllNetworkTestsC7000.class,
+    AllSecurityTests.class,
     AllServerTestsC7000.class,
     AllStorageTestsC7000.class,
     AlertBDDTest.class

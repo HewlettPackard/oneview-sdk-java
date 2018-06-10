@@ -2,6 +2,7 @@
 
 #### New Resources:
   - Licenses
+  - Login Details
 
 #### New Features:
 This release adds support to OneView Rest API version 500 to the already existing features:
